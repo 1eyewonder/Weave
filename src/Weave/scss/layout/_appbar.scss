@@ -1,0 +1,167 @@
+@use "sass:map";
+@import '../abstracts/variables';
+
+.appbar {
+  width: 100%;
+  display: flex;
+  z-index: var(--zindex-appbar);
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-direction: column;
+  color: var(--palette-appbar-text);
+  background-color: var(--palette-appbar-background);
+  transition: margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,width 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+
+  &.appbar-fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    .popover-cascading-value {
+      position: fixed;
+    }
+  }
+
+  &.appbar-fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    .popover-cascading-value {
+      position: fixed;
+    }
+  }
+
+  .toolbar-appbar {
+    height: calc(var(--appbar-height) - var(--appbar-height) / 8);
+  }
+
+  @media (min-width:$breakpoint-xs) and (orientation: landscape) {
+    .toolbar-appbar {
+      height: calc(var(--appbar-height) - var(--appbar-height) / 4);
+    }
+  }
+
+  @media (min-width:$breakpoint-sm) {
+    .toolbar-appbar {
+      height: var(--appbar-height);
+    }
+  }
+
+  &.appbar-dense {
+    .toolbar-appbar {
+      height: calc(var(--appbar-height) - var(--appbar-height) / 4);
+    }
+  }
+}
+
+.drawer-open {
+  &-responsive {
+    @each $breakpoint in map.keys($breakpoints) {
+      &-#{$breakpoint} {
+        @media (min-width: map.get($breakpoints, $breakpoint)) {
+          &-left.drawer-left-clipped-never .appbar {
+            margin-left: var(--drawer-width-left);
+            width: calc(100% - var(--drawer-width-left));
+          }
+
+          &-right.drawer-right-clipped-never .appbar {
+            margin-right: var(--drawer-width-right);
+            width: calc(100% - var(--drawer-width-right));
+          }
+
+          &-left.drawer-left-clipped-never#{&}-right.drawer-right-clipped-never .appbar {
+            margin-left: var(--drawer-width-left);
+            margin-right: var(--drawer-width-right);
+            width: calc(100% - var(--drawer-width-left) - var(--drawer-width-right));
+          }
+        }
+      }
+    }
+  }
+
+  &-persistent {
+    &-left.drawer-left-clipped-never .appbar {
+      margin-left: var(--drawer-width-left);
+      width: calc(100% - var(--drawer-width-left));
+    }
+
+    &-right.drawer-right-clipped-never .appbar {
+      margin-right: var(--drawer-width-right);
+      width: calc(100% - var(--drawer-width-right));
+    }
+
+    &-left.drawer-left-clipped-never#{&}-right.drawer-right-clipped-never .appbar {
+      margin-left: var(--drawer-width-left);
+      margin-right: var(--drawer-width-right);
+      width: calc(100% - var(--drawer-width-left) - var(--drawer-width-right));
+    }
+  }
+
+  &-mini {
+    @each $breakpoint in map.keys($breakpoints) {
+      &-#{$breakpoint} {
+        @media (min-width: map.get($breakpoints, $breakpoint)) {
+          &-left.drawer-left-clipped-never .appbar {
+            margin-left: var(--drawer-width-left);
+            width: calc(100% - var(--drawer-width-left));
+          }
+
+          &-right.drawer-right-clipped-never .appbar {
+            margin-right: var(--drawer-width-right);
+            width: calc(100% - var(--drawer-width-right));
+          }
+
+          &-left.drawer-left-clipped-never#{&}-right.drawer-right-clipped-never .appbar {
+            margin-left: var(--drawer-width-left);
+            margin-right: var(--drawer-width-right);
+            width: calc(100% - var(--drawer-width-left) - var(--drawer-width-right));
+          }
+        }
+      }
+    }
+  }
+}
+
+.drawer-close-mini {
+  @each $breakpoint in map.keys($breakpoints) {
+    &-#{$breakpoint} {
+      &-left.drawer-left-clipped-never .appbar {
+        margin-left: var(--drawer-width-mini-left);
+        width: calc(100% - var(--drawer-width-mini-left));
+      }
+
+      &-right.drawer-right-clipped-never .appbar {
+        margin-right: var(--drawer-width-mini-right);
+        width: calc(100% - var(--drawer-width-mini-right));
+      }
+
+      &-left.drawer-left-clipped-never#{&}-right.drawer-right-clipped-never .appbar {
+        margin-left: var(--drawer-width-mini-left);
+        margin-right: var(--drawer-width-mini-right);
+        width: calc(100% - var(--drawer-width-mini-left) - var(--drawer-width-mini-right));
+      }
+
+      @media (max-width: map.get($breakpoints, $breakpoint)) {
+        &-left.drawer-left-clipped-docked .appbar {
+          margin-left: var(--drawer-width-mini-left);
+          width: calc(100% - var(--drawer-width-mini-left));
+        }
+
+        &-right.drawer-right-clipped-docked .appbar {
+          margin-right: var(--drawer-width-mini-right);
+          width: calc(100% - var(--drawer-width-mini-right));
+        }
+
+        &-left.drawer-left-clipped-docked#{&}-right.drawer-right-clipped-docked .appbar {
+          margin-left: var(--drawer-width-mini-left);
+          margin-right: var(--drawer-width-mini-right);
+          width: calc(100% - var(--drawer-width-mini-left) - var(--drawer-width-mini-right));
+        }
+      }
+    }
+  }
+}

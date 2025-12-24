@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <NoWarn>NU1510</NoWarn>
+  </PropertyGroup>
+
+  <!-- Kill WebSharper Booster Service before build on Windows. This is just to help iterate when using dotnet watch -->
+  <Target Name="KillWebSharperBooster" BeforeTargets="BeforeBuild;BeforeRebuild;BeforeClean">
+    <Exec Condition="'$(OS)' == 'Windows_NT'" 
+          Command="taskkill /F /IM wsfscservice.exe 2&gt;nul || exit /b 0" 
+          ContinueOnError="true" 
+          IgnoreExitCode="true" />
+  </Target>
+</Project>

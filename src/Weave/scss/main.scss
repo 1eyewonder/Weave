@@ -1,0 +1,42 @@
+// Main SCSS Entry Point
+// Import order: Variables -> Reset -> Base -> Components -> Layouts -> Utilities
+
+// Abstracts
+@import "abstracts/variables";
+@import "abstracts/mixins";
+@import "abstracts/colors";
+
+// Core
+@import "core/variables";
+@import "core/colors";
+@import "core/themes"; // Theme system for light/dark mode
+@import "core/reset";
+@import "core/base";
+@import "core/typography";
+@import "core/animations";
+@import "core/elevation";
+@import "core/ripple";
+
+// Components
+@import "components/button";
+@import "components/tooltip";
+@import "components/typography";
+@import "components/focustrap";
+@import "components/field";
+@import "components/grid";
+@import "components/flexbreak";
+@import "components/divider";
+@import "components/checkbox";
+@import "components/radiobutton";
+@import "components/switch";
+@import "components/dropdown";
+
+// Layouts
+@import "layout/appbar";
+@import "layout/container";
+@import "layout/drawer";
+@import "layout/main";
+@import "layout/scroll";
+
+// Utilities
+@import "utilities/index";

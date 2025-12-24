@@ -1,0 +1,93 @@
+@import '../abstracts/variables';
+
+.container {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container--gutters {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.container--fill-height {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width:$breakpoint-sm) {
+  .container--gutters {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width:$breakpoint-sm) {
+  .container--fixed {
+    max-width: $breakpoint-sm;
+  }
+}
+
+@media (min-width:$breakpoint-md) {
+  .container--fixed {
+    max-width: $breakpoint-md;
+  }
+}
+
+@media (min-width:$breakpoint-lg) {
+  .container--fixed {
+    max-width: $breakpoint-lg;
+  }
+}
+
+@media (min-width:$breakpoint-xl) {
+  .container--fixed {
+    max-width: $breakpoint-xl;
+  }
+}
+
+@media (min-width:$breakpoint-xxl) {
+  .container--fixed {
+    max-width: $breakpoint-xxl;
+  }
+}
+
+@media (min-width:$breakpoint-xs) {
+  .container--maxwidth-xs {
+    max-width: 444px;
+  }
+}
+
+@media (min-width:$breakpoint-sm) {
+  .container--maxwidth-sm {
+    max-width: $breakpoint-sm;
+  }
+}
+
+@media (min-width:$breakpoint-md) {
+  .container--maxwidth-md {
+    max-width: $breakpoint-md;
+  }
+}
+
+@media (min-width:$breakpoint-lg) {
+  .container--maxwidth-lg {
+    max-width: $breakpoint-lg;
+  }
+}
+
+@media (min-width:$breakpoint-xl) {
+  .container--maxwidth-xl {
+    max-width: $breakpoint-xl;
+  }
+}
+
+@media (min-width:$breakpoint-xxl) {
+  .container--maxwidth-xxl {
+    max-width: $breakpoint-xxl;
+  }
+}

@@ -1,0 +1,120 @@
+.typography {
+  margin: 0;
+}
+
+$typography-types: (
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "subtitle1",
+  "subtitle2",
+  "body1",
+  "body2",
+  "button",
+  "caption",
+  "overline"
+);
+
+@each $type in $typography-types {
+  .typography--#{$type} {
+    font-size: var(--typography-#{$type}-size);
+    font-family: var(--typography-#{$type}-family);
+    font-weight: var(--typography-#{$type}-weight);
+    line-height: var(--typography-#{$type}-lineheight);
+    letter-spacing: var(--typography-#{$type}-letterspacing);
+    text-transform: var(--typography-#{$type}-text-transform);
+  }
+}
+
+.typography--sr-only {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.typography--align-inherit {
+  text-align: inherit;
+}
+
+.typography--align-left {
+  text-align: left;
+}
+
+.typography--align-center {
+  text-align: center;
+}
+
+.typography--align-right {
+  text-align: right;
+}
+
+.typography--align-justify {
+  text-align: justify;
+}
+
+.typography--align-start {
+  text-align: start;
+}
+
+.typography--align-end {
+  text-align: end;
+}
+
+.typography--nowrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.typography--gutterbottom {
+  margin-bottom: 0.35em;
+}
+
+.typography--paragraph {
+  margin-bottom: 16px;
+}
+
+// Color modifiers
+.typography--primary {
+  color: var(--palette-primary);
+}
+
+.typography--secondary {
+  color: var(--palette-secondary);
+}
+
+.typography--tertiary {
+  color: var(--palette-tertiary);
+}
+
+.typography--success {
+  color: var(--palette-success);
+}
+
+.typography--error {
+  color: var(--palette-error);
+}
+
+.typography--warning {
+  color: var(--palette-warning);
+}
+
+.typography--info {
+  color: var(--palette-info);
+}
+
+.typography--text-primary {
+  color: var(--palette-text-primary);
+}
+
+.typography--text-secondary {
+  color: var(--palette-text-secondary);
+}
+
+.typography--text-disabled {
+  color: var(--palette-text-disabled);
+}

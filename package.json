@@ -1,0 +1,13 @@
+{
+  "name": "weave",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@4.5.3",
+  "scripts": {
+    "build:css": "yarn sass src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map",
+    "watch:css": "yarn sass --watch src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map"
+  },
+  "devDependencies": {
+    "sass": "^1.96.0"
+  }
+}

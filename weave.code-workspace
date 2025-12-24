@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "FSharp.enableAnalyzers": true,
+    "FSharp.analyzersPath": ["packages/Analyzers"],
+    "editor.formatOnSave": true
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-dotnettools.vscode-dotnet-pack",
+      "alefragnani.Bookmarks",
+      "ms-azuretools.vscode-docker",
+      "oderwat.indent-rainbow",
+      "Ionide.Ionide-Paket",
+      "ms-vsliveshare.vsliveshare",
+      "bierner.markdown-preview-github-styles",
+      "bierner.markdown-mermaid",
+      "tintoy.msbuild-project-tools",
+      "christian-kohler.path-intellisense",
+      "johnpapa.vscode-peacock"
+    ]
+  }
+}

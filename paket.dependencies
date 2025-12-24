@@ -1,0 +1,25 @@
+source https://api.nuget.org/v3/index.json
+storage: none
+
+nuget FSharp.Core
+nuget FSharpPlus
+nuget FsToolkit.ErrorHandling
+nuget Zanaptak.TypedCssClasses
+nuget WebSharper
+nuget WebSharper.UI
+nuget WebSharper.FSharp
+nuget WebSharper.AspNetCore
+
+group test
+  source https://api.nuget.org/v3/index.json
+  storage: none
+
+  nuget Expecto.FsCheck
+  nuget Microsoft.NET.Test.Sdk
+  nuget YoloDev.Expecto.TestSdk
+
+group analyzers
+  source https://api.nuget.org/v3/index.json
+
+  nuget Ionide.Analyzers
+  nuget G-Research.FSharp.Analyzers

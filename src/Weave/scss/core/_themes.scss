@@ -1,0 +1,202 @@
+@import "colors";
+
+// =============================================================================
+// LIGHT THEME
+// =============================================================================
+:root,
+[data-theme="light"] {
+  // --- Surface Colors ---
+  --palette-background: #ffffff;
+  --palette-background-paper: #e6e6e6;
+  --palette-background-darken: #f5f5f5;
+  --palette-surface: #ffffff;
+
+  // --- Text Colors ---
+  --palette-text-primary: #424242;
+  --palette-text-secondary: rgba(0, 0, 0, 0.54);
+  --palette-text-disabled: rgba(0, 0, 0, 0.38);
+
+  // --- Divider & Border Colors ---
+  --palette-divider: rgba(0, 0, 0, 0.12);
+  --palette-divider-light: rgba(0, 0, 0, 0.8);
+  --palette-lines-default: rgba(0, 0, 0, 0.12);
+  --palette-lines-inputs: #bdbdbd;
+
+  // --- Action Colors ---
+  --palette-action-default: rgba(0, 0, 0, 0.54);
+  --palette-action-default-hover: rgba(0, 0, 0, 0.04);
+  --palette-action-disabled: rgba(0, 0, 0, 0.26);
+  --palette-action-disabled-background: rgba(0, 0, 0, 0.12);
+
+  // --- Brand Colors ---
+
+  --palette-primary: #0164fc;
+  --palette-primary-text: #ffffff;
+  --palette-primary-lighten: #0187f1;
+  --palette-primary-darken: #002fc6;
+  --palette-primary-rgb: 1, 70, 176;
+
+  --palette-secondary: #594ae2;
+  --palette-secondary-text: #ffffff;
+  --palette-secondary-lighten: #7d6ff0;
+  --palette-secondary-darken: #3d2eb4;
+  --palette-secondary-rgb: 89, 74, 226;
+
+  --palette-tertiary: #ff4081;
+  --palette-tertiary-text: #ffffff;
+  --palette-tertiary-lighten: #ff6699;
+  --palette-tertiary-darken: #d91d63;
+  --palette-tertiary-rgb: 255, 64, 129;
+
+  --palette-success: #00c853;
+  --palette-success-text: #ffffff;
+  --palette-success-lighten: #33d672;
+  --palette-success-darken: #009638;
+  --palette-success-rgb: 0, 200, 83;
+
+  --palette-error: #f44336;
+  --palette-error-text: #ffffff;
+  --palette-error-lighten: #f6685e;
+  --palette-error-darken: #d32f2f;
+  --palette-error-rgb: 244, 67, 54;
+
+  --palette-warning: #ff9800;
+  --palette-warning-text: #ffffff;
+  --palette-warning-lighten: #ffac33;
+  --palette-warning-darken: #c77700;
+  --palette-warning-rgb: 255, 152, 0;
+
+  --palette-info: #1ec8a5;
+  --palette-info-text: #ffffff;
+  --palette-info-lighten: #4ed9ba;
+  --palette-info-darken: #149977;
+  --palette-info-rgb: 30, 200, 165;
+
+  // --- Component-Specific Colors ---
+  --palette-appbar-background: #594ae2;
+  --palette-appbar-text: #ffffff;
+
+  --palette-drawer-background: #ffffff;
+  --palette-drawer-text: #424242;
+  --palette-drawer-icon: #616161;
+
+  // --- Input Component Colors ---
+  --input-border-color: rgba(0, 0, 0, 0.42);
+  --input-outlined-border: rgba(0, 0, 0, 0.23);
+  --input-filled-background: rgba(0, 0, 0, 0.04);
+  --input-label-color: rgba(0, 0, 0, 0.6);
+  --input-helper-text-color: rgba(0, 0, 0, 0.6);
+  --input-label-background: var(--palette-background);
+
+  // --- Utility Colors ---
+  --palette-gray-default: #9e9e9e;
+  --palette-gray-light: #bdbdbd;
+  --palette-gray-lighter: #e0e0e0;
+  --palette-gray-dark: #757575;
+  --palette-gray-darker: #212121;
+  --palette-dark-text: #ffffff;
+  --palette-hover-opacity: 0.06;
+}
+
+// =============================================================================
+// DARK THEME
+// =============================================================================
+[data-theme="dark"] {
+  --palette-background: #32333d;
+  --palette-background-paper: #373740;
+  --palette-background-darken: #27272f;
+  --palette-surface: #373740;
+
+  --palette-text-primary: rgba(255, 255, 255);
+  --palette-text-secondary: rgba(255, 255, 255, 0.5);
+  --palette-text-disabled: rgba(255, 255, 255, 0.2);
+
+  --palette-divider: rgba(255, 255, 255, 0.12);
+  --palette-divider-light: rgba(255, 255, 255, 0.06);
+  --palette-lines-default: rgba(255, 255, 255, 0.12);
+  --palette-lines-inputs: rgba(255, 255, 255, 0.3);
+
+  --palette-action-default: #adadb1;
+  --palette-action-default-hover: rgba(255, 255, 255, 0.08);
+  --palette-action-disabled: rgba(255, 255, 255, 0.26);
+  --palette-action-disabled-background: rgba(255, 255, 255, 0.12);
+
+  --palette-primary: #088ffd;
+  --palette-primary-text: #ffffff;
+  --palette-primary-lighten: #35d7ff;
+  --palette-primary-darken: #0164fc;
+  --palette-primary-rgb: 1, 70, 176;
+
+  --palette-secondary: #594ae2;
+  --palette-secondary-text: #ffffff;
+  --palette-secondary-lighten: #9b92ed;
+  --palette-secondary-darken: #4d40c2;
+  --palette-secondary-rgb: 119, 107, 231;
+
+  --palette-tertiary: #ff4081;
+  --palette-tertiary-text: #ffffff;
+  --palette-tertiary-lighten: #ff6699;
+  --palette-tertiary-darken: #d91d63;
+  --palette-tertiary-rgb: 255, 64, 129;
+
+  --palette-success: #0bba83;
+  --palette-success-text: #ffffff;
+  --palette-success-lighten: #3dc99a;
+  --palette-success-darken: #089a6b;
+  --palette-success-rgb: 11, 186, 131;
+
+  --palette-error: #f64e62;
+  --palette-error-text: #ffffff;
+  --palette-error-lighten: #f77381;
+  --palette-error-darken: #b53746;
+  --palette-error-rgb: 246, 78, 98;
+
+  --palette-warning: #ffa800;
+  --palette-warning-text: #ffffff;
+  --palette-warning-lighten: #ffb933;
+  --palette-warning-darken: #cc8600;
+  --palette-warning-rgb: 255, 168, 0;
+
+  --palette-info: #1ec8a5;
+  --palette-info-text: #ffffff;
+  --palette-info-lighten: #4ed9ba;
+  --palette-info-darken: #149977;
+  --palette-info-rgb: 30, 200, 165;
+
+  // --- Component-Specific Colors ---
+  --palette-appbar-background: #27272f;
+  --palette-appbar-text: rgba(255, 255, 255, 0.7);
+
+  --palette-drawer-background: #27272f;
+  --palette-drawer-text: rgba(255, 255, 255, 0.5);
+  --palette-drawer-icon: rgba(255, 255, 255, 0.5);
+
+  // --- Input Component Colors ---
+  --input-border-color: rgba(255, 255, 255, 0.42);
+  --input-outlined-border: rgba(255, 255, 255, 0.23);
+  --input-filled-background: rgba(255, 255, 255, 0.09);
+  --input-label-color: rgba(255, 255, 255, 0.7);
+  --input-helper-text-color: rgba(255, 255, 255, 0.7);
+  --input-label-background: var(--palette-background);
+
+  // --- Utility Colors ---
+  --palette-gray-default: #9e9e9e;
+  --palette-gray-light: #bdbdbd;
+  --palette-gray-lighter: #e0e0e0;
+  --palette-gray-dark: #757575;
+  --palette-gray-darker: #212121;
+  --palette-dark-text: rgba(0, 0, 0, 0.87);
+  --palette-hover-opacity: 0.06;
+}
+
+// =============================================================================
+// THEME-AWARE COLOR OVERRIDES
+// =============================================================================
+// When using theme classes like .theme-primary, .theme-secondary, etc.,
+// the input label background should match the theme background
+
+@each $color in (primary, secondary, tertiary, success, error, warning, info) {
+  .theme-#{$color} {
+    --input-label-background: var(--palette-#{$color});
+  }
+}

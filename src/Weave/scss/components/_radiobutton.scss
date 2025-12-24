@@ -1,0 +1,166 @@
+$radio-size: 20px;
+$dot-size: 10px;
+
+.radio {
+  --radio-brand-color: var(--palette-action-default);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+
+  &.disabled,
+  .disabled:focus-visible,
+  .disabled:active,
+  &.readonly,
+  .readonly:hover {
+    cursor: default;
+    background-color: transparent !important;
+    & * {
+      cursor: default;
+      color: var(--palette-text-disabled);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .disabled:hover {
+      cursor: default;
+      background-color: transparent !important;
+      & * {
+        cursor: default;
+        color: var(--palette-text-disabled);
+      }
+    }
+  }
+
+  &--dense {
+    padding: 4px;
+  }
+
+  &--small {
+    --radio-size: 16px;
+    --dot-size: 7px;
+  }
+  &--medium {
+    --radio-size: 20px;
+    --dot-size: 10px;
+  }
+  &--large {
+    --radio-size: 28px;
+    --dot-size: 14px;
+  }
+}
+
+.radio--primary {
+  --radio-brand-color: var(--palette-primary);
+}
+.radio--secondary {
+  --radio-brand-color: var(--palette-secondary);
+}
+.radio--tertiary {
+  --radio-brand-color: var(--palette-tertiary);
+}
+.radio--error {
+  --radio-brand-color: var(--palette-error);
+}
+.radio--warning {
+  --radio-brand-color: var(--palette-warning);
+}
+.radio--success {
+  --radio-brand-color: var(--palette-success);
+}
+.radio--info {
+  --radio-brand-color: var(--palette-info);
+}
+
+// Input (hidden)
+.radio__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--radio-size, 20px);
+  height: var(--radio-size, 20px);
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: inherit;
+  z-index: 1;
+}
+
+// Checked state
+.radio__input:checked + .radio__span {
+  border-color: var(--radio-brand-color, var(--palette-action-default));
+}
+.radio__input:checked + .radio__span::after {
+  display: block;
+  background: var(--radio-brand-color, var(--palette-action-default));
+}
+
+// Disabled state: filled background and border, no dot
+.radio__input:disabled + .radio__span {
+  background: var(--palette-background-disabled, #f0f0f0);
+  border-color: var(--palette-text-disabled, #aaa);
+}
+.radio__input:disabled + .radio__span::after {
+  display: none;
+}
+
+// Visual circle
+.radio__span {
+  display: inline-block;
+  width: var(--radio-size, 20px);
+  height: var(--radio-size, 20px);
+  border-radius: 50%;
+  border: 2px solid var(--radio-brand-color, var(--palette-action-default));
+  background: var(--palette-background);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  position: relative;
+}
+
+// Dot
+.radio__span::after {
+  content: "";
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--dot-size, 10px);
+  height: var(--dot-size, 10px);
+  background: var(--radio-brand-color, var(--palette-action-default));
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.radio__label {
+  font-size: 1em;
+
+  .radio.flex-row & {
+    margin-left: 0.5em;
+  }
+
+  .radio.flex-row-reverse & {
+    margin-left: 0;
+    margin-right: 0.5em;
+  }
+
+  .radio.flex-column & {
+    margin-left: 0;
+    margin-bottom: 0.5em;
+  }
+
+  .radio.flex-column-reverse & {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .radio--small & {
+    font-size: 0.85em;
+  }
+  .radio--medium & {
+    font-size: 1em;
+  }
+  .radio--large & {
+    font-size: 1.25em;
+  }
+}

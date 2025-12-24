@@ -1,0 +1,99 @@
+@import 'variables';
+
+@each $color in $palette-colors {
+  .#{$color} {
+    background-color: var(--palette-#{$color}) !important;
+  }
+
+  .#{$color}-text {
+    color: var(--palette-#{$color}) !important;
+    --ripple-color: var(--palette-#{$color}) !important;
+  }
+
+  .#{$color}-hover {
+    background-color: var(--palette-#{$color}-hover) !important;
+  }
+
+  .hover\:#{$color}-hover {
+    @media(hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--palette-#{$color}-hover) !important;
+      }
+    }
+
+    &:focus-visible, &:active {
+      background-color: var(--palette-#{$color}-hover) !important;
+    }
+  }
+
+  .border-#{$color} {
+    border-color: var(--palette-#{$color}) !important;
+  }
+
+  .theme-#{$color} {
+    color: var(--palette-#{$color}-text) !important;
+    background-color: var(--palette-#{$color}) !important;
+  }
+
+  // Automatically apply correct text color when background is set via inline style
+  [style*="background-color: var(--palette-#{$color})"] {
+    color: var(--palette-#{$color}-text);
+  }
+}
+
+.inherit-text {
+  color: inherit !important;
+}
+
+.border-lines-default {
+  border-color: var(--palette-lines-default);
+}
+
+.background {
+  background-color: var(--palette-background) !important;
+}
+
+.background-gray {
+  background-color: var(--palette-background-gray) !important;
+}
+
+.theme-transparent {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+.transparent-text {
+  color: transparent !important;
+}
+
+.text-primary {
+  color: var(--palette-text-primary);
+}
+
+.text-secondary {
+  color: var(--palette-text-secondary);
+}
+
+.text-disabled {
+  color: var(--palette-text-disabled);
+}
+
+.white {
+  background-color: #FFFFFF !important;
+}
+
+.white-text {
+  color: #FFFFFF !important;
+}
+
+.black {
+  background-color: #000000 !important;
+}
+
+.black-text {
+  color: #000000 !important;
+}

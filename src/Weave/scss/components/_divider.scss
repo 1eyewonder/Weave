@@ -1,0 +1,44 @@
+.divider {
+  margin: 0;
+  flex-shrink: 0;
+  border-color: var(--palette-divider);
+  border-width: 2px;
+  border-style: solid none none none;
+}
+
+.divider--absolute {
+  left: 0;
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+}
+
+.divider--inset {
+  margin-left: 72px;
+  margin-inline-start: 72px;
+  margin-inline-end: unset;
+}
+
+.divider--light {
+  border-color: var(--palette-divider-light);
+}
+
+.divider--middle {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.divider--vertical {
+  border-style: none solid none none;
+  height: 100%;
+}
+
+.divider--flexitem {
+  height: auto;
+  align-self: stretch;
+}
+
+.divider--fullwidth {
+  flex-grow: 1;
+  width: 100%;
+}

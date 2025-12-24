@@ -1,0 +1,64 @@
+@import "../abstracts/variables";
+
+$base-spacing: 0.15rem;
+$max-spacing-steps: 20;
+$columns: 12;
+
+.grid {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.grid__item {
+  margin: 0;
+  box-sizing: border-box;
+  min-height: var(--grid-item-min-height);
+  display: flex;
+  justify-content: center;
+}
+
+@for $i from 0 through $max-spacing-steps {
+  .grid--spacing-#{$i} {
+    --grid-gap: #{$base-spacing * $i};
+    gap: var(--grid-gap);
+  }
+}
+
+// Responsive grid sizes using predefined breakpoints.
+@each $name, $value in $breakpoints {
+  @media (min-width: $value) {
+    @for $i from 1 through $columns {
+      .grid__item--#{$name}-#{$i} {
+        flex-grow: 1;
+        flex-shrink: 1;
+        max-width: calc(
+          (100% - (#{$columns} - 1) * var(--grid-gap, 0px)) /
+            #{$columns} *
+            #{$i} +
+            ((#{$i} - 1) * var(--grid-gap, 0px))
+        );
+        flex-basis: calc(
+          (100% - (#{$columns} - 1) * var(--grid-gap, 0px)) /
+            #{$columns} *
+            #{$i} +
+            ((#{$i} - 1) * var(--grid-gap, 0px))
+        );
+      }
+    }
+
+    .grid__item--#{$name}-auto {
+      flex-grow: 0;
+      max-width: none;
+      flex-basis: auto;
+    }
+
+    .grid__item--#{$name}-true {
+      flex-grow: 1;
+      max-width: 100%;
+      flex-basis: 0;
+    }
+  }
+}

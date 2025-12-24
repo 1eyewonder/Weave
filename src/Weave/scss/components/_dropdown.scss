@@ -1,0 +1,175 @@
+.weave-dropdown {
+  display: inline-flex;
+  align-self: center;
+  position: relative;
+
+  & * {
+    cursor: pointer;
+  }
+
+  &__button--hidden {
+    position: absolute;
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    user-select: none;
+    width: 100%;
+    justify-content: flex-start;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  &__chevron {
+    display: inline-flex;
+    margin-left: 8px;
+    transition: transform 0.2s;
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__list {
+    padding: 4px 0;
+    min-width: 112px;
+    background: var(--palette-background-paper);
+    box-shadow: var(--palette-shadow-2);
+    border-radius: 4px;
+    z-index: 10;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &--top-left {
+      top: 0;
+      left: 0;
+    }
+    &--top-center {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &--top-right {
+      top: 0;
+      right: 0;
+      left: auto;
+    }
+    &--center-left {
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+    &--center-right {
+      top: 50%;
+      right: 0;
+      left: auto;
+      transform: translateY(-50%);
+    }
+    &--bottom-left {
+      bottom: 0;
+      left: 0;
+      top: auto;
+    }
+    &--bottom-center {
+      bottom: 0;
+      left: 50%;
+      top: auto;
+      transform: translateX(-50%);
+    }
+    &--bottom-right {
+      bottom: 0;
+      right: 0;
+      left: auto;
+      top: auto;
+    }
+  }
+
+  &__item {
+    width: 100%;
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    text-align: start;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.1s;
+
+    &:hover:not(&--disabled) {
+      background: var(--palette-action-hover);
+    }
+
+    &--dense {
+      padding: 2px 12px;
+    }
+
+    &--disabled {
+      color: var(--palette-action-disabled) !important;
+      cursor: default !important;
+      pointer-events: none !important;
+      .ws-dropdown__item-icon {
+        color: var(--palette-action-disabled) !important;
+      }
+    }
+
+    &-icon {
+      display: inline-flex;
+      flex-shrink: 0;
+      margin-inline-end: 12px;
+      color: var(--palette-action-default);
+    }
+
+    &-text {
+      flex: 1 1 auto;
+      margin: 4px 0;
+    }
+  }
+
+  &__divider {
+    margin: 4px 0;
+    height: 1px;
+    background: var(--palette-divider);
+    width: 100%;
+  }
+
+  // If any dropdown item has an icon, then give the other ones the same gutters.
+  &__list:has(.weave-dropdown__item-icon)
+    .weave-dropdown__item:not(:has(.weave-dropdown__item-icon))
+    .weave-dropdown__item-text {
+    margin-inline-start: 36px;
+  }
+
+  &__list:has(.weave-dropdown__subdropdown-icon)
+    .weave-dropdown__item:not(:has(.weave-dropdown__subdropdown-icon))
+    .weave-dropdown__item-text {
+    margin-inline-end: 36px;
+  }
+
+  &__subdropdown-icon {
+    display: inline-flex;
+    margin-inline-start: 12px;
+    color: var(--palette-action-default);
+  }
+
+  &--open {
+    z-index: 20;
+  }
+}
+
+.weave-popover:has(> .weave-dropdown__list) {
+  overflow: hidden;
+  &:has(> .weave-dropdown__list:empty) {
+    visibility: hidden;
+  }
+}

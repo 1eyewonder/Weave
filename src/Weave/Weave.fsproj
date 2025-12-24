@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Helpers.fs" />
+    <Compile Include="Theming.fs" />
+    <Compile Include="components/Core.fs" />
+    <Compile Include="components/Typography.fs" />
+    <Compile Include="components/Container.fs" />
+    <Compile Include="components/Button.fs" />
+    <Compile Include="components/Tooltip.fs" />
+    <Compile Include="components/Divider.fs" />
+    <Compile Include="components/Grid.fs" />
+    <Compile Include="components/NumericField.fs" />
+    <Compile Include="components/Checkbox.fs" />
+    <Compile Include="components/RadioButton.fs" />
+    <Compile Include="components/Switch.fs" />
+    <Compile Include="components/Dropdown.fs" />
+    <None Include="wsconfig.json" />
+    <None Include="scss/*" />
+  </ItemGroup>
+
+  <!-- Compile SCSS to CSS before build -->
+  <Target Name="CompileScss" BeforeTargets="BeforeBuild">
+    <Exec Command="yarn build:css" WorkingDirectory="$(ProjectDir)..\.." />
+  </Target>
+
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+
+</Project>

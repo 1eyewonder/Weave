@@ -1,0 +1,482 @@
+.input-control {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: top;
+}
+
+.input-control--field {
+  .input-control__slot {
+    height: auto;
+    min-height: 19px;
+
+    &.input-control__root--outlined.input-control--adorned-start {
+      padding-left: 0;
+      padding-inline-start: 0;
+      padding-inline-end: 14px;
+    }
+
+    &.input-control__root--filled.input-control--adorned-start {
+      padding-left: 0;
+      padding-inline-start: 0;
+      padding-inline-end: 12px;
+    }
+
+    &.input-control__slot--no-padding {
+      padding-top: 0px;
+      padding-bottom: 0px;
+
+      &.input-control__root--filled {
+        padding-top: 21px;
+        padding-bottom: 2px;
+      }
+
+      &.input-control__root--outlined {
+        padding-top: 7px;
+        padding-bottom: 2px;
+      }
+    }
+  }
+}
+
+.input-control--text {
+  .input-control__root {
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+    opacity: 0.42;
+  }
+
+  // When wrapper has spin buttons, move border to wrapper
+  .input-control__input-wrapper--with-spin {
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+    opacity: 0.42;
+
+    .input-control__root {
+      border-bottom: none;
+    }
+  }
+}
+
+.input-control--filled {
+  .input-control__root {
+    background-color: var(--input-filled-background, currentColor);
+    opacity: 0.04;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+  }
+
+  // When wrapper has spin buttons, move styling to wrapper
+  .input-control__input-wrapper--with-spin {
+    background-color: var(--input-filled-background, currentColor);
+    opacity: 0.04;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+
+    .input-control__root {
+      background-color: transparent;
+      border-radius: 0;
+      border-bottom: none;
+    }
+  }
+}
+
+.input-control--outlined {
+  .input-control__label {
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    background-color: var(
+      --input-label-background,
+      var(--palette-background-default, transparent)
+    );
+    padding: 0 4px;
+    margin-bottom: 0;
+    z-index: 1;
+    color: var(--input-label-color, var(--palette-text-primary, currentColor));
+    opacity: 1;
+  }
+
+  .input-control__input-wrapper {
+    margin-top: 0;
+  }
+
+  .input-control__root {
+    border: 1px solid
+      var(--input-outlined-border, var(--palette-text-primary, currentColor));
+    border-radius: 4px;
+    color: var(--palette-text-primary, currentColor);
+    opacity: 1;
+  }
+
+  // When wrapper has spin buttons, move border to wrapper
+  .input-control__input-wrapper--with-spin {
+    border: 1px solid
+      var(--input-outlined-border, var(--palette-text-primary, currentColor));
+    border-radius: 4px;
+    opacity: 1;
+
+    .input-control__root {
+      border: none;
+      border-radius: 0;
+    }
+  }
+}
+
+.input-control--margin-none {
+  margin: 0;
+}
+
+.input-control--margin-dense {
+  margin: 4px 0;
+}
+
+.input-control--margin-normal {
+  margin: 8px 0;
+}
+
+.input-control--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.input-control--error {
+  .input-control__root {
+    border-color: var(--palette-error);
+  }
+
+  .input-control__label {
+    color: var(--palette-error);
+  }
+
+  &.input-control--outlined {
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-error);
+    }
+  }
+}
+
+// Color variants
+.input-control--primary {
+  .input-control__label {
+    color: var(--palette-primary);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-primary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-primary);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-primary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-primary);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-primary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-primary);
+    }
+  }
+}
+
+.input-control--secondary {
+  .input-control__label {
+    color: var(--palette-secondary);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-secondary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-secondary);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-secondary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-secondary);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-secondary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-secondary);
+    }
+  }
+}
+
+.input-control--tertiary {
+  .input-control__label {
+    color: var(--palette-tertiary);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-tertiary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-tertiary);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-tertiary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-tertiary);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-tertiary);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-tertiary);
+    }
+  }
+}
+
+.input-control--success {
+  .input-control__label {
+    color: var(--palette-success);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-success);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-success);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-success);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-success);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-success);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-success);
+    }
+  }
+}
+
+.input-control--warning {
+  .input-control__label {
+    color: var(--palette-warning);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-warning);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-warning);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-warning);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-warning);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-warning);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-warning);
+    }
+  }
+}
+
+.input-control--info {
+  .input-control__label {
+    color: var(--palette-info);
+  }
+
+  &.input-control--outlined {
+    .input-control__root {
+      border-color: var(--palette-info);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-color: var(--palette-info);
+    }
+  }
+
+  &.input-control--filled {
+    .input-control__root {
+      border-bottom-color: var(--palette-info);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-info);
+    }
+  }
+
+  &.input-control--text {
+    .input-control__root {
+      border-bottom-color: var(--palette-info);
+    }
+
+    .input-control__input-wrapper--with-spin {
+      border-bottom-color: var(--palette-info);
+    }
+  }
+}
+
+.input-control__slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-control__input-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-control__root {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: currentColor;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.input-control__root--text {
+  padding: 4px 0 5px;
+}
+
+.input-control__root--filled {
+  padding: 27px 12px 10px;
+}
+
+.input-control__root--outlined {
+  padding: 10px 14px;
+}
+
+.input-control__label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: var(--input-label-color, var(--palette-text-primary, currentColor));
+  opacity: 0.7;
+  transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+}
+
+.input-control__label--focused {
+  color: var(--palette-primary);
+}
+
+.input-control__helper-text {
+  font-size: 0.75rem;
+  line-height: 1.66;
+  margin-top: 4px;
+  color: var(--input-helper-text-color, currentColor);
+  opacity: 0.7;
+}
+
+.input-control__error-text {
+  font-size: 0.75rem;
+  line-height: 1.66;
+  margin-top: 4px;
+  color: var(--palette-error);
+}
+
+.input-control__numeric-spin {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-left: 4px;
+  gap: 2px;
+
+  button {
+    min-width: auto;
+    padding: 2px 4px;
+    font-size: 0.625rem;
+    line-height: 1;
+    color: var(--palette-text-primary, currentColor);
+  }
+}
+
+/* Hide native browser spin buttons for number inputs when using custom spin buttons */
+.input-control--hide-native-spin {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
+.width-full {
+  width: 100%;
+}

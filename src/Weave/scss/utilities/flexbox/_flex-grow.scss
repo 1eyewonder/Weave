@@ -1,0 +1,41 @@
+@import '../../abstracts/variables';
+
+@mixin flex-grow ($breakpoint) {
+  // element does not grow
+  .flex-#{$breakpoint}grow-0 {
+    flex-grow: 0 !important;
+  }
+
+  // element grows to fill available space
+  .flex-#{$breakpoint}grow-1 {
+    flex-grow: 1 !important;
+  }
+
+  // only first child grows
+  .flex-#{$breakpoint}grow-start > *:first-child {
+    flex-grow: 1 !important;
+  }
+
+  // only last child grows
+  .flex-#{$breakpoint}grow-end > *:last-child {
+    flex-grow: 1 !important;
+  }
+
+    // first and last child grow
+  .flex-#{$breakpoint}grow-start-and-end > :first-child,
+  .flex-#{$breakpoint}grow-start-and-end > :last-child {
+    flex-grow: 1 !important;
+  }
+
+  // all but first and last child grow
+  .flex-#{$breakpoint}grow-middle > *:not(:first-child):not(:last-child) {
+    flex-grow: 1 !important;
+  }
+
+  // all children grow
+  .flex-#{$breakpoint}grow-all > * {
+    flex-grow: 1 !important;
+  }
+}
+
+@include flex-grow("");

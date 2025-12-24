@@ -1,0 +1,43 @@
+// Color definitions
+$color-primary: #007bff;
+$color-secondary: #4ed913;
+$color-tertiary: #a83a40;
+$color-success: #28a745;
+$color-danger: #dc3545;
+$color-warning: #ffc107;
+$color-info: #17a2b8;
+
+// Calculate darker shades (for hover/active states)
+$color-primary-darken: darken($color-primary, 10%);
+$color-secondary-darken: darken($color-secondary, 10%);
+$color-tertiary-darken: darken($color-tertiary, 10%);
+$color-success-darken: darken($color-success, 10%);
+$color-danger-darken: darken($color-danger, 10%);
+$color-warning-darken: darken($color-warning, 10%);
+$color-info-darken: darken($color-info, 10%);
+
+// Calculate hover states with transparency
+$color-primary-hover: rgba($color-primary, 0.08);
+$color-secondary-hover: rgba($color-secondary, 0.08);
+$color-tertiary-hover: rgba($color-tertiary, 0.08);
+$color-success-hover: rgba($color-success, 0.08);
+$color-danger-hover: rgba($color-danger, 0.08);
+$color-warning-hover: rgba($color-warning, 0.08);
+$color-info-hover: rgba($color-info, 0.08);
+
+$palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+
+$sizes: small, medium, large;
+
+// Base spacing unit for utilities (1 step = 0.25rem)
+// Keep this aligned with component sizing and grid spacing assumptions
+$spacing-base: 0.25rem;
+
+$breakpoint-xs: 0px;
+$breakpoint-sm: 600px;
+$breakpoint-md: 960px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+$breakpoint-xxl: 2560px;
+
+$breakpoints: ( xs: $breakpoint-xs, sm: $breakpoint-sm, md: $breakpoint-md, lg: $breakpoint-lg, xl: $breakpoint-xl, xxl: $breakpoint-xxl );

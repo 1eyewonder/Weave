@@ -1,0 +1,5 @@
+@for $i from 0 through 25 {
+  .elevation-#{$i} {
+    box-shadow: var(--elevation-#{$i});
+  }
+}

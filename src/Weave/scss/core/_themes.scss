@@ -12,7 +12,8 @@
   --palette-surface: #ffffff;
 
   // --- Text Colors ---
-  --palette-text-primary: #424242;
+  --palette-text-primary: rgba(66, 66, 66, 1);
+  --palette-text-primary-rgb: 66, 66, 66;
   --palette-text-secondary: rgba(0, 0, 0, 0.54);
   --palette-text-disabled: rgba(0, 0, 0, 0.38);
 
@@ -108,6 +109,7 @@
   --palette-surface: #373740;
 
   --palette-text-primary: rgba(255, 255, 255);
+  --palette-text-primary-rgb: 255, 255, 255;
   --palette-text-secondary: rgba(255, 255, 255, 0.5);
   --palette-text-disabled: rgba(255, 255, 255, 0.2);
 

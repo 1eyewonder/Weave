@@ -1,3 +1,5 @@
+@import "../utilities/borders/border-radius";
+
 $font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
   "Helvetica Neue", Arial, sans-serif;
 $font-family-heading: $font-family-base;
@@ -18,7 +20,8 @@ $spacing-xxl: 3rem;
 
 // CSS Custom Properties
 :root {
-  --default-borderradius: 4px;
+  --default-borderradius: #{map-get($border-radiuses, "sm")};
+  --default-button-borderradius: #{map-get($border-radiuses, "md")};
   --grid-item-min-height: 64px;
   --palette-border-opacity: 0.8;
 

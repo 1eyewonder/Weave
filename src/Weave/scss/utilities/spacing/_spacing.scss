@@ -1,34 +1,50 @@
-@import '../../abstracts/variables';
+@import "../../abstracts/variables";
 
 // Rem-based spacing utilities derived from a single base unit ($spacing-base)
 // 1 step = $spacing-base (default 0.25rem). Supports 0..20, negatives (n1..n20) for margins, and responsive breakpoints.
 
-@mixin spacing-positive-negative ($breakpoint) {
+@mixin spacing-positive-negative($breakpoint) {
   // Positive / zero values for margin and padding
   @each $prop, $abbrev in (margin: m, padding: p) {
-    @for $i from 0 through 4 {
+    @for $i from 0 through 20 {
       $value: $i * $spacing-base;
 
       .#{$abbrev}t-#{$breakpoint}#{$i},
-      .#{$abbrev}y-#{$breakpoint}#{$i} { #{$prop}-top: $value !important; }
+      .#{$abbrev}y-#{$breakpoint}#{$i} {
+        #{$prop}-top: $value !important;
+      }
 
       .#{$abbrev}r-#{$breakpoint}#{$i},
-      .#{$abbrev}x-#{$breakpoint}#{$i} { #{$prop}-right: $value !important; }
+      .#{$abbrev}x-#{$breakpoint}#{$i} {
+        #{$prop}-right: $value !important;
+      }
 
       .#{$abbrev}l-#{$breakpoint}#{$i},
-      .#{$abbrev}x-#{$breakpoint}#{$i} { #{$prop}-left: $value !important; }
+      .#{$abbrev}x-#{$breakpoint}#{$i} {
+        #{$prop}-left: $value !important;
+      }
 
       .#{$abbrev}b-#{$breakpoint}#{$i},
-      .#{$abbrev}y-#{$breakpoint}#{$i} { #{$prop}-bottom: $value !important; }
+      .#{$abbrev}y-#{$breakpoint}#{$i} {
+        #{$prop}-bottom: $value !important;
+      }
 
-      .#{$abbrev}s-#{$breakpoint}#{$i} { #{$prop}-inline-start: $value !important; }
-      .#{$abbrev}e-#{$breakpoint}#{$i} { #{$prop}-inline-end: $value !important; }
-      .#{$abbrev}a-#{$breakpoint}#{$i} { #{$prop}: $value !important; }
+      .#{$abbrev}s-#{$breakpoint}#{$i} {
+        #{$prop}-inline-start: $value !important;
+      }
+      .#{$abbrev}e-#{$breakpoint}#{$i} {
+        #{$prop}-inline-end: $value !important;
+      }
+      .#{$abbrev}a-#{$breakpoint}#{$i} {
+        #{$prop}: $value !important;
+      }
     }
 
     // Auto values: only valid for margin
     @if $prop == margin {
-      .#{$abbrev}a-#{$breakpoint}auto { margin: auto !important; }
+      .#{$abbrev}a-#{$breakpoint}auto {
+        margin: auto !important;
+      }
       .#{$abbrev}x-#{$breakpoint}auto {
         margin-left: auto !important;
         margin-right: auto !important;
@@ -41,46 +57,60 @@
   }
 
   // Negative margin values: n1..n20
-  @for $i from 1 through 4 {
+  @for $i from 0 through 20 {
     $neg: -$i * $spacing-base;
 
     .mt-#{$breakpoint}n#{$i},
-    .my-#{$breakpoint}n#{$i} { margin-top: $neg !important; }
+    .my-#{$breakpoint}n#{$i} {
+      margin-top: $neg !important;
+    }
 
     .mr-#{$breakpoint}n#{$i},
-    .mx-#{$breakpoint}n#{$i} { margin-right: $neg !important; }
+    .mx-#{$breakpoint}n#{$i} {
+      margin-right: $neg !important;
+    }
 
     .ml-#{$breakpoint}n#{$i},
-    .mx-#{$breakpoint}n#{$i} { margin-left: $neg !important; }
+    .mx-#{$breakpoint}n#{$i} {
+      margin-left: $neg !important;
+    }
 
     .mb-#{$breakpoint}n#{$i},
-    .my-#{$breakpoint}n#{$i} { margin-bottom: $neg !important; }
+    .my-#{$breakpoint}n#{$i} {
+      margin-bottom: $neg !important;
+    }
 
-    .ms-#{$breakpoint}n#{$i} { margin-inline-start: $neg !important; }
-    .me-#{$breakpoint}n#{$i} { margin-inline-end: $neg !important; }
-    .ma-#{$breakpoint}n#{$i} { margin: $neg !important; }
+    .ms-#{$breakpoint}n#{$i} {
+      margin-inline-start: $neg !important;
+    }
+    .me-#{$breakpoint}n#{$i} {
+      margin-inline-end: $neg !important;
+    }
+    .ma-#{$breakpoint}n#{$i} {
+      margin: $neg !important;
+    }
   }
 }
 
 // XS >
 @include spacing-positive-negative("");
 
-@media screen and (min-width:$breakpoint-sm) {
+@media screen and (min-width: $breakpoint-sm) {
   @include spacing-positive-negative("sm-");
 }
 
-@media screen and (min-width:$breakpoint-md) {
+@media screen and (min-width: $breakpoint-md) {
   @include spacing-positive-negative("md-");
 }
 
-@media screen and (min-width:$breakpoint-lg) {
+@media screen and (min-width: $breakpoint-lg) {
   @include spacing-positive-negative("lg-");
 }
 
-@media screen and (min-width:$breakpoint-xl) {
+@media screen and (min-width: $breakpoint-xl) {
   @include spacing-positive-negative("xl-");
 }
 
-@media screen and (min-width:$breakpoint-xxl) {
+@media screen and (min-width: $breakpoint-xxl) {
   @include spacing-positive-negative("xxl-");
 }

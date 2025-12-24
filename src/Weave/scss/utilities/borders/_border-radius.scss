@@ -1,4 +1,9 @@
-$border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
+$border-radiuses: (
+  "none": 0,
+  "sm": 4px,
+  "md": 8px,
+  "lg": 12px,
+);
 
 @each $size, $value in $border-radiuses {
   .rounded-#{$size} {
@@ -10,7 +15,8 @@ $border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
     border-top-right-radius: $value !important;
   }
 
-  .rounded-r-#{$size}, .rounded-e-#{$size} {
+  .rounded-r-#{$size},
+  .rounded-e-#{$size} {
     border-top-right-radius: $value !important;
     border-bottom-right-radius: $value !important;
   }
@@ -20,24 +26,29 @@ $border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
     border-bottom-left-radius: $value !important;
   }
 
-  .rounded-l-#{$size}, .rounded-s-#{$size} {
+  .rounded-l-#{$size},
+  .rounded-s-#{$size} {
     border-top-left-radius: $value !important;
     border-bottom-left-radius: $value !important;
   }
 
-  .rounded-tl-#{$size}, .rounded-ts-#{$size} {
+  .rounded-tl-#{$size},
+  .rounded-ts-#{$size} {
     border-top-left-radius: $value !important;
   }
 
-  .rounded-tr-#{$size}, .rounded-te-#{$size} {
+  .rounded-tr-#{$size},
+  .rounded-te-#{$size} {
     border-top-right-radius: $value !important;
   }
 
-  .rounded-br-#{$size}, .rounded-be-#{$size} {
+  .rounded-br-#{$size},
+  .rounded-be-#{$size} {
     border-bottom-right-radius: $value !important;
   }
 
-  .rounded-bl-#{$size}, .rounded-bs-#{$size} {
+  .rounded-bl-#{$size},
+  .rounded-bs-#{$size} {
     border-bottom-left-radius: $value !important;
   }
 
@@ -89,7 +100,8 @@ $border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
   border-top-right-radius: var(--default-borderradius) !important;
 }
 
-.rounded-r, .rounded-e {
+.rounded-r,
+.rounded-e {
   border-top-right-radius: var(--default-borderradius) !important;
   border-bottom-right-radius: var(--default-borderradius) !important;
 }
@@ -99,24 +111,29 @@ $border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
   border-bottom-left-radius: var(--default-borderradius) !important;
 }
 
-.rounded-l, .rounded-s {
+.rounded-l,
+.rounded-s {
   border-top-left-radius: var(--default-borderradius) !important;
   border-bottom-left-radius: var(--default-borderradius) !important;
 }
 
-.rounded-tl, .rounded-ts {
+.rounded-tl,
+.rounded-ts {
   border-top-left-radius: var(--default-borderradius) !important;
 }
 
-.rounded-tr, .rounded-te {
+.rounded-tr,
+.rounded-te {
   border-top-right-radius: var(--default-borderradius) !important;
 }
 
-.rounded-br, .rounded-be {
+.rounded-br,
+.rounded-be {
   border-bottom-right-radius: var(--default-borderradius) !important;
 }
 
-.rounded-bl, .rounded-bs {
+.rounded-bl,
+.rounded-bs {
   border-bottom-left-radius: var(--default-borderradius) !important;
 }
 
@@ -157,7 +174,6 @@ $border-radiuses: ( "none": 0, "sm": 2px, "md": 8px, "lg": 12px);
   }
 }
 //------------------------------------------------------------------
-
 
 .rounded-circle {
   border-radius: 50% !important;

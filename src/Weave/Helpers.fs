@@ -5,6 +5,15 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 
+[<AutoOpen; JavaScript>]
+module Generic =
+
+  [<Inline>]
+  let inline curry f a b = f (a, b)
+
+  [<Inline>]
+  let inline uncurry f (a, b) = f a b
+
 [<JavaScript>]
 module Option =
 
@@ -159,6 +168,15 @@ module Attr =
 
   let enabled (isEnabled: View<bool>) : Attr =
     Attr.DynamicBool "disabled" (View.not isEnabled)
+
+  [<Inline>]
+  let inline bindOption ([<InlineIfLambda>] f: 'T -> Attr) (x: 'T option) = Option.mapOrDefault Attr.Empty f x
+
+  module List =
+
+    [<Inline>]
+    let inline bindOption ([<InlineIfLambda>] f: 'T -> Attr) (x: 'T list option) =
+      Option.mapOrDefault [] (List.map f) x
 
   module Tab =
 

@@ -71,251 +71,268 @@ module CssHelpers =
 
   [<RequireQualifiedAccess>]
   type Margin =
-    | Top of Size
-    | Bottom of Size
-    | Left of Size
-    | Right of Size
-    | Vertical of Size
-    | Horizontal of Size
-    | All of Size
+    | Top of Size option
+    | Bottom of Size option
+    | Left of Size option
+    | Right of Size option
+    | Vertical of Size option
+    | Horizontal of Size option
+    | All of Size option
 
   module Margin =
 
     module Top =
 
-      let extraSmall = Margin.Top Size.ExtraSmall
-      let small = Margin.Top Size.Small
-      let medium = Margin.Top Size.Medium
-      let large = Margin.Top Size.Large
-      let extraLarge = Margin.Top Size.ExtraLarge
+      let none = Margin.Top None
+      let extraSmall = Margin.Top(Some Size.ExtraSmall)
+      let small = Margin.Top(Some Size.Small)
+      let medium = Margin.Top(Some Size.Medium)
+      let large = Margin.Top(Some Size.Large)
+      let extraLarge = Margin.Top(Some Size.ExtraLarge)
 
     module Bottom =
 
-      let extraSmall = Margin.Bottom Size.ExtraSmall
-      let small = Margin.Bottom Size.Small
-      let medium = Margin.Bottom Size.Medium
-      let large = Margin.Bottom Size.Large
-      let extraLarge = Margin.Bottom Size.ExtraLarge
+      let none = Margin.Bottom None
+      let extraSmall = Margin.Bottom(Some Size.ExtraSmall)
+      let small = Margin.Bottom(Some Size.Small)
+      let medium = Margin.Bottom(Some Size.Medium)
+      let large = Margin.Bottom(Some Size.Large)
+      let extraLarge = Margin.Bottom(Some Size.ExtraLarge)
 
     module Left =
 
-      let extraSmall = Margin.Left Size.ExtraSmall
-      let small = Margin.Left Size.Small
-      let medium = Margin.Left Size.Medium
-      let large = Margin.Left Size.Large
-      let extraLarge = Margin.Left Size.ExtraLarge
+      let none = Margin.Left None
+      let extraSmall = Margin.Left(Some Size.ExtraSmall)
+      let small = Margin.Left(Some Size.Small)
+      let medium = Margin.Left(Some Size.Medium)
+      let large = Margin.Left(Some Size.Large)
+      let extraLarge = Margin.Left(Some Size.ExtraLarge)
 
     module Right =
 
-      let extraSmall = Margin.Right Size.ExtraSmall
-      let small = Margin.Right Size.Small
-      let medium = Margin.Right Size.Medium
-      let large = Margin.Right Size.Large
-      let extraLarge = Margin.Right Size.ExtraLarge
+      let none = Margin.Right None
+      let extraSmall = Margin.Right(Some Size.ExtraSmall)
+      let small = Margin.Right(Some Size.Small)
+      let medium = Margin.Right(Some Size.Medium)
+      let large = Margin.Right(Some Size.Large)
+      let extraLarge = Margin.Right(Some Size.ExtraLarge)
 
     module Vertical =
 
-      let extraSmall = Margin.Vertical Size.ExtraSmall
-      let small = Margin.Vertical Size.Small
-      let medium = Margin.Vertical Size.Medium
-      let large = Margin.Vertical Size.Large
-      let extraLarge = Margin.Vertical Size.ExtraLarge
+      let none = Margin.Vertical None
+      let extraSmall = Margin.Vertical(Some Size.ExtraSmall)
+      let small = Margin.Vertical(Some Size.Small)
+      let medium = Margin.Vertical(Some Size.Medium)
+      let large = Margin.Vertical(Some Size.Large)
+      let extraLarge = Margin.Vertical(Some Size.ExtraLarge)
 
     module Horizontal =
 
-      let extraSmall = Margin.Horizontal Size.ExtraSmall
-      let small = Margin.Horizontal Size.Small
-      let medium = Margin.Horizontal Size.Medium
-      let large = Margin.Horizontal Size.Large
-      let extraLarge = Margin.Horizontal Size.ExtraLarge
+      let none = Margin.Horizontal None
+      let extraSmall = Margin.Horizontal(Some Size.ExtraSmall)
+      let small = Margin.Horizontal(Some Size.Small)
+      let medium = Margin.Horizontal(Some Size.Medium)
+      let large = Margin.Horizontal(Some Size.Large)
+      let extraLarge = Margin.Horizontal(Some Size.ExtraLarge)
 
     module All =
 
-      let extraSmall = Margin.All Size.ExtraSmall
-      let small = Margin.All Size.Small
-      let medium = Margin.All Size.Medium
-      let large = Margin.All Size.Large
-      let extraLarge = Margin.All Size.ExtraLarge
+      let none = Margin.All None
+      let extraSmall = Margin.All(Some Size.ExtraSmall)
+      let small = Margin.All(Some Size.Small)
+      let medium = Margin.All(Some Size.Medium)
+      let large = Margin.All(Some Size.Large)
+      let extraLarge = Margin.All(Some Size.ExtraLarge)
 
     let toClasses margin =
       match margin with
       | Margin.Top size ->
         match size with
-        | Size.ExtraSmall -> Css.``mt-0``
-        | Size.Small -> Css.``mt-1``
-        | Size.Medium -> Css.``mt-2``
-        | Size.Large -> Css.``mt-3``
-        | Size.ExtraLarge -> Css.``mt-4``
+        | None -> Css.``mt-0``
+        | Some Size.ExtraSmall -> Css.``mt-4``
+        | Some Size.Small -> Css.``mt-8``
+        | Some Size.Medium -> Css.``mt-12``
+        | Some Size.Large -> Css.``mt-16``
+        | Some Size.ExtraLarge -> Css.``mt-20``
         |> List.singleton
       | Margin.Bottom size ->
         match size with
-        | Size.ExtraSmall -> Css.``mb-0``
-        | Size.Small -> Css.``mb-1``
-        | Size.Medium -> Css.``mb-2``
-        | Size.Large -> Css.``mb-3``
-        | Size.ExtraLarge -> Css.``mb-4``
+        | None -> Css.``mb-0``
+        | Some Size.ExtraSmall -> Css.``mb-4``
+        | Some Size.Small -> Css.``mb-8``
+        | Some Size.Medium -> Css.``mb-12``
+        | Some Size.Large -> Css.``mb-16``
+        | Some Size.ExtraLarge -> Css.``mb-20``
         |> List.singleton
       | Margin.Left size ->
         match size with
-        | Size.ExtraSmall -> Css.``ml-0``
-        | Size.Small -> Css.``ml-1``
-        | Size.Medium -> Css.``ml-2``
-        | Size.Large -> Css.``ml-3``
-        | Size.ExtraLarge -> Css.``ml-4``
+        | None -> Css.``ml-0``
+        | Some Size.ExtraSmall -> Css.``ml-4``
+        | Some Size.Small -> Css.``ml-8``
+        | Some Size.Medium -> Css.``ml-12``
+        | Some Size.Large -> Css.``ml-16``
+        | Some Size.ExtraLarge -> Css.``ml-20``
         |> List.singleton
       | Margin.Right size ->
         match size with
-        | Size.ExtraSmall -> Css.``mr-0``
-        | Size.Small -> Css.``mr-1``
-        | Size.Medium -> Css.``mr-2``
-        | Size.Large -> Css.``mr-3``
-        | Size.ExtraLarge -> Css.``mr-4``
+        | None -> Css.``mr-0``
+        | Some Size.ExtraSmall -> Css.``mr-4``
+        | Some Size.Small -> Css.``mr-8``
+        | Some Size.Medium -> Css.``mr-12``
+        | Some Size.Large -> Css.``mr-16``
+        | Some Size.ExtraLarge -> Css.``mr-20``
         |> List.singleton
       | Margin.Vertical size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``mt-0``; Css.``mb-0`` ]
-        | Size.Small -> [ Css.``mt-1``; Css.``mb-1`` ]
-        | Size.Medium -> [ Css.``mt-2``; Css.``mb-2`` ]
-        | Size.Large -> [ Css.``mt-3``; Css.``mb-3`` ]
-        | Size.ExtraLarge -> [ Css.``mt-4``; Css.``mb-4`` ]
+        | None -> [ Css.``mt-0``; Css.``mb-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``mt-4``; Css.``mb-4`` ]
+        | Some Size.Small -> [ Css.``mt-8``; Css.``mb-8`` ]
+        | Some Size.Medium -> [ Css.``mt-12``; Css.``mb-12`` ]
+        | Some Size.Large -> [ Css.``mt-16``; Css.``mb-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``mt-20``; Css.``mb-20`` ]
       | Margin.Horizontal size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``ml-0``; Css.``mr-0`` ]
-        | Size.Small -> [ Css.``ml-1``; Css.``mr-1`` ]
-        | Size.Medium -> [ Css.``ml-2``; Css.``mr-2`` ]
-        | Size.Large -> [ Css.``ml-3``; Css.``mr-3`` ]
-        | Size.ExtraLarge -> [ Css.``ml-4``; Css.``mr-4`` ]
+        | None -> [ Css.``ml-0``; Css.``mr-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``ml-4``; Css.``mr-4`` ]
+        | Some Size.Small -> [ Css.``ml-8``; Css.``mr-8`` ]
+        | Some Size.Medium -> [ Css.``ml-12``; Css.``mr-12`` ]
+        | Some Size.Large -> [ Css.``ml-16``; Css.``mr-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``ml-20``; Css.``mr-20`` ]
       | Margin.All size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``ma-0`` ]
-        | Size.Small -> [ Css.``ma-1`` ]
-        | Size.Medium -> [ Css.``ma-2`` ]
-        | Size.Large -> [ Css.``ma-3`` ]
-        | Size.ExtraLarge -> [ Css.``ma-4`` ]
+        | None -> [ Css.``ma-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``ma-4`` ]
+        | Some Size.Small -> [ Css.``ma-8`` ]
+        | Some Size.Medium -> [ Css.``ma-12`` ]
+        | Some Size.Large -> [ Css.``ma-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``ma-20`` ]
 
   [<RequireQualifiedAccess>]
   type Padding =
-    | Top of Size
-    | Bottom of Size
-    | Left of Size
-    | Right of Size
-    | Vertical of Size
-    | Horizontal of Size
-    | All of Size
+    | Top of Size option
+    | Bottom of Size option
+    | Left of Size option
+    | Right of Size option
+    | Vertical of Size option
+    | Horizontal of Size option
+    | All of Size option
 
   module Padding =
 
     module Top =
-
-      let extraSmall = Padding.Top Size.ExtraSmall
-      let small = Padding.Top Size.Small
-      let medium = Padding.Top Size.Medium
-      let large = Padding.Top Size.Large
-      let extraLarge = Padding.Top Size.ExtraLarge
+      let none = Padding.Top None
+      let extraSmall = Padding.Top(Some Size.ExtraSmall)
+      let small = Padding.Top(Some Size.Small)
+      let medium = Padding.Top(Some Size.Medium)
+      let large = Padding.Top(Some Size.Large)
+      let extraLarge = Padding.Top(Some Size.ExtraLarge)
 
     module Bottom =
-
-      let extraSmall = Padding.Bottom Size.ExtraSmall
-      let small = Padding.Bottom Size.Small
-      let medium = Padding.Bottom Size.Medium
-      let large = Padding.Bottom Size.Large
-      let extraLarge = Padding.Bottom Size.ExtraLarge
+      let none = Padding.Bottom None
+      let extraSmall = Padding.Bottom(Some Size.ExtraSmall)
+      let small = Padding.Bottom(Some Size.Small)
+      let medium = Padding.Bottom(Some Size.Medium)
+      let large = Padding.Bottom(Some Size.Large)
+      let extraLarge = Padding.Bottom(Some Size.ExtraLarge)
 
     module Left =
-
-      let extraSmall = Padding.Left Size.ExtraSmall
-      let small = Padding.Left Size.Small
-      let medium = Padding.Left Size.Medium
-      let large = Padding.Left Size.Large
-      let extraLarge = Padding.Left Size.ExtraLarge
+      let none = Padding.Left None
+      let extraSmall = Padding.Left(Some Size.ExtraSmall)
+      let small = Padding.Left(Some Size.Small)
+      let medium = Padding.Left(Some Size.Medium)
+      let large = Padding.Left(Some Size.Large)
+      let extraLarge = Padding.Left(Some Size.ExtraLarge)
 
     module Right =
-
-      let extraSmall = Padding.Right Size.ExtraSmall
-      let small = Padding.Right Size.Small
-      let medium = Padding.Right Size.Medium
-      let large = Padding.Right Size.Large
-      let extraLarge = Padding.Right Size.ExtraLarge
+      let none = Padding.Right None
+      let extraSmall = Padding.Right(Some Size.ExtraSmall)
+      let small = Padding.Right(Some Size.Small)
+      let medium = Padding.Right(Some Size.Medium)
+      let large = Padding.Right(Some Size.Large)
+      let extraLarge = Padding.Right(Some Size.ExtraLarge)
 
     module Vertical =
-
-      let extraSmall = Padding.Vertical Size.ExtraSmall
-      let small = Padding.Vertical Size.Small
-      let medium = Padding.Vertical Size.Medium
-      let large = Padding.Vertical Size.Large
-      let extraLarge = Padding.Vertical Size.ExtraLarge
+      let none = Padding.Vertical None
+      let extraSmall = Padding.Vertical(Some Size.ExtraSmall)
+      let small = Padding.Vertical(Some Size.Small)
+      let medium = Padding.Vertical(Some Size.Medium)
+      let large = Padding.Vertical(Some Size.Large)
+      let extraLarge = Padding.Vertical(Some Size.ExtraLarge)
 
     module Horizontal =
-
-      let extraSmall = Padding.Horizontal Size.ExtraSmall
-      let small = Padding.Horizontal Size.Small
-      let medium = Padding.Horizontal Size.Medium
-      let large = Padding.Horizontal Size.Large
-      let extraLarge = Padding.Horizontal Size.ExtraLarge
+      let none = Padding.Horizontal None
+      let extraSmall = Padding.Horizontal(Some Size.ExtraSmall)
+      let small = Padding.Horizontal(Some Size.Small)
+      let medium = Padding.Horizontal(Some Size.Medium)
+      let large = Padding.Horizontal(Some Size.Large)
+      let extraLarge = Padding.Horizontal(Some Size.ExtraLarge)
 
     module All =
-
-      let extraSmall = Padding.All Size.ExtraSmall
-      let small = Padding.All Size.Small
-      let medium = Padding.All Size.Medium
-      let large = Padding.All Size.Large
-      let extraLarge = Padding.All Size.ExtraLarge
+      let none = Padding.All None
+      let extraSmall = Padding.All(Some Size.ExtraSmall)
+      let small = Padding.All(Some Size.Small)
+      let medium = Padding.All(Some Size.Medium)
+      let large = Padding.All(Some Size.Large)
+      let extraLarge = Padding.All(Some Size.ExtraLarge)
 
     let toClasses padding =
       match padding with
       | Padding.Top size ->
         match size with
-        | Size.ExtraSmall -> Css.``pt-0``
-        | Size.Small -> Css.``pt-1``
-        | Size.Medium -> Css.``pt-2``
-        | Size.Large -> Css.``pt-3``
-        | Size.ExtraLarge -> Css.``pt-4``
-        |> List.singleton
+        | None -> [ Css.``pt-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pt-4`` ]
+        | Some Size.Small -> [ Css.``pt-8`` ]
+        | Some Size.Medium -> [ Css.``pt-12`` ]
+        | Some Size.Large -> [ Css.``pt-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pt-20`` ]
       | Padding.Bottom size ->
         match size with
-        | Size.ExtraSmall -> Css.``pb-0``
-        | Size.Small -> Css.``pb-1``
-        | Size.Medium -> Css.``pb-2``
-        | Size.Large -> Css.``pb-3``
-        | Size.ExtraLarge -> Css.``pb-4``
-        |> List.singleton
+        | None -> [ Css.``pb-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pb-4`` ]
+        | Some Size.Small -> [ Css.``pb-8`` ]
+        | Some Size.Medium -> [ Css.``pb-12`` ]
+        | Some Size.Large -> [ Css.``pb-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pb-20`` ]
       | Padding.Left size ->
         match size with
-        | Size.ExtraSmall -> Css.``pl-0``
-        | Size.Small -> Css.``pl-1``
-        | Size.Medium -> Css.``pl-2``
-        | Size.Large -> Css.``pl-3``
-        | Size.ExtraLarge -> Css.``pl-4``
-        |> List.singleton
+        | None -> [ Css.``pl-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pl-4`` ]
+        | Some Size.Small -> [ Css.``pl-8`` ]
+        | Some Size.Medium -> [ Css.``pl-12`` ]
+        | Some Size.Large -> [ Css.``pl-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pl-20`` ]
       | Padding.Right size ->
         match size with
-        | Size.ExtraSmall -> Css.``pr-0``
-        | Size.Small -> Css.``pr-1``
-        | Size.Medium -> Css.``pr-2``
-        | Size.Large -> Css.``pr-3``
-        | Size.ExtraLarge -> Css.``pr-4``
-        |> List.singleton
+        | None -> [ Css.``pr-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pr-4`` ]
+        | Some Size.Small -> [ Css.``pr-8`` ]
+        | Some Size.Medium -> [ Css.``pr-12`` ]
+        | Some Size.Large -> [ Css.``pr-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pr-20`` ]
       | Padding.Vertical size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``pt-0``; Css.``pb-0`` ]
-        | Size.Small -> [ Css.``pt-1``; Css.``pb-1`` ]
-        | Size.Medium -> [ Css.``pt-2``; Css.``pb-2`` ]
-        | Size.Large -> [ Css.``pt-3``; Css.``pb-3`` ]
-        | Size.ExtraLarge -> [ Css.``pt-4``; Css.``pb-4`` ]
+        | None -> [ Css.``pt-0``; Css.``pb-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pt-4``; Css.``pb-4`` ]
+        | Some Size.Small -> [ Css.``pt-8``; Css.``pb-8`` ]
+        | Some Size.Medium -> [ Css.``pt-12``; Css.``pb-12`` ]
+        | Some Size.Large -> [ Css.``pt-16``; Css.``pb-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pt-20``; Css.``pb-20`` ]
       | Padding.Horizontal size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``pl-0``; Css.``pr-0`` ]
-        | Size.Small -> [ Css.``pl-1``; Css.``pr-1`` ]
-        | Size.Medium -> [ Css.``pl-2``; Css.``pr-2`` ]
-        | Size.Large -> [ Css.``pl-3``; Css.``pr-3`` ]
-        | Size.ExtraLarge -> [ Css.``pl-4``; Css.``pr-4`` ]
+        | None -> [ Css.``pl-0``; Css.``pr-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pl-4``; Css.``pr-4`` ]
+        | Some Size.Small -> [ Css.``pl-8``; Css.``pr-8`` ]
+        | Some Size.Medium -> [ Css.``pl-12``; Css.``pr-12`` ]
+        | Some Size.Large -> [ Css.``pl-16``; Css.``pr-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pl-20``; Css.``pr-20`` ]
       | Padding.All size ->
         match size with
-        | Size.ExtraSmall -> [ Css.``pa-0`` ]
-        | Size.Small -> [ Css.``pa-1`` ]
-        | Size.Medium -> [ Css.``pa-2`` ]
-        | Size.Large -> [ Css.``pa-3`` ]
-        | Size.ExtraLarge -> [ Css.``pa-4`` ]
+        | None -> [ Css.``pa-0`` ]
+        | Some Size.ExtraSmall -> [ Css.``pa-4`` ]
+        | Some Size.Small -> [ Css.``pa-8`` ]
+        | Some Size.Medium -> [ Css.``pa-12`` ]
+        | Some Size.Large -> [ Css.``pa-16`` ]
+        | Some Size.ExtraLarge -> [ Css.``pa-20`` ]
 
   [<RequireQualifiedAccess; Struct>]
   type Outline =

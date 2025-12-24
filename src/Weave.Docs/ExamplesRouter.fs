@@ -99,7 +99,9 @@ module ExamplesRouter =
            Button.Variant.Text)
         |> Button.Variant.toClass
         |> cl
-        Margin.toClasses Margin.All.small |> cls
+
+        Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+        Button.Color.toClass BrandColor.Primary |> cl
       ]
     )
 
@@ -121,7 +123,11 @@ module ExamplesRouter =
         Grid.Create(
           items = [
             let item target =
-              GridItem.Create(navButton page target (fun p -> Var.Set currentPage p))
+              GridItem.Create(
+                navButton page target (fun p -> Var.Set currentPage p),
+                xs = Grid.Width.create 3,
+                xl = Grid.Width.create 1
+              )
 
             GridItem.Create(logo)
             FlexBreak.Create()
@@ -146,21 +152,25 @@ module ExamplesRouter =
                 modeVar.View
                 |> View.Map(fun mode ->
                   match mode with
-                  | Theming.Light -> text "🌙 Dark Mode"
-                  | Theming.Dark -> text "☀️ Light Mode")
+                  | Theming.Light -> text "Dark Mode"
+                  | Theming.Dark -> text "Light Mode")
                 |> Doc.EmbedView,
                 onClick =
                   (fun () ->
                     let newMode = Theming.toggleMode ()
                     Var.Set modeVar newMode),
                 attrs = [
-                  Button.Variant.Text |> Button.Variant.toClass |> cl
-                  JustifyContent.toClass JustifyContent.FlexEnd |> cl
+                  Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+                  Button.Variant.Filled |> Button.Variant.toClass |> cl
+                  Button.Color.toClass BrandColor.Secondary |> cl
                 ]
-              )
+              ),
+              xs = Grid.Width.create 3,
+              xl = Grid.Width.create 1
             )
 
           ],
+          justify = JustifyContent.SpaceEvenly,
           attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
         ))
 

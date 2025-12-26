@@ -11,19 +11,8 @@ open WebSharper.JavaScript
 [<JavaScript>]
 module ButtonExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.small |> cl
-      ] [ content ]
-    ]
-
   let private variantExamples () =
-    section
+    Helpers.section
       "Variants"
       "Buttons come in three variants: Filled, Outlined, and Text"
       (Grid.Create(
@@ -83,7 +72,7 @@ module ButtonExamples =
       ]),
       spacing = Grid.GutterSpacing.create 2
     )
-    |> section "Colors" "Buttons support all theme colors"
+    |> Helpers.section "Colors" "Buttons support all theme colors"
 
   let private sizeExamples () =
     Grid.Create(
@@ -108,7 +97,7 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> section "Sizes" "Buttons come in three sizes: Small, Medium (default), and Large"
+    |> Helpers.section "Sizes" "Buttons come in three sizes: Small, Medium (default), and Large"
 
   let private disabledExamples () =
     Grid.Create(
@@ -137,7 +126,7 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> section "Disabled State" "Buttons can be disabled using the enabled parameter"
+    |> Helpers.section "Disabled State" "Buttons can be disabled using the enabled parameter"
 
   let private fullWidthExample () =
     Button.Create(
@@ -151,7 +140,7 @@ module ButtonExamples =
         | None -> Attr.Empty
       ]
     )
-    |> section "Full Width" "Buttons can span the full width of their container"
+    |> Helpers.section "Full Width" "Buttons can span the full width of their container"
 
   let private borderRadiusExamples () =
     Grid.Create(
@@ -179,22 +168,28 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> section "Border Radius" "Buttons can have different border radius styles"
+    |> Helpers.section "Border Radius" "Buttons can have different border radius styles"
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Button Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "Buttons allow users to take actions and make choices with a single tap.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
+        Helpers.divider ()
         variantExamples ()
+        Helpers.divider ()
         colorExamples ()
+        Helpers.divider ()
         sizeExamples ()
+        Helpers.divider ()
         disabledExamples ()
+        Helpers.divider ()
         fullWidthExample ()
+        Helpers.divider ()
         borderRadiusExamples ()
       ],
       maxWidth = Container.MaxWidth.Large

@@ -10,17 +10,6 @@ open Weave
 [<JavaScript>]
 module SwitchExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.small |> cl
-      ] [ content ]
-    ]
-
   let private basicSwitchExample () =
     let basicIsChecked = Var.Create false
 
@@ -30,13 +19,13 @@ module SwitchExamples =
       |> View.printfn
       Switch.Create(basicIsChecked, View.Const "Default Switch")
     ]
-    |> section "Basic Switch" "A simple switch with a label."
+    |> Helpers.section "Basic Switch" "A simple switch with a label."
 
   let private disabledSwitchExample () =
     let isChecked = Var.Create true
 
     Switch.Create(isChecked, View.Const "Disabled Switch", enabled = View.Const false)
-    |> section "Disabled Switch" "A switch that is disabled and cannot be toggled."
+    |> Helpers.section "Disabled Switch" "A switch that is disabled and cannot be toggled."
 
   let private switchWithDynamicLabel () =
     let isChecked = Var.Create false
@@ -45,7 +34,7 @@ module SwitchExamples =
       isChecked.View |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
 
     Switch.Create(isChecked, label)
-    |> section "Dynamic Label" "A switch with a label that updates based on its state."
+    |> Helpers.section "Dynamic Label" "A switch with a label that updates based on its state."
 
   let private switchSizesExample () =
     let sizes = [
@@ -64,7 +53,7 @@ module SwitchExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> section "Sizes" "Switches in different sizes."
+    |> Helpers.section "Sizes" "Switches in different sizes."
 
   let private switchColorsExample () =
     let switches =
@@ -89,7 +78,7 @@ module SwitchExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> section "Colors" "Switches with different color themes."
+    |> Helpers.section "Colors" "Switches with different color themes."
 
   let private contentPlacementExample () =
     let placement = Var.Create Switch.ContentPlacement.Right
@@ -124,21 +113,28 @@ module SwitchExamples =
       )
 
     Grid.Create(radioButtons @ [ GridItem.Create(demoSwitch, xs = Grid.Width.create 12) ])
-    |> section "Content Placement" "Change the label position using the ContentPlacement option."
+    |> Helpers.section "Content Placement" "Change the label position using the ContentPlacement option."
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Switch Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Switch Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "The Switch component allows users to toggle between two states. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
+
+        Helpers.divider ()
         basicSwitchExample ()
+        Helpers.divider ()
         disabledSwitchExample ()
+        Helpers.divider ()
         switchWithDynamicLabel ()
+        Helpers.divider ()
         switchSizesExample ()
+        Helpers.divider ()
         switchColorsExample ()
+        Helpers.divider ()
         contentPlacementExample ()
       ]
     )

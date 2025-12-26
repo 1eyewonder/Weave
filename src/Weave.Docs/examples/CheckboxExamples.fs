@@ -10,17 +10,6 @@ open Weave
 [<JavaScript>]
 module CheckboxExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.small |> cl
-      ] [ content ]
-    ]
-
   let private basicCheckboxExample () =
     let basicIsChecked = Var.Create false
 
@@ -31,13 +20,13 @@ module CheckboxExamples =
 
       Checkbox.Create(basicIsChecked, View.Const "Default Checkbox")
     ]
-    |> section "Basic Checkbox" "A simple checkbox with a label."
+    |> Helpers.section "Basic Checkbox" "A simple checkbox with a label."
 
   let private disabledCheckboxExample () =
     let isChecked = Var.Create true
 
     Checkbox.Create(isChecked, View.Const "Disabled Checkbox", enabled = View.Const false)
-    |> section "Disabled Checkbox" "A checkbox that is disabled and cannot be toggled."
+    |> Helpers.section "Disabled Checkbox" "A checkbox that is disabled and cannot be toggled."
 
   let private checkboxWithDynamicLabel () =
     let isChecked = Var.Create false
@@ -46,7 +35,7 @@ module CheckboxExamples =
       isChecked.View |> View.Map(fun v -> if v then "I am checked!" else "Check me!")
 
     Checkbox.Create(isChecked, label)
-    |> section "Dynamic Label" "A checkbox with a label that updates based on its state."
+    |> Helpers.section "Dynamic Label" "A checkbox with a label that updates based on its state."
 
   let private checkboxSizesExample () =
     let sizes = [
@@ -65,7 +54,7 @@ module CheckboxExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> section "Sizes" "Checkboxes in different sizes."
+    |> Helpers.section "Sizes" "Checkboxes in different sizes."
 
   let private checkboxColorsExample () =
     let checkboxes =
@@ -90,7 +79,7 @@ module CheckboxExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> section "Colors" "Checkboxes with different color themes."
+    |> Helpers.section "Colors" "Checkboxes with different color themes."
 
   let private contentPlacementExample () =
     let placement = Var.Create Checkbox.ContentPlacement.Right
@@ -125,21 +114,28 @@ module CheckboxExamples =
       )
 
     Grid.Create(radioButtons @ [ GridItem.Create(demoCheckBox, xs = Grid.Width.create 12) ])
-    |> section "Content Placement" "Change the label position using the ContentPlacement option."
+    |> Helpers.section "Content Placement" "Change the label position using the ContentPlacement option."
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Checkbox Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Checkbox Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "The Checkbox component allows users to select one or more options from a set. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
+
+        Helpers.divider ()
         basicCheckboxExample ()
+        Helpers.divider ()
         disabledCheckboxExample ()
+        Helpers.divider ()
         checkboxWithDynamicLabel ()
+        Helpers.divider ()
         checkboxSizesExample ()
+        Helpers.divider ()
         checkboxColorsExample ()
+        Helpers.divider ()
         contentPlacementExample ()
       ]
     )

@@ -10,17 +10,6 @@ open Weave
 [<JavaScript>]
 module RadioButtonExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.small |> cl
-      ] [ content ]
-    ]
-
   let private basicRadioExample () =
     let selected = Var.Create "Option 1"
     let options = [ "Option 1"; "Option 2"; "Option 3" ]
@@ -32,7 +21,7 @@ module RadioButtonExamples =
         |> Doc.Concat
       ]
     )
-    |> section "Basic Radio" "A simple radio group with three options. Only one can be selected."
+    |> Helpers.section "Basic Radio" "A simple radio group with three options. Only one can be selected."
 
   let private disabledRadioExample () =
     let selected = Var.Create "Disabled"
@@ -44,7 +33,7 @@ module RadioButtonExamples =
         Radio.Create(selected, "C", displayText = View.Const "Or Me", enabled = View.Const false)
       ]
     )
-    |> section "Disabled Radio" "A radio button that is disabled and cannot be toggled."
+    |> Helpers.section "Disabled Radio" "A radio button that is disabled and cannot be toggled."
 
   let private radioWithDynamicLabel () =
     let selected = Var.Create false
@@ -53,7 +42,7 @@ module RadioButtonExamples =
       selected.View |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
     Grid.Create([ Radio.Create(selected, true, displayText = label) ], justify = JustifyContent.Center)
-    |> section "Dynamic Label" "A radio button with a label that updates based on its state."
+    |> Helpers.section "Dynamic Label" "A radio button with a label that updates based on its state."
 
   let private radioSizesExample () =
     let selected = Var.Create Radio.Size.Medium
@@ -75,7 +64,7 @@ module RadioButtonExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> section "Sizes" "Radio buttons in different sizes."
+    |> Helpers.section "Sizes" "Radio buttons in different sizes."
 
   let private radioColorsExample () =
     let selected = Var.Create BrandColor.Primary
@@ -105,7 +94,7 @@ module RadioButtonExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> section "Colors" "Radio buttons with different color themes."
+    |> Helpers.section "Colors" "Radio buttons with different color themes."
 
   let private contentPlacementExample () =
     let placement = Var.Create Radio.ContentPlacement.Right
@@ -141,21 +130,28 @@ module RadioButtonExamples =
       )
 
     Grid.Create(radioButtons @ [ GridItem.Create(demoRadio, xs = Grid.Width.create 12) ])
-    |> section "Content Placement" "Change the label position using the ContentPlacement option."
+    |> Helpers.section "Content Placement" "Change the label position using the ContentPlacement option."
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Radio Button Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Radio Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "The Radio component allows users to select a single option from a set. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
+
+        Helpers.divider ()
         basicRadioExample ()
+        Helpers.divider ()
         disabledRadioExample ()
+        Helpers.divider ()
         radioWithDynamicLabel ()
+        Helpers.divider ()
         radioSizesExample ()
+        Helpers.divider ()
         radioColorsExample ()
+        Helpers.divider ()
         contentPlacementExample ()
       ]
     )

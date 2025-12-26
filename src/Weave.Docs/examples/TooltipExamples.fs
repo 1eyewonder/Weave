@@ -11,22 +11,7 @@ open WebSharper.JavaScript
 [<JavaScript>]
 module TooltipExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        cls [
-          yield! Padding.toClasses Padding.All.medium
-          BorderRadius.toClass BorderRadius.All.small
-          AlignItems.toClass AlignItems.Center
-        ]
-        SurfaceColor.toAttr SurfaceColor.Paper
-      ] [ content ]
-    ]
-
-  let grid content =
-    Grid.Create(items = content, attrs = [ Padding.toClasses Padding.Vertical.large |> cls ])
+  let grid content = Grid.Create(items = content) //, attrs = [ Padding.toClasses Padding.Vertical.large |> cls ])
 
   let private directionExamples () =
     let tooltipBtn displayText direction =
@@ -57,7 +42,9 @@ module TooltipExamples =
       tooltipBtn "Right" Tooltip.Direction.Right
     ]
     |> grid
-    |> section "Directions" "Tooltips can be positioned in four directions relative to the target element"
+    |> Helpers.section
+      "Directions"
+      "Tooltips can be positioned in four directions relative to the target element"
 
   let private colorExamples () =
     [
@@ -89,7 +76,7 @@ module TooltipExamples =
       tooltipButton "Info" BrandColor.Info
     ]
     |> grid
-    |> section "Colors" "Tooltips support all theme colors to match your design system"
+    |> Helpers.section "Colors" "Tooltips support all theme colors to match your design system"
 
   let private activationExamples () =
     [
@@ -158,7 +145,7 @@ module TooltipExamples =
     // |> gridItem
     ]
     |> grid
-    |> section "Activation Events" "Tooltips can be triggered by different user interactions"
+    |> Helpers.section "Activation Events" "Tooltips can be triggered by different user interactions"
 
   let private arrowExamples () =
     div [
@@ -200,7 +187,7 @@ module TooltipExamples =
         Caption.Create("showArrow = false", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
       ]
     ]
-    |> section "Arrow Visibility" "Tooltips can optionally display an arrow pointing to the target"
+    |> Helpers.section "Arrow Visibility" "Tooltips can optionally display an arrow pointing to the target"
 
   let private customContentExample () =
     div [
@@ -229,7 +216,7 @@ module TooltipExamples =
         ]
       )
     ]
-    |> section "Custom Content" "Tooltips can display rich content using Doc instead of plain text"
+    |> Helpers.section "Custom Content" "Tooltips can display rich content using Doc instead of plain text"
 
   let private textTooltipExample () =
     div [ Padding.toClasses Padding.All.medium |> cls ] [
@@ -259,7 +246,7 @@ module TooltipExamples =
 
       Body1.Create(" for more information.", attrs = [ Attr.Style "display" "inline" ])
     ]
-    |> section "Text Tooltips" "Tooltips can be applied to inline text elements, not just buttons"
+    |> Helpers.section "Text Tooltips" "Tooltips can be applied to inline text elements, not just buttons"
 
   let private iconTooltipExample () =
     div [
@@ -319,23 +306,30 @@ module TooltipExamples =
         tooltipAttrs = [ Tooltip.Color.toClass BrandColor.Error |> cl ]
       )
     ]
-    |> section "Icon Tooltips" "Tooltips work great with icon buttons and badges"
+    |> Helpers.section "Icon Tooltips" "Tooltips work great with icon buttons and badges"
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Tooltip Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Tooltip Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "Tooltips display informative text when users hover over, focus on, or tap an element.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
+        Helpers.divider ()
         directionExamples ()
+        Helpers.divider ()
         colorExamples ()
+        Helpers.divider ()
         activationExamples ()
+        Helpers.divider ()
         arrowExamples ()
+        Helpers.divider ()
         customContentExample ()
+        Helpers.divider ()
         textTooltipExample ()
+        Helpers.divider ()
         iconTooltipExample ()
       ],
       maxWidth = Container.MaxWidth.Large

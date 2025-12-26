@@ -63,14 +63,7 @@ type Radio =
     let isSelected = Var.Create false
 
     label [
-      cls [
-        Css.radio
-        Flex.Inline.allSizes
-      // FlexWrap.NoWrap.allSizes
-      // AlignItems.toClass AlignItems.Center
-      // AlignContent.toClass AlignContent.Center
-      // JustifyContent.toClass JustifyContent.Center
-      ]
+      cls [ Css.radio; Flex.Inline.allSizes ]
 
       contentPlacement
       |> View.MapCached (function

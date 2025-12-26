@@ -11,52 +11,41 @@ open WebSharper.JavaScript
 [<JavaScript>]
 module TypographyExamples =
 
-  let private section title description content =
-    div [ Margin.toClasses Margin.Bottom.extraLarge |> cls ] [
-      H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
-      div [
-        Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.small |> cl
-      ] [ content ]
-    ]
-
   let private variantExamples () =
     div [] [
-      H1.Create("Heading 1", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      H2.Create("Heading 2", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      H3.Create("Heading 3", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      H4.Create("Heading 4", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      H5.Create("Heading 5", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-      H6.Create("Heading 6", attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
+      H1.Create("Heading 1", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H2.Create("Heading 2", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H3.Create("Heading 3", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H4.Create("Heading 4", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H5.Create("Heading 5", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H6.Create("Heading 6", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
       Subtitle1.Create(
         "Subtitle 1 - Slightly larger secondary text",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
       Subtitle2.Create(
         "Subtitle 2 - Smaller secondary text",
-        attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
       Body1.Create(
         "Body 1 - This is the default body text style. It's used for most content and provides good readability for longer paragraphs of text.",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
       Body2.Create(
         "Body 2 - A slightly smaller body text variant that can be used for less prominent content or to create visual hierarchy.",
-        attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      Typography.Button.Create("BUTTON TEXT", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+      Typography.Button.Create("BUTTON TEXT", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
       Caption.Create(
         "Caption text - Small text for annotations",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
-      Overline.Create("OVERLINE TEXT", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+      Overline.Create("OVERLINE TEXT", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
     ]
-    |> section
+    |> Helpers.section
       "Typography Variants"
       "All available typography styles with their respective sizing and weights"
 
@@ -66,7 +55,7 @@ module TypographyExamples =
         Body1.Create(
           View.Const displayText,
           attrs = [
-            Margin.toClasses Margin.Bottom.small |> cls
+            Margin.toClasses Margin.Bottom.extraSmall |> cls
             Typography.Align.toClass alignment |> cl
           ]
         )
@@ -79,11 +68,11 @@ module TypographyExamples =
         "Justified text - This is a longer piece of text that will demonstrate how justify alignment works when text wraps across multiple lines. Notice how both edges align evenly."
         Typography.Align.Justify
     ]
-    |> section "Text Alignment" "Typography components support various text alignment options"
+    |> Helpers.section "Text Alignment" "Typography components support various text alignment options"
 
   let private textWrapExamples () =
     div [] [
-      div [ Margin.toClasses Margin.Bottom.medium |> cls ] [
+      div [ Margin.toClasses Margin.Bottom.extraSmall |> cls ] [
         Body2.Create(
           "With text wrapping (default):",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
@@ -120,7 +109,7 @@ module TypographyExamples =
         ]
       ]
     ]
-    |> section "Text Wrapping" "Control whether text wraps to the next line or truncates"
+    |> Helpers.section "Text Wrapping" "Control whether text wraps to the next line or truncates"
 
   let private colorExamples () =
     Grid.Create(
@@ -142,49 +131,54 @@ module TypographyExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> section "Colors" "Typography can use theme colors with CSS utility classes"
+    |> Helpers.section "Colors" "Typography can use theme colors with CSS utility classes"
 
-  let private hierarchyExample () =
+  let private hierarchyExamples () =
     div [] [
-      H2.Create("Article Title", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+      H2.Create("Article Title", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
       Subtitle1.Create(
         "A subtitle that provides context",
-        attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      H4.Create("Section Heading", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+      H4.Create("Section Heading", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
       Body1.Create(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
       Body1.Create(
         "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-        attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ]
+        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      H5.Create("Subsection", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+      H5.Create("Subsection", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
       Body2.Create(
         "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
       Caption.Create("Last updated: December 20, 2025")
     ]
-    |> section "Hierarchy Example" "Combining different typography styles to create visual hierarchy"
+    |> Helpers.section "Hierarchy Example" "Combining different typography styles to create visual hierarchy"
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Typography Component", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
+        H1.Create("Typography Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "Typography components provide consistent text styling throughout your application with semantic meaning and visual hierarchy.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
+        Helpers.divider ()
         variantExamples ()
+        Helpers.divider ()
         alignmentExamples ()
+        Helpers.divider ()
         textWrapExamples ()
+        Helpers.divider ()
         colorExamples ()
-        hierarchyExample ()
+        Helpers.divider ()
+        hierarchyExamples ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

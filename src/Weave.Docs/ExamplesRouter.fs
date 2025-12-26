@@ -41,10 +41,10 @@ module ExamplesRouter =
     | Home ->
       Container.Create(
         div [] [
-          H1.Create("Component Examples", attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ])
+          H1.Create("Component Examples", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
           Body1.Create(
             "Welcome to the component documentation. Select a component from the navigation to view examples.",
-            attrs = [ Margin.toClasses Margin.Bottom.extraLarge |> cls ]
+            attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
           )
         ],
         maxWidth = Container.MaxWidth.Large
@@ -96,7 +96,7 @@ module ExamplesRouter =
         (if isActive then
            Button.Variant.Filled
          else
-           Button.Variant.Text)
+           Button.Variant.Outlined)
         |> Button.Variant.toClass
         |> cl
 
@@ -114,8 +114,12 @@ module ExamplesRouter =
         yield! Margin.toClasses Margin.Bottom.large
         Flex.Flex.allSizes
         FlexWrap.Wrap.allSizes
+        AlignItems.toClass AlignItems.Start
+        AlignContent.toClass AlignContent.Start
+        yield! Margin.toClasses Margin.Bottom.extraLarge
       ]
 
+      Attr.Style "min-height" "100vh"
       SurfaceColor.toAttr SurfaceColor.BackgroundDarker
     ] [
       currentPage.View
@@ -171,12 +175,22 @@ module ExamplesRouter =
 
           ],
           justify = JustifyContent.SpaceEvenly,
-          attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
+          attrs = [
+            cls [ AlignItems.toClass AlignItems.Center ]
+            Attr.Style "position" "sticky"
+            Attr.Style "top" "0"
+            Attr.Style "z-index" "1000"
+            SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          ]
         ))
 
       div [
-        Padding.toClasses Padding.All.large |> cls
-        FlexItem.Grow.allSizes |> cl
-        FlexDirection.Column.allSizes |> cl
+        cls [
+          yield! Padding.toClasses Padding.All.large
+          FlexItem.Grow.allSizes
+          FlexDirection.Column.allSizes
+          AlignItems.toClass AlignItems.Start
+          AlignContent.toClass AlignContent.Start
+        ]
       ] [ currentPage.View |> Doc.BindView renderPage ]
     ]

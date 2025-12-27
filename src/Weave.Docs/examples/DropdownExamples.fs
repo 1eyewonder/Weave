@@ -86,14 +86,15 @@ module DropdownExamples =
             H3.Create("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
           ],
-          xs = Grid.Width.create 5
+          xs = Grid.Width.create 4
         )
         GridItem.Create(
           Grid.Create(
             [
               GridItem.Create(
                 Subtitle1.Create(
-                  "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections."
+                  "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
+                  attrs = [ Attr.Style "text-align" "center" ]
                 )
               )
               GridItem.Create(
@@ -113,9 +114,16 @@ module DropdownExamples =
                 ),
                 xs = Grid.Width.create 12
               )
+            ],
+            justify = JustifyContent.FlexStart,
+            attrs = [
+              cls [
+                AlignItems.toClass AlignItems.Center
+                AlignContent.toClass AlignContent.Center
+              ]
             ]
           ),
-          xs = Grid.Width.create 2
+          xs = Grid.Width.create 4
         )
 
         GridItem.Create(
@@ -123,7 +131,7 @@ module DropdownExamples =
             H3.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
           ],
-          xs = Grid.Width.create 5
+          xs = Grid.Width.create 4
         )
       ],
       justify = JustifyContent.SpaceAround,

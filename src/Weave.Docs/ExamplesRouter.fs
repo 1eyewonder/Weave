@@ -58,7 +58,7 @@ module ExamplesRouter =
     | CheckboxExamples -> CheckboxExamples.render ()
     | RadioButtonExamples -> RadioButtonExamples.render ()
     | SwitchExamples -> SwitchExamples.render ()
-    | ContainerExamples -> div [] [ text "Container examples coming soon..." ]
+    | ContainerExamples -> ContainerExamples.render ()
     | NumericFieldExamples -> div [] [ text "Numeric Field examples coming soon..." ]
     | DropdownExamples -> DropdownExamples.render ()
 

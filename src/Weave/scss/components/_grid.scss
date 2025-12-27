@@ -4,7 +4,7 @@ $base-spacing: 0.1rem;
 $max-spacing-steps: 20;
 $columns: 12;
 
-.grid {
+.weave-grid {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -12,7 +12,7 @@ $columns: 12;
   align-items: stretch;
 }
 
-.grid__item {
+.weave-grid__item {
   margin: 0;
   box-sizing: border-box;
   min-height: var(--grid-item-min-height);
@@ -21,7 +21,7 @@ $columns: 12;
 }
 
 @for $i from 0 through $max-spacing-steps {
-  .grid--spacing-#{$i} {
+  .weave-grid--spacing-#{$i} {
     --grid-gap: #{$base-spacing * $i};
     gap: var(--grid-gap);
   }
@@ -31,7 +31,7 @@ $columns: 12;
 @each $name, $value in $breakpoints {
   @media (min-width: $value) {
     @for $i from 1 through $columns {
-      .grid__item--#{$name}-#{$i} {
+      .weave-grid__item--#{$name}-#{$i} {
         flex-grow: 1;
         flex-shrink: 1;
         max-width: calc(
@@ -49,13 +49,13 @@ $columns: 12;
       }
     }
 
-    .grid__item--#{$name}-auto {
+    .weave-grid__item--#{$name}-auto {
       flex-grow: 0;
       max-width: none;
       flex-basis: auto;
     }
 
-    .grid__item--#{$name}-true {
+    .weave-grid__item--#{$name}-true {
       flex-grow: 1;
       max-width: 100%;
       flex-basis: 0;

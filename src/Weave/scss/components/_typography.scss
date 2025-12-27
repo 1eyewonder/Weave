@@ -1,4 +1,4 @@
-.typography {
+.weave-typography {
   margin: 0;
 }
 
@@ -19,7 +19,7 @@ $typography-types: (
 );
 
 @each $type in $typography-types {
-  .typography--#{$type} {
+  .weave-typography--#{$type} {
     font-size: var(--typography-#{$type}-size);
     font-family: var(--typography-#{$type}-family);
     font-weight: var(--typography-#{$type}-weight);
@@ -29,92 +29,92 @@ $typography-types: (
   }
 }
 
-.typography--sr-only {
+.weave-typography--sr-only {
   width: 1px;
   height: 1px;
   overflow: hidden;
   position: absolute;
 }
 
-.typography--align-inherit {
+.weave-typography--align-inherit {
   text-align: inherit;
 }
 
-.typography--align-left {
+.weave-typography--align-left {
   text-align: left;
 }
 
-.typography--align-center {
+.weave-typography--align-center {
   text-align: center;
 }
 
-.typography--align-right {
+.weave-typography--align-right {
   text-align: right;
 }
 
-.typography--align-justify {
+.weave-typography--align-justify {
   text-align: justify;
 }
 
-.typography--align-start {
+.weave-typography--align-start {
   text-align: start;
 }
 
-.typography--align-end {
+.weave-typography--align-end {
   text-align: end;
 }
 
-.typography--nowrap {
+.weave-typography--nowrap {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.typography--gutterbottom {
+.weave-typography--gutterbottom {
   margin-bottom: 0.35em;
 }
 
-.typography--paragraph {
+.weave-typography--paragraph {
   margin-bottom: 16px;
 }
 
 // Color modifiers
-.typography--primary {
+.weave-typography--primary {
   color: var(--palette-primary);
 }
 
-.typography--secondary {
+.weave-typography--secondary {
   color: var(--palette-secondary);
 }
 
-.typography--tertiary {
+.weave-typography--tertiary {
   color: var(--palette-tertiary);
 }
 
-.typography--success {
+.weave-typography--success {
   color: var(--palette-success);
 }
 
-.typography--error {
+.weave-typography--error {
   color: var(--palette-error);
 }
 
-.typography--warning {
+.weave-typography--warning {
   color: var(--palette-warning);
 }
 
-.typography--info {
+.weave-typography--info {
   color: var(--palette-info);
 }
 
-.typography--text-primary {
+.weave-typography--text-primary {
   color: var(--palette-text-primary);
 }
 
-.typography--text-secondary {
+.weave-typography--text-secondary {
   color: var(--palette-text-secondary);
 }
 
-.typography--text-disabled {
+.weave-typography--text-disabled {
   color: var(--palette-text-disabled);
 }

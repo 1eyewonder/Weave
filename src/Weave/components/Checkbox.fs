@@ -19,21 +19,21 @@ module Checkbox =
 
     let toClass size =
       match size with
-      | Size.Small -> Css.``checkbox--small``
-      | Size.Medium -> Css.``checkbox--medium``
-      | Size.Large -> Css.``checkbox--large``
+      | Size.Small -> Css.``weave-checkbox--small``
+      | Size.Medium -> Css.``weave-checkbox--medium``
+      | Size.Large -> Css.``weave-checkbox--large``
 
   module Color =
 
     let toClass color =
       match color with
-      | BrandColor.Primary -> Css.``checkbox--primary``
-      | BrandColor.Secondary -> Css.``checkbox--secondary``
-      | BrandColor.Tertiary -> Css.``checkbox--tertiary``
-      | BrandColor.Error -> Css.``checkbox--error``
-      | BrandColor.Warning -> Css.``checkbox--warning``
-      | BrandColor.Success -> Css.``checkbox--success``
-      | BrandColor.Info -> Css.``checkbox--info``
+      | BrandColor.Primary -> Css.``weave-checkbox--primary``
+      | BrandColor.Secondary -> Css.``weave-checkbox--secondary``
+      | BrandColor.Tertiary -> Css.``weave-checkbox--tertiary``
+      | BrandColor.Error -> Css.``weave-checkbox--error``
+      | BrandColor.Warning -> Css.``weave-checkbox--warning``
+      | BrandColor.Success -> Css.``weave-checkbox--success``
+      | BrandColor.Info -> Css.``weave-checkbox--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -63,7 +63,7 @@ type Checkbox =
 
     label [
       cls [
-        Css.checkbox
+        Css.``weave-checkbox``
         Flex.Inline.allSizes
         FlexWrap.NoWrap.allSizes
         AlignItems.toClass AlignItems.Center
@@ -106,10 +106,10 @@ type Checkbox =
           if enabled then
             not flag |> Var.Set isChecked)
 
-        cl Css.checkbox__input
+        cl Css.``weave-checkbox__input``
       ] []
-      span [ cls [ Css.checkbox__span ] ] []
+      span [ cls [ Css.``weave-checkbox__span`` ] ] []
       match displayText with
-      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.checkbox__label ] ])
+      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.``weave-checkbox__label`` ] ])
       | None -> Doc.Empty
     ]

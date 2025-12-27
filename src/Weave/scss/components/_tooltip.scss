@@ -1,18 +1,18 @@
-.tooltip-root {
+.weave-tooltip-root {
   position: relative;
   display: inline-block;
 
-  &.tooltip-root--inline {
+  &.weave-tooltip-root--inline {
     display: inline-block;
   }
 
-  &.tooltip-root--inline:has(> .width-full) {
+  &.weave-tooltip-root--inline:has(> .width-full) {
     display: block;
     width: 100%;
   }
 }
 
-.tooltip {
+.weave-tooltip {
   position: absolute;
   padding: 4px 8px;
   text-align: center;
@@ -25,21 +25,21 @@
   z-index: var(--zindex-tooltip);
   white-space: nowrap;
 
-  &.tooltip--default {
+  &.weave-tooltip--default {
     color: var(--palette-text-primary);
     background-color: var(--palette-background-paper);
 
-    &.tooltip--arrow::after {
+    &.weave-tooltip--arrow::after {
       border-color: var(--palette-divider) transparent transparent transparent;
     }
   }
 
   @each $color in $palette-colors {
-    &.tooltip--#{$color} {
+    &.weave-tooltip--#{$color} {
       color: var(--palette-#{$color}-text);
       background-color: var(--palette-#{$color});
 
-      &.tooltip--arrow::after {
+      &.weave-tooltip--arrow::after {
         border-color: var(--palette-#{$color})
           transparent
           transparent
@@ -48,14 +48,14 @@
     }
   }
 
-  &.tooltip {
+  &.weave-tooltip {
     &--center-left:not([data-popover-flip]),
     &--center-right[data-popover-flip] {
       right: 100%;
       top: 50%;
       transform: translateY(-50%) translateX(-10px);
 
-      &.tooltip--arrow::after {
+      &.weave-tooltip--arrow::after {
         left: 100%;
         top: 50%;
         transform: translateY(-50%) rotate(270deg);
@@ -68,7 +68,7 @@
       top: 50%;
       transform: translateY(-50%) translateX(10px);
 
-      &.tooltip--arrow::after {
+      &.weave-tooltip--arrow::after {
         right: 100%;
         top: 50%;
         transform: translateY(-50%) rotate(90deg);
@@ -81,7 +81,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(-10px);
 
-      &.tooltip--arrow::after {
+      &.weave-tooltip--arrow::after {
         top: 100%;
         left: 50%;
         transform: translateX(-50%) rotate(0deg);
@@ -94,7 +94,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(10px);
 
-      &.tooltip--arrow::after {
+      &.weave-tooltip--arrow::after {
         bottom: 100%;
         left: 50%;
         transform: translateX(-50%) rotate(180deg);
@@ -102,7 +102,7 @@
     }
   }
 
-  &.tooltip--arrow::after {
+  &.weave-tooltip--arrow::after {
     content: "";
     position: absolute;
     border-width: 6px;

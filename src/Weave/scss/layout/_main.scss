@@ -1,44 +1,44 @@
-@import '../abstracts/variables';
+@import "../abstracts/variables";
 
-.main-content {
+.weave-main-content {
   margin: 0;
   flex: 1 1 auto;
   padding-top: calc(var(--appbar-height) - var(--appbar-height) / 8);
-  transition: margin 225ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+  transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 }
 
-@media (min-width:$breakpoint-xs) and (orientation: landscape) {
-  .main-content {
+@media (min-width: $breakpoint-xs) and (orientation: landscape) {
+  .weave-main-content {
     padding-top: calc(var(--appbar-height) - var(--appbar-height) / 4);
   }
 }
 
-@media (min-width:$breakpoint-sm) {
-  .main-content {
+@media (min-width: $breakpoint-sm) {
+  .weave-main-content {
     padding-top: var(--appbar-height);
   }
 }
 
 .appbar-dense {
-  ~ .main-content {
+  ~ .weave-main-content {
     padding-top: calc(var(--appbar-height) - var(--appbar-height) / 4);
   }
 }
 
-.drawer-open {
+.weave-drawer-open {
   &-responsive {
     @each $breakpoint in map-keys($breakpoints) {
       &-#{$breakpoint} {
         @media (min-width: map-get($breakpoints, $breakpoint)) {
-          &-left .main-content {
+          &-left .weave-main-content {
             margin-left: var(--drawer-width-left);
           }
 
-          &-right .main-content {
+          &-right .weave-main-content {
             margin-right: var(--drawer-width-right);
           }
 
-          &-left#{&}-right .main-content {
+          &-left#{&}-right .weave-main-content {
             margin-right: var(--drawer-width-right);
             margin-left: var(--drawer-width-left);
           }
@@ -48,15 +48,15 @@
   }
 
   &-persistent {
-    &-left:not(&-right) .main-content {
+    &-left:not(&-right) .weave-main-content {
       margin-left: var(--drawer-width-left);
     }
 
-    &-right:not(&-left) .main-content {
+    &-right:not(&-left) .weave-main-content {
       margin-right: var(--drawer-width-right);
     }
 
-    &-left#{&}-right .main-content {
+    &-left#{&}-right .weave-main-content {
       margin-right: var(--drawer-width-right);
       margin-left: var(--drawer-width-left);
     }
@@ -65,31 +65,32 @@
   &-mini {
     @each $breakpoint in map-keys($breakpoints) {
       &-#{$breakpoint} {
-        &-left .main-content {
+        &-left .weave-main-content {
           margin-left: var(--drawer-width-left);
         }
 
-        &-right .main-content {
+        &-right .weave-main-content {
           margin-right: var(--drawer-width-right);
         }
 
-        &-left#{&}-right .main-content {
+        &-left#{&}-right .weave-main-content {
           margin-right: var(--drawer-width-right);
           margin-left: var(--drawer-width-left);
         }
       }
     }
 
-    &-none, &-always {
-      &-left .main-content {
+    &-none,
+    &-always {
+      &-left .weave-main-content {
         margin-left: var(--drawer-width-left);
       }
 
-      &-right .main-content {
+      &-right .weave-main-content {
         margin-right: var(--drawer-width-right);
       }
 
-      &-left#{&}-right .main-content {
+      &-left#{&}-right .weave-main-content {
         margin-right: var(--drawer-width-right);
         margin-left: var(--drawer-width-left);
       }
@@ -97,35 +98,36 @@
   }
 }
 
-.drawer-close {
+.weave-drawer-close {
   &-mini {
     @each $breakpoint in map-keys($breakpoints) {
       &-#{$breakpoint} {
-        &-left .main-content {
+        &-left .weave-main-content {
           margin-left: var(--drawer-width-mini-left);
         }
 
-        &-right .main-content {
+        &-right .weave-main-content {
           margin-right: var(--drawer-width-mini-right);
         }
 
-        &-left#{&}-right .main-content {
+        &-left#{&}-right .weave-main-content {
           margin-right: var(--drawer-width-mini-right);
           margin-left: var(--drawer-width-mini-left);
         }
       }
     }
 
-    &-none, &-always {
-      &-left .main-content {
+    &-none,
+    &-always {
+      &-left .weave-main-content {
         margin-left: var(--drawer-width-mini-left);
       }
 
-      &-right .main-content {
+      &-right .weave-main-content {
         margin-right: var(--drawer-width-mini-right);
       }
 
-      &-left#{&}-right .main-content {
+      &-left#{&}-right .weave-main-content {
         margin-right: var(--drawer-width-mini-right);
         margin-left: var(--drawer-width-mini-left);
       }

@@ -1,7 +1,7 @@
 $radio-size: 20px;
 $dot-size: 10px;
 
-.radio {
+.weave-radio {
   --radio-brand-color: var(--palette-action-default);
   cursor: pointer;
   display: inline-flex;
@@ -51,30 +51,30 @@ $dot-size: 10px;
   }
 }
 
-.radio--primary {
+.weave-radio--primary {
   --radio-brand-color: var(--palette-primary);
 }
-.radio--secondary {
+.weave-radio--secondary {
   --radio-brand-color: var(--palette-secondary);
 }
-.radio--tertiary {
+.weave-radio--tertiary {
   --radio-brand-color: var(--palette-tertiary);
 }
-.radio--error {
+.weave-radio--error {
   --radio-brand-color: var(--palette-error);
 }
-.radio--warning {
+.weave-radio--warning {
   --radio-brand-color: var(--palette-warning);
 }
-.radio--success {
+.weave-radio--success {
   --radio-brand-color: var(--palette-success);
 }
-.radio--info {
+.weave-radio--info {
   --radio-brand-color: var(--palette-info);
 }
 
 // Input (hidden)
-.radio__input {
+.weave-radio__input {
   position: absolute;
   top: 0;
   left: 0;
@@ -88,25 +88,25 @@ $dot-size: 10px;
 }
 
 // Checked state
-.radio__input:checked + .radio__span {
+.weave-radio__input:checked + .weave-radio__span {
   border-color: var(--radio-brand-color, var(--palette-action-default));
 }
-.radio__input:checked + .radio__span::after {
+.weave-radio__input:checked + .weave-radio__span::after {
   display: block;
   background: var(--radio-brand-color, var(--palette-action-default));
 }
 
 // Disabled state: filled background and border, no dot
-.radio__input:disabled + .radio__span {
+.weave-radio__input:disabled + .weave-radio__span {
   background: var(--palette-background-disabled, #f0f0f0);
   border-color: var(--palette-text-disabled, #aaa);
 }
-.radio__input:disabled + .radio__span::after {
+.weave-radio__input:disabled + .weave-radio__span::after {
   display: none;
 }
 
 // Visual circle
-.radio__span {
+.weave-radio__span {
   display: inline-block;
   width: var(--radio-size, 20px);
   height: var(--radio-size, 20px);
@@ -119,7 +119,7 @@ $dot-size: 10px;
 }
 
 // Dot
-.radio__span::after {
+.weave-radio__span::after {
   content: "";
   display: none;
   position: absolute;
@@ -132,35 +132,35 @@ $dot-size: 10px;
   transform: translate(-50%, -50%);
 }
 
-.radio__label {
+.weave-radio__label {
   font-size: 1em;
 
-  .radio.flex-row & {
+  .weave-radio.flex-row & {
     margin-left: 0.5em;
   }
 
-  .radio.flex-row-reverse & {
+  .weave-radio.flex-row-reverse & {
     margin-left: 0;
     margin-right: 0.5em;
   }
 
-  .radio.flex-column & {
+  .weave-radio.flex-column & {
     margin-left: 0;
     margin-bottom: 0.5em;
   }
 
-  .radio.flex-column-reverse & {
+  .weave-radio.flex-column-reverse & {
     margin-left: 0;
     margin-top: 0.5em;
   }
 
-  .radio--small & {
+  .weave-radio--small & {
     font-size: 0.85em;
   }
-  .radio--medium & {
+  .weave-radio--medium & {
     font-size: 1em;
   }
-  .radio--large & {
+  .weave-radio--large & {
     font-size: 1.25em;
   }
 }

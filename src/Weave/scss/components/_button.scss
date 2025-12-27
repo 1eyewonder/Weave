@@ -1,7 +1,7 @@
 @import "../abstracts/variables";
 @import "../core/themes";
 
-.button {
+.weave-button {
   color: inherit;
   border: 0;
   cursor: pointer;
@@ -57,15 +57,15 @@
   }
 }
 
-.button--text {
+.weave-button--text {
   padding: 6px 8px;
 
-  &.button--inherit {
+  &.weave-button--inherit {
     color: inherit;
   }
 
   @each $color in $palette-colors {
-    &.button--#{$color} {
+    &.weave-button--#{$color} {
       color: var(--palette-#{$color});
       --ripple-color: var(--palette-#{$color});
 
@@ -83,18 +83,18 @@
   }
 }
 
-.button--outlined {
+.weave-button--outlined {
   color: var(--palette-text-primary);
   border: 3px solid
     rgba(var(--palette-text-primary), var(--palette-border-opacity));
   padding: 4px 14px;
 
-  &.button--inherit {
+  &.weave-button--inherit {
     color: inherit;
     border-color: currentColor;
   }
 
-  &.button--icon {
+  &.weave-button--icon {
     padding: 5px;
   }
 
@@ -110,7 +110,7 @@
   }
 
   @each $color in $palette-colors {
-    &.button--#{$color} {
+    &.weave-button--#{$color} {
       color: var(--palette-#{$color});
       --ripple-color: var(--palette-#{$color});
       border: 2px
@@ -140,7 +140,7 @@
   }
 }
 
-.button--filled {
+.weave-button--filled {
   color: var(--palette-text-primary);
   --ripple-color: var(--palette-text-primary);
   --ripple-opacity: var(--ripple-opacity-secondary) !important;
@@ -148,7 +148,7 @@
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   background-color: var(--palette-action-default-hover);
 
-  &.button--icon {
+  &.weave-button--icon {
     padding: 6px;
   }
 
@@ -180,7 +180,7 @@
   }
 
   @each $color in $palette-colors {
-    &.button--#{$color} {
+    &.weave-button--#{$color} {
       color: var(--palette-#{$color}-text);
       --ripple-color: var(--palette-#{$color}-text);
       background-color: var(--palette-#{$color});
@@ -199,7 +199,7 @@
   }
 }
 
-.button--no-elevation {
+.weave-button--no-elevation {
   box-shadow: none;
 
   @media (hover: hover) and (pointer: fine) {
@@ -221,107 +221,107 @@
   }
 }
 
-.button--small {
-  &.button--text {
+.weave-button--small {
+  &.weave-button--text {
     padding: 4px 5px;
     font-size: 0.8125rem;
   }
 
-  &.button--outlined {
+  &.weave-button--outlined {
     padding: 3px 9px;
     font-size: 0.8125rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 4px;
     }
   }
 
-  &.button--filled {
+  &.weave-button--filled {
     padding: 4px 10px;
     font-size: 0.8125rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 5px;
     }
   }
 }
 
-.button--medium {
-  &.button--text {
+.weave-button--medium {
+  &.weave-button--text {
     padding: 6px 8px;
     font-size: 0.875rem;
   }
 
-  &.button--outlined {
+  &.weave-button--outlined {
     padding: 5px 15px;
     font-size: 0.875rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 5px;
     }
   }
 
-  &.button--filled {
+  &.weave-button--filled {
     padding: 6px 16px;
     font-size: 0.875rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 6px;
     }
   }
 }
 
-.button--large {
-  &.button--text {
+.weave-button--large {
+  &.weave-button--text {
     padding: 8px 11px;
     font-size: 0.9375rem;
   }
 
-  &.button--outlined {
+  &.weave-button--outlined {
     padding: 7px 21px;
     font-size: 0.9375rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 4px;
     }
   }
 
-  &.button--filled {
+  &.weave-button--filled {
     padding: 8px 22px;
     font-size: 0.9375rem;
 
-    &.button--icon {
+    &.weave-button--icon {
       padding: 5px;
     }
   }
 }
 
-.button--full-width {
+.weave-button--full-width {
   width: 100%;
 }
 
-.button--disabled {
+.weave-button--disabled {
   color: var(--palette-action-disabled) !important;
   cursor: default;
   pointer-events: none;
   box-shadow: none;
 }
 
-.button__label {
+.weave-button__label {
   width: 100%;
   display: inherit;
   align-items: inherit;
   justify-content: inherit;
 }
 
-.button__icon--start {
+.weave-button__icon--start {
   display: inherit;
   margin-left: -4px;
   margin-right: 8px;
   margin-inline-start: -4px;
   margin-inline-end: 8px;
 
-  &.button__icon--small {
+  &.weave-button__icon--small {
     margin-left: -2px;
     margin-inline-start: -2px;
   }
@@ -330,23 +330,23 @@
     font-size: 20px;
   }
 
-  &.button__icon--small > *:first-child {
+  &.weave-button__icon--small > *:first-child {
     font-size: 18px;
   }
 
-  &.button__icon--large > *:first-child {
+  &.weave-button__icon--large > *:first-child {
     font-size: 22px;
   }
 }
 
-.button__icon--end {
+.weave-button__icon--end {
   display: inherit;
   margin-left: 8px;
   margin-right: -4px;
   margin-inline-start: 8px;
   margin-inline-end: -4px;
 
-  &.button__icon--small {
+  &.weave-button__icon--small {
     margin-right: -2px;
     margin-inline-end: -2px;
   }
@@ -355,11 +355,11 @@
     font-size: 20px;
   }
 
-  &.button__icon--small > *:first-child {
+  &.weave-button__icon--small > *:first-child {
     font-size: 18px;
   }
 
-  &.button__icon--large > *:first-child {
+  &.weave-button__icon--large > *:first-child {
     font-size: 22px;
   }
 }

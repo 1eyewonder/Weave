@@ -1,6 +1,6 @@
 @import "../abstracts/variables";
 
-.container {
+.weave-container {
   width: 100%;
   height: 100%;
   display: block;
@@ -9,86 +9,86 @@
   margin-right: auto;
 }
 
-.container--gutters {
+.weave-container--gutters {
   padding-left: 16px;
   padding-right: 16px;
 }
 
-.container--fill-height {
+.weave-container--fill-height {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
 
 @media (min-width: $breakpoint-sm) {
-  .container--gutters {
+  .weave-container--gutters {
     padding-left: 24px;
     padding-right: 24px;
   }
 }
 
 @media (min-width: $breakpoint-sm) {
-  .container--fixed {
+  .weave-container--fixed {
     max-width: $breakpoint-sm;
   }
 }
 
 @media (min-width: $breakpoint-md) {
-  .container--fixed {
+  .weave-container--fixed {
     max-width: $breakpoint-md;
   }
 }
 
 @media (min-width: $breakpoint-lg) {
-  .container--fixed {
+  .weave-container--fixed {
     max-width: $breakpoint-lg;
   }
 }
 
 @media (min-width: $breakpoint-xl) {
-  .container--fixed {
+  .weave-container--fixed {
     max-width: $breakpoint-xl;
   }
 }
 
 @media (min-width: $breakpoint-xxl) {
-  .container--fixed {
+  .weave-container--fixed {
     max-width: $breakpoint-xxl;
   }
 }
 
 @media (min-width: $breakpoint-xs) {
-  .container--maxwidth-xs {
+  .weave-container--maxwidth-xs {
     max-width: 444px;
   }
 }
 
 @media (min-width: $breakpoint-sm) {
-  .container--maxwidth-sm {
+  .weave-container--maxwidth-sm {
     max-width: $breakpoint-sm;
   }
 }
 
 @media (min-width: $breakpoint-md) {
-  .container--maxwidth-md {
+  .weave-container--maxwidth-md {
     max-width: $breakpoint-md;
   }
 }
 
 @media (min-width: $breakpoint-lg) {
-  .container--maxwidth-lg {
+  .weave-container--maxwidth-lg {
     max-width: $breakpoint-lg;
   }
 }
 
 @media (min-width: $breakpoint-xl) {
-  .container--maxwidth-xl {
+  .weave-container--maxwidth-xl {
     max-width: $breakpoint-xl;
   }
 }
 
 @media (min-width: $breakpoint-xxl) {
-  .container--maxwidth-xxl {
+  .weave-container--maxwidth-xxl {
     max-width: $breakpoint-xxl;
   }
 }

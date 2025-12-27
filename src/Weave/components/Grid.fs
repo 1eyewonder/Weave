@@ -38,7 +38,7 @@ module Grid =
 
     let value (Spacing s) = s
 
-    let toClass (Spacing size) = sprintf "grid--spacing-%i" size
+    let toClass (Spacing size) = sprintf "weave-grid--spacing-%i" size
 
   [<Struct>]
   type Width = private Width of int
@@ -53,7 +53,7 @@ module Grid =
     let value (Width s) = s
 
     let toClass breakpoint (Width width) =
-      sprintf "grid__item--%s-%i" (Breakpoint.toString breakpoint) width
+      sprintf "weave-grid__item--%s-%i" (Breakpoint.toString breakpoint) width
 
 open Grid
 
@@ -67,7 +67,11 @@ type Grid =
     let attrs = defaultArg attrs List.empty
     let justify = defaultArg justify JustifyContent.SpaceAround
 
-    let gridClasses = [ Css.grid; GutterSpacing.toClass spacing; JustifyContent.toClass justify ]
+    let gridClasses = [
+      Css.``weave-grid``
+      GutterSpacing.toClass spacing
+      JustifyContent.toClass justify
+    ]
 
     div [ yield! gridClasses |> List.map cl; yield! attrs ] items
 
@@ -80,7 +84,7 @@ type GridItem =
     let attrs = defaultArg attrs List.empty
 
     let itemClasses = [
-      cl Css.grid__item
+      cl Css.``weave-grid__item``
       xs |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.ExtraSmall >> cl)
       sm |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.Small >> cl)
       md |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.Medium >> cl)
@@ -94,4 +98,4 @@ type GridItem =
 type FlexBreak =
 
   static member Create() =
-    div [ cl Css.``flex-break``; Attr.Style "aria-hidden" "true" ] []
+    div [ cl Css.``weave-flex-break``; Attr.Style "aria-hidden" "true" ] []

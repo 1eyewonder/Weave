@@ -21,9 +21,9 @@ module NumericField =
 
     let toClass variant =
       match variant with
-      | Variant.Text -> Css.``input-control--text``
-      | Variant.Filled -> Css.``input-control--filled``
-      | Variant.Outlined -> Css.``input-control--outlined``
+      | Variant.Text -> Css.``weave-input--text``
+      | Variant.Filled -> Css.``weave-input--filled``
+      | Variant.Outlined -> Css.``weave-input--outlined``
 
   [<RequireQualifiedAccess; Struct>]
   type Margin =
@@ -35,21 +35,21 @@ module NumericField =
 
     let toClass margin =
       match margin with
-      | Margin.None -> Css.``input-control--margin-none``
-      | Margin.Dense -> Css.``input-control--margin-dense``
-      | Margin.Normal -> Css.``input-control--margin-normal``
+      | Margin.None -> Css.``weave-input--margin-none``
+      | Margin.Dense -> Css.``weave-input--margin-dense``
+      | Margin.Normal -> Css.``weave-input--margin-normal``
 
   module Color =
 
     let toClass color =
       match color with
-      | BrandColor.Primary -> Css.``input-control--primary``
-      | BrandColor.Secondary -> Css.``input-control--secondary``
-      | BrandColor.Tertiary -> Css.``input-control--tertiary``
-      | BrandColor.Error -> Css.``input-control--error``
-      | BrandColor.Warning -> Css.``input-control--warning``
-      | BrandColor.Success -> Css.``input-control--success``
-      | BrandColor.Info -> Css.``input-control--info``
+      | BrandColor.Primary -> Css.``weave-input--primary``
+      | BrandColor.Secondary -> Css.``weave-input--secondary``
+      | BrandColor.Tertiary -> Css.``weave-input--tertiary``
+      | BrandColor.Error -> Css.``weave-input--error``
+      | BrandColor.Warning -> Css.``weave-input--warning``
+      | BrandColor.Success -> Css.``weave-input--success``
+      | BrandColor.Info -> Css.``weave-input--info``
 
 open NumericField
 
@@ -128,8 +128,8 @@ type NumericField =
       |> Doc.BindView(fun txt ->
         if not <| System.String.IsNullOrEmpty(txt) then
           label [
-            Css.``input-control__label`` |> cl
-            Attr.DynamicClassPred Css.``input-control__label--focused`` isFocused.View
+            Css.``weave-input__label`` |> cl
+            Attr.DynamicClassPred Css.``weave-input__label--focused`` isFocused.View
           ] [ text txt ]
         else
           Doc.Empty)
@@ -137,7 +137,7 @@ type NumericField =
     let inputContainer =
       value
       |> f [
-        Css.``input-control__root`` |> cl
+        Css.``weave-input__root`` |> cl
         attr.``type`` "number"
         Attr.DynamicProp "placeholder" placeholder
         Attr.enabled enabled
@@ -155,7 +155,7 @@ type NumericField =
       View.Map2 (fun enabled ro -> enabled && not ro) enabled readOnly
       |> Doc.BindView(fun shouldShow ->
         if shouldShow then
-          div [ Css.``input-control__numeric-spin`` |> cl ] [
+          div [ Css.``weave-input__numeric-spin`` |> cl ] [
 
             (max, step)
             ||> View.zipCached
@@ -193,7 +193,7 @@ type NumericField =
       ||> View.zipCached
       |> Doc.BindView(fun (helper, isError) ->
         if not (System.String.IsNullOrEmpty(helper)) && not isError then
-          div [ Css.``input-control__helper-text`` |> cl ] [ text helper ]
+          div [ Css.``weave-input__helper-text`` |> cl ] [ text helper ]
         else
           Doc.Empty)
 
@@ -202,26 +202,26 @@ type NumericField =
       ||> View.zipCached
       |> Doc.BindView(fun (errTxt, isError) ->
         if not (System.String.IsNullOrEmpty(errTxt)) && isError then
-          div [ Css.``input-control__error-text`` |> cl ] [ text errTxt ]
+          div [ Css.``weave-input__error-text`` |> cl ] [ text errTxt ]
         else
           Doc.Empty)
 
     div [
-      Css.``input-control`` |> cl
-      Css.``input-control--field`` |> cl
-      Css.``input-control--hide-native-spin`` |> cl
-      View.not enabled |> Attr.DynamicClassPred Css.``input-control--disabled``
-      Attr.DynamicClassPred Css.``input-control--error`` errorView
+      Css.``weave-input`` |> cl
+      Css.``weave-input--field`` |> cl
+      Css.``weave-input--hide-native-spin`` |> cl
+      View.not enabled |> Attr.DynamicClassPred Css.``weave-input--disabled``
+      Attr.DynamicClassPred Css.``weave-input--error`` errorView
       yield! attrs
     ] [
       label
 
       div [
-        Css.``input-control__input-wrapper`` |> cl
+        Css.``weave-input__input-wrapper`` |> cl
 
         (enabled, readOnly)
         ||> View.map2Cached (fun en ro -> en && not ro)
-        |> Attr.DynamicClassPred Css.``input-control__input-wrapper--with-spin``
+        |> Attr.DynamicClassPred Css.``weave-input__input-wrapper--with-spin``
       ] [ inputContainer; spinButtons ]
 
       helperText

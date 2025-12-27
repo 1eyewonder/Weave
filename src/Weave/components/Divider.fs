@@ -19,7 +19,7 @@ module Divider =
     let toClasses orientation =
       match orientation with
       | Orientation.Horizontal -> []
-      | Orientation.Vertical -> [ Css.``divider--vertical`` ]
+      | Orientation.Vertical -> [ Css.``weave-divider--vertical`` ]
 
   [<RequireQualifiedAccess; Struct>]
   type Variant =
@@ -31,9 +31,9 @@ module Divider =
 
     let toClass variant =
       match variant with
-      | Variant.FullWidth -> Css.``divider--fullwidth``
-      | Variant.Inset -> Css.``divider--inset``
-      | Variant.Middle -> Css.``divider--middle``
+      | Variant.FullWidth -> Css.``weave-divider--fullwidth``
+      | Variant.Inset -> Css.``weave-divider--inset``
+      | Variant.Middle -> Css.``weave-divider--middle``
 
 open Divider
 
@@ -44,4 +44,8 @@ type Divider =
     let attrs = defaultArg attrs []
     let orientation = defaultArg orientation Orientation.Horizontal
 
-    div [ cl Css.``divider``; Orientation.toClasses orientation |> cls; yield! attrs ] []
+    div [
+      cl Css.``weave-divider``
+      Orientation.toClasses orientation |> cls
+      yield! attrs
+    ] []

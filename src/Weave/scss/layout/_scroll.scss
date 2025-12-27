@@ -1,4 +1,4 @@
-.scroll-locked {
+.weave-scroll-locked {
   padding-right: 8px;
   overflow: hidden;
 
@@ -8,19 +8,19 @@
     }
 
     .main-content {
-      .scroll-to-top {
+      .weave-scroll-to-top {
         padding-right: 8px;
       }
     }
   }
 }
 
-.scroll-locked-no-padding {
+.weave-scroll-locked-no-padding {
   overflow: hidden;
 }
 
 @-moz-document url-prefix() {
-  .scroll-locked {
+  .weave-scroll-locked {
     padding-right: 17px; //the width of scroll-bar in firefox
 
     .layout {
@@ -29,7 +29,7 @@
       }
 
       .main-content {
-        .scroll-to-top {
+        .weave-scroll-to-top {
           padding-right: 17px;
         }
       }
@@ -37,7 +37,7 @@
   }
 }
 
-.scroll-to-top {
+.weave-scroll-to-top {
   position: fixed;
   cursor: pointer;
   z-index: 100;
@@ -61,7 +61,7 @@
   }
 
   &:after {
-    content: '';
+    content: "";
     background: transparent;
     top: 0;
     bottom: 0;

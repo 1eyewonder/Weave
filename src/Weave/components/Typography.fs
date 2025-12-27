@@ -19,13 +19,13 @@ module Typography =
 
     let toClass color =
       match color with
-      | BrandColor.Primary -> Css.``typography--primary``
-      | BrandColor.Secondary -> Css.``typography--secondary``
-      | BrandColor.Tertiary -> Css.``typography--tertiary``
-      | BrandColor.Error -> Css.``typography--error``
-      | BrandColor.Warning -> Css.``typography--warning``
-      | BrandColor.Success -> Css.``typography--success``
-      | BrandColor.Info -> Css.``typography--info``
+      | BrandColor.Primary -> Css.``weave-typography--primary``
+      | BrandColor.Secondary -> Css.``weave-typography--secondary``
+      | BrandColor.Tertiary -> Css.``weave-typography--tertiary``
+      | BrandColor.Error -> Css.``weave-typography--error``
+      | BrandColor.Warning -> Css.``weave-typography--warning``
+      | BrandColor.Success -> Css.``weave-typography--success``
+      | BrandColor.Info -> Css.``weave-typography--info``
 
   type Text =
 
@@ -34,12 +34,12 @@ module Typography =
       let attrs = defaultArg attrs List.empty
 
       div [
-        cl Css.typography
+        cl Css.``weave-typography``
         yield! attrs
 
         textWrap
         |> View.MapCached not
-        |> Attr.DynamicClassPred Css.``typography--nowrap``
+        |> Attr.DynamicClassPred Css.``weave-typography--nowrap``
       ] [ text displayText ]
 
     static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
@@ -47,12 +47,12 @@ module Typography =
       let attrs = defaultArg attrs List.empty
 
       div [
-        cl Css.typography
+        cl Css.``weave-typography``
         yield! attrs
 
         textWrap
         |> View.MapCached not
-        |> Attr.DynamicClassPred Css.``typography--nowrap``
+        |> Attr.DynamicClassPred Css.``weave-typography--nowrap``
       ] [ textView displayText ]
 
   [<RequireQualifiedAccess; Struct>]
@@ -75,19 +75,19 @@ module Typography =
 
     let toClass typo =
       match typo with
-      | Typo.H1 -> Css.``typography--h1``
-      | Typo.H2 -> Css.``typography--h2``
-      | Typo.H3 -> Css.``typography--h3``
-      | Typo.H4 -> Css.``typography--h4``
-      | Typo.H5 -> Css.``typography--h5``
-      | Typo.H6 -> Css.``typography--h6``
-      | Typo.Subtitle1 -> Css.``typography--subtitle1``
-      | Typo.Subtitle2 -> Css.``typography--subtitle2``
-      | Typo.Body1 -> Css.``typography--body1``
-      | Typo.Body2 -> Css.``typography--body2``
-      | Typo.Button -> Css.``typography--button``
-      | Typo.Caption -> Css.``typography--caption``
-      | Typo.Overline -> Css.``typography--overline``
+      | Typo.H1 -> Css.``weave-typography--h1``
+      | Typo.H2 -> Css.``weave-typography--h2``
+      | Typo.H3 -> Css.``weave-typography--h3``
+      | Typo.H4 -> Css.``weave-typography--h4``
+      | Typo.H5 -> Css.``weave-typography--h5``
+      | Typo.H6 -> Css.``weave-typography--h6``
+      | Typo.Subtitle1 -> Css.``weave-typography--subtitle1``
+      | Typo.Subtitle2 -> Css.``weave-typography--subtitle2``
+      | Typo.Body1 -> Css.``weave-typography--body1``
+      | Typo.Body2 -> Css.``weave-typography--body2``
+      | Typo.Button -> Css.``weave-typography--button``
+      | Typo.Caption -> Css.``weave-typography--caption``
+      | Typo.Overline -> Css.``weave-typography--overline``
 
   [<RequireQualifiedAccess; Struct>]
   type Align =
@@ -103,13 +103,13 @@ module Typography =
 
     let toClass align =
       match align with
-      | Align.Inherit -> Css.``typography--align-inherit``
-      | Align.Justify -> Css.``typography--align-justify``
-      | Align.Center -> Css.``typography--align-center``
-      | Align.Left -> Css.``typography--align-left``
-      | Align.Right -> Css.``typography--align-right``
-      | Align.Start -> Css.``typography--align-start``
-      | Align.End -> Css.``typography--align-end``
+      | Align.Inherit -> Css.``weave-typography--align-inherit``
+      | Align.Justify -> Css.``weave-typography--align-justify``
+      | Align.Center -> Css.``weave-typography--align-center``
+      | Align.Left -> Css.``weave-typography--align-left``
+      | Align.Right -> Css.``weave-typography--align-right``
+      | Align.Start -> Css.``weave-typography--align-start``
+      | Align.End -> Css.``weave-typography--align-end``
 
   type Button =
 

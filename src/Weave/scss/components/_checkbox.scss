@@ -3,7 +3,7 @@ $checkmark-width: 6px;
 $checkmark-height: 12px;
 
 // Base styles
-.checkbox {
+.weave-checkbox {
   --checkbox-brand-color: var(--palette-action-default);
   cursor: pointer;
   display: inline-flex;
@@ -59,30 +59,30 @@ $checkmark-height: 12px;
   }
 }
 
-.checkbox--primary {
+.weave-checkbox--primary {
   --checkbox-brand-color: var(--palette-primary);
 }
-.checkbox--secondary {
+.weave-checkbox--secondary {
   --checkbox-brand-color: var(--palette-secondary);
 }
-.checkbox--tertiary {
+.weave-checkbox--tertiary {
   --checkbox-brand-color: var(--palette-tertiary);
 }
-.checkbox--error {
+.weave-checkbox--error {
   --checkbox-brand-color: var(--palette-error);
 }
-.checkbox--warning {
+.weave-checkbox--warning {
   --checkbox-brand-color: var(--palette-warning);
 }
-.checkbox--success {
+.weave-checkbox--success {
   --checkbox-brand-color: var(--palette-success);
 }
-.checkbox--info {
+.weave-checkbox--info {
   --checkbox-brand-color: var(--palette-info);
 }
 
 // Input (hidden)
-.checkbox__input {
+.weave-checkbox__input {
   position: absolute;
   top: 0;
   left: 0;
@@ -96,26 +96,26 @@ $checkmark-height: 12px;
 }
 
 // Checked state
-.checkbox__input:checked + .checkbox__span {
+.weave-checkbox__input:checked + .weave-checkbox__span {
   background: var(--checkbox-brand-color, var(--palette-action-default));
   border-color: var(--checkbox-brand-color, var(--palette-action-default));
 }
-.checkbox__input:checked + .checkbox__span::after {
+.weave-checkbox__input:checked + .weave-checkbox__span::after {
   display: block;
   border-color: var(--palette-background);
 }
 
 // Disabled state: filled background and border, no checkmark
-.checkbox__input:disabled + .checkbox__span {
+.weave-checkbox__input:disabled + .weave-checkbox__span {
   background: var(--palette-background-disabled, #f0f0f0);
   border-color: var(--palette-text-disabled, #aaa);
 }
-.checkbox__input:disabled + .checkbox__span::after {
+.weave-checkbox__input:disabled + .weave-checkbox__span::after {
   display: none;
 }
 
 // Visual box
-.checkbox__span {
+.weave-checkbox__span {
   display: inline-block;
   width: var(--checkbox-size, 20px);
   height: var(--checkbox-size, 20px);
@@ -128,7 +128,7 @@ $checkmark-height: 12px;
 }
 
 // Checkmark
-.checkbox__span::after {
+.weave-checkbox__span::after {
   content: "";
   display: none;
   position: absolute;
@@ -141,35 +141,35 @@ $checkmark-height: 12px;
   transform: translate(-50%, -60%) rotate(45deg);
 }
 
-.checkbox__label {
+.weave-checkbox__label {
   font-size: 1em;
 
-  .checkbox.flex-row & {
+  .weave-checkbox.flex-row & {
     margin-left: 0.5em;
   }
 
-  .checkbox.flex-row-reverse & {
+  .weave-checkbox.flex-row-reverse & {
     margin-left: 0;
     margin-right: 0.5em;
   }
 
-  .checkbox.flex-column & {
+  .weave-checkbox.flex-column & {
     margin-left: 0;
     margin-bottom: 0.5em;
   }
 
-  .checkbox.flex-column-reverse & {
+  .weave-checkbox.flex-column-reverse & {
     margin-left: 0;
     margin-top: 0.5em;
   }
 
-  .checkbox--small & {
+  .weave-checkbox--small & {
     font-size: 0.85em;
   }
-  .checkbox--medium & {
+  .weave-checkbox--medium & {
     font-size: 1em;
   }
-  .checkbox--large & {
+  .weave-checkbox--large & {
     font-size: 1.25em;
   }
 }

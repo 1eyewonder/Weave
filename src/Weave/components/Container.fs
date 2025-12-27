@@ -20,12 +20,12 @@ module Container =
 
     let toClass maxWidth =
       match maxWidth with
-      | MaxWidth.ExtraSmall -> Css.``container--maxwidth-xs``
-      | MaxWidth.Small -> Css.``container--maxwidth-sm``
-      | MaxWidth.Medium -> Css.``container--maxwidth-md``
-      | MaxWidth.Large -> Css.``container--maxwidth-lg``
-      | MaxWidth.ExtraLarge -> Css.``container--maxwidth-xl``
-      | MaxWidth.ExtraExtraLarge -> Css.``container--maxwidth-xxl``
+      | MaxWidth.ExtraSmall -> Css.``weave-container--maxwidth-xs``
+      | MaxWidth.Small -> Css.``weave-container--maxwidth-sm``
+      | MaxWidth.Medium -> Css.``weave-container--maxwidth-md``
+      | MaxWidth.Large -> Css.``weave-container--maxwidth-lg``
+      | MaxWidth.ExtraLarge -> Css.``weave-container--maxwidth-xl``
+      | MaxWidth.ExtraExtraLarge -> Css.``weave-container--maxwidth-xxl``
 
 open Container
 
@@ -41,16 +41,16 @@ type Container =
     let attrs = defaultArg attrs List.empty
 
     let containerClasses = [
-      Css.container
-      Css.``container--fill-height``
+      Css.``weave-container``
+      Css.``weave-container--fill-height``
 
       if fixedWidth then
-        Css.``container--fixed``
+        Css.``weave-container--fixed``
       else
         MaxWidth.toClass maxWidth
 
       if gutters then
-        Css.``container--gutters``
+        Css.``weave-container--gutters``
     ]
 
     div [ yield! containerClasses |> List.map cl; yield! attrs ] [ content ]

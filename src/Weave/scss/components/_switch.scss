@@ -1,4 +1,4 @@
-.switch {
+.weave-switch {
   --switch-brand-color: var(--palette-action-default);
   cursor: pointer;
   display: inline-flex;
@@ -24,7 +24,7 @@
     justify-content: center;
     width: max-content;
   }
-  .switch__label {
+  .weave-switch__label {
     font-size: 1em;
     text-align: center;
     width: 100%;
@@ -33,21 +33,21 @@
     align-items: center;
     text-align: center;
 
-    .switch.flex-row & {
+    .weave-switch.flex-row & {
       margin-left: 0.5em;
     }
 
-    .switch.flex-row-reverse & {
+    .weave-switch.flex-row-reverse & {
       margin-left: 0;
       margin-right: 0.5em;
     }
 
-    .switch.flex-column & {
+    .weave-switch.flex-column & {
       margin-left: 0;
       margin-bottom: 0.5em;
     }
 
-    .switch.flex-column-reverse & {
+    .weave-switch.flex-column-reverse & {
       margin-left: 0;
       margin-top: 0.5em;
     }
@@ -66,29 +66,29 @@
   }
 }
 
-.switch--primary {
+.weave-switch--primary {
   --switch-brand-color: var(--palette-primary);
 }
-.switch--secondary {
+.weave-switch--secondary {
   --switch-brand-color: var(--palette-secondary);
 }
-.switch--tertiary {
+.weave-switch--tertiary {
   --switch-brand-color: var(--palette-tertiary);
 }
-.switch--error {
+.weave-switch--error {
   --switch-brand-color: var(--palette-error);
 }
-.switch--warning {
+.weave-switch--warning {
   --switch-brand-color: var(--palette-warning);
 }
-.switch--success {
+.weave-switch--success {
   --switch-brand-color: var(--palette-success);
 }
-.switch--info {
+.weave-switch--info {
   --switch-brand-color: var(--palette-info);
 }
 
-.switch__container {
+.weave-switch__container {
   --switch-brand-color: inherit;
   position: relative;
   display: inline-block;
@@ -97,24 +97,24 @@
   flex-shrink: 0;
   vertical-align: middle;
 
-  .switch.flex-row & {
+  .weave-switch.flex-row & {
     margin-right: 0.5em;
   }
 
-  .switch.flex-row-reverse & {
+  .weave-switch.flex-row-reverse & {
     margin-left: 0.5em;
   }
 
-  .switch.flex-column & {
+  .weave-switch.flex-column & {
     margin-bottom: 0.3em;
   }
 
-  .switch.flex-column-reverse & {
+  .weave-switch.flex-column-reverse & {
     margin-top: 0.3em;
   }
 }
 
-.switch__track {
+.weave-switch__track {
   display: block;
   width: 100%;
   height: 100%;
@@ -125,7 +125,7 @@
   background-color: var(--switch-brand-color, var(--palette-action-default));
 }
 
-.switch__thumb {
+.weave-switch__thumb {
   width: 20px;
   height: 20px;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
@@ -141,7 +141,7 @@
 }
 
 // Checkmark inside thumb when toggled
-.switch__thumb::after {
+.weave-switch__thumb::after {
   content: "";
   display: none;
   position: absolute;
@@ -155,71 +155,83 @@
   pointer-events: none;
 }
 
-.switch__input:checked ~ .switch__thumb::after {
+.weave-switch__input:checked ~ .weave-switch__thumb::after {
   display: block;
 }
 
 /* Checked state: move thumb to right */
-.switch__input:checked ~ .switch__thumb {
+.weave-switch__input:checked ~ .weave-switch__thumb {
   left: calc(100% - 20px);
 }
-.switch__input:checked ~ .switch__track {
+.weave-switch__input:checked ~ .weave-switch__track {
   background: var(--switch-brand-color, var(--palette-action-default));
   opacity: 0.8;
 }
 
-.switch--primary .switch__input:checked ~ .switch__thumb {
+.weave-switch--primary .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-primary);
   border-color: #f0f0f0;
   border-radius: 50%;
 }
-.switch--primary .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--primary
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-primary-text);
 }
 
-.switch--secondary .switch__input:checked ~ .switch__thumb {
+.weave-switch--secondary .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-secondary);
 }
-.switch--secondary .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--secondary
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-secondary-text);
 }
 
-.switch--tertiary .switch__input:checked ~ .switch__thumb {
+.weave-switch--tertiary .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-tertiary);
 }
-.switch--tertiary .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--tertiary
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-tertiary-text);
 }
 
-.switch--error .switch__input:checked ~ .switch__thumb {
+.weave-switch--error .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-error);
 }
-.switch--error .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--error
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-error-text);
 }
 
-.switch--warning .switch__input:checked ~ .switch__thumb {
+.weave-switch--warning .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-warning);
 }
-.switch--warning .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--warning
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-warning-text);
 }
 
-.switch--success .switch__input:checked ~ .switch__thumb {
+.weave-switch--success .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-success);
 }
-.switch--success .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--success
+  .weave-switch__input:checked
+  ~ .weave-switch__thumb::after {
   border-color: var(--palette-success-text);
 }
 
-.switch--info .switch__input:checked ~ .switch__thumb {
+.weave-switch--info .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-info);
 }
-.switch--info .switch__input:checked ~ .switch__thumb::after {
+.weave-switch--info .weave-switch__input:checked ~ .weave-switch__thumb::after {
   border-color: var(--palette-info-text);
 }
 
-.switch__input {
+.weave-switch__input {
   position: absolute;
   top: 0;
   left: 0;
@@ -233,15 +245,15 @@
 }
 
 // Disabled state: hide thumb, style track
-.switch__input:disabled ~ .switch__thumb {
+.weave-switch__input:disabled ~ .weave-switch__thumb {
   display: none;
 }
-.switch__input:disabled ~ .switch__track {
+.weave-switch__input:disabled ~ .weave-switch__track {
   background: var(--palette-background-disabled, #f0f0f0);
   opacity: 1;
 }
 
-.switch__span {
+.weave-switch__span {
   width: 58px;
   height: 38px;
   display: inline-flex;
@@ -254,7 +266,7 @@
   vertical-align: middle;
 }
 
-.switch__base {
+.weave-switch__base {
   padding: 9px;
   top: 0;
   left: 0;
@@ -269,7 +281,7 @@
   &.checked {
     transform: translateX(20px);
 
-    & + .switch-track {
+    & + .weave-switch-track {
       opacity: 0.5;
     }
   }
@@ -280,10 +292,10 @@
     }
   }
 
-  &.switch--disabled {
+  &.weave-switch--disabled {
     color: var(--palette-gray-default) !important;
 
-    & + .switch-track {
+    & + .weave-switch-track {
       opacity: 0.12 !important;
     }
 
@@ -302,12 +314,12 @@
   }
 }
 
-.switch__button {
+.weave-switch__button {
   display: flex;
   align-items: inherit;
   justify-content: inherit;
 
-  & .switch__input {
+  & .weave-switch__input {
     top: 0;
     left: 0;
     width: 100%;
@@ -320,58 +332,58 @@
     position: absolute;
   }
 
-  & .switch__thumb--small {
+  & .weave-switch__thumb--small {
     width: 14px;
     height: 14px;
   }
 
-  & .switch__thumb--medium {
+  & .weave-switch__thumb--medium {
     width: 20px;
     height: 20px;
   }
 
-  & .switch__thumb--large {
+  & .weave-switch__thumb--large {
     width: 26px;
     height: 26px;
   }
 }
 
-.switch__base--small {
-  &.switch__base {
+.weave-switch__base--small {
+  &.weave-switch__base {
     padding: 5px;
   }
 }
 
-.switch__base--medium {
-  &.switch__base {
+.weave-switch__base--medium {
+  &.weave-switch__base {
     padding: 9px;
   }
 }
 
-.switch__base--large {
-  &.switch__base {
+.weave-switch__base--large {
+  &.weave-switch__base {
     padding: 13px;
   }
 }
 
-.switch__span--small {
-  &.switch__span {
+.weave-switch__span--small {
+  &.weave-switch__span {
     padding: 7px;
     width: 44px;
     height: 24px;
   }
 }
 
-.switch__span--medium {
-  &.switch__span {
+.weave-switch__span--medium {
+  &.weave-switch__span {
     padding: 12px;
     width: 58px;
     height: 38px;
   }
 }
 
-.switch__span---large {
-  &.switch__span {
+.weave-switch__span---large {
+  &.weave-switch__span {
     padding: 17px;
     width: 72px;
     height: 52px;

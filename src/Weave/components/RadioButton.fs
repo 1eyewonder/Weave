@@ -18,20 +18,20 @@ module Radio =
   module Size =
     let toClass size =
       match size with
-      | Size.Small -> Css.``radio--small``
-      | Size.Medium -> Css.``radio--medium``
-      | Size.Large -> Css.``radio--large``
+      | Size.Small -> Css.``weave-radio--small``
+      | Size.Medium -> Css.``weave-radio--medium``
+      | Size.Large -> Css.``weave-radio--large``
 
   module Color =
     let toClass color =
       match color with
-      | BrandColor.Primary -> Css.``radio--primary``
-      | BrandColor.Secondary -> Css.``radio--secondary``
-      | BrandColor.Tertiary -> Css.``radio--tertiary``
-      | BrandColor.Error -> Css.``radio--error``
-      | BrandColor.Warning -> Css.``radio--warning``
-      | BrandColor.Success -> Css.``radio--success``
-      | BrandColor.Info -> Css.``radio--info``
+      | BrandColor.Primary -> Css.``weave-radio--primary``
+      | BrandColor.Secondary -> Css.``weave-radio--secondary``
+      | BrandColor.Tertiary -> Css.``weave-radio--tertiary``
+      | BrandColor.Error -> Css.``weave-radio--error``
+      | BrandColor.Warning -> Css.``weave-radio--warning``
+      | BrandColor.Success -> Css.``weave-radio--success``
+      | BrandColor.Info -> Css.``weave-radio--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -63,7 +63,7 @@ type Radio =
     let isSelected = Var.Create false
 
     label [
-      cls [ Css.radio; Flex.Inline.allSizes ]
+      cls [ Css.``weave-radio``; Flex.Inline.allSizes ]
 
       contentPlacement
       |> View.MapCached (function
@@ -100,7 +100,7 @@ type Radio =
           if enabled then
             Var.Set userSelection value)
 
-        cl Css.radio__input
+        cl Css.``weave-radio__input``
       ] [
         userSelection.View
         |> Doc.sinkCached (fun userSelection ->
@@ -109,13 +109,13 @@ type Radio =
           else
             Var.Set isSelected false)
       ]
-      span [ cls [ Css.radio__span ] ] []
+      span [ cls [ Css.``weave-radio__span`` ] ] []
       match displayText with
       | Some v ->
         span [
           cls [
-            Css.radio__label
-            Css.``typography--body1``
+            Css.``weave-radio__label``
+            Css.``weave-typography--body1``
             JustifyContent.toClass JustifyContent.Center
           ]
         ] [ textView v ]

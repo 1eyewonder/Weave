@@ -18,20 +18,20 @@ module Switch =
   module Size =
     let toClass size =
       match size with
-      | Size.Small -> Css.``switch__base--small``
-      | Size.Medium -> Css.``switch__base--medium``
-      | Size.Large -> Css.``switch__base--large``
+      | Size.Small -> Css.``weave-switch__base--small``
+      | Size.Medium -> Css.``weave-switch__base--medium``
+      | Size.Large -> Css.``weave-switch__base--large``
 
   module Color =
     let toClass color =
       match color with
-      | BrandColor.Primary -> Css.``switch--primary``
-      | BrandColor.Secondary -> Css.``switch--secondary``
-      | BrandColor.Tertiary -> Css.``switch--tertiary``
-      | BrandColor.Error -> Css.``switch--error``
-      | BrandColor.Warning -> Css.``switch--warning``
-      | BrandColor.Success -> Css.``switch--success``
-      | BrandColor.Info -> Css.``switch--info``
+      | BrandColor.Primary -> Css.``weave-switch--primary``
+      | BrandColor.Secondary -> Css.``weave-switch--secondary``
+      | BrandColor.Tertiary -> Css.``weave-switch--tertiary``
+      | BrandColor.Error -> Css.``weave-switch--error``
+      | BrandColor.Warning -> Css.``weave-switch--warning``
+      | BrandColor.Success -> Css.``weave-switch--success``
+      | BrandColor.Info -> Css.``weave-switch--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -54,7 +54,11 @@ type Switch =
       attrs: Attr list
     ) =
     label [
-      cls [ Css.switch; Flex.Inline.allSizes; AlignItems.toClass AlignItems.Center ]
+      cls [
+        Css.``weave-switch``
+        Flex.Inline.allSizes
+        AlignItems.toClass AlignItems.Center
+      ]
 
       contentPlacement
       |> View.MapCached (function
@@ -82,12 +86,12 @@ type Switch =
 
       yield! attrs
     ] [
-      div [ cls [ Css.``switch__container`` ] ] [
+      div [ cls [ Css.``weave-switch__container`` ] ] [
         input [
           Attr.Prop "type" "checkbox"
           Attr.Checked isChecked
           Attr.enabled enabled
-          cl Css.switch__input
+          cl Css.``weave-switch__input``
 
           let clickable = (isChecked.View, enabled) ||> View.zipCached
 
@@ -95,8 +99,8 @@ type Switch =
             if enabled then
               not flag |> Var.Set isChecked)
         ] []
-        span [ cls [ Css.``switch__track`` ] ] []
-        span [ cls [ Css.``switch__thumb`` ] ] []
+        span [ cls [ Css.``weave-switch__track`` ] ] []
+        span [ cls [ Css.``weave-switch__thumb`` ] ] []
       ]
       content
     ]
@@ -117,7 +121,7 @@ type Switch =
 
     let content =
       match displayText with
-      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.switch__label ] ])
+      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.``weave-switch__label`` ] ])
       | None -> Doc.Empty
 
     Switch.Render(isChecked, content, enabled, contentPlacement, attrs)
@@ -138,6 +142,6 @@ type Switch =
 
     let content =
       content
-      |> Option.mapOrDefault Doc.Empty (fun d -> div [ cls [ Css.switch__label ] ] [ d ])
+      |> Option.mapOrDefault Doc.Empty (fun d -> div [ cls [ Css.``weave-switch__label`` ] ] [ d ])
 
     Switch.Render(isChecked, content, enabled, contentPlacement, attrs)

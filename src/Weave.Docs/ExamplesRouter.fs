@@ -22,6 +22,7 @@ module ExamplesRouter =
     | SwitchExamples
     | ContainerExamples
     | NumericFieldExamples
+    | DropdownExamples
 
   let private pageToString page =
     match page with
@@ -35,6 +36,7 @@ module ExamplesRouter =
     | SwitchExamples -> "Switch"
     | ContainerExamples -> "Container"
     | NumericFieldExamples -> "Numeric Field"
+    | DropdownExamples -> "Dropdown"
 
   let private renderPage page =
     match page with
@@ -58,6 +60,7 @@ module ExamplesRouter =
     | SwitchExamples -> SwitchExamples.render ()
     | ContainerExamples -> div [] [ text "Container examples coming soon..." ]
     | NumericFieldExamples -> div [] [ text "Numeric Field examples coming soon..." ]
+    | DropdownExamples -> DropdownExamples.render ()
 
   let private logo =
     div [
@@ -111,7 +114,6 @@ module ExamplesRouter =
 
     div [
       cls [
-        yield! Margin.toClasses Margin.Bottom.large
         Flex.Flex.allSizes
         FlexWrap.Wrap.allSizes
         AlignItems.toClass AlignItems.Start
@@ -148,6 +150,7 @@ module ExamplesRouter =
                 SwitchExamples
                 ContainerExamples
                 NumericFieldExamples
+                DropdownExamples
               ]
               |> List.map item
 
@@ -181,12 +184,14 @@ module ExamplesRouter =
             Attr.Style "top" "0"
             Attr.Style "z-index" "1000"
             SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+            Padding.toClasses Padding.Bottom.medium |> cls
           ]
         ))
 
       div [
         cls [
-          yield! Padding.toClasses Padding.All.large
+          yield! Padding.toClasses Padding.Horizontal.large
+          yield! Padding.toClasses Padding.Bottom.large
           FlexItem.Grow.allSizes
           FlexDirection.Column.allSizes
           AlignItems.toClass AlignItems.Start

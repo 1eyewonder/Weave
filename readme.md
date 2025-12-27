@@ -46,8 +46,7 @@ Button.Create(
             // classes based on what different components support
             Button.Variant.toClass Button.Variant.Outlined
             Button.Color.toClass BrandColor.Primary
-        ]
-        
+        ] 
     ]
 )
 ```
@@ -61,16 +60,13 @@ Weave is looking to have built in support for theming applications. Currently, t
 
 ## Starting Development
 
-1. Download .NET 10 SDK
-    - https://dotnet.microsoft.com/en-us/download
-2. Download VSCode
-    - https://code.visualstudio.com/
-3. Open `weave.code-workspace` file and press the `Open workspace` in the bottom right corner. Install the recommended extensions.
-4. In your command line run:
+1. Open `weave.code-workspace` file and press the `Open workspace` in the bottom right corner. Install the recommended extensions.
+2. In your command line run:
     - `dotnet tool restore`
     - `dotnet paket restore`
+    - `yarn install`
     - `dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj`
-5. Open your browser and navigate to `http://localhost:5000`
+3. Open your browser and navigate to `http://localhost:5000`
 
 ## Contributing
 

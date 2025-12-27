@@ -82,6 +82,8 @@ module Tooltip =
       let rootClasses = [ Css.``tooltip-root`` ]
 
       div [
+        AlignItems.toClass AlignItems.Center |> cl
+        AlignContent.toClass AlignContent.Center |> cl
         yield! rootClasses |> List.map cl
         yield! attrs
 

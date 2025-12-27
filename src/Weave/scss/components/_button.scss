@@ -71,13 +71,13 @@
 
       @media (hover: hover) and (pointer: fine) {
         &:hover {
-          background-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
         }
       }
 
       &:focus-visible,
       &:active {
-        background-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+        background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
       }
     }
   }
@@ -85,7 +85,7 @@
 
 .button--outlined {
   color: var(--palette-text-primary);
-  border: 2px solid
+  border: 3px solid
     rgba(var(--palette-text-primary), var(--palette-border-opacity));
   padding: 4px 14px;
 
@@ -121,7 +121,7 @@
         &:hover {
           border: 2px solid
             rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-          background-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
         }
       }
 
@@ -130,7 +130,7 @@
         border: 2px
           solid
           rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-        background-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+        background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
       }
     }
   }

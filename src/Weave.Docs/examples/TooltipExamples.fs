@@ -29,7 +29,7 @@ module TooltipExamples =
                 ]
               ]
             ),
-            sprintf "Tooltip on %A" direction |> text,
+            Body1.Create(sprintf "Tooltip on %A" direction),
             direction = direction
           ),
         xs = Grid.Width.create 3
@@ -60,7 +60,7 @@ module TooltipExamples =
                 Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
               ]
             ),
-            sprintf "%s tooltip" displayText |> text,
+            Body1.Create(sprintf "%s tooltip" displayText),
             tooltipAttrs = [ Tooltip.Color.toClass color |> cl ]
           ),
           xs = Grid.Width.create 6,
@@ -103,7 +103,7 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Primary |> cl
             ]
           ),
-          text "Appears on hover",
+          Body1.Create("Appears on hover"),
           activationEvents = [ Tooltip.Activation.Hover ]
         )
         Caption.Create("Hover activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
@@ -120,7 +120,7 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Secondary |> cl
             ]
           ),
-          text "Appears on click",
+          Body1.Create("Appears on click"),
           activationEvents = [ Tooltip.Activation.Click ]
         )
         Caption.Create("Click activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
@@ -165,7 +165,7 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Primary |> cl
             ]
           ),
-          text "I have an arrow pointing",
+          Body1.Create("I have an arrow pointing"),
           showArrow = true
         )
         Caption.Create("showArrow = true (default)", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
@@ -181,7 +181,7 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Secondary |> cl
             ]
           ),
-          text "No arrow here",
+          Body1.Create("No arrow here"),
           showArrow = false
         )
         Caption.Create("showArrow = false", attrs = [ Margin.toClasses Margin.Top.small |> cls ])

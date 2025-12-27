@@ -34,7 +34,7 @@ module GridExamples =
         GridItem.Create(demoBox (View.Const "Item 3") BrandColor.Tertiary, xs = Grid.Width.create 12)
       ]
     )
-    |> Helpers.section "Basic Grid" "A simple grid with items stacked vertically on all screen sizes"
+    |> Helpers.section "Basic Grid" (text "A simple grid with items stacked vertically on all screen sizes")
 
   let private equalColumnsExample () =
     Grid.Create(
@@ -45,7 +45,7 @@ module GridExamples =
             GridItem.Create(demoBox (View.Const "1/4") BrandColor.Primary, xs = Grid.Width.create 3))
       ]
     )
-    |> Helpers.section "Equal Columns" "Grid items with equal widths (3/12 = 25% each)"
+    |> Helpers.section "Equal Columns" (text "Grid items with equal widths (3/12 = 25% each)")
 
   let private responsiveGridExample () =
     Grid.Create(
@@ -75,7 +75,7 @@ module GridExamples =
     )
     |> Helpers.section
       "Responsive Grid"
-      "Grid items that change width at different breakpoints. Resize your browser to see the effect."
+      (text "Grid items that change width at different breakpoints. Resize your browser to see the effect.")
 
   let private spacingExample () =
     div [] [
@@ -103,7 +103,9 @@ module GridExamples =
         spacing = Grid.GutterSpacing.create 20
       )
     ]
-    |> Helpers.section "Spacing" "Control the gap between grid items with different spacing values (1-20)"
+    |> Helpers.section
+      "Spacing"
+      (text "Control the gap between grid items with different spacing values (1-20)")
 
   let private justifyContentExample () =
     div [] [
@@ -191,7 +193,7 @@ module GridExamples =
         justify = JustifyContent.SpaceEvenly
       )
     ]
-    |> Helpers.section "Justify Content" "Control how grid items are aligned along the main axis"
+    |> Helpers.section "Justify Content" (text "Control how grid items are aligned along the main axis")
 
   let private flexBreakExample () =
     Grid.Create(
@@ -205,7 +207,9 @@ module GridExamples =
         GridItem.Create(demoBox (View.Const "Item 4") BrandColor.Primary, xs = Grid.Width.create 4)
       ]
     )
-    |> Helpers.section "Flex Break" "Use FlexBreak to force items onto a new row without changing their width"
+    |> Helpers.section
+      "Flex Break"
+      (text "Use FlexBreak to force items onto a new row without changing their width")
 
   let private nestedGridExample () =
     Grid.Create(
@@ -262,7 +266,7 @@ module GridExamples =
         )
       ]
     )
-    |> Helpers.section "Nested Grids" "Grids can be nested inside grid items for complex layouts"
+    |> Helpers.section "Nested Grids" (text "Grids can be nested inside grid items for complex layouts")
 
   let private cardLayoutExample () =
     let card title description =
@@ -317,7 +321,7 @@ module GridExamples =
         )
       ]
     )
-    |> Helpers.section "Card Layout" "A practical example using grid for a responsive card layout"
+    |> Helpers.section "Card Layout" (text "A practical example using grid for a responsive card layout")
 
   let render () =
     Container.Create(

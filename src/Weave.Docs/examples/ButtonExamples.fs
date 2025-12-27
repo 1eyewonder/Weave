@@ -14,7 +14,7 @@ module ButtonExamples =
   let private variantExamples () =
     Helpers.section
       "Variants"
-      "Buttons come in three variants: Filled, Outlined, and Text"
+      (text "Buttons come in three variants: Filled, Outlined, and Text")
       (Grid.Create(
         [
           let btn displayText variant =
@@ -66,7 +66,7 @@ module ButtonExamples =
         )
       ])
     )
-    |> Helpers.section "Colors" "Buttons support all theme colors"
+    |> Helpers.section "Colors" (text "Buttons support all theme colors")
 
   let private sizeExamples () =
     Grid.Create(
@@ -91,7 +91,7 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> Helpers.section "Sizes" "Buttons come in three sizes: Small, Medium (default), and Large"
+    |> Helpers.section "Sizes" (text "Buttons come in three sizes: Small, Medium (default), and Large")
 
   let private disabledExamples () =
     Grid.Create(
@@ -120,7 +120,7 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> Helpers.section "Disabled State" "Buttons can be disabled using the enabled parameter"
+    |> Helpers.section "Disabled State" (text "Buttons can be disabled using the enabled parameter")
 
   let private fullWidthExample () =
     Button.Create(
@@ -134,7 +134,7 @@ module ButtonExamples =
         | None -> Attr.Empty
       ]
     )
-    |> Helpers.section "Full Width" "Buttons can span the full width of their container"
+    |> Helpers.section "Full Width" (text "Buttons can span the full width of their container")
 
   let private borderRadiusExamples () =
     Grid.Create(
@@ -162,7 +162,7 @@ module ButtonExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> Helpers.section "Border Radius" "Buttons can have different border radius styles"
+    |> Helpers.section "Border Radius" (text "Buttons can have different border radius styles")
 
   let render () =
     Container.Create(

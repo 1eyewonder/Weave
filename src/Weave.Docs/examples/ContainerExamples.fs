@@ -40,7 +40,7 @@ module ContainerExamples =
     ]
     |> Helpers.section
       "MaxWidth Variants"
-      "Showcases each maxWidth option with a colored background for visibility."
+      (text "Showcases each maxWidth option with a colored background for visibility.")
 
   let fixedWidthAndGuttersExample () =
     let centeredText (displayText: string) =
@@ -126,7 +126,7 @@ module ContainerExamples =
     ]
     |> Helpers.section
       "Fixed Width & Gutters"
-      "Demonstrates all combinations of the fixedWidth and gutters parameters."
+      (text "Demonstrates all combinations of the fixedWidth and gutters parameters.")
 
   let render () =
     Container.Create(

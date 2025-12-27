@@ -14,7 +14,9 @@ module Helpers =
   let section title description content =
     div [ Margin.toClasses Margin.Bottom.small |> cls ] [
       H3.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Create(View.Const description, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+
+      div [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ] [ description ]
+
       div [
         Padding.toClasses Padding.All.small |> cls
         SurfaceColor.toAttr SurfaceColor.Paper

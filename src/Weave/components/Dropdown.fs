@@ -65,6 +65,11 @@ module Dropdown =
       | TransformOrigin.BottomCenter -> "Bottom Center"
       | TransformOrigin.BottomRight -> "Bottom Right"
 
+  [<RequireQualifiedAccess; Struct>]
+  type OpenOn =
+    | Click
+    | Hover
+
 open Dropdown
 
 [<JavaScript>]
@@ -74,12 +79,18 @@ type Dropdown =
       buttonContents: Doc,
       items: seq<Doc>,
       ?isOpen: Var<bool>,
+      ?openOn: View<OpenOn>,
       ?anchorOrigin: View<AnchorOrigin>,
       ?transformOrigin: View<TransformOrigin>,
+      ?enabled: View<bool>,
+      ?closeOnOutsideClick: View<bool>,
       ?buttonAttrs: Attr list,
       ?attrs: Attr list
     ) =
     let openVar = defaultArg isOpen (Var.Create false)
+    let openOn = defaultArg openOn (View.Const OpenOn.Click)
+    let enabled = defaultArg enabled (View.Const true)
+    let closeOnOutsideClick = defaultArg closeOnOutsideClick (View.Const true)
     let buttonAttrs = defaultArg buttonAttrs []
     let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.BottomLeft)
 
@@ -100,11 +111,28 @@ type Dropdown =
     let button =
       let contents = [ buttonContents; chevron openVar.View ] |> Doc.Concat
 
-      Button.Create(
-        contents,
-        onClick = (fun () -> openVar.Value <- not openVar.Value),
-        attrs = [ yield! buttonAttrs; on.afterRender (fun el -> buttonRef.Value <- Some el) ]
-      )
+      openOn
+      |> Doc.BindView(fun openOn ->
+        let onClick =
+          match openOn with
+          | OpenOn.Click -> fun () -> openVar.Value <- not openVar.Value
+          | OpenOn.Hover -> fun () -> ()
+
+        let onHover =
+          match openOn with
+          | OpenOn.Click -> []
+          | OpenOn.Hover -> [ on.mouseEnter (fun _ _ -> Var.Set openVar true) ]
+
+        Button.Create(
+          contents,
+          onClick = onClick,
+          enabled = enabled,
+          attrs = [
+            yield! buttonAttrs
+            on.afterRender (fun el -> buttonRef.Value <- Some el)
+            yield! onHover
+          ]
+        ))
 
     let renderItem item =
       div [ cl Css.``weave-dropdown__item`` ] [ item ]
@@ -140,7 +168,7 @@ type Dropdown =
 
     let menuView =
       openVar.View
-      |> View.Map(fun isOpen ->
+      |> View.MapCached(fun isOpen ->
         if isOpen then
           div
             [
@@ -268,7 +296,22 @@ type Dropdown =
         else
           detachOutsideClick ())
 
-    div [ cl Css.``weave-dropdown``; yield! attrs ] [ outsideClickWatcher; button; Doc.EmbedView menuView ]
+    div [
+      cl Css.``weave-dropdown``
+      Attr.enabled enabled
+      yield! attrs
+
+      on.mouseLeaveView openOn (fun _ _ openOn ->
+        match openOn with
+        | OpenOn.Hover -> Var.Set openVar false
+        | _ -> ())
+    ] [
+      closeOnOutsideClick
+      |> Doc.BindView(fun closeOn -> if closeOn then outsideClickWatcher else Doc.Empty)
+
+      button
+      Doc.EmbedView menuView
+    ]
 
 [<JavaScript>]
 type DropdownItem =
@@ -293,16 +336,19 @@ type DropdownItem =
 [<JavaScript>]
 type NestedDropdown =
   static member Create
-    (buttonContents, items, ?isOpen, ?anchorOrigin, ?transformOrigin, ?buttonAttrs, ?attrs)
+    (buttonContents, items, ?isOpen, ?openOn, ?anchorOrigin, ?transformOrigin, ?enabled, ?buttonAttrs, ?attrs)
     =
     let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.TopRight)
+    let openOn = defaultArg openOn (View.Const OpenOn.Hover)
 
     Dropdown.Create(
       buttonContents,
       items,
       ?isOpen = isOpen,
+      openOn = openOn,
       anchorOrigin = anchorOrigin,
       ?transformOrigin = transformOrigin,
+      ?enabled = enabled,
       buttonAttrs = [
         cls [
           Button.Variant.toClass Button.Variant.Text

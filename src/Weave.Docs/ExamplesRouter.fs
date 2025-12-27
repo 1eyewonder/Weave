@@ -124,69 +124,68 @@ module ExamplesRouter =
       Attr.Style "min-height" "100vh"
       SurfaceColor.toAttr SurfaceColor.BackgroundDarker
     ] [
-      currentPage.View
-      |> Doc.BindView(fun page ->
-        Grid.Create(
-          items = [
-            let item target =
-              GridItem.Create(
-                navButton page target (fun p -> Var.Set currentPage p),
-                xs = Grid.Width.create 3,
-                xl = Grid.Width.create 1
-              )
+      let navButton target =
+        currentPage.View
+        |> Doc.BindView(fun page -> navButton page target (fun p -> Var.Set currentPage p))
 
-            GridItem.Create(logo)
-            FlexBreak.Create()
+      Grid.Create(
+        items = [
+          let item target =
+            GridItem.Create(navButton target, xs = Grid.Width.create 3, xl = Grid.Width.create 1)
 
-            yield!
-              [
-                Home
-                ButtonExamples
-                TypographyExamples
-                TooltipExamples
-                GridExamples
-                CheckboxExamples
-                RadioButtonExamples
-                SwitchExamples
-                ContainerExamples
-                NumericFieldExamples
-                DropdownExamples
+          GridItem.Create(logo)
+          FlexBreak.Create()
+
+          yield!
+            [
+              Home
+              ButtonExamples
+              TypographyExamples
+              TooltipExamples
+              GridExamples
+              CheckboxExamples
+              RadioButtonExamples
+              SwitchExamples
+              ContainerExamples
+              NumericFieldExamples
+              DropdownExamples
+            ]
+            |> List.map item
+
+          GridItem.Create(
+            Button.Create(
+              modeVar.View
+              |> View.Map(fun mode ->
+                match mode with
+                | Theming.Light -> text "Dark Mode"
+                | Theming.Dark -> text "Light Mode")
+              |> Doc.EmbedView,
+              onClick =
+                (fun () ->
+                  let newMode = Theming.toggleMode ()
+                  Var.Set modeVar newMode),
+              attrs = [
+                Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+                Button.Variant.Filled |> Button.Variant.toClass |> cl
+                Button.Color.toClass BrandColor.Secondary |> cl
               ]
-              |> List.map item
+            ),
+            xs = Grid.Width.create 3,
+            xl = Grid.Width.create 1
+          )
 
-            GridItem.Create(
-              Button.Create(
-                modeVar.View
-                |> View.Map(fun mode ->
-                  match mode with
-                  | Theming.Light -> text "Dark Mode"
-                  | Theming.Dark -> text "Light Mode")
-                |> Doc.EmbedView,
-                onClick =
-                  (fun () ->
-                    let newMode = Theming.toggleMode ()
-                    Var.Set modeVar newMode),
-                attrs = [
-                  Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Secondary |> cl
-                ]
-              ),
-              xs = Grid.Width.create 3,
-              xl = Grid.Width.create 1
-            )
-
-          ],
-          justify = JustifyContent.SpaceEvenly,
-          attrs = [
-            cls [ AlignItems.toClass AlignItems.Center ]
-            Attr.Style "position" "sticky"
-            Attr.Style "top" "0"
-            Attr.Style "z-index" "1000"
-            SurfaceColor.toAttr SurfaceColor.BackgroundDarker
-            Padding.toClasses Padding.Bottom.medium |> cls
-          ]
-        ))
+        ],
+        justify = JustifyContent.SpaceEvenly,
+        attrs = [
+          cls [ AlignItems.toClass AlignItems.Center ]
+          Attr.Style "position" "sticky"
+          Attr.Style "top" "0"
+          Attr.Style "z-index" "1000"
+          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          Padding.toClasses Padding.Bottom.medium |> cls
+          Padding.toClasses Padding.Horizontal.small |> cls
+        ]
+      )
 
       div [
         cls [

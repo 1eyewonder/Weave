@@ -50,8 +50,7 @@ module ButtonExamples =
 
     Grid.Create(
       colors
-      |> List.indexed
-      |> List.collect (fun (i, (name, color)) -> [
+      |> List.collect (fun (name, color) -> [
         GridItem.Create(
           Button.Create(
             text name,
@@ -59,18 +58,13 @@ module ButtonExamples =
             attrs = [
               Button.Variant.Filled |> Button.Variant.toClass |> cl
               Button.Color.toClass color |> cl
-
               Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
             ]
           ),
-          xs = Grid.Width.create 6,
-          md = Grid.Width.create 2
+          xs = Grid.Width.create 12,
+          md = Grid.Width.create 3
         )
-
-        if i % 3 = 1 then
-          FlexBreak.Create()
-      ]),
-      spacing = Grid.GutterSpacing.create 2
+      ])
     )
     |> Helpers.section "Colors" "Buttons support all theme colors"
 

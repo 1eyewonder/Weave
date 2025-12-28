@@ -71,13 +71,13 @@ module ButtonExamples =
   let private sizeExamples () =
     Grid.Create(
       [
-        let btn displayText size =
+        let btn displayText size variant =
           GridItem.Create(
             Button.Create(
               text displayText,
               onClick = (fun () -> printfn "%s clicked" displayText),
               attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
+                variant |> Button.Variant.toClass |> cl
                 Button.Size.toClass size |> cl
                 Button.Color.toClass BrandColor.Primary |> cl
               ]
@@ -85,15 +85,23 @@ module ButtonExamples =
             xs = Grid.Width.create 4
           )
 
-        btn "Small" Button.Size.Small
-        btn "Medium" Button.Size.Medium
-        btn "Large" Button.Size.Large
+        btn "Small" Button.Size.Small Button.Variant.Filled
+        btn "Medium" Button.Size.Medium Button.Variant.Filled
+        btn "Large" Button.Size.Large Button.Variant.Filled
+        btn "Small" Button.Size.Small Button.Variant.Outlined
+        btn "Medium" Button.Size.Medium Button.Variant.Outlined
+        btn "Large" Button.Size.Large Button.Variant.Outlined
+        btn "Small" Button.Size.Small Button.Variant.Text
+        btn "Medium" Button.Size.Medium Button.Variant.Text
+        btn "Large" Button.Size.Large Button.Variant.Text
       ],
-      spacing = Grid.GutterSpacing.create 2
+      justify = JustifyContent.Center,
+      attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
     )
     |> Helpers.section
       "Sizes"
-      (Helpers.bodyText "Buttons come in three sizes: Small, Medium (default), and Large")
+      (Helpers.bodyText
+        "Buttons come in three sizes: Small, Medium (default), and Large. These sizes effect the button's minimum height and padding.")
 
   let private disabledExamples () =
     Grid.Create(

@@ -58,7 +58,7 @@ module Button =
     let toClass size =
       match size with
       | Size.Small -> Css.``weave-button--small``
-      | Size.Medium -> ""
+      | Size.Medium -> Css.``weave-button--medium``
       | Size.Large -> Css.``weave-button--large``
 
   [<RequireQualifiedAccess; Struct>]

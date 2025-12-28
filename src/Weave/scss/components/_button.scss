@@ -27,6 +27,7 @@
   letter-spacing: var(--typography-button-letterspacing);
   text-transform: var(--typography-button-text-transform);
   min-width: 64px;
+  min-height: 2vh;
   box-sizing: border-box;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -222,78 +223,21 @@
 }
 
 .weave-button--small {
-  &.weave-button--text {
-    padding: 4px 5px;
-    font-size: 0.8125rem;
-  }
-
-  &.weave-button--outlined {
-    padding: 3px 9px;
-    font-size: 0.8125rem;
-
-    &.weave-button--icon {
-      padding: 4px;
-    }
-  }
-
-  &.weave-button--filled {
-    padding: 4px 10px;
-    font-size: 0.8125rem;
-
-    &.weave-button--icon {
-      padding: 5px;
-    }
-  }
+  min-height: 30px;
+  padding: 4px 12px;
+  font-size: calc(var(--typography-button-size) - 0.25rem);
 }
 
 .weave-button--medium {
-  &.weave-button--text {
-    padding: 6px 8px;
-    font-size: 0.875rem;
-  }
-
-  &.weave-button--outlined {
-    padding: 5px 15px;
-    font-size: 0.875rem;
-
-    &.weave-button--icon {
-      padding: 5px;
-    }
-  }
-
-  &.weave-button--filled {
-    padding: 6px 16px;
-    font-size: 0.875rem;
-
-    &.weave-button--icon {
-      padding: 6px;
-    }
-  }
+  min-height: 40px;
+  padding: 6px 16px;
+  font-size: var(--typography-button-size);
 }
 
 .weave-button--large {
-  &.weave-button--text {
-    padding: 8px 11px;
-    font-size: 0.9375rem;
-  }
-
-  &.weave-button--outlined {
-    padding: 7px 21px;
-    font-size: 0.9375rem;
-
-    &.weave-button--icon {
-      padding: 4px;
-    }
-  }
-
-  &.weave-button--filled {
-    padding: 8px 22px;
-    font-size: 0.9375rem;
-
-    &.weave-button--icon {
-      padding: 5px;
-    }
-  }
+  min-height: 50px;
+  padding: 8px 20px;
+  font-size: calc(var(--typography-button-size) + 0.25rem);
 }
 
 .weave-button--full-width {

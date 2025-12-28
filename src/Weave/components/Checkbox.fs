@@ -69,6 +69,8 @@ type Checkbox =
         AlignItems.toClass AlignItems.Center
       ]
 
+      View.not enabled |> Attr.DynamicClassPred Css.``weave-checkbox--disabled``
+
       contentPlacement
       |> View.MapCached (function
         | ContentPlacement.Right -> true
@@ -116,6 +118,9 @@ type Checkbox =
           View.Const false,
           attrs = [
             cls [ Css.``weave-checkbox__label`` ]
+
+            View.not enabled
+            |> Attr.DynamicClassPred Css.``weave-checkbox__label--disabled``
 
             View.not enabled |> Attr.toggleColor Palette.textDisabled
           ]

@@ -11,33 +11,6 @@ $checkmark-height: 12px;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 
-  // Disabled and readonly states
-  &.disabled,
-  .disabled:focus-visible,
-  .disabled:active,
-  &.readonly,
-  .readonly:hover {
-    cursor: default;
-    background-color: transparent !important;
-
-    & * {
-      cursor: default;
-      color: var(--palette-text-disabled);
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .disabled:hover {
-      cursor: default;
-      background-color: transparent !important;
-
-      & * {
-        cursor: default;
-        color: var(--palette-text-disabled);
-      }
-    }
-  }
-
   &--dense {
     padding: 4px;
   }
@@ -57,6 +30,11 @@ $checkmark-height: 12px;
     --checkmark-width: 8px;
     --checkmark-height: 16px;
   }
+}
+
+.weave-checkbox--disabled,
+.weave-checkbox--disabled * {
+  cursor: default !important;
 }
 
 .weave-checkbox--primary {
@@ -103,10 +81,10 @@ $checkmark-height: 12px;
   border-color: var(--palette-background);
 }
 
-// Disabled state: filled background and border, no checkmark
 .weave-checkbox__input:disabled + .weave-checkbox__span {
   background: var(--palette-action-disabled);
   border: none;
+  cursor: default;
 }
 .weave-checkbox__input:disabled + .weave-checkbox__span::after {
   display: none;
@@ -170,4 +148,8 @@ $checkmark-height: 12px;
   .weave-checkbox--large & {
     font-size: 1.25em;
   }
+}
+
+.weave-checkbox__label--disabled {
+  cursor: default;
 }

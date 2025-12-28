@@ -52,18 +52,11 @@
       margin-top: 0.5em;
     }
   }
+}
 
-  &.readonly {
-    cursor: default;
-    background-color: transparent !important;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .readonly:hover {
-      cursor: default;
-      background-color: transparent !important;
-    }
-  }
+.weave-switch--disabled,
+.weave-switch--disabled * {
+  cursor: default !important;
 }
 
 .weave-switch--primary {

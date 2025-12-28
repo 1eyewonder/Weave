@@ -60,6 +60,8 @@ type Switch =
         AlignItems.toClass AlignItems.Center
       ]
 
+      View.not enabled |> Attr.DynamicClassPred Css.``weave-switch--disabled``
+
       contentPlacement
       |> View.MapCached (function
         | ContentPlacement.Right -> true

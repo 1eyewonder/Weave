@@ -23,6 +23,78 @@ module CssHelpers =
   let text = Html.text
   let textView = Html.textView
 
+  module private Style =
+
+    [<Literal>]
+    let backgroundColor = "background-color"
+
+    [<Literal>]
+    let color = "color"
+
+  module Attr =
+
+    let toggleStyleOrDefault style value defaultValue enabled =
+      enabled
+      |> View.MapCached(fun e -> if e then value else defaultValue)
+      |> Attr.DynamicStyle style
+
+    let toggleBackgroundColorOrDefault value defaultValue enabled =
+      toggleStyleOrDefault Style.backgroundColor value defaultValue enabled
+
+    let toggleBackgroundColor value enabled =
+      toggleStyleOrDefault Style.backgroundColor value "" enabled
+
+    let toggleColorOrDefault value defaultValue enabled =
+      toggleStyleOrDefault Style.color value defaultValue enabled
+
+    let toggleColor value enabled =
+      toggleStyleOrDefault Style.color value "" enabled
+
+  /// CSS variables for Weave's theme palette
+  module Palette =
+
+    [<Literal>]
+    let primary = "var(--palette-primary)"
+
+    [<Literal>]
+    let secondary = "var(--palette-secondary)"
+
+    [<Literal>]
+    let tertiary = "var(--palette-tertiary)"
+
+    [<Literal>]
+    let error = "var(--palette-error)"
+
+    [<Literal>]
+    let warning = "var(--palette-warning)"
+
+    [<Literal>]
+    let success = "var(--palette-success)"
+
+    [<Literal>]
+    let info = "var(--palette-info)"
+
+    [<Literal>]
+    let background = "var(--palette-background)"
+
+    [<Literal>]
+    let backgroundDarken = "var(--palette-background-darken)"
+
+    [<Literal>]
+    let backgroundPaper = "var(--palette-background-paper)"
+
+    [<Literal>]
+    let surface = "var(--palette-surface)"
+
+    [<Literal>]
+    let textDisabled = "var(--palette-text-disabled)"
+
+    [<Literal>]
+    let actionDisabled = "var(--palette-action-disabled)"
+
+    [<Literal>]
+    let backgroundDisabled = "var(--palette-action-disabled-background)"
+
   [<RequireQualifiedAccess; Struct>]
   type Size =
     | ExtraSmall
@@ -43,15 +115,18 @@ module CssHelpers =
 
   module BrandColor =
 
-    let toBackgroundColor color =
+    let private toStyle style color =
       match color with
-      | BrandColor.Primary -> Attr.Style "background-color" "var(--palette-primary)"
-      | BrandColor.Secondary -> Attr.Style "background-color" "var(--palette-secondary)"
-      | BrandColor.Tertiary -> Attr.Style "background-color" "var(--palette-tertiary)"
-      | BrandColor.Error -> Attr.Style "background-color" "var(--palette-error)"
-      | BrandColor.Warning -> Attr.Style "background-color" "var(--palette-warning)"
-      | BrandColor.Success -> Attr.Style "background-color" "var(--palette-success)"
-      | BrandColor.Info -> Attr.Style "background-color" "var(--palette-info)"
+      | BrandColor.Primary -> Attr.Style style Palette.primary
+      | BrandColor.Secondary -> Attr.Style style Palette.secondary
+      | BrandColor.Tertiary -> Attr.Style style Palette.tertiary
+      | BrandColor.Error -> Attr.Style style Palette.error
+      | BrandColor.Warning -> Attr.Style style Palette.warning
+      | BrandColor.Success -> Attr.Style style Palette.success
+      | BrandColor.Info -> Attr.Style style Palette.info
+
+    let toBackgroundColor color = toStyle Style.backgroundColor color
+    let toColor color = toStyle Style.color color
 
   [<RequireQualifiedAccess; Struct>]
   type SurfaceColor =
@@ -62,12 +137,32 @@ module CssHelpers =
 
   module SurfaceColor =
 
-    let toBackgroundColor color =
+    let private toStyle style color =
       match color with
-      | SurfaceColor.Background -> Attr.Style "background-color" "var(--palette-background)"
-      | SurfaceColor.BackgroundDarker -> Attr.Style "background-color" "var(--palette-background-darken)"
-      | SurfaceColor.Paper -> Attr.Style "background-color" "var(--palette-background-paper)"
-      | SurfaceColor.Surface -> Attr.Style "background-color" "var(--palette-surface)"
+      | SurfaceColor.Background -> Attr.Style style Palette.background
+      | SurfaceColor.BackgroundDarker -> Attr.Style style Palette.backgroundDarken
+      | SurfaceColor.Paper -> Attr.Style style Palette.backgroundPaper
+      | SurfaceColor.Surface -> Attr.Style style Palette.surface
+
+    let toBackgroundColor color = toStyle Style.backgroundColor color
+    let toColor color = toStyle Style.color color
+
+  [<RequireQualifiedAccess; Struct>]
+  type DisabledColor =
+    | Background
+    | Text
+    | Action
+
+  module DisabledColor =
+
+    let private toStyle style color =
+      match color with
+      | DisabledColor.Background -> Attr.Style style Palette.backgroundDisabled
+      | DisabledColor.Text -> Attr.Style style Palette.textDisabled
+      | DisabledColor.Action -> Attr.Style style Palette.actionDisabled
+
+    let toBackgroundColor color = toStyle Style.backgroundColor color
+    let toColor color = toStyle Style.color color
 
   [<RequireQualifiedAccess>]
   type Margin =

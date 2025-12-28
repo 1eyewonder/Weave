@@ -110,6 +110,15 @@ type Checkbox =
       ] []
       span [ cls [ Css.``weave-checkbox__span`` ] ] []
       match displayText with
-      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.``weave-checkbox__label`` ] ])
+      | Some v ->
+        Body1.Create(
+          v,
+          View.Const false,
+          attrs = [
+            cls [ Css.``weave-checkbox__label`` ]
+
+            View.not enabled |> Attr.toggleColor Palette.textDisabled
+          ]
+        )
       | None -> Doc.Empty
     ]

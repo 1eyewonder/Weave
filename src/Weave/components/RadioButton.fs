@@ -118,6 +118,7 @@ type Radio =
             Css.``weave-typography--body1``
             JustifyContent.toClass JustifyContent.Center
           ]
+          View.not enabled |> Attr.toggleColor Palette.textDisabled
         ] [ textView v ]
       | None -> Doc.Empty
     ]

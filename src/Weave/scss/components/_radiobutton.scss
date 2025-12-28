@@ -78,8 +78,8 @@ $dot-size: 10px;
   position: relative;
   top: 0;
   left: 0;
-  width: var(--radio-size, 20px);
-  height: var(--radio-size, 20px);
+  width: 0;
+  height: 0;
   margin: 0;
   padding: 0;
   opacity: 0;
@@ -98,8 +98,8 @@ $dot-size: 10px;
 
 // Disabled state: filled background and border, no dot
 .weave-radio__input:disabled + .weave-radio__span {
-  background: var(--palette-background-disabled, #f0f0f0);
-  border-color: var(--palette-text-disabled, #aaa);
+  background: var(--palette-action-disabled, #f0f0f0);
+  border: none;
 }
 .weave-radio__input:disabled + .weave-radio__span::after {
   display: none;

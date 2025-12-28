@@ -15,7 +15,7 @@ module GridExamples =
     Container.Create(
       content = Typography.Button.Create(label),
       attrs = [
-        BrandColor.toAttr color
+        BrandColor.toBackgroundColor color
 
         cls [
           BorderRadius.toClass BorderRadius.All.small
@@ -279,7 +279,7 @@ module GridExamples =
     let card title description =
       div [
         Padding.toClasses Padding.All.medium |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
+        SurfaceColor.toBackgroundColor SurfaceColor.Paper
         Attr.Style "border" "1px solid var(--palette-divider)"
         BorderRadius.toClass BorderRadius.All.medium |> cl
         Attr.Style "height" "100%"

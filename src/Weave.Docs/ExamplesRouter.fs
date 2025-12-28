@@ -125,7 +125,7 @@ module ExamplesRouter =
       ]
 
       Attr.Style "min-height" "100vh"
-      SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+      SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
     ] [
       let navButton target =
         currentPage.View
@@ -202,7 +202,7 @@ module ExamplesRouter =
 
           Attr.Style "top" "0"
           Attr.Style "z-index" "1000"
-          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
           Padding.toClasses Padding.Bottom.medium |> cls
           Padding.toClasses Padding.Horizontal.small |> cls
         ]

@@ -273,7 +273,7 @@ module TooltipExamples =
           Attr.Style "width" "40px"
           Attr.Style "height" "40px"
           Attr.Style "border-radius" "50%"
-          BrandColor.toAttr BrandColor.Primary
+          BrandColor.toBackgroundColor BrandColor.Primary
           Attr.Style "color" "white"
           Attr.Style "cursor" "pointer"
           Attr.Style "font-size" "20px"
@@ -290,7 +290,7 @@ module TooltipExamples =
           Attr.Style "width" "40px"
           Attr.Style "height" "40px"
           Attr.Style "border-radius" "50%"
-          BrandColor.toAttr BrandColor.Success
+          BrandColor.toBackgroundColor BrandColor.Success
           Attr.Style "color" "white"
           Attr.Style "cursor" "pointer"
           Attr.Style "font-size" "20px"
@@ -307,7 +307,7 @@ module TooltipExamples =
           Attr.Style "width" "40px"
           Attr.Style "height" "40px"
           Attr.Style "border-radius" "50%"
-          BrandColor.toAttr BrandColor.Error
+          BrandColor.toBackgroundColor BrandColor.Error
           Attr.Style "color" "white"
           Attr.Style "cursor" "pointer"
           Attr.Style "font-size" "20px"

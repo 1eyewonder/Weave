@@ -38,9 +38,12 @@ module ContainerExamples =
                 AlignItems.toClass AlignItems.Center
                 JustifyContent.toClass JustifyContent.Center
               ]
-              if i % 2 = 0 then BrandColor.toAttr BrandColor.Primary
-              elif i % 3 = 0 then BrandColor.toAttr BrandColor.Secondary
-              else BrandColor.toAttr BrandColor.Tertiary
+              if i % 2 = 0 then
+                BrandColor.toBackgroundColor BrandColor.Primary
+              elif i % 3 = 0 then
+                BrandColor.toBackgroundColor BrandColor.Secondary
+              else
+                BrandColor.toBackgroundColor BrandColor.Tertiary
             ]
           ))
     ]
@@ -76,7 +79,7 @@ module ContainerExamples =
         content,
         attrs = [
           Attr.Style "min-height" "1vh"
-          BrandColor.toAttr BrandColor.Primary
+          BrandColor.toBackgroundColor BrandColor.Primary
           cls [ JustifyContent.toClass JustifyContent.Center ]
         ]
       )
@@ -91,7 +94,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
         ]
       )
       Container.Create(
@@ -103,7 +106,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
         ]
       )
       Container.Create(
@@ -115,7 +118,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
         ]
       )
       Container.Create(
@@ -124,7 +127,7 @@ module ContainerExamples =
         gutters = false,
         attrs = [
           cls [ JustifyContent.toClass JustifyContent.Center ]
-          SurfaceColor.toAttr SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
         ]
       )
     ]

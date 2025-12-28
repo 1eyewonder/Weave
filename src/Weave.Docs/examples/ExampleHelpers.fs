@@ -21,7 +21,7 @@ module Helpers =
 
       div [
         Padding.toClasses Padding.All.small |> cls
-        SurfaceColor.toAttr SurfaceColor.Paper
+        SurfaceColor.toBackgroundColor SurfaceColor.Paper
         BorderRadius.toClass BorderRadius.All.small |> cl
       ] [ content ]
     ]

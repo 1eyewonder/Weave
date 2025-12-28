@@ -43,7 +43,7 @@ module CssHelpers =
 
   module BrandColor =
 
-    let toAttr color =
+    let toBackgroundColor color =
       match color with
       | BrandColor.Primary -> Attr.Style "background-color" "var(--palette-primary)"
       | BrandColor.Secondary -> Attr.Style "background-color" "var(--palette-secondary)"
@@ -62,7 +62,7 @@ module CssHelpers =
 
   module SurfaceColor =
 
-    let toAttr color =
+    let toBackgroundColor color =
       match color with
       | SurfaceColor.Background -> Attr.Style "background-color" "var(--palette-background)"
       | SurfaceColor.BackgroundDarker -> Attr.Style "background-color" "var(--palette-background-darken)"

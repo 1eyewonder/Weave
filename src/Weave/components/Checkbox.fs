@@ -118,10 +118,6 @@ type Checkbox =
           View.Const false,
           attrs = [
             cls [ Css.``weave-checkbox__label`` ]
-
-            View.not enabled
-            |> Attr.DynamicClassPred Css.``weave-checkbox__label--disabled``
-
             View.not enabled |> Attr.toggleColor Palette.textDisabled
           ]
         )

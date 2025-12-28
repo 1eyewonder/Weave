@@ -9,30 +9,6 @@ $dot-size: 10px;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 
-  &.disabled,
-  .disabled:focus-visible,
-  .disabled:active,
-  &.readonly,
-  .readonly:hover {
-    cursor: default;
-    background-color: transparent !important;
-    & * {
-      cursor: default;
-      color: var(--palette-text-disabled);
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .disabled:hover {
-      cursor: default;
-      background-color: transparent !important;
-      & * {
-        cursor: default;
-        color: var(--palette-text-disabled);
-      }
-    }
-  }
-
   &--dense {
     padding: 4px;
   }
@@ -49,6 +25,11 @@ $dot-size: 10px;
     --radio-size: 28px;
     --dot-size: 14px;
   }
+}
+
+.weave-radio--disabled,
+.weave-radio--disabled * {
+  cursor: default !important;
 }
 
 .weave-radio--primary {

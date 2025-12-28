@@ -65,6 +65,8 @@ type Radio =
     label [
       cls [ Css.``weave-radio``; Flex.Inline.allSizes ]
 
+      View.not enabled |> Attr.DynamicClassPred Css.``weave-radio--disabled``
+
       contentPlacement
       |> View.MapCached (function
         | ContentPlacement.Right -> true

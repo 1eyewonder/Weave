@@ -26,8 +26,7 @@ module ButtonExamples =
                   Button.Variant.toClass variant |> cl
                   BrandColor.Primary |> Button.Color.toClass |> cl
                 ]
-              ),
-              xs = Grid.Width.create 4
+              )
             )
 
           btn "Filled" Button.Variant.Filled
@@ -60,9 +59,7 @@ module ButtonExamples =
               Button.Color.toClass color |> cl
               Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
             ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 3
+          )
         )
       ])
     )
@@ -82,7 +79,8 @@ module ButtonExamples =
                 Button.Color.toClass BrandColor.Primary |> cl
               ]
             ),
-            xs = Grid.Width.create 4
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
           )
 
         btn "Small" Button.Size.Small Button.Variant.Filled
@@ -115,8 +113,7 @@ module ButtonExamples =
               Button.Variant.Filled |> Button.Variant.toClass |> cl
               Button.Color.toClass BrandColor.Primary |> cl
             ]
-          ),
-          xs = Grid.Width.create 6
+          )
         )
         GridItem.Create(
           Button.Create(
@@ -124,8 +121,7 @@ module ButtonExamples =
             onClick = (fun () -> printfn "This won't fire"),
             enabled = View.Const false,
             attrs = [ Button.Variant.Filled |> Button.Variant.toClass |> cl ]
-          ),
-          xs = Grid.Width.create 6
+          )
         )
       ],
       spacing = Grid.GutterSpacing.create 2
@@ -161,8 +157,7 @@ module ButtonExamples =
                 BorderRadius.toClass radius |> cl
                 BrandColor.Primary |> Button.Color.toClass |> cl
               ]
-            ),
-            xs = Grid.Width.create 4
+            )
           )
 
         btn "None" BorderRadius.All.none

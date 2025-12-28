@@ -339,7 +339,7 @@ type NestedDropdown =
     (buttonContents, items, ?isOpen, ?openOn, ?anchorOrigin, ?transformOrigin, ?enabled, ?buttonAttrs, ?attrs)
     =
     let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.TopRight)
-    let openOn = defaultArg openOn (View.Const OpenOn.Hover)
+    let openOn = defaultArg openOn (View.Const OpenOn.Click)
 
     Dropdown.Create(
       buttonContents,

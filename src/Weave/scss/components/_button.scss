@@ -59,8 +59,6 @@
 }
 
 .weave-button--text {
-  padding: 6px 8px;
-
   &.weave-button--inherit {
     color: inherit;
   }
@@ -88,7 +86,6 @@
   color: var(--palette-text-primary);
   border: 3px solid
     rgba(var(--palette-text-primary), var(--palette-border-opacity));
-  padding: 4px 14px;
 
   &.weave-button--inherit {
     color: inherit;

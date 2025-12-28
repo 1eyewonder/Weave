@@ -85,7 +85,10 @@ module ExamplesRouter =
         ]
       ] [
         H3.Create("Weave", attrs = [ cls [ "weave-logo-title" ] ])
-        Body1.Create("Threading Logic. Fabricating UI.", attrs = [ Attr.Style "font-style" "italic" ])
+        Body1.Create(
+          "Threading Logic. Fabricating UI.",
+          attrs = [ Attr.Style "font-style" "italic"; Attr.Style "white-space" "nowrap" ]
+        )
       ]
     ]
 
@@ -131,7 +134,14 @@ module ExamplesRouter =
       Grid.Create(
         items = [
           let item target =
-            GridItem.Create(navButton target, xs = Grid.Width.create 3, xl = Grid.Width.create 1)
+            GridItem.Create(
+              navButton target,
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6,
+              md = Grid.Width.create 4,
+              lg = Grid.Width.create 3,
+              xl = Grid.Width.create 1
+            )
 
           GridItem.Create(logo)
           FlexBreak.Create()
@@ -170,7 +180,10 @@ module ExamplesRouter =
                 Button.Color.toClass BrandColor.Secondary |> cl
               ]
             ),
-            xs = Grid.Width.create 3,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 6,
+            md = Grid.Width.create 4,
+            lg = Grid.Width.create 3,
             xl = Grid.Width.create 1
           )
 
@@ -178,7 +191,15 @@ module ExamplesRouter =
         justify = JustifyContent.SpaceEvenly,
         attrs = [
           cls [ AlignItems.toClass AlignItems.Center ]
-          Attr.Style "position" "sticky"
+
+          Breakpoint.browser
+          |> View.Map(fun bp ->
+            match bp with
+            | Breakpoint.ExtraSmall
+            | Breakpoint.Small -> "static"
+            | _ -> "sticky")
+          |> Attr.DynamicStyle "position"
+
           Attr.Style "top" "0"
           Attr.Style "z-index" "1000"
           SurfaceColor.toAttr SurfaceColor.BackgroundDarker

@@ -87,8 +87,17 @@ module DropdownExamples =
             H6.Create("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
           ],
-          xs = Grid.Width.create 4
+          xs = Grid.Width.create 6
         )
+
+        GridItem.Create(
+          div [] [
+            H6.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+            radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
+          ],
+          xs = Grid.Width.create 6
+        )
+
         GridItem.Create(
           Grid.Create(
             [
@@ -116,7 +125,7 @@ module DropdownExamples =
                 xs = Grid.Width.create 12
               )
             ],
-            justify = JustifyContent.FlexStart,
+            justify = JustifyContent.Center,
             attrs = [
               cls [
                 AlignItems.toClass AlignItems.Center
@@ -124,19 +133,12 @@ module DropdownExamples =
               ]
             ]
           ),
-          xs = Grid.Width.create 4
+          xs = Grid.Width.create 10,
+          attrs = [ cls [ yield! Margin.toClasses Margin.Top.small ] ]
         )
 
-        GridItem.Create(
-          div [] [
-            H6.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-            radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
-          ],
-          xs = Grid.Width.create 4
-        )
       ],
-      justify = JustifyContent.SpaceAround,
-      spacing = Grid.GutterSpacing.create 2
+      justify = JustifyContent.SpaceAround
     )
     |> Helpers.section
       "Placement"
@@ -311,6 +313,7 @@ module DropdownExamples =
             )
           ],
           isOpen = nestedIsOpen,
+          openOn = View.Const Dropdown.OpenOn.Hover,
           buttonAttrs = [
             nestedIsOpen.View
             |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Primary)
@@ -333,17 +336,36 @@ module DropdownExamples =
 
     Grid.Create(
       [
-        GridItem.Create(clickableDropdown, xs = Grid.Width.create 3)
-        GridItem.Create(hoverDropdown, xs = Grid.Width.create 3)
-        GridItem.Create(nestedClickableDropdown, xs = Grid.Width.create 3)
-        GridItem.Create(nestedHoverDropdown, xs = Grid.Width.create 3)
-      ],
-      spacing = Grid.GutterSpacing.create 2
+        GridItem.Create(
+          clickableDropdown,
+          xs = Grid.Width.create 12,
+          sm = Grid.Width.create 6,
+          md = Grid.Width.create 3
+        )
+        GridItem.Create(
+          hoverDropdown,
+          xs = Grid.Width.create 12,
+          sm = Grid.Width.create 6,
+          md = Grid.Width.create 3
+        )
+        GridItem.Create(
+          nestedClickableDropdown,
+          xs = Grid.Width.create 12,
+          sm = Grid.Width.create 6,
+          md = Grid.Width.create 3
+        )
+        GridItem.Create(
+          nestedHoverDropdown,
+          xs = Grid.Width.create 12,
+          sm = Grid.Width.create 6,
+          md = Grid.Width.create 3
+        )
+      ]
     )
     |> Helpers.section
       "OpenOn Property"
       (Helpers.bodyText
-        "The OpenOn property allows you to specify whether the dropdown opens on click or hover. The default behavior for the Dropdown component is to open on click, while NestedDropdown defaults to opening on hover. You can override this by specifying the OpenOn property when creating either component.")
+        "The OpenOn property allows you to specify whether the dropdown opens on click or hover. The default behavior for the Dropdown and NestedDropdown component is to open on click. You can override this by specifying the OpenOn property when creating either component.")
 
   let private disabledExample () =
     let items = [

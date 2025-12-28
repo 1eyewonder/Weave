@@ -102,7 +102,7 @@ type Switch =
         span [ cls [ Css.``weave-switch__track`` ] ] []
         span [ cls [ Css.``weave-switch__thumb`` ] ] []
       ]
-      content
+      div [ View.not enabled |> Attr.toggleColor Palette.textDisabled ] [ content ]
     ]
 
   static member Create

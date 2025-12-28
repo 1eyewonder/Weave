@@ -249,7 +249,7 @@
   display: none;
 }
 .weave-switch__input:disabled ~ .weave-switch__track {
-  background: var(--palette-background-disabled, #f0f0f0);
+  background: var(--palette-action-disabled, #f0f0f0);
   opacity: 1;
 }
 

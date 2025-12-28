@@ -23,7 +23,7 @@ module RadioButtonExamples =
     )
     |> Helpers.section
       "Basic Radio"
-      (text "A simple radio group with three options. Only one can be selected.")
+      (Helpers.bodyText "A simple radio group with three options. Only one can be selected.")
 
   let private disabledRadioExample () =
     let selected = Var.Create "Disabled"
@@ -35,7 +35,9 @@ module RadioButtonExamples =
         Radio.Create(selected, "C", displayText = View.Const "Or Me", enabled = View.Const false)
       ]
     )
-    |> Helpers.section "Disabled Radio" (text "A radio button that is disabled and cannot be toggled.")
+    |> Helpers.section
+      "Disabled Radio"
+      (Helpers.bodyText "A radio button that is disabled and cannot be toggled.")
 
   let private radioWithDynamicLabel () =
     let selected = Var.Create false
@@ -44,7 +46,9 @@ module RadioButtonExamples =
       selected.View |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
     Grid.Create([ Radio.Create(selected, true, displayText = label) ], justify = JustifyContent.Center)
-    |> Helpers.section "Dynamic Label" (text "A radio button with a label that updates based on its state.")
+    |> Helpers.section
+      "Dynamic Label"
+      (Helpers.bodyText "A radio button with a label that updates based on its state.")
 
   let private radioSizesExample () =
     let selected = Var.Create Radio.Size.Medium
@@ -66,7 +70,7 @@ module RadioButtonExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> Helpers.section "Sizes" (text "Radio buttons in different sizes.")
+    |> Helpers.section "Sizes" (Helpers.bodyText "Radio buttons in different sizes.")
 
   let private radioColorsExample () =
     let selected = Var.Create BrandColor.Primary
@@ -96,7 +100,7 @@ module RadioButtonExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> Helpers.section "Colors" (text "Radio buttons with different color themes.")
+    |> Helpers.section "Colors" (Helpers.bodyText "Radio buttons with different color themes.")
 
   let private contentPlacementExample () =
     let placement = Var.Create Radio.ContentPlacement.Right
@@ -134,7 +138,7 @@ module RadioButtonExamples =
     Grid.Create(radioButtons @ [ GridItem.Create(demoRadio, xs = Grid.Width.create 12) ])
     |> Helpers.section
       "Content Placement"
-      (text "Change the label position using the ContentPlacement option.")
+      (Helpers.bodyText "Change the label position using the ContentPlacement option.")
 
   let render () =
     Container.Create(

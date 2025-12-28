@@ -20,13 +20,15 @@ module CheckboxExamples =
 
       Checkbox.Create(basicIsChecked, View.Const "Default Checkbox")
     ]
-    |> Helpers.section "Basic Checkbox" (text "A simple checkbox with a label.")
+    |> Helpers.section "Basic Checkbox" (Helpers.bodyText "A simple checkbox with a label.")
 
   let private disabledCheckboxExample () =
     let isChecked = Var.Create true
 
     Checkbox.Create(isChecked, View.Const "Disabled Checkbox", enabled = View.Const false)
-    |> Helpers.section "Disabled Checkbox" (text "A checkbox that is disabled and cannot be toggled.")
+    |> Helpers.section
+      "Disabled Checkbox"
+      (Helpers.bodyText "A checkbox that is disabled and cannot be toggled.")
 
   let private checkboxWithDynamicLabel () =
     let isChecked = Var.Create false
@@ -35,7 +37,9 @@ module CheckboxExamples =
       isChecked.View |> View.Map(fun v -> if v then "I am checked!" else "Check me!")
 
     Checkbox.Create(isChecked, label)
-    |> Helpers.section "Dynamic Label" (text "A checkbox with a label that updates based on its state.")
+    |> Helpers.section
+      "Dynamic Label"
+      (Helpers.bodyText "A checkbox with a label that updates based on its state.")
 
   let private checkboxSizesExample () =
     let sizes = [
@@ -54,7 +58,7 @@ module CheckboxExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> Helpers.section "Sizes" (text "Checkboxes in different sizes.")
+    |> Helpers.section "Sizes" (Helpers.bodyText "Checkboxes in different sizes.")
 
   let private checkboxColorsExample () =
     let checkboxes =
@@ -79,7 +83,7 @@ module CheckboxExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> Helpers.section "Colors" (text "Checkboxes with different color themes.")
+    |> Helpers.section "Colors" (Helpers.bodyText "Checkboxes with different color themes.")
 
   let private contentPlacementExample () =
     let placement = Var.Create Checkbox.ContentPlacement.Right
@@ -116,7 +120,7 @@ module CheckboxExamples =
     Grid.Create(radioButtons @ [ GridItem.Create(demoCheckBox, xs = Grid.Width.create 12) ])
     |> Helpers.section
       "Content Placement"
-      (text "Change the label position using the ContentPlacement option.")
+      (Helpers.bodyText "Change the label position using the ContentPlacement option.")
 
   let render () =
     Container.Create(

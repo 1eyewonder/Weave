@@ -44,7 +44,7 @@ module TooltipExamples =
     |> grid
     |> Helpers.section
       "Directions"
-      (text "Tooltips can be positioned in four directions relative to the target element")
+      (Helpers.bodyText "Tooltips can be positioned in four directions relative to the target element")
 
   let private colorExamples () =
     [
@@ -76,7 +76,9 @@ module TooltipExamples =
       tooltipButton "Info" BrandColor.Info
     ]
     |> grid
-    |> Helpers.section "Colors" (text "Tooltips support all theme colors to match your design system")
+    |> Helpers.section
+      "Colors"
+      (Helpers.bodyText "Tooltips support all theme colors to match your design system")
 
   let private activationExamples () =
     [
@@ -145,7 +147,9 @@ module TooltipExamples =
     // |> gridItem
     ]
     |> grid
-    |> Helpers.section "Activation Events" (text "Tooltips can be triggered by different user interactions")
+    |> Helpers.section
+      "Activation Events"
+      (Helpers.bodyText "Tooltips can be triggered by different user interactions")
 
   let private arrowExamples () =
     div [
@@ -189,7 +193,7 @@ module TooltipExamples =
     ]
     |> Helpers.section
       "Arrow Visibility"
-      (text "Tooltips can optionally display an arrow pointing to the target")
+      (Helpers.bodyText "Tooltips can optionally display an arrow pointing to the target")
 
   let private customContentExample () =
     div [
@@ -220,7 +224,7 @@ module TooltipExamples =
     ]
     |> Helpers.section
       "Custom Content"
-      (text "Tooltips can display rich content using Doc instead of plain text")
+      (Helpers.bodyText "Tooltips can display rich content using Doc instead of plain text")
 
   let private textTooltipExample () =
     div [ Padding.toClasses Padding.All.medium |> cls ] [
@@ -252,7 +256,7 @@ module TooltipExamples =
     ]
     |> Helpers.section
       "Text Tooltips"
-      (text "Tooltips can be applied to inline text elements, not just buttons")
+      (Helpers.bodyText "Tooltips can be applied to inline text elements, not just buttons")
 
   let private iconTooltipExample () =
     div [
@@ -312,7 +316,7 @@ module TooltipExamples =
         tooltipAttrs = [ Tooltip.Color.toClass BrandColor.Error |> cl ]
       )
     ]
-    |> Helpers.section "Icon Tooltips" (text "Tooltips work great with icon buttons and badges")
+    |> Helpers.section "Icon Tooltips" (Helpers.bodyText "Tooltips work great with icon buttons and badges")
 
   let render () =
     Container.Create(
@@ -337,6 +341,5 @@ module TooltipExamples =
         textTooltipExample ()
         Helpers.divider ()
         iconTooltipExample ()
-      ],
-      maxWidth = Container.MaxWidth.Large
+      ]
     )

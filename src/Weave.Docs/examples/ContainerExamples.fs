@@ -2,6 +2,7 @@ namespace Weave.Docs.Examples
 
 open WebSharper
 open WebSharper.UI
+open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 open Weave.Container
@@ -19,19 +20,24 @@ module ContainerExamples =
     MaxWidth.ExtraExtraLarge
   ]
 
+  let centeredText (displayText: string) =
+    H6.Create(displayText, attrs = [ cls [ AlignSelf.toClass AlignSelf.Center ] ])
+
   let variantExamples () =
     div [] [
       yield!
         options
         |> List.mapi (fun i mw ->
           Container.Create(
-            Body2.Create(
-              sprintf "MaxWidth = %A" mw,
-              attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
-            ),
+            sprintf "MaxWidth = %A" mw |> centeredText,
             maxWidth = mw,
             attrs = [
-              Margin.toClasses Margin.Bottom.small |> cls
+              Attr.Style "min-height" "1vh"
+              cls [
+                yield! Margin.toClasses Margin.Bottom.small
+                AlignItems.toClass AlignItems.Center
+                JustifyContent.toClass JustifyContent.Center
+              ]
               if i % 2 = 0 then BrandColor.toAttr BrandColor.Primary
               elif i % 3 = 0 then BrandColor.toAttr BrandColor.Secondary
               else BrandColor.toAttr BrandColor.Tertiary
@@ -40,41 +46,42 @@ module ContainerExamples =
     ]
     |> Helpers.section
       "MaxWidth Variants"
-      (text "Showcases each maxWidth option with a colored background for visibility.")
+      (Helpers.bodyText "Showcases each maxWidth option with a colored background for visibility.")
 
   let fixedWidthAndGuttersExample () =
-    let centeredText (displayText: string) =
-      H4.Create(displayText, attrs = [ cls [ AlignSelf.toClass AlignSelf.Center ] ])
+    let description =
+      div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
+        Body1.Create(
+          "The Container component supports two key layout parameters:",
+          attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        )
+
+        Subtitle2.Create("Fixed Width")
+
+        Body1.Create(
+          "With the Fixed property set to true the container will \"snap\" to the closest breakpoint.",
+          attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        )
+
+        Subtitle2.Create("Gutters")
+
+        Body1.Create(
+          "If true, horizontal padding (gutters) are applied inside the container.",
+          attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+        )
+      ]
 
     let filler content =
       Container.Create(
         content,
         attrs = [
+          Attr.Style "min-height" "1vh"
           BrandColor.toAttr BrandColor.Primary
           cls [ JustifyContent.toClass JustifyContent.Center ]
         ]
       )
 
     div [] [
-      Body1.Create(
-        "The Container component supports two key layout parameters:",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
-      )
-      ul [] [
-        li [] [
-          strong [] [ text "fixedWidth:" ]
-          text "With the Fixed property set to true the container will \"snap\" to the closest breakpoint."
-        ]
-        li [] [
-          strong [] [ text "gutters:" ]
-          text " If true (default), horizontal padding (gutters) are applied inside the container."
-        ]
-      ]
-      Helpers.divider ()
-      Body2.Create(
-        "Below are combinations of fixedWidth and gutters:",
-        attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
-      )
       Container.Create(
         "fixedWidth = false, gutters = true (default)" |> centeredText |> filler,
         fixedWidth = false,
@@ -116,25 +123,20 @@ module ContainerExamples =
         fixedWidth = true,
         gutters = false,
         attrs = [
-          cls [
-            yield! Margin.toClasses Margin.Bottom.small
-            JustifyContent.toClass JustifyContent.Center
-          ]
+          cls [ JustifyContent.toClass JustifyContent.Center ]
           SurfaceColor.toAttr SurfaceColor.BackgroundDarker
         ]
       )
     ]
-    |> Helpers.section
-      "Fixed Width & Gutters"
-      (text "Demonstrates all combinations of the fixedWidth and gutters parameters.")
+    |> Helpers.section "Fixed Width & Gutters" description
 
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Container Component", attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ])
+        H1.Create("Container Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Body1.Create(
           "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts.",
-          attrs = [ Margin.toClasses Margin.Bottom.medium |> cls ]
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
         Helpers.divider ()

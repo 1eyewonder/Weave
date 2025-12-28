@@ -47,7 +47,7 @@ module TypographyExamples =
     ]
     |> Helpers.section
       "Typography Variants"
-      (text "All available typography styles with their respective sizing and weights")
+      (Helpers.bodyText "All available typography styles with their respective sizing and weights")
 
   let private alignmentExamples () =
     div [] [
@@ -68,7 +68,9 @@ module TypographyExamples =
         "Justified text - This is a longer piece of text that will demonstrate how justify alignment works when text wraps across multiple lines. Notice how both edges align evenly."
         Typography.Align.Justify
     ]
-    |> Helpers.section "Text Alignment" (text "Typography components support various text alignment options")
+    |> Helpers.section
+      "Text Alignment"
+      (Helpers.bodyText "Typography components support various text alignment options")
 
   let private textWrapExamples () =
     div [] [
@@ -109,7 +111,9 @@ module TypographyExamples =
         ]
       ]
     ]
-    |> Helpers.section "Text Wrapping" (text "Control whether text wraps to the next line or truncates")
+    |> Helpers.section
+      "Text Wrapping"
+      (Helpers.bodyText "Control whether text wraps to the next line or truncates")
 
   let private colorExamples () =
     Grid.Create(
@@ -131,7 +135,7 @@ module TypographyExamples =
       ],
       spacing = Grid.GutterSpacing.create 2
     )
-    |> Helpers.section "Colors" (text "Typography can use theme colors with CSS utility classes")
+    |> Helpers.section "Colors" (Helpers.bodyText "Typography can use theme colors with CSS utility classes")
 
   let private hierarchyExamples () =
     div [] [
@@ -160,7 +164,7 @@ module TypographyExamples =
     ]
     |> Helpers.section
       "Hierarchy Example"
-      (text "Combining different typography styles to create visual hierarchy")
+      (Helpers.bodyText "Combining different typography styles to create visual hierarchy")
 
   let render () =
     Container.Create(
@@ -181,6 +185,5 @@ module TypographyExamples =
         colorExamples ()
         Helpers.divider ()
         hierarchyExamples ()
-      ],
-      maxWidth = Container.MaxWidth.Large
+      ]
     )

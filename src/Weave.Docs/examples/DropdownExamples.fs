@@ -34,7 +34,7 @@ module DropdownExamples =
     )
     |> Helpers.section
       "Basic Usage"
-      (text
+      (Helpers.bodyText
         "A simple dropdown with a few items. Clicking on the button or anywhere else on screen while the dropdown is open will close the dropdown.")
 
   let private placementExample () =
@@ -84,7 +84,7 @@ module DropdownExamples =
       [
         GridItem.Create(
           div [] [
-            H3.Create("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+            H6.Create("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
           ],
           xs = Grid.Width.create 4
@@ -93,7 +93,7 @@ module DropdownExamples =
           Grid.Create(
             [
               GridItem.Create(
-                Subtitle1.Create(
+                Body1.Create(
                   "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
                   attrs = [ Attr.Style "text-align" "center" ]
                 )
@@ -129,7 +129,7 @@ module DropdownExamples =
 
         GridItem.Create(
           div [] [
-            H3.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+            H6.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
           ],
           xs = Grid.Width.create 4
@@ -140,7 +140,7 @@ module DropdownExamples =
     )
     |> Helpers.section
       "Placement"
-      (text "Dropdowns can be positioned using both anchor origin and transform origin.")
+      (Helpers.bodyText "Dropdowns can be positioned using both anchor origin and transform origin.")
 
   let private nestedDropdownExample () =
     let nestedIsOpen = Var.Create false
@@ -219,7 +219,7 @@ module DropdownExamples =
     )
     |> Helpers.section
       "Nested Dropdowns"
-      (text
+      (Helpers.bodyText
         "Dropdowns can contain nested dropdown menus. There are no default stylings for nested dropdowns, however utilizing the `isOpen` parameter, you can build reactive styling based on if the given menu is open.")
 
   let private openOnExamples () =
@@ -342,7 +342,7 @@ module DropdownExamples =
     )
     |> Helpers.section
       "OpenOn Property"
-      (text
+      (Helpers.bodyText
         "The OpenOn property allows you to specify whether the dropdown opens on click or hover. The default behavior for the Dropdown component is to open on click, while NestedDropdown defaults to opening on hover. You can override this by specifying the OpenOn property when creating either component.")
 
   let private disabledExample () =
@@ -371,7 +371,9 @@ module DropdownExamples =
         ]
       ]
     )
-    |> Helpers.section "Disabled Items" (text "Dropdown items can be disabled using the `enabled` property.")
+    |> Helpers.section
+      "Disabled Items"
+      (Helpers.bodyText "Dropdown items can be disabled using the `enabled` property.")
 
   let render () =
     Container.Create(
@@ -392,6 +394,5 @@ module DropdownExamples =
         openOnExamples ()
         Helpers.divider ()
         disabledExample ()
-      ],
-      maxWidth = Container.MaxWidth.Large
+      ]
     )

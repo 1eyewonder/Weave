@@ -19,13 +19,13 @@ module SwitchExamples =
       |> View.printfn
       Switch.Create(basicIsChecked, View.Const "Default Switch")
     ]
-    |> Helpers.section "Basic Switch" (text "A simple switch with a label.")
+    |> Helpers.section "Basic Switch" (Helpers.bodyText "A simple switch with a label.")
 
   let private disabledSwitchExample () =
     let isChecked = Var.Create true
 
     Switch.Create(isChecked, View.Const "Disabled Switch", enabled = View.Const false)
-    |> Helpers.section "Disabled Switch" (text "A switch that is disabled and cannot be toggled.")
+    |> Helpers.section "Disabled Switch" (Helpers.bodyText "A switch that is disabled and cannot be toggled.")
 
   let private switchWithDynamicLabel () =
     let isChecked = Var.Create false
@@ -34,7 +34,9 @@ module SwitchExamples =
       isChecked.View |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
 
     Switch.Create(isChecked, label)
-    |> Helpers.section "Dynamic Label" (text "A switch with a label that updates based on its state.")
+    |> Helpers.section
+      "Dynamic Label"
+      (Helpers.bodyText "A switch with a label that updates based on its state.")
 
   let private switchSizesExample () =
     let sizes = [
@@ -53,7 +55,7 @@ module SwitchExamples =
           md = Grid.Width.create 4
         ))
     )
-    |> Helpers.section "Sizes" (text "Switches in different sizes.")
+    |> Helpers.section "Sizes" (Helpers.bodyText "Switches in different sizes.")
 
   let private switchColorsExample () =
     let switches =
@@ -78,7 +80,7 @@ module SwitchExamples =
           md = Grid.Width.create 1
         ))
     )
-    |> Helpers.section "Colors" (text "Switches with different color themes.")
+    |> Helpers.section "Colors" (Helpers.bodyText "Switches with different color themes.")
 
   let private contentPlacementExample () =
     let placement = Var.Create Switch.ContentPlacement.Right
@@ -115,7 +117,7 @@ module SwitchExamples =
     Grid.Create(radioButtons @ [ GridItem.Create(demoSwitch, xs = Grid.Width.create 12) ])
     |> Helpers.section
       "Content Placement"
-      (text "Change the label position using the ContentPlacement option.")
+      (Helpers.bodyText "Change the label position using the ContentPlacement option.")
 
   let render () =
     Container.Create(

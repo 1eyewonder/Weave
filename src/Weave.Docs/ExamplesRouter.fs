@@ -59,7 +59,7 @@ module ExamplesRouter =
     | RadioButtonExamples -> RadioButtonExamples.render ()
     | SwitchExamples -> SwitchExamples.render ()
     | ContainerExamples -> ContainerExamples.render ()
-    | NumericFieldExamples -> div [] [ text "Numeric Field examples coming soon..." ]
+    | NumericFieldExamples -> NumericFieldExamples.render ()
     | DropdownExamples -> DropdownExamples.render ()
 
   let private logo =

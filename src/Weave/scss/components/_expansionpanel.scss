@@ -1,0 +1,89 @@
+.weave-expansion-panels {
+  flex: 0 1 auto;
+  position: relative;
+  max-width: 100%;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  border-radius: var(--default-borderradius);
+
+  .weave-expansion-panel {
+    border-radius: var(--default-borderradius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .weave-expansion-panel__header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem;
+    background: var(--palette-surface);
+    border-bottom: 1px solid var(--palette-divider);
+    transition: background 0.2s;
+    font-family: var(--typography-h6-family);
+    font-size: var(--typography-h6-size);
+    font-weight: var(--typography-h6-weight);
+    color: var(--palette-text-primary);
+    user-select: none;
+  }
+
+  .weave-expansion-panel--expanded {
+    .weave-expansion-panel__header {
+      color: var(--palette-primary-text);
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .weave-expansion-panel__content {
+      margin-bottom: 1rem;
+    }
+
+    .weave-expansion-panel__header--filled {
+      transition: color 0.2s, background 0.2s;
+      background-color: var(--palette-background);
+    }
+    @each $color in $palette-colors {
+      .weave-expansion-panel__header--filled.weave-expansion-panel__header--#{$color} {
+        background-color: var(--palette-#{$color});
+      }
+    }
+  }
+
+  // Hover highlights regardless of expanded/collapsed state
+  .weave-expansion-panel__header--highlight {
+    transition: color 0.2s, background 0.2s;
+    &:hover {
+      color: var(--palette-action-default-hover);
+    }
+  }
+  @each $color in $palette-colors {
+    .weave-expansion-panel__header--highlight.weave-expansion-panel__header--#{$color}:hover {
+      color: var(--palette-#{$color});
+    }
+  }
+
+  .weave-expansion-panel--collapsed {
+    .weave-expansion-panel__content {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: hidden;
+      border-top: none;
+    }
+  }
+
+  .weave-expansion-panel__icon {
+    width: 40px;
+    transition: transform 0.2s;
+  }
+
+  .weave-expansion-panel__content {
+    padding: 1rem;
+    background: var(--palette-surface);
+    color: var(--palette-text-primary);
+    font-family: var(--typography-body1-family);
+    font-size: var(--typography-body1-size);
+    font-weight: var(--typography-body1-weight);
+    line-height: var(--typography-body1-lineheight);
+    transition: max-height 0.2s, padding 0.2s;
+  }
+}

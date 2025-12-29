@@ -23,6 +23,7 @@ module ExamplesRouter =
     | ContainerExamples
     | NumericFieldExamples
     | DropdownExamples
+    | ExpansionPanelExamples
 
   let private pageToString page =
     match page with
@@ -37,6 +38,7 @@ module ExamplesRouter =
     | ContainerExamples -> "Container"
     | NumericFieldExamples -> "Numeric Field"
     | DropdownExamples -> "Dropdown"
+    | ExpansionPanelExamples -> "Expansion Panel"
 
   let private renderPage page =
     match page with
@@ -61,6 +63,7 @@ module ExamplesRouter =
     | ContainerExamples -> ContainerExamples.render ()
     | NumericFieldExamples -> NumericFieldExamples.render ()
     | DropdownExamples -> DropdownExamples.render ()
+    | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
 
   let private logo =
     div [
@@ -159,6 +162,7 @@ module ExamplesRouter =
               ContainerExamples
               NumericFieldExamples
               DropdownExamples
+              ExpansionPanelExamples
             ]
             |> List.map item
 

@@ -19,6 +19,7 @@
     <Compile Include="components/RadioButton.fs" />
     <Compile Include="components/Switch.fs" />
     <Compile Include="components/Dropdown.fs" />
+    <Compile Include="components/ExpansionPanel.fs" />
     <None Include="wsconfig.json" />
     <None Include="scss/*" />
   </ItemGroup>

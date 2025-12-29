@@ -107,6 +107,65 @@ module DialogExamples =
       (Helpers.bodyText
         "A dialog that can be dismissed by clicking outside or pressing Escape. Useful for less critical prompts.")
 
+  let private positionDialogExample () =
+    let dialogVisible = Var.Create None
+
+    let content dialog =
+      div [] [
+        Body1.Create("This dialog demonstrates different positions.")
+        div [ Margin.toClasses Margin.Top.small |> cls ] [
+          Button.Create(
+            text "Close",
+            onClick = (fun () -> Var.Set dialog None),
+            attrs = [
+              cls [
+                Button.Color.toClass BrandColor.Primary
+                Button.Variant.toClass Button.Variant.Filled
+              ]
+            ]
+          )
+        ]
+      ]
+
+    let positionButtons =
+      [
+        Dialog.DialogPosition.Center, "Center"
+        Dialog.DialogPosition.TopCenter, "Top Center"
+        Dialog.DialogPosition.BottomCenter, "Bottom Center"
+        Dialog.DialogPosition.CenterRight, "Center Right"
+        Dialog.DialogPosition.CenterLeft, "Center Left"
+      ]
+      |> List.map (fun (pos, label) ->
+        Button.Create(
+          text label,
+          onClick = (fun () -> Var.Set dialogVisible (Some pos)),
+          attrs = [
+            cls [
+              Button.Color.toClass BrandColor.Secondary
+              Button.Variant.toClass Button.Variant.Filled
+            ]
+          ]
+        ))
+
+    Grid.Create(
+      [
+        dialogVisible.View
+        |> Doc.BindView (function
+          | Some pos ->
+            Dialog.Create(
+              DialogTitle.Create(H6.Create(sprintf "%A Dialog" pos)),
+              DialogContent.Create(content dialogVisible),
+              dialogPosition = View.Const pos
+            )
+          | None -> Doc.Empty)
+        yield! positionButtons |> List.map (fun btn -> GridItem.Create(btn))
+      ]
+    )
+    |> Helpers.section
+      "Dialog Positions"
+      (Helpers.bodyText
+        "Dialogs can appear in different positions. Use the buttons to open dialogs at each position.")
+
   let render () =
     Container.Create(
       div [] [
@@ -119,5 +178,7 @@ module DialogExamples =
         basicDialogExample ()
         Helpers.divider ()
         optionalDialogExample ()
+        Helpers.divider ()
+        positionDialogExample ()
       ]
     )

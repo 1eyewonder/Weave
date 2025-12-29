@@ -90,33 +90,3 @@ type Dialog =
       ] []
       div [ cls [ Css.``weave-dialog__window`` ] ] [ title; content ]
     ]
-
-// type MessageBox =
-
-//   static member Create
-//     (title: Doc, message: Doc, onConfirm: unit -> unit, ?onCancel: unit -> unit, ?attrs: Attr list)
-//     =
-//     let attrs = defaultArg attrs []
-
-//     let onCancel =
-//       match onCancel with
-//       | Some f -> f
-//       | None -> fun () -> ()
-
-//     let title = DialogTitle.Create(title)
-
-//     let content =
-//       div [ cls [ Flex.Inline.allSizes; JustifyContent.toClass JustifyContent.FlexEnd ] ] [
-//         message
-//         div [ cls [ Flex.Inline.allSizes; JustifyContent.toClass JustifyContent.FlexEnd ] ] [
-//           Button.Create(Body1.Create("Cancel"), onClick = onCancel)
-//           Button.Create(
-//             Body1.Create("Confirm"),
-//             onClick = onConfirm,
-//             attrs = [ cls [ Button.Color.toClass BrandColor.Primary ] ]
-//           )
-//         ]
-//       ]
-//       |> DialogContent.Create
-
-//     Dialog.Create(title, content, attrs = attrs)

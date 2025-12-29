@@ -20,6 +20,7 @@
     <Compile Include="components/Switch.fs" />
     <Compile Include="components/Dropdown.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
+    <Compile Include="components/Dialog.fs" />
     <None Include="wsconfig.json" />
     <None Include="scss/*" />
   </ItemGroup>

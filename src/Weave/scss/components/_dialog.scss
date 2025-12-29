@@ -1,0 +1,218 @@
+@import "../core/variables";
+
+.weave-dialog {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--weave-zindex-dialog);
+}
+
+.weave-dialog__backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--weave-zindex-dialog);
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+.weave-dialog--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.weave-dialog--topcenter {
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 32px;
+}
+
+.weave-dialog--bottomcenter {
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 32px;
+}
+
+.weave-dialog--centerright {
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 32px;
+}
+
+.weave-dialog--centerleft {
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 32px;
+}
+
+.weave-dialog--topleft .weave-dialog__window {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+}
+
+.weave-dialog--topright .weave-dialog__window {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+}
+
+.weave-dialog--bottomleft .weave-dialog__window {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+}
+
+.weave-dialog--bottomright .weave-dialog__window {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+}
+
+.weave-dialog__window {
+  display: flex;
+  z-index: calc(var(--weave-zindex-dialog) + 2);
+  flex-direction: column;
+  color: var(--weave-palette-text-primary);
+  background-color: var(--weave-palette-surface);
+  border-radius: var(--weave-default-borderradius);
+  -webkit-animation: weave-open-dialog-center 0.1s
+    cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: weave-open-dialog-center 0.1s cubic-bezier(0.39, 0.575, 0.565, 1)
+    both;
+  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  max-height: calc(100vh - var(--weave-appbar-height)); // keep as fallback
+  max-height: calc(100dvh - var(--weave-appbar-height));
+  overflow-y: auto;
+  outline-style: none;
+}
+
+.weave-dialog__window--rtl .weave-dialog__title .weave-dialog__close {
+  right: unset;
+  left: 8px;
+}
+
+.weave-dialog__title {
+  z-index: 1;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 16px 24px;
+  overflow-wrap: anywhere;
+  border-top-left-radius: var(--weave-default-borderradius);
+  border-top-right-radius: var(--weave-default-borderradius);
+  position: relative;
+}
+
+.weave-dialog__title:has(.weave-dialog__close) {
+  padding-inline-end: 64px;
+}
+
+.weave-dialog__title + * > .weave-dialog__content {
+  border-radius: 0;
+}
+
+.weave-dialog__close {
+  top: 8px;
+  right: 8px;
+  position: absolute;
+}
+
+.weave-dialog__content {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 8px 24px;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+  border-top-left-radius: var(--weave-default-borderradius);
+  border-top-right-radius: var(--weave-default-borderradius);
+}
+
+.weave-dialog__content--no-side-padding {
+  padding: 12px 0px;
+  margin: 0;
+}
+
+.weave-dialog__actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom-left-radius: var(--weave-default-borderradius);
+  border-bottom-right-radius: var(--weave-default-borderradius);
+}
+
+.weave-dialog__actions:empty {
+  display: none;
+}
+
+.weave-dialog__window--width-false {
+  max-width: calc(100% - 64px);
+}
+.weave-dialog__window--width-xs {
+  max-width: 444px;
+}
+.weave-dialog__window--width-sm {
+  max-width: 600px;
+}
+.weave-dialog__window--width-md {
+  max-width: 960px;
+}
+.weave-dialog__window--width-lg {
+  max-width: 1280px;
+}
+.weave-dialog__window--width-xl {
+  max-width: 1920px;
+}
+.weave-dialog__window--width-xxl {
+  max-width: 2560px;
+}
+.weave-dialog__window--width-full {
+  width: calc(100% - 64px);
+}
+.weave-dialog__window--fullscreen {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  max-width: 100%;
+  max-height: none;
+  border-radius: 0;
+  overflow-y: hidden;
+}
+
+@-webkit-keyframes weave-open-dialog-center {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes weave-open-dialog-center {
+  0% {
+    opacity: 0;
+  }
+  1% {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}

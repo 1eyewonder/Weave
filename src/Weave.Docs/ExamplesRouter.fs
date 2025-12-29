@@ -24,6 +24,7 @@ module ExamplesRouter =
     | NumericFieldExamples
     | DropdownExamples
     | ExpansionPanelExamples
+    | DialogExamples
 
   let private pageToString page =
     match page with
@@ -39,6 +40,7 @@ module ExamplesRouter =
     | NumericFieldExamples -> "Numeric Field"
     | DropdownExamples -> "Dropdown"
     | ExpansionPanelExamples -> "Expansion Panel"
+    | DialogExamples -> "Dialog"
 
   let private renderPage page =
     match page with
@@ -64,6 +66,7 @@ module ExamplesRouter =
     | NumericFieldExamples -> NumericFieldExamples.render ()
     | DropdownExamples -> DropdownExamples.render ()
     | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
+    | DialogExamples -> DialogExamples.render ()
 
   let private logo =
     div [
@@ -163,6 +166,7 @@ module ExamplesRouter =
               NumericFieldExamples
               DropdownExamples
               ExpansionPanelExamples
+              DialogExamples
             ]
             |> List.map item
 
@@ -205,7 +209,6 @@ module ExamplesRouter =
           |> Attr.DynamicStyle "position"
 
           Attr.Style "top" "0"
-          Attr.Style "z-index" "1000"
           SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
           Padding.toClasses Padding.Bottom.medium |> cls
           Padding.toClasses Padding.Horizontal.small |> cls

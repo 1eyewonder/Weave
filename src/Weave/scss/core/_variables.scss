@@ -10,6 +10,7 @@ $font-family-heading: $font-family-base;
   --default-button-borderradius: #{map-get($border-radiuses, "md")};
   --grid-item-min-height: 1vh;
   --palette-border-opacity: 0.8;
+  --weave-zindex-dialog: 10;
 
   // Typography CSS Variables
   // H1

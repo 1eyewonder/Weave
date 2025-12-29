@@ -174,113 +174,31 @@ type Dropdown =
             [
               cls [ Css.``weave-dropdown__list`` ]
 
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.TopLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-top-left``
+              Map.ofList [
+                AnchorOrigin.TopLeft, Css.``weave-dropdown__list--anchor-origin-top-left``
+                AnchorOrigin.TopCenter, Css.``weave-dropdown__list--anchor-origin-top-center``
+                AnchorOrigin.TopRight, Css.``weave-dropdown__list--anchor-origin-top-right``
+                AnchorOrigin.CenterLeft, Css.``weave-dropdown__list--anchor-origin-center-left``
+                AnchorOrigin.CenterCenter, Css.``weave-dropdown__list--anchor-origin-center-center``
+                AnchorOrigin.CenterRight, Css.``weave-dropdown__list--anchor-origin-center-right``
+                AnchorOrigin.BottomLeft, Css.``weave-dropdown__list--anchor-origin-bottom-left``
+                AnchorOrigin.BottomCenter, Css.``weave-dropdown__list--anchor-origin-bottom-center``
+                AnchorOrigin.BottomRight, Css.``weave-dropdown__list--anchor-origin-bottom-right``
+              ]
+              |> Attr.classSelection anchorOrigin
 
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.TopCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-top-center``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.TopRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-top-right``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.CenterLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-center-left``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.CenterCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-center-center``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.CenterRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-center-right``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.BottomLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-bottom-left``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.BottomCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-bottom-center``
-
-              anchorOrigin
-              |> View.MapCached (function
-                | AnchorOrigin.BottomRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--anchor-origin-bottom-right``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.TopLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-top-left``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.TopCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-top-center``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.TopRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-top-right``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.CenterLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-center-left``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.CenterCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-center-center``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.CenterRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-center-right``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.BottomLeft -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-bottom-left``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.BottomCenter -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-bottom-center``
-
-              transformOrigin
-              |> View.MapCached (function
-                | TransformOrigin.BottomRight -> true
-                | _ -> false)
-              |> Attr.DynamicClassPred Css.``weave-dropdown__list--transform-origin-bottom-right``
+              Map.ofList [
+                TransformOrigin.TopLeft, Css.``weave-dropdown__list--transform-origin-top-left``
+                TransformOrigin.TopCenter, Css.``weave-dropdown__list--transform-origin-top-center``
+                TransformOrigin.TopRight, Css.``weave-dropdown__list--transform-origin-top-right``
+                TransformOrigin.CenterLeft, Css.``weave-dropdown__list--transform-origin-center-left``
+                TransformOrigin.CenterCenter, Css.``weave-dropdown__list--transform-origin-center-center``
+                TransformOrigin.CenterRight, Css.``weave-dropdown__list--transform-origin-center-right``
+                TransformOrigin.BottomLeft, Css.``weave-dropdown__list--transform-origin-bottom-left``
+                TransformOrigin.BottomCenter, Css.``weave-dropdown__list--transform-origin-bottom-center``
+                TransformOrigin.BottomRight, Css.``weave-dropdown__list--transform-origin-bottom-right``
+              ]
+              |> Attr.classSelection transformOrigin
 
               on.afterRender (fun el -> dropdownRoot.Value <- el)
             ]

@@ -172,6 +172,16 @@ module Attr =
   [<Inline>]
   let inline bindOption ([<InlineIfLambda>] f: 'T -> Attr) (x: 'T option) = Option.mapOrDefault Attr.Empty f x
 
+  /// Dynamically applies classes based on the value of a View and its corresponding map of values to class names. Meant to selectively apply one class at a time.
+  [<Inline>]
+  let inline classSelection<'T when 'T: comparison> (view: View<'T>) (map: Map<'T, string>) =
+    Map.values map
+    |> Seq.map (fun className ->
+      view
+      |> View.MapCached(fun v -> Map.tryFind v map = Some className)
+      |> Attr.DynamicClassPred className)
+    |> Attr.Concat
+
   module List =
 
     [<Inline>]

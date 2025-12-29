@@ -41,6 +41,7 @@ module Radio =
     | Right
 
 open Radio
+open WebSharper.UI.Server
 
 [<JavaScript>]
 type Radio =
@@ -67,29 +68,13 @@ type Radio =
 
       View.not enabled |> Attr.DynamicClassPred Css.``weave-radio--disabled``
 
-      contentPlacement
-      |> View.MapCached (function
-        | ContentPlacement.Right -> true
-        | _ -> false)
-      |> Attr.DynamicClassPred FlexDirection.Row.allSizes
-
-      contentPlacement
-      |> View.MapCached (function
-        | ContentPlacement.Left -> true
-        | _ -> false)
-      |> Attr.DynamicClassPred FlexDirection.RowReverse.allSizes
-
-      contentPlacement
-      |> View.MapCached (function
-        | ContentPlacement.Top -> true
-        | _ -> false)
-      |> Attr.DynamicClassPred FlexDirection.ColumnReverse.allSizes
-
-      contentPlacement
-      |> View.MapCached (function
-        | ContentPlacement.Bottom -> true
-        | _ -> false)
-      |> Attr.DynamicClassPred FlexDirection.Column.allSizes
+      Map.ofList [
+        ContentPlacement.Right, FlexDirection.Row.allSizes
+        ContentPlacement.Left, FlexDirection.RowReverse.allSizes
+        ContentPlacement.Top, FlexDirection.ColumnReverse.allSizes
+        ContentPlacement.Bottom, FlexDirection.Column.allSizes
+      ]
+      |> Attr.classSelection contentPlacement
 
       yield! attrs
     ] [

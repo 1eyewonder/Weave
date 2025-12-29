@@ -94,17 +94,11 @@ type ExpansionPanelHeader =
           if isEnabled then
             Var.Set expanded (not isExpanded)
 
-        variant
-        |> View.MapCached (function
-          | HeaderVariant.Filled -> true
-          | _ -> false)
-        |> Attr.DynamicClassPred Css.``weave-expansion-panel__header--filled``
-
-        variant
-        |> View.MapCached (function
-          | HeaderVariant.Highlight -> true
-          | _ -> false)
-        |> Attr.DynamicClassPred Css.``weave-expansion-panel__header--highlight``
+        Map.ofList [
+          HeaderVariant.Filled, Css.``weave-expansion-panel__header--filled``
+          HeaderVariant.Highlight, Css.``weave-expansion-panel__header--highlight``
+        ]
+        |> Attr.classSelection variant
 
         yield! attrs
       ]

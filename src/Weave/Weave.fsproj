@@ -8,6 +8,7 @@
     <Compile Include="Helpers.fs" />
     <Compile Include="Theming.fs" />
     <Compile Include="components/Core.fs" />
+    <Compile Include="components/Icons.fs" />
     <Compile Include="components/Typography.fs" />
     <Compile Include="components/Container.fs" />
     <Compile Include="components/Button.fs" />

@@ -53,6 +53,14 @@ module Doc =
       | Some v -> f v
       | None -> Doc.Empty)
 
+  [<Inline>]
+  let inline bindViewOptionOrDefault defaultValue ([<InlineIfLambda>] f: 'T -> Doc) (view: View<'T option>) =
+    view
+    |> Doc.BindView(fun opt ->
+      match opt with
+      | Some v -> f v
+      | None -> defaultValue)
+
 [<JavaScript>]
 module View =
 

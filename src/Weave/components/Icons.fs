@@ -20,9 +20,12 @@ module Icons =
 
     [<RequireQualifiedAccess; Struct>]
     type Style =
-      | Outlined of filled: bool
-      | Rounded of filled: bool
-      | Sharp of filled: bool
+      | Outlined
+      | OutlinedFilled
+      | Rounded
+      | RoundedFilled
+      | Sharp
+      | SharpFilled
 
     [<RequireQualifiedAccess; Struct>]
     type IconWeight =
@@ -7838,15 +7841,21 @@ module private IconHelpers =
 
   let styleToString style =
     match style with
-    | Style.Outlined _ -> "outlined"
-    | Style.Rounded _ -> "rounded"
-    | Style.Sharp _ -> "sharp"
+    | Style.OutlinedFilled
+    | Style.Outlined -> "outlined"
+    | Style.RoundedFilled
+    | Style.Rounded -> "rounded"
+    | Style.SharpFilled
+    | Style.Sharp -> "sharp"
 
   let fillToString style =
     match style with
-    | Style.Outlined filled
-    | Style.Rounded filled
-    | Style.Sharp filled -> if filled then Some "'FILL' 1" else None
+    | Style.OutlinedFilled
+    | Style.RoundedFilled
+    | Style.SharpFilled -> Some "'FILL' 1"
+    | Style.Outlined
+    | Style.Rounded
+    | Style.Sharp -> None
 
   let weightToString weight =
     match weight with
@@ -7877,32 +7886,58 @@ type Icon =
   static member Create
     (
       icon: MaterialSymbols.Icon,
-      ?style: MaterialSymbols.Style,
-      ?weight: MaterialSymbols.IconWeight,
-      ?grade: MaterialSymbols.IconGrade,
-      ?opticalSize: MaterialSymbols.OpticalSize
+      ?style: View<MaterialSymbols.Style>,
+      ?weight: View<MaterialSymbols.IconWeight>,
+      ?grade: View<MaterialSymbols.IconGrade>,
+      ?opticalSize: View<MaterialSymbols.OpticalSize>,
+      ?attrs: Attr list
     ) =
-    let className =
-      match style with
-      | Some style -> (generationToString Symbols, styleToString style) ||> sprintf "%s-%s"
-      | None -> generationToString Symbols
+    let attrs = defaultArg attrs []
+
+    let parametersFirst =
+      (ViewOption.sequence style, ViewOption.sequence weight) ||> View.zipCached
+
+    let parametersSecond =
+      (ViewOption.sequence grade, ViewOption.sequence opticalSize) ||> View.zipCached
+
+    let parameters = (parametersFirst, parametersSecond) ||> View.zipCached
 
     let iconStyle =
-      [
-        match style |> Option.bind fillToString with
-        | Some style -> style
-        | None -> ()
-        match weight with
-        | Some weight -> weightToString weight
-        | None -> ()
-        match grade with
-        | Some grade -> gradeToString grade
-        | None -> ()
-        match opticalSize with
-        | Some size -> opticalSizeToString size
-        | None -> ()
-      ]
-      |> String.concat ", "
-      |> Attr.Style "font-variation-settings"
+      parameters
+      |> View.MapCached(fun ((style, weight), (grade, opticalSize)) ->
+        [
+          match style |> Option.bind fillToString with
+          | Some style -> style
+          | None -> ()
+          match weight with
+          | Some weight -> weightToString weight
+          | None -> ()
+          match grade with
+          | Some grade -> gradeToString grade
+          | None -> ()
+          match opticalSize with
+          | Some size -> opticalSizeToString size
+          | None -> ()
+        ]
+        |> String.concat ", ")
+      |> Attr.DynamicStyle "font-variation-settings"
 
-    span [ cl className; iconStyle ] [ MaterialSymbols.Icon.toSnakeCase icon |> text ]
+    span [
+      [
+        Some MaterialSymbols.Style.Outlined
+        Some MaterialSymbols.Style.OutlinedFilled
+        Some MaterialSymbols.Style.Rounded
+        Some MaterialSymbols.Style.RoundedFilled
+        Some MaterialSymbols.Style.Sharp
+        Some MaterialSymbols.Style.SharpFilled
+      ]
+      |> List.map (fun style ->
+        match style with
+        | Some s -> style, (generationToString Symbols, styleToString s) ||> sprintf "%s-%s"
+        | None -> style, generationToString Symbols)
+      |> Map.ofList
+      |> Attr.classSelection (ViewOption.sequence style)
+
+      iconStyle
+      yield! attrs
+    ] [ MaterialSymbols.Icon.toSnakeCase icon |> text ]

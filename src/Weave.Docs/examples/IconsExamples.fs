@@ -59,6 +59,7 @@ module IconsExamples =
     let opticalSize = Var.Create MaterialSymbols.OpticalSize.``24``
     let weight = Var.Create MaterialSymbols.IconWeight.``400``
     let grade = Var.Create MaterialSymbols.IconGrade.``0``
+    let color = Var.Create<BrandColor option> None
 
     let filledOptions = [ false, "Unfilled"; true, "Filled" ]
 
@@ -157,6 +158,31 @@ module IconsExamples =
           md = Grid.Width.create 3
         ))
 
+    let colorOptions = [
+      None, "Default"
+      Some BrandColor.Primary, "Primary"
+      Some BrandColor.Secondary, "Secondary"
+      Some BrandColor.Tertiary, "Tertiary"
+      Some BrandColor.Info, "Info"
+      Some BrandColor.Success, "Success"
+      Some BrandColor.Warning, "Warning"
+      Some BrandColor.Error, "Error"
+    ]
+
+    let colorRadios =
+      colorOptions
+      |> List.map (fun (value, label) ->
+        GridItem.Create(
+          Radio.Create(
+            color,
+            value,
+            displayText = View.Const label,
+            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
+          ),
+          xs = Grid.Width.create 12,
+          md = Grid.Width.create 1
+        ))
+
     let createItem icon =
       GridItem.Create(
         div [
@@ -167,6 +193,7 @@ module IconsExamples =
             AlignItems.toClass AlignItems.Center
             yield! Margin.toClasses Margin.Bottom.extraSmall
           ]
+
         ] [
           let style =
             (style.View, filled.View)
@@ -188,7 +215,21 @@ module IconsExamples =
               weight = weight.View,
               grade = grade.View,
               opticalSize = opticalSize.View,
-              attrs = [ Attr.Style "font-size" "3em" ]
+              attrs = [
+                Attr.Style "font-size" "3em"
+
+                Map.ofList [
+                  None, ""
+                  Some BrandColor.Primary, Typography.Color.toClass BrandColor.Primary
+                  Some BrandColor.Secondary, Typography.Color.toClass BrandColor.Secondary
+                  Some BrandColor.Tertiary, Typography.Color.toClass BrandColor.Tertiary
+                  Some BrandColor.Info, Typography.Color.toClass BrandColor.Info
+                  Some BrandColor.Success, Typography.Color.toClass BrandColor.Success
+                  Some BrandColor.Warning, Typography.Color.toClass BrandColor.Warning
+                  Some BrandColor.Error, Typography.Color.toClass BrandColor.Error
+                ]
+                |> Attr.classSelection color.View
+              ]
             ))
 
           let iconText =
@@ -219,182 +260,184 @@ module IconsExamples =
         xl = Grid.Width.create 1
       )
 
-    let createHeader title expanded =
-      ExpansionPanelHeader.CreateWithDefaultIcons(
-        text title,
-        expanded,
-        attrs = [ cls [ ExpansionPanel.Color.toColor BrandColor.Primary ] ]
-      )
+    let examples =
+      div [] [
+        H6.Create("Sample Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
-    let actionsExpanded = Var.Create true
-
-    let expansionPanel =
-      ExpansionPanelContainer.Create(
-        [
-          ExpansionPanel.Create(
-            header = createHeader "Sample Icons" actionsExpanded,
-            content =
-              Grid.Create(
-                [
-                  yield!
-                    [
-                      Action.``3dRotation``
-                      Action.Accessibility
-                      Action.AccessibilityNew
-                      Action.Accessible
-                      Action.AccessibleForward
-                      Action.AccountBox
-                      Action.AccountChild
-                      Action.AccountChildInvert
-                      Action.AccountCircle
-                      Action.AccountCircleOff
-                      Action.Ad
-                      Action.AdGroup
-                      Action.AdGroupOff
-                      Action.AdOff
-                      Action.AddAd
-                      Action.AddAlert
-                      Action.AdsClick
-                      Action.Alarm
-                      Action.AlarmAdd
-                      Action.AlarmOff
-                      Action.AlarmOn
-                      Action.AlarmPause
-                      Action.AlarmSmartWake
-                      Action.AllInclusive
-                      Action.AllOut
-                      Action.Anchor
-                      Action.Api
-                      Action.Approval
-                      Action.ApprovalDelegation
-                      Action.ApprovalDelegationOff
-                      Action.ArrowSelectorTool
-                      Action.AutoDelete
-                      Action.AwardStar
-                      Action.BackgroundReplace
-                      Action.Backup
-                      Action.BackupTable
-                      Action.BatchPrediction
-                      Action.BookRibbon
-                      Action.Bookmark
-                      Action.BookmarkAdd
-                      Action.BookmarkAdded
-                      Action.BookmarkBag
-                      Action.BookmarkCheck
-                      Action.BookmarkFlag
-                      Action.BookmarkHeart
-                      Action.BookmarkManager
-                      Action.BookmarkRemove
-                      Action.BookmarkStacks
-                      Action.BookmarkStar
-                      Action.Bookmarks
-                      Action.Browse
-                      Action.BugReport
-                      Action.Build
-                      Action.BuildCircle
-                      Action.CalendarCheck
-                      Action.CalendarClock
-                      Action.CalendarLock
-                      Action.CalendarMonth
-                      Action.CalendarToday
-                      Action.Category
-                      Action.Celebration
-                      Action.ChangeHistory
-                      Action.ChromeReaderMode
-                      Action.CircleNotifications
-                      Action.Circles
-                      Action.CirclesExt
-                      Action.Code
-                      Action.CodeBlocks
-                      Action.CodeOff
-                      Action.CollectionsBookmark
-                      Action.Commit
-                      Action.ComponentExchange
-                      Action.ContactsProduct
-                      Action.Dangerous
-                      Action.DataLossPrevention
-                      Action.DateRange
-                      Action.DeleteHistory
-                      Action.DeveloperGuide
-                      Action.DomainVerification
-                      Action.DomainVerificationOff
-                      Action.DraftOrders
-                      Action.DynamicFeed
-                      Action.EditCalendar
-                      Action.EditNotifications
-                      Action.EditSquare
-                      Action.Error
-                      Action.Event
-                      Action.EventAvailable
-                      Action.EventBusy
-                      Action.EventNote
-                      Action.EventRepeat
-                      Action.EventUpcoming
-                      Action.Extension
-                      Action.FeatureSearch
-                      Action.Feedback
-                      Action.FindReplace
-                      Action.Fingerprint
-                      Action.FingerprintOff
-                      Action.Flutter
-                      Action.FlutterDash
-                      Action.FreeCancellation
-                      Action.Gesture
-                      Action.GestureSelect
-                      Action.HandGesture
-                      Action.HandGestureOff
-                      Action.Help
-                      Action.HelpCenter
-                      Action.HelpClinic
-                      Action.History
-                      Action.History2
-                      Action.HistoryOff
-                      Action.HistoryToggleOff
-                      Action.HomeAppLogo
-                      Action.HotelClass
-                      Action.Hourglass
-                      Action.HourglassCheck
-                      Action.HourglassDisabled
-                      Action.HourglassEmpty
-                      Action.HourglassPause
-                      Action.HowToReg
-                      Action.Http
-                      Action.IndeterminateQuestionBox
-                      Action.Info
-                      Action.InfoI
-                      Action.Input
-                      Action.Interests
-                    ]
-                    |> List.map (Icon.Action >> createItem)
-                ]
-              ),
-            expanded = actionsExpanded
-          )
-        ]
-      )
+        Grid.Create(
+          [
+            yield!
+              [
+                Action.``3dRotation``
+                Action.Accessibility
+                Action.AccessibilityNew
+                Action.Accessible
+                Action.AccessibleForward
+                Action.AccountBox
+                Action.AccountChild
+                Action.AccountChildInvert
+                Action.AccountCircle
+                Action.AccountCircleOff
+                Action.Ad
+                Action.AdGroup
+                Action.AdGroupOff
+                Action.AdOff
+                Action.AddAd
+                Action.AddAlert
+                Action.AdsClick
+                Action.Alarm
+                Action.AlarmAdd
+                Action.AlarmOff
+                Action.AlarmOn
+                Action.AlarmPause
+                Action.AlarmSmartWake
+                Action.AllInclusive
+                Action.AllOut
+                Action.Anchor
+                Action.Api
+                Action.Approval
+                Action.ApprovalDelegation
+                Action.ApprovalDelegationOff
+                Action.ArrowSelectorTool
+                Action.AutoDelete
+                Action.AwardStar
+                Action.BackgroundReplace
+                Action.Backup
+                Action.BackupTable
+                Action.BatchPrediction
+                Action.BookRibbon
+                Action.Bookmark
+                Action.BookmarkAdd
+                Action.BookmarkAdded
+                Action.BookmarkBag
+                Action.BookmarkCheck
+                Action.BookmarkFlag
+                Action.BookmarkHeart
+                Action.BookmarkManager
+                Action.BookmarkRemove
+                Action.BookmarkStacks
+                Action.BookmarkStar
+                Action.Bookmarks
+                Action.Browse
+                Action.BugReport
+                Action.Build
+                Action.BuildCircle
+                Action.CalendarCheck
+                Action.CalendarClock
+                Action.CalendarLock
+                Action.CalendarMonth
+                Action.CalendarToday
+                Action.Category
+                Action.Celebration
+                Action.ChangeHistory
+                Action.ChromeReaderMode
+                Action.CircleNotifications
+                Action.Circles
+                Action.CirclesExt
+                Action.Code
+                Action.CodeBlocks
+                Action.CodeOff
+                Action.CollectionsBookmark
+                Action.Commit
+                Action.ComponentExchange
+                Action.ContactsProduct
+                Action.Dangerous
+                Action.DataLossPrevention
+                Action.DateRange
+                Action.DeleteHistory
+                Action.DeveloperGuide
+                Action.DomainVerification
+                Action.DomainVerificationOff
+                Action.DraftOrders
+                Action.DynamicFeed
+                Action.EditCalendar
+                Action.EditNotifications
+                Action.EditSquare
+                Action.Error
+                Action.Event
+                Action.EventAvailable
+                Action.EventBusy
+                Action.EventNote
+                Action.EventRepeat
+                Action.EventUpcoming
+                Action.Extension
+                Action.FeatureSearch
+                Action.Feedback
+                Action.FindReplace
+                Action.Fingerprint
+                Action.FingerprintOff
+                Action.Flutter
+                Action.FlutterDash
+                Action.FreeCancellation
+                Action.Gesture
+                Action.GestureSelect
+                Action.HandGesture
+                Action.HandGestureOff
+                Action.Help
+                Action.HelpCenter
+                Action.HelpClinic
+                Action.History
+                Action.History2
+                Action.HistoryOff
+                Action.HistoryToggleOff
+                Action.HomeAppLogo
+                Action.HotelClass
+                Action.Hourglass
+                Action.HourglassCheck
+                Action.HourglassDisabled
+                Action.HourglassEmpty
+                Action.HourglassPause
+                Action.HowToReg
+                Action.Http
+                Action.IndeterminateQuestionBox
+                Action.Info
+                Action.InfoI
+                Action.Input
+                Action.Interests
+              ]
+              |> List.map (Icon.Action >> createItem)
+          ]
+        )
+      ]
 
     Grid.Create(
       [
         GridItem.Create(H6.Create("Select Fill"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(filledRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
         FlexBreak.Create()
+
         GridItem.Create(H6.Create("Select Style"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(styleRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
         FlexBreak.Create()
+
         GridItem.Create(
           H6.Create("Select Optical Size"),
           xs = Grid.Width.create 12,
           md = Grid.Width.create 12
         )
+
         GridItem.Create(Grid.Create(opticalSizeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
         FlexBreak.Create()
+
         GridItem.Create(H6.Create("Select Weight"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(weightRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
         FlexBreak.Create()
+
         GridItem.Create(H6.Create("Select Grade"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(gradeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
         FlexBreak.Create()
-        GridItem.Create(expansionPanel, xs = Grid.Width.create 12)
+
+        GridItem.Create(H6.Create("Select Color"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(Grid.Create(colorRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+
+        FlexBreak.Create()
+
+        GridItem.Create(examples, xs = Grid.Width.create 12)
       ]
     )
     |> Helpers.section "Icons" Doc.Empty

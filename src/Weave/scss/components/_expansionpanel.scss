@@ -76,7 +76,6 @@
   }
 
   .weave-expansion-panel__content {
-    padding: 1rem;
     background: var(--palette-surface);
     color: var(--palette-text-primary);
     font-family: var(--typography-body1-family);
@@ -84,5 +83,10 @@
     font-weight: var(--typography-body1-weight);
     line-height: var(--typography-body1-lineheight);
     transition: max-height 0.2s, padding 0.2s;
+  }
+
+  .weave-expansion-panel__content--with-gutters {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

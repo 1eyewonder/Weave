@@ -6,9 +6,9 @@
 :root,
 [data-theme="light"] {
   // --- Surface Colors ---
-  --palette-background: #ffffff;
-  --palette-background-paper: #e6e6e6;
-  --palette-background-darken: #f5f5f5;
+  --palette-background: #f5f5f5;
+  --palette-background-paper: #e4e4e4;
+  --palette-background-darken: #dedede;
   --palette-surface: #ffffff;
 
   // --- Text Colors ---
@@ -104,10 +104,10 @@
 // DARK THEME
 // =============================================================================
 [data-theme="dark"] {
-  --palette-background: #32333d;
-  --palette-background-paper: #373740;
-  --palette-background-darken: #27272f;
-  --palette-surface: #373740;
+  --palette-background: #1b1c25;
+  --palette-background-paper: #414558;
+  --palette-background-darken: #16171d;
+  --palette-surface: #282a36;
 
   --palette-text-primary: rgba(255, 255, 255);
   --palette-text-primary-rgb: 255, 255, 255;

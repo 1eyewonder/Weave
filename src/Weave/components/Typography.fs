@@ -1,15 +1,9 @@
 namespace Weave
 
 open WebSharper
-open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
-open WebSharper.UI.Templating
-open WebSharper
-open WebSharper.UI
-open WebSharper.Sitelets
-open Zanaptak.TypedCssClasses
-open WebSharper.UI.Client
+open WebSharper.UI.Html
 open Weave.CssHelpers
 
 [<JavaScript>]
@@ -27,26 +21,20 @@ module Typography =
       | BrandColor.Success -> Css.``weave-typography--success``
       | BrandColor.Info -> Css.``weave-typography--info``
 
-  type Text =
+  module internal Text =
 
-    static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    let create htmlElement content textWrap attrs =
       let textWrap = defaultArg textWrap (View.Const true)
       let attrs = defaultArg attrs List.empty
 
-      div [
+      htmlElement [
         cl Css.``weave-typography``
         yield! attrs
 
         textWrap
         |> View.MapCached not
         |> Attr.DynamicClassPred Css.``weave-typography--nowrap``
-      ] [ displayText ]
-
-    static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Text.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
-
-    static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Text.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+      ] [ content ]
 
   [<RequireQualifiedAccess; Struct>]
   type Typo =
@@ -106,183 +94,421 @@ module Typography =
 
   type Button =
 
-    static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
       let attr = Typo.toClass Typo.Button |> cl
-      let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-      Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-    static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+      attrs
+      |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+      |> Some
+      |> Text.create element content textWrap
 
-    static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+    static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+    static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+    static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+    static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+    static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+    static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+      Button.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 open Typography
 
 [<JavaScript>]
 type H1 =
 
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H1 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H1.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H1.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H1(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(h1, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H1(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(h1, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H1(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H1.Create(h1, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type H2 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H2 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H2.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H2.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H2(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(h2, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H2(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(h2, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H2(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H2.Create(h2, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type H3 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H3 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H3.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H3.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H3(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(h3, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H3(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(h3, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H3(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H3.Create(h3, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type H4 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H4 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H4.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H4.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H4(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(h4, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H4(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(h4, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H4(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H4.Create(h4, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type H5 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H5 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H5.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H5.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H5(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(h5, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H5(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(h5, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H5(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H5.Create(h5, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type H6 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.H6 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H6.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    H6.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H6(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(h6, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H6(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(h6, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member H6(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    H6.Create(h6, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Subtitle1 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Subtitle1 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Subtitle1.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Subtitle1.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle1.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Subtitle2 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Subtitle2 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Subtitle2.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Subtitle2.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Subtitle2.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Body1 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Body1 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Body1.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Body1.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body1.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Body2 =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Body2 |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Body2.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Body2.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Body2.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Caption =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Caption |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Caption.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Caption.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Caption.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 [<JavaScript>]
 type Overline =
-
-  static member Create(displayText: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+  static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
     let attr = Typo.toClass Typo.Overline |> cl
-    let attrs = attrs |> Option.mapOrDefault [ attr ] (List.append [ attr ])
-    Text.Create(displayText, ?textWrap = textWrap, attrs = attrs)
 
-  static member Create(displayText: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Overline.Create(text displayText, ?textWrap = textWrap, ?attrs = attrs)
+    attrs
+    |> Option.mapOrDefault [ attr ] (List.append [ attr ])
+    |> Some
+    |> Text.create element content textWrap
 
-  static member Create(displayText: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-    Overline.Create(textView displayText, ?textWrap = textWrap, ?attrs = attrs)
+  static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+
+  static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
+    Overline.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)

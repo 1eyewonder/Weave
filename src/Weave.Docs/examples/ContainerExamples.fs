@@ -21,7 +21,7 @@ module ContainerExamples =
   ]
 
   let centeredText (displayText: string) =
-    H6.Create(displayText, attrs = [ cls [ AlignSelf.toClass AlignSelf.Center ] ])
+    H6.Div(displayText, attrs = [ cls [ AlignSelf.toClass AlignSelf.Center ] ])
 
   let variantExamples () =
     div [] [
@@ -54,21 +54,21 @@ module ContainerExamples =
   let fixedWidthAndGuttersExample () =
     let description =
       div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
-        Body1.Create(
+        Body1.Div(
           "The Container component supports two key layout parameters:",
           attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
         )
 
-        Subtitle2.Create("Fixed Width")
+        Subtitle2.Div("Fixed Width")
 
-        Body1.Create(
+        Body1.Div(
           "With the Fixed property set to true the container will \"snap\" to the closest breakpoint.",
           attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
         )
 
-        Subtitle2.Create("Gutters")
+        Subtitle2.Div("Gutters")
 
-        Body1.Create(
+        Body1.Div(
           "If true, horizontal padding (gutters) are applied inside the container.",
           attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
         )
@@ -94,7 +94,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.Background
         ]
       )
       Container.Create(
@@ -106,7 +106,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.Background
         ]
       )
       Container.Create(
@@ -118,7 +118,7 @@ module ContainerExamples =
             yield! Margin.toClasses Margin.Bottom.small
             JustifyContent.toClass JustifyContent.Center
           ]
-          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.Background
         ]
       )
       Container.Create(
@@ -127,7 +127,7 @@ module ContainerExamples =
         gutters = false,
         attrs = [
           cls [ JustifyContent.toClass JustifyContent.Center ]
-          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.Background
         ]
       )
     ]
@@ -136,8 +136,8 @@ module ContainerExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Container Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Container Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

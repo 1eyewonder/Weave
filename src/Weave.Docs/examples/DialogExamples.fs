@@ -40,7 +40,7 @@ module DialogExamples =
 
     let content dialog =
       div [] [
-        Body1.Create("This is a basic dialog with title and content.")
+        Body1.Div("This is a basic dialog with title and content.")
         div [ Margin.toClasses Margin.Top.small |> cls ] [ confirm dialog; cancel dialog ]
       ]
 
@@ -59,7 +59,7 @@ module DialogExamples =
       |> Doc.BindView(fun isOpen ->
         if isOpen then
           Dialog.Create(
-            DialogTitle.Create(H6.Create("Dialog Title")),
+            DialogTitle.Create(H6.Div("Dialog Title")),
             DialogContent.Create(content dialogVisible)
           )
         else
@@ -75,7 +75,7 @@ module DialogExamples =
 
     let content dialog =
       div [] [
-        Body1.Create("This dialog can be dismissed by clicking outside.")
+        Body1.Div("This dialog can be dismissed by clicking outside.")
         div [ Margin.toClasses Margin.Top.small |> cls ] [ confirm dialog; cancel dialog ]
       ]
 
@@ -94,7 +94,7 @@ module DialogExamples =
       |> Doc.BindView(fun isOpen ->
         if isOpen then
           Dialog.Create(
-            DialogTitle.Create(H6.Create("Optional Dialog")),
+            DialogTitle.Create(H6.Div("Optional Dialog")),
             DialogContent.Create(content dialogVisible),
             dialogInteraction =
               View.Const(Dialog.Interaction.Optional(fun () -> Var.Set dialogVisible false))
@@ -112,7 +112,7 @@ module DialogExamples =
 
     let content dialog =
       div [] [
-        Body1.Create("This dialog demonstrates different positions.")
+        Body1.Div("This dialog demonstrates different positions.")
         div [ Margin.toClasses Margin.Top.small |> cls ] [
           Button.Create(
             text "Close",
@@ -153,7 +153,7 @@ module DialogExamples =
         |> Doc.BindView (function
           | Some pos ->
             Dialog.Create(
-              DialogTitle.Create(H6.Create(sprintf "%A Dialog" pos)),
+              DialogTitle.Create(H6.Div(sprintf "%A Dialog" pos)),
               DialogContent.Create(content dialogVisible),
               dialogPosition = View.Const pos
             )
@@ -169,8 +169,8 @@ module DialogExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Dialog Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Dialog Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "Dialogs are used to display important information or request user input in a modal window.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

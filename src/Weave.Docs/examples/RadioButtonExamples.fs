@@ -143,8 +143,8 @@ module RadioButtonExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Radio Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Radio Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "The Radio component allows users to select a single option from a set. It supports different sizes, colors, and can be disabled.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

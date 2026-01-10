@@ -97,7 +97,7 @@ type Checkbox =
       span [ cls [ Css.``weave-checkbox__span`` ] ] []
       match displayText with
       | Some v ->
-        Body1.Create(
+        Body1.Div(
           v,
           View.Const false,
           attrs = [

@@ -13,7 +13,7 @@ module GridExamples =
 
   let private demoBox (label: View<string>) color =
     Container.Create(
-      content = Typography.Button.Create(label),
+      content = Typography.Button.Div(label),
       attrs = [
         BrandColor.toBackgroundColor color
 
@@ -85,21 +85,21 @@ module GridExamples =
       let item color =
         GridItem.Create(demoBox (View.Const "Item") color, xs = Grid.Width.create 4)
 
-      Body1.Create("Spacing: 0", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div("Spacing: 0", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
       Grid.Create(
         [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
         spacing = Grid.GutterSpacing.create 0
       )
 
-      Body1.Create("Spacing: 10", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div("Spacing: 10", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
       Grid.Create(
         [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
         spacing = Grid.GutterSpacing.create 10
       )
 
-      Body1.Create("Spacing: 20", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div("Spacing: 20", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
       Grid.Create(
         [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
@@ -112,7 +112,7 @@ module GridExamples =
 
   let private justifyContentExample () =
     div [] [
-      Body1.Create("Justify: Start", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div("Justify: Start", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
       Grid.Create(
         [
           GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -121,7 +121,7 @@ module GridExamples =
         justify = JustifyContent.FlexStart
       )
 
-      Body1.Create(
+      Body1.Div(
         "Justify: Center",
         attrs = [
           Margin.toClasses Margin.Top.medium |> cls
@@ -136,7 +136,7 @@ module GridExamples =
         justify = JustifyContent.Center
       )
 
-      Body1.Create(
+      Body1.Div(
         "Justify: End",
         attrs = [
           Margin.toClasses Margin.Top.medium |> cls
@@ -151,7 +151,7 @@ module GridExamples =
         justify = JustifyContent.FlexEnd
       )
 
-      Body1.Create(
+      Body1.Div(
         "Justify: Space Between",
         attrs = [
           Margin.toClasses Margin.Top.medium |> cls
@@ -166,7 +166,7 @@ module GridExamples =
         justify = JustifyContent.SpaceBetween
       )
 
-      Body1.Create(
+      Body1.Div(
         "Justify: Space Around",
         attrs = [
           Margin.toClasses Margin.Top.medium |> cls
@@ -181,7 +181,7 @@ module GridExamples =
         justify = JustifyContent.SpaceAround
       )
 
-      Body1.Create(
+      Body1.Div(
         "Justify: Space Evenly",
         attrs = [
           Margin.toClasses Margin.Top.medium |> cls
@@ -222,7 +222,7 @@ module GridExamples =
         GridItem.Create(
           Container.Create(
             [
-              Body1.Create(
+              Body1.Div(
                 "Outer Grid - Left Column",
                 attrs = [
                   Margin.toClasses Margin.Bottom.extraSmall |> cls
@@ -255,7 +255,7 @@ module GridExamples =
         GridItem.Create(
           Container.Create(
             [
-              Body1.Create(
+              Body1.Div(
                 "Outer Grid - Right Column",
                 attrs = [
                   Margin.toClasses Margin.Bottom.extraSmall |> cls
@@ -284,8 +284,8 @@ module GridExamples =
         BorderRadius.toClass BorderRadius.All.medium |> cl
         Attr.Style "height" "100%"
       ] [
-        H5.Create(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(View.Const description)
+        H5.Div(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(View.Const description)
       ]
 
     Grid.Create(
@@ -335,8 +335,8 @@ module GridExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Grid Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Grid Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "The Grid component uses a 12-column system to create flexible, responsive layouts. Items can span different numbers of columns at different breakpoints.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

@@ -117,8 +117,8 @@ type ExpansionPanelHeader =
       expanded = expanded,
       icon =
         ExpansionPanelIcon.Create(
-          H6.Create("+", attrs = [ Attr.Style "text-align" "center" ]),
-          H6.Create("-", attrs = [ Attr.Style "text-align" "center" ]),
+          H6.Div("+", attrs = [ Attr.Style "text-align" "center" ]),
+          H6.Div("-", attrs = [ Attr.Style "text-align" "center" ]),
           expanded = expanded
         ),
       ?highlightVariant = highlightVariant,
@@ -161,6 +161,20 @@ type ExpansionPanelHeader =
     )
 
 [<JavaScript>]
+type ExpansionPanelContent =
+
+  static member Create(content: Doc, ?gutters: View<bool>, ?attrs: Attr list) =
+    let attrs = defaultArg attrs []
+    let gutters = defaultArg gutters (View.Const true)
+
+    div [
+      cls [ Css.``weave-expansion-panel__content`` ]
+      gutters
+      |> Attr.DynamicClassPred Css.``weave-expansion-panel__content--with-gutters``
+      yield! attrs
+    ] [ content ]
+
+[<JavaScript>]
 type ExpansionPanel =
 
   static member Create
@@ -168,9 +182,6 @@ type ExpansionPanel =
     =
     let expanded = defaultArg expanded (Var.Create false)
     let attrs = defaultArg attrs []
-
-    let contentDiv =
-      div [ cls [ Css.``weave-expansion-panel__content`` ]; yield! attrs ] [ content ]
 
     div [
       cls [ Css.``weave-expansion-panel`` ]
@@ -181,4 +192,4 @@ type ExpansionPanel =
       |> Attr.DynamicClassPred Css.``weave-expansion-panel--collapsed``
 
       yield! attrs
-    ] [ header; contentDiv ]
+    ] [ header; content ]

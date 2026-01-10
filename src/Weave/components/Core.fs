@@ -10,11 +10,14 @@ open WebSharper.UI
 open WebSharper.Sitelets
 open Zanaptak.TypedCssClasses
 open WebSharper.UI.Client
+open Weave.Theming
 
 [<JavaScript>]
 module CssHelpers =
 
   type internal Css = CssClasses<"styles.css">
+
+  type WebSharperElement = Attr list -> Doc list -> Doc
 
   let div = Html.div
   let cl = Attr.Class
@@ -23,7 +26,11 @@ module CssHelpers =
   let text = Html.text
   let textView = Html.textView
 
-  module private Style =
+  module Theme =
+
+    let current = Var.Create(Theming.getMode ())
+
+  module Style =
 
     [<Literal>]
     let backgroundColor = "background-color"
@@ -115,7 +122,7 @@ module CssHelpers =
 
   module BrandColor =
 
-    let private toStyle style color =
+    let internal toStyle style color =
       match color with
       | BrandColor.Primary -> Attr.Style style Palette.primary
       | BrandColor.Secondary -> Attr.Style style Palette.secondary
@@ -137,7 +144,7 @@ module CssHelpers =
 
   module SurfaceColor =
 
-    let private toStyle style color =
+    let internal toStyle style color =
       match color with
       | SurfaceColor.Background -> Attr.Style style Palette.background
       | SurfaceColor.BackgroundDarker -> Attr.Style style Palette.backgroundDarken
@@ -155,7 +162,7 @@ module CssHelpers =
 
   module DisabledColor =
 
-    let private toStyle style color =
+    let internal toStyle style color =
       match color with
       | DisabledColor.Background -> Attr.Style style Palette.backgroundDisabled
       | DisabledColor.Text -> Attr.Style style Palette.textDisabled
@@ -697,6 +704,16 @@ module CssHelpers =
       let lg = toClass (Some Breakpoint.Large) Flex.Inline
       let xl = toClass (Some Breakpoint.ExtraLarge) Flex.Inline
       let xxl = toClass (Some Breakpoint.ExtraExtraLarge) Flex.Inline
+
+    module InlineBlock =
+
+      let allSizes = toClass None Flex.InlineBlock
+      let xs = toClass (Some Breakpoint.ExtraSmall) Flex.InlineBlock
+      let sm = toClass (Some Breakpoint.Small) Flex.InlineBlock
+      let md = toClass (Some Breakpoint.Medium) Flex.InlineBlock
+      let lg = toClass (Some Breakpoint.Large) Flex.InlineBlock
+      let xl = toClass (Some Breakpoint.ExtraLarge) Flex.InlineBlock
+      let xxl = toClass (Some Breakpoint.ExtraExtraLarge) Flex.InlineBlock
 
   [<RequireQualifiedAccess; Struct>]
   type FlexWrap =

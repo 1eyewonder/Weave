@@ -71,12 +71,12 @@ module NumericFieldExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("NumericField Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("NumericField Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "NumericField allows users to input and adjust numeric values with optional constraints and error handling.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
-        Body1.Create(
+        Body1.Div(
           "⚠️ Note: I am working on other components right now, so this component needs more polishing than others.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

@@ -19,25 +19,25 @@ module IconsExamples =
         "To use Material Symbols icons in your project, you need to include the appropriate Google Fonts link in your HTML head section. Depending on the style of icons you want to use, you can choose from the following options:"
 
     div [] [
-      H6.Create("Outlined Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Create(
+      H6.Div("Outlined Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div(
         "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />",
         attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      H6.Create("Rounded Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Create(
+      H6.Div("Rounded Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div(
         "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />",
         attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      H6.Create("Sharp Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Create(
+      H6.Div("Sharp Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div(
         "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />",
         attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
       )
 
-      H6.Create("More Styles", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      H6.Div("More Styles", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
       let body =
         div [] [
@@ -49,7 +49,7 @@ module IconsExamples =
           ] [ text "Google's developer's guide" ]
         ]
 
-      Body1.Create(body, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      Body1.Div(body, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
     ]
     |> Helpers.section "Reference Google Fonts" description
 
@@ -252,7 +252,7 @@ module IconsExamples =
             | Icon.Travel tv -> sprintf "%A" tv
             | Icon.UiActions ua -> sprintf "%A" ua
 
-          Body2.Create(iconText, attrs = [ Attr.Style "text-align" "center" ])
+          Body2.Div(iconText, attrs = [ Attr.Style "text-align" "center" ])
         ],
         xs = Grid.Width.create 6,
         sm = Grid.Width.create 4,
@@ -262,7 +262,7 @@ module IconsExamples =
 
     let examples =
       div [] [
-        H6.Create("Sample Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        H6.Div("Sample Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
         Grid.Create(
           [
@@ -402,37 +402,33 @@ module IconsExamples =
 
     Grid.Create(
       [
-        GridItem.Create(H6.Create("Select Fill"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(H6.Div("Select Fill"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(filledRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
 
-        GridItem.Create(H6.Create("Select Style"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(H6.Div("Select Style"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(styleRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
 
-        GridItem.Create(
-          H6.Create("Select Optical Size"),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 12
-        )
+        GridItem.Create(H6.Div("Select Optical Size"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
 
         GridItem.Create(Grid.Create(opticalSizeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
 
-        GridItem.Create(H6.Create("Select Weight"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(H6.Div("Select Weight"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(weightRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
 
-        GridItem.Create(H6.Create("Select Grade"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(H6.Div("Select Grade"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(gradeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
 
-        GridItem.Create(H6.Create("Select Color"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+        GridItem.Create(H6.Div("Select Color"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
         GridItem.Create(Grid.Create(colorRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
 
         FlexBreak.Create()
@@ -445,13 +441,13 @@ module IconsExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "Weave has built in helpers for Material Symbols icons. The icons are structured within a DU which is organized into child DUs which align with the categories defined by Google.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
-        Body1.Create(
+        Body1.Div(
           "Note, that the Icon DU does not guarantee static type safety when selecting icons since the end user is reponsible for including the correct Google Fonts link in their HTML head section. Make sure to include the appropriate link for the style of icons you wish to use.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

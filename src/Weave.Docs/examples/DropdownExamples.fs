@@ -84,7 +84,7 @@ module DropdownExamples =
       [
         GridItem.Create(
           div [] [
-            H6.Create("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+            H6.Div("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
           ],
           xs = Grid.Width.create 6
@@ -92,7 +92,7 @@ module DropdownExamples =
 
         GridItem.Create(
           div [] [
-            H6.Create("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+            H6.Div("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
             radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
           ],
           xs = Grid.Width.create 6
@@ -102,7 +102,7 @@ module DropdownExamples =
           Grid.Create(
             [
               GridItem.Create(
-                Body1.Create(
+                Body1.Div(
                   "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
                   attrs = [ Attr.Style "text-align" "center" ]
                 )
@@ -400,8 +400,8 @@ module DropdownExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Dropdown Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Dropdown Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

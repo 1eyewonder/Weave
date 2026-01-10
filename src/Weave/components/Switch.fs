@@ -107,7 +107,7 @@ type Switch =
 
     let content =
       match displayText with
-      | Some v -> Body1.Create(v, View.Const false, attrs = [ cls [ Css.``weave-switch__label`` ] ])
+      | Some v -> Body1.Div(v, View.Const false, attrs = [ cls [ Css.``weave-switch__label`` ] ])
       | None -> Doc.Empty
 
     Switch.Render(isChecked, content, enabled, contentPlacement, attrs)

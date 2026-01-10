@@ -49,8 +49,8 @@ module ExamplesRouter =
     | Home ->
       Container.Create(
         div [] [
-          H1.Create("Component Examples", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Body1.Create(
+          H1.Div("Component Examples", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          Body1.Div(
             "Welcome to the component documentation. Select a component from the navigation to view examples.",
             attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
           )
@@ -93,8 +93,8 @@ module ExamplesRouter =
           AlignItems.toClass AlignItems.Start
         ]
       ] [
-        H3.Create("Weave", attrs = [ cls [ "weave-logo-title" ] ])
-        Body1.Create(
+        H3.Div("Weave", attrs = [ cls [ "weave-logo-title" ] ])
+        Body1.Div(
           "Threading Logic. Fabricating UI.",
           attrs = [ Attr.Style "font-style" "italic"; Attr.Style "white-space" "nowrap" ]
         )
@@ -122,7 +122,6 @@ module ExamplesRouter =
 
   let render () =
     let currentPage = Var.Create Home
-    let modeVar = Var.Create(Theming.getMode ())
 
     div [
       cls [
@@ -134,7 +133,7 @@ module ExamplesRouter =
       ]
 
       Attr.Style "min-height" "100vh"
-      SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+      SurfaceColor.toBackgroundColor SurfaceColor.Background
     ] [
       let navButton target =
         currentPage.View
@@ -176,7 +175,7 @@ module ExamplesRouter =
 
           GridItem.Create(
             Button.Create(
-              modeVar.View
+              Theme.current.View
               |> View.Map(fun mode ->
                 match mode with
                 | Theming.Light -> text "Dark Mode"
@@ -185,7 +184,7 @@ module ExamplesRouter =
               onClick =
                 (fun () ->
                   let newMode = Theming.toggleMode ()
-                  Var.Set modeVar newMode),
+                  Var.Set Theme.current newMode),
               attrs = [
                 Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
                 Button.Variant.Filled |> Button.Variant.toClass |> cl
@@ -214,7 +213,7 @@ module ExamplesRouter =
 
           Attr.Style "top" "0"
           Attr.Style "z-index" "10"
-          SurfaceColor.toBackgroundColor SurfaceColor.BackgroundDarker
+          SurfaceColor.toBackgroundColor SurfaceColor.Background
           Padding.toClasses Padding.Bottom.medium |> cls
           Padding.toClasses Padding.Horizontal.small |> cls
         ]

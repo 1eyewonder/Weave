@@ -125,8 +125,8 @@ module CheckboxExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Checkbox Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Checkbox Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "The Checkbox component allows users to select one or more options from a set. It supports different sizes, colors, and can be disabled.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

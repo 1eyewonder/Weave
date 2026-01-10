@@ -13,15 +13,28 @@ module ExpansionPanelExamples =
 
   let multiplePanels () =
     let headerContent n expanded =
-      ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Create(sprintf "Expansion Panel %i" n), expanded)
+      ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div(sprintf "Expansion Panel %i" n), expanded)
+
+    let expansionContent n =
+      ExpansionPanelContent.Create(text (sprintf "Content %i" n))
 
     ExpansionPanelContainer.Create(
       [
         let oneExpanded = Var.Create false
-        ExpansionPanel.Create(headerContent 1 oneExpanded, expanded = oneExpanded, content = text "Content 1")
+
+        ExpansionPanel.Create(
+          headerContent 1 oneExpanded,
+          expanded = oneExpanded,
+          content = expansionContent 1
+        )
 
         let twoExpanded = Var.Create false
-        ExpansionPanel.Create(headerContent 2 twoExpanded, expanded = twoExpanded, content = text "Content 2")
+
+        ExpansionPanel.Create(
+          headerContent 2 twoExpanded,
+          expanded = twoExpanded,
+          content = expansionContent 2
+        )
       ]
     )
     |> Helpers.section
@@ -31,13 +44,16 @@ module ExpansionPanelExamples =
   let color () =
     let header expanded color =
       ExpansionPanelHeader.CreateWithDefaultIcons(
-        Body1.Create(sprintf "%A" color),
+        Body1.Div(sprintf "%A" color),
         expanded,
         attrs = [ cls [ ExpansionPanel.Color.toColor color ] ]
       )
 
+    let content (color: BrandColor) =
+      ExpansionPanelContent.Create(text (sprintf "%A" color))
+
     let panel color expanded =
-      ExpansionPanel.Create(header expanded color, expanded = expanded, content = text (sprintf "%A" color))
+      ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
 
     ExpansionPanelContainer.Create(
       [
@@ -70,11 +86,14 @@ module ExpansionPanelExamples =
   let highlightVariants () =
     let headerContent expanded variant =
       ExpansionPanelHeader.CreateWithDefaultIcons(
-        Body1.Create(sprintf "%A" variant),
+        Body1.Div(sprintf "%A" variant),
         expanded,
         highlightVariant = View.Const variant,
         attrs = [ cls [ ExpansionPanel.Color.toColor BrandColor.Primary ] ]
       )
+
+    let content displayText =
+      ExpansionPanelContent.Create(text displayText)
 
     ExpansionPanelContainer.Create(
       [
@@ -83,7 +102,7 @@ module ExpansionPanelExamples =
         ExpansionPanel.Create(
           headerContent oneExpanded ExpansionPanel.HeaderVariant.Filled,
           expanded = oneExpanded,
-          content = text "Filled"
+          content = content "Filled"
         )
 
         let twoExpanded = Var.Create false
@@ -91,7 +110,7 @@ module ExpansionPanelExamples =
         ExpansionPanel.Create(
           headerContent twoExpanded ExpansionPanel.HeaderVariant.Highlight,
           expanded = twoExpanded,
-          content = text "Highlight"
+          content = content "Highlight"
         )
 
         let threeExpanded = Var.Create false
@@ -99,7 +118,7 @@ module ExpansionPanelExamples =
         ExpansionPanel.Create(
           headerContent threeExpanded ExpansionPanel.HeaderVariant.None,
           expanded = threeExpanded,
-          content = text "None"
+          content = content "None"
         )
       ]
     )
@@ -110,8 +129,8 @@ module ExpansionPanelExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("ExpansionPanel Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("ExpansionPanel Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "The ExpansionPanel component allows for collapsible sections of content, useful for organizing information in a compact manner.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

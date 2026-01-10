@@ -29,7 +29,7 @@ module TooltipExamples =
                 ]
               ]
             ),
-            Body1.Create(sprintf "Tooltip on %A" direction),
+            Body1.Div(sprintf "Tooltip on %A" direction),
             direction = direction
           ),
         xs = Grid.Width.create 3
@@ -60,7 +60,7 @@ module TooltipExamples =
                 Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
               ]
             ),
-            Body1.Create(sprintf "%s tooltip" displayText),
+            Body1.Div(sprintf "%s tooltip" displayText),
             tooltipAttrs = [ Tooltip.Color.toClass color |> cl ]
           ),
           xs = Grid.Width.create 6,
@@ -105,10 +105,10 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Primary |> cl
             ]
           ),
-          Body1.Create("Appears on hover"),
+          Body1.Div("Appears on hover"),
           activationEvents = [ Tooltip.Activation.Hover ]
         )
-        Caption.Create("Hover activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
+        Caption.Div("Hover activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
       ]
       |> gridItem
 
@@ -122,10 +122,10 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Secondary |> cl
             ]
           ),
-          Body1.Create("Appears on click"),
+          Body1.Div("Appears on click"),
           activationEvents = [ Tooltip.Activation.Click ]
         )
-        Caption.Create("Click activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
+        Caption.Div("Click activation", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
       ]
       |> gridItem
 
@@ -169,10 +169,10 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Primary |> cl
             ]
           ),
-          Body1.Create("I have an arrow pointing"),
+          Body1.Div("I have an arrow pointing"),
           showArrow = true
         )
-        Caption.Create("showArrow = true (default)", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
+        Caption.Div("showArrow = true (default)", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
       ]
 
       div [ Attr.Style "text-align" "center" ] [
@@ -185,10 +185,10 @@ module TooltipExamples =
               Button.Color.toClass BrandColor.Secondary |> cl
             ]
           ),
-          Body1.Create("No arrow here"),
+          Body1.Div("No arrow here"),
           showArrow = false
         )
-        Caption.Create("showArrow = false", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
+        Caption.Div("showArrow = false", attrs = [ Margin.toClasses Margin.Top.small |> cls ])
       ]
     ]
     |> Helpers.section
@@ -211,14 +211,14 @@ module TooltipExamples =
           ]
         ),
         div [ Attr.Style "padding" "4px" ] [
-          Body2.Create(
+          Body2.Div(
             "Custom Tooltip",
             attrs = [
               Attr.Style "font-weight" "bold"
               Margin.toClasses Margin.Bottom.extraSmall |> cls
             ]
           )
-          Caption.Create("You can use Doc elements for rich content")
+          Caption.Div("You can use Doc elements for rich content")
         ]
       )
     ]
@@ -228,7 +228,7 @@ module TooltipExamples =
 
   let private textTooltipExample () =
     div [ Padding.toClasses Padding.All.medium |> cls ] [
-      Body1.Create("Hover over ", attrs = [ Attr.Style "display" "inline" ])
+      Body1.Div("Hover over ", attrs = [ Attr.Style "display" "inline" ])
 
       Tooltip.Tooltip.Create(
         span [
@@ -239,7 +239,7 @@ module TooltipExamples =
         text "This is a tooltip on inline text"
       )
 
-      Body1.Create(" to see a tooltip. You can also hover over ", attrs = [ Attr.Style "display" "inline" ])
+      Body1.Div(" to see a tooltip. You can also hover over ", attrs = [ Attr.Style "display" "inline" ])
 
       Tooltip.Tooltip.Create(
         span [
@@ -252,7 +252,7 @@ module TooltipExamples =
         tooltipAttrs = [ Tooltip.Color.toClass BrandColor.Secondary |> cl ]
       )
 
-      Body1.Create(" for more information.", attrs = [ Attr.Style "display" "inline" ])
+      Body1.Div(" for more information.", attrs = [ Attr.Style "display" "inline" ])
     ]
     |> Helpers.section
       "Text Tooltips"
@@ -321,8 +321,8 @@ module TooltipExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Create("Tooltip Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Create(
+        H1.Div("Tooltip Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
           "Tooltips display informative text when users hover over, focus on, or tap an element.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )

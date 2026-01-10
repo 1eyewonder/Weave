@@ -649,6 +649,7 @@ module CssHelpers =
   type Flex =
     | Flex
     | Inline
+    | InlineBlock
 
   /// Controls if a container is a flex box
   module Flex =
@@ -657,18 +658,25 @@ module CssHelpers =
       match breakpoint, flex with
       | None, Flex.Flex -> Css.``d-flex``
       | None, Flex.Inline -> Css.``d-inline-flex``
+      | None, Flex.InlineBlock -> Css.``d-inline-block``
       | Some Breakpoint.ExtraSmall, Flex.Flex -> Css.``d-xs-flex``
       | Some Breakpoint.ExtraSmall, Flex.Inline -> Css.``d-xs-inline-flex``
+      | Some Breakpoint.ExtraSmall, Flex.InlineBlock -> Css.``d-xs-inline-block``
       | Some Breakpoint.Small, Flex.Flex -> Css.``d-sm-flex``
       | Some Breakpoint.Small, Flex.Inline -> Css.``d-sm-inline-flex``
+      | Some Breakpoint.Small, Flex.InlineBlock -> Css.``d-sm-inline-block``
       | Some Breakpoint.Medium, Flex.Flex -> Css.``d-md-flex``
       | Some Breakpoint.Medium, Flex.Inline -> Css.``d-md-inline-flex``
+      | Some Breakpoint.Medium, Flex.InlineBlock -> Css.``d-md-inline-block``
       | Some Breakpoint.Large, Flex.Flex -> Css.``d-lg-flex``
       | Some Breakpoint.Large, Flex.Inline -> Css.``d-lg-inline-flex``
+      | Some Breakpoint.Large, Flex.InlineBlock -> Css.``d-lg-inline-block``
       | Some Breakpoint.ExtraLarge, Flex.Flex -> Css.``d-xl-flex``
       | Some Breakpoint.ExtraLarge, Flex.Inline -> Css.``d-xl-inline-flex``
+      | Some Breakpoint.ExtraLarge, Flex.InlineBlock -> Css.``d-xl-inline-block``
       | Some Breakpoint.ExtraExtraLarge, Flex.Flex -> Css.``d-xxl-flex``
       | Some Breakpoint.ExtraExtraLarge, Flex.Inline -> Css.``d-xxl-inline-flex``
+      | Some Breakpoint.ExtraExtraLarge, Flex.InlineBlock -> Css.``d-xxl-inline-block``
 
     module Flex =
 

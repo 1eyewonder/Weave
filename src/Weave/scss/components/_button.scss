@@ -19,7 +19,7 @@
   background-color: transparent;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
-  padding: 6px 16px;
+  padding: 10px 16px;
   font-family: var(--typography-button-family);
   font-size: var(--typography-button-size);
   font-weight: var(--typography-button-weight);
@@ -27,7 +27,7 @@
   letter-spacing: var(--typography-button-letterspacing);
   text-transform: var(--typography-button-text-transform);
   min-width: 64px;
-  min-height: 2vh;
+  min-height: 14px;
   box-sizing: border-box;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -221,19 +221,19 @@
 
 .weave-button--small {
   min-height: 30px;
-  padding: 4px 12px;
+  padding: 6px 12px;
   font-size: calc(var(--typography-button-size) - 0.25rem);
 }
 
 .weave-button--medium {
   min-height: 40px;
-  padding: 6px 16px;
+  padding: 10px 16px;
   font-size: var(--typography-button-size);
 }
 
 .weave-button--large {
   min-height: 50px;
-  padding: 8px 20px;
+  padding: 14px 20px;
   font-size: calc(var(--typography-button-size) + 0.25rem);
 }
 

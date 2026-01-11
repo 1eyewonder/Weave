@@ -76,7 +76,9 @@ module DropdownExamples =
               selected,
               opt,
               displayText = View.Const(toString opt),
-              attrs = [ Radio.Color.toClass color |> cl ]
+              attrs = [
+                cls [ Radio.Color.toClass color; yield! Margin.toClasses Margin.Bottom.extraSmall ]
+              ]
             ))
       ]
 

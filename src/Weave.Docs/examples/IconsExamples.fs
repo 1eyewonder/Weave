@@ -66,15 +66,16 @@ module IconsExamples =
     let filledRadios =
       filledOptions
       |> List.map (fun (value, label) ->
-        GridItem.Create(
-          Radio.Create(
-            filled,
-            value,
-            displayText = View.Const label,
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 3
+        Radio.Create(
+          filled,
+          value,
+          displayText = View.Const label,
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let styleOptions = [ Style.Outlined; Style.Rounded; Style.Sharp ]
@@ -82,15 +83,16 @@ module IconsExamples =
     let styleRadios =
       styleOptions
       |> List.map (fun value ->
-        GridItem.Create(
-          Radio.Create(
-            style,
-            value,
-            displayText = View.Const(sprintf "%A" value),
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 3
+        Radio.Create(
+          style,
+          value,
+          displayText = View.Const(sprintf "%A" value),
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let opticalSizeOptions = [
@@ -103,15 +105,16 @@ module IconsExamples =
     let opticalSizeRadios =
       opticalSizeOptions
       |> List.map (fun size ->
-        GridItem.Create(
-          Radio.Create(
-            opticalSize,
-            size,
-            displayText = View.Const(sprintf "%A" size),
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 3
+        Radio.Create(
+          opticalSize,
+          size,
+          displayText = View.Const(sprintf "%A" size),
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let weightOptions = [
@@ -127,15 +130,16 @@ module IconsExamples =
     let weightRadios =
       weightOptions
       |> List.map (fun w ->
-        GridItem.Create(
-          Radio.Create(
-            weight,
-            w,
-            displayText = View.Const(sprintf "%A" w),
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 1
+        Radio.Create(
+          weight,
+          w,
+          displayText = View.Const(sprintf "%A" w),
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let gradeOptions = [
@@ -147,15 +151,16 @@ module IconsExamples =
     let gradeRadios =
       gradeOptions
       |> List.map (fun g ->
-        GridItem.Create(
-          Radio.Create(
-            grade,
-            g,
-            displayText = View.Const(sprintf "%A" g),
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 3
+        Radio.Create(
+          grade,
+          g,
+          displayText = View.Const(sprintf "%A" g),
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let colorOptions = [
@@ -172,15 +177,16 @@ module IconsExamples =
     let colorRadios =
       colorOptions
       |> List.map (fun (value, label) ->
-        GridItem.Create(
-          Radio.Create(
-            color,
-            value,
-            displayText = View.Const label,
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          ),
-          xs = Grid.Width.create 12,
-          md = Grid.Width.create 1
+        Radio.Create(
+          color,
+          value,
+          displayText = View.Const label,
+          attrs = [
+            cls [
+              Radio.Color.toClass BrandColor.Primary
+              yield! Margin.toClasses Margin.Vertical.extraSmall
+            ]
+          ]
         ))
 
     let createItem icon =
@@ -400,43 +406,120 @@ module IconsExamples =
         )
       ]
 
-    Grid.Create(
-      [
-        GridItem.Create(H6.Div("Select Fill"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
-        GridItem.Create(Grid.Create(filledRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+    div [] [
+      H6.Div("Select Fill")
 
-        FlexBreak.Create()
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! filledRadios ]
 
-        GridItem.Create(H6.Div("Select Style"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
-        GridItem.Create(Grid.Create(styleRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+      H6.Div("Select Style")
 
-        FlexBreak.Create()
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! styleRadios ]
 
-        GridItem.Create(H6.Div("Select Optical Size"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
+      H6.Div("Select Optical Size")
 
-        GridItem.Create(Grid.Create(opticalSizeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! opticalSizeRadios ]
 
-        FlexBreak.Create()
+      H6.Div("Select Weight")
 
-        GridItem.Create(H6.Div("Select Weight"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
-        GridItem.Create(Grid.Create(weightRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! weightRadios ]
 
-        FlexBreak.Create()
+      H6.Div("Select Grade")
 
-        GridItem.Create(H6.Div("Select Grade"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
-        GridItem.Create(Grid.Create(gradeRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! gradeRadios ]
 
-        FlexBreak.Create()
+      H6.Div("Select Color")
 
-        GridItem.Create(H6.Div("Select Color"), xs = Grid.Width.create 12, md = Grid.Width.create 12)
-        GridItem.Create(Grid.Create(colorRadios), xs = Grid.Width.create 12, md = Grid.Width.create 9)
+      div [
+        cls [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.toClass JustifyContent.FlexStart
+        ]
+      ] [ yield! colorRadios ]
 
-        FlexBreak.Create()
-
-        GridItem.Create(examples, xs = Grid.Width.create 12)
-      ]
-    )
+      examples
+    ]
     |> Helpers.section "Icons" Doc.Empty
+
+  // Grid.Create(
+  //   [
+  //     H6.Div("Select Fill")
+  //     GridItem.Create(
+  //       Grid.Create(filledRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     H6.Div("Select Style")
+  //     GridItem.Create(
+  //       Grid.Create(styleRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     H6.Div("Select Optical Size")
+  //     GridItem.Create(
+  //       Grid.Create(opticalSizeRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     H6.Div("Select Weight")
+  //     GridItem.Create(
+  //       Grid.Create(weightRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     H6.Div("Select Grade")
+  //     GridItem.Create(
+  //       Grid.Create(gradeRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     H6.Div("Select Color")
+  //     GridItem.Create(
+  //       Grid.Create(colorRadios, justify = JustifyContent.FlexStart),
+  //       xs = Grid.Width.create 12,
+  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
+  //     )
+
+  //     GridItem.Create(examples, xs = Grid.Width.create 12)
+  //   ],
+  //   justify = JustifyContent.FlexStart
+  // )
+  //|> Helpers.section "Icons" Doc.Empty
 
   let render () =
     Container.Create(

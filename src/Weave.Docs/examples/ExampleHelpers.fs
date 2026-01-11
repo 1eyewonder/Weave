@@ -7,6 +7,8 @@ open WebSharper.UI.Client
 open WebSharper.JavaScript
 open Weave
 open Weave.CssHelpers
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
 module Helpers =
@@ -53,9 +55,24 @@ module Helpers =
 
         let codeIsExpanded = Var.Create false
 
+        let icon =
+          codeIsExpanded.View
+          |> Doc.BindView(fun expanded ->
+            let attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
+
+            if expanded then
+              Icon.Create(Icon.UiActions UiActions.CollapseAll, attrs = attrs)
+            else
+              Icon.Create(Icon.UiActions UiActions.ExpandAll, attrs = attrs))
+
+        let headerText =
+          codeIsExpanded.View
+          |> View.MapCached(fun expanded -> if expanded then "Hide Code" else "Show Code")
+
         let header =
-          ExpansionPanelHeader.CreateWithDefaultIcons(
-            content = Subtitle2.Div("Show Code"),
+          ExpansionPanelHeader.CreateWithCustomIcons(
+            content = Subtitle2.Div(headerText),
+            icon = icon,
             expanded = codeIsExpanded,
             attrs = [ cls [ ExpansionPanel.Color.toColor BrandColor.Primary ] ]
           )
@@ -76,7 +93,8 @@ module Helpers =
               content = ExpansionPanelContent.Create(codeContent, gutters = View.Const false),
               expanded = codeIsExpanded
             )
-          ]
+          ],
+          attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
         )
       ]
     ]

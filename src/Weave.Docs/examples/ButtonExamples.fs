@@ -395,5 +395,6 @@ btn BorderRadius.Circle
         fullWidthExample ()
         Helpers.divider ()
         borderRadiusExamples ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

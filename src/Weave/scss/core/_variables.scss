@@ -5,6 +5,8 @@ $font-family-heading: $font-family-base;
 $typography-letterspacing-base: 0.01em;
 
 :root {
+  --weave-font-family: #{$font-family-base};
+
   --default-borderradius: #{map-get($border-radiuses, "sm")};
   --default-button-borderradius: #{map-get($border-radiuses, "md")};
   --grid-item-min-height: 24px;

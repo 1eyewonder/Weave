@@ -38,6 +38,52 @@
       href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/fsharp.min.js"></script>
+
+    <!-- We need to be able to call highlighting after rendering due to WebSharper mechanics -->
+    <script>
+      window.highlightCodeElement = function (element) {
+        if (window.hljs && element) {
+          window.hljs.highlightElement(element);
+        }
+      };
+    </script>
+
+    <!-- Here we are overwriting highlight.js's styling to make it blend in with our styling better -->
+    <style>
+      .hljs {
+        background: var(--palette-background-darken);
+        color: var(--palette-text-primary);
+        font-family: var(--weave-font-family);
+      }
+      .hljs-string {
+        color: var(--palette-secondary);
+      }
+      .hljs-operator {
+        color: var(--palette-primary);
+      }
+      .hljs-keyword {
+        color: var(--palette-tertiary);
+      }
+      .hljs-type {
+        color: var(--palette-tertiary);
+      }
+      .hljs-built_in {
+        color: var(--palette-primary);
+      }
+      .hljs-literal {
+        color: var(--palette-secondary);
+      }
+      .hljs-comment {
+        color: var(--palette-success);
+      }
+    </style>
   </head>
   <body>
     <div id="main"></div>

@@ -219,14 +219,17 @@ module ExamplesRouter =
         ]
       )
 
-      div [
-        cls [
-          yield! Padding.toClasses Padding.Horizontal.large
-          yield! Padding.toClasses Padding.Bottom.large
-          FlexItem.Grow.allSizes
-          FlexDirection.Column.allSizes
-          AlignItems.toClass AlignItems.Start
-          AlignContent.toClass AlignContent.Start
-        ]
-      ] [ currentPage.View |> Doc.BindView renderPage ]
+      Container.Create(
+        div [
+          cls [
+            yield! Padding.toClasses Padding.Horizontal.large
+            yield! Padding.toClasses Padding.Bottom.large
+            FlexItem.Grow.allSizes
+            FlexDirection.Column.allSizes
+            AlignItems.toClass AlignItems.Start
+            AlignContent.toClass AlignContent.Start
+          ]
+        ] [ currentPage.View |> Doc.BindView renderPage ],
+        gutters = false
+      )
     ]

@@ -48,66 +48,69 @@ module Tooltip =
     | Focus
     | Click
 
-  type Tooltip =
+open Tooltip
 
-    static member Create
-      (
-        innerContent: Doc,
-        tooltipContent: Doc,
-        ?activationEvents: Activation list,
-        ?direction: Direction,
-        ?showArrow: bool,
-        ?tooltipAttrs: Attr list,
-        ?wrapperAttrs: Attr list
-      ) =
-      let direction = defaultArg direction Direction.Top
-      let showArrow = defaultArg showArrow true
-      let attrs = defaultArg wrapperAttrs List.empty
-      let activationEvents = defaultArg activationEvents [ Hover; Focus ]
+[<JavaScript>]
+type Tooltip =
 
-      let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
+  static member Create
+    (
+      innerContent: Doc,
+      tooltipContent: Doc,
+      ?activationEvents: Activation list,
+      ?direction: Direction,
+      ?showArrow: bool,
+      ?tooltipAttrs: Attr list,
+      ?wrapperAttrs: Attr list
+    ) =
+    let direction = defaultArg direction Direction.Top
+    let showArrow = defaultArg showArrow true
+    let attrs = defaultArg wrapperAttrs List.empty
+    let activationEvents = defaultArg activationEvents [ Hover; Focus ]
 
-      let isVisible = Var.Create false
+    let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
 
-      let tooltipClasses = [
-        Css.``weave-tooltip``
-        Css.``weave-tooltip--default``
+    let isVisible = Var.Create false
 
-        Direction.toClass direction
+    let tooltipClasses = [
+      Css.``weave-tooltip``
+      Css.``weave-tooltip--default``
 
-        if showArrow then
-          Css.``weave-tooltip--arrow``
-      ]
+      Direction.toClass direction
 
-      let rootClasses = [ Css.``weave-tooltip-root`` ]
+      if showArrow then
+        Css.``weave-tooltip--arrow``
+    ]
+
+    let rootClasses = [ Css.``weave-tooltip-root`` ]
+
+    div [
+      AlignItems.toClass AlignItems.Center |> cl
+      AlignContent.toClass AlignContent.Center |> cl
+      yield! rootClasses |> List.map cl
+      yield! attrs
+
+      yield!
+        activationEvents
+        |> List.collect (function
+          | Hover -> [
+              on.mouseEnter (fun _ _ -> Var.Set isVisible true)
+              on.mouseLeave (fun _ _ -> Var.Set isVisible false)
+            ]
+          | Focus -> [
+              on.focus (fun _ _ -> Var.Set isVisible true)
+              on.blur (fun _ _ -> Var.Set isVisible false)
+            ]
+          | Click -> [ on.click (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
+    ] [
+      innerContent
 
       div [
-        AlignItems.toClass AlignItems.Center |> cl
-        AlignContent.toClass AlignContent.Center |> cl
-        yield! rootClasses |> List.map cl
-        yield! attrs
+        yield! tooltipClasses |> List.map cl
+        yield! tooltipAttrs
 
-        yield!
-          activationEvents
-          |> List.collect (function
-            | Hover -> [
-                on.mouseEnter (fun _ _ -> Var.Set isVisible true)
-                on.mouseLeave (fun _ _ -> Var.Set isVisible false)
-              ]
-            | Focus -> [
-                on.focus (fun _ _ -> Var.Set isVisible true)
-                on.blur (fun _ _ -> Var.Set isVisible false)
-              ]
-            | Click -> [ on.click (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
-      ] [
-        innerContent
-
-        div [
-          yield! tooltipClasses |> List.map cl
-          yield! tooltipAttrs
-
-          Attr.DynamicStyle
-            "display"
-            (isVisible.View |> View.Map(fun visible -> if visible then "block" else "none"))
-        ] [ tooltipContent ]
-      ]
+        Attr.DynamicStyle
+          "display"
+          (isVisible.View |> View.Map(fun visible -> if visible then "block" else "none"))
+      ] [ tooltipContent ]
+    ]

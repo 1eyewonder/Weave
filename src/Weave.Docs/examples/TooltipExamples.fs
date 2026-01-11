@@ -17,7 +17,7 @@ module TooltipExamples =
     let tooltipBtn displayText direction =
       GridItem.Create(
         content =
-          Tooltip.Tooltip.Create(
+          Tooltip.Create(
             Button.Create(
               text displayText,
               onClick = (fun () -> ()),
@@ -50,7 +50,7 @@ module TooltipExamples =
     [
       let tooltipButton displayText color =
         GridItem.Create(
-          Tooltip.Tooltip.Create(
+          Tooltip.Create(
             Button.Create(
               text displayText,
               onClick = (fun () -> ()),
@@ -96,7 +96,7 @@ module TooltipExamples =
         )
 
       [
-        Tooltip.Tooltip.Create(
+        Tooltip.Create(
           Button.Create(
             text "Hover Me",
             onClick = (fun () -> ()),
@@ -113,7 +113,7 @@ module TooltipExamples =
       |> gridItem
 
       [
-        Tooltip.Tooltip.Create(
+        Tooltip.Create(
           Button.Create(
             text "Click Me",
             onClick = (fun () -> ()),
@@ -130,7 +130,7 @@ module TooltipExamples =
       |> gridItem
 
     // [
-    //   Tooltip.Tooltip.Create(
+    //   Tooltip..Create(
     //     Button.Create(
     //       text "Hover or Focus",
     //       onClick = (fun () -> ()),
@@ -160,7 +160,7 @@ module TooltipExamples =
       Attr.Style "padding" "32px"
     ] [
       div [ Attr.Style "text-align" "center" ] [
-        Tooltip.Tooltip.Create(
+        Tooltip.Create(
           Button.Create(
             text "With Arrow",
             onClick = (fun () -> ()),
@@ -176,7 +176,7 @@ module TooltipExamples =
       ]
 
       div [ Attr.Style "text-align" "center" ] [
-        Tooltip.Tooltip.Create(
+        Tooltip.Create(
           Button.Create(
             text "Without Arrow",
             onClick = (fun () -> ()),
@@ -201,7 +201,7 @@ module TooltipExamples =
       Attr.Style "justify-content" "center"
       Attr.Style "padding" "32px"
     ] [
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         Button.Create(
           text "Rich Content Tooltip",
           onClick = (fun () -> ()),
@@ -230,7 +230,7 @@ module TooltipExamples =
     div [ Padding.toClasses Padding.All.medium |> cls ] [
       Body1.Div("Hover over ", attrs = [ Attr.Style "display" "inline" ])
 
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         span [
           Attr.Style "color" "var(--palette-primary)"
           Attr.Style "text-decoration" "underline"
@@ -241,7 +241,7 @@ module TooltipExamples =
 
       Body1.Div(" to see a tooltip. You can also hover over ", attrs = [ Attr.Style "display" "inline" ])
 
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         span [
           Attr.Style "color" "var(--palette-secondary)"
           Attr.Style "font-weight" "bold"
@@ -265,7 +265,7 @@ module TooltipExamples =
       Attr.Style "gap" "16px"
       Attr.Style "padding" "24px"
     ] [
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         div [
           Attr.Style "display" "inline-flex"
           Attr.Style "align-items" "center"
@@ -282,7 +282,7 @@ module TooltipExamples =
         tooltipAttrs = [ Tooltip.Color.toClass BrandColor.Info |> cl ]
       )
 
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         div [
           Attr.Style "display" "inline-flex"
           Attr.Style "align-items" "center"
@@ -299,7 +299,7 @@ module TooltipExamples =
         tooltipAttrs = [ Tooltip.Color.toClass BrandColor.Success |> cl ]
       )
 
-      Tooltip.Tooltip.Create(
+      Tooltip.Create(
         div [
           Attr.Style "display" "inline-flex"
           Attr.Style "align-items" "center"

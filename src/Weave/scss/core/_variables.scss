@@ -39,14 +39,14 @@ $typography-letterspacing-base: 0.01em;
   --typography-h4-letterspacing: #{$typography-letterspacing-base};
   --typography-h4-text-transform: none;
 
-  --typography-h5-size: clamp(1.5rem, 2.5vw, 2.625rem);
+  --typography-h5-size: clamp(1.75rem, 2.5vw, 1.875rem);
   --typography-h5-family: #{$font-family-heading};
   --typography-h5-weight: 500;
   --typography-h5-lineheight: 1;
   --typography-h5-letterspacing: #{$typography-letterspacing-base};
   --typography-h5-text-transform: none;
 
-  --typography-h6-size: clamp(1.25rem, 2vw, 2.375rem);
+  --typography-h6-size: clamp(1.5rem, 2vw, 1.625rem);
   --typography-h6-family: #{$font-family-heading};
   --typography-h6-weight: 500;
   --typography-h6-lineheight: 1;

@@ -7930,6 +7930,7 @@ type Icon =
         Some MaterialSymbols.Style.RoundedFilled
         Some MaterialSymbols.Style.Sharp
         Some MaterialSymbols.Style.SharpFilled
+        None
       ]
       |> List.map (fun style ->
         match style with

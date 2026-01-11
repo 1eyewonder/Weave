@@ -86,20 +86,21 @@ type Button =
     let attrs = defaultArg attrs List.empty
 
     let content =
+      let innerContent =
+        Typography.Button.Div(
+          innerContents,
+          textWrap = View.Const false,
+          attrs = [ cls [ Css.``weave-button__label``; Flex.InlineBlock.allSizes ] ]
+        )
+
       match icon, iconPosition with
       | Some iconDoc, IconPosition.Start ->
-        [
-          div [ cls [ Css.``weave-button__icon--start`` ] ] [ iconDoc ]
-          div [ cl Css.``weave-button__label`` ] [ innerContents ]
-        ]
+        [ div [ cls [ Css.``weave-button__icon--start`` ] ] [ iconDoc ]; innerContent ]
         |> Doc.Concat
       | Some iconDoc, IconPosition.End ->
-        [
-          div [ cl Css.``weave-button__label`` ] [ innerContents ]
-          div [ cls [ Css.``weave-button__icon--end`` ] ] [ iconDoc ]
-        ]
+        [ innerContent; div [ cls [ Css.``weave-button__icon--end`` ] ] [ iconDoc ] ]
         |> Doc.Concat
-      | None, _ -> div [ cl Css.``weave-button__label`` ] [ innerContents ]
+      | None, _ -> innerContent
 
     button [
       attr.``type`` "button"

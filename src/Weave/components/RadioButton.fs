@@ -99,13 +99,12 @@ type Radio =
       span [ cls [ Css.``weave-radio__span`` ] ] []
       match displayText with
       | Some v ->
-        span [
-          cls [
-            Css.``weave-radio__label``
-            Css.``weave-typography--body1``
-            JustifyContent.toClass JustifyContent.Center
+        Body1.Span(
+          v,
+          attrs = [
+            cls [ Css.``weave-radio__label``; JustifyContent.toClass JustifyContent.Center ]
+            View.not enabled |> Attr.toggleColor Palette.textDisabled
           ]
-          View.not enabled |> Attr.toggleColor Palette.textDisabled
-        ] [ textView v ]
+        )
       | None -> Doc.Empty
     ]

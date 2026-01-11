@@ -8,6 +8,7 @@ $dot-size: 10px;
   align-items: center;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
+  margin: 6px 10px;
 
   &--dense {
     padding: 4px;
@@ -114,8 +115,6 @@ $dot-size: 10px;
 }
 
 .weave-radio__label {
-  font-size: 1em;
-
   .weave-radio.flex-row & {
     margin-left: 0.5em;
   }

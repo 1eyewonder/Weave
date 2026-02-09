@@ -1,0 +1,9 @@
+group build
+Fake.Core.Target
+Fake.Core.ReleaseNotes
+Fake.DotNet.AssemblyInfoFile
+Fake.DotNet.Paket
+Fake.Tools.Git
+Fake.Api.GitHub
+Fake.BuildServer.GitHubActions
+Fake.Javascript.Yarn

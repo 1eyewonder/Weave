@@ -62,10 +62,8 @@ Weave is looking to have built in support for theming applications. Currently, t
 
 1. Open `weave.code-workspace` file and press the `Open workspace` in the bottom right corner. Install the recommended extensions.
 2. In your command line run:
-    - `dotnet tool restore`
-    - `dotnet paket restore`
-    - `yarn install`
-    - `dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj`
+    - `./build.cmd init` or `./build.sh init` to install dependencies and build the project
+    - `dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj` to start the documentation site
 3. Open your browser and navigate to `http://localhost:5000`
 
 ## Contributing

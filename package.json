@@ -8,6 +8,7 @@
     "watch:css": "yarn sass --watch src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map"
   },
   "devDependencies": {
+    "esbuild": "^0.27.3",
     "sass": "^1.96.0"
   }
 }

@@ -2,7 +2,6 @@ source https://api.nuget.org/v3/index.json
 storage: none
 
 nuget FSharp.Core
-nuget FSharpPlus
 nuget FsToolkit.ErrorHandling
 nuget Zanaptak.TypedCssClasses
 nuget WebSharper
@@ -23,3 +22,16 @@ group analyzers
 
   nuget Ionide.Analyzers
   nuget G-Research.FSharp.Analyzers
+
+group build
+  source https://api.nuget.org/v3/index.json
+  storage: none
+
+  nuget Fake.Core.Target
+  nuget Fake.Core.ReleaseNotes
+  nuget Fake.DotNet.AssemblyInfoFile
+  nuget Fake.DotNet.Paket
+  nuget Fake.Tools.Git
+  nuget Fake.Api.GitHub
+  nuget Fake.BuildServer.GitHubActions
+  nuget Fake.Javascript.Yarn

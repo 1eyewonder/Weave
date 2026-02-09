@@ -1,9 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="examples/ExampleHelpers.fs" />
     <Compile Include="examples/ThemingExamples.fs" />
@@ -28,24 +27,18 @@
     <None Include="vite.config.js" />
     <None Include="wsconfig.json" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Weave\Weave.fsproj" />
+    <ProjectReference Include="../Weave/Weave.fsproj" />
   </ItemGroup>
-
   <Target Name="CopyWeaveStyles" BeforeTargets="Build">
-    <Copy SourceFiles="../Weave/styles.css" DestinationFolder="$(ProjectDir)wwwroot\Scripts" SkipUnchangedFiles="true" />
-</Target>
-
+    <Copy SourceFiles="../Weave/styles.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
+  </Target>
   <Target Name="CopyWeaveLogo" BeforeTargets="Build">
-    <Copy SourceFiles="../Weave/resources/weave-logo.png" DestinationFolder="$(ProjectDir)wwwroot\assets" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="../Weave/resources/weave-logo.png" DestinationFolder="$(ProjectDir)wwwroot/assets" SkipUnchangedFiles="true" />
   </Target>
-
   <Target Name="ESBuildBundle" AfterTargets="WebSharperCompile" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="yarn install" WorkingDirectory="$(ProjectDir)..\.." />
-    <Exec Command="node src/Weave.Docs/esbuild.config.mjs" WorkingDirectory="$(ProjectDir)..\.." />
+    <Exec Command="yarn install" WorkingDirectory="$(ProjectDir)../.." />
+    <Exec Command="node src/Weave.Docs/esbuild.config.mjs" WorkingDirectory="$(ProjectDir)../.." />
   </Target>
-
   <Import Project="..\..\.paket\Paket.Restore.targets" />
-
 </Project>

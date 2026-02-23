@@ -1,481 +1,309 @@
-.weave-input {
+.weave-field {
   display: inline-flex;
   flex-direction: column;
+  justify-content: flex-end; // bottom-align content when stretched by grid
   position: relative;
+  min-width: 0;
+  color: var(--palette-text-primary, currentColor);
+}
+
+.weave-field__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: text;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.weave-field__label {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: top left;
+  transform: translate(var(--field-label-x, 0px), var(--field-label-y, 0px))
+    scale(1);
+  color: var(--input-label-color, var(--palette-text-primary, currentColor));
+  transition:
+    color 200ms cubic-bezier(0, 0, 0.2, 1),
+    transform 200ms cubic-bezier(0, 0, 0.2, 1),
+    max-width 200ms cubic-bezier(0, 0, 0.2, 1);
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 24px);
+  font-size: 1rem;
+  line-height: 1.4375em;
+  top: 0;
+  left: 0;
+}
+
+.weave-field__label--float {
+  transform: translate(
+      var(--field-label-float-x, 0px),
+      var(--field-label-float-y, 0px)
+    )
+    scale(0.75);
+}
+
+.weave-field__input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.4375em;
+  color: currentColor;
+  box-sizing: border-box;
   margin: 0;
-  padding: 0;
-  border: 0;
-  vertical-align: top;
-}
+  padding: var(--field-input-padding, 0);
 
-.weave-input--field {
-  .weave-input__slot {
-    height: auto;
-    min-height: 19px;
-
-    &.weave-input__root--outlined.weave-input--adorned-start {
-      padding-left: 0;
-      padding-inline-start: 0;
-      padding-inline-end: 14px;
-    }
-
-    &.weave-input__root--filled.weave-input--adorned-start {
-      padding-left: 0;
-      padding-inline-start: 0;
-      padding-inline-end: 12px;
-    }
-
-    &.weave-input__slot--no-padding {
-      padding-top: 0px;
-      padding-bottom: 0px;
-
-      &.weave-input__root--filled {
-        padding-top: 21px;
-        padding-bottom: 2px;
-      }
-
-      &.weave-input__root--outlined {
-        padding-top: 7px;
-        padding-bottom: 2px;
-      }
-    }
-  }
-}
-
-.weave-input--text {
-  .weave-input__root {
-    border-bottom: 1px solid var(--input-border-color, currentColor);
-    opacity: 0.42;
-  }
-
-  // When wrapper has spin buttons, move border to wrapper
-  .weave-input__input-wrapper--with-spin {
-    border-bottom: 1px solid var(--input-border-color, currentColor);
-    opacity: 0.42;
-
-    .weave-input__root {
-      border-bottom: none;
-    }
-  }
-}
-
-.weave-input--filled {
-  .weave-input__root {
-    background-color: var(--input-filled-background, currentColor);
-    opacity: 0.04;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--input-border-color, currentColor);
-  }
-
-  // When wrapper has spin buttons, move styling to wrapper
-  .weave-input__input-wrapper--with-spin {
-    background-color: var(--input-filled-background, currentColor);
-    opacity: 0.04;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--input-border-color, currentColor);
-
-    .weave-input__root {
-      background-color: transparent;
-      border-radius: 0;
-      border-bottom: none;
-    }
-  }
-}
-
-.weave-input--outlined {
-  .weave-input__label {
-    position: absolute;
-    top: -8px;
-    left: 10px;
-    background-color: var(
-      --input-label-background,
-      var(--palette-background-default, transparent)
-    );
-    padding: 0 4px;
-    margin-bottom: 0;
-    z-index: 1;
+  @include inputplaceholder {
     color: var(--input-label-color, var(--palette-text-primary, currentColor));
-    opacity: 1;
+    opacity: 0.42;
+    transition: opacity 200ms cubic-bezier(0, 0, 0.2, 1);
   }
+}
 
-  .weave-input__input-wrapper {
-    margin-top: 0;
+.weave-field__adornment {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--palette-text-secondary, currentColor);
+  padding-top: var(--field-adorn-pt, 0);
+  padding-bottom: var(--field-adorn-pb, 0);
+}
+
+.weave-field__adornment--start {
+  padding-left: var(--field-adorn-start-pl, 0px);
+  margin-right: 8px;
+}
+
+.weave-field__adornment--end {
+  padding-right: var(--field-adorn-end-pr, 0px);
+  margin-left: var(--field-adorn-end-ml, 8px);
+}
+
+.weave-field__outline {
+  text-align: left;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: -5px;
+  left: 0;
+  margin: 0;
+  padding: 0 8px;
+  pointer-events: none;
+  border-radius: inherit;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(
+    --input-outlined-border,
+    var(--palette-text-primary, currentColor)
+  );
+  overflow: hidden;
+  min-width: 0%;
+}
+
+.weave-field__outline-legend {
+  float: unset;
+  width: auto;
+  overflow: hidden;
+  display: block;
+  padding: 0;
+  height: 11px;
+  font-size: 0.75em;
+  visibility: hidden;
+  max-width: 0.01px;
+  transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  white-space: nowrap;
+
+  > span {
+    padding-left: 5px;
+    padding-right: 8px;
+    display: inline-block;
+    opacity: 0;
+    visibility: visible;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
   }
+}
 
-  .weave-input__root {
-    border: 1px solid
-      var(--input-outlined-border, var(--palette-text-primary, currentColor));
+.weave-field__outline-legend--float {
+  max-width: 100%;
+  transition: max-width 100ms cubic-bezier(0, 0, 0.2, 1) 50ms;
+}
+
+.weave-field__help-text {
+  font-size: 0.75rem;
+  line-height: 1.66;
+  margin: 0 14px;
+  max-height: 0;
+  overflow: hidden;
+  color: var(--input-help-text-color, currentColor);
+  opacity: 0;
+  transition:
+    max-height 200ms cubic-bezier(0, 0, 0.2, 1),
+    margin-top 200ms cubic-bezier(0, 0, 0.2, 1),
+    opacity 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.weave-field--show-help-text .weave-field__help-text {
+  max-height: 3em;
+  margin-top: 3px;
+  opacity: 0.7;
+}
+
+// ===========================================================================
+// STANDARD VARIANT
+// Label floats ABOVE the control into the field's padding-top area.
+// ===========================================================================
+.weave-field--standard {
+  --field-label-x: 0px;
+  --field-label-y: 4px;
+  --field-label-float-x: 0px;
+  --field-label-float-y: -17.5px;
+  --field-input-padding: 4px 0 8px;
+  --field-adorn-pt: 4px;
+  --field-adorn-pb: 8px;
+
+  padding-top: 16px;
+
+  .weave-field__control {
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+  }
+}
+
+// ===========================================================================
+// FILLED VARIANT
+// Label stays INSIDE the control, moving from the text position to the top.
+// ===========================================================================
+.weave-field--filled {
+  --field-label-x: 12px;
+  --field-label-y: 25px;
+  --field-label-float-x: 12px;
+  --field-label-float-y: 7px;
+  --field-input-padding: 25px 12px 10px;
+  --field-adorn-pt: 25px;
+  --field-adorn-pb: 10px;
+  --field-adorn-start-pl: 12px;
+  --field-adorn-end-pr: 12px;
+  --field-adorn-end-ml: 0px;
+
+  .weave-field__control {
+    background-color: var(--input-filled-background, rgba(255, 255, 255, 0.09));
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+  }
+}
+
+// ===========================================================================
+// OUTLINED VARIANT
+// Border is on the <fieldset> (.weave-field__outline), NOT the control.
+// The <legend> inside the fieldset auto-creates the label notch.
+// ===========================================================================
+.weave-field--outlined {
+  --field-label-x: 14px;
+  --field-label-y: 16.5px;
+  --field-label-float-x: 14px;
+  --field-label-float-y: -9px;
+  --field-input-padding: 16.5px 14px;
+  --field-adorn-pt: 16.5px;
+  --field-adorn-pb: 16.5px;
+  --field-adorn-start-pl: 14px;
+  --field-adorn-end-pr: 14px;
+  --field-adorn-end-ml: 0px;
+
+  .weave-field__control {
     border-radius: 4px;
-    color: var(--palette-text-primary, currentColor);
-    opacity: 1;
   }
 
-  // When wrapper has spin buttons, move border to wrapper
-  .weave-input__input-wrapper--with-spin {
-    border: 1px solid
-      var(--input-outlined-border, var(--palette-text-primary, currentColor));
-    border-radius: 4px;
-    opacity: 1;
+  // Extra outlined-specific float styling
+  .weave-field__label--float {
+    padding: 0 5px;
+    max-width: calc(133% - 32px);
+  }
+}
 
-    .weave-input__root {
-      border: none;
-      border-radius: 0;
+// ===========================================================================
+// START ADORNMENT PRESENT – shift unfloated label to clear the adornment
+// Offset = adornment-start padding-left + 24px icon + 8px margin-right
+// ===========================================================================
+.weave-field--has-start-adornment {
+  .weave-field__input {
+    padding-left: 0;
+  }
+
+  .weave-field__label:not(.weave-field__label--float) {
+    transform: translate(
+        calc(var(--field-adorn-start-pl, 0px) + 32px),
+        var(--field-label-y, 0px)
+      )
+      scale(1);
+  }
+}
+
+// ===========================================================================
+// STATES
+// ===========================================================================
+
+.weave-field--focused {
+  .weave-field__label--float {
+    color: var(--palette-primary);
+  }
+
+  &.weave-field--standard,
+  &.weave-field--filled {
+    .weave-field__control {
+      border-bottom-width: 2px;
+      border-bottom-color: var(--palette-primary);
     }
   }
+
+  &.weave-field--outlined .weave-field__outline {
+    border-width: 2px;
+    border-color: var(--palette-primary);
+  }
 }
 
-.weave-input--margin-none {
-  margin: 0;
-}
-
-.weave-input--margin-dense {
-  margin: 4px 0;
-}
-
-.weave-input--margin-normal {
-  margin: 8px 0;
-}
-
-.weave-input--disabled {
+.weave-field--disabled {
   opacity: 0.6;
   pointer-events: none;
 }
 
-.weave-input--error {
-  .weave-input__root {
-    border-color: var(--palette-error);
-  }
-
-  .weave-input__label {
-    color: var(--palette-error);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-error);
-    }
-  }
-}
-
-// Color variants
-.weave-input--primary {
-  .weave-input__label {
-    color: var(--palette-primary);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-primary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-primary);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-primary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-primary);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-primary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-primary);
-    }
-  }
-}
-
-.weave-input--secondary {
-  .weave-input__label {
-    color: var(--palette-secondary);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-secondary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-secondary);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-secondary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-secondary);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-secondary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-secondary);
-    }
-  }
-}
-
-.weave-input--tertiary {
-  .weave-input__label {
-    color: var(--palette-tertiary);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-tertiary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-tertiary);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-tertiary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-tertiary);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-tertiary);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-tertiary);
-    }
-  }
-}
-
-.weave-input--success {
-  .weave-input__label {
-    color: var(--palette-success);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-success);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-success);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-success);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-success);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-success);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-success);
-    }
-  }
-}
-
-.weave-input--warning {
-  .weave-input__label {
-    color: var(--palette-warning);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-warning);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-warning);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-warning);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-warning);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-warning);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-warning);
-    }
-  }
-}
-
-.weave-input--info {
-  .weave-input__label {
-    color: var(--palette-info);
-  }
-
-  &.weave-input--outlined {
-    .weave-input__root {
-      border-color: var(--palette-info);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-color: var(--palette-info);
-    }
-  }
-
-  &.weave-input--filled {
-    .weave-input__root {
-      border-bottom-color: var(--palette-info);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-info);
-    }
-  }
-
-  &.weave-input--text {
-    .weave-input__root {
-      border-bottom-color: var(--palette-info);
-    }
-
-    .weave-input__input-wrapper--with-spin {
-      border-bottom-color: var(--palette-info);
-    }
-  }
-}
-
-.weave-input__slot {
-  position: relative;
-  display: flex;
-  align-items: center;
+.weave-field--full-width {
   width: 100%;
+  min-height: 100%;
 }
 
-.weave-input__input-wrapper {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-}
-
-.weave-input__root {
-  font-family: inherit;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: currentColor;
-  box-sizing: border-box;
-  padding: 8px 12px;
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
-
-  &:focus {
-    outline: none;
-  }
-}
-
-.weave-input__root--text {
-  padding: 4px 0 5px;
-}
-
-.weave-input__root--filled {
-  padding: 27px 12px 10px;
-}
-
-.weave-input__root--outlined {
-  padding: 10px 14px;
-}
-
-.weave-input__label {
-  display: block;
-  font-size: 0.875rem;
-  line-height: 1;
-  margin-bottom: 4px;
-  color: var(--input-label-color, var(--palette-text-primary, currentColor));
-  opacity: 0.7;
-  transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-}
-
-.weave-input__label--focused {
-  color: var(--palette-primary);
-}
-
-.weave-input__helper-text {
-  font-size: 0.75rem;
-  line-height: 1.66;
-  margin-top: 4px;
-  color: var(--input-helper-text-color, currentColor);
-  opacity: 0.7;
-}
-
-.weave-input__error-text {
-  font-size: 0.75rem;
-  line-height: 1.66;
-  margin-top: 4px;
-  color: var(--palette-error);
-}
-
-.weave-input__numeric-spin {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  gap: 2px;
-
-  button {
-    min-width: 30px;
-    padding: 2px 4px;
-    font-size: 0.625rem;
-    line-height: 1;
-    color: var(--palette-text-primary, currentColor);
-  }
-}
-
-/* Hide native browser spin buttons for number inputs when using custom spin buttons */
-.weave-input--hide-native-spin {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+@each $color in $field-colors {
+  .weave-field--show-help-text .weave-field__help-text--#{$color} {
+    color: var(--palette-#{$color});
+    opacity: 1;
   }
 
-  input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-  }
-}
+  .weave-field--#{$color} {
+    &.weave-field--focused .weave-field__label--float {
+      color: var(--palette-#{$color});
+    }
 
-.width-full {
-  width: 100%;
+    &.weave-field--focused {
+      &.weave-field--standard,
+      &.weave-field--filled {
+        .weave-field__control {
+          border-bottom-color: var(--palette-#{$color});
+        }
+      }
+
+      &.weave-field--outlined .weave-field__outline {
+        border-color: var(--palette-#{$color});
+      }
+    }
+  }
 }

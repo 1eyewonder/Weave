@@ -13,7 +13,7 @@ module DropdownExamples =
   let clickableItem (alertVar: Var<string option>) n =
     DropdownItem.Create(
       text (sprintf "Item %d" n),
-      onClick = (fun () -> Var.Set alertVar (Some (sprintf "Clicked item %d" n)))
+      onClick = (fun () -> Var.Set alertVar (Some(sprintf "Clicked item %d" n)))
     )
 
   let private alertDialog (messageVar: Var<string option>) =
@@ -39,8 +39,7 @@ module DropdownExamples =
               ]
             ]
           ),
-          dialogInteraction =
-            View.Const(Dialog.Interaction.Optional(fun () -> Var.Set messageVar None))
+          dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> Var.Set messageVar None))
         )
       | None -> Doc.Empty)
 

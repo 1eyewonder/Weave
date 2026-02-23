@@ -16,6 +16,7 @@
     <Compile Include="components/Divider.fs" />
     <Compile Include="components/Grid.fs" />
     <Compile Include="components/NumericField.fs" />
+    <Compile Include="components/Field.fs" />
     <Compile Include="components/Checkbox.fs" />
     <Compile Include="components/RadioButton.fs" />
     <Compile Include="components/Switch.fs" />

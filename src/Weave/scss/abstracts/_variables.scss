@@ -25,7 +25,10 @@ $color-danger-hover: rgba($color-danger, 0.08);
 $color-warning-hover: rgba($color-warning, 0.08);
 $color-info-hover: rgba($color-info, 0.08);
 
-$palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+$palette-colors:
+  primary, secondary, tertiary, info, success, warning, error, dark;
+
+$field-colors: primary, secondary, tertiary, error, warning, success, info;
 
 $sizes: small, medium, large;
 
@@ -40,4 +43,11 @@ $breakpoint-lg: 1280px;
 $breakpoint-xl: 1920px;
 $breakpoint-xxl: 2560px;
 
-$breakpoints: ( xs: $breakpoint-xs, sm: $breakpoint-sm, md: $breakpoint-md, lg: $breakpoint-lg, xl: $breakpoint-xl, xxl: $breakpoint-xxl );
+$breakpoints: (
+  xs: $breakpoint-xs,
+  sm: $breakpoint-sm,
+  md: $breakpoint-md,
+  lg: $breakpoint-lg,
+  xl: $breakpoint-xl,
+  xxl: $breakpoint-xxl,
+);

@@ -31,12 +31,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 24px);
-  font-size: var(--typography-body2-size, 1rem);
-  font-family: var(--typography-body2-family, inherit);
-  font-weight: var(--typography-body2-weight, 400);
-  line-height: var(--typography-body2-lineheight, 1.4375em);
-  letter-spacing: var(--typography-body2-letterspacing, normal);
+  max-width: calc(100% - 1.5em);
+  font: inherit;
   top: 0;
   left: 0;
 }
@@ -55,11 +51,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: var(--typography-body2-family, inherit);
-  font-size: var(--typography-body2-size, 1rem);
-  font-weight: var(--typography-body2-weight, 400);
-  line-height: var(--typography-body2-lineheight, 1.4375em);
-  letter-spacing: var(--typography-body2-letterspacing, normal);
+  font: inherit;
   color: currentColor;
   box-sizing: border-box;
   margin: 0;
@@ -84,7 +76,7 @@
 
 .weave-field__adornment--start {
   padding-left: var(--field-adorn-start-pl, 0px);
-  margin-right: 8px;
+  margin-right: 0.5em;
 }
 
 .weave-field__adornment--end {
@@ -97,10 +89,10 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  top: -5px;
+  top: -0.3125em;
   left: 0;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 0.5em;
   pointer-events: none;
   border-radius: inherit;
   border-style: solid;
@@ -119,7 +111,7 @@
   overflow: hidden;
   display: block;
   padding: 0;
-  height: 11px;
+  height: 0.6875em;
   font-size: 0.75em;
   visibility: hidden;
   max-width: 0.01px;
@@ -127,8 +119,8 @@
   white-space: nowrap;
 
   > span {
-    padding-left: 5px;
-    padding-right: 8px;
+    padding-left: 0.3125em;
+    padding-right: 1em;
     display: inline-block;
     opacity: 0;
     visibility: visible;
@@ -150,7 +142,7 @@
   font-weight: var(--typography-caption-weight, 400);
   line-height: var(--typography-caption-lineheight, 1.66);
   letter-spacing: var(--typography-caption-letterspacing, normal);
-  margin: 0 14px;
+  margin: 0 0.875rem;
   max-height: 0;
   overflow: hidden;
   color: var(--input-help-text-color, currentColor);
@@ -163,7 +155,7 @@
 
 .weave-field--show-help-text .weave-field__help-text {
   max-height: 3em;
-  margin-top: 3px;
+  margin-top: 0.1875rem;
   opacity: 0.7;
 }
 
@@ -172,18 +164,18 @@
 // Label floats ABOVE the control into the field's padding-top area.
 // ===========================================================================
 .weave-field--standard {
-  --field-label-x: 12px;
-  --field-label-y: 4px;
-  --field-label-float-x: 12px;
-  --field-label-float-y: -17.5px;
-  --field-input-padding: 4px 12px 8px;
-  --field-adorn-pt: 4px;
-  --field-adorn-pb: 8px;
-  --field-adorn-start-pl: 12px;
-  --field-adorn-end-pr: 12px;
-  --field-adorn-end-ml: 0px;
+  --field-label-x: 0.75em;
+  --field-label-y: 0.25em;
+  --field-label-float-x: 0.75em;
+  --field-label-float-y: -1.09375em;
+  --field-input-padding: 0.25em 0.75em 0.5em;
+  --field-adorn-pt: 0.25em;
+  --field-adorn-pb: 0.5em;
+  --field-adorn-start-pl: 0.75em;
+  --field-adorn-end-pr: 0.75em;
+  --field-adorn-end-ml: 0em;
 
-  padding-top: 16px;
+  padding-top: 1em;
 
   .weave-field__control {
     border-bottom: 1px solid var(--input-border-color, currentColor);
@@ -195,16 +187,16 @@
 // Label stays INSIDE the control, moving from the text position to the top.
 // ===========================================================================
 .weave-field--filled {
-  --field-label-x: 12px;
-  --field-label-y: 25px;
-  --field-label-float-x: 12px;
-  --field-label-float-y: 7px;
-  --field-input-padding: 25px 12px 10px;
-  --field-adorn-pt: 25px;
-  --field-adorn-pb: 10px;
-  --field-adorn-start-pl: 12px;
-  --field-adorn-end-pr: 12px;
-  --field-adorn-end-ml: 0px;
+  --field-label-x: 0.75em;
+  --field-label-y: 1.5625em;
+  --field-label-float-x: 0.75em;
+  --field-label-float-y: 0.4375em;
+  --field-input-padding: 1.5625em 0.75em 0.625em;
+  --field-adorn-pt: 1.5625em;
+  --field-adorn-pb: 0.625em;
+  --field-adorn-start-pl: 0.75em;
+  --field-adorn-end-pr: 0.75em;
+  --field-adorn-end-ml: 0em;
 
   .weave-field__control {
     background-color: var(--input-filled-background, rgba(255, 255, 255, 0.09));
@@ -220,16 +212,16 @@
 // The <legend> inside the fieldset auto-creates the label notch.
 // ===========================================================================
 .weave-field--outlined {
-  --field-label-x: 14px;
-  --field-label-y: 16.5px;
-  --field-label-float-x: 14px;
-  --field-label-float-y: -9px;
-  --field-input-padding: 16.5px 14px;
-  --field-adorn-pt: 16.5px;
-  --field-adorn-pb: 16.5px;
-  --field-adorn-start-pl: 14px;
-  --field-adorn-end-pr: 14px;
-  --field-adorn-end-ml: 0px;
+  --field-label-x: 0.875em;
+  --field-label-y: 1.03125em;
+  --field-label-float-x: 0.875em;
+  --field-label-float-y: -0.5625em;
+  --field-input-padding: 1.03125em 0.875em;
+  --field-adorn-pt: 1.03125em;
+  --field-adorn-pb: 1.03125em;
+  --field-adorn-start-pl: 0.875em;
+  --field-adorn-end-pr: 0.875em;
+  --field-adorn-end-ml: 0em;
 
   .weave-field__control {
     border-radius: 4px;
@@ -237,8 +229,8 @@
 
   // Extra outlined-specific float styling
   .weave-field__label--float {
-    padding: 0 5px;
-    max-width: calc(133% - 32px);
+    padding: 0 0.3125em;
+    max-width: calc(133% - 2em);
   }
 }
 
@@ -253,7 +245,7 @@
 
   .weave-field__label:not(.weave-field__label--float) {
     transform: translate(
-        calc(var(--field-adorn-start-pl, 0px) + 32px),
+        calc(var(--field-adorn-start-pl, 0px) + 2em),
         var(--field-label-y, 0px)
       )
       scale(1);

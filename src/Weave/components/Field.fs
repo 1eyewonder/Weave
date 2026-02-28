@@ -88,6 +88,7 @@ type Field =
       ?enabled: View<bool>,
       ?startAdornment: Doc,
       ?endAdornment: Doc,
+      ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
 
@@ -96,6 +97,10 @@ type Field =
     let showHelpText = defaultArg showHelpText (View.Const false)
     let helpText = defaultArg helpText Doc.Empty
     let enabled = defaultArg enabled (View.Const true)
+
+    let typoAttrs =
+      defaultArg typoAttrs [ Typography.Typo.toClass Typography.Typo.Body2 |> cl ]
+
     let attrs = defaultArg attrs List.empty
 
     let label =
@@ -105,7 +110,7 @@ type Field =
           Html.label [
             cls [ Css.``weave-field__label`` ]
             Attr.DynamicClassPred Css.``weave-field__label--float`` shouldFloat
-          ] [ Body2.Span(txt) ]
+          ] [ Html.span [] [ text txt ] ]
         else
           Doc.Empty)
 
@@ -146,6 +151,7 @@ type Field =
     div [
       Css.``weave-field`` |> cl
       Variant.toClass variant |> cl
+      yield! typoAttrs
       if hasStartAdornment then
         Css.``weave-field--has-start-adornment`` |> cl
       Attr.DynamicClassPred Css.``weave-field--focused`` isFocused
@@ -181,6 +187,7 @@ type Field =
       ?startAdornment: Doc,
       ?endAdornment: Doc,
       ?inputAttrs: Attr list,
+      ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
 
@@ -215,7 +222,7 @@ type Field =
     let inputElement =
       Doc.InputType.Text
         [
-          cls [ Css.``weave-field__input``; Css.``weave-typography--body2`` ]
+          cls [ Css.``weave-field__input`` ]
 
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
@@ -241,5 +248,6 @@ type Field =
       enabled = enabled,
       ?startAdornment = startAdornment,
       ?endAdornment = endAdornment,
+      ?typoAttrs = typoAttrs,
       ?attrs = attrs
     )

@@ -41,6 +41,7 @@ type NumericField =
       ?enableMouseWheel: View<bool>,
       ?upIcon: Doc,
       ?downIcon: Doc,
+      ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
 
@@ -129,7 +130,7 @@ type NumericField =
     let inputElement =
       Doc.InputType.Text
         [
-          cls [ Css.``weave-field__input``; Css.``weave-typography--body2`` ]
+          cls [ Css.``weave-field__input`` ]
           attr.``type`` "number"
 
           Attr.DynamicProp "placeholder" effectivePlaceholder
@@ -223,6 +224,7 @@ type NumericField =
         enabled = enabled,
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
+        ?typoAttrs = typoAttrs,
         attrs = [
           Css.``weave-field--numeric`` |> cl
           Attr.DynamicClassPred Css.``weave-field--has-spin`` showSpinButtons
@@ -253,6 +255,7 @@ type NumericField =
       ?enableMouseWheel: View<bool>,
       ?upIcon: Doc,
       ?downIcon: Doc,
+      ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
 
@@ -335,7 +338,7 @@ type NumericField =
     let inputElement =
       Doc.InputType.Text
         [
-          cls [ Css.``weave-field__input``; Css.``weave-typography--body2`` ]
+          cls [ Css.``weave-field__input`` ]
           attr.``type`` "number"
           Attr.Create "step" "any"
 
@@ -429,6 +432,7 @@ type NumericField =
         enabled = enabled,
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
+        ?typoAttrs = typoAttrs,
         attrs = [
           Css.``weave-field--numeric`` |> cl
           Attr.DynamicClassPred Css.``weave-field--has-spin`` showSpinButtons

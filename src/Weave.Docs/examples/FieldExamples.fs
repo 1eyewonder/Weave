@@ -692,6 +692,97 @@ mkField BrandColor.Info "Info"
     Helpers.codeSampleSection "Color Variants" description content code
 
   // ---------------------------------------------------------------------------
+  // Typography Configuration
+  // ---------------------------------------------------------------------------
+  let private typographyExample () =
+    let captionVal = Var.Create ""
+    let body1Val = Var.Create ""
+    let subtitle1Val = Var.Create ""
+    let h6Val = Var.Create ""
+    let colorVal = Var.Create ""
+
+    let description =
+      Helpers.bodyText
+        "Use the typoAttrs parameter to configure the field's font styling. Because the component uses em-based sizing, the entire field — label, input, and chrome — scales proportionally with the chosen typography class. You can also mix in color classes."
+
+    let content =
+      Grid.Create(
+        [
+          GridItem.Create(
+            Field.Create(
+              captionVal,
+              variant = Field.Variant.Outlined,
+              labelText = View.Const "Caption",
+              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Caption |> cl ],
+              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+            ),
+            xs = Grid.Width.create 12,
+            md = Grid.Width.create 6
+          )
+
+          GridItem.Create(
+            Field.Create(
+              body1Val,
+              variant = Field.Variant.Outlined,
+              labelText = View.Const "Body1",
+              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Body1 |> cl ],
+              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+            ),
+            xs = Grid.Width.create 12,
+            md = Grid.Width.create 6
+          )
+
+          GridItem.Create(
+            Field.Create(
+              subtitle1Val,
+              variant = Field.Variant.Outlined,
+              labelText = View.Const "Subtitle1",
+              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Subtitle1 |> cl ],
+              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+            ),
+            xs = Grid.Width.create 12,
+            md = Grid.Width.create 6
+          )
+
+          GridItem.Create(
+            Field.Create(
+              h6Val,
+              variant = Field.Variant.Outlined,
+              labelText = View.Const "H6",
+              typoAttrs = [ Typography.Typo.toClass Typography.Typo.H6 |> cl ],
+              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+            ),
+            xs = Grid.Width.create 12,
+            md = Grid.Width.create 6
+          )
+        ],
+        spacing = Grid.GutterSpacing.create 10
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let value = Var.Create ""
+
+// Scale down with Caption typography
+Field.Create(
+    value,
+    labelText = View.Const "Caption",
+    typoAttrs = [ Typography.Typo.toClass Typography.Typo.Caption |> cl ]
+)
+
+// Scale up with Subtitle1 typography
+Field.Create(
+    value,
+    labelText = View.Const "Subtitle1",
+    typoAttrs = [ Typography.Typo.toClass Typography.Typo.Subtitle1 |> cl ]
+)
+"""
+
+    Helpers.codeSampleSection "Typography Configuration" description content code
+
+  // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
   let render () =
@@ -720,5 +811,7 @@ mkField BrandColor.Info "Info"
         disabledExample ()
         Helpers.divider ()
         colorExample ()
+        Helpers.divider ()
+        typographyExample ()
       ]
     )

@@ -63,7 +63,7 @@ module FieldExamples =
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -142,7 +142,7 @@ Field.Create(
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -222,7 +222,7 @@ Field.Create(
             mkItem Field.Variant.Filled "Filled" searchIcon noIcon startFilledVal
             mkItem Field.Variant.Outlined "Outlined" searchIcon noIcon startOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 4
+          spacing = Grid.GutterSpacing.create 10
         )
 
         Body1.Div("End Adornment", attrs = [ cls [ yield! Margin.toClasses Margin.Vertical.extraSmall ] ])
@@ -233,7 +233,7 @@ Field.Create(
             mkItem Field.Variant.Filled "Filled" noIcon infoIcon endFilledVal
             mkItem Field.Variant.Outlined "Outlined" noIcon warningIcon endOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 4
+          spacing = Grid.GutterSpacing.create 10
         )
 
         Body1.Div("Both Adornments", attrs = [ cls [ yield! Margin.toClasses Margin.Vertical.extraSmall ] ])
@@ -244,7 +244,7 @@ Field.Create(
             mkItem Field.Variant.Filled "Filled" searchIcon infoIcon bothFilledVal
             mkItem Field.Variant.Outlined "Outlined" searchIcon warningIcon bothOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 4
+          spacing = Grid.GutterSpacing.create 10
         )
       ]
 
@@ -514,7 +514,7 @@ Field.Create(
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -604,7 +604,7 @@ Field.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =

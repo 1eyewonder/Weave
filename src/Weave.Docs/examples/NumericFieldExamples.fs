@@ -60,7 +60,7 @@ module NumericFieldExamples =
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -126,7 +126,7 @@ NumericField.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -215,7 +215,7 @@ NumericField.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -324,7 +324,7 @@ NumericField.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -408,7 +408,7 @@ NumericField.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =
@@ -519,7 +519,7 @@ NumericField.Create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 4
+        spacing = Grid.GutterSpacing.create 10
       )
 
     let code =

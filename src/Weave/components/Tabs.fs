@@ -10,7 +10,9 @@ open Weave.CssHelpers
 [<JavaScript>]
 module Tabs =
 
+  /// <summary>
   /// Position of the tab strip relative to the tab panel content.
+  /// </summary>
   [<RequireQualifiedAccess; Struct>]
   type Position =
     | Top
@@ -39,7 +41,9 @@ module Tabs =
       | Position.Start
       | Position.End -> false
 
+  /// <summary>
   /// Whether to center tabs when they fit within the container.
+  /// </summary>
   [<RequireQualifiedAccess; Struct>]
   type Alignment =
     | Start
@@ -117,7 +121,9 @@ open Tabs
 [<JavaScript>]
 type TabPanel =
 
+  /// <summary>
   /// Renders a single tab panel that is visible only when its index matches the active tab.
+  /// </summary>
   static member Create(content: Doc, index: int, activeIndex: View<int>, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
@@ -132,7 +138,9 @@ type TabPanel =
 [<JavaScript>]
 type Tabs =
 
+  /// <summary>
   /// Scrolls the tab header so that the tab at `targetIndex` is visible.
+  /// </summary>
   static member private ScrollToTab(headerEl: Dom.Element, targetIndex: int, position: Position) =
     let tabs = headerEl.QuerySelectorAll(".weave-tabs__tab")
 
@@ -161,7 +169,9 @@ type Tabs =
         elif tabTop + tabHeight > headerScroll + headerHeight then
           headerEl?scrollTop <- tabTop + tabHeight - headerHeight
 
+  /// <summary>
   /// Checks whether the tab container overflows and needs scroll buttons.
+  /// </summary>
   static member private CheckOverflow(headerEl: Dom.Element, position: Position) =
     let isHorizontal = Position.isHorizontal position
 
@@ -170,7 +180,9 @@ type Tabs =
     else
       headerEl?scrollHeight > headerEl?clientHeight
 
+  /// <summary>
   /// Scrolls the header by one "page" in the given direction.
+  /// </summary>
   static member private ScrollByPage(headerEl: Dom.Element, position: Position, forward: bool) =
     let isHorizontal = Position.isHorizontal position
 
@@ -193,7 +205,9 @@ type Tabs =
         else
           max 0.0 (current - amount)
 
+  /// <summary>
   /// Updates the indicator element to match the position and size of the active tab.
+  /// </summary>
   static member private UpdateIndicator(headerEl: Dom.Element, activeIndex: int, position: Position) =
     let tabs = headerEl.QuerySelectorAll(".weave-tabs__tab")
     let indicatorEl = headerEl.QuerySelector(".weave-tabs__indicator")

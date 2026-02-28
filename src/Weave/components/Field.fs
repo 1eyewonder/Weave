@@ -73,9 +73,11 @@ type FieldHelpText =
 [<JavaScript>]
 type Field =
 
+  /// <summary>
   /// Core overload: wraps a pre-built input element with the full field chrome
   /// (label, adornments, outline, help text, variant styling, focus/disabled states).
   /// Use this when you need a custom input element (e.g. numeric, date, etc.).
+  /// </summary>
   static member Create
     (
       inputElement: Doc,
@@ -172,7 +174,9 @@ type Field =
       helpTextDoc
     ]
 
+  /// <summary>
   /// Convenience overload for text fields: creates the input element internally.
+  /// </summary>
   static member Create
     (
       value: Var<string>,

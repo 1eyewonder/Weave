@@ -20,7 +20,9 @@ open NumericField
 [<JavaScript>]
 type NumericField =
 
+  /// <summary>
   /// Creates a numeric field for integer values.
+  /// </summary>
   static member Create
     (
       value: Var<int>,
@@ -234,7 +236,9 @@ type NumericField =
     ]
     |> Doc.Concat
 
+  /// <summary>
   /// Creates a numeric field for floating-point values.
+  /// </summary>
   static member Create
     (
       value: Var<float>,

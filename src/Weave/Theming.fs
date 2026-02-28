@@ -75,7 +75,9 @@ module Theming =
 
   module ThemePalette =
 
+    /// <summary>
     /// Empty palette (will use CSS defaults)
+    /// </summary>
     let empty = {
       Background = None
       BackgroundPaper = None

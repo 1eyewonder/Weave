@@ -6,8 +6,10 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open Weave.CssHelpers
 
+/// <summary>
 /// Listens for events on the document and invokes a callback when the event
 /// target is outside all of the tracked element refs.
+/// </summary>
 [<JavaScript>]
 module DocumentEventListener =
 
@@ -43,9 +45,11 @@ module DocumentEventListener =
 
   let create () = { Handler = None }
 
+  /// <summary>
   /// Returns a Doc sink that automatically attaches/detaches the listener
   /// based on a boolean view (e.g. an isOpen view).
   /// `eventName` is the first parameter so you can partially apply common events.
+  /// </summary>
   let watch (eventName: string) (refs: Dom.Element ref list) (onEvent: unit -> unit) (isActive: View<bool>) =
     let listener = create ()
 
@@ -60,8 +64,10 @@ module DocumentEventListener =
 
   let onMouseDown = watch "mousedown"
 
+/// <summary>
 /// Observes the size of a DOM element using the browser ResizeObserver API
 /// and exposes reactive Width and Height views.
+/// </summary>
 [<JavaScript>]
 module ResizeListener =
 
@@ -95,8 +101,10 @@ module ResizeListener =
         this.Handler <- None
       | None -> ()
 
+  /// <summary>
   /// Creates an ElementSize tracker and begins listening for window resize events.
   /// Returns (elementSize, disposeFn) where disposeFn removes the listener.
+  /// </summary>
   let observe (el: Dom.Element) : ElementSize * (unit -> unit) =
     let size = {
       Width = Var.Create(float el?offsetWidth)
@@ -109,8 +117,10 @@ module ResizeListener =
     let dispose () = listener.Detach()
     size, dispose
 
+  /// <summary>
   /// Creates an Attr that starts observing the element after render and
   /// stores the resulting ElementSize in the provided Var.
+  /// </summary>
   let track (sizeVar: Var<ElementSize option>) =
     on.afterRender (fun el ->
       let size, _ = observe el
@@ -119,7 +129,9 @@ module ResizeListener =
 [<JavaScript>]
 module Disabled =
 
+  /// <summary>
   /// Adds a disabled CSS class when the `enabled` view is false.
+  /// </summary>
   let disabledClass (cssClass: string) (enabled: View<bool>) =
     View.not enabled |> Attr.DynamicClassPred cssClass
 

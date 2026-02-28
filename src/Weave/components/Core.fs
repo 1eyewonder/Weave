@@ -57,7 +57,9 @@ module CssHelpers =
     let toggleColor value enabled =
       toggleStyleOrDefault Style.color value "" enabled
 
+  /// <summary>
   /// CSS variables for Weave's theme palette
+  /// </summary>
   module Palette =
 
     [<Literal>]
@@ -658,7 +660,9 @@ module CssHelpers =
     | Inline
     | InlineBlock
 
+  /// <summary>
   /// Controls if a container is a flex box
+  /// </summary>
   module Flex =
 
     let toClass breakpoint flex =
@@ -721,7 +725,9 @@ module CssHelpers =
     | Wrap
     | WrapReverse
 
+  /// <summary>
   /// Controls the wrap of flex items. Place on a flex container.
+  /// </summary>
   module FlexWrap =
 
     let toClass breakpoint wrap =
@@ -785,7 +791,9 @@ module CssHelpers =
     | Column
     | ColumnReverse
 
+  /// <summary>
   /// Controls the direction of flex items. Place on a flex container.
+  /// </summary>
   module FlexDirection =
 
     let toClass breakpoint direction =
@@ -870,7 +878,9 @@ module CssHelpers =
     | NoShrink
     | None
 
+  /// <summary>
   /// Utilities for controlling how flex items both grow and shrink. Place on items within a flex container.
+  /// </summary>
   module FlexItem =
 
     let toClass breakpoint flex =
@@ -1021,7 +1031,9 @@ module CssHelpers =
     | SpaceAround
     | SpaceEvenly
 
+  /// <summary>
   /// Controls how flex and grid items are positioned along a container's main axis. Place on a flex or grid container.
+  /// </summary>
   module JustifyContent =
 
     let toClass justify =
@@ -1042,7 +1054,9 @@ module CssHelpers =
     | SpaceAround
     | Stretch
 
+  /// <summary>
   /// Controls how rows are positioned in a flex or grid container. Place on a flex or grid container.
+  /// </summary>
   module AlignContent =
 
     let toClass align =
@@ -1062,7 +1076,9 @@ module CssHelpers =
     | End
     | Stretch
 
+  /// <summary>
   /// Controls how flex and grid items are positioned along a container's cross axis. Place on a flex or grid container.
+  /// </summary>
   module AlignItems =
 
     let toClass align =
@@ -1081,7 +1097,9 @@ module CssHelpers =
     | End
     | Stretch
 
+  /// <summary>
   /// Controls how an individual flex or grid item is positioned along its container's cross axis. Place on a flex or grid item.
+  /// </summary>
   module AlignSelf =
 
     let toClass align =
@@ -1307,7 +1325,9 @@ module CssHelpers =
     | None
     | ScaleDown
 
+  /// <summary>
   /// Specifies how a replaced element's content should be resized
+  /// </summary>
   module ObjectFit =
 
     let toClass objectFit =
@@ -1329,7 +1349,9 @@ module CssHelpers =
     | RightBottom
     | RightTop
 
+  /// <summary>
   /// Specifies how a replaced element's content should be positioned within its container
+  /// </summary>
   module ObjectPosition =
 
     let toClass objectPosition =
@@ -1351,7 +1373,9 @@ module CssHelpers =
     | Fixed
     | Sticky
 
+  /// <summary>
   /// Utilities for controlling how an element is positioned in the DOM
+  /// </summary>
   module Position =
 
     let toClass position =

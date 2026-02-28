@@ -15,7 +15,9 @@ module Icons =
   [<Struct>]
   type MaterialGeneration = | Symbols
 
+  /// <summary>
   /// https://fonts.google.com/icons?icon.set=Material+Symbols
+  /// </summary>
   module MaterialSymbols =
 
     [<RequireQualifiedAccess; Struct>]

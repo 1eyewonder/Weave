@@ -80,9 +80,11 @@ module private ButtonMenuInternal =
 [<JavaScript>]
 type ButtonMenu =
 
+  /// <summary>
   /// Creates a button menu with an icon button trigger.
   /// Pass closedIcon for the default icon, and optionally openIcon for a different icon when open.
   /// If openIcon is not provided, the closedIcon will rotate 45 degrees when opened.
+  /// </summary>
   static member CreateIcon
     (
       closedIcon: Doc,
@@ -133,8 +135,10 @@ type ButtonMenu =
 
     ButtonMenuInternal.renderMenu triggerButton items direction isOpen openOnHover attrs
 
+  /// <summary>
   /// Creates a button menu with a standard text button trigger.
   /// Pass closedContent for the default button text, and optionally openContent for different text when open.
+  /// </summary>
   static member Create
     (
       closedContent: Doc,

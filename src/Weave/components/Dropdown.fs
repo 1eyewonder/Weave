@@ -11,7 +11,9 @@ open Weave.CssHelpers
 [<JavaScript>]
 module Dropdown =
 
+  /// <summary>
   /// Position on the button where the dropdown menu is anchored.
+  /// </summary>
   [<RequireQualifiedAccess; Struct>]
   type AnchorOrigin =
     | TopLeft
@@ -38,7 +40,9 @@ module Dropdown =
       | AnchorOrigin.BottomCenter -> "Bottom Center"
       | AnchorOrigin.BottomRight -> "Bottom Right"
 
+  /// <summary>
   /// Area of the dropdown menu that is aligned to the anchor point on the button.
+  /// </summary>
   [<RequireQualifiedAccess; Struct>]
   type TransformOrigin =
     | TopLeft

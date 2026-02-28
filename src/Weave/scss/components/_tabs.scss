@@ -1,0 +1,235 @@
+@import "../abstracts/variables";
+
+.weave-tabs {
+  display: flex;
+  width: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  color: var(--palette-text-primary);
+}
+
+.weave-tabs--top {
+  flex-direction: column;
+}
+
+.weave-tabs--bottom {
+  flex-direction: column-reverse;
+}
+
+.weave-tabs--left,
+.weave-tabs--start {
+  flex-direction: row;
+}
+
+.weave-tabs--right,
+.weave-tabs--end {
+  flex-direction: row-reverse;
+}
+
+.weave-tabs__header-wrapper {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  flex-shrink: 0;
+
+  // Horizontal orientations
+  .weave-tabs--top &,
+  .weave-tabs--bottom & {
+    flex-direction: row;
+  }
+
+  // Vertical orientations
+  .weave-tabs--left &,
+  .weave-tabs--right &,
+  .weave-tabs--start &,
+  .weave-tabs--end & {
+    flex-direction: column;
+  }
+}
+
+.weave-tabs__header {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+
+  // Horizontal: row layout
+  .weave-tabs--top &,
+  .weave-tabs--bottom & {
+    flex-direction: row;
+    scroll-behavior: smooth;
+  }
+
+  // Vertical: column layout
+  .weave-tabs--left &,
+  .weave-tabs--right &,
+  .weave-tabs--start &,
+  .weave-tabs--end & {
+    flex-direction: column;
+    scroll-behavior: smooth;
+  }
+}
+
+.weave-tabs__header--centered {
+  justify-content: center;
+}
+
+.weave-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--palette-text-primary);
+  font-family: var(--typography-button-family);
+  font-size: var(--typography-button-size);
+  font-weight: var(--typography-button-weight);
+  letter-spacing: var(--typography-button-letterspacing);
+  text-transform: var(--typography-button-text-transform);
+  transition:
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Horizontal padding
+  .weave-tabs--top &,
+  .weave-tabs--bottom & {
+    padding: 12px 16px;
+    min-width: 72px;
+  }
+
+  // Vertical padding
+  .weave-tabs--left &,
+  .weave-tabs--right &,
+  .weave-tabs--start &,
+  .weave-tabs--end & {
+    padding: 12px 20px;
+    min-height: 48px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(.weave-tabs__tab--disabled) {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+
+  &:focus-visible:not(.weave-tabs__tab--disabled) {
+    background-color: var(--palette-action-default-hover);
+  }
+}
+
+.weave-tabs__tab--disabled {
+  color: var(--palette-text-disabled) !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+.weave-tabs__tab-icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+.weave-tabs__tab-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.weave-tabs__indicator {
+  position: absolute;
+  transition:
+    left 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    top 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 1;
+
+  .weave-tabs--top & {
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+  }
+
+  .weave-tabs--bottom & {
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+  }
+
+  .weave-tabs--left &,
+  .weave-tabs--start & {
+    right: 0;
+    top: 0;
+    width: 3px;
+    height: 0;
+  }
+
+  .weave-tabs--right &,
+  .weave-tabs--end & {
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 0;
+  }
+}
+
+.weave-tabs__scroll-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--palette-text-primary);
+  padding: 4px;
+  z-index: 2;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+
+  &:focus-visible {
+    background-color: var(--palette-action-default-hover);
+  }
+}
+
+.weave-tabs__scroll-icon {
+  font-size: 20px;
+}
+
+.weave-tabs__panels {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.weave-tabs__panel {
+  padding: 12px;
+}
+
+@each $color in $palette-colors {
+  .weave-tabs--#{$color} {
+    .weave-tabs__tab--active {
+      color: var(--palette-#{$color});
+    }
+
+    .weave-tabs__indicator {
+      background-color: var(--palette-#{$color});
+    }
+  }
+}

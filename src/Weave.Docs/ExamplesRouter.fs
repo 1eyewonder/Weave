@@ -27,6 +27,7 @@ module ExamplesRouter =
     | ExpansionPanelExamples
     | DialogExamples
     | IconsExamples
+    | TabsExamples
 
   let private pageToString page =
     match page with
@@ -45,6 +46,7 @@ module ExamplesRouter =
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
     | IconsExamples -> "Icons"
+    | TabsExamples -> "Tabs"
 
   let private renderPage page =
     match page with
@@ -73,6 +75,7 @@ module ExamplesRouter =
     | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
     | DialogExamples -> DialogExamples.render ()
     | IconsExamples -> IconsExamples.render ()
+    | TabsExamples -> TabsExamples.render ()
 
   let private logo =
     div [
@@ -174,6 +177,7 @@ module ExamplesRouter =
               ExpansionPanelExamples
               DialogExamples
               IconsExamples
+              TabsExamples
             ]
             |> List.map item
 

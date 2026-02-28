@@ -156,13 +156,13 @@ type Field =
         Css.``weave-field--has-start-adornment`` |> cl
       Attr.DynamicClassPred Css.``weave-field--focused`` isFocused
       Attr.DynamicClassPred Css.``weave-field--show-help-text`` showHelpText
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-field--disabled``
+      Disabled.disabledClass Css.``weave-field--disabled`` enabled
       yield! attrs
     ] [
       div [
         Css.``weave-field__control`` |> cl
 
-        on.click (fun el _ ->
+        on.clickTap (fun el _ ->
           let inp = el.QuerySelector("input")
 
           if not (isNull inp) then

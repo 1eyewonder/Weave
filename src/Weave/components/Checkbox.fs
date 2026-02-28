@@ -69,7 +69,7 @@ type Checkbox =
         AlignItems.toClass AlignItems.Center
       ]
 
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-checkbox--disabled``
+      Disabled.disabledClass Css.``weave-checkbox--disabled`` enabled
 
       Map.ofList [
         ContentPlacement.Right, FlexDirection.Row.allSizes

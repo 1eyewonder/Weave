@@ -100,7 +100,7 @@ type Dropdown =
     let attrs = defaultArg attrs []
 
     let mutable dropdownRoot = ref (JS.Document.CreateElement "div")
-    let buttonRef = ref None
+    let buttonElRef = ref (JS.Document.CreateElement "span")
 
     let chevron (isOpen: View<bool>) =
       span [
@@ -129,42 +129,13 @@ type Dropdown =
           enabled = enabled,
           attrs = [
             yield! buttonAttrs
-            on.afterRender (fun el -> buttonRef.Value <- Some el)
+            on.afterRender (fun el -> buttonElRef.Value <- el)
             yield! onHover
           ]
         ))
 
     let renderItem item =
       div [ cl Css.``weave-dropdown__item`` ] [ item ]
-
-    let mutable outsideClickHandler = None
-
-    let attachOutsideClick () =
-      let handler (e: Dom.Event) =
-        let target = e.Target :?> Dom.Element
-
-        let isInsideDropdown =
-          match dropdownRoot.Value with
-          | null -> false
-          | root -> root.Contains(target)
-
-        let isInsideButton =
-          match buttonRef.Value with
-          | Some btn -> btn.Contains(target)
-          | None -> false
-
-        if not isInsideDropdown && not isInsideButton then
-          openVar.Value <- false
-
-      JS.Document.AddEventListener("mousedown", handler)
-      outsideClickHandler <- Some handler
-
-    let detachOutsideClick () =
-      match outsideClickHandler with
-      | Some handler ->
-        JS.Document.RemoveEventListener("mousedown", handler)
-        outsideClickHandler <- None
-      | None -> ()
 
     let menuView =
       openVar.View
@@ -208,11 +179,7 @@ type Dropdown =
 
     let outsideClickWatcher =
       openVar.View
-      |> Doc.sinkCached (fun isOpen ->
-        if isOpen then
-          attachOutsideClick ()
-        else
-          detachOutsideClick ())
+      |> DocumentEventListener.onMouseDown [ dropdownRoot; buttonElRef ] (fun () -> openVar.Value <- false)
 
     div [
       cl Css.``weave-dropdown``

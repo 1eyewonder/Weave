@@ -41,31 +41,8 @@ module private ButtonMenuInternal =
     =
 
     let mutable containerEl = ref (JS.Document.CreateElement "div")
-    let mutable outsideClickHandler: Option<Dom.Event -> unit> = None
     let currentHover = Var.Create false
     let hoverSync = openOnHover |> Doc.sinkCached (fun v -> currentHover.Value <- v)
-
-    let attachOutsideClick () =
-      let handler (e: Dom.Event) =
-        let target = e.Target :?> Dom.Element
-
-        let isInside =
-          match containerEl.Value with
-          | null -> false
-          | root -> root.Contains target
-
-        if not isInside then
-          isOpen.Value <- false
-
-      JS.Document.AddEventListener("click", handler)
-      outsideClickHandler <- Some handler
-
-    let detachOutsideClick () =
-      match outsideClickHandler with
-      | Some handler ->
-        JS.Document.RemoveEventListener("click", handler)
-        outsideClickHandler <- None
-      | None -> ()
 
     let menuItems =
       items
@@ -77,7 +54,7 @@ module private ButtonMenuInternal =
 
     let outsideClickWatcher =
       isOpen.View
-      |> Doc.sinkCached (fun o -> if o then attachOutsideClick () else detachOutsideClick ())
+      |> DocumentEventListener.onClick [ containerEl ] (fun () -> isOpen.Value <- false)
 
     div [
       cl Css.``weave-button-menu``

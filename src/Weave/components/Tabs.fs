@@ -296,7 +296,7 @@ type Tabs =
         isActive |> Attr.DynamicClassPred Css.``weave-tabs__tab--active``
         tabDef.Disabled |> Attr.DynamicClassPred Css.``weave-tabs__tab--disabled``
         Attr.enabled (View.not tabDef.Disabled)
-        on.clickView tabDef.Disabled (fun _ _ disabled ->
+        on.clickTapView tabDef.Disabled (fun _ _ disabled ->
           if not disabled then
             selectTab index)
       ] [ tabDef.Header ]
@@ -339,7 +339,7 @@ type Tabs =
       button [
         cl Css.``weave-tabs__scroll-btn``
         attr.``type`` "button"
-        on.click (fun _ _ -> scrollBack ())
+        on.clickTap (fun _ _ -> scrollBack ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
       ] [ scrollBackIcon ]
 
@@ -347,7 +347,7 @@ type Tabs =
       button [
         cl Css.``weave-tabs__scroll-btn``
         attr.``type`` "button"
-        on.click (fun _ _ -> scrollForward ())
+        on.clickTap (fun _ _ -> scrollForward ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
       ] [ scrollForwardIcon ]
 

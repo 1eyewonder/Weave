@@ -66,7 +66,7 @@ type Radio =
     label [
       cls [ Css.``weave-radio``; Flex.Inline.allSizes ]
 
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-radio--disabled``
+      Disabled.disabledClass Css.``weave-radio--disabled`` enabled
 
       Map.ofList [
         ContentPlacement.Right, FlexDirection.Row.allSizes
@@ -83,9 +83,7 @@ type Radio =
         Attr.Checked isSelected
         Attr.enabled enabled
 
-        on.clickView enabled (fun _ _ enabled ->
-          if enabled then
-            Var.Set userSelection value)
+        on.clickViewGuarded enabled (fun () -> Var.Set userSelection value)
 
         cl Css.``weave-radio__input``
       ] [

@@ -101,7 +101,7 @@ type Tooltip =
               on.focus (fun _ _ -> Var.Set isVisible true)
               on.blur (fun _ _ -> Var.Set isVisible false)
             ]
-          | Click -> [ on.click (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
+          | Click -> [ on.clickTap (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
     ] [
       innerContent
 

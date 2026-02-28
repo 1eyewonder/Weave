@@ -86,11 +86,8 @@ type Button =
 
       yield! attrs
 
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-button--disabled``
-
-      on.clickView enabled (fun _ _ enabled ->
-        if enabled then
-          onClick ())
+      Disabled.disabledClass Css.``weave-button--disabled`` enabled
+      on.clickTapViewGuarded enabled onClick
     ] [ content ]
 
   static member CreateIcon(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
@@ -105,9 +102,6 @@ type Button =
 
       yield! attrs
 
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-button--disabled``
-
-      on.clickView enabled (fun _ _ enabled ->
-        if enabled then
-          onClick ())
+      Disabled.disabledClass Css.``weave-button--disabled`` enabled
+      on.clickTapViewGuarded enabled onClick
     ] [ icon ]

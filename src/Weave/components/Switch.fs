@@ -60,7 +60,7 @@ type Switch =
         AlignItems.toClass AlignItems.Center
       ]
 
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-switch--disabled``
+      Disabled.disabledClass Css.``weave-switch--disabled`` enabled
 
       Map.ofList [
         ContentPlacement.Right, FlexDirection.Row.allSizes

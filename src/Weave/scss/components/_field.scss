@@ -32,8 +32,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 24px);
-  font-size: 1rem;
-  line-height: 1.4375em;
+  font-size: var(--typography-body2-size, 1rem);
+  font-family: var(--typography-body2-family, inherit);
+  font-weight: var(--typography-body2-weight, 400);
+  line-height: var(--typography-body2-lineheight, 1.4375em);
+  letter-spacing: var(--typography-body2-letterspacing, normal);
   top: 0;
   left: 0;
 }
@@ -52,9 +55,11 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: inherit;
-  font-size: 1rem;
-  line-height: 1.4375em;
+  font-family: var(--typography-body2-family, inherit);
+  font-size: var(--typography-body2-size, 1rem);
+  font-weight: var(--typography-body2-weight, 400);
+  line-height: var(--typography-body2-lineheight, 1.4375em);
+  letter-spacing: var(--typography-body2-letterspacing, normal);
   color: currentColor;
   box-sizing: border-box;
   margin: 0;
@@ -140,8 +145,11 @@
 }
 
 .weave-field__help-text {
-  font-size: 0.75rem;
-  line-height: 1.66;
+  font-size: var(--typography-caption-size, 0.75rem);
+  font-family: var(--typography-caption-family, inherit);
+  font-weight: var(--typography-caption-weight, 400);
+  line-height: var(--typography-caption-lineheight, 1.66);
+  letter-spacing: var(--typography-caption-letterspacing, normal);
   margin: 0 14px;
   max-height: 0;
   overflow: hidden;
@@ -164,13 +172,16 @@
 // Label floats ABOVE the control into the field's padding-top area.
 // ===========================================================================
 .weave-field--standard {
-  --field-label-x: 0px;
+  --field-label-x: 12px;
   --field-label-y: 4px;
-  --field-label-float-x: 0px;
+  --field-label-float-x: 12px;
   --field-label-float-y: -17.5px;
-  --field-input-padding: 4px 0 8px;
+  --field-input-padding: 4px 12px 8px;
   --field-adorn-pt: 4px;
   --field-adorn-pb: 8px;
+  --field-adorn-start-pl: 12px;
+  --field-adorn-end-pr: 12px;
+  --field-adorn-end-ml: 0px;
 
   padding-top: 16px;
 
@@ -306,4 +317,85 @@
       }
     }
   }
+}
+
+// ===========================================================================
+// NUMERIC FIELD
+// ===========================================================================
+
+// Hide native number-input spinners and apply numeric-specific tweaks.
+.weave-field--numeric {
+  .weave-field__input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  // When spin buttons are present, the end adornment stretches to fill the
+  // control height so the two buttons can stack vertically.
+  &.weave-field--has-spin .weave-field__adornment--end {
+    align-self: stretch;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+    margin-left: 0;
+  }
+}
+
+.weave-field__spin-buttons {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-left: 1px solid var(--input-border-color, rgba(0, 0, 0, 0.23));
+  overflow: hidden;
+}
+
+// Variant-specific corner rounding so buttons match the field outline.
+.weave-field--outlined .weave-field__spin-buttons {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.weave-field--filled .weave-field__spin-buttons {
+  border-top-right-radius: 3px;
+}
+
+.weave-field__spin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 8px;
+  font-size: 0.5rem;
+  line-height: 1;
+  color: currentColor;
+  min-width: 24px;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  // Divider between the two buttons.
+  & + .weave-field__spin-btn {
+    border-top: 1px solid var(--input-border-color, rgba(0, 0, 0, 0.23));
+  }
+}
+
+.weave-field--disabled .weave-field__spin-btn {
+  cursor: default;
+  pointer-events: none;
 }

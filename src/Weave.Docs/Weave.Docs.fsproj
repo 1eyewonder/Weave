@@ -15,6 +15,7 @@
     <Compile Include="examples/SwitchExamples.fs" />
     <Compile Include="examples/DropdownExamples.fs" />
     <Compile Include="examples/FieldExamples.fs" />
+    <Compile Include="examples/NumericFieldExamples.fs" />
     <Compile Include="examples/ContainerExamples.fs" />
     <Compile Include="examples/ExpansionPanelExamples.fs" />
     <Compile Include="examples/DialogExamples.fs" />

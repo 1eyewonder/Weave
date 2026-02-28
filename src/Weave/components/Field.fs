@@ -73,17 +73,19 @@ type FieldHelpText =
 [<JavaScript>]
 type Field =
 
+  /// Core overload: wraps a pre-built input element with the full field chrome
+  /// (label, adornments, outline, help text, variant styling, focus/disabled states).
+  /// Use this when you need a custom input element (e.g. numeric, date, etc.).
   static member Create
     (
-      value: Var<string>,
+      inputElement: Doc,
+      isFocused: View<bool>,
+      shouldFloat: View<bool>,
       ?variant: Variant,
       ?labelText: View<string>,
-      ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
       ?enabled: View<bool>,
-      ?readOnly: View<bool>,
-      ?shrinkLabel: View<bool>,
       ?startAdornment: Doc,
       ?endAdornment: Doc,
       ?attrs: Attr list
@@ -91,33 +93,10 @@ type Field =
 
     let variant = defaultArg variant Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
-    let placeholder = defaultArg placeholder (View.Const "")
     let showHelpText = defaultArg showHelpText (View.Const false)
     let helpText = defaultArg helpText Doc.Empty
     let enabled = defaultArg enabled (View.Const true)
-    let readOnly = defaultArg readOnly (View.Const false)
-    let shrinkLabel = defaultArg shrinkLabel (View.Const false)
     let attrs = defaultArg attrs List.empty
-
-    let isFocused = Var.Create false
-
-    let hasValue =
-      value.View |> View.MapCached(fun v -> not (System.String.IsNullOrEmpty(v)))
-
-    let hasExplicitPlaceholder =
-      placeholder |> View.MapCached(fun p -> not (System.String.IsNullOrEmpty(p)))
-
-    let shouldFloat =
-      isFocused.View <||> hasValue <||> shrinkLabel <||> hasExplicitPlaceholder
-
-    // When no explicit placeholder the label doubles as placeholder, so hide native placeholder.
-    // When explicit placeholder is given, show it (browser hides it automatically if there's a value).
-    let effectivePlaceholder =
-      (placeholder, shouldFloat)
-      ||> View.Map2(fun ph floated ->
-        if System.String.IsNullOrEmpty(ph) then ""
-        elif floated then ph
-        else "")
 
     let label =
       labelText
@@ -144,22 +123,6 @@ type Field =
         div [ cls [ Css.``weave-field__adornment``; Css.``weave-field__adornment--end`` ] ] [ adornment ]
       | None -> Doc.Empty
 
-    let inputElement =
-      Doc.InputType.Text
-        [
-          cls [ Css.``weave-field__input``; Css.``weave-typography--body2`` ]
-
-          Attr.DynamicProp "placeholder" effectivePlaceholder
-          Attr.enabled enabled
-          Attr.DynamicBool "readOnly" readOnly
-
-          on.focus (fun _ _ -> isFocused.Value <- true)
-          on.blur (fun el _ ->
-            el?scrollLeft <- 0
-            isFocused.Value <- false)
-        ]
-        value
-
     let outlineDoc =
       match variant with
       | Variant.Outlined ->
@@ -185,7 +148,7 @@ type Field =
       Variant.toClass variant |> cl
       if hasStartAdornment then
         Css.``weave-field--has-start-adornment`` |> cl
-      Attr.DynamicClassPred Css.``weave-field--focused`` isFocused.View
+      Attr.DynamicClassPred Css.``weave-field--focused`` isFocused
       Attr.DynamicClassPred Css.``weave-field--show-help-text`` showHelpText
       View.not enabled |> Attr.DynamicClassPred Css.``weave-field--disabled``
       yield! attrs
@@ -202,3 +165,81 @@ type Field =
 
       helpTextDoc
     ]
+
+  /// Convenience overload for text fields: creates the input element internally.
+  static member Create
+    (
+      value: Var<string>,
+      ?variant: Variant,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?shrinkLabel: View<bool>,
+      ?startAdornment: Doc,
+      ?endAdornment: Doc,
+      ?inputAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+
+    let variant = defaultArg variant Variant.Standard
+    let labelText = defaultArg labelText (View.Const "")
+    let placeholder = defaultArg placeholder (View.Const "")
+    let enabled = defaultArg enabled (View.Const true)
+    let readOnly = defaultArg readOnly (View.Const false)
+    let shrinkLabel = defaultArg shrinkLabel (View.Const false)
+    let inputAttrs = defaultArg inputAttrs List.empty
+
+    let isFocused = Var.Create false
+
+    let hasValue =
+      value.View |> View.MapCached(fun v -> not (System.String.IsNullOrEmpty(v)))
+
+    let hasExplicitPlaceholder =
+      placeholder |> View.MapCached(fun p -> not (System.String.IsNullOrEmpty(p)))
+
+    let shouldFloat =
+      isFocused.View <||> hasValue <||> shrinkLabel <||> hasExplicitPlaceholder
+
+    // When no explicit placeholder the label doubles as placeholder, so hide native placeholder.
+    // When explicit placeholder is given, show it (browser hides it automatically if there's a value).
+    let effectivePlaceholder =
+      (placeholder, shouldFloat)
+      ||> View.Map2(fun ph floated ->
+        if System.String.IsNullOrEmpty(ph) then ""
+        elif floated then ph
+        else "")
+
+    let inputElement =
+      Doc.InputType.Text
+        [
+          cls [ Css.``weave-field__input``; Css.``weave-typography--body2`` ]
+
+          Attr.DynamicProp "placeholder" effectivePlaceholder
+          Attr.enabled enabled
+          Attr.DynamicBool "readOnly" readOnly
+
+          on.focus (fun _ _ -> isFocused.Value <- true)
+          on.blur (fun el _ ->
+            el?scrollLeft <- 0
+            isFocused.Value <- false)
+
+          yield! inputAttrs
+        ]
+        value
+
+    Field.Create(
+      inputElement,
+      isFocused.View,
+      shouldFloat,
+      variant = variant,
+      labelText = labelText,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      enabled = enabled,
+      ?startAdornment = startAdornment,
+      ?endAdornment = endAdornment,
+      ?attrs = attrs
+    )

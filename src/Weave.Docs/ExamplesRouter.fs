@@ -22,6 +22,7 @@ module ExamplesRouter =
     | SwitchExamples
     | ContainerExamples
     | FieldExamples
+    | NumericFieldExamples
     | DropdownExamples
     | ExpansionPanelExamples
     | DialogExamples
@@ -39,6 +40,7 @@ module ExamplesRouter =
     | SwitchExamples -> "Switch"
     | ContainerExamples -> "Container"
     | FieldExamples -> "Field"
+    | NumericFieldExamples -> "Numeric Field"
     | DropdownExamples -> "Dropdown"
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
@@ -66,6 +68,7 @@ module ExamplesRouter =
     | SwitchExamples -> SwitchExamples.render ()
     | ContainerExamples -> ContainerExamples.render ()
     | FieldExamples -> FieldExamples.render ()
+    | NumericFieldExamples -> NumericFieldExamples.render ()
     | DropdownExamples -> DropdownExamples.render ()
     | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
     | DialogExamples -> DialogExamples.render ()
@@ -166,6 +169,7 @@ module ExamplesRouter =
               SwitchExamples
               ContainerExamples
               FieldExamples
+              NumericFieldExamples
               DropdownExamples
               ExpansionPanelExamples
               DialogExamples

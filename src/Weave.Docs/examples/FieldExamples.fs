@@ -796,6 +796,8 @@ Field.Create(
         Helpers.divider ()
         variantsExample ()
         Helpers.divider ()
+        colorExample ()
+        Helpers.divider ()
         withContentExample ()
         Helpers.divider ()
         adornmentsExample ()
@@ -809,8 +811,6 @@ Field.Create(
         helpTextColorVariationsExample ()
         Helpers.divider ()
         disabledExample ()
-        Helpers.divider ()
-        colorExample ()
         Helpers.divider ()
         typographyExample ()
       ]

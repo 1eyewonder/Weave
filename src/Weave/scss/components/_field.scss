@@ -165,17 +165,17 @@
 // ===========================================================================
 .weave-field--standard {
   --field-label-x: 0.75em;
-  --field-label-y: 0.25em;
+  --field-label-y: 0.25rem;
   --field-label-float-x: 0.75em;
   --field-label-float-y: -1.09375em;
-  --field-input-padding: 0.25em 0.75em 0.5em;
-  --field-adorn-pt: 0.25em;
-  --field-adorn-pb: 0.5em;
+  --field-input-padding: 0.25rem 0.75em 0.4375rem;
+  --field-adorn-pt: 0.25rem;
+  --field-adorn-pb: 0.4375rem;
   --field-adorn-start-pl: 0.75em;
   --field-adorn-end-pr: 0.75em;
   --field-adorn-end-ml: 0em;
 
-  padding-top: 1em;
+  padding-top: 0.875rem;
 
   .weave-field__control {
     border-bottom: 1px solid var(--input-border-color, currentColor);
@@ -188,12 +188,12 @@
 // ===========================================================================
 .weave-field--filled {
   --field-label-x: 0.75em;
-  --field-label-y: 1.5625em;
+  --field-label-y: 1.375rem;
   --field-label-float-x: 0.75em;
   --field-label-float-y: 0.4375em;
-  --field-input-padding: 1.5625em 0.75em 0.625em;
-  --field-adorn-pt: 1.5625em;
-  --field-adorn-pb: 0.625em;
+  --field-input-padding: 1.375rem 0.75em 0.5625rem;
+  --field-adorn-pt: 1.375rem;
+  --field-adorn-pb: 0.5625rem;
   --field-adorn-start-pl: 0.75em;
   --field-adorn-end-pr: 0.75em;
   --field-adorn-end-ml: 0em;
@@ -213,12 +213,12 @@
 // ===========================================================================
 .weave-field--outlined {
   --field-label-x: 0.875em;
-  --field-label-y: 1.03125em;
+  --field-label-y: 0.9rem;
   --field-label-float-x: 0.875em;
   --field-label-float-y: -0.5625em;
-  --field-input-padding: 1.03125em 0.875em;
-  --field-adorn-pt: 1.03125em;
-  --field-adorn-pb: 1.03125em;
+  --field-input-padding: 0.9rem 0.875em;
+  --field-adorn-pt: 0.9rem;
+  --field-adorn-pb: 0.9rem;
   --field-adorn-start-pl: 0.875em;
   --field-adorn-end-pr: 0.875em;
   --field-adorn-end-ml: 0em;

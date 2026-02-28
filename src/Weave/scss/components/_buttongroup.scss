@@ -1,0 +1,368 @@
+@import "../abstracts/variables";
+@import "../core/themes";
+
+.weave-button-group {
+  display: inline-flex;
+  flex-direction: row;
+  border-radius: var(--default-button-borderradius);
+  overflow: visible;
+
+  // Default (horizontal) border-radius removal on adjacent items
+  > .weave-button-group__item {
+    &:not(:first-child) > .weave-button,
+    &:not(:first-child) > .weave-button-menu > .weave-button,
+    &:not(:first-child) > .weave-dropdown > .weave-button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:not(:last-child) > .weave-button,
+    &:not(:last-child) > .weave-button-menu > .weave-button,
+    &:not(:last-child) > .weave-dropdown > .weave-button {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+
+.weave-button-group--vertical {
+  flex-direction: column;
+
+  > .weave-button-group__item {
+    display: flex;
+
+    > .weave-button,
+    > .weave-button-menu,
+    > .weave-dropdown {
+      flex: 1;
+    }
+
+    > .weave-button-menu > .weave-button,
+    > .weave-dropdown > .weave-button {
+      width: 100%;
+    }
+    // Zero all radii on every item, then restore only outer corners
+    > .weave-button,
+    > .weave-button-menu > .weave-button,
+    > .weave-dropdown > .weave-button {
+      border-radius: 0;
+    }
+
+    // First item: restore top corners
+    &:first-child > .weave-button,
+    &:first-child > .weave-button-menu > .weave-button,
+    &:first-child > .weave-dropdown > .weave-button {
+      border-top-left-radius: var(--default-button-borderradius);
+      border-top-right-radius: var(--default-button-borderradius);
+    }
+
+    // Last item: restore bottom corners
+    &:last-child > .weave-button,
+    &:last-child > .weave-button-menu > .weave-button,
+    &:last-child > .weave-dropdown > .weave-button {
+      border-bottom-left-radius: var(--default-button-borderradius);
+      border-bottom-right-radius: var(--default-button-borderradius);
+    }
+  }
+}
+
+.weave-button-group__item {
+  display: inline-flex;
+
+  > .weave-button {
+    box-shadow: none;
+    border-radius: var(--default-button-borderradius);
+    min-width: auto;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      box-shadow: none;
+    }
+  }
+
+  // Let button menus & dropdowns inside an item still behave normally
+  > .weave-button-menu,
+  > .weave-dropdown {
+    > .weave-button {
+      box-shadow: none;
+      border-radius: var(--default-button-borderradius);
+
+      &:hover,
+      &:focus-visible,
+      &:active {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.weave-button-group--filled {
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    color: var(--palette-text-primary);
+    background-color: var(--palette-action-default-hover);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--palette-action-disabled-background);
+      }
+    }
+
+    &:focus-visible,
+    &:active {
+      background-color: var(--palette-action-disabled-background);
+    }
+  }
+
+  > .weave-button-group__item:not(:last-child) {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  &.weave-button-group--vertical > .weave-button-group__item:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  @each $color in $palette-colors {
+    &.weave-button-group--#{$color} {
+      .weave-button-group__item > .weave-button,
+      .weave-button-group__item > .weave-button-menu > .weave-button,
+      .weave-button-group__item > .weave-dropdown > .weave-button {
+        color: var(--palette-#{$color}-text);
+        background-color: var(--palette-#{$color});
+
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            background-color: var(--palette-#{$color}-darken);
+          }
+        }
+
+        &:focus-visible,
+        &:active {
+          background-color: var(--palette-#{$color}-darken);
+        }
+      }
+
+      > .weave-button-group__item:not(:last-child) {
+        border-right-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+      }
+
+      &.weave-button-group--vertical
+        > .weave-button-group__item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), 0.3);
+      }
+    }
+  }
+}
+
+.weave-button-group--outlined {
+  box-shadow: none;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--palette-text-primary);
+
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    color: var(--palette-text-primary);
+    border: none;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--palette-action-default-hover);
+      }
+    }
+
+    &:focus-visible,
+    &:active {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+
+  > .weave-button-group__item:not(:last-child) {
+    border-right-width: 2px;
+    border-right-style: solid;
+    border-right-color: var(--palette-text-primary);
+  }
+
+  &.weave-button-group--vertical > .weave-button-group__item:not(:last-child) {
+    border-right: none;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--palette-text-primary);
+  }
+
+  @each $color in $palette-colors {
+    &.weave-button-group--#{$color} {
+      border-color: rgba(
+        var(--palette-#{$color}-rgb),
+        var(--palette-border-opacity)
+      );
+
+      .weave-button-group__item > .weave-button,
+      .weave-button-group__item > .weave-button-menu > .weave-button,
+      .weave-button-group__item > .weave-dropdown > .weave-button {
+        color: var(--palette-#{$color});
+
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+          }
+        }
+
+        &:focus-visible,
+        &:active {
+          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+        }
+      }
+
+      > .weave-button-group__item:not(:last-child) {
+        border-right-color: rgba(
+          var(--palette-#{$color}-rgb),
+          var(--palette-border-opacity)
+        );
+      }
+
+      &.weave-button-group--vertical
+        > .weave-button-group__item:not(:last-child) {
+        border-right: none;
+        border-bottom: 2px
+          solid
+          rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+      }
+    }
+  }
+}
+
+.weave-button-group--text {
+  box-shadow: none;
+
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    color: var(--palette-text-primary);
+    border: none;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--palette-action-default-hover);
+      }
+    }
+
+    &:focus-visible,
+    &:active {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+
+  > .weave-button-group__item:not(:last-child) {
+    border-right-width: 2px;
+    border-right-style: solid;
+    border-right-color: var(--palette-text-primary);
+  }
+
+  &.weave-button-group--vertical > .weave-button-group__item:not(:last-child) {
+    border-right: none;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--palette-text-primary);
+  }
+
+  @each $color in $palette-colors {
+    &.weave-button-group--#{$color} {
+      .weave-button-group__item > .weave-button,
+      .weave-button-group__item > .weave-button-menu > .weave-button,
+      .weave-button-group__item > .weave-dropdown > .weave-button {
+        color: var(--palette-#{$color});
+
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+          }
+        }
+
+        &:focus-visible,
+        &:active {
+          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+        }
+      }
+
+      > .weave-button-group__item:not(:last-child) {
+        border-right-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+      }
+
+      &.weave-button-group--vertical
+        > .weave-button-group__item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), 0.3);
+      }
+    }
+  }
+}
+
+.weave-button-group--small {
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    min-height: 30px;
+    padding: 6px 12px;
+    font-size: calc(var(--typography-button-size) - 0.25rem);
+  }
+}
+
+.weave-button-group--medium {
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    min-height: 40px;
+    padding: 10px 16px;
+    font-size: var(--typography-button-size);
+  }
+}
+
+.weave-button-group--large {
+  .weave-button-group__item > .weave-button,
+  .weave-button-group__item > .weave-button-menu > .weave-button,
+  .weave-button-group__item > .weave-dropdown > .weave-button {
+    min-height: 50px;
+    padding: 14px 20px;
+    font-size: calc(var(--typography-button-size) + 0.25rem);
+  }
+}
+
+.weave-button-group {
+  .weave-button-group__item > .weave-button--disabled,
+  .weave-button-group__item > .weave-button-menu > .weave-button--disabled,
+  .weave-button-group__item > .weave-dropdown > .weave-button--disabled {
+    color: var(--palette-action-disabled) !important;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &.weave-button-group--filled {
+    .weave-button-group__item > .weave-button--disabled,
+    .weave-button-group__item > .weave-button-menu > .weave-button--disabled,
+    .weave-button-group__item > .weave-dropdown > .weave-button--disabled {
+      background-color: var(--palette-action-disabled-background) !important;
+    }
+  }
+}
+
+.weave-button-group {
+  // Prevent the entire trigger button from rotating; rotate only the icon
+  .weave-button-menu__trigger {
+    transition: none;
+  }
+
+  .weave-button-menu__trigger--rotated {
+    transform: none;
+
+    > * {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: rotate(45deg);
+    }
+  }
+}

@@ -14,6 +14,7 @@ module ExamplesRouter =
   type Page =
     | Home
     | ButtonExamples
+    | ButtonGroupExamples
     | ButtonMenuExamples
     | TypographyExamples
     | TooltipExamples
@@ -34,6 +35,7 @@ module ExamplesRouter =
     match page with
     | Home -> "Home"
     | ButtonExamples -> "Button"
+    | ButtonGroupExamples -> "Button Group"
     | ButtonMenuExamples -> "Button Menu"
     | TypographyExamples -> "Typography"
     | TooltipExamples -> "Tooltip"
@@ -64,6 +66,7 @@ module ExamplesRouter =
         maxWidth = Container.MaxWidth.Large
       )
     | ButtonExamples -> ButtonExamples.render ()
+    | ButtonGroupExamples -> ButtonGroupExamples.render ()
     | ButtonMenuExamples -> ButtonMenuExamples.render ()
     | TypographyExamples -> TypographyExamples.render ()
     | TooltipExamples -> TooltipExamples.render ()
@@ -167,6 +170,7 @@ module ExamplesRouter =
             [
               Home
               ButtonExamples
+              ButtonGroupExamples
               ButtonMenuExamples
               TypographyExamples
               TooltipExamples

@@ -61,46 +61,22 @@ module Button =
       | Size.Medium -> Css.``weave-button--medium``
       | Size.Large -> Css.``weave-button--large``
 
-  [<RequireQualifiedAccess; Struct>]
-  type IconPosition =
-    | Start
-    | End
-
 open Button
 
 [<JavaScript>]
 type Button =
 
-  static member Create
-    (
-      innerContents: Doc,
-      onClick: unit -> unit,
-      ?enabled: View<bool>,
-      ?icon: Doc,
-      ?iconPosition: IconPosition,
-      ?attrs: Attr list
-    ) =
+  static member Create(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
 
     let enabled = defaultArg enabled (View.Const true)
-    let iconPosition = defaultArg iconPosition IconPosition.Start
     let attrs = defaultArg attrs List.empty
 
     let content =
-      let innerContent =
-        Typography.Button.Div(
-          innerContents,
-          textWrap = View.Const false,
-          attrs = [ cls [ Css.``weave-button__label``; Flex.InlineBlock.allSizes ] ]
-        )
-
-      match icon, iconPosition with
-      | Some iconDoc, IconPosition.Start ->
-        [ div [ cls [ Css.``weave-button__icon--start`` ] ] [ iconDoc ]; innerContent ]
-        |> Doc.Concat
-      | Some iconDoc, IconPosition.End ->
-        [ innerContent; div [ cls [ Css.``weave-button__icon--end`` ] ] [ iconDoc ] ]
-        |> Doc.Concat
-      | None, _ -> innerContent
+      Typography.Button.Div(
+        innerContents,
+        textWrap = View.Const false,
+        attrs = [ cls [ Css.``weave-button__label``; Flex.Inline.allSizes ] ]
+      )
 
     button [
       attr.``type`` "button"
@@ -116,3 +92,22 @@ type Button =
         if enabled then
           onClick ())
     ] [ content ]
+
+  static member CreateIcon(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+
+    let enabled = defaultArg enabled (View.Const true)
+    let attrs = defaultArg attrs List.empty
+
+    button [
+      attr.``type`` "button"
+      cl Css.``weave-button``
+      cl Css.``weave-button--icon``
+
+      yield! attrs
+
+      View.not enabled |> Attr.DynamicClassPred Css.``weave-button--disabled``
+
+      on.clickView enabled (fun _ _ enabled ->
+        if enabled then
+          onClick ())
+    ] [ icon ]

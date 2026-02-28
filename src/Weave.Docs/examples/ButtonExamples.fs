@@ -5,6 +5,8 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
 open Weave.CssHelpers
 open WebSharper.JavaScript
 
@@ -374,6 +376,194 @@ btn BorderRadius.Circle
 
     Helpers.codeSampleSection "Border Radius" description content code
 
+  let private iconButtonExamples () =
+    let description =
+      Helpers.bodyText
+        "Icon buttons render a single icon without a text label. Use Button.CreateIcon to create them. They reuse the same variant, color, and size classes as regular buttons."
+
+    let content =
+      Grid.Create(
+        [
+          let btn icon ariaLabel color =
+            GridItem.Create(
+              Button.CreateIcon(
+                Icon.Create(icon),
+                onClick = (fun () -> printfn "%s clicked" ariaLabel),
+                attrs = [
+                  Attr.Create "aria-label" ariaLabel
+                  Button.Color.toClass color |> cl
+                  Button.Variant.Filled |> Button.Variant.toClass |> cl
+                  BorderRadius.toClass BorderRadius.Circle |> cl
+                ]
+              )
+            )
+
+          btn (Icon.UiActions UiActions.Delete) "delete" BrandColor.Error
+          btn (Icon.UiActions UiActions.Favorite) "favorite" BrandColor.Secondary
+          btn (Icon.UiActions UiActions.Home) "home" BrandColor.Primary
+          btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
+        ],
+        spacing = Grid.GutterSpacing.create 2
+      )
+
+    let code =
+      """open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
+open Weave.CssHelpers
+
+let btn icon ariaLabel color =
+    Button.CreateIcon(
+        Icon.Create(icon),
+        onClick = (fun () -> printfn "%s clicked" ariaLabel),
+        attrs = [
+            Attr.Create "aria-label" ariaLabel // see here
+            Button.Color.toClass color |> cl
+            Button.Variant.Filled |> Button.Variant.toClass |> cl
+            BorderRadius.toClass BorderRadius.Circle |> cl
+        ]
+    )
+
+btn (Icon.UiActions UiActions.Delete) "delete" BrandColor.Error
+btn (Icon.UiActions UiActions.Favorite) "favorite" BrandColor.Secondary
+btn (Icon.UiActions UiActions.Home) "home" BrandColor.Primary
+btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
+"""
+
+    Helpers.codeSampleSection "Icon Buttons" description content code
+
+  let private iconButtonVariantAndSizeExamples () =
+    let description =
+      Helpers.bodyText "Icon buttons support the same variant and size options as regular buttons."
+
+    let content =
+      Grid.Create(
+        [
+          let btn variant size =
+            let variantName = sprintf "%A" variant
+
+            GridItem.Create(
+              Button.CreateIcon(
+                Icon.Create(Icon.UiActions UiActions.Delete),
+                onClick = (fun () -> printfn "%s icon clicked" variantName),
+                attrs = [
+                  Attr.Create "aria-label" "delete"
+                  Button.Variant.toClass variant |> cl
+                  Button.Size.toClass size |> cl
+                  Button.Color.toClass BrandColor.Primary |> cl
+                ]
+              )
+            )
+
+          btn Button.Variant.Outlined Button.Size.Small
+          btn Button.Variant.Outlined Button.Size.Medium
+          btn Button.Variant.Outlined Button.Size.Large
+          btn Button.Variant.Filled Button.Size.Small
+          btn Button.Variant.Filled Button.Size.Medium
+          btn Button.Variant.Filled Button.Size.Large
+          btn Button.Variant.Text Button.Size.Small
+          btn Button.Variant.Text Button.Size.Medium
+          btn Button.Variant.Text Button.Size.Large
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
+open Weave.CssHelpers
+
+let btn variant size =
+    Button.CreateIcon(
+        Icon.Create(Icon.UiActions UiActions.Delete),
+        onClick = (fun () -> ()),
+        attrs = [
+            Attr.Create "aria-label" "delete"
+            Button.Variant.toClass variant |> cl // see here
+            Button.Size.toClass size |> cl // see here
+            Button.Color.toClass BrandColor.Primary |> cl
+        ]
+    )
+
+btn Button.Variant.Outlined Button.Size.Small
+btn Button.Variant.Outlined Button.Size.Medium
+btn Button.Variant.Outlined Button.Size.Large
+btn Button.Variant.Filled Button.Size.Small
+btn Button.Variant.Filled Button.Size.Medium
+btn Button.Variant.Filled Button.Size.Large
+btn Button.Variant.Text Button.Size.Small
+btn Button.Variant.Text Button.Size.Medium
+btn Button.Variant.Text Button.Size.Large
+"""
+
+    Helpers.codeSampleSection "Icon Button Variants & Sizes" description content code
+
+  let private iconButtonDisabledExamples () =
+    let description =
+      Helpers.bodyText "Icon buttons can be disabled the same way as regular buttons."
+
+    let content =
+      Grid.Create(
+        [
+          GridItem.Create(
+            Button.CreateIcon(
+              Icon.Create(Icon.UiActions UiActions.Favorite),
+              onClick = (fun () -> printfn "favorite clicked"),
+              enabled = View.Const true,
+              attrs = [
+                Attr.Create "aria-label" "favorite"
+                Button.Variant.Filled |> Button.Variant.toClass |> cl
+                Button.Color.toClass BrandColor.Secondary |> cl
+              ]
+            )
+          )
+          GridItem.Create(
+            Button.CreateIcon(
+              Icon.Create(Icon.UiActions UiActions.Favorite),
+              onClick = (fun () -> printfn "This won't fire"),
+              enabled = View.Const false,
+              attrs = [
+                Attr.Create "aria-label" "favorite"
+                Button.Variant.Filled |> Button.Variant.toClass |> cl
+              ]
+            )
+          )
+        ],
+        spacing = Grid.GutterSpacing.create 2
+      )
+
+    let code =
+      """open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
+open Weave.CssHelpers
+
+Button.CreateIcon(
+    Icon.Create(Icon.UiActions UiActions.Favorite),
+    onClick = (fun () -> printfn "favorite clicked"),
+    enabled = View.Const true, // see here
+    attrs = [
+        Attr.Create "aria-label" "favorite"
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        Button.Color.toClass BrandColor.Secondary |> cl
+    ]
+)
+
+Button.CreateIcon(
+    Icon.Create(Icon.UiActions UiActions.Favorite),
+    onClick = (fun () -> printfn "This won't fire"),
+    enabled = View.Const false, // see here
+    attrs = [
+        Attr.Create "aria-label" "favorite"
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Disabled Icon Buttons" description content code
+
   let render () =
     Container.Create(
       div [] [
@@ -395,6 +585,12 @@ btn BorderRadius.Circle
         fullWidthExample ()
         Helpers.divider ()
         borderRadiusExamples ()
+        Helpers.divider ()
+        iconButtonExamples ()
+        Helpers.divider ()
+        iconButtonVariantAndSizeExamples ()
+        Helpers.divider ()
+        iconButtonDisabledExamples ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

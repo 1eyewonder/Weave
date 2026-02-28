@@ -7,6 +7,7 @@
     <Compile Include="examples/ExampleHelpers.fs" />
     <Compile Include="examples/ThemingExamples.fs" />
     <Compile Include="examples/ButtonExamples.fs" />
+    <Compile Include="examples/ButtonMenuExamples.fs" />
     <Compile Include="examples/GridExamples.fs" />
     <Compile Include="examples/TooltipExamples.fs" />
     <Compile Include="examples/TypographyExamples.fs" />

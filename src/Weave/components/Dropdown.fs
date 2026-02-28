@@ -233,13 +233,11 @@ type Dropdown =
 
 [<JavaScript>]
 type DropdownItem =
-  static member Create(innerContents, onClick, ?enabled, ?icon, ?iconPosition, ?attrs) =
+  static member Create(innerContents, onClick, ?enabled, ?attrs) =
     Button.Create(
       innerContents,
       onClick,
       ?enabled = enabled,
-      ?icon = icon,
-      ?iconPosition = iconPosition,
       attrs = [
         cls [
           Button.Variant.toClass Button.Variant.Text

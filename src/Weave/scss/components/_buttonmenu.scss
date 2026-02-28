@@ -1,0 +1,147 @@
+@import "../abstracts/variables";
+@import "../core/themes";
+
+.weave-button-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Trigger button icon rotation when no openIcon is provided
+.weave-button-menu__trigger {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.weave-button-menu__trigger--rotated {
+  transform: rotate(45deg);
+}
+
+// Icon swap: both icons stacked, transition rotate + fade
+.weave-button-menu__trigger-icons {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weave-button-menu__trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: inherit;
+}
+
+.weave-button-menu__trigger-icon--closed {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+.weave-button-menu__trigger-icon--open {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  opacity: 0;
+}
+
+.weave-button-menu--open .weave-button-menu__trigger-icon--closed {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+
+.weave-button-menu--open .weave-button-menu__trigger-icon--open {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+// Items container
+.weave-button-menu__items {
+  position: absolute;
+  display: flex;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// Direction variants
+.weave-button-menu--top > .weave-button-menu__items {
+  flex-direction: column-reverse;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 8px;
+}
+
+.weave-button-menu--bottom > .weave-button-menu__items {
+  flex-direction: column;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 8px;
+}
+
+.weave-button-menu--left > .weave-button-menu__items {
+  flex-direction: row-reverse;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 8px;
+}
+
+.weave-button-menu--right > .weave-button-menu__items {
+  flex-direction: row;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 8px;
+}
+
+// Individual menu items
+.weave-button-menu__item {
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.weave-button-menu--top > .weave-button-menu__items > .weave-button-menu__item {
+  margin-bottom: 8px;
+}
+
+.weave-button-menu--bottom
+  > .weave-button-menu__items
+  > .weave-button-menu__item {
+  margin-top: 8px;
+}
+
+.weave-button-menu--left
+  > .weave-button-menu__items
+  > .weave-button-menu__item {
+  margin-right: 8px;
+}
+
+.weave-button-menu--right
+  > .weave-button-menu__items
+  > .weave-button-menu__item {
+  margin-left: 8px;
+}
+
+// Open state
+.weave-button-menu--open > .weave-button-menu__items {
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.weave-button-menu--open
+  > .weave-button-menu__items
+  > .weave-button-menu__item {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}

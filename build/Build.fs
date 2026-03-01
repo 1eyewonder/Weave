@@ -90,7 +90,7 @@ let checkFormatCode _ =
     Trace.logf "Errors while formatting: %A" result.Errors
 
 let analyze _ =
-  let analyzerPaths = !! "packages/analyzers/**/analyzers/dotnet/fs"
+  let analyzerPaths = !!"packages/analyzers/**/analyzers/dotnet/fs"
 
   let createArgsForProject (project: string) analyzerPaths =
     let projectName = Path.GetFileNameWithoutExtension project
@@ -107,8 +107,8 @@ let analyze _ =
     |> String.concat " "
 
   seq {
-    yield! !! "src/**/*.fsproj"
-    yield! !! "build/**/*.fsproj"
+    yield! !!"src/**/*.fsproj"
+    yield! !!"build/**/*.fsproj"
   }
   |> Seq.iter (fun fsproj ->
     let result = createArgsForProject fsproj analyzerPaths |> dotnet.analyzers
@@ -116,7 +116,7 @@ let analyze _ =
     result.Errors |> Seq.iter Trace.traceError)
 
 let clean _ =
-  !! "bin" ++ "src/**/bin" ++ "tests/**/bin" ++ "src/**/obj" ++ "tests/**/obj"
+  !!"bin" ++ "src/**/bin" ++ "tests/**/bin" ++ "src/**/obj" ++ "tests/**/obj"
   |> Shell.cleanDirs
 
   [ "paket-files/paket.restore.cached" ] |> Seq.iter Shell.rm
@@ -134,14 +134,23 @@ let restore _ =
   Fake.DotNet.Paket.restore (fun p -> { p with ToolType = ToolType.CreateLocalTool() })
   DotNet.restore id solutionFile
 
-let yarnInstall _ =
-  Yarn.install id
+let yarnInstall _ = Yarn.install id
 
 let hardDependency x y = x ==> y |> ignore
 let (==>!) = hardDependency
 
 let softDependency x y = x ?=> y |> ignore
 let (?=>!) = softDependency
+
+let buildDocs _ =
+  Yarn.exec "build:css" id
+
+  let setParams (defaults: DotNet.BuildOptions) = {
+    defaults with
+        Configuration = DotNet.BuildConfiguration.Release
+  }
+
+  DotNet.build setParams (rootDir </> "src" </> "Weave.Docs" </> "Weave.Docs.fsproj")
 
 let initTargets () =
 
@@ -156,6 +165,7 @@ let initTargets () =
   Target.create "YarnInstall" yarnInstall
   Target.create "CheckFormat" checkFormatCode
   Target.create "Analyze" analyze
+  Target.create "BuildDocs" buildDocs
   Target.create "Init" ignore
 
   "Clean" ?=>! "Restore"
@@ -167,10 +177,12 @@ let initTargets () =
 
   "YarnInstall" ?=>! "Build"
 
-  "Clean" ==>! "Init"
+  "Clean" ?=>! "Init"
   "Restore" ==>! "Init"
   "YarnInstall" ==>! "Init"
   "Build" ==>! "Init"
+
+  "Init" ==>! "BuildDocs"
 
 [<EntryPoint>]
 let main argv =
@@ -182,6 +194,6 @@ let main argv =
 
   initTargets () |> ignore
 
-  Target.runOrDefaultWithArguments "DotnetPack"
+  Target.runOrDefaultWithArguments "Init"
 
   0 // return an integer exit code

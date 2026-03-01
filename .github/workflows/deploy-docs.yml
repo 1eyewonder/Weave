@@ -29,6 +29,9 @@ jobs:
 
       - uses: actions/setup-node@v6
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Restore tools
         run: dotnet tool restore
 

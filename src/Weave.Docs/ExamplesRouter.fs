@@ -13,6 +13,8 @@ module ExamplesRouter =
   [<Struct>]
   type Page =
     | Home
+    | AppBarExamples
+    | SpacerExamples
     | ButtonExamples
     | ButtonGroupExamples
     | ButtonMenuExamples
@@ -34,6 +36,8 @@ module ExamplesRouter =
   let private pageToString page =
     match page with
     | Home -> "Home"
+    | AppBarExamples -> "App Bar"
+    | SpacerExamples -> "Spacer"
     | ButtonExamples -> "Button"
     | ButtonGroupExamples -> "Button Group"
     | ButtonMenuExamples -> "Button Menu"
@@ -65,6 +69,8 @@ module ExamplesRouter =
         ],
         maxWidth = Container.MaxWidth.Large
       )
+    | AppBarExamples -> AppBarExamples.render ()
+    | SpacerExamples -> SpacerExamples.render ()
     | ButtonExamples -> ButtonExamples.render ()
     | ButtonGroupExamples -> ButtonGroupExamples.render ()
     | ButtonMenuExamples -> ButtonMenuExamples.render ()
@@ -169,6 +175,8 @@ module ExamplesRouter =
           yield!
             [
               Home
+              AppBarExamples
+              SpacerExamples
               ButtonExamples
               ButtonGroupExamples
               ButtonMenuExamples

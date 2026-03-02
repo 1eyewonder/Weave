@@ -21,6 +21,8 @@
     <Compile Include="examples/ContainerExamples.fs" />
     <Compile Include="examples/ExpansionPanelExamples.fs" />
     <Compile Include="examples/TabsExamples.fs" />
+    <Compile Include="examples/AppBarExamples.fs" />
+    <Compile Include="examples/SpacerExamples.fs" />
     <Compile Include="examples/DialogExamples.fs" />
     <Compile Include="examples/IconsExamples.fs" />
     <Compile Include="ExamplesRouter.fs" />

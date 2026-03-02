@@ -1,0 +1,5 @@
+// Expands to fill all available space in a flex row/column,
+// pushing sibling elements to the outer edges.
+.weave-spacer {
+  flex: 1 1 auto;
+}

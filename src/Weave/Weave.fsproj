@@ -27,6 +27,8 @@
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />
     <Compile Include="components/Dialog.fs" />
+    <Compile Include="components/Spacer.fs" />
+    <Compile Include="components/AppBar.fs" />
     <None Include="wsconfig.json" />
     <None Include="scss/*" />
   </ItemGroup>

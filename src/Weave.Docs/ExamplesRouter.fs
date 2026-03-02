@@ -33,6 +33,7 @@ module ExamplesRouter =
     | IconsExamples
     | TabsExamples
     | ListExamples
+    | LinkExamples
 
   let private pageToString page =
     match page with
@@ -57,6 +58,7 @@ module ExamplesRouter =
     | IconsExamples -> "Icons"
     | TabsExamples -> "Tabs"
     | ListExamples -> "List"
+    | LinkExamples -> "Link"
 
   let private renderPage page =
     match page with
@@ -91,6 +93,7 @@ module ExamplesRouter =
     | IconsExamples -> IconsExamples.render ()
     | TabsExamples -> TabsExamples.render ()
     | ListExamples -> ListExamples.render ()
+    | LinkExamples -> LinkExamples.render ()
 
   let private logo =
     div [
@@ -198,6 +201,7 @@ module ExamplesRouter =
               IconsExamples
               TabsExamples
               ListExamples
+              LinkExamples
             ]
             |> List.map item
 

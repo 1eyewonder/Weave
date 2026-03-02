@@ -39,7 +39,6 @@ open Weave.CssHelpers
 [<JavaScript>]
 module {Name} =
 
-  // --- Variant DU (if the component has visual variants) ---
   [<RequireQualifiedAccess; Struct>]
   type Variant =
     | Filled
@@ -52,7 +51,6 @@ module {Name} =
       | Variant.Filled   -> Css.``weave-{name}--filled``
       | Variant.Outlined -> Css.``weave-{name}--outlined``
 
-  // --- Size DU (conventional for input/control components) ---i
   [<RequireQualifiedAccess; Struct>]
   type Size =
     | Small
@@ -67,7 +65,6 @@ module {Name} =
       | Size.Medium -> Css.``weave-{name}--medium``
       | Size.Large  -> Css.``weave-{name}--large``
 
-  // --- Color — always uses the shared BrandColor DU ---
   module Color =
 
     let toClass color =
@@ -118,31 +115,25 @@ Follow BEM naming and use CSS custom properties from the theme system. Never har
 @import "../abstracts/variables";
 @import "../core/themes";
 
-// Root element
 .weave-{name} {
-  // Base structural styles
   display: inline-flex;
   align-items: center;
   position: relative;
   box-sizing: border-box;
 
-  // Use theme custom properties for color/typography
   color: var(--palette-text-primary);
   background-color: transparent;
   border-radius: var(--default-button-borderradius);
 
-  // Transitions follow the standard cubic-bezier curve used across Weave
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
               box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-  // Disabled state — always present for interactive components
   &.weave-{name}--disabled {
     color: var(--palette-action-disabled);
     cursor: default;
     pointer-events: none;
   }
 
-  // Hover — gate behind media query to avoid sticky hover on touch devices
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: var(--palette-action-default-hover);
@@ -150,7 +141,6 @@ Follow BEM naming and use CSS custom properties from the theme system. Never har
   }
 }
 
-// --- Variant modifiers ---
 .weave-{name}--filled {
   // ...
 }
@@ -160,12 +150,10 @@ Follow BEM naming and use CSS custom properties from the theme system. Never har
   // ...
 }
 
-// --- Size modifiers ---
 .weave-{name}--small  { /* ... */ }
 .weave-{name}--medium { /* ... */ }
 .weave-{name}--large  { /* ... */ }
 
-// --- Color modifiers — use the $palette-colors SCSS loop ---
 .weave-{name}--filled {
   @each $color in $palette-colors {
     &.weave-{name}--#{$color} {
@@ -182,7 +170,6 @@ Follow BEM naming and use CSS custom properties from the theme system. Never har
   }
 }
 
-// --- Child elements (BEM __element) ---
 .weave-{name}__label {
   // ...
 }
@@ -280,7 +267,6 @@ module {Name}Examples =
 
     Helpers.codeSampleSection "Variants" description content code
 
-  // Main render entry point — always named `render`
   let render () =
     Container.Create(
       div [] [

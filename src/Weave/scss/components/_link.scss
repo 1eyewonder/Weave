@@ -1,0 +1,110 @@
+@import "../abstracts/variables";
+@import "../core/themes";
+
+// Renders as <a>, designed to sit inline with surrounding text or standalone.
+.weave-link {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  position: relative;
+  box-sizing: border-box;
+  gap: 4px;
+  font: inherit;
+  cursor: pointer;
+  // Never apply text-decoration on the root so icon adornments are unaffected.
+  // Underline is applied via border-bottom on .weave-link__text to avoid
+  // flex-item text-decoration quirks and UA hover propagation issues.
+  text-decoration: none;
+
+  // Explicitly override UA stylesheets that add `a:hover { text-decoration: underline }`.
+  // Those rules have specificity 0,1,1 which beats our class-only rule (0,1,0).
+  &:hover {
+    text-decoration: none;
+  }
+
+  color: var(--palette-primary);
+
+  transition:
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  &.weave-link--disabled {
+    color: var(--palette-action-disabled);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  // Hover — gate behind media query to avoid sticky hover on touch devices
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+// Underline modifiers — use border-bottom on .weave-link__text rather than
+// text-decoration to avoid two problems:
+// 1. text-decoration on a flex item is unreliable across browsers.
+// 2. text-decoration propagates from an ancestor <a> and child elements cannot
+//    suppress it, making the "None" variant fail on hover.
+
+.weave-link--underline-always {
+  .weave-link__text {
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+}
+
+.weave-link--underline-hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .weave-link__text {
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
+    }
+  }
+
+  &:focus-visible .weave-link__text {
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+}
+
+.weave-link--underline-none {
+  &:hover .weave-link__text,
+  &:focus-visible .weave-link__text {
+    border-bottom: none;
+  }
+}
+
+// Used by Link.CreateIcon — no text label is rendered.
+.weave-link--icon {
+  // No gap needed when there is no adjacent text
+  gap: 0;
+}
+
+// Text portion — underline decoration is scoped here so icons stay clean
+.weave-link__text {
+  display: inline;
+}
+
+// Icon adornments — always flex so SVG/font icons align correctly; no underline
+.weave-link__start-icon,
+.weave-link__end-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+// Override the default primary color via BrandColor.toClass.
+@each $color in $palette-colors {
+  .weave-link--#{$color} {
+    color: var(--palette-#{$color});
+  }
+}

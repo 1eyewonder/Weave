@@ -92,7 +92,7 @@ module ExamplesRouter =
       ]
     ] [
       img [
-        attr.src "/assets/weave-logo.png"
+        attr.src "assets/weave-logo.png"
         attr.alt "Weave Component Library Logo"
         Attr.Style "height" "100px"
         Attr.Style "display" "block"

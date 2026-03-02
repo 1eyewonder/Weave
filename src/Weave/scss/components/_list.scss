@@ -1,0 +1,240 @@
+.weave-list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  margin: 0;
+  background: var(--palette-surface);
+  border-radius: var(--default-borderradius);
+  overflow: auto;
+}
+
+.weave-list--bordered {
+  border: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
+}
+
+.weave-list--dense .weave-list-item {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  min-height: 36px;
+}
+
+.weave-list--dense .weave-list-subheader {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.5;
+}
+
+.weave-list--readonly .weave-list-item {
+  cursor: default;
+}
+
+.weave-list-subheader {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-family: var(--typography-body2-family);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--palette-text-secondary);
+  line-height: 48px;
+  user-select: none;
+}
+
+.weave-list-subheader--inset {
+  padding-inline-start: 72px;
+}
+
+.weave-list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  min-height: 48px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+  text-decoration: none;
+  user-select: none;
+  gap: 16px;
+  box-sizing: border-box;
+  color: var(--palette-text-primary);
+  font-family: var(--typography-body1-family);
+  font-size: var(--typography-body1-size);
+  font-weight: var(--typography-body1-weight);
+  line-height: var(--typography-body1-lineheight);
+  letter-spacing: var(--typography-body1-letterspacing);
+}
+
+.weave-list-item:hover:not(.weave-list-item--disabled):not(
+    .weave-list-item--readonly
+  ) {
+  background-color: var(--palette-action-default-hover);
+}
+
+.weave-list-item--selectable:hover:not(.weave-list-item--disabled):not(
+    .weave-list-item--readonly
+  ) {
+  color: var(--list-item-selected-color);
+}
+
+.weave-list-item--selectable:hover:not(.weave-list-item--disabled):not(
+    .weave-list-item--readonly
+  )
+  .weave-list-item__secondary-content {
+  color: rgba(var(--list-item-selected-rgb), 0.7);
+}
+
+.weave-list-item--disabled {
+  color: var(--palette-text-disabled) !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.weave-list-item--disabled .weave-list-item__icon {
+  color: var(--palette-text-disabled) !important;
+}
+
+.weave-list-item--readonly {
+  cursor: default;
+}
+
+.weave-list-item {
+  --list-item-selected-color: var(--palette-primary);
+  --list-item-selected-rgb: var(--palette-primary-rgb);
+}
+
+.weave-list-item--primary {
+  --list-item-selected-color: var(--palette-primary);
+  --list-item-selected-rgb: var(--palette-primary-rgb);
+}
+.weave-list-item--secondary {
+  --list-item-selected-color: var(--palette-secondary);
+  --list-item-selected-rgb: var(--palette-secondary-rgb);
+}
+.weave-list-item--tertiary {
+  --list-item-selected-color: var(--palette-tertiary);
+  --list-item-selected-rgb: var(--palette-tertiary-rgb);
+}
+.weave-list-item--error {
+  --list-item-selected-color: var(--palette-error);
+  --list-item-selected-rgb: var(--palette-error-rgb);
+}
+.weave-list-item--warning {
+  --list-item-selected-color: var(--palette-warning);
+  --list-item-selected-rgb: var(--palette-warning-rgb);
+}
+.weave-list-item--success {
+  --list-item-selected-color: var(--palette-success);
+  --list-item-selected-rgb: var(--palette-success-rgb);
+}
+.weave-list-item--info {
+  --list-item-selected-color: var(--palette-info);
+  --list-item-selected-rgb: var(--palette-info-rgb);
+}
+
+.weave-list-item--selected {
+  background-color: rgba(var(--list-item-selected-rgb), 0.12);
+  color: var(--list-item-selected-color);
+}
+
+.weave-list-item--selected .weave-list-item__icon {
+  color: inherit;
+}
+
+.weave-list-item__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--palette-action-default);
+}
+
+.weave-list-item__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.weave-list-item__secondary-content {
+  font-family: var(--typography-body2-family);
+  font-size: var(--typography-body2-size);
+  font-weight: var(--typography-body2-weight);
+  line-height: var(--typography-body2-lineheight);
+  letter-spacing: var(--typography-body2-letterspacing);
+  color: var(--palette-text-secondary);
+  margin-top: 2px;
+}
+
+.weave-list-item--selected .weave-list-item__secondary-content {
+  color: rgba(var(--list-item-selected-rgb), 0.7);
+}
+
+.weave-list-item__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--palette-action-default);
+  border-radius: var(--default-borderradius);
+  flex-shrink: 0;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.weave-list-item__checkbox--checked {
+  background-color: var(--list-item-selected-color);
+  border-color: var(--list-item-selected-color);
+}
+
+.weave-list-item__checkbox--checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 8px;
+  border: solid var(--palette-background);
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+
+.weave-list-item__checkbox--indeterminate {
+  background-color: var(--list-item-selected-color);
+  border-color: var(--list-item-selected-color);
+}
+
+.weave-list-item__checkbox--indeterminate::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 2px;
+  background: var(--palette-background);
+  transform: translate(-50%, -50%);
+}
+
+.weave-list-item--disabled .weave-list-item__checkbox {
+  border-color: var(--palette-action-disabled);
+}
+
+.weave-list-item--disabled .weave-list-item__checkbox--checked,
+.weave-list-item--disabled .weave-list-item__checkbox--indeterminate {
+  background-color: var(--palette-action-disabled);
+  border-color: var(--palette-action-disabled);
+}
+
+.weave-list-item__expand-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  transition: transform 0.2s ease;
+}
+
+.weave-list-item__expand-icon--expanded {
+  transform: rotate(180deg);
+}
+
+.weave-list-nested {
+  padding-inline-start: 16px;
+}

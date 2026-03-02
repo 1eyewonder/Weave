@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <NoWarn>NU1510</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <!-- Kill WebSharper Booster Service before build. This is just to help iterate when using dotnet watch -->

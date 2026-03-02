@@ -24,6 +24,7 @@
     <Compile Include="components/RadioButton.fs" />
     <Compile Include="components/Switch.fs" />
     <Compile Include="components/Dropdown.fs" />
+    <Compile Include="components/List.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />
     <Compile Include="components/Dialog.fs" />

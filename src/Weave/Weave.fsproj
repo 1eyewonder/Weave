@@ -31,6 +31,7 @@
     <Compile Include="components/Dialog.fs" />
     <Compile Include="components/Spacer.fs" />
     <Compile Include="components/AppBar.fs" />
+    <Compile Include="components/Drawer.fs" />
     <None Include="wsconfig.json" />
     <None Include="scss/*" />
   </ItemGroup>

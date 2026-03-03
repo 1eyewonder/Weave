@@ -1,3 +1,4 @@
+@use "sass:map";
 @import "../abstracts/variables";
 
 .weave-drawer {
@@ -11,7 +12,7 @@
   color: var(--palette-drawer-text);
   background-color: var(--palette-drawer-background);
 
-  .weave-drawer-content {
+  &__content {
     height: 100%;
     max-height: 100%;
     display: flex;
@@ -19,26 +20,27 @@
     flex-direction: column;
   }
 
-  &:not(.weave-drawer-fixed) {
+  // Without --fixed modifier the drawer positions relative to its container
+  &:not(.weave-drawer--fixed) {
     position: absolute;
   }
 
-  @each $breakpoint in map-keys($breakpoints) {
-    &.weave-drawer-mini.weave-drawer-#{$breakpoint}:not(.weave-drawer--closed),
-    &.weave-drawer-responsive.weave-drawer-#{$breakpoint} {
-      @media (max-width: (map-get($breakpoints, $breakpoint) - 1px)) {
+  @each $breakpoint in map.keys($breakpoints) {
+    &--mini.weave-drawer--#{$breakpoint}:not(.weave-drawer--closed),
+    &--responsive.weave-drawer--#{$breakpoint} {
+      @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
         z-index: calc(var(--zindex-appbar) + 2);
 
-        &.weave-drawer--initial:not(.weave-drawer-mini) {
+        &.weave-drawer--initial:not(.weave-drawer--mini) {
           display: none !important;
         }
       }
     }
   }
 
-  &.weave-drawer-responsive,
-  &.weave-drawer-persistent {
-    &.weave-drawer-pos-left {
+  &--responsive,
+  &--persistent {
+    &.weave-drawer--pos-left {
       height: 100%;
       right: auto;
       width: var(--drawer-width, var(--drawer-width-left));
@@ -47,7 +49,7 @@
         left: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-left 225ms cubic-bezier(0, 0, 0.2, 1);
+          animation: weave-drawer-slide-in-left 225ms cubic-bezier(0, 0, 0.2, 1);
         }
       }
 
@@ -56,12 +58,13 @@
         left: calc(-1 * var(--drawer-width, var(--drawer-width-left)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-left 225ms cubic-bezier(0, 0, 0.2, 1);
+          animation: weave-drawer-slide-out-left 225ms
+            cubic-bezier(0, 0, 0.2, 1);
         }
       }
     }
 
-    &.weave-drawer-pos-right {
+    &.weave-drawer--pos-right {
       height: 100%;
       left: auto;
       width: var(--drawer-width, var(--drawer-width-right));
@@ -70,7 +73,8 @@
         right: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-right 225ms cubic-bezier(0, 0, 0.2, 1);
+          animation: weave-drawer-slide-in-right 225ms
+            cubic-bezier(0, 0, 0.2, 1);
         }
       }
 
@@ -79,63 +83,50 @@
         right: calc(-1 * var(--drawer-width, var(--drawer-width-right)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-right 225ms cubic-bezier(0, 0, 0.2, 1);
-        }
-      }
-    }
-
-    &.weave-drawer-pos-bottom {
-      width: 100%;
-      top: auto;
-      height: var(--drawer-height, var(--drawer-height-bottom));
-
-      &.weave-drawer--open {
-        bottom: 0;
-
-        &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-bottom 225ms cubic-bezier(0, 0, 0.2, 1);
-        }
-      }
-
-      &.weave-drawer--closed {
-        box-shadow: none;
-        bottom: calc(-1 * var(--drawer-height, var(--drawer-height-bottom)));
-
-        &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-bottom 225ms cubic-bezier(0, 0, 0.2, 1);
-        }
-      }
-    }
-
-    &.weave-drawer-pos-top {
-      width: 100%;
-      bottom: auto;
-      height: var(--drawer-height, var(--drawer-height-top));
-
-      &.weave-drawer--open {
-        top: 0;
-
-        &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-top 225ms cubic-bezier(0, 0, 0.2, 1);
-        }
-      }
-
-      &.weave-drawer--closed {
-        box-shadow: none;
-        top: calc(-1 * var(--drawer-height, var(--drawer-height-top)));
-
-        &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-top 225ms cubic-bezier(0, 0, 0.2, 1);
+          animation: weave-drawer-slide-out-right 225ms
+            cubic-bezier(0, 0, 0.2, 1);
         }
       }
     }
   }
 
-  &.weave-drawer-mini {
+  &--mini {
     height: 100%;
+    overflow-x: hidden;
     transition: width 225ms cubic-bezier(0, 0, 0.2, 1);
 
-    &.weave-drawer-pos-left {
+    .weave-drawer-mini-label {
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition:
+        max-width 225ms cubic-bezier(0, 0, 0.2, 1),
+        opacity 225ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    &.weave-drawer--open .weave-drawer-mini-label {
+      max-width: 200px;
+      opacity: 1;
+    }
+
+    &.weave-drawer--hover-expand {
+      &.weave-drawer--pos-left:hover {
+        width: var(--drawer-width-left);
+      }
+
+      &.weave-drawer--pos-right:hover {
+        width: var(--drawer-width-right);
+      }
+
+      &:hover .weave-drawer-mini-label {
+        max-width: 200px;
+        opacity: 1;
+      }
+    }
+
+    &.weave-drawer--pos-left {
       left: 0;
       right: auto;
 
@@ -148,7 +139,7 @@
       }
     }
 
-    &.weave-drawer-pos-right {
+    &.weave-drawer--pos-right {
       left: auto;
       right: 0;
 
@@ -162,12 +153,12 @@
     }
   }
 
-  &.weave-drawer-temporary {
+  &--temporary {
     margin: 0 !important;
     z-index: calc(var(--zindex-appbar) + 2);
     transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
-    &.weave-drawer-pos-left {
+    &.weave-drawer--pos-left {
       right: auto;
       top: 0;
       height: 100%;
@@ -177,7 +168,7 @@
         left: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-left 225ms cubic-bezier(0, 0, 0.2, 1)
+          animation: weave-drawer-slide-in-left 225ms cubic-bezier(0, 0, 0.2, 1)
             forwards;
         }
       }
@@ -186,13 +177,13 @@
         left: calc(-1 * var(--drawer-width, var(--drawer-width-left)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-left 225ms cubic-bezier(0, 0, 0.2, 1)
-            forwards;
+          animation: weave-drawer-slide-out-left 225ms
+            cubic-bezier(0, 0, 0.2, 1) forwards;
         }
       }
     }
 
-    &.weave-drawer-pos-right {
+    &.weave-drawer--pos-right {
       left: auto;
       top: 0;
       height: 100%;
@@ -202,8 +193,8 @@
         right: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-right 225ms cubic-bezier(0, 0, 0.2, 1)
-            forwards;
+          animation: weave-drawer-slide-in-right 225ms
+            cubic-bezier(0, 0, 0.2, 1) forwards;
         }
       }
 
@@ -211,13 +202,13 @@
         right: calc(-1 * var(--drawer-width, var(--drawer-width-right)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-right 225ms cubic-bezier(0, 0, 0.2, 1)
-            forwards;
+          animation: weave-drawer-slide-out-right 225ms
+            cubic-bezier(0, 0, 0.2, 1) forwards;
         }
       }
     }
 
-    &.weave-drawer-pos-bottom {
+    &.weave-drawer--pos-bottom {
       left: 0;
       top: auto;
       width: 100%;
@@ -226,8 +217,8 @@
         bottom: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-bottom 225ms cubic-bezier(0, 0, 0.2, 1) 0ms
-            1;
+          animation: weave-drawer-slide-in-bottom 225ms
+            cubic-bezier(0, 0, 0.2, 1) 0ms 1;
         }
       }
 
@@ -235,13 +226,13 @@
         bottom: calc(-1 * var(--drawer-height, var(--drawer-height-bottom)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-bottom 225ms cubic-bezier(0, 0, 0.2, 1)
-            0ms 1;
+          animation: weave-drawer-slide-out-bottom 225ms
+            cubic-bezier(0, 0, 0.2, 1) 0ms 1;
         }
       }
     }
 
-    &.weave-drawer-pos-top {
+    &.weave-drawer--pos-top {
       left: 0;
       bottom: auto;
       width: 100%;
@@ -250,7 +241,8 @@
         top: 0;
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-in-top 225ms cubic-bezier(0, 0, 0.2, 1) 0ms 1;
+          animation: weave-drawer-slide-in-top 225ms cubic-bezier(0, 0, 0.2, 1)
+            0ms 1;
         }
       }
 
@@ -258,214 +250,134 @@
         top: calc(-1 * var(--drawer-height, var(--drawer-height-top)));
 
         &:not(.weave-drawer--initial) {
-          animation: drawer-slide-out-top 225ms cubic-bezier(0, 0, 0.2, 1) 0ms 1;
+          animation: weave-drawer-slide-out-top 225ms cubic-bezier(0, 0, 0.2, 1)
+            0ms 1;
         }
       }
     }
   }
 
-  &.weave-drawer-mini.weave-drawer-pos-left ~ div:not(.main-content),
-  &.weave-drawer-mini.weave-drawer-pos-right ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-left ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-right ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-top ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-bottom ~ div:not(.main-content) {
-    transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  }
+  &__header {
+    display: flex;
+    min-height: var(--appbar-height);
+    padding: 12px 24px;
 
-  &.weave-drawer-mini.weave-drawer-pos-left.weave-drawer--open
-    ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-left.weave-drawer--open
-    ~ div:not(.main-content) {
-    margin-left: var(--drawer-width, var(--drawer-width-left));
-  }
-
-  &.weave-drawer-mini.weave-drawer-pos-right.weave-drawer--open
-    ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-right.weave-drawer--open
-    ~ div:not(.main-content) {
-    margin-right: var(--drawer-width, var(--drawer-width-right));
-  }
-
-  &.weave-drawer-mini.weave-drawer-pos-top.weave-drawer--open
-    ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-top.weave-drawer--open
-    ~ div:not(.main-content) {
-    margin-top: var(--drawer-height, var(--drawer-height-top));
-  }
-
-  &.weave-drawer-mini.weave-drawer-pos-bottom.weave-drawer--open
-    ~ div:not(.main-content),
-  &.weave-drawer-persistent.weave-drawer-pos-bottom.weave-drawer--open
-    ~ div:not(.main-content) {
-    margin-bottom: var(--drawer-height, var(--drawer-height-bottom));
-  }
-
-  &.weave-drawer-mini.weave-drawer-pos-left.weave-drawer--closed
-    ~ div:not(.main-content) {
-    margin-left: var(--drawer-width, var(--drawer-width-mini-left));
-  }
-
-  &.weave-drawer-mini.weave-drawer-pos-right.weave-drawer--closed
-    ~ div:not(.main-content) {
-    margin-right: var(--drawer-width, var(--drawer-width-mini-right));
-  }
-}
-
-.weave-drawer-header {
-  display: flex;
-  min-height: var(--appbar-height);
-  padding: 12px 24px 12px 24px;
-
-  &.weave-drawer-header-dense {
-    min-height: calc(var(--appbar-height) - var(--appbar-height) / 4);
-    padding: 8px 24px 8px 24px;
-  }
-}
-
-.weave-drawer-fixed {
-  &.weave-drawer-mini.weave-drawer-clipped-always,
-  &.weave-drawer-persistent:not(.weave-drawer-clipped-never),
-  &.weave-drawer-responsive.weave-drawer-clipped-always,
-  &.weave-drawer-temporary.weave-drawer-clipped-always {
-    top: var(--appbar-height);
-    height: calc(100% - var(--appbar-height));
-
-    @media (max-width: $breakpoint-sm - 1px) and (orientation: landscape) {
-      top: calc(var(--appbar-height) - var(--appbar-height) / 4);
-      height: calc(
-        100% - calc(var(--appbar-height) - var(--appbar-height) / 4)
-      );
-    }
-
-    @media (max-width: $breakpoint-sm - 1px) and (orientation: portrait) {
-      top: calc(var(--appbar-height) - var(--appbar-height) / 8);
-      height: calc(
-        100% - calc(var(--appbar-height) - var(--appbar-height) / 8)
-      );
+    &--dense {
+      min-height: calc(var(--appbar-height) - var(--appbar-height) / 4);
+      padding: 8px 24px;
     }
   }
 
-  @each $breakpoint in map-keys($breakpoints) {
-    &.weave-drawer-mini.weave-drawer-clipped-docked.weave-drawer-#{$breakpoint},
-    &.weave-drawer-responsive.weave-drawer-clipped-docked.weave-drawer-#{$breakpoint} {
-      @media (min-width: map-get($breakpoints, $breakpoint)) {
-        top: var(--appbar-height);
-        height: calc(100% - var(--appbar-height));
+  &__overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--zindex-appbar) + 1);
+    cursor: pointer;
 
-        @media (max-width: $breakpoint-sm - 1px) and (orientation: landscape) {
-          top: calc(
-            var(--appbar-height) - var(--appbar-height) - var(--appbar-height) /
-              4
-          );
-          height: calc(
-            100% - var(--appbar-height) + var(--appbar-height) -
-              var(--appbar-height) / 4
-          );
+    // When the drawer is viewport-fixed, the overlay must also be fixed so
+    // it covers the whole screen rather than just the scroll container.
+    &--fixed {
+      position: fixed;
+    }
+
+    &--open {
+      @each $breakpoint in map.keys($breakpoints) {
+        &.weave-drawer__overlay--responsive.weave-drawer__overlay--#{$breakpoint} {
+          @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
+            display: block;
+
+            &.weave-drawer--initial {
+              display: none;
+            }
+          }
         }
 
-        @media (max-width: $breakpoint-sm - 1px) and (orientation: portrait) {
-          top: calc(var(--appbar-height) - var(--appbar-height) / 8);
-          height: calc(100% - var(--appbar-height) / 8);
-        }
-      }
-    }
-  }
-}
-
-.appbar-dense ~ .weave-drawer-fixed {
-  &.weave-drawer-mini:not(.weave-drawer-clipped-never),
-  &.weave-drawer-persistent:not(.weave-drawer-clipped-never),
-  &.weave-drawer-responsive.weave-drawer-clipped-always,
-  &.weave-drawer-temporary.weave-drawer-clipped-always {
-    top: calc(var(--appbar-height) - var(--appbar-height) / 4);
-    height: calc(100% - var(--appbar-height) + var(--appbar-height) / 4);
-  }
-
-  @each $breakpoint in map-keys($breakpoints) {
-    @media (min-width: map-get($breakpoints, $breakpoint)) {
-      &.weave-drawer-responsive.weave-drawer-clipped-docked.weave-drawer-#{$breakpoint} {
-        top: calc(var(--appbar-height) - var(--appbar-height) / 4);
-        height: calc(100% - var(--appbar-height) + var(--appbar-height) / 4);
-      }
-    }
-  }
-}
-
-.weave-drawer-overlay {
-  display: none;
-
-  &.weave-drawer-overlay--open {
-    @each $breakpoint in map-keys($breakpoints) {
-      &.weave-drawer-overlay-responsive.weave-drawer-overlay-#{$breakpoint} {
-        @media (max-width: map-get($breakpoints, $breakpoint) - 1px) {
-          display: block;
-
-          &.weave-drawer--initial {
-            display: none;
+        &.weave-drawer__overlay--mini.weave-drawer__overlay--#{$breakpoint} {
+          @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
+            display: block;
           }
         }
       }
 
-      &.weave-drawer-overlay-mini.weave-drawer-overlay-#{$breakpoint} {
-        @media (max-width: map-get($breakpoints, $breakpoint) - 1px) {
-          display: block;
-        }
+      &.weave-drawer__overlay--temporary {
+        display: block;
       }
-    }
-
-    &.weave-drawer-overlay-temporary {
-      display: block;
     }
   }
 }
 
-/*#region keyframes*/
-@keyframes drawer-slide-in-left {
+.weave-drawer--clip-appbar {
+  top: var(--appbar-height);
+  height: calc(100% - var(--appbar-height));
+}
+
+.weave-drawer--clip-fullheight {
+  --clip-mode: fullheight; // identity marker; no position offset applied
+}
+
+.weave-drawer--fixed.weave-drawer--clip-appbar {
+  @media (max-width: ($breakpoint-sm - 1px)) and (orientation: landscape) {
+    top: calc(var(--appbar-height) - var(--appbar-height) / 4);
+    height: calc(100% - calc(var(--appbar-height) - var(--appbar-height) / 4));
+  }
+
+  @media (max-width: ($breakpoint-sm - 1px)) and (orientation: portrait) {
+    top: calc(var(--appbar-height) - var(--appbar-height) / 8);
+    height: calc(100% - calc(var(--appbar-height) - var(--appbar-height) / 8));
+  }
+}
+
+.weave-appbar--dense ~ .weave-drawer--fixed.weave-drawer--clip-appbar {
+  top: calc(var(--appbar-height) - var(--appbar-height) / 4);
+  height: calc(100% - var(--appbar-height) + var(--appbar-height) / 4);
+}
+
+@keyframes weave-drawer-slide-in-left {
   from {
     left: calc(-1 * var(--drawer-width, var(--drawer-width-left)));
   }
 }
 
-@keyframes drawer-slide-out-left {
+@keyframes weave-drawer-slide-out-left {
   from {
     left: 0;
   }
 }
 
-@keyframes drawer-slide-in-right {
+@keyframes weave-drawer-slide-in-right {
   from {
     right: calc(-1 * var(--drawer-width, var(--drawer-width-right)));
   }
 }
 
-@keyframes drawer-slide-out-right {
+@keyframes weave-drawer-slide-out-right {
   from {
     right: 0;
   }
 }
 
-@keyframes drawer-slide-in-bottom {
+@keyframes weave-drawer-slide-in-bottom {
   from {
     bottom: calc(-1 * var(--drawer-height, var(--drawer-height-bottom)));
   }
 }
 
-@keyframes drawer-slide-out-bottom {
+@keyframes weave-drawer-slide-out-bottom {
   from {
     bottom: 0;
   }
 }
 
-@keyframes drawer-slide-in-top {
+@keyframes weave-drawer-slide-in-top {
   from {
     top: calc(-1 * var(--drawer-height, var(--drawer-height-top)));
   }
 }
 
-@keyframes drawer-slide-out-top {
+@keyframes weave-drawer-slide-out-top {
   from {
     top: 0;
   }
 }
-/*#endregion*/

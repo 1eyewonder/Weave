@@ -24,6 +24,7 @@
     <Compile Include="examples/AppBarExamples.fs" />
     <Compile Include="examples/SpacerExamples.fs" />
     <Compile Include="examples/DialogExamples.fs" />
+    <Compile Include="examples/DrawerExamples.fs" />
     <Compile Include="examples/IconsExamples.fs" />
     <Compile Include="examples/ListExamples.fs" />
     <Compile Include="examples/LinkExamples.fs" />

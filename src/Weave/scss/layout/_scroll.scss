@@ -2,12 +2,12 @@
   padding-right: 8px;
   overflow: hidden;
 
-  .layout {
-    .appbar {
+  .weave-layout {
+    .weave-appbar {
       padding-right: 8px;
     }
 
-    .main-content {
+    .weave-main-content {
       .weave-scroll-to-top {
         padding-right: 8px;
       }
@@ -23,12 +23,12 @@
   .weave-scroll-locked {
     padding-right: 17px; //the width of scroll-bar in firefox
 
-    .layout {
-      .appbar {
+    .weave-layout {
+      .weave-appbar {
         padding-right: 17px;
       }
 
-      .main-content {
+      .weave-main-content {
         .weave-scroll-to-top {
           padding-right: 17px;
         }
@@ -42,7 +42,7 @@
   cursor: pointer;
   z-index: 100;
 
-  &.visible {
+  &--visible {
     bottom: 16px;
     right: 16px;
     opacity: 1;
@@ -50,7 +50,7 @@
     flex: 1;
   }
 
-  &.hidden {
+  &--hidden {
     bottom: 16px;
     right: 16px;
     opacity: 0;

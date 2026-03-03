@@ -30,6 +30,7 @@ module ExamplesRouter =
     | DropdownExamples
     | ExpansionPanelExamples
     | DialogExamples
+    | DrawerExamples
     | IconsExamples
     | TabsExamples
     | ListExamples
@@ -55,6 +56,7 @@ module ExamplesRouter =
     | DropdownExamples -> "Dropdown"
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
+    | DrawerExamples -> "Drawer"
     | IconsExamples -> "Icons"
     | TabsExamples -> "Tabs"
     | ListExamples -> "List"
@@ -90,6 +92,7 @@ module ExamplesRouter =
     | DropdownExamples -> DropdownExamples.render ()
     | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
     | DialogExamples -> DialogExamples.render ()
+    | DrawerExamples -> DrawerExamples.render ()
     | IconsExamples -> IconsExamples.render ()
     | TabsExamples -> TabsExamples.render ()
     | ListExamples -> ListExamples.render ()
@@ -198,6 +201,7 @@ module ExamplesRouter =
               DropdownExamples
               ExpansionPanelExamples
               DialogExamples
+              DrawerExamples
               IconsExamples
               TabsExamples
               ListExamples

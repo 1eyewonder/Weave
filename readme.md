@@ -1,26 +1,58 @@
 # Weave
 
-
 <div align="center">
     <img src="./src/Weave/resources/weave-logo.png" alt="Weave Logo" width="400"/>
 </div>
 <div align="center">
     <i>Threading Logic. Fabricating UI.</i>
 </div>
+<br/>
 
-## Overview
+[Weave](https://1eyewonder.github.io/Weave) is a modern component library for building web applications in F# with [WebSharper](https://websharper.com/). It provides a growing set of reusable UI components, layout primitives, and styling utilities designed to reduce boilerplate and improve developer experience.
 
-Weave is a component library built around [WebSharper](https://websharper.com/) for building web applications in F#. It provides a set of UI components and utilities to streamline the development process, allowing developers to focus on application logic rather than boilerplate code.
+Weave is opinionated where it matters — consistent theming, ergonomic APIs, and structured styling — while remaining flexible enough to work seamlessly with native WebSharper constructs.
 
-⚠️ This project is under active development and just a playground for now. When it becomes more established, I can look into making proper releases and documentation.
+⚠️ Weave is currently in active development and serves as an experimental playground. APIs may change as the library evolves toward a more stable release.
 
-### Why Weave?
+## Vision
 
-When working in WebSharper, I have really missed having a component library similar to what I worked in the past with Blazor. [MudBlazor](https://mudblazor.com) was the one I was most familiar with and enjoyed using. A lot of the styling and component designs were inspired by MudBlazor, but reimagined for F# and WebSharper with some personal taste mixed in.
+WebSharper provides a powerful foundation for full-stack F# web development, but it lacks a cohesive, modern component ecosystem comparable to what exists in other frameworks.
 
-### Functional vs OOP
+Weave aims to fill that gap by providing:
 
-While partial application is one of my favorite features of F#, Weave components utilize classes in order to use optional parameters. Since UI components can quickly grow in complexity, this approach helps keep the codebase manageable while not creating an overwhelming number of functions for the end user.
+- A consistent, composable component model
+- Built-in theming support
+- Strong typing for styling and variants
+- Familiar patterns inspired by mature ecosystems
+- An API designed specifically for F# developers
+
+The long-term goal is to create a production-ready component library that feels natural in F#, not a direct port of patterns from other ecosystems.
+
+## Why Weave?
+
+While working in WebSharper, I found myself missing the ergonomics and completeness of component libraries available in other frameworks such as:
+
+- Clean component APIs
+- Minimal boiler plate
+- Rich theming support
+- Strong developer experience
+
+Weave draws inspiration from these principles, but reimagines them for:
+
+- F#
+- Functional-first thinking
+- WebSharper’s architecture
+- A more type-driven styling approach
+
+This is not a clone — it is a reinterpretation with an F# mindset.
+
+## Component Design Philosophy
+
+### Functional Language, Practical API
+
+F# encourages partial application and functional composition. However, UI components often require many optional parameters (events, styles, variants, configuration options).
+
+To avoid excessive function overloads and deeply nested parameter patterns, Weave components are currently implemented using classes with optional parameters.
 
 ```fsharp
 Button.Create(
@@ -29,43 +61,118 @@ Button.Create(
 )
 ```
 
-📓As I continue to play around with this library, I may try to add CEs to keep the API more "F-fsharpy"
+This approach provides:
 
-### F# Meets CSS
+- Clear discoverability via IntelliSense
+- Predictable component construction
+- A manageable API surface
+- Extensibility as components grow in complexity
 
-I am a CSS novice, hence me using this as a playground for my learning. In order to simplify styling, Weave has a multitude of wrappers around CSS in order have intellisense help me with discoverability for styling options. Nothing stops the user from using WebSharpers 'Attr.Style' and other helpers though.
+Future iterations may explore Computation Expressions (CEs) to provide a more idiomatic F# feel without sacrificing usability.
+
+### Strongly-Typed Styling
+
+Styling in Weave is designed to be:
+
+- Discoverable
+- Constrained
+- Composable
+- Type-safe where practical
+
+Rather than relying solely on raw strings for CSS classes, Weave provides discriminated unions and helpers that map directly to supported styling variants.
 
 ```fsharp
 Button.Create(
     text "Hello World!",
     onClick = (fun () -> ()),
     attrs = [
-        // cls: converts strings into WebSharper class attributes
-        cls [ 
-            // various DU based helpers to convert to CSS 
-            // classes based on what different components support
+        cls [
             Button.Variant.toClass Button.Variant.Outlined
             Button.Color.toClass BrandColor.Primary
-        ] 
+        ]
     ]
 )
 ```
 
-### Theming
+This approach:
 
-Weave is looking to have built in support for theming applications. Currently, there is support for light and dark themes. There is also the ability to configure the theme at [runtime](./src/Weave/Theming.fs)
+- Improves IntelliSense discoverability
+- Reduces invalid style combinations
+- Makes supported variants explicit
+- Keeps styling aligned with component intent
+
+Developers still retain full access to WebSharper’s native styling tools (Attr.Style, raw classes, etc.) when complete flexibility is required.
+
+## Theming System
+
+Weave includes built-in support for application theming.
+
+Current features:
+
+- Light theme
+- Dark theme
+- Runtime theme configuration
+- Centralized theme definition
+
+Theming configuration is defined in Theming.fs, allowing applications to override colors, spacing, and other design tokens.
+
+### Dark Theme
 
 <img src="./resources/dark-theme.png"/>
+
+### Light Theme
+
 <img src="./resources/light-theme.png"/>
 
-## Starting Development
+Current Status
 
-1. Open `weave.code-workspace` file and press the `Open workspace` in the bottom right corner. Install the recommended extensions.
-2. In your command line run:
-    - `./build.cmd init` or `./build.sh init` to install dependencies and build the project
-    - `dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj` to start the documentation site
-3. Open your browser and navigate to `http://localhost:5000`
+Weave is:
+
+- ✅ Functional
+- ⚠️ Experimental
+- 🚧 Evolving
+
+It is currently a playground for exploring:
+
+- F#-friendly component patterns
+- Strongly typed styling abstractions
+- Practical theming in WebSharper
+- API ergonomics in a functional-first ecosystem
+
+❗ Breaking changes are expected as design patterns mature.
+
+## Getting Started
+
+### Development Setup
+
+1. Open `weave.code-workspace`
+2. Install the recommended extensions
+3. Run:
+    ```bash
+    ./build.cmd init
+    ```
+    or
+    ```bash
+    ./build.sh init
+    ```
+
+4. Start the documentation site:
+
+```bash
+dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj
+```
+
+5. Navigate to `http://localhost:5000` to view the documentation and examples.
 
 ## Contributing
 
-I'm unsure of the people's interest in this project, but feel free to reach out to me on the F# discord or open issues/PRs here on GitHub if you have suggestions or want to contribute!
+Community interest will shape the future of Weave.
+
+You can:
+
+- Open issues
+- Submit pull requests
+- Share design ideas
+- Discuss on the F# Discord
+
+Even early feedback is valuable at this stage.

@@ -18,9 +18,59 @@ module Helpers =
   let divider () =
     Divider.Create(attrs = [ Margin.toClasses Margin.Vertical.small |> cls ])
 
+  /// Generates a URL-friendly slug from a title string
+  let private slugify (title: string) =
+    title.ToLower().Replace(" ", "-").Replace("'", "").Replace("`", "").Replace("(", "").Replace(")", "")
+
+  /// Section header with an anchor link for deep-linking
+  let private sectionHeader title =
+    let slug = slugify title
+
+    div [
+      attr.id slug
+      Margin.toClasses Margin.Bottom.extraSmall |> cls
+      Attr.Class "section-header"
+      cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+      Attr.Style "gap" "8px"
+    ] [
+      H4.Div(View.Const title)
+      a [
+        attr.href (sprintf "#%s" slug)
+        Attr.Class "anchor-link"
+        Attr.Style "text-decoration" "none"
+        Attr.Style "color" "var(--palette-primary)"
+        Attr.Style "font-size" "1.1em"
+        Attr.Style "font-weight" "bold"
+        Attr.Style "line-height" "1"
+      ] [ text "#" ]
+    ]
+
+  /// Page-level title (H1) with an anchor link
+  let pageTitle title =
+    let slug = slugify title
+
+    div [
+      attr.id slug
+      Margin.toClasses Margin.Bottom.extraSmall |> cls
+      Attr.Class "section-header"
+      cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+      Attr.Style "gap" "12px"
+    ] [
+      H1.Div(title)
+      a [
+        attr.href (sprintf "#%s" slug)
+        Attr.Class "anchor-link"
+        Attr.Style "text-decoration" "none"
+        Attr.Style "color" "var(--palette-primary)"
+        Attr.Style "font-size" "1.25em"
+        Attr.Style "font-weight" "bold"
+        Attr.Style "line-height" "1"
+      ] [ text "#" ]
+    ]
+
   let section title description content =
     div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-      div [ Margin.toClasses Margin.Bottom.extraSmall |> cls ] [ H4.Div(View.Const title) ]
+      sectionHeader title
 
       div [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ] [ description ]
 
@@ -36,7 +86,7 @@ module Helpers =
 
   let codeSampleSection title description (content: Doc) (linesOfCode: string) =
     div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-      div [ Margin.toClasses Margin.Bottom.extraSmall |> cls ] [ H4.Div(View.Const title) ]
+      sectionHeader title
 
       div [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ] [ description ]
 

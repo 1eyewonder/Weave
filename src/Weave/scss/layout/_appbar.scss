@@ -45,4 +45,11 @@
     left: 0;
     z-index: var(--zindex-appbar);
   }
+
+  // Buttons inside the AppBar should use the AppBar's text color (--palette-appbar-text),
+  // not --palette-text-primary, so they remain legible on any AppBar background.
+  .weave-button {
+    color: inherit;
+    --ripple-color: currentColor;
+  }
 }

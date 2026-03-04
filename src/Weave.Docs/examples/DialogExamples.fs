@@ -180,5 +180,6 @@ module DialogExamples =
         optionalDialogExample ()
         Helpers.divider ()
         positionDialogExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

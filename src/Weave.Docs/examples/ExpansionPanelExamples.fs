@@ -141,5 +141,6 @@ module ExpansionPanelExamples =
         color ()
         Helpers.divider ()
         highlightVariants ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

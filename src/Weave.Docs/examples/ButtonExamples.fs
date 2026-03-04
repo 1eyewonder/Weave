@@ -446,13 +446,15 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
               Button.CreateIcon(
                 Icon.Create(Icon.UiActions UiActions.Delete),
                 onClick = (fun () -> printfn "%s icon clicked" variantName),
+
                 attrs = [
                   Attr.Create "aria-label" "delete"
                   Button.Variant.toClass variant |> cl
                   Button.Size.toClass size |> cl
                   Button.Color.toClass BrandColor.Primary |> cl
                 ]
-              )
+              ),
+              xs = Grid.Width.create 4
             )
 
           btn Button.Variant.Outlined Button.Size.Small
@@ -465,7 +467,7 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
           btn Button.Variant.Text Button.Size.Medium
           btn Button.Variant.Text Button.Size.Large
         ],
-        spacing = Grid.GutterSpacing.create 2,
+        justify = JustifyContent.SpaceAround,
         attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
       )
 

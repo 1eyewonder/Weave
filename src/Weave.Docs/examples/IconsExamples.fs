@@ -539,5 +539,6 @@ module IconsExamples =
         referenceGoogleFonts ()
         Helpers.divider ()
         icons ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

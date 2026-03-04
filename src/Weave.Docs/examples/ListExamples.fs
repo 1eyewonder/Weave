@@ -544,5 +544,6 @@ Switch.Create(dense, displayText = View.Const "Dense", attrs = [ Switch.Color.to
         interactiveExample ()
         Helpers.divider ()
         denseExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

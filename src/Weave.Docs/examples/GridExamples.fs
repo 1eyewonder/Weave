@@ -357,5 +357,6 @@ module GridExamples =
         nestedGridExample ()
         Helpers.divider ()
         cardLayoutExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

@@ -140,5 +140,6 @@ module SwitchExamples =
         switchColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

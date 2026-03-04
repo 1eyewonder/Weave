@@ -146,5 +146,6 @@ module ContainerExamples =
         variantExamples ()
         Helpers.divider ()
         fixedWidthAndGuttersExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

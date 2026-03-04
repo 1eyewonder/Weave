@@ -596,5 +596,6 @@ DrawerContainer.Create(
         headerExample ()
         Helpers.divider ()
         clipModeExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

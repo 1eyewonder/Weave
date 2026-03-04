@@ -39,7 +39,7 @@ module ButtonGroupExamples =
           makeGroup ButtonGroup.Variant.Outlined
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.Center,
+        justify = JustifyContent.SpaceAround,
         attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
       )
 
@@ -116,7 +116,7 @@ ButtonGroup.Create(
           makeGroup ButtonGroup.Variant.Outlined
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.Center,
+        justify = JustifyContent.SpaceAround,
         attrs = [ cls [ AlignItems.toClass AlignItems.Start ] ]
       )
 
@@ -170,7 +170,7 @@ ButtonGroup.Create(
           makeGroup ButtonGroup.Size.Large BrandColor.Success
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.Center,
+        justify = JustifyContent.SpaceAround,
         attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
       )
 

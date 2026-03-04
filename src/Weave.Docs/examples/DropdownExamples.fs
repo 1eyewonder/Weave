@@ -466,5 +466,6 @@ module DropdownExamples =
         openOnExamples ()
         Helpers.divider ()
         disabledExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

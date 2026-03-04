@@ -578,5 +578,6 @@ Tooltip.Create(
         textTooltipExample ()
         Helpers.divider ()
         iconTooltipExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

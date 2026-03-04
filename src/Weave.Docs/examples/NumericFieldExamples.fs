@@ -570,5 +570,6 @@ NumericField.Create(
         customIconsExample ()
         Helpers.divider ()
         disabledExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

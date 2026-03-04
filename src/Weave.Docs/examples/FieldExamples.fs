@@ -813,5 +813,6 @@ Field.Create(
         disabledExample ()
         Helpers.divider ()
         typographyExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

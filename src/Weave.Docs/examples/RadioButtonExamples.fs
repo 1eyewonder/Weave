@@ -161,5 +161,6 @@ module RadioButtonExamples =
         radioColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

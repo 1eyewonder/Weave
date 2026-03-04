@@ -143,5 +143,6 @@ module CheckboxExamples =
         checkboxColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
-      ]
+      ],
+      maxWidth = Container.MaxWidth.Large
     )

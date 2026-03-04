@@ -361,9 +361,22 @@ type DrawerContainer =
   /// drawers open or close.
   /// </summary>
   /// <remarks>
-  /// The AppBar and main-content elements must be direct or nested children of
-  /// the container and must carry the <c>weave-appbar</c> /
-  /// <c>weave-main-content</c> class names for the push transitions to apply.
+  /// The AppBar and main-content elements must be <b>direct children</b> of
+  /// the <c>weave-drawer-container__main</c> slot rendered by this component.
+  /// Pass them as siblings via <c>Doc.Concat</c> (rather than wrapping them in
+  /// an extra <c>div</c>) so the push CSS selectors can reach them:
+  /// <code>
+  /// DrawerContainer.Create(
+  ///     mainContent = Doc.Concat [
+  ///         AppBar.Create(...)
+  ///         div [ cl "weave-main-content" ] [ content ]
+  ///     ], ...
+  /// )
+  /// </code>
+  /// Using a wrapper <c>div</c> will prevent the AppBar and main content from
+  /// being shifted when the drawer opens. Nested AppBars (e.g. inside example
+  /// previews) are intentionally not affected because they sit deeper in the
+  /// tree.
   /// Top and Bottom drawers are always overlay-only and therefore do not
   /// require a container; render them with <c>Drawer.Render</c> directly.
   /// </remarks>

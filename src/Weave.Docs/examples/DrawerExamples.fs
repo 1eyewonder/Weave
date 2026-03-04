@@ -119,7 +119,7 @@ module DrawerExamples =
       demoBox (
         DrawerContainer.Create(
           mainContent =
-            div [] [
+            Doc.Concat [
               AppBar.Create(
                 toolbar
                   "Temporary Drawer"
@@ -157,7 +157,7 @@ module DrawerExamples =
       """let isOpen = Var.Create false
 
 DrawerContainer.Create(
-    mainContent = div [] [
+    mainContent = Doc.Concat [
         AppBar.Create(toolbar "My App" openButton, position = AppBar.Position.Static)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
@@ -201,7 +201,7 @@ DrawerContainer.Create(
       demoBox (
         DrawerContainer.Create(
           mainContent =
-            div [] [
+            Doc.Concat [
               AppBar.Create(
                 toolbar "Persistent Drawer" toggleButton,
                 position = AppBar.Position.Static,
@@ -224,7 +224,7 @@ DrawerContainer.Create(
       """let isOpen = Var.Create false
 
 DrawerContainer.Create(
-    mainContent = div [] [
+    mainContent = Doc.Concat [
         AppBar.Create(toolbar "My App" toggleButton, position = AppBar.Position.Static)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
@@ -256,7 +256,7 @@ DrawerContainer.Create(
       demoBox (
         DrawerContainer.Create(
           mainContent =
-            div [] [
+            Doc.Concat [
               AppBar.Create(
                 toolbar "Responsive Drawer" toggleButton,
                 position = AppBar.Position.Static,
@@ -281,7 +281,7 @@ DrawerContainer.Create(
       """let isOpen = Var.Create false
 
 DrawerContainer.Create(
-    mainContent = div [] [
+    mainContent = Doc.Concat [
         AppBar.Create(...)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
@@ -331,7 +331,7 @@ DrawerContainer.Create(
       demoBox (
         DrawerContainer.Create(
           mainContent =
-            div [] [
+            Doc.Concat [
               AppBar.Create(
                 toolbar "Mini Drawer" controls,
                 position = AppBar.Position.Static,
@@ -365,7 +365,7 @@ DrawerContainer.Create(
 let hoverEnabled = Var.Create false
 
 DrawerContainer.Create(
-    mainContent = div [] [
+    mainContent = Doc.Concat [
         AppBar.Create(...)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
@@ -395,7 +395,7 @@ DrawerContainer.Create(
       demoBox (
         DrawerContainer.Create(
           mainContent =
-            div [] [
+            Doc.Concat [
               AppBar.Create(
                 toolbar
                   "Drawer with Header"
@@ -535,7 +535,7 @@ DrawerContainer.Create(
               // AppBar is inside mainContent; drawer extends the full container height.
               DrawerContainer.Create(
                 mainContent =
-                  div [] [
+                  Doc.Concat [
                     AppBar.Create(
                       toolbar "Clip Mode Demo" (div [] []),
                       position = AppBar.Position.Static,
@@ -567,7 +567,7 @@ DrawerContainer.Create(
 
 // FullHeight mode (default) — AppBar is inside mainContent, drawer covers full height:
 DrawerContainer.Create(
-    mainContent = div [] [ AppBar.Create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
+    mainContent = Doc.Concat [ AppBar.Create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
     leftDrawer = Drawer.Create(navList, isOpen.View, variant = Drawer.Variant.Persistent,
                                clipMode = Drawer.ClipMode.FullHeight)
 )"""

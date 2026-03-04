@@ -2,66 +2,66 @@
 @import "../abstracts/variables";
 
 @mixin _push-left-full {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-left: var(--drawer-width-left);
     width: calc(100% - var(--drawer-width-left));
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-left: var(--drawer-width-left);
   }
 }
 
 @mixin _push-right-full {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-right: var(--drawer-width-right);
     width: calc(100% - var(--drawer-width-right));
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-right: var(--drawer-width-right);
   }
 }
 
 @mixin _push-both-full {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-left: var(--drawer-width-left);
     margin-right: var(--drawer-width-right);
     width: calc(100% - var(--drawer-width-left) - var(--drawer-width-right));
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-left: var(--drawer-width-left);
     margin-right: var(--drawer-width-right);
   }
 }
 
 @mixin _push-left-mini {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-left: var(--drawer-width-mini-left);
     width: calc(100% - var(--drawer-width-mini-left));
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-left: var(--drawer-width-mini-left);
   }
 }
 
 @mixin _push-right-mini {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-right: var(--drawer-width-mini-right);
     width: calc(100% - var(--drawer-width-mini-right));
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-right: var(--drawer-width-mini-right);
   }
 }
 
 @mixin _push-both-mini {
-  .weave-appbar {
+  > .weave-drawer-container__main > .weave-appbar {
     margin-left: var(--drawer-width-mini-left);
     margin-right: var(--drawer-width-mini-right);
     width: calc(
       100% - var(--drawer-width-mini-left) - var(--drawer-width-mini-right)
     );
   }
-  .weave-main-content {
+  > .weave-drawer-container__main > .weave-main-content {
     margin-left: var(--drawer-width-mini-left);
     margin-right: var(--drawer-width-mini-right);
   }
@@ -118,7 +118,7 @@
           &.weave-drawer-container--side-left:not(
               .weave-drawer-container--side-right
             ) {
-            .weave-appbar {
+            > .weave-drawer-container__main > .weave-appbar {
               margin-left: var(--drawer-width-left);
               width: calc(100% - var(--drawer-width-left));
             }
@@ -126,13 +126,13 @@
           &.weave-drawer-container--side-right:not(
               .weave-drawer-container--side-left
             ) {
-            .weave-appbar {
+            > .weave-drawer-container__main > .weave-appbar {
               margin-right: var(--drawer-width-right);
               width: calc(100% - var(--drawer-width-right));
             }
           }
           &.weave-drawer-container--side-left.weave-drawer-container--side-right {
-            .weave-appbar {
+            > .weave-drawer-container__main > .weave-appbar {
               margin-left: var(--drawer-width-left);
               margin-right: var(--drawer-width-right);
               width: calc(
@@ -144,17 +144,17 @@
 
         // Main content is driven by component state (no media-query guard needed)
         &.weave-drawer-container--side-left {
-          .weave-main-content {
+          > .weave-drawer-container__main > .weave-main-content {
             margin-left: var(--drawer-width-left);
           }
         }
         &.weave-drawer-container--side-right {
-          .weave-main-content {
+          > .weave-drawer-container__main > .weave-main-content {
             margin-right: var(--drawer-width-right);
           }
         }
         &.weave-drawer-container--side-left.weave-drawer-container--side-right {
-          .weave-main-content {
+          > .weave-drawer-container__main > .weave-main-content {
             margin-left: var(--drawer-width-left);
             margin-right: var(--drawer-width-right);
           }
@@ -185,6 +185,7 @@
     flex: 1;
     min-width: 0;
     overflow: auto;
+    scroll-behavior: smooth;
     // Margin transitions for persistent/mini drawer push behaviour
     transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   }

@@ -1106,7 +1106,7 @@ module ExamplesRouter =
     | TabsExamples -> TabsExamples.render ()
     | ListExamples -> ListExamples.render ()
     | LinkExamples -> LinkExamples.render ()
-    | DividerExamples -> Doc.Empty // TODO: Create DividerExamples
+    | DividerExamples -> DividerExamples.render ()
 
   /// GitHub SVG logo for the AppBar link
   let private githubSvg =

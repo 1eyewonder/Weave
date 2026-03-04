@@ -12,7 +12,7 @@
 
 Weave is opinionated where it matters — consistent theming, ergonomic APIs, and structured styling — while remaining flexible enough to work seamlessly with native WebSharper constructs.
 
-⚠️ Weave is currently in active development and serves as an experimental playground. APIs may change as the library evolves toward a more stable release.
+⚠️ Weave is currently in active development and serves as an experimental playground. No packages exist as of yet.
 
 ## Vision
 

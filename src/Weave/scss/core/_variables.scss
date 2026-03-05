@@ -2,7 +2,6 @@
 
 $font-family-base: "Fira Sans", sans-serif, monospace;
 $font-family-heading: $font-family-base;
-$typography-letterspacing-base: 0.01em;
 
 :root {
   --weave-font-family: #{$font-family-base};
@@ -13,7 +12,6 @@ $typography-letterspacing-base: 0.01em;
   --palette-border-opacity: 0.8;
   --weave-zindex-dialog: 10;
 
-  // --- Layout / Drawer dimensions ---
   --appbar-height: 64px;
   --zindex-appbar: 1100;
   --zindex-drawer: 1200;
@@ -25,94 +23,117 @@ $typography-letterspacing-base: 0.01em;
   --drawer-height-top: 256px;
   --drawer-height-bottom: 256px;
 
-  --typography-h1-size: clamp(3.875rem, 6vw, 4rem);
+  // ---------------------------------------------------------------------------
+  // Typography Scale — Major Third (1.25) ratio
+  //
+  // Headings use clamp() with calc(rem + vw) preferred values for smooth fluid
+  // scaling between mobile (~320 px) and desktop (~1440 px) viewports.
+  // Body / UI text stays at fixed rem values so it never drops below the 16 px
+  // accessibility floor for primary reading text.
+  //
+  // Weights graduate from light (300) at large display sizes → regular (400) →
+  // medium (500) at small / UI sizes, creating natural visual hierarchy.
+  //
+  // Letter-spacing follows optical best practice: tighter (negative) for large
+  // headlines, neutral in the middle, and progressively wider for smaller and
+  // uppercase styles.
+  // ---------------------------------------------------------------------------
+
+  --typography-h1-size: clamp(2.25rem, calc(1.8rem + 2.15vw), 3.75rem);
   --typography-h1-family: #{$font-family-heading};
-  --typography-h1-weight: 500;
-  --typography-h1-lineheight: 1.12;
-  --typography-h1-letterspacing: #{$typography-letterspacing-base};
+  --typography-h1-weight: 300;
+  --typography-h1-lineheight: 1.15;
+  --typography-h1-letterspacing: -0.015em;
   --typography-h1-text-transform: none;
 
-  --typography-h2-size: clamp(3rem, 5vw, 3.125rem);
+  --typography-h2-size: clamp(1.875rem, calc(1.5rem + 1.6vw), 3rem);
   --typography-h2-family: #{$font-family-heading};
-  --typography-h2-weight: 500;
-  --typography-h2-lineheight: 1.15;
-  --typography-h2-letterspacing: #{$typography-letterspacing-base};
+  --typography-h2-weight: 300;
+  --typography-h2-lineheight: 1.2;
+  --typography-h2-letterspacing: -0.005em;
   --typography-h2-text-transform: none;
 
-  --typography-h3-size: clamp(2.5rem, 4vw, 2.625rem);
+  --typography-h3-size: clamp(1.625rem, calc(1.35rem + 1.25vw), 2.5rem);
   --typography-h3-family: #{$font-family-heading};
-  --typography-h3-weight: 500;
-  --typography-h3-lineheight: 1.2;
-  --typography-h3-letterspacing: #{$typography-letterspacing-base};
+  --typography-h3-weight: 400;
+  --typography-h3-lineheight: 1.25;
+  --typography-h3-letterspacing: 0em;
   --typography-h3-text-transform: none;
 
-  --typography-h4-size: clamp(2rem, 3vw, 2.125rem);
+  --typography-h4-size: clamp(1.375rem, calc(1.15rem + 0.9vw), 2rem);
   --typography-h4-family: #{$font-family-heading};
-  --typography-h4-weight: 500;
-  --typography-h4-lineheight: 1.25;
-  --typography-h4-letterspacing: #{$typography-letterspacing-base};
+  --typography-h4-weight: 400;
+  --typography-h4-lineheight: 1.3;
+  --typography-h4-letterspacing: 0.007em;
   --typography-h4-text-transform: none;
 
-  --typography-h5-size: clamp(1.75rem, 2.5vw, 1.875rem);
+  --typography-h5-size: clamp(1.125rem, calc(1rem + 0.55vw), 1.5rem);
   --typography-h5-family: #{$font-family-heading};
-  --typography-h5-weight: 500;
-  --typography-h5-lineheight: 1.3;
-  --typography-h5-letterspacing: #{$typography-letterspacing-base};
+  --typography-h5-weight: 400;
+  --typography-h5-lineheight: 1.35;
+  --typography-h5-letterspacing: 0em;
   --typography-h5-text-transform: none;
 
-  --typography-h6-size: clamp(1.5rem, 2vw, 1.625rem);
+  --typography-h6-size: clamp(1rem, calc(0.9rem + 0.35vw), 1.25rem);
   --typography-h6-family: #{$font-family-heading};
   --typography-h6-weight: 500;
-  --typography-h6-lineheight: 1.35;
-  --typography-h6-letterspacing: #{$typography-letterspacing-base};
+  --typography-h6-lineheight: 1.4;
+  --typography-h6-letterspacing: 0.008em;
   --typography-h6-text-transform: none;
 
-  --typography-subtitle1-size: clamp(1.125rem, 2.25vw, 1.25rem);
+  --typography-subtitle1-size: clamp(1rem, calc(0.95rem + 0.18vw), 1.125rem);
   --typography-subtitle1-family: #{$font-family-base};
-  --typography-subtitle1-weight: 500;
-  --typography-subtitle1-lineheight: 1.4;
-  --typography-subtitle1-letterspacing: #{$typography-letterspacing-base};
+  --typography-subtitle1-weight: 400;
+  --typography-subtitle1-lineheight: 1.5;
+  --typography-subtitle1-letterspacing: 0.009em;
   --typography-subtitle1-text-transform: none;
 
-  --typography-subtitle2-size: clamp(1rem, 2vw, 1.125rem);
+  --typography-subtitle2-size: 0.875rem;
   --typography-subtitle2-family: #{$font-family-base};
   --typography-subtitle2-weight: 500;
-  --typography-subtitle2-lineheight: 1.4;
-  --typography-subtitle2-letterspacing: #{$typography-letterspacing-base};
+  --typography-subtitle2-lineheight: 1.5;
+  --typography-subtitle2-letterspacing: 0.007em;
   --typography-subtitle2-text-transform: none;
 
-  --typography-body1-size: clamp(1rem, 2vw, 1.125rem);
+  --typography-body1-size: 1rem;
   --typography-body1-family: #{$font-family-base};
-  --typography-body1-weight: 500;
-  --typography-body1-lineheight: 1.5;
-  --typography-body1-letterspacing: #{$typography-letterspacing-base};
+  --typography-body1-weight: 400;
+  --typography-body1-lineheight: 1.6;
+  --typography-body1-letterspacing: 0.01em;
   --typography-body1-text-transform: none;
 
-  --typography-body2-size: clamp(0.875rem, 1.75vw, 1rem);
+  --typography-body2-size: 0.875rem;
   --typography-body2-family: #{$font-family-base};
-  --typography-body2-weight: 500;
+  --typography-body2-weight: 400;
   --typography-body2-lineheight: 1.5;
-  --typography-body2-letterspacing: #{$typography-letterspacing-base};
+  --typography-body2-letterspacing: 0.011em;
   --typography-body2-text-transform: none;
 
-  --typography-button-size: clamp(0.875rem, 1.75vw, 1rem);
+  --typography-button-size: 0.875rem;
   --typography-button-family: #{$font-family-base};
   --typography-button-weight: 500;
-  --typography-button-lineheight: 1.5;
-  --typography-button-letterspacing: #{$typography-letterspacing-base};
+  --typography-button-lineheight: 1.75;
+  --typography-button-letterspacing: 0.03em;
   --typography-button-text-transform: uppercase;
 
-  --typography-caption-size: clamp(0.875rem, 1.75vw, 1rem);
+  --typography-caption-size: 0.75rem;
   --typography-caption-family: #{$font-family-base};
-  --typography-caption-weight: 500;
-  --typography-caption-lineheight: 1.4;
-  --typography-caption-letterspacing: #{$typography-letterspacing-base};
+  --typography-caption-weight: 400;
+  --typography-caption-lineheight: 1.66;
+  --typography-caption-letterspacing: 0.03em;
   --typography-caption-text-transform: none;
 
-  --typography-overline-size: clamp(0.875rem, 1.75vw, 1rem);
+  --typography-overline-size: 0.75rem;
   --typography-overline-family: #{$font-family-base};
   --typography-overline-weight: 500;
-  --typography-overline-lineheight: 1.5;
-  --typography-overline-letterspacing: #{$typography-letterspacing-base};
+  --typography-overline-lineheight: 1.75;
+  --typography-overline-letterspacing: 0.1em;
   --typography-overline-text-transform: uppercase;
+
+  --typography-default-family: #{$font-family-base};
+  --typography-default-size: 1rem;
+  --typography-default-weight: 400;
+  --typography-default-lineheight: 1.6;
+  --typography-default-letterspacing: 0.01em;
+  --typography-default-text-transform: none;
 }

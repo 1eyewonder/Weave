@@ -30,10 +30,16 @@ $typography-types: (
 }
 
 .weave-typography--sr-only {
+  position: absolute;
   width: 1px;
   height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .weave-typography--align-inherit {
@@ -75,7 +81,7 @@ $typography-types: (
 }
 
 .weave-typography--paragraph {
-  margin-bottom: 16px;
+  margin-bottom: 1em;
 }
 
 // Color modifiers

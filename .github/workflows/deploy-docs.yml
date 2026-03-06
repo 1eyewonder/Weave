@@ -9,35 +9,12 @@ permissions:
   pages: write
   id-token: write
   contents: read
-  security-events: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: "10.x"
-
-      - name: Restore tools
-        run: dotnet tool restore
-
-      - name: Analyze
-        run: ./build.sh Analyze
-        continue-on-error: true
-
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: analysisreports
-        continue-on-error: true
-
   deploy:
     runs-on: ubuntu-latest
     environment:

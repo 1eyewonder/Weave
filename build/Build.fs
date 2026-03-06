@@ -142,6 +142,16 @@ let (==>!) = hardDependency
 let softDependency x y = x ?=> y |> ignore
 let (?=>!) = softDependency
 
+let runTests _ =
+  let setParams (defaults: DotNet.TestOptions) = {
+    defaults with
+        NoBuild = true
+        NoRestore = true
+        Configuration = DotNet.BuildConfiguration.fromString configuration
+  }
+
+  !!testsGlob |> Seq.iter (DotNet.test setParams)
+
 let buildDocs _ =
   Yarn.exec "build:css" id
 
@@ -165,24 +175,26 @@ let initTargets () =
   Target.create "YarnInstall" yarnInstall
   Target.create "CheckFormat" checkFormatCode
   Target.create "Analyze" analyze
+  Target.create "RunTests" runTests
   Target.create "BuildDocs" buildDocs
   Target.create "Init" ignore
 
   "Clean" ?=>! "Restore"
-
-  "Restore" ?=>! "Build"
   "Restore" ?=>! "YarnInstall"
+
+  "Restore" ==>! "Build"
+  "YarnInstall" ==>! "Build"
+  "Build" ==>! "RunTests"
+  "RunTests" ==>! "BuildDocs"
+
   "Restore" ==>! "Analyze"
   "Restore" ==>! "CheckFormat"
 
-  "YarnInstall" ?=>! "Build"
-
+  // local dev convenience
   "Clean" ?=>! "Init"
   "Restore" ==>! "Init"
   "YarnInstall" ==>! "Init"
   "Build" ==>! "Init"
-
-  "Init" ==>! "BuildDocs"
 
 [<EntryPoint>]
 let main argv =

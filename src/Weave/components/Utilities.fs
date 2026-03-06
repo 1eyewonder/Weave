@@ -163,7 +163,7 @@ module on =
   /// For input types, stick with on.clickView since these inputs have native toggle semantics tied to the click event.
   /// </remarks>
   let clickTapView (view: View<'T>) (handler: Dom.Element -> Dom.Event -> 'T -> unit) =
-    let current: ref<Option<'T>> = ref None
+    let current: 'T option ref = ref None
 
     Attr.Concat [
       on.afterRender (fun _ -> view |> View.Sink(fun v -> current.Value <- Some v))

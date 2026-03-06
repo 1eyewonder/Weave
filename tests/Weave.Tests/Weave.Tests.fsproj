@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Weave\Weave.fsproj" />
+    <Compile Include="ButtonTests.fs" />
+    <Compile Include="ButtonGroupTests.fs" />
+    <Compile Include="CheckboxTests.fs" />
+    <Compile Include="SwitchTests.fs" />
+    <Compile Include="RadioButtonTests.fs" />
+    <Compile Include="TypographyTests.fs" />
+    <Compile Include="DividerTests.fs" />
+    <Compile Include="GridTests.fs" />
+    <Compile Include="TabsTests.fs" />
+    <Compile Include="DropdownTests.fs" />
+    <Compile Include="LinkTests.fs" />
+  </ItemGroup>
+
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+
+</Project>

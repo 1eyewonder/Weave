@@ -72,8 +72,7 @@ type Link =
       | Some icon -> Html.span [ cl Css.``weave-link__end-icon`` ] [ icon ]
       | None -> Doc.Empty
 
-    let textLabel =
-      Html.span [ cl Css.``weave-link__text`` ] [ innerContents ]
+    let textLabel = Html.span [ cl Css.``weave-link__text`` ] [ innerContents ]
 
     a [
       cl Css.``weave-link``
@@ -94,13 +93,8 @@ type Link =
   /// Creates a link containing only an icon — no text label and no underline.
   /// </summary>
   static member CreateIcon
-    (
-      icon: Doc,
-      ?href: string,
-      ?enabled: View<bool>,
-      ?onClick: unit -> unit,
-      ?attrs: Attr list
-    ) =
+    (icon: Doc, ?href: string, ?enabled: View<bool>, ?onClick: unit -> unit, ?attrs: Attr list)
+    =
 
     let href = defaultArg href "#"
     let enabled = defaultArg enabled (View.Const true)

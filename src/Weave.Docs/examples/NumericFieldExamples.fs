@@ -182,7 +182,7 @@ NumericField.Create(
               value.View
               |> Doc.BindView(fun v ->
                 Body2.Div(
-                  $"Current value: {v}",
+                  $"Current value: %i{v}",
                   attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
                 ))
             ],
@@ -207,7 +207,7 @@ NumericField.Create(
                floatVal.View
                |> Doc.BindView(fun v ->
                  Body2.Div(
-                   $"Current value: {v}",
+                   $"Current value: %f{v}",
                    attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
                  ))
              ]),

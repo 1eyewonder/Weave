@@ -81,7 +81,7 @@ type Dropdown =
   static member Create
     (
       buttonContents: Doc,
-      items: seq<Doc>,
+      items: Doc seq,
       ?isOpen: Var<bool>,
       ?openOn: View<OpenOn>,
       ?anchorOrigin: View<AnchorOrigin>,

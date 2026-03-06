@@ -200,22 +200,28 @@ module ScrollListener =
   let trackSections (sectionSelector: string) (threshold: float) (onSection: string -> unit) : Attr =
     on.afterRender (fun el ->
       let mutable ticking = false
-      el.AddEventListener("scroll", fun (_: Dom.Event) ->
-        if not ticking then
-          ticking <- true
-          JS.Window?requestAnimationFrame(fun _ ->
-            ticking <- false
-            let headers = JS.Document.QuerySelectorAll sectionSelector
-            let mTop = el.GetBoundingClientRect().Top
-            let mutable bestId = ""
-            let mutable bestRelTop = -1.0e10
-            for i in 0 .. headers.Length - 1 do
-              let h = As<Dom.Element>(headers.Item i)
-              let relTop = h.GetBoundingClientRect().Top - mTop
-              if relTop <= threshold && relTop > bestRelTop then
-                bestRelTop <- relTop
-                bestId <- h.Id
-            onSection bestId
-          ) |> ignore
-      )
-    )
+
+      el.AddEventListener(
+        "scroll",
+        fun (_: Dom.Event) ->
+          if not ticking then
+            ticking <- true
+
+            JS.Window?requestAnimationFrame(fun _ ->
+              ticking <- false
+              let headers = JS.Document.QuerySelectorAll sectionSelector
+              let mTop = el.GetBoundingClientRect().Top
+              let mutable bestId = ""
+              let mutable bestRelTop = -1.0e10
+
+              for i in 0 .. headers.Length - 1 do
+                let h = As<Dom.Element>(headers.Item i)
+                let relTop = h.GetBoundingClientRect().Top - mTop
+
+                if relTop <= threshold && relTop > bestRelTop then
+                  bestRelTop <- relTop
+                  bestId <- h.Id
+
+              onSection bestId)
+            |> ignore
+      ))

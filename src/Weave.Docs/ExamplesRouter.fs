@@ -95,7 +95,87 @@ module ExamplesRouter =
     | "Divider" -> Some DividerExamples
     | _ -> None
 
-  /// Returns a static CSS mini-illustration for a component page card.
+  let private pageToHash page =
+    match page with
+    | Home -> ""
+    | AppBarExamples -> "#app-bar"
+    | SpacerExamples -> "#spacer"
+    | ButtonExamples -> "#button"
+    | ButtonGroupExamples -> "#button-group"
+    | ButtonMenuExamples -> "#button-menu"
+    | TypographyExamples -> "#typography"
+    | TooltipExamples -> "#tooltip"
+    | GridExamples -> "#grid"
+    | CheckboxExamples -> "#checkbox"
+    | RadioButtonExamples -> "#radio-button"
+    | SwitchExamples -> "#switch"
+    | ContainerExamples -> "#container"
+    | FieldExamples -> "#field"
+    | NumericFieldExamples -> "#numeric-field"
+    | DropdownExamples -> "#dropdown"
+    | ExpansionPanelExamples -> "#expansion-panel"
+    | DialogExamples -> "#dialog"
+    | DrawerExamples -> "#drawer"
+    | IconsExamples -> "#icons"
+    | TabsExamples -> "#tabs"
+    | ListExamples -> "#list"
+    | LinkExamples -> "#link"
+    | DividerExamples -> "#divider"
+
+  let private hashToPage hash =
+    match hash with
+    | s when String.length s = 0 -> Some Home
+    | "#home" -> Some Home
+    | "#app-bar" -> Some AppBarExamples
+    | "#spacer" -> Some SpacerExamples
+    | "#button" -> Some ButtonExamples
+    | "#button-group" -> Some ButtonGroupExamples
+    | "#button-menu" -> Some ButtonMenuExamples
+    | "#typography" -> Some TypographyExamples
+    | "#tooltip" -> Some TooltipExamples
+    | "#grid" -> Some GridExamples
+    | "#checkbox" -> Some CheckboxExamples
+    | "#radio-button" -> Some RadioButtonExamples
+    | "#switch" -> Some SwitchExamples
+    | "#container" -> Some ContainerExamples
+    | "#field" -> Some FieldExamples
+    | "#numeric-field" -> Some NumericFieldExamples
+    | "#dropdown" -> Some DropdownExamples
+    | "#expansion-panel" -> Some ExpansionPanelExamples
+    | "#dialog" -> Some DialogExamples
+    | "#drawer" -> Some DrawerExamples
+    | "#icons" -> Some IconsExamples
+    | "#tabs" -> Some TabsExamples
+    | "#list" -> Some ListExamples
+    | "#link" -> Some LinkExamples
+    | "#divider" -> Some DividerExamples
+    | _ -> None
+
+  [<Inline "window.location.hash">]
+  let private getLocationHash () = X<string>
+
+  [<Inline "window.location.hash = $hash">]
+  let private setLocationHash (hash: string) = X<unit>
+
+  [<Inline "window.addEventListener('hashchange', function() { $callback(window.location.hash); })">]
+  let private onHashChange (callback: string -> unit) = X<unit>
+
+  /// Update the URL without adding a browser history entry (won't fire hashchange)
+  [<Inline "history.replaceState(null, '', $hash)">]
+  let private replaceStateHash (hash: string) = X<unit>
+
+  /// Navigate to the root URL, removing the hash entirely (creates a history entry)
+  [<Inline "history.pushState(null, '', location.pathname + location.search)">]
+  let private clearHash () = X<unit>
+
+  /// Split a hash string on the first "/" — returns a 1- or 2-element array
+  [<Inline "$s.split('/')">]
+  let private splitHashParts (s: string) = X<string[]>
+
+  /// Remove a leading "#" character
+  [<Inline "$s.substring(1)">]
+  let private stripHash (s: string) = X<string>
+
   let private previewFor page : Doc =
     let cp children = div [ cl "cp" ] children
 
@@ -1008,7 +1088,6 @@ module ExamplesRouter =
             )
           ]
 
-          // Category cards
           let categorySection (title: string) (items: (string * Page) list) =
             div [ Margin.toClasses Margin.Bottom.medium |> cls ] [
               H5.Div(title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
@@ -1108,25 +1187,79 @@ module ExamplesRouter =
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
 
-  /// GitHub SVG logo for the AppBar link
   let private githubSvg =
     Doc.Verbatim
       """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>"""
 
-  /// Scroll the main content area to the top
-  [<Inline "var el = document.querySelector('.weave-drawer-container__main'); if(el) el.scrollTop = 0;">]
-  let private scrollMainToTop () = X<unit>
-
   let render () =
-    let selectedNav = Var.Create<string option>(Some "Home")
+    let initialHash = getLocationHash ()
+    let initialParts = splitHashParts initialHash
+    let initialPageHash = initialParts.[0]
+
+    let initialSection =
+      if initialParts.Length > 1 then
+        Some initialParts.[1]
+      else
+        None
+
+    let initialPage = initialPageHash |> hashToPage |> Option.defaultValue Home
+
+    // Stored reference to the .weave-main-content element, set via on.afterRender
+    let mainEl = Var.Create<Dom.Element option> None
+
+    let scrollMainToTop () =
+      mainEl.Value |> Option.iter (fun el -> el?scrollTop <- 0)
+
+    let scrollToSectionAfterDelay (id: string) (ms: int) =
+      JS.Window?setTimeout(
+        (fun () ->
+          let target = JS.Document.GetElementById id
+
+          if not (isNull target) then
+            mainEl.Value
+            |> Option.iter (fun m ->
+              m?scrollTop <-
+                As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
+                - m.GetBoundingClientRect().Top
+                - 16.0)),
+        ms
+      )
+      |> ignore
+
+    // Retries every 50ms (up to ~2s) until the target element exists in the DOM,
+    // then scrolls to it. Needed when the page content renders asynchronously.
+    let scrollToSectionWhenReady (id: string) =
+      let maxAttempts = 40
+      let interval = 50
+      let mutable attempt = 0
+
+      let rec tryScroll () =
+        attempt <- attempt + 1
+        let target = JS.Document.GetElementById id
+
+        if not (isNull target) then
+          mainEl.Value
+          |> Option.iter (fun m ->
+            m?scrollTop <-
+              As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
+              - m.GetBoundingClientRect().Top
+              - 16.0)
+        elif attempt < maxAttempts then
+          JS.Window?setTimeout(tryScroll, interval) |> ignore
+
+      tryScroll ()
+
+    let selectedNav = Var.Create<string option>(Some(pageToString initialPage))
     let drawerOpen = Var.Create false
 
-    // Derive current page from nav selection
+    let navigateTo (page: Page) =
+      setLocationHash (pageToHash page)
+      Var.Set selectedNav (Some(pageToString page))
+
     let currentPageView =
       selectedNav.View
       |> View.Map(fun sel -> sel |> Option.bind stringToPage |> Option.defaultValue Home)
 
-    // Side effects on navigation: scroll to top + close drawer on mobile
     let navEffects =
       selectedNav.View
       |> Doc.sink (fun _ ->
@@ -1135,18 +1268,47 @@ module ExamplesRouter =
         if BrowserUtils.windowWidth.Value < 960 then
           Var.Set drawerOpen false)
 
-    // Helper: navigate to a page by updating the nav selection
-    let navigateTo (page: Page) =
-      Var.Set selectedNav (Some(pageToString page))
+    onHashChange (fun hash ->
+      let parts = splitHashParts hash
+      let pagePart = parts.[0]
+      let sectionPart = if parts.Length > 1 then Some parts.[1] else None
 
-    // ── Custom sidebar navigation ──
+      match hashToPage pagePart with
+      | Some page ->
+        let currentName = selectedNav.Value |> Option.defaultValue ""
+        let isPageChange = pageToString page <> currentName
+
+        if isPageChange then
+          Var.Set selectedNav (Some(pageToString page))
+
+        // If the page changed, the new content renders async — poll until element exists.
+        // If we're already on the page, the element is present so a short delay is fine.
+        sectionPart
+        |> Option.iter (fun id ->
+          if isPageChange then
+            scrollToSectionWhenReady id
+          else
+            scrollToSectionAfterDelay id 50)
+      | None ->
+        // Bare section slug from an in-page anchor link (e.g. href="#variants")
+        // Rewrite the history entry to the combined "#page/section" format
+        let sectionSlug = stripHash hash
+
+        let pageHash =
+          selectedNav.Value
+          |> Option.bind stringToPage
+          |> Option.map pageToHash
+          |> Option.defaultValue "#home"
+
+        replaceStateHash (pageHash + "/" + sectionSlug)
+        scrollToSectionAfterDelay sectionSlug 0)
+
     let layoutExpanded = Var.Create true
     let navSectionExpanded = Var.Create true
     let inputsExpanded = Var.Create true
     let dataExpanded = Var.Create true
     let feedbackExpanded = Var.Create true
 
-    // A single selectable leaf item
     let navLeafItem (label: string) =
       div [
         cls [
@@ -1160,10 +1322,9 @@ module ExamplesRouter =
         Attr.Style "margin" "1px 8px"
         Attr.Class "weave-nav-leaf"
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
-        on.click (fun _ _ -> Var.Set selectedNav (Some label))
+        on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
       ] [ Body2.Div(label) ]
 
-    // A collapsible group with a category icon and Material Symbols chevron
     let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) items =
       div [] [
         div [
@@ -1196,7 +1357,6 @@ module ExamplesRouter =
 
     let navList =
       div [ cls [ yield! Padding.toClasses Padding.Vertical.extraSmall ] ] [
-        // Home item (with icon)
         div [
           cls [
             Flex.Flex.allSizes
@@ -1212,7 +1372,7 @@ module ExamplesRouter =
           Attr.DynamicClassPred
             "weave-nav-item--active"
             (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
-          on.click (fun _ _ -> Var.Set selectedNav (Some "Home"))
+          on.click (fun _ _ -> navigateTo Home)
         ] [
           Icon.Create(Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
           Body2.Div("Home")
@@ -1259,7 +1419,6 @@ module ExamplesRouter =
         ]
       ]
 
-    // ── AppBar content ──
     let appBarContent =
       div [
         cls [
@@ -1269,14 +1428,12 @@ module ExamplesRouter =
           yield! Padding.toClasses Padding.Vertical.extraSmall
         ]
       ] [
-        // Hamburger menu toggle
         Button.CreateIcon(
           Icon.Create(Icon.UiActions UiActions.Menu),
           onClick = (fun () -> Var.Set drawerOpen (not drawerOpen.Value)),
           attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
         )
 
-        // Logo + title
         div [
           cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
           Attr.Style "gap" "8px"
@@ -1286,7 +1443,6 @@ module ExamplesRouter =
 
         Spacer.Create()
 
-        // GitHub link
         a [
           attr.href "https://github.com/1eyewonder/Weave"
           attr.target "_blank"
@@ -1296,7 +1452,6 @@ module ExamplesRouter =
           cls [ yield! Padding.toClasses Padding.Horizontal.extraSmall ]
         ] [ githubSvg ]
 
-        // Theme toggle
         Button.CreateIcon(
           Theme.current.View
           |> Doc.BindView(fun mode ->
@@ -1310,7 +1465,6 @@ module ExamplesRouter =
         )
       ]
 
-    // ── Full page layout ──
     div [
       Attr.Style "height" "100vh"
       Attr.Style "overflow" "hidden"
@@ -1319,14 +1473,12 @@ module ExamplesRouter =
     ] [
       navEffects
 
-      // AppBar across full width at top
       AppBar.Create(
         appBarContent,
         position = AppBar.Position.Static,
         attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
       )
 
-      // Drawer + main content fill remaining space
       DrawerContainer.Create(
         mainContent =
           div [
@@ -1334,6 +1486,21 @@ module ExamplesRouter =
             Attr.Style "overflow-y" "auto"
             Attr.Style "scroll-behavior" "smooth"
             Attr.Style "height" "100%"
+            on.afterRender (fun el ->
+              Var.Set mainEl (Some el)
+              // If the initial URL contained a section, poll until the page content renders
+              initialSection |> Option.iter scrollToSectionWhenReady)
+            ScrollListener.trackSections ".section-header[id]" 80.0 (fun sectionId ->
+              let pageHash =
+                selectedNav.Value
+                |> Option.bind stringToPage
+                |> Option.map pageToHash
+                |> Option.defaultValue "#home"
+
+              if sectionId <> "" then
+                replaceStateHash (pageHash + "/" + sectionId)
+              else
+                replaceStateHash pageHash)
           ] [
             div [ cls [ yield! Padding.toClasses Padding.All.small ] ] [
               currentPageView |> Doc.BindView(renderPage navigateTo)

@@ -185,3 +185,37 @@ module on =
     clickTapView enabled (fun _ _ isEnabled ->
       if isEnabled then
         onClick ())
+
+[<JavaScript>]
+module ScrollListener =
+
+  /// <summary>
+  /// Returns an <c>Attr</c> that, when applied to a scrollable element, tracks
+  /// the topmost visible section heading and fires <c>onSection</c> with its id.
+  /// A heading qualifies when its top edge is at or below <c>threshold</c> pixels
+  /// from the container top; the best (closest-to-top) qualifying heading wins.
+  /// Fires with <c>""</c> when no heading qualifies (e.g. scrolled to the very top).
+  /// Uses requestAnimationFrame to throttle work to once per paint.
+  /// </summary>
+  let trackSections (sectionSelector: string) (threshold: float) (onSection: string -> unit) : Attr =
+    on.afterRender (fun el ->
+      let mutable ticking = false
+      el.AddEventListener("scroll", fun (_: Dom.Event) ->
+        if not ticking then
+          ticking <- true
+          JS.Window?requestAnimationFrame(fun _ ->
+            ticking <- false
+            let headers = JS.Document.QuerySelectorAll sectionSelector
+            let mTop = el.GetBoundingClientRect().Top
+            let mutable bestId = ""
+            let mutable bestRelTop = -1.0e10
+            for i in 0 .. headers.Length - 1 do
+              let h = As<Dom.Element>(headers.Item i)
+              let relTop = h.GetBoundingClientRect().Top - mTop
+              if relTop <= threshold && relTop > bestRelTop then
+                bestRelTop <- relTop
+                bestId <- h.Id
+            onSection bestId
+          ) |> ignore
+      )
+    )

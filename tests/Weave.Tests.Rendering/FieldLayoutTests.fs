@@ -27,7 +27,8 @@ type FieldLayoutTests() =
     do! this.LoadFixture()
 
     let! transform =
-      this.Page.EvaluateAsync<string> "() => getComputedStyle(document.querySelector('#label-floated')).transform"
+      this.Page.EvaluateAsync<string>
+        "() => getComputedStyle(document.querySelector('#label-floated')).transform"
 
     // scale(0.75) is serialized as a matrix: matrix(0.75, 0, 0, 0.75, tx, ty)
     Assert.Contains("0.75", transform)
@@ -38,7 +39,8 @@ type FieldLayoutTests() =
     do! this.LoadFixture()
 
     let! transform =
-      this.Page.EvaluateAsync<string> "() => getComputedStyle(document.querySelector('#label-standard')).transform"
+      this.Page.EvaluateAsync<string>
+        "() => getComputedStyle(document.querySelector('#label-standard')).transform"
 
     // Non-floated label should use scale(1), serialized as matrix(1, 0, 0, 1, tx, ty)
     Assert.DoesNotContain("0.75", transform)

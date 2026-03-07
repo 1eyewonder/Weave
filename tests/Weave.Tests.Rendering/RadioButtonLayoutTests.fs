@@ -69,10 +69,7 @@ type RadioButtonLayoutTests() =
     let! span = this.Page.Locator("#span-labeled").BoundingBoxAsync()
     let! label = this.Page.Locator("#label-text").BoundingBoxAsync()
 
-    Assert.True(
-      label.X > span.X,
-      $"Label (x={label.X}) should be to the right of radio span (x={span.X})"
-    )
+    Assert.True(label.X > span.X, $"Label (x={label.X}) should be to the right of radio span (x={span.X})")
   }
 
   [<Fact>]

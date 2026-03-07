@@ -1,0 +1,11 @@
+services:
+  playwright-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    volumes:
+      - .:/weave
+    working_dir: /weave
+    environment:
+      - BUILD_CONFIGURATION
+    command: sh -c "./build.sh RunTests"

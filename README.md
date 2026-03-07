@@ -164,6 +164,35 @@ dotnet run --project .\src\Weave.Docs\Weave.Docs.fsproj
 
 5. Navigate to `http://localhost:5000` to view the documentation and examples.
 
+## Testing
+
+### Without Docker
+
+**Dependencies:** .NET 10 SDK, Node.js 22+
+
+Linux/macOS:
+
+```bash
+./build.sh RunTests
+```
+
+Windows:
+
+```cmd
+./build.cmd RunTests
+```
+
+### With Docker
+
+**Dependencies:** Docker
+
+```bash
+docker compose build
+docker compose run --rm playwright-tests
+```
+
+The Docker path runs Playwright rendering tests in a pre-configured browser environment. Use this if you don't have .NET 10 or Node.js 22 installed locally, or to match CI behavior exactly.
+
 ## Contributing
 
 Community interest will shape the future of Weave.

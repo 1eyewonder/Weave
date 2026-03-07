@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/playwright/dotnet:v1.58.0-noble
+
+RUN apt-get update -qq \
+    && apt-get install -y -qq curl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y -qq nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g corepack && corepack enable
+
+# Pre-download the yarn version pinned in package.json (single source of truth)
+COPY package.json .
+RUN corepack prepare --activate
+
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir /usr/share/dotnet
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright

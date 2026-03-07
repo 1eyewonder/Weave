@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Divider Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Horizontal divider fills its block container -->
+    <div id="divider-h-container" style="width: 400px;">
+      <div id="divider-horizontal" class="weave-divider"></div>
+    </div>
+
+    <!-- Vertical divider in a flex container with explicit height -->
+    <div id="divider-v-container" style="display: flex; height: 80px; align-items: stretch; width: 40px; margin-top: 16px;">
+      <div id="divider-vertical" class="weave-divider weave-divider--vertical"></div>
+    </div>
+
+    <!-- Middle variant: has 16px left/right margins -->
+    <div id="divider-middle-container" style="width: 400px; margin-top: 16px;">
+      <div id="divider-middle" class="weave-divider weave-divider--middle"></div>
+    </div>
+
+    <!-- Inset variant: has 72px left margin -->
+    <div id="divider-inset-container" style="width: 400px; margin-top: 16px;">
+      <div id="divider-inset" class="weave-divider weave-divider--inset"></div>
+    </div>
+  </body>
+</html>

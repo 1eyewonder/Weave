@@ -9,8 +9,14 @@ type ButtonLayoutTests() =
   inherit PageTest()
 
   // Boundary pairs for CSS breakpoints: xs/sm (600px), sm/md (960px), md/lg (1280px)
-  static member ViewportWidths: obj[][] =
-    [| [| 599 |]; [| 600 |]; [| 959 |]; [| 960 |]; [| 1279 |]; [| 1280 |] |]
+  static member ViewportWidths: obj[][] = [|
+    [| 599 |]
+    [| 600 |]
+    [| 959 |]
+    [| 960 |]
+    [| 1279 |]
+    [| 1280 |]
+  |]
 
   member private _.FixturePath =
     let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)

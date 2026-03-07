@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typography Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="h1" class="weave-typography weave-typography--h1">Heading 1</div>
+    <div id="h2" class="weave-typography weave-typography--h2">Heading 2</div>
+    <div id="h3" class="weave-typography weave-typography--h3">Heading 3</div>
+    <div id="h4" class="weave-typography weave-typography--h4">Heading 4</div>
+    <div id="h5" class="weave-typography weave-typography--h5">Heading 5</div>
+    <div id="h6" class="weave-typography weave-typography--h6">Heading 6</div>
+    <div id="body1" class="weave-typography weave-typography--body1">Body 1</div>
+    <div id="body2" class="weave-typography weave-typography--body2">Body 2</div>
+    <div id="caption" class="weave-typography weave-typography--caption">Caption</div>
+
+    <!-- nowrap: long text in a narrow container should stay on one line -->
+    <div
+      id="nowrap"
+      class="weave-typography weave-typography--body1 weave-typography--nowrap"
+      style="width: 80px; overflow: hidden;"
+    >
+      This text is very long and should not wrap to a new line at all
+    </div>
+
+    <!-- wrapping: same text without nowrap should be taller -->
+    <div
+      id="wrap"
+      class="weave-typography weave-typography--body1"
+      style="width: 80px; overflow: hidden;"
+    >
+      This text is very long and should not wrap to a new line at all
+    </div>
+  </body>
+</html>

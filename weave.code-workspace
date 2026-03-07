@@ -1,13 +1,12 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "FSharp.enableAnalyzers": true,
     "FSharp.analyzersPath": ["packages/analyzers"],
-    "editor.formatOnSave": true
   },
   "extensions": {
     "recommendations": [
@@ -21,7 +20,7 @@
       "bierner.markdown-mermaid",
       "tintoy.msbuild-project-tools",
       "christian-kohler.path-intellisense",
-      "johnpapa.vscode-peacock"
-    ]
-  }
+      "johnpapa.vscode-peacock",
+    ],
+  },
 }

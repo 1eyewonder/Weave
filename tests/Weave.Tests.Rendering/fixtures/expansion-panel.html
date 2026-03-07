@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expansion Panel Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Collapsed panel: content has max-height: 0 -->
+    <div class="weave-expansion-panels" style="width: 600px;">
+      <div id="panel-collapsed" class="weave-expansion-panel weave-expansion-panel--collapsed">
+        <div id="header-collapsed" class="weave-expansion-panel__header">Collapsed Panel</div>
+        <div id="content-collapsed" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+          Collapsed content
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded panel: content is visible -->
+    <div class="weave-expansion-panels" style="width: 600px; margin-top: 16px;">
+      <div id="panel-expanded" class="weave-expansion-panel weave-expansion-panel--expanded">
+        <div id="header-expanded" class="weave-expansion-panel__header">Expanded Panel</div>
+        <div id="content-expanded" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+          Expanded content
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

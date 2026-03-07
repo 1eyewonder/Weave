@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radio Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Small: --radio-size: 16px → span BoundingBox ≈ 20px (16px + 2px border each side) -->
+    <label class="weave-radio weave-radio--small d-inline-flex flex-row">
+      <input type="radio" class="weave-radio__input" />
+      <span id="span-small" class="weave-radio__span"></span>
+    </label>
+
+    <!-- Medium: --radio-size: 20px → span BoundingBox ≈ 24px -->
+    <label class="weave-radio weave-radio--medium d-inline-flex flex-row" style="margin-top: 16px; display: block;">
+      <input type="radio" class="weave-radio__input" />
+      <span id="span-medium" class="weave-radio__span"></span>
+    </label>
+
+    <!-- Large: --radio-size: 28px → span BoundingBox ≈ 32px -->
+    <label class="weave-radio weave-radio--large d-inline-flex flex-row" style="margin-top: 16px; display: block;">
+      <input type="radio" class="weave-radio__input" />
+      <span id="span-large" class="weave-radio__span"></span>
+    </label>
+
+    <!-- Default (flex-row): label appears to the right of the radio span -->
+    <label id="radio-labeled" class="weave-radio weave-radio--medium d-inline-flex flex-row" style="margin-top: 16px;">
+      <input type="radio" class="weave-radio__input" />
+      <span id="span-labeled" class="weave-radio__span"></span>
+      <span id="label-text" class="weave-typography weave-typography--body1 weave-radio__label">Label</span>
+    </label>
+  </body>
+</html>

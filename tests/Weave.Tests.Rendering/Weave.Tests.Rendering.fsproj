@@ -6,6 +6,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ButtonLayoutTests.fs" />
+    <Compile Include="ButtonGroupLayoutTests.fs" />
+    <Compile Include="DividerLayoutTests.fs" />
+    <Compile Include="GridLayoutTests.fs" />
+    <Compile Include="AppBarLayoutTests.fs" />
+    <Compile Include="ContainerLayoutTests.fs" />
+    <Compile Include="TabsLayoutTests.fs" />
+    <Compile Include="ListLayoutTests.fs" />
+    <Compile Include="CheckboxLayoutTests.fs" />
+    <Compile Include="SwitchLayoutTests.fs" />
+    <Compile Include="RadioButtonLayoutTests.fs" />
+    <Compile Include="ExpansionPanelLayoutTests.fs" />
+    <Compile Include="TypographyLayoutTests.fs" />
+    <Compile Include="FieldLayoutTests.fs" />
   </ItemGroup>
   <Import Project="../../.paket/Paket.Restore.targets" />
 </Project>

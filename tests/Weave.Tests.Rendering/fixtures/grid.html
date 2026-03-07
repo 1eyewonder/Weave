@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+      .fixed-container {
+        width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Two xs-6 items side by side in a fixed-width container -->
+    <div class="fixed-container">
+      <div id="grid-xs6" class="weave-grid weave-grid--spacing-0">
+        <div id="item-xs6-a" class="weave-grid__item weave-grid__item--xs-6">A</div>
+        <div id="item-xs6-b" class="weave-grid__item weave-grid__item--xs-6">B</div>
+      </div>
+    </div>
+
+    <!-- Single xs-12 item fills the grid -->
+    <div class="fixed-container">
+      <div id="grid-xs12" class="weave-grid weave-grid--spacing-0">
+        <div id="item-xs12" class="weave-grid__item weave-grid__item--xs-12">Full</div>
+      </div>
+    </div>
+
+    <!-- Responsive: xs-12 (stacked) but sm-6 (side by side at >= 600px) -->
+    <div id="grid-responsive" class="weave-grid weave-grid--spacing-0" style="width: 100vw;">
+      <div id="item-responsive-a" class="weave-grid__item weave-grid__item--xs-12 weave-grid__item--sm-6">A</div>
+      <div id="item-responsive-b" class="weave-grid__item weave-grid__item--xs-12 weave-grid__item--sm-6">B</div>
+    </div>
+  </body>
+</html>

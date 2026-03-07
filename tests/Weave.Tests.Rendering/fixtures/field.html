@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Field Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Standard field: label not floated (no value) -->
+    <div id="field-standard" class="weave-field weave-field--standard weave-typography--body2">
+      <div class="weave-field__control">
+        <label id="label-standard" class="weave-field__label">
+          <span>Standard Label</span>
+        </label>
+        <input type="text" class="weave-field__input" />
+      </div>
+    </div>
+
+    <!-- Standard field: label floated (has value) -->
+    <div
+      id="field-floated"
+      class="weave-field weave-field--standard weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label id="label-floated" class="weave-field__label weave-field__label--float">
+          <span>Floated Label</span>
+        </label>
+        <input type="text" class="weave-field__input" value="some value" />
+      </div>
+    </div>
+
+    <!-- Full-width field inside a container -->
+    <div id="full-width-container" style="width: 400px; margin-top: 32px;">
+      <div id="field-full-width" class="weave-field weave-field--standard weave-field--full-width weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Full Width</span></label>
+          <input type="text" class="weave-field__input" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Field with help text hidden by default -->
+    <div
+      id="field-with-help"
+      class="weave-field weave-field--standard weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>With Help</span></label>
+        <input type="text" class="weave-field__input" />
+      </div>
+      <p id="help-text" class="weave-field__help-text">Help text content</p>
+    </div>
+
+    <!-- Field with help text visible -->
+    <div
+      id="field-with-help-shown"
+      class="weave-field weave-field--standard weave-field--show-help-text weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>With Help Shown</span></label>
+        <input type="text" class="weave-field__input" />
+      </div>
+      <p id="help-text-shown" class="weave-field__help-text">Help text content</p>
+    </div>
+
+    <!-- Outlined field -->
+    <div
+      id="field-outlined"
+      class="weave-field weave-field--outlined weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>Outlined</span></label>
+        <input type="text" class="weave-field__input" />
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>Outlined</span></legend>
+        </fieldset>
+      </div>
+    </div>
+  </body>
+</html>

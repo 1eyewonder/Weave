@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkbox Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Small: --checkbox-size: 16px → span BoundingBox ≈ 20px (16 + 2px border each side) -->
+    <label class="weave-checkbox weave-checkbox--small">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="span-small" class="weave-checkbox__span"></span>
+    </label>
+
+    <!-- Medium: --checkbox-size: 20px → span BoundingBox ≈ 24px -->
+    <label class="weave-checkbox weave-checkbox--medium" style="margin-top: 16px; display: block;">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="span-medium" class="weave-checkbox__span"></span>
+    </label>
+
+    <!-- Large: --checkbox-size: 28px → span BoundingBox ≈ 32px -->
+    <label class="weave-checkbox weave-checkbox--large" style="margin-top: 16px; display: block;">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="span-large" class="weave-checkbox__span"></span>
+    </label>
+
+    <!-- Default (flex-row): label appears to the right of the checkbox span -->
+    <label id="checkbox-labeled" class="weave-checkbox flex-row" style="margin-top: 16px;">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="span-labeled" class="weave-checkbox__span"></span>
+      <div id="label-text" class="weave-typography weave-checkbox__label">Label</div>
+    </label>
+  </body>
+</html>

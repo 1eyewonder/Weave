@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Switch Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Unchecked switch: thumb at left (left: 0) -->
+    <label class="weave-switch flex-row">
+      <div id="switch-container-off" class="weave-switch__container">
+        <input type="checkbox" class="weave-switch__input" />
+        <span class="weave-switch__track"></span>
+        <span id="thumb-off" class="weave-switch__thumb"></span>
+      </div>
+      <div id="switch-label" class="weave-switch__label">Off</div>
+    </label>
+
+    <!-- Checked switch: thumb at right (left: calc(100% - 20px) = 20px) -->
+    <label class="weave-switch flex-row" style="margin-top: 16px;">
+      <div id="switch-container-on" class="weave-switch__container">
+        <input type="checkbox" class="weave-switch__input" checked />
+        <span class="weave-switch__track"></span>
+        <span id="thumb-on" class="weave-switch__thumb"></span>
+      </div>
+    </label>
+  </body>
+</html>

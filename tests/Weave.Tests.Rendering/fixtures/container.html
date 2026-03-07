@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Container Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- maxwidth-xs: constrained to 444px -->
+    <div id="container-xs" class="weave-container weave-container--maxwidth-xs"></div>
+
+    <!-- maxwidth-sm: constrained to 600px at >= 600px viewport -->
+    <div id="container-sm" class="weave-container weave-container--maxwidth-sm"></div>
+
+    <!-- Gutters: 16px padding below 600px, 24px at >= 600px -->
+    <div
+      id="container-gutters"
+      class="weave-container weave-container--gutters weave-container--maxwidth-xxl"
+    ></div>
+  </body>
+</html>

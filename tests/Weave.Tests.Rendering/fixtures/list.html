@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Normal list: items have min-height 48px -->
+    <div id="list-normal" class="weave-list" style="width: 300px;">
+      <div id="item-1" class="weave-list-item">Item 1</div>
+      <div id="item-2" class="weave-list-item">Item 2</div>
+      <div id="item-3" class="weave-list-item">Item 3</div>
+    </div>
+
+    <!-- Dense list: items have min-height 36px -->
+    <div id="list-dense" class="weave-list weave-list--dense" style="width: 300px; margin-top: 16px;">
+      <div id="item-dense" class="weave-list-item">Dense Item</div>
+    </div>
+  </body>
+</html>

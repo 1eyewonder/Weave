@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabs Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Horizontal (top) tabs with 3 tabs, first active -->
+    <div
+      id="tabs-top"
+      class="weave-tabs weave-tabs--top weave-tabs--primary"
+      style="width: 600px;"
+    >
+      <div id="tabs-header-wrapper" class="weave-tabs__header-wrapper">
+        <div id="tabs-header" class="weave-tabs__header">
+          <button id="tab-0" class="weave-tabs__tab weave-tabs__tab--active">Tab 1</button>
+          <button id="tab-1" class="weave-tabs__tab">Tab 2</button>
+          <button id="tab-2" class="weave-tabs__tab">Tab 3</button>
+          <div class="weave-tabs__indicator"></div>
+        </div>
+      </div>
+      <div id="tabs-panels" class="weave-tabs__panels">
+        <div id="panel-0" class="weave-tabs__panel" style="display: block;">Panel 1 content</div>
+        <div id="panel-1" class="weave-tabs__panel" style="display: none;">Panel 2 content</div>
+      </div>
+    </div>
+  </body>
+</html>

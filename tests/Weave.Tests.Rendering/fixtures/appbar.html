@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AppBar Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Static (in-flow) appbar — base weave-appbar, no position modifier -->
+    <header id="appbar-static" class="weave-appbar">
+      <span>Title</span>
+    </header>
+
+    <div id="content-after-static" style="height: 20px;"></div>
+
+    <!-- Fixed appbar pinned to top of viewport -->
+    <header id="appbar-fixed" class="weave-appbar weave-appbar--fixed-top">
+      <span>Fixed Title</span>
+    </header>
+  </body>
+</html>

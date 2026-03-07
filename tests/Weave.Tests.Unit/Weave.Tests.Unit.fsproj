@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Weave\Weave.fsproj" />
+    <ProjectReference Include="../../src/Weave/Weave.fsproj" />
     <Compile Include="ButtonTests.fs" />
     <Compile Include="ButtonGroupTests.fs" />
     <Compile Include="CheckboxTests.fs" />
@@ -20,6 +20,6 @@
     <Compile Include="LinkTests.fs" />
   </ItemGroup>
 
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <Import Project="../../.paket/Paket.Restore.targets" />
 
 </Project>

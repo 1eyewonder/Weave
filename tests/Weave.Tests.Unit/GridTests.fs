@@ -1,4 +1,4 @@
-module Weave.Tests.GridTests
+module Weave.Tests.Unit.GridTests
 
 open Expecto
 open FsCheck

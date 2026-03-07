@@ -1,4 +1,4 @@
-module Weave.Tests.TypographyTests
+module Weave.Tests.Unit.TypographyTests
 
 open Expecto
 open Weave

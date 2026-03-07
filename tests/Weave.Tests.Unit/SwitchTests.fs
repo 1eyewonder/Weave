@@ -1,4 +1,4 @@
-module Weave.Tests.SwitchTests
+module Weave.Tests.Unit.SwitchTests
 
 open Expecto
 open Weave

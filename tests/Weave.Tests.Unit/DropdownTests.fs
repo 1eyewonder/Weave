@@ -1,4 +1,4 @@
-module Weave.Tests.DropdownTests
+module Weave.Tests.Unit.DropdownTests
 
 open Expecto
 open Weave

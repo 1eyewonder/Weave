@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+      .full-width-container {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="btn-small" class="weave-button weave-button--filled weave-button--small">
+      <span class="weave-button__label">Small</span>
+    </button>
+
+    <button id="btn-medium" class="weave-button weave-button--filled weave-button--medium">
+      <span class="weave-button__label">Medium</span>
+    </button>
+
+    <button id="btn-large" class="weave-button weave-button--filled weave-button--large">
+      <span class="weave-button__label">Large</span>
+    </button>
+
+    <button id="btn-medium-outlined" class="weave-button weave-button--outlined weave-button--medium">
+      <span class="weave-button__label">Medium Outlined</span>
+    </button>
+
+    <button id="btn-medium-text" class="weave-button weave-button--text weave-button--medium">
+      <span class="weave-button__label">Medium Text</span>
+    </button>
+
+    <button id="btn-icon" class="weave-button weave-button--filled weave-button--icon weave-button--medium">
+      <span>×</span>
+    </button>
+
+    <div id="full-width-container" class="full-width-container">
+      <button
+        id="btn-full-width"
+        class="weave-button weave-button--filled weave-button--medium weave-button--full-width"
+      >
+        <span class="weave-button__label">Full Width</span>
+      </button>
+    </div>
+  </body>
+</html>

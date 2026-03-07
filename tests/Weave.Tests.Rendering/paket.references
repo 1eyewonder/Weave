@@ -1,0 +1,8 @@
+group Main
+  FSharp.Core
+
+group test
+  Microsoft.NET.Test.Sdk
+  Microsoft.Playwright.Xunit
+  xunit
+  xunit.runner.visualstudio

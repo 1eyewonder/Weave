@@ -1,4 +1,4 @@
-module Weave.Tests.TabsTests
+module Weave.Tests.Unit.TabsTests
 
 open Expecto
 open Weave

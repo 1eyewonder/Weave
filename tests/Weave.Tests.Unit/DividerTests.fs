@@ -1,4 +1,4 @@
-module Weave.Tests.DividerTests
+module Weave.Tests.Unit.DividerTests
 
 open Expecto
 open Weave

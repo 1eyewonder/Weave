@@ -25,7 +25,7 @@ let isCI = lazy (environVarAsBoolOrDefault "CI" false)
 
 let project = "Weave"
 let summary = "A component library for front ends using F# and WebSharper"
-let configuration = "Debug"
+let configuration = Environment.environVarOrDefault "BUILD_CONFIGURATION" "Debug"
 let solutionFile = "Weave.sln"
 
 let rootDir = __SOURCE_DIRECTORY__ </> ".."
@@ -157,6 +157,7 @@ let buildDocs _ =
 
   let setParams (defaults: DotNet.BuildOptions) = {
     defaults with
+        NoRestore = true
         Configuration = DotNet.BuildConfiguration.Release
   }
 
@@ -185,7 +186,10 @@ let initTargets () =
   "Restore" ==>! "Build"
   "YarnInstall" ==>! "Build"
   "Build" ==>! "RunTests"
-  "RunTests" ==>! "BuildDocs"
+
+  "RunTests" ?=>! "BuildDocs"
+  "Restore" ==>! "BuildDocs"
+  "YarnInstall" ==>! "BuildDocs"
 
   "Restore" ==>! "Analyze"
   "Restore" ==>! "CheckFormat"

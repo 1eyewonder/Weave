@@ -1,4 +1,4 @@
-module Weave.Tests.ButtonTests
+module Weave.Tests.Unit.ButtonTests
 
 open Expecto
 open Weave

@@ -1,4 +1,4 @@
-module Weave.Tests.LinkTests
+module Weave.Tests.Unit.LinkTests
 
 open Expecto
 open Weave

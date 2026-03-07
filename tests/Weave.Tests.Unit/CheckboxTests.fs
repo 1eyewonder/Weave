@@ -1,4 +1,4 @@
-module Weave.Tests.CheckboxTests
+module Weave.Tests.Unit.CheckboxTests
 
 open Expecto
 open Weave

@@ -16,6 +16,9 @@ group test
   nuget Expecto.FsCheck
   nuget Microsoft.NET.Test.Sdk
   nuget YoloDev.Expecto.TestSdk
+  nuget Microsoft.Playwright.Xunit
+  nuget xunit
+  nuget xunit.runner.visualstudio
 
 group analyzers
   source https://api.nuget.org/v3/index.json

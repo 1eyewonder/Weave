@@ -1,4 +1,4 @@
-module Weave.Tests.RadioButtonTests
+module Weave.Tests.Unit.RadioButtonTests
 
 open Expecto
 open Weave

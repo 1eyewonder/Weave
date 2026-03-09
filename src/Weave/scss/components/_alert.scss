@@ -29,13 +29,6 @@
     margin-right: -8px;
     color: inherit;
   }
-
-  @each $color in $palette-colors {
-    &.weave-alert--#{$color} {
-      background-color: rgba(var(--palette-#{$color}-rgb), 0.15);
-      color: var(--palette-#{$color});
-    }
-  }
 }
 
 .weave-alert--standard {

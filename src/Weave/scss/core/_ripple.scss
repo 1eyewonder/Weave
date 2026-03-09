@@ -1,6 +1,9 @@
 .ripple {
   --ripple-offset-x: 0;
   --ripple-offset-y: 0;
+  --ripple-color: currentColor;
+  --ripple-opacity: 0.3;
+  --ripple-opacity-secondary: 0.15;
   position: relative;
   overflow: hidden;
 

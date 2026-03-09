@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
+    <Compile Include="AlertTests.fs" />
     <Compile Include="ButtonTests.fs" />
     <Compile Include="ButtonGroupTests.fs" />
     <Compile Include="CheckboxTests.fs" />

@@ -1,0 +1,76 @@
+@import "../abstracts/variables";
+@import "../core/themes";
+
+.weave-alert {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--default-borderradius);
+  box-sizing: border-box;
+  background-color: var(--palette-surface);
+  color: var(--palette-text-primary);
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+    padding: 2px 0;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    margin-left: 8px;
+    margin-right: -8px;
+    color: inherit;
+  }
+
+  @each $color in $palette-colors {
+    &.weave-alert--#{$color} {
+      background-color: rgba(var(--palette-#{$color}-rgb), 0.15);
+      color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-alert--standard {
+  background-color: var(--palette-surface);
+  color: var(--palette-text-primary);
+
+  @each $color in $palette-colors {
+    &.weave-alert--#{$color} {
+      background-color: rgba(var(--palette-#{$color}-rgb), 0.15);
+      color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-alert--outlined {
+  background-color: transparent;
+  border: 1px solid var(--palette-divider);
+  color: var(--palette-text-primary);
+
+  @each $color in $palette-colors {
+    &.weave-alert--#{$color} {
+      border-color: var(--palette-#{$color});
+      color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-alert--filled {
+  background-color: var(--palette-background-paper);
+  color: var(--palette-text-primary);
+
+  @each $color in $palette-colors {
+    &.weave-alert--#{$color} {
+      background-color: var(--palette-#{$color});
+      color: var(--palette-#{$color}-text);
+    }
+  }
+}

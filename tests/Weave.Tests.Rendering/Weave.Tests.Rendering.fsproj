@@ -5,6 +5,7 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AlertLayoutTests.fs" />
     <Compile Include="ButtonLayoutTests.fs" />
     <Compile Include="ButtonGroupLayoutTests.fs" />
     <Compile Include="DividerLayoutTests.fs" />

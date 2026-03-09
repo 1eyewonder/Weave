@@ -37,6 +37,7 @@ module ExamplesRouter =
     | IconsExamples
     | TabsExamples
     | ListExamples
+    | AlertExamples
     | LinkExamples
     | DividerExamples
 
@@ -64,6 +65,7 @@ module ExamplesRouter =
     | IconsExamples -> "Icons"
     | TabsExamples -> "Tabs"
     | ListExamples -> "List"
+    | AlertExamples -> "Alert"
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
 
@@ -91,6 +93,7 @@ module ExamplesRouter =
     | "Icons" -> Some IconsExamples
     | "Tabs" -> Some TabsExamples
     | "List" -> Some ListExamples
+    | "Alert" -> Some AlertExamples
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
     | _ -> None
@@ -119,6 +122,7 @@ module ExamplesRouter =
     | IconsExamples -> "#icons"
     | TabsExamples -> "#tabs"
     | ListExamples -> "#list"
+    | AlertExamples -> "#alert"
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
 
@@ -147,6 +151,7 @@ module ExamplesRouter =
     | "#icons" -> Some IconsExamples
     | "#tabs" -> Some TabsExamples
     | "#list" -> Some ListExamples
+    | "#alert" -> Some AlertExamples
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
     | _ -> None
@@ -1054,6 +1059,35 @@ module ExamplesRouter =
           Attr.Style "border-radius" "2px"
         ] []
       ]
+    | AlertExamples ->
+      cp [
+        div [
+          Attr.Style "background" "rgba(var(--palette-warning-rgb), 0.15)"
+          Attr.Style "border-radius" "6px"
+          Attr.Style "top" "26px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "36px"
+          Attr.Style "position" "absolute"
+          Attr.Style "box-sizing" "border-box"
+        ] []
+        span [
+          Attr.Style "font-family" "'Material Symbols Outlined'"
+          Attr.Style "font-size" "18px"
+          Attr.Style "line-height" "1"
+          Attr.Style "color" "var(--palette-warning)"
+          Attr.Style "top" "35px"
+          Attr.Style "left" "14%"
+          Attr.Style "user-select" "none"
+        ] [ text "warning" ]
+        div [
+          cl "cp-line"
+          Attr.Style "top" "41px"
+          Attr.Style "left" "32%"
+          Attr.Style "right" "14%"
+          Attr.Style "height" "7px"
+        ] []
+      ]
     | _ -> Doc.Empty
 
   let private renderPage (navigate: Page -> unit) page =
@@ -1159,7 +1193,11 @@ module ExamplesRouter =
             "Typography", TypographyExamples
           ]
 
-          categorySection "Feedback" [ "Dialog", DialogExamples; "Expansion Panel", ExpansionPanelExamples ]
+          categorySection "Feedback" [
+            "Alert", AlertExamples
+            "Dialog", DialogExamples
+            "Expansion Panel", ExpansionPanelExamples
+          ]
         ],
         maxWidth = Container.MaxWidth.Large
       )
@@ -1184,6 +1222,7 @@ module ExamplesRouter =
     | IconsExamples -> IconsExamples.render ()
     | TabsExamples -> TabsExamples.render ()
     | ListExamples -> ListExamples.render ()
+    | AlertExamples -> AlertExamples.render ()
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
 
@@ -1414,6 +1453,7 @@ module ExamplesRouter =
         ]
 
         navGroup (Icon.Action Action.Feedback) "Feedback" feedbackExpanded [
+          navLeafItem "Alert"
           navLeafItem "Dialog"
           navLeafItem "Expansion Panel"
         ]

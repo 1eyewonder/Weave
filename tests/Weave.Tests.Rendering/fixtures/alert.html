@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alert Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .alert-stack > * + * {
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="alert-stack">
+      <!-- Three variants stacked for layout ordering tests -->
+      <div id="alert-standard" class="weave-alert weave-alert--standard weave-alert--info">
+        <div class="weave-alert__content">Standard info alert</div>
+      </div>
+
+      <div id="alert-outlined" class="weave-alert weave-alert--outlined weave-alert--info">
+        <div class="weave-alert__content">Outlined info alert</div>
+      </div>
+
+      <div id="alert-filled" class="weave-alert weave-alert--filled weave-alert--info">
+        <div class="weave-alert__content">Filled info alert</div>
+      </div>
+
+      <!-- Alert with icon for icon-left-of-content test -->
+      <div
+        id="alert-with-icon"
+        class="weave-alert weave-alert--standard weave-alert--success"
+      >
+        <div class="weave-alert__icon">
+          <span style="font-family: 'Material Symbols Outlined'; font-size: 20px">check_circle</span>
+        </div>
+        <div class="weave-alert__content">Alert with icon</div>
+      </div>
+
+      <!-- Alert with close button for close-right-of-content test -->
+      <div
+        id="alert-with-close"
+        class="weave-alert weave-alert--standard weave-alert--warning"
+      >
+        <div class="weave-alert__content">Alert with close button</div>
+        <button
+          class="weave-button weave-button--icon weave-alert__close"
+          type="button"
+          aria-label="close alert"
+        >
+          <span style="font-family: 'Material Symbols Outlined'; font-size: 20px">close</span>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

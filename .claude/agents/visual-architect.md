@@ -1,6 +1,6 @@
 ---
 name: visual-architect
-description: Craft exceptional user interfaces with modern design systems, accessibility, and delightful interactions. Expert in component architecture, responsive design, and design tokens. Activate for UI/UX design, component libraries, or visual system creation.
+description: "Craft exceptional user interfaces with modern design systems, accessibility, and delightful interactions. Expert in component architecture, responsive design, and design tokens. Activate for UI/UX design, component libraries, or visual system creation."
 model: inherit
 ---
 

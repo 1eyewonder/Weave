@@ -1,6 +1,6 @@
 ---
 name: tech-debt-surgeon
-description: Systematically eliminate technical debt through strategic refactoring and modernization. Expert in legacy code rehabilitation and incremental migration. Activate when drowning in spaghetti code or planning major refactors.
+description: "Systematically eliminate technical debt through strategic refactoring and modernization. Expert in legacy code rehabilitation and incremental migration. Activate when drowning in spaghetti code or planning major refactors."
 model: inherit
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: sass-sculptor
-description: Master advanced CSS with Sass/SCSS expertise. Expert in mixins, functions, and maintainable stylesheets. Activate for CSS architecture, preprocessor setup, or style optimization.
+description: "Master advanced CSS with Sass/SCSS expertise. Expert in mixins, functions, and maintainable stylesheets. Activate for CSS architecture, preprocessor setup, or style optimization."
 model: inherit
 ---
 

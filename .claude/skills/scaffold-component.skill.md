@@ -15,7 +15,7 @@ Use this structure as an example, but not a silver bullet. Only include the DU s
 
 **Rules:**
 
-- Class constructors are used to simplify the API for users so the library doesn't have difficulty with naming and discoverability for the end users. In order to simplify these constructors, it is suggested styling props are passed in as `?attrs: Attr list` instead of individual optional parameters (e.g. `?variant`, `?color`, etc.). This also gives users more flexibility to combine multiple styles (e.g. `Variant.Filled` + `Size.Small` + `BrandColor.Primary`) without the library needing to define every possible combination as an explicit parameter.
+- Styling props (variant, color, size, etc.) must not be individual optional parameters on `Create` — pass them via `?attrs: Attr list` using the component's `toClass` helpers. See the **Create Function Parameters** section of `weave-component-conventions.skill.md` for the full rule and examples.
 - DU types carrying variants/sizes/etc. should have `[<RequireQualifiedAccess; Struct>]` due to the fact their union cases likely share names with other components. This also prevents users from having to deal with name collisions and having to open modules in various orders to get the right cases in scope.
 - `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component.
 - All `toClass` functions live inside a companion sub-module of the same name (e.g. `module Variant`, `module Size`, `module Color`).

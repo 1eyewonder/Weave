@@ -134,6 +134,16 @@ module CssHelpers =
       | BrandColor.Success -> Attr.Style style Palette.success
       | BrandColor.Info -> Attr.Style style Palette.info
 
+    let palette color =
+      match color with
+      | BrandColor.Primary -> Palette.primary
+      | BrandColor.Secondary -> Palette.secondary
+      | BrandColor.Tertiary -> Palette.tertiary
+      | BrandColor.Error -> Palette.error
+      | BrandColor.Warning -> Palette.warning
+      | BrandColor.Success -> Palette.success
+      | BrandColor.Info -> Palette.info
+
     let toBackgroundColor color = toStyle Style.backgroundColor color
     let toColor color = toStyle Style.color color
 
@@ -153,6 +163,13 @@ module CssHelpers =
       | SurfaceColor.Paper -> Attr.Style style Palette.backgroundPaper
       | SurfaceColor.Surface -> Attr.Style style Palette.surface
 
+    let palette color =
+      match color with
+      | SurfaceColor.Background -> Palette.background
+      | SurfaceColor.BackgroundDarker -> Palette.backgroundDarken
+      | SurfaceColor.Paper -> Palette.backgroundPaper
+      | SurfaceColor.Surface -> Palette.surface
+
     let toBackgroundColor color = toStyle Style.backgroundColor color
     let toColor color = toStyle Style.color color
 
@@ -170,8 +187,40 @@ module CssHelpers =
       | DisabledColor.Text -> Attr.Style style Palette.textDisabled
       | DisabledColor.Action -> Attr.Style style Palette.actionDisabled
 
+    let palette color =
+      match color with
+      | DisabledColor.Background -> Palette.backgroundDisabled
+      | DisabledColor.Text -> Palette.textDisabled
+      | DisabledColor.Action -> Palette.actionDisabled
+
     let toBackgroundColor color = toStyle Style.backgroundColor color
     let toColor color = toStyle Style.color color
+
+  [<RequireQualifiedAccess; Struct>]
+  type Color =
+    | Brand of brand: BrandColor
+    | Surface of surface: SurfaceColor
+    | Disabled of disabled: DisabledColor
+
+  module Color =
+
+    let palette color =
+      match color with
+      | Color.Brand brand -> BrandColor.palette brand
+      | Color.Surface surface -> SurfaceColor.palette surface
+      | Color.Disabled disabled -> DisabledColor.palette disabled
+
+    let toBackgroundColor color =
+      match color with
+      | Color.Brand brand -> BrandColor.toBackgroundColor brand
+      | Color.Surface surface -> SurfaceColor.toBackgroundColor surface
+      | Color.Disabled disabled -> DisabledColor.toBackgroundColor disabled
+
+    let toColor color =
+      match color with
+      | Color.Brand brand -> BrandColor.toColor brand
+      | Color.Surface surface -> SurfaceColor.toColor surface
+      | Color.Disabled disabled -> DisabledColor.toColor disabled
 
   [<RequireQualifiedAccess>]
   type Margin =

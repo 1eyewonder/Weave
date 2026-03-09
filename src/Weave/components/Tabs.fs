@@ -23,6 +23,7 @@ module Tabs =
     | End
 
   module Position =
+
     let toClass position =
       match position with
       | Position.Top -> Css.``weave-tabs--top``
@@ -50,10 +51,42 @@ module Tabs =
     | Center
 
   module Alignment =
+
     let toClass alignment =
       match alignment with
       | Alignment.Start -> None
-      | Alignment.Center -> Some Css.``weave-tabs__header--centered``
+      | Alignment.Center -> Some Css.``weave-tabs--centered``
+
+    let toAttr alignment =
+      toClass alignment |> Attr.bindOption Attr.Class
+
+  /// <summary>
+  /// Visual style of the tab header strip.
+  /// </summary>
+  [<RequireQualifiedAccess; Struct>]
+  type Variant =
+    | Text
+    | Outlined
+    | Filled
+
+  module Variant =
+
+    let toClass variant =
+      match variant with
+      | Variant.Text -> Css.``weave-tabs--text``
+      | Variant.Outlined -> Css.``weave-tabs--outlined``
+      | Variant.Filled -> Css.``weave-tabs--filled``
+
+  /// <summary>
+  /// Sets the background color of the tab header strip
+  /// </summary>
+  module HeaderBackground =
+
+    let toAttr (color: Color) =
+      Attr.Style "--tabs-header-background" (Color.palette color)
+
+    let toCustomAttr (value: string) =
+      Attr.Style "--tabs-header-background" value
 
   module Color =
     let toClass color =
@@ -136,12 +169,12 @@ type TabPanel =
     ] [ content ]
 
 [<JavaScript>]
-type Tabs =
+module private TabsInternal =
 
   /// <summary>
   /// Scrolls the tab header so that the tab at `targetIndex` is visible.
   /// </summary>
-  static member private ScrollToTab(headerEl: Dom.Element, targetIndex: int, position: Position) =
+  let scrollToTab (headerEl: Dom.Element) (targetIndex: int) (position: Position) =
     let tabs = headerEl.QuerySelectorAll(".weave-tabs__tab")
 
     if targetIndex >= 0 && targetIndex < tabs.Length then
@@ -172,7 +205,7 @@ type Tabs =
   /// <summary>
   /// Checks whether the tab container overflows and needs scroll buttons.
   /// </summary>
-  static member private CheckOverflow(headerEl: Dom.Element, position: Position) =
+  let checkOverflow (headerEl: Dom.Element) (position: Position) =
     let isHorizontal = Position.isHorizontal position
 
     if isHorizontal then
@@ -183,7 +216,7 @@ type Tabs =
   /// <summary>
   /// Scrolls the header by one "page" in the given direction.
   /// </summary>
-  static member private ScrollByPage(headerEl: Dom.Element, position: Position, forward: bool) =
+  let scrollByPage (headerEl: Dom.Element) (position: Position) (forward: bool) =
     let isHorizontal = Position.isHorizontal position
 
     if isHorizontal then
@@ -208,7 +241,7 @@ type Tabs =
   /// <summary>
   /// Updates the indicator element to match the position and size of the active tab.
   /// </summary>
-  static member private UpdateIndicator(headerEl: Dom.Element, activeIndex: int, position: Position) =
+  let updateIndicator (headerEl: Dom.Element) (activeIndex: int) (position: Position) =
     let tabs = headerEl.QuerySelectorAll(".weave-tabs__tab")
     let indicatorEl = headerEl.QuerySelector(".weave-tabs__indicator")
 
@@ -227,13 +260,14 @@ type Tabs =
         indicatorEl?style?top <- string<float> tabTop + "px"
         indicatorEl?style?height <- string<float> tabHeight + "px"
 
+[<JavaScript>]
+type Tabs =
+
   static member Create
     (
-      tabs: TabDef list,
+      tabs: View<TabDef list>,
       ?activeIndex: Var<int>,
       ?position: Position,
-      ?alignment: Alignment,
-      ?color: BrandColor,
       ?scrollBackIcon: Doc,
       ?scrollForwardIcon: Doc,
       ?attrs: Attr list
@@ -241,8 +275,6 @@ type Tabs =
 
     let activeIndex = defaultArg activeIndex (Var.Create 0)
     let position = defaultArg position Position.Top
-    let alignment = defaultArg alignment Alignment.Start
-    let color = defaultArg color BrandColor.Primary
     let attrs = defaultArg attrs []
 
     let headerRef = Var.Create<Dom.Element option> None
@@ -274,22 +306,22 @@ type Tabs =
 
     let updateOverflow () =
       match headerRef.Value with
-      | Some el -> Var.Set showScrollButtons (Tabs.CheckOverflow(el, position))
+      | Some el -> Var.Set showScrollButtons (TabsInternal.checkOverflow el position)
       | None -> ()
 
     let updateIndicator () =
       match headerRef.Value with
-      | Some el -> Tabs.UpdateIndicator(el, activeIndex.Value, position)
+      | Some el -> TabsInternal.updateIndicator el activeIndex.Value position
       | None -> ()
 
     let scrollBack () =
       match headerRef.Value with
-      | Some el -> Tabs.ScrollByPage(el, position, false)
+      | Some el -> TabsInternal.scrollByPage el position false
       | None -> ()
 
     let scrollForward () =
       match headerRef.Value with
-      | Some el -> Tabs.ScrollByPage(el, position, true)
+      | Some el -> TabsInternal.scrollByPage el position true
       | None -> ()
 
     let selectTab index =
@@ -297,7 +329,7 @@ type Tabs =
 
       match headerRef.Value with
       | Some el ->
-        Tabs.ScrollToTab(el, index, position)
+        TabsInternal.scrollToTab el index position
         JS.SetTimeout (fun () -> updateIndicator ()) 0 |> ignore
       | None -> ()
 
@@ -315,13 +347,11 @@ type Tabs =
             selectTab index)
       ] [ tabDef.Header ]
 
-    let indicator =
-      div [ cl Css.``weave-tabs__indicator``; BrandColor.toBackgroundColor color ] []
+    let indicator = div [ cl Css.``weave-tabs__indicator`` ] []
 
     let header =
       div [
         cl Css.``weave-tabs__header``
-        Alignment.toClass alignment |> Attr.bindOption cl
         on.afterRender (fun el ->
           Var.Set headerRef (Some el)
 
@@ -338,14 +368,13 @@ type Tabs =
               ))
             0
           |> ignore)
-        // On scroll event recalc overflow
+
         Attr.Handler "scroll" (fun _ _ -> updateOverflow ())
       ] [
-        yield! tabs |> List.mapi (fun i t -> tabItem t i)
+        tabs |> Doc.BindView(List.mapi (fun i t -> tabItem t i) >> Doc.Concat)
 
         indicator
 
-        // Reactive sink: whenever activeIndex changes, update the indicator
         Doc.sinkCached (fun _ -> updateIndicator ()) activeIndex.View
       ]
 
@@ -367,15 +396,14 @@ type Tabs =
 
     let panels =
       div [ cl Css.``weave-tabs__panels`` ] [
-        yield! tabs |> List.mapi (fun i t -> TabPanel.Create(t.Panel, i, activeIndex.View))
+        tabs
+        |> Doc.BindView(
+          List.mapi (fun i t -> TabPanel.Create(t.Panel, i, activeIndex.View))
+          >> Doc.Concat
+        )
       ]
 
-    div [
-      cl Css.``weave-tabs``
-      cl (Position.toClass position)
-      cl (Color.toClass color)
-      yield! attrs
-    ] [
+    div [ cls [ Css.``weave-tabs``; Position.toClass position ]; yield! attrs ] [
       div [ cl Css.``weave-tabs__header-wrapper`` ] [ scrollBackBtn; header; scrollFwdBtn ]
       panels
     ]

@@ -51,9 +51,9 @@ let tabsTests =
     testList "Alignment.toClass" [
       testCase "Start returns None (default, no modifier class)"
       <| fun () -> Expect.isNone (Tabs.Alignment.toClass Tabs.Alignment.Start) ""
-      testCase "Center returns Some weave-tabs__header--centered"
+      testCase "Center returns Some weave-tabs--centered"
       <| fun () ->
-        Expect.equal (Tabs.Alignment.toClass Tabs.Alignment.Center) (Some "weave-tabs__header--centered") ""
+        Expect.equal (Tabs.Alignment.toClass Tabs.Alignment.Center) (Some "weave-tabs--centered") ""
     ]
 
     testList "Color.toClass" [

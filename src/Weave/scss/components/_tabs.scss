@@ -70,8 +70,10 @@
   }
 }
 
-.weave-tabs__header--centered {
-  justify-content: center;
+.weave-tabs--centered {
+  .weave-tabs__header {
+    justify-content: center;
+  }
 }
 
 .weave-tabs__tab {
@@ -97,14 +99,12 @@
     color 200ms cubic-bezier(0.4, 0, 0.2, 1),
     background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Horizontal padding
   .weave-tabs--top &,
   .weave-tabs--bottom & {
     padding: 12px 16px;
     min-width: 72px;
   }
 
-  // Vertical padding
   .weave-tabs--left &,
   .weave-tabs--right &,
   .weave-tabs--start &,
@@ -118,6 +118,7 @@
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(.weave-tabs__tab--disabled) {
       background-color: var(--palette-action-default-hover);
+      border-radius: var(--default-borderradius, 4px);
     }
   }
 
@@ -222,6 +223,14 @@
   padding: 12px;
 }
 
+.weave-tabs__tab--active {
+  color: var(--palette-action-default);
+}
+
+.weave-tabs__indicator {
+  background-color: var(--palette-action-default);
+}
+
 @each $color in $palette-colors {
   .weave-tabs--#{$color} {
     .weave-tabs__tab--active {
@@ -230,6 +239,105 @@
 
     .weave-tabs__indicator {
       background-color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-tabs--text {
+  @each $color in $palette-colors {
+    &.weave-tabs--#{$color} {
+      .weave-tabs__tab--active {
+        color: var(--palette-#{$color});
+      }
+
+      .weave-tabs__indicator {
+        background-color: var(--palette-#{$color});
+      }
+    }
+  }
+}
+
+.weave-tabs--outlined {
+  // Tab buttons must sit above the sliding pill indicator
+  .weave-tabs__tab {
+    z-index: 2;
+  }
+
+  &.weave-tabs--top,
+  &.weave-tabs--bottom {
+    .weave-tabs__indicator {
+      top: 0;
+      bottom: 0;
+      height: auto;
+      border-radius: var(--default-borderradius, 4px);
+    }
+  }
+
+  &.weave-tabs--left,
+  &.weave-tabs--right,
+  &.weave-tabs--start,
+  &.weave-tabs--end {
+    .weave-tabs__indicator {
+      left: 0;
+      right: 0;
+      width: auto;
+      border-radius: var(--default-borderradius, 4px);
+    }
+  }
+
+  @each $color in $palette-colors {
+    &.weave-tabs--#{$color} {
+      .weave-tabs__indicator {
+        background-color: transparent !important;
+        border: 2px solid rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+      }
+
+      .weave-tabs__tab--active {
+        color: var(--palette-#{$color});
+      }
+    }
+  }
+}
+
+.weave-tabs--filled {
+  .weave-tabs__header-wrapper {
+    background-color: var(--tabs-header-background, transparent);
+    border-radius: var(--default-borderradius, 4px);
+  }
+
+  // Tab buttons must sit above the sliding pill indicator
+  .weave-tabs__tab {
+    z-index: 2;
+  }
+
+  &.weave-tabs--top,
+  &.weave-tabs--bottom {
+    .weave-tabs__indicator {
+      top: 0;
+      bottom: 0;
+      height: auto;
+      border-radius: var(--default-borderradius, 4px);
+    }
+  }
+
+  &.weave-tabs--left,
+  &.weave-tabs--right,
+  &.weave-tabs--start,
+  &.weave-tabs--end {
+    .weave-tabs__indicator {
+      left: 0;
+      right: 0;
+      width: auto;
+      border-radius: var(--default-borderradius, 4px);
+    }
+  }
+
+  @each $color in $palette-colors {
+    &.weave-tabs--#{$color} {
+      // Active tab text contrasts against the colored pill; inactive tabs keep default text color
+      .weave-tabs__tab--active {
+        color: var(--palette-#{$color}-text);
+      }
     }
   }
 }

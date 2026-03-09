@@ -11,12 +11,13 @@ When asked to create a new Weave component. The component name used throughout t
 
 ## 1. F# Component File — `src/Weave/components/{Name}.fs`
 
-Use this structure as an example, but not a silver bullet. Only include the DU sub-modules that are semantically meaningful for the component. 
+Use this structure as an example, but not a silver bullet. Only include the DU sub-modules that are semantically meaningful for the component.
 
 **Rules:**
+
 - Class constructors are used to simplify the API for users so the library doesn't have difficulty with naming and discoverability for the end users. In order to simplify these constructors, it is suggested styling props are passed in as `?attrs: Attr list` instead of individual optional parameters (e.g. `?variant`, `?color`, etc.). This also gives users more flexibility to combine multiple styles (e.g. `Variant.Filled` + `Size.Small` + `BrandColor.Primary`) without the library needing to define every possible combination as an explicit parameter.
 - DU types carrying variants/sizes/etc. should have `[<RequireQualifiedAccess; Struct>]` due to the fact their union cases likely share names with other components. This also prevents users from having to deal with name collisions and having to open modules in various orders to get the right cases in scope.
-- `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component. 
+- `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component.
 - All `toClass` functions live inside a companion sub-module of the same name (e.g. `module Variant`, `module Size`, `module Color`).
 - The `open {Name}` after the module exposes the DU cases into scope for the `type {Name}` static class below it.
 - Optional parameters (`?enabled`, `?attrs`, `?size`, etc.) always have a `defaultArg` binding at the top of `Create`.
@@ -176,7 +177,8 @@ Follow BEM naming and use CSS custom properties from the theme system. Never har
 ```
 
 **Rules:**
-- File name is always `_{name}.scss` (underscore prefix, all lowercase).
+
+- File name is always `_{name}.scss` (underscore prefix, all lowercase)
 - Color modifier classes must use the `@each $color in $palette-colors` SCSS loop — never hard-code individual color rules.
 - Disabled state, hover, focus-visible, and active states are mandatory for interactive components.
 - Use `var(--palette-{color})`, `var(--palette-{color}-contrast)`, and `rgba(var(--palette-{color}-rgb), alpha)` for color values.
@@ -281,6 +283,7 @@ module {Name}Examples =
 ```
 
 **Rules:**
+
 - All example functions are `private`. Only `render ()` is public.
 - Always wrap the top-level output in `Container.Create(..., maxWidth = Container.MaxWidth.Large)`.
 - Separate example sections with `Helpers.divider ()`.
@@ -301,9 +304,10 @@ Add the new example file **before** `ExamplesRouter.fs` in the compile order:
 <Compile Include="ExamplesRouter.fs" />    <!-- this line already exists, add above it -->
 ```
 
-### 6b. Update `src/Weave.Docs/ExamplesRouter.fs` in four places:
+### 6b. Update `src/Weave.Docs/ExamplesRouter.fs` in four places
 
 **1 — Add to the `Page` DU:**
+
 ```fsharp
 [<Struct>]
 type Page =
@@ -313,6 +317,7 @@ type Page =
 ```
 
 **2 — Add to `pageToString`:**
+
 ```fsharp
 let private pageToString page =
   match page with
@@ -321,6 +326,7 @@ let private pageToString page =
 ```
 
 **3 — Add to `renderPage`:**
+
 ```fsharp
 let private renderPage page =
   match page with
@@ -329,6 +335,7 @@ let private renderPage page =
 ```
 
 **4 — Add to the nav item list inside `render ()`:**
+
 ```fsharp
 yield!
   [
@@ -338,6 +345,181 @@ yield!
     {Name}Examples    // <-- add here
   ]
   |> List.map item
+```
+
+---
+
+---
+
+## 7. Unit Tests — `tests/Weave.Tests.Unit/{Name}Tests.fs`
+
+Unit tests validate that every `toClass` function maps each DU case to the correct BEM class string and that all cases produce distinct classes. Use **Expecto** with `testList`/`testTheory`/`testCase`.
+
+**Rules:**
+
+- Module name is `Weave.Tests.Unit.{Name}Tests` (no `namespace`, just a top-level `module`).
+- The root binding must be decorated with `[<Tests>]` so Expecto discovers it automatically — no manual registration needed.
+- Write one `testList` per `toClass` (or other pure mapping) function.
+- For exhaustive DU cases: use `testTheory` with a list of `(input, expectedClass)` tuples, then a separate `testCase` that checks all cases produce distinct strings via `List.distinct`.
+- For `toClass` functions that return `Option<string>` (e.g. the default/no-modifier case returns `None`): use `Expect.isNone` and `Expect.equal ... (Some "...")` in individual `testCase` entries.
+- Never test `Create` or DOM rendering in unit tests — that belongs in the rendering tests.
+
+```fsharp
+module Weave.Tests.Unit.{Name}Tests
+
+open Expecto
+open Weave
+open Weave.CssHelpers
+
+[<Tests>]
+let {name}Tests =
+  testList "{Name}" [
+
+    testList "Variant.toClass" [
+      testTheory "each variant maps to the correct class" [
+        {Name}.Variant.Filled,   "weave-{name}--filled"
+        {Name}.Variant.Outlined, "weave-{name}--outlined"
+      ]
+      <| fun (variant, expected) -> Expect.equal ({Name}.Variant.toClass variant) expected ""
+
+      testCase "all variants produce distinct classes"
+      <| fun () ->
+        let classes =
+          [ {Name}.Variant.Filled; {Name}.Variant.Outlined ]
+          |> List.map {Name}.Variant.toClass
+
+        Expect.equal (List.distinct classes).Length classes.Length "each variant maps to a unique class"
+    ]
+
+    // Repeat the same pattern for Size.toClass, Color.toClass, etc.
+
+    // For toClass functions that return Option<string>:
+    testList "SomeProp.toClass" [
+      testCase "Default returns None (no modifier class)"
+      <| fun () -> Expect.isNone ({Name}.SomeProp.toClass {Name}.SomeProp.Default) ""
+      testCase "Other returns Some weave-{name}--other"
+      <| fun () ->
+        Expect.equal ({Name}.SomeProp.toClass {Name}.SomeProp.Other) (Some "weave-{name}--other") ""
+    ]
+  ]
+```
+
+### 7a. Register in `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj`
+
+Add a `<Compile>` entry in alphabetical order relative to the other test files:
+
+```xml
+<ItemGroup>
+  <!-- ... existing entries ... -->
+  <Compile Include="{Name}Tests.fs" />
+</ItemGroup>
+```
+
+---
+
+## 8. Rendering Tests — `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs`
+
+Rendering tests validate visual layout and CSS behaviour using **Playwright** (xUnit). They load a static HTML fixture in a headless browser and assert on bounding boxes, computed styles, and DOM state.
+
+**Rules:**
+
+- Class name is `{Name}LayoutTests` inheriting `PageTest()` from `Microsoft.Playwright.Xunit`.
+- Always call `this.LoadFixture()` first in every `[<Fact>]` test.
+- Give every meaningful element in the fixture an `id` attribute so tests can locate them with `this.Page.Locator("#id")`.
+- Use `BoundingBoxAsync()` to assert positional relationships (left/right, above/below, width/height).
+- Use `Page.EvaluateAsync<string>` to check computed styles (e.g. `display`, `visibility`) when bounding boxes are unavailable (e.g. hidden elements return `null`).
+- Allow ±1px tolerance in floating-point comparisons (`abs (a - b) <= 1.0f`).
+- Tests should be coarse-grained and layout-focused — avoid pixel-perfect assertions.
+
+```fsharp
+module Weave.Tests.Rendering.{Name}LayoutTests
+
+open Microsoft.Playwright.Xunit
+open Xunit
+open System.IO
+open System.Reflection
+
+type {Name}LayoutTests() =
+  inherit PageTest()
+
+  member private _.FixturePath =
+    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+
+    let fixtureDir =
+      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
+
+    Path.Combine(fixtureDir, "{name}.html")
+
+  member this.LoadFixture() = task {
+    do! this.Page.SetViewportSizeAsync(1280, 800)
+    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
+    ()
+  }
+
+  [<Fact>]
+  member this.``describe the layout expectation``() = task {
+    do! this.LoadFixture()
+    let! elementA = this.Page.Locator("#element-a").BoundingBoxAsync()
+    let! elementB = this.Page.Locator("#element-b").BoundingBoxAsync()
+
+    Assert.True(elementA.X < elementB.X, $"Element A (x={elementA.X}) should be left of B (x={elementB.X})")
+  }
+
+  [<Fact>]
+  member this.``hidden element is not displayed``() = task {
+    do! this.LoadFixture()
+
+    let! display =
+      this.Page.EvaluateAsync<string>("() => getComputedStyle(document.querySelector('#hidden-el')).display")
+
+    Assert.Equal("none", display)
+  }
+```
+
+### 8a. Create the HTML fixture — `tests/Weave.Tests.Rendering/fixtures/{name}.html`
+
+The fixture is a hand-written static HTML file using the component's BEM classes directly. It does **not** run WebSharper — it simply exercises the compiled CSS.
+
+**Rules:**
+
+- Link to the compiled stylesheet with `<link rel="stylesheet" href="../../../src/Weave/styles.css" />`.
+- Apply `margin: 0; padding: 16px; box-sizing: border-box;` on `body` to give a predictable layout origin.
+- Assign `id` attributes to every element that a test will locate.
+- Use explicit `style="display: block;"` / `style="display: none;"` on panels/content that are statically active or hidden.
+- Cover enough states to make at least one meaningful layout assertion per important structural relationship (e.g. tab order, panel visibility, alignment).
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{Name} Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Example: render the component with BEM classes and id attributes -->
+    <div id="{name}-root" class="weave-{name} weave-{name}--filled weave-{name}--primary">
+      <div id="{name}-content">Content</div>
+    </div>
+  </body>
+</html>
+```
+
+### 8b. Register in `tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj`
+
+```xml
+<ItemGroup>
+  <!-- ... existing entries ... -->
+  <Compile Include="{Name}LayoutTests.fs" />
+</ItemGroup>
 ```
 
 ---
@@ -353,3 +535,9 @@ Before marking the component as done, verify:
 - [ ] `src/Weave.Docs/examples/{Name}Examples.fs` created with at least one example section and a `render ()` function
 - [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `ExamplesRouter.fs`
 - [ ] `ExamplesRouter.fs` updated in all four locations: `Page` DU, `pageToString`, `renderPage`, nav list
+- [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created with `testTheory` coverage for every `toClass` function and distinct-class assertions
+- [ ] `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj` has `<Compile Include="{Name}Tests.fs" />`
+- [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship
+- [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link
+- [ ] `tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj` has `<Compile Include="{Name}LayoutTests.fs" />`
+- [ ] Run `dotnet fantomas .` in the root of the repo to format all files

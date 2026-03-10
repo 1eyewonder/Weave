@@ -1,5 +1,4 @@
-@import "../core/variables";
-@import "../abstracts/mixins";
+@use "../abstracts/mixins" as *;
 
 .weave-dialog {
   display: flex;

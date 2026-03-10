@@ -1,5 +1,3 @@
-@import '../../abstracts/variables';
-
 @mixin align-content ($breakpoint) {
   .align-content-#{$breakpoint}start {
     align-content: flex-start !important;

@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "../abstracts/variables";
+@use "../abstracts/variables" as *;
 
 @mixin _push-left-full {
   > .weave-drawer-container__main > .weave-appbar {

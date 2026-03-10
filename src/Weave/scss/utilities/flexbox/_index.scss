@@ -1,15 +1,15 @@
-@import '../../abstracts/variables';
-@import 'flex';
-@import 'flex-direction';
-@import 'flex-grow';
-@import 'flex-shrink';
-@import 'flex-wrap';
-@import 'justify-content';
-@import 'order';
-@import 'align-content';
-@import 'align-items';
-@import 'align-self';
-@import 'gap';
+@use '../../abstracts/variables' as *;
+@use 'flex' as *;
+@use 'flex-direction' as *;
+@use 'flex-grow' as *;
+@use 'flex-shrink' as *;
+@use 'flex-wrap' as *;
+@use 'justify-content' as *;
+@use 'order' as *;
+@use 'align-content' as *;
+@use 'align-items' as *;
+@use 'align-self' as *;
+@use 'gap' as *;
 
 
 @each $name, $value in $breakpoints {

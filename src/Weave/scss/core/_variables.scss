@@ -1,4 +1,5 @@
-@import "../utilities/borders/border-radius";
+@use "sass:map";
+@use "../utilities/borders/border-radius" as *;
 
 $font-family-base: "Fira Sans", sans-serif, monospace;
 $font-family-heading: $font-family-base;
@@ -10,8 +11,8 @@ $font-family-heading: $font-family-base;
   // Must be a bare unitless integer — never set with a unit (e.g. 1px).
   --weave-density: 1;
 
-  --default-borderradius: #{map-get($border-radiuses, "sm")};
-  --default-button-borderradius: #{map-get($border-radiuses, "md")};
+  --default-borderradius: #{map.get($border-radiuses, "sm")};
+  --default-button-borderradius: #{map.get($border-radiuses, "md")};
   --grid-item-min-height: 24px;
   --palette-border-opacity: 0.8;
   --weave-zindex-dialog: 10;

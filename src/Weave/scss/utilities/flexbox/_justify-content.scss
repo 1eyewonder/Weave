@@ -1,5 +1,3 @@
-@import '../../abstracts/variables';
-
 @mixin justify-content ($breakpoint) {
   .justify-#{$breakpoint}start {
     justify-content: flex-start !important;

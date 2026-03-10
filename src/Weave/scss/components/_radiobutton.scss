@@ -1,5 +1,4 @@
-@import "../abstracts/variables";
-@import "../abstracts/mixins";
+@use "../abstracts/mixins" as *;
 
 $radio-size: 20px;
 $dot-size: 10px;

@@ -2,50 +2,50 @@
 // Import order: Variables -> Reset -> Base -> Components -> Layouts -> Utilities
 
 // Abstracts
-@import "abstracts/variables";
-@import "abstracts/mixins";
-@import "abstracts/colors";
+@use "abstracts/variables" as abstracts-variables;
+@use "abstracts/mixins";
+@use "abstracts/colors";
 
 // Core
-@import "core/variables";
-@import "core/density";
-@import "core/themes";
-@import "core/reset";
-@import "core/base";
-@import "core/animations";
-@import "core/elevation";
-@import "core/ripple";
+@use "core/variables" as core-variables;
+@use "core/density";
+@use "core/themes";
+@use "core/reset";
+@use "core/base";
+@use "core/animations";
+@use "core/elevation";
+@use "core/ripple";
 
 // Components
-@import "components/alert";
-@import "components/button";
-@import "components/buttongroup";
-@import "components/buttonmenu";
-@import "components/tooltip";
-@import "components/typography";
-@import "components/focustrap";
-@import "components/field";
-@import "components/grid";
-@import "components/flexbreak";
-@import "components/divider";
-@import "components/checkbox";
-@import "components/radiobutton";
-@import "components/spacer";
-@import "components/switch";
-@import "components/dropdown";
-@import "components/expansionpanel";
-@import "components/link";
-@import "components/list";
-@import "components/dialog";
-@import "components/tabs";
+@use "components/alert";
+@use "components/button";
+@use "components/buttongroup";
+@use "components/buttonmenu";
+@use "components/tooltip";
+@use "components/typography";
+@use "components/focustrap";
+@use "components/field";
+@use "components/grid";
+@use "components/flexbreak";
+@use "components/divider";
+@use "components/checkbox";
+@use "components/radiobutton";
+@use "components/spacer";
+@use "components/switch";
+@use "components/dropdown";
+@use "components/expansionpanel";
+@use "components/link";
+@use "components/list";
+@use "components/dialog";
+@use "components/tabs";
 
 // Layouts
-@import "layout/appbar";
-@import "layout/container";
-@import "layout/drawer";
-@import "layout/drawer-container";
-@import "layout/main";
-@import "layout/scroll";
+@use "layout/appbar";
+@use "layout/container";
+@use "layout/drawer";
+@use "layout/drawer-container";
+@use "layout/main";
+@use "layout/scroll";
 
 // Utilities
-@import "utilities/index";
+@use "utilities/index";

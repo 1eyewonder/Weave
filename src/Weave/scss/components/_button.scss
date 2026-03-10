@@ -1,6 +1,5 @@
-@import "../abstracts/variables";
-@import "../abstracts/mixins";
-@import "../core/themes";
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
 
 .weave-button {
   color: inherit;

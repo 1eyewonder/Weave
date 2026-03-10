@@ -1,5 +1,4 @@
-@import "../abstracts/variables";
-@import "../abstracts/mixins";
+@use "../abstracts/mixins" as *;
 
 .weave-switch {
   --switch-brand-color: var(--palette-action-default);

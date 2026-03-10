@@ -1,4 +1,4 @@
-@import "../abstracts/variables";
+@use "../abstracts/variables" as *;
 
 $base-spacing: 0.1rem;
 $max-spacing-steps: 20;

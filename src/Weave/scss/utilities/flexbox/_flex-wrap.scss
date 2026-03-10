@@ -1,5 +1,3 @@
-@import '../../abstracts/variables';
-
 @mixin flex-wrap ($breakpoint) {
   .flex-#{$breakpoint}wrap {
     flex-wrap: wrap !important;

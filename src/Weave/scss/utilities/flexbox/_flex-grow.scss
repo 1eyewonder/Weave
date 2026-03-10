@@ -1,5 +1,3 @@
-@import '../../abstracts/variables';
-
 @mixin flex-grow ($breakpoint) {
   // element does not grow
   .flex-#{$breakpoint}grow-0 {

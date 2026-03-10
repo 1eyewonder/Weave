@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $palette-colors:
   primary, secondary, tertiary, info, success, warning, error;
 
@@ -10,7 +12,7 @@ $density-steps: (
   spacious: 2,
 );
 
-$density-standard-step: map-get($density-steps, standard); // = 1
+$density-standard-step: map.get($density-steps, standard); // = 1
 
 $field-colors: primary, secondary, tertiary, error, warning, success, info;
 

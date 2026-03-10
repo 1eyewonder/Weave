@@ -1,5 +1,4 @@
-@import "../abstracts/variables";
-@import "../core/themes";
+@use "../abstracts/variables" as *;
 
 .weave-button-group {
   display: inline-flex;

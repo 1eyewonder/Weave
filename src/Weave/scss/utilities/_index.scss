@@ -1,19 +1,19 @@
-@import 'borders/border-radius';
-@import 'borders/border-style';
-@import 'borders/border-width';
-@import 'borders/outline';
+@use 'borders/border-radius';
+@use 'borders/border-style';
+@use 'borders/border-width';
+@use 'borders/outline';
 
-@import 'flexbox';
+@use 'flexbox';
 
-@import 'interactivity/cursor';
-@import 'interactivity/pointerevents';
+@use 'interactivity/cursor';
+@use 'interactivity/pointerevents';
 
-@import 'layout/display';
-@import 'layout/object-fit';
-@import 'layout/object-position';
-@import 'layout/overflow';
-@import 'layout/position';
-@import 'layout/visibility';
-@import 'layout/zindex';
+@use 'layout/display';
+@use 'layout/object-fit';
+@use 'layout/object-position';
+@use 'layout/overflow';
+@use 'layout/position';
+@use 'layout/visibility';
+@use 'layout/zindex';
 
-@import 'spacing/spacing';
+@use 'spacing/spacing';

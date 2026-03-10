@@ -1,5 +1,4 @@
-@import "../abstracts/variables";
-@import "../abstracts/mixins";
+@use "../abstracts/mixins" as *;
 
 $checkbox-size: 20px;
 $checkmark-width: 6px;

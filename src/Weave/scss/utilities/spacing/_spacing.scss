@@ -1,4 +1,4 @@
-@import "../../abstracts/variables";
+@use "../../abstracts/variables" as *;
 
 // Rem-based spacing utilities derived from a single base unit ($spacing-base)
 // 1 step = $spacing-base (default 0.25rem). Supports 0..20, negatives (n1..n20) for margins, and responsive breakpoints.

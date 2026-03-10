@@ -1,5 +1,4 @@
-@import "../abstracts/variables";
-@import "../core/themes";
+@use "../abstracts/variables" as *;
 
 // Renders as <a>, designed to sit inline with surrounding text or standalone.
 .weave-link {

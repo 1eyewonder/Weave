@@ -865,7 +865,7 @@ ButtonMenu.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Button Menu Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Button Menu"
         Body1.Div(
           "A floating action button menu that fans out a list of items when clicked. Supports icon button triggers (CreateIcon) and standard text button triggers (Create), four fan-out directions, and icon swap or rotation animations.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

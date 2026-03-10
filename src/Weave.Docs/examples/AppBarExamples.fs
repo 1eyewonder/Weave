@@ -246,7 +246,7 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
   let render () =
     Container.Create(
       div [] [
-        H1.Div("AppBar", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "App Bar"
         Helpers.bodyText
           "AppBar provides a top-level horizontal bar for branding, navigation, \
            and global actions. It themes automatically with the rest of the application."

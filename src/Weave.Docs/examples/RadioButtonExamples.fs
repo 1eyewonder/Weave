@@ -208,7 +208,7 @@ Radio.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Radio Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Radio Button"
         Body1.Div(
           "The Radio component allows users to select a single option from a set. It supports different sizes, colors, and can be disabled.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

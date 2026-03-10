@@ -106,7 +106,7 @@ Button.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Density", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Density"
         Body1.Div(
           "Utility which controls spacing and sizing across components.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

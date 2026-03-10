@@ -551,7 +551,7 @@ NumericField.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("NumericField Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Numeric Field"
         Body1.Div(
           "NumericField wraps Field to provide a typed numeric input with spin buttons, keyboard arrow keys, mouse wheel support, and optional min/max/step constraints. Separate overloads exist for int and float values.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

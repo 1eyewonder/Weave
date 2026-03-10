@@ -427,7 +427,7 @@ ButtonGroup.Create(
   let render () =
     Container.Create(
       div [] [
-        H3.Div("Button Group", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Button Group"
         Body1.Div(
           "ButtonGroup groups buttons, icon buttons, button menus, and dropdowns into a single visual unit with shared variant, color, and size styling.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

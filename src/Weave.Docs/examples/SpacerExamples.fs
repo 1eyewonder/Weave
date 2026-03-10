@@ -94,7 +94,7 @@ module SpacerExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Spacer", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Spacer"
         Helpers.bodyText
           "Spacer is a zero-content element that expands to fill all \
            available space in a flex container (flex: 1 1 auto). \

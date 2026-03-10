@@ -181,7 +181,7 @@ Switch.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Switch Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Switch"
         Body1.Div(
           "The Switch component allows users to toggle between two states. It supports different sizes, colors, and can be disabled.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

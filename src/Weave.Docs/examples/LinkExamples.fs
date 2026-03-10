@@ -369,7 +369,7 @@ Link.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Link", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Link"
         Helpers.bodyText
           "A component that wraps an anchor element with configurable underline behaviour, icon adornments, and reactive enable/disable state."
         Helpers.divider ()

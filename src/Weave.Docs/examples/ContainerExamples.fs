@@ -136,7 +136,7 @@ module ContainerExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Container Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Container"
         Body1.Div(
           "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

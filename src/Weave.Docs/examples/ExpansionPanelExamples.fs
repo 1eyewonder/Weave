@@ -182,7 +182,7 @@ ExpansionPanelContainer.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("ExpansionPanel Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Expansion Panel"
         Body1.Div(
           "The ExpansionPanel component allows for collapsible sections of content, useful for organizing information in a compact manner.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

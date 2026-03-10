@@ -529,7 +529,7 @@ WeaveList.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("List Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "List"
         Body1.Div(
           "A scrollable list for displaying text, avatars, icons, and interactive items. Use lists to help users find a specific item and act on it.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

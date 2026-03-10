@@ -169,7 +169,7 @@ module DialogExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Dialog Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Dialog"
         Body1.Div(
           "Dialogs are used to display important information or request user input in a modal window.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

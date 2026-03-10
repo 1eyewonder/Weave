@@ -788,7 +788,7 @@ Field.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Field Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Field"
         Body1.Div(
           "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

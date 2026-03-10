@@ -524,7 +524,7 @@ module IconsExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Icons"
         Body1.Div(
           "Weave has built in helpers for Material Symbols icons. The icons are structured within a DU which is organized into child DUs which align with the categories defined by Google.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

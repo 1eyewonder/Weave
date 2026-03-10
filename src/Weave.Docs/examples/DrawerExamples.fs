@@ -560,7 +560,7 @@ DrawerContainer.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Drawer Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Drawer"
         Body1.Div(
           "Drawers provide navigation panels that can slide in from any edge of \
            the screen. Wrap side drawers in a DrawerContainer so the AppBar and \

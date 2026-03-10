@@ -125,7 +125,7 @@ div [
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Divider Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Divider"
         Body1.Div(
           "Dividers are thin lines that group content in lists and layouts.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

@@ -271,7 +271,7 @@ Caption.Div("Last updated: December 20, 2025")
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Typography Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Typography"
         Body1.Div(
           "Typography components provide consistent text styling throughout your application with semantic meaning and visual hierarchy.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

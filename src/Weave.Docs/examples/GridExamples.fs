@@ -335,7 +335,7 @@ module GridExamples =
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Grid Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Grid"
         Body1.Div(
           "The Grid component uses a 12-column system to create flexible, responsive layouts. Items can span different numbers of columns at different breakpoints.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

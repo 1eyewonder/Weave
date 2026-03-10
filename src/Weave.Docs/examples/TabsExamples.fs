@@ -607,7 +607,7 @@ Tabs.Create(
   let render () =
     Container.Create(
       div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
-        H1.Div("Tabs", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Tabs"
 
         Body1.Div(
           "Tabs organize content across different screens and views.",

@@ -507,7 +507,7 @@ Dropdown.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Dropdown Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Dropdown"
         Body1.Div(
           "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

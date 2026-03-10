@@ -558,7 +558,7 @@ Tooltip.Create(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Tooltip Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Tooltip"
         Body1.Div(
           "Tooltips display informative text when users hover over, focus on, or tap an element.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

@@ -621,7 +621,7 @@ Button.CreateIcon(
   let render () =
     Container.Create(
       div [] [
-        H1.Div("Button Component", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Helpers.pageTitle "Button"
         Body1.Div(
           "Buttons allow users to take actions and make choices with a single tap.",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]

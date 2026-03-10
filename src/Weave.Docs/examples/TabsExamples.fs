@@ -236,7 +236,7 @@ Tabs.Create(
             ],
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
-           )
+          )
         ],
         justify = JustifyContent.SpaceAround
       )
@@ -382,21 +382,13 @@ Tabs.Create(
     let content =
       Grid.Create(
         [
-          GridItem.Create(
-            makeTabs Position.Top "Top",
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
-          )
+          GridItem.Create(makeTabs Position.Top "Top", xs = Grid.Width.create 12, md = Grid.Width.create 6)
           GridItem.Create(
             makeTabs Position.Bottom "Bottom",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-          GridItem.Create(
-            makeTabs Position.Left "Left",
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
-          )
+          GridItem.Create(makeTabs Position.Left "Left", xs = Grid.Width.create 12, md = Grid.Width.create 6)
           GridItem.Create(
             makeTabs Position.Right "Right",
             xs = Grid.Width.create 12,
@@ -537,8 +529,7 @@ div [ Attr.Style "max-width" "500px" ] [
 
   let private densityExample () =
     let description =
-      Helpers.bodyText
-        "Density controls tab padding. Pass the density class in attrs to set it per-instance."
+      Helpers.bodyText "Density controls tab padding. Pass the density class in attrs to set it per-instance."
 
     let tabs () =
       View.Const [
@@ -550,17 +541,18 @@ div [ Attr.Style "max-width" "500px" ] [
       let col density =
         let label = sprintf "%A" density
 
-        div [
-          Density.toClass density |> cl
-        ] [
+        div [ Density.toClass density |> cl ] [
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Tabs.Create(tabs (), attrs = [
+          Tabs.Create(
+            tabs (),
+            attrs = [
               cls [
                 Color.toClass BrandColor.Primary
                 BorderRadius.toClass BorderRadius.All.small
               ]
               Attr.Style "border" "1px solid var(--palette-divider)"
-            ])
+            ]
+          )
         ]
 
       Grid.Create(

@@ -1491,9 +1491,7 @@ module ExamplesRouter =
           navLeafItem "Expansion Panel"
         ]
 
-        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
-          navLeafItem "Density"
-        ]
+        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [ navLeafItem "Density" ]
       ]
 
     let appBarContent =

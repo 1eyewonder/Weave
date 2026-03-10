@@ -58,10 +58,7 @@ type AlertLayoutTests() =
       $"Standard (y={standard.Y}) should be above outlined (y={outlined.Y})"
     )
 
-    Assert.True(
-      outlined.Y < filled.Y,
-      $"Outlined (y={outlined.Y}) should be above filled (y={filled.Y})"
-    )
+    Assert.True(outlined.Y < filled.Y, $"Outlined (y={outlined.Y}) should be above filled (y={filled.Y})")
   }
 
   [<Fact>]
@@ -70,10 +67,7 @@ type AlertLayoutTests() =
     let! icon = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
     let! content = this.Page.Locator("#alert-with-icon .weave-alert__content").BoundingBoxAsync()
 
-    Assert.True(
-      icon.X < content.X,
-      $"Icon (x={icon.X}) should be left of content (x={content.X})"
-    )
+    Assert.True(icon.X < content.X, $"Icon (x={icon.X}) should be left of content (x={content.X})")
   }
 
   [<Fact>]
@@ -82,8 +76,5 @@ type AlertLayoutTests() =
     let! content = this.Page.Locator("#alert-with-close .weave-alert__content").BoundingBoxAsync()
     let! close = this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
 
-    Assert.True(
-      content.X < close.X,
-      $"Content (x={content.X}) should be left of close button (x={close.X})"
-    )
+    Assert.True(content.X < close.X, $"Content (x={content.X}) should be left of close button (x={close.X})")
   }

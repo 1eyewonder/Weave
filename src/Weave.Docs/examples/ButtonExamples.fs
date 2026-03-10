@@ -460,17 +460,10 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
       let row density =
         let label = sprintf "%A" density
 
-        div [
-          cl (Density.toClass density)
-          Margin.toClasses Margin.Bottom.small |> cls
-        ] [
+        div [ cl (Density.toClass density); Margin.toClasses Margin.Bottom.small |> cls ] [
           Grid.Create(
             [
-              GridItem.Create(
-                Subtitle2.Div(label),
-                xs = Grid.Width.create 12,
-                sm = Grid.Width.create 3
-              )
+              GridItem.Create(Subtitle2.Div(label), xs = Grid.Width.create 12, sm = Grid.Width.create 3)
               GridItem.Create(
                 Button.CreateIcon(
                   Icon.Create(Icon.UiActions UiActions.Favorite),
@@ -517,11 +510,7 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
           )
         ]
 
-      div [] [
-        row Density.Compact
-        row Density.Standard
-        row Density.Spacious
-      ]
+      div [] [ row Density.Compact; row Density.Standard; row Density.Spacious ]
 
     let code =
       """open Weave

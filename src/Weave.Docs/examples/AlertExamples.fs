@@ -19,14 +19,12 @@ module AlertExamples =
     let content =
       div [
         SurfaceColor.toBackgroundColor SurfaceColor.Background
-        cls [ yield! Padding.toClasses Padding.All.small; BorderRadius.toClass BorderRadius.All.small ]
+        cls [
+          yield! Padding.toClasses Padding.All.small
+          BorderRadius.toClass BorderRadius.All.small
+        ]
       ] [
-        Alert.Create(
-          text "This is an alert.",
-          attrs = [
-            Alert.Variant.toClass Alert.Variant.Standard |> cl
-          ]
-        )
+        Alert.Create(text "This is an alert.", attrs = [ Alert.Variant.toClass Alert.Variant.Standard |> cl ])
       ]
 
     let code =
@@ -128,7 +126,10 @@ Alert.Create(
     let content =
       div [
         SurfaceColor.toBackgroundColor SurfaceColor.Background
-        cls [ yield! Padding.toClasses Padding.All.small; BorderRadius.toClass BorderRadius.All.small ]
+        cls [
+          yield! Padding.toClasses Padding.All.small
+          BorderRadius.toClass BorderRadius.All.small
+        ]
       ] [
         Grid.Create(
           colors
@@ -140,7 +141,9 @@ Alert.Create(
                 text label,
                 attrs = [
                   Alert.Variant.toClass Alert.Variant.Standard |> cl
-                  Alert.AlertColor.toClass color |> Option.map cl |> Option.defaultValue Attr.Empty
+                  Alert.AlertColor.toClass color
+                  |> Option.map cl
+                  |> Option.defaultValue Attr.Empty
                 ]
               ),
               xs = Grid.Width.create 12,

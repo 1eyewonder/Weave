@@ -455,7 +455,10 @@ module DropdownExamples =
     let content =
       let col density =
         let label = sprintf "%A" density
-        let items = [ 1..3 ] |> List.map (fun n -> DropdownItem.Create(text (sprintf "Item %d" n), onClick = fun () -> ()))
+
+        let items =
+          [ 1..3 ]
+          |> List.map (fun n -> DropdownItem.Create(text (sprintf "Item %d" n), onClick = (fun () -> ())))
 
         div [ cl (Density.toClass density) ] [
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])

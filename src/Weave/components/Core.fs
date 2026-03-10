@@ -157,7 +157,7 @@ module CssHelpers =
 
     let toClass density =
       match density with
-      | Density.Compact  -> Css.``weave-density--compact``
+      | Density.Compact -> Css.``weave-density--compact``
       | Density.Standard -> Css.``weave-density--standard``
       | Density.Spacious -> Css.``weave-density--spacious``
 

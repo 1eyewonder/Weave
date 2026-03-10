@@ -208,12 +208,7 @@ DrawerContainer.Create(
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreatePersistent(
-              navList (),
-              isOpen.View,
-              position = Drawer.Position.Left,
-              isFixed = false
-            )
+            Drawer.CreatePersistent(navList (), isOpen.View, position = Drawer.Position.Left, isFixed = false)
         )
       )
 

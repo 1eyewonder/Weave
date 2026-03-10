@@ -54,9 +54,6 @@ let alertTests =
           ]
           |> List.map Alert.AlertColor.toClass
 
-        Expect.equal
-          (List.distinct classes).Length
-          classes.Length
-          "each BrandColor maps to a unique class"
+        Expect.equal (List.distinct classes).Length classes.Length "each BrandColor maps to a unique class"
     ]
   ]

@@ -45,14 +45,7 @@ module Alert =
 [<JavaScript>]
 type Alert =
 
-  static member Create
-    (
-      content: Doc,
-      ?icon: Doc,
-      ?onClose: unit -> unit,
-      ?closeIcon: Doc,
-      ?attrs: Attr list
-    ) =
+  static member Create(content: Doc, ?icon: Doc, ?onClose: unit -> unit, ?closeIcon: Doc, ?attrs: Attr list) =
 
     let attrs = defaultArg attrs List.empty
 
@@ -73,10 +66,7 @@ type Alert =
         )
       | None -> Doc.Empty
 
-    div [
-      cl Css.``weave-alert``
-      yield! attrs
-    ] [
+    div [ cl Css.``weave-alert``; yield! attrs ] [
       iconDoc
       div [ cl Css.``weave-alert__content`` ] [ content ]
       closeDoc

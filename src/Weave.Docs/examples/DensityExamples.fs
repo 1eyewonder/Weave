@@ -10,7 +10,7 @@ open Weave.Icons.MaterialSymbols
 open Weave.CssHelpers
 
 [<JavaScript>]
-module WeaveStylingExamples =
+module DensityExamples =
 
   let private densitySection () =
     let description =

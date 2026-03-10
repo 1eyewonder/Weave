@@ -1256,7 +1256,7 @@ module ExamplesRouter =
     | AlertExamples -> AlertExamples.render ()
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
-    | DensityExamples -> WeaveStylingExamples.render ()
+    | DensityExamples -> DensityExamples.render ()
 
   let private githubSvg =
     Doc.Verbatim

@@ -1656,9 +1656,14 @@ module ExamplesRouter =
               else
                 replaceStateHash pageHash)
           ] [
-            div [ cls [ yield! Padding.toClasses Padding.All.small ] ] [
-              currentPageView |> Doc.BindView(renderPage navigateTo)
-            ]
+            div [
+              cls [
+                FlexDirection.toClass None FlexDirection.Column
+                FlexDirection.toClass (Some Breakpoint.Medium) FlexDirection.Row
+                yield! Padding.toClasses Padding.All.Medium.small
+                yield! Padding.toClasses Padding.All.ExtraSmall.extraSmall
+              ]
+            ] [ currentPageView |> Doc.BindView(renderPage navigateTo) ]
           ],
         leftDrawer =
           Drawer.CreateResponsive(

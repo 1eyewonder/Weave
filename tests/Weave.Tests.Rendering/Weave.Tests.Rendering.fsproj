@@ -28,6 +28,7 @@
     <Compile Include="DrawerLayoutTests.fs" />
     <Compile Include="SpacerLayoutTests.fs" />
     <Compile Include="NumericFieldLayoutTests.fs" />
+    <Compile Include="SpacingLayoutTests.fs" />
   </ItemGroup>
   <Import Project="../../.paket/Paket.Restore.targets" />
 </Project>

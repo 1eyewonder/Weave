@@ -26,6 +26,7 @@
     <Compile Include="ListTests.fs" />
     <Compile Include="TooltipTests.fs" />
     <Compile Include="DrawerTests.fs" />
+    <Compile Include="SpacingTests.fs" />
   </ItemGroup>
 
   <Import Project="../../.paket/Paket.Restore.targets" />

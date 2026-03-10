@@ -83,8 +83,7 @@ type Button =
 
     button [
       attr.``type`` "button"
-      cl Css.``weave-button``
-      cl Css.``weave-button--icon``
+      cls [ Css.``weave-button``; Css.``weave-button--icon`` ]
 
       yield! attrs
 

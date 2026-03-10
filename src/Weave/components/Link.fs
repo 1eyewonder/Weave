@@ -102,8 +102,7 @@ type Link =
     let attrs = defaultArg attrs List.empty
 
     a [
-      cl Css.``weave-link``
-      cl Css.``weave-link--icon``
+      cls [ Css.``weave-link``; Css.``weave-link--icon`` ]
 
       attr.href href
 

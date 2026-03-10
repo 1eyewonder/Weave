@@ -108,12 +108,16 @@ type ButtonMenu =
       | Some oi ->
         div [ cl Css.``weave-button-menu__trigger-icons`` ] [
           div [
-            cl Css.``weave-button-menu__trigger-icon``
-            cl Css.``weave-button-menu__trigger-icon--closed``
+            cls [
+              Css.``weave-button-menu__trigger-icon``
+              Css.``weave-button-menu__trigger-icon--closed``
+            ]
           ] [ closedIcon ]
           div [
-            cl Css.``weave-button-menu__trigger-icon``
-            cl Css.``weave-button-menu__trigger-icon--open``
+            cls [
+              Css.``weave-button-menu__trigger-icon``
+              Css.``weave-button-menu__trigger-icon--open``
+            ]
           ] [ oi ]
         ]
       | None -> closedIcon

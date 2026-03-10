@@ -32,23 +32,6 @@ let buttonTests =
       <| fun () -> Expect.isNone (Button.Width.toClass Button.Width.Auto) "Auto should return None"
     ]
 
-    testList "Size.toClass" [
-      testTheory "each size maps to the correct class" [
-        Button.Size.Small, "weave-button--small"
-        Button.Size.Medium, "weave-button--medium"
-        Button.Size.Large, "weave-button--large"
-      ]
-      <| fun (size, expected) -> Expect.equal (Button.Size.toClass size) expected ""
-
-      testCase "all sizes produce distinct classes"
-      <| fun () ->
-        let classes =
-          [ Button.Size.Small; Button.Size.Medium; Button.Size.Large ]
-          |> List.map Button.Size.toClass
-
-        Expect.equal (List.distinct classes).Length classes.Length "each size maps to a unique class"
-    ]
-
     testList "Color.toClass" [
       testTheory "each color maps to the correct class" [
         BrandColor.Primary, "weave-button--primary"

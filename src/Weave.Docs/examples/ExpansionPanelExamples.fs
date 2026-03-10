@@ -126,6 +126,59 @@ module ExpansionPanelExamples =
       "Header Highlight Variants"
       (Helpers.bodyText "Expansion panel headers can have different variants: Filled, Highlight, and None.")
 
+  let private densityExample () =
+    let description =
+      Helpers.bodyText
+        "Density controls expansion panel header padding. Pass the density class in attrs to set it per-instance on the container."
+
+    let content =
+      let col density =
+        let label = sprintf "%A" density
+        let expanded = Var.Create false
+
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          ExpansionPanelContainer.Create(
+            [
+              ExpansionPanel.Create(
+                ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div("Panel Header"), expanded),
+                expanded = expanded,
+                content = ExpansionPanelContent.Create(text "Panel content")
+              )
+            ]
+          )
+        ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let expanded = Var.Create false
+
+ExpansionPanelContainer.Create(
+    [
+        ExpansionPanel.Create(
+            ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div("Panel Header"), expanded),
+            expanded = expanded,
+            content = ExpansionPanelContent.Create(text "Panel content")
+        )
+    ],
+    attrs = [ cl (Density.toClass Density.Compact) ] // see here
+)
+"""
+
+    Helpers.codeSampleSection "Density" description content code
+
   let render () =
     Container.Create(
       div [] [
@@ -141,6 +194,8 @@ module ExpansionPanelExamples =
         color ()
         Helpers.divider ()
         highlightVariants ()
+        Helpers.divider ()
+        densityExample ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

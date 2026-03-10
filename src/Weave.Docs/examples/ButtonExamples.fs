@@ -154,76 +154,95 @@ colors
 
     Helpers.codeSampleSection "Colors" description content code
 
-  let private sizeExamples () =
+  let private densityExamples () =
     let description =
       Helpers.bodyText
-        "Buttons come in three sizes: Small, Medium (default), and Large. These sizes effect the button's minimum height and padding."
+        "Density controls button height and padding. Pass the density class in attrs to set it per-instance. See the Density section on the Weave Styling page for container-level usage."
 
     let content =
+      let col density =
+        let label = sprintf "%A" density
+
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          div [] [
+            Button.Create(
+              text "Filled",
+              onClick = (fun () -> ()),
+              attrs = [
+                Button.Variant.Filled |> Button.Variant.toClass |> cl
+                BrandColor.Primary |> Button.Color.toClass |> cl
+              ]
+            )
+          ]
+          div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+            Button.Create(
+              text "Outlined",
+              onClick = (fun () -> ()),
+              attrs = [
+                Button.Variant.Outlined |> Button.Variant.toClass |> cl
+                BrandColor.Primary |> Button.Color.toClass |> cl
+              ]
+            )
+          ]
+          div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+            Button.Create(
+              text "Text",
+              onClick = (fun () -> ()),
+              attrs = [
+                Button.Variant.Text |> Button.Variant.toClass |> cl
+                BrandColor.Primary |> Button.Color.toClass |> cl
+              ]
+            )
+          ]
+        ]
+
       Grid.Create(
         [
-          let btn displayText size variant =
-            GridItem.Create(
-              Button.Create(
-                text displayText,
-                onClick = (fun () -> printfn "%s clicked" displayText),
-                attrs = [
-                  variant |> Button.Variant.toClass |> cl
-                  Button.Size.toClass size |> cl
-                  Button.Color.toClass BrandColor.Primary |> cl
-                ]
-              ),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 4
-            )
-
-          btn "Small" Button.Size.Small Button.Variant.Filled
-          btn "Medium" Button.Size.Medium Button.Variant.Filled
-          btn "Large" Button.Size.Large Button.Variant.Filled
-          btn "Small" Button.Size.Small Button.Variant.Outlined
-          btn "Medium" Button.Size.Medium Button.Variant.Outlined
-          btn "Large" Button.Size.Large Button.Variant.Outlined
-          btn "Small" Button.Size.Small Button.Variant.Text
-          btn "Medium" Button.Size.Medium Button.Variant.Text
-          btn "Large" Button.Size.Large Button.Variant.Text
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
         ],
-        justify = JustifyContent.Center,
-        attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
       )
 
     let code =
       """open Weave
 open Weave.CssHelpers
 
-let onClick name = printfn "%s clicked" name
+Button.Create(
+    text "Compact",
+    onClick = (fun () -> ()),
+    attrs = [
+        cl (Density.toClass Density.Compact) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
 
-let btn (size: Size) variant =
-    let displayText = sprintf "%A" size
+Button.Create(
+    text "Standard",
+    onClick = (fun () -> ()),
+    attrs = [
+        cl (Density.toClass Density.Standard) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
 
-    Button.Create(
-        text displayText,
-        onClick = (fun () -> onClick displayText),
-        attrs = [
-            cls [
-                Button.Variant.toClass variant
-                Button.Size.toClass size // see here
-                Button.Color.toClass BrandColor.Primary
-            ]
-        ]
-    )
-
-btn Button.Size.Small Button.Variant.Filled
-btn Button.Size.Medium Button.Variant.Filled
-btn Button.Size.Large Button.Variant.Filled
-btn Button.Size.Small Button.Variant.Outlined
-btn Button.Size.Medium Button.Variant.Outlined
-btn Button.Size.Large Button.Variant.Outlined
-btn Button.Size.Small Button.Variant.Text
-btn Button.Size.Medium Button.Variant.Text
-btn Button.Size.Large Button.Variant.Text
+Button.Create(
+    text "Spacious",
+    onClick = (fun () -> ()),
+    attrs = [
+        cl (Density.toClass Density.Spacious) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
 """
 
-    Helpers.codeSampleSection "Sizes" description content code
+    Helpers.codeSampleSection "Density" description content code
 
   let private disabledExamples () =
     let description =
@@ -432,44 +451,77 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
 
     Helpers.codeSampleSection "Icon Buttons" description content code
 
-  let private iconButtonVariantAndSizeExamples () =
+  let private iconButtonDensityExamples () =
     let description =
-      Helpers.bodyText "Icon buttons support the same variant and size options as regular buttons."
+      Helpers.bodyText
+        "Icon buttons respond to density the same way as text buttons. Pass the density class in attrs to set it per-instance. See the Density section on the Weave Styling page for container-level usage."
 
     let content =
-      Grid.Create(
-        [
-          let btn variant size =
-            let variantName = sprintf "%A" variant
+      let row density =
+        let label = sprintf "%A" density
 
-            GridItem.Create(
-              Button.CreateIcon(
-                Icon.Create(Icon.UiActions UiActions.Delete),
-                onClick = (fun () -> printfn "%s icon clicked" variantName),
+        div [
+          cl (Density.toClass density)
+          Margin.toClasses Margin.Bottom.small |> cls
+        ] [
+          Grid.Create(
+            [
+              GridItem.Create(
+                Subtitle2.Div(label),
+                xs = Grid.Width.create 12,
+                sm = Grid.Width.create 3
+              )
+              GridItem.Create(
+                Button.CreateIcon(
+                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  onClick = (fun () -> ()),
+                  attrs = [
+                    Attr.Create "aria-label" "favorite"
+                    Button.Variant.Filled |> Button.Variant.toClass |> cl
+                    BrandColor.Secondary |> Button.Color.toClass |> cl
+                  ]
+                ),
+                xs = Grid.Width.create 4,
+                sm = Grid.Width.create 3
+              )
+              GridItem.Create(
+                Button.CreateIcon(
+                  Icon.Create(Icon.UiActions UiActions.Delete),
+                  onClick = (fun () -> ()),
+                  attrs = [
+                    Attr.Create "aria-label" "delete"
+                    Button.Variant.Outlined |> Button.Variant.toClass |> cl
+                    BrandColor.Error |> Button.Color.toClass |> cl
+                  ]
+                ),
+                xs = Grid.Width.create 4,
+                sm = Grid.Width.create 3
+              )
+              GridItem.Create(
+                Button.CreateIcon(
+                  Icon.Create(Icon.UiActions UiActions.Search),
+                  onClick = (fun () -> ()),
+                  attrs = [
+                    Attr.Create "aria-label" "search"
+                    Button.Variant.Text |> Button.Variant.toClass |> cl
+                    BrandColor.Primary |> Button.Color.toClass |> cl
+                  ]
+                ),
+                xs = Grid.Width.create 4,
+                sm = Grid.Width.create 3
+              )
+            ],
+            spacing = Grid.GutterSpacing.create 2,
+            justify = JustifyContent.FlexStart,
+            attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
+          )
+        ]
 
-                attrs = [
-                  Attr.Create "aria-label" "delete"
-                  Button.Variant.toClass variant |> cl
-                  Button.Size.toClass size |> cl
-                  Button.Color.toClass BrandColor.Primary |> cl
-                ]
-              ),
-              xs = Grid.Width.create 4
-            )
-
-          btn Button.Variant.Outlined Button.Size.Small
-          btn Button.Variant.Outlined Button.Size.Medium
-          btn Button.Variant.Outlined Button.Size.Large
-          btn Button.Variant.Filled Button.Size.Small
-          btn Button.Variant.Filled Button.Size.Medium
-          btn Button.Variant.Filled Button.Size.Large
-          btn Button.Variant.Text Button.Size.Small
-          btn Button.Variant.Text Button.Size.Medium
-          btn Button.Variant.Text Button.Size.Large
-        ],
-        justify = JustifyContent.SpaceAround,
-        attrs = [ AlignItems.toClass AlignItems.Center |> cl ]
-      )
+      div [] [
+        row Density.Compact
+        row Density.Standard
+        row Density.Spacious
+      ]
 
     let code =
       """open Weave
@@ -477,30 +529,41 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 open Weave.CssHelpers
 
-let btn variant size =
-    Button.CreateIcon(
-        Icon.Create(Icon.UiActions UiActions.Delete),
-        onClick = (fun () -> ()),
-        attrs = [
-            Attr.Create "aria-label" "delete"
-            Button.Variant.toClass variant |> cl // see here
-            Button.Size.toClass size |> cl // see here
-            Button.Color.toClass BrandColor.Primary |> cl
-        ]
-    )
+Button.CreateIcon(
+    Icon.Create(Icon.UiActions UiActions.Favorite),
+    onClick = (fun () -> ()),
+    attrs = [
+        Attr.Create "aria-label" "favorite"
+        cl (Density.toClass Density.Compact) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
 
-btn Button.Variant.Outlined Button.Size.Small
-btn Button.Variant.Outlined Button.Size.Medium
-btn Button.Variant.Outlined Button.Size.Large
-btn Button.Variant.Filled Button.Size.Small
-btn Button.Variant.Filled Button.Size.Medium
-btn Button.Variant.Filled Button.Size.Large
-btn Button.Variant.Text Button.Size.Small
-btn Button.Variant.Text Button.Size.Medium
-btn Button.Variant.Text Button.Size.Large
+Button.CreateIcon(
+    Icon.Create(Icon.UiActions UiActions.Favorite),
+    onClick = (fun () -> ()),
+    attrs = [
+        Attr.Create "aria-label" "favorite"
+        cl (Density.toClass Density.Standard) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
+
+Button.CreateIcon(
+    Icon.Create(Icon.UiActions UiActions.Favorite),
+    onClick = (fun () -> ()),
+    attrs = [
+        Attr.Create "aria-label" "favorite"
+        cl (Density.toClass Density.Spacious) // see here
+        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        BrandColor.Primary |> Button.Color.toClass |> cl
+    ]
+)
 """
 
-    Helpers.codeSampleSection "Icon Button Variants & Sizes" description content code
+    Helpers.codeSampleSection "Icon Button Density" description content code
 
   let private iconButtonDisabledExamples () =
     let description =
@@ -580,7 +643,7 @@ Button.CreateIcon(
         Helpers.divider ()
         colorExamples ()
         Helpers.divider ()
-        sizeExamples ()
+        densityExamples ()
         Helpers.divider ()
         disabledExamples ()
         Helpers.divider ()
@@ -590,7 +653,7 @@ Button.CreateIcon(
         Helpers.divider ()
         iconButtonExamples ()
         Helpers.divider ()
-        iconButtonVariantAndSizeExamples ()
+        iconButtonDensityExamples ()
         Helpers.divider ()
         iconButtonDisabledExamples ()
       ],

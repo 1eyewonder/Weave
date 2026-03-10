@@ -447,6 +447,60 @@ module DropdownExamples =
         (Helpers.bodyText "Dropdown items can be disabled using the `enabled` property.")
     ]
 
+  let private densityExample () =
+    let description =
+      Helpers.bodyText
+        "Density controls the touch-target padding and minimum height of dropdown items on a three-step scale: Compact, Standard, and Spacious. Pass the density class on the dropdown's root element via attrs."
+
+    let content =
+      let col density =
+        let label = sprintf "%A" density
+        let items = [ 1..3 ] |> List.map (fun n -> DropdownItem.Create(text (sprintf "Item %d" n), onClick = fun () -> ()))
+
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          Dropdown.Create(
+            buttonContents = text "Open",
+            items = items,
+            buttonAttrs = [
+              cls [
+                Button.Variant.toClass Button.Variant.Filled
+                Button.Color.toClass BrandColor.Primary
+              ]
+            ]
+          )
+        ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+// Per-instance: pass the density class in attrs to set it on the dropdown root
+Dropdown.Create(
+    buttonContents = text "Compact",
+    items = items,
+    attrs = [ cl (Density.toClass Density.Compact) ] // see here
+)
+
+Dropdown.Create(
+    buttonContents = text "Spacious",
+    items = items,
+    attrs = [ cl (Density.toClass Density.Spacious) ] // see here
+)
+"""
+
+    Helpers.codeSampleSection "Density" description content code
+
   let render () =
     Container.Create(
       div [] [
@@ -466,6 +520,8 @@ module DropdownExamples =
         openOnExamples ()
         Helpers.divider ()
         disabledExample ()
+        Helpers.divider ()
+        densityExample ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

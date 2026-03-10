@@ -6,6 +6,10 @@ $font-family-heading: $font-family-base;
 :root {
   --weave-font-family: #{$font-family-base};
 
+  // Density scale: 0 = Compact, 1 = Standard, 2 = Spacious
+  // Must be a bare unitless integer — never set with a unit (e.g. 1px).
+  --weave-density: 1;
+
   --default-borderradius: #{map-get($border-radiuses, "sm")};
   --default-button-borderradius: #{map-get($border-radiuses, "md")};
   --grid-item-min-height: 24px;

@@ -535,6 +535,83 @@ div [ Attr.Style "max-width" "500px" ] [
 
     Helpers.codeSampleSection "Custom Scroll Icons" description content code
 
+  let private densityExample () =
+    let description =
+      Helpers.bodyText
+        "Density controls tab padding. Pass the density class in attrs to set it per-instance."
+
+    let tabs () =
+      View.Const [
+        Body1.Div("Content One") |> TabDef.createText "Tab One"
+        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+      ]
+
+    let content =
+      let col density =
+        let label = sprintf "%A" density
+
+        div [
+          Density.toClass density |> cl
+        ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          Tabs.Create(tabs (), attrs = [
+              cls [
+                Color.toClass BrandColor.Primary
+                BorderRadius.toClass BorderRadius.All.small
+              ]
+              Attr.Style "border" "1px solid var(--palette-divider)"
+            ])
+        ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.Tabs
+open Weave.CssHelpers
+
+let tabs =
+    View.Const [
+        Body1.Div("Content One") |> TabDef.createText "Tab One"
+        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+    ]
+
+Tabs.Create(
+    tabs,
+    attrs = [
+        cl (Density.toClass Density.Compact) // see here
+        cl (Color.toClass BrandColor.Primary)
+    ]
+)
+
+Tabs.Create(
+    tabs,
+    attrs = [
+        cl (Density.toClass Density.Standard) // see here
+        cl (Color.toClass BrandColor.Primary)
+    ]
+)
+
+Tabs.Create(
+    tabs,
+    attrs = [
+        cl (Density.toClass Density.Spacious) // see here
+        cl (Color.toClass BrandColor.Primary)
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Density" description content code
+
   let render () =
     Container.Create(
       div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
@@ -562,6 +639,8 @@ div [ Attr.Style "max-width" "500px" ] [
         scrollableExample ()
         Helpers.divider ()
         customScrollIconsExample ()
+        Helpers.divider ()
+        densityExample ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

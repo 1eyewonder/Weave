@@ -47,20 +47,6 @@ module Button =
       | BrandColor.Success -> Css.``weave-button--success``
       | BrandColor.Info -> Css.``weave-button--info``
 
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
-
-  module Size =
-
-    let toClass size =
-      match size with
-      | Size.Small -> Css.``weave-button--small``
-      | Size.Medium -> Css.``weave-button--medium``
-      | Size.Large -> Css.``weave-button--large``
-
 open Button
 
 [<JavaScript>]

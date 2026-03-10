@@ -482,35 +482,39 @@ WeaveList.Create(
   selectionMode = WeaveList.SelectionMode.ToggleSelection
 )"""
 
-  let private denseExample () =
-    let dense = Var.Create true
-
+  let private densityExample () =
     let content =
-      div [] [
-        WeaveList.Create(
-          [
-            ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Inbox)) "Item 1")
-            ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Send)) "Item 2")
-            ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Drafts)) "Item 3")
-          ],
-          dense = dense.View
-        )
+      let col density =
+        let label = sprintf "%A" density
 
-        div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
-          Switch.Create(
-            dense,
-            displayText = View.Const "Dense",
-            attrs = [ Switch.Color.toClass BrandColor.Secondary |> cl ]
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          WeaveList.Create(
+            [
+              ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Inbox)) "Item 1")
+              ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Send)) "Item 2")
+              ListItem.Create(iconLabel (Icon.Create(Icon.Communicate Communicate.Drafts)) "Item 3")
+            ]
           )
         ]
-      ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
 
     Helpers.codeSampleSection
-      "Dense"
+      "Density"
       (Helpers.bodyText
-        "Set dense to true to reduce vertical padding on each item, producing a more compact layout.")
+        "Density controls list item padding and height. Pass the density class in attrs to set it per-instance.")
       content
-      """let dense = Var.Create true
+      """open Weave
+open Weave.CssHelpers
 
 WeaveList.Create(
   [
@@ -518,10 +522,9 @@ WeaveList.Create(
     ListItem.Create(iconLabel sendIcon "Item 2")
     ListItem.Create(iconLabel draftsIcon "Item 3")
   ],
-  dense = dense.View
+  attrs = [ cl (Density.toClass Density.Compact) ] // see here
 )
-
-Switch.Create(dense, displayText = View.Const "Dense", attrs = [ Switch.Color.toClass BrandColor.Secondary |> cl ])"""
+"""
 
   let render () =
     Container.Create(
@@ -543,7 +546,7 @@ Switch.Create(dense, displayText = View.Const "Dense", attrs = [ Switch.Color.to
         Helpers.divider ()
         interactiveExample ()
         Helpers.divider ()
-        denseExample ()
+        densityExample ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

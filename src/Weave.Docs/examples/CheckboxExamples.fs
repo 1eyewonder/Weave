@@ -122,6 +122,65 @@ module CheckboxExamples =
       "Content Placement"
       (Helpers.bodyText "Change the label position using the ContentPlacement option.")
 
+  let private densityExample () =
+    let description =
+      Helpers.bodyText
+        "Density controls the touch-target padding on a three-step scale: Compact, Standard, and Spacious. Pass the density class in attrs to override a single instance."
+
+    let content =
+      let col density =
+        let label = sprintf "%A" density
+
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          Checkbox.Create(
+            Var.Create false,
+            View.Const "Unchecked",
+            attrs = [ Checkbox.Color.toClass BrandColor.Primary |> cl ]
+          )
+          Checkbox.Create(
+            Var.Create true,
+            View.Const "Checked",
+            attrs = [ Checkbox.Color.toClass BrandColor.Primary |> cl ]
+          )
+        ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+// Per-instance: pass the density class in attrs to set it on one component
+Checkbox.Create(
+    isChecked,
+    View.Const "Compact",
+    attrs = [
+        cl (Density.toClass Density.Compact) // see here
+        Checkbox.Color.toClass BrandColor.Primary |> cl
+    ]
+)
+
+Checkbox.Create(
+    isChecked,
+    View.Const "Spacious",
+    attrs = [
+        cl (Density.toClass Density.Spacious) // see here
+        Checkbox.Color.toClass BrandColor.Primary |> cl
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Density" description content code
+
   let render () =
     Container.Create(
       div [] [
@@ -143,6 +202,8 @@ module CheckboxExamples =
         checkboxColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
+        Helpers.divider ()
+        densityExample ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

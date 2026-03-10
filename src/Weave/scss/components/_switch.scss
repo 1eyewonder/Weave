@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 .weave-switch {
   --switch-brand-color: var(--palette-action-default);
   cursor: pointer;
@@ -5,6 +8,8 @@
   align-items: center;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
+  // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
+  padding: density-spacing(4, 4);
 
   &.flex-row {
     flex-direction: row;

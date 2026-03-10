@@ -40,6 +40,7 @@ module ExamplesRouter =
     | AlertExamples
     | LinkExamples
     | DividerExamples
+    | DensityExamples
 
   let private pageToString page =
     match page with
@@ -68,6 +69,7 @@ module ExamplesRouter =
     | AlertExamples -> "Alert"
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
+    | DensityExamples -> "Density"
 
   let private stringToPage s =
     match s with
@@ -96,6 +98,7 @@ module ExamplesRouter =
     | "Alert" -> Some AlertExamples
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
+    | "Density" -> Some DensityExamples
     | _ -> None
 
   let private pageToHash page =
@@ -125,6 +128,7 @@ module ExamplesRouter =
     | AlertExamples -> "#alert"
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
+    | DensityExamples -> "#density"
 
   let private hashToPage hash =
     match hash with
@@ -154,6 +158,7 @@ module ExamplesRouter =
     | "#alert" -> Some AlertExamples
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
+    | "#density" -> Some DensityExamples
     | _ -> None
 
   [<Inline "window.location.hash">]
@@ -1088,6 +1093,30 @@ module ExamplesRouter =
           Attr.Style "height" "7px"
         ] []
       ]
+    | DensityExamples ->
+      cp [
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "16px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "36px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "20px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "66px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "24px"
+        ] []
+      ]
     | _ -> Doc.Empty
 
   let private renderPage (navigate: Page -> unit) page =
@@ -1198,6 +1227,8 @@ module ExamplesRouter =
             "Dialog", DialogExamples
             "Expansion Panel", ExpansionPanelExamples
           ]
+
+          categorySection "Styling" [ "Density", DensityExamples ]
         ],
         maxWidth = Container.MaxWidth.Large
       )
@@ -1225,6 +1256,7 @@ module ExamplesRouter =
     | AlertExamples -> AlertExamples.render ()
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
+    | DensityExamples -> WeaveStylingExamples.render ()
 
   let private githubSvg =
     Doc.Verbatim
@@ -1347,6 +1379,7 @@ module ExamplesRouter =
     let inputsExpanded = Var.Create true
     let dataExpanded = Var.Create true
     let feedbackExpanded = Var.Create true
+    let stylingExpanded = Var.Create true
 
     let navLeafItem (label: string) =
       div [
@@ -1456,6 +1489,10 @@ module ExamplesRouter =
           navLeafItem "Alert"
           navLeafItem "Dialog"
           navLeafItem "Expansion Panel"
+        ]
+
+        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
+          navLeafItem "Density"
         ]
       ]
 

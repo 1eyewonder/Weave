@@ -148,6 +148,20 @@ module CssHelpers =
     let toColor color = toStyle Style.color color
 
   [<RequireQualifiedAccess; Struct>]
+  type Density =
+    | Compact
+    | Standard
+    | Spacious
+
+  module Density =
+
+    let toClass density =
+      match density with
+      | Density.Compact  -> Css.``weave-density--compact``
+      | Density.Standard -> Css.``weave-density--standard``
+      | Density.Spacious -> Css.``weave-density--spacious``
+
+  [<RequireQualifiedAccess; Struct>]
   type SurfaceColor =
     | Background
     | BackgroundDarker

@@ -33,51 +33,51 @@ type ButtonLayoutTests() =
   }
 
   [<Fact>]
-  member this.``small button min height``() = task {
+  member this.``compact button min height``() = task {
     do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-small").BoundingBoxAsync()
+    let! box = this.Page.Locator("#btn-compact").BoundingBoxAsync()
 
-    Assert.True(box.Height >= 30.0f, $"Small button height {box.Height}px should be >= 30px")
+    Assert.True(box.Height >= 30.0f, $"Compact button height {box.Height}px should be >= 30px")
   }
 
   [<Fact>]
-  member this.``medium button min height``() = task {
+  member this.``standard button min height``() = task {
     do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-medium").BoundingBoxAsync()
+    let! box = this.Page.Locator("#btn-standard").BoundingBoxAsync()
 
-    Assert.True(box.Height >= 40.0f, $"Medium button height {box.Height}px should be >= 40px")
+    Assert.True(box.Height >= 40.0f, $"Standard button height {box.Height}px should be >= 40px")
   }
 
   [<Fact>]
-  member this.``large button min height``() = task {
+  member this.``spacious button min height``() = task {
     do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-large").BoundingBoxAsync()
+    let! box = this.Page.Locator("#btn-spacious").BoundingBoxAsync()
 
-    Assert.True(box.Height >= 50.0f, $"Large button height {box.Height}px should be >= 50px")
+    Assert.True(box.Height >= 50.0f, $"Spacious button height {box.Height}px should be >= 50px")
   }
 
   [<Fact>]
-  member this.``size ordering is preserved``() = task {
+  member this.``density ordering is preserved``() = task {
     do! this.LoadFixture 1280
-    let! small = this.Page.Locator("#btn-small").BoundingBoxAsync()
-    let! medium = this.Page.Locator("#btn-medium").BoundingBoxAsync()
-    let! large = this.Page.Locator("#btn-large").BoundingBoxAsync()
+    let! compact = this.Page.Locator("#btn-compact").BoundingBoxAsync()
+    let! standard = this.Page.Locator("#btn-standard").BoundingBoxAsync()
+    let! spacious = this.Page.Locator("#btn-spacious").BoundingBoxAsync()
 
     Assert.True(
-      small.Height < medium.Height,
-      $"Small ({small.Height}px) should be shorter than medium ({medium.Height}px)"
+      compact.Height < standard.Height,
+      $"Compact ({compact.Height}px) should be shorter than standard ({standard.Height}px)"
     )
 
     Assert.True(
-      medium.Height < large.Height,
-      $"Medium ({medium.Height}px) should be shorter than large ({large.Height}px)"
+      standard.Height < spacious.Height,
+      $"Standard ({standard.Height}px) should be shorter than spacious ({spacious.Height}px)"
     )
   }
 
   [<Theory>]
-  [<InlineData("#btn-small")>]
-  [<InlineData("#btn-medium")>]
-  [<InlineData("#btn-large")>]
+  [<InlineData("#btn-compact")>]
+  [<InlineData("#btn-standard")>]
+  [<InlineData("#btn-spacious")>]
   member this.``filled button has min width``(buttonId: string) = task {
     do! this.LoadFixture 1280
     let! box = this.Page.Locator(buttonId).BoundingBoxAsync()
@@ -110,19 +110,19 @@ type ButtonLayoutTests() =
   }
 
   [<Fact>]
-  member this.``medium button height is consistent across variants``() = task {
+  member this.``standard button height is consistent across variants``() = task {
     do! this.LoadFixture 1280
-    let! filled = this.Page.Locator("#btn-medium").BoundingBoxAsync()
-    let! outlined = this.Page.Locator("#btn-medium-outlined").BoundingBoxAsync()
-    let! text = this.Page.Locator("#btn-medium-text").BoundingBoxAsync()
+    let! filled = this.Page.Locator("#btn-filled").BoundingBoxAsync()
+    let! outlined = this.Page.Locator("#btn-outlined").BoundingBoxAsync()
+    let! text = this.Page.Locator("#btn-text").BoundingBoxAsync()
 
     Assert.True(
       abs (filled.Height - outlined.Height) <= 1.0f,
-      $"Filled ({filled.Height}px) and outlined ({outlined.Height}px) medium buttons should have the same height"
+      $"Filled ({filled.Height}px) and outlined ({outlined.Height}px) standard buttons should have the same height"
     )
 
     Assert.True(
       abs (filled.Height - text.Height) <= 1.0f,
-      $"Filled ({filled.Height}px) and text ({text.Height}px) medium buttons should have the same height"
+      $"Filled ({filled.Height}px) and text ({text.Height}px) standard buttons should have the same height"
     )
   }

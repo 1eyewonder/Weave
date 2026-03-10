@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 $checkbox-size: 20px;
 $checkmark-width: 6px;
 $checkmark-height: 12px;
@@ -10,10 +13,8 @@ $checkmark-height: 12px;
   align-items: center;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
-
-  &--dense {
-    padding: 4px;
-  }
+  // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
+  padding: density-spacing(4, 4);
 
   &--small {
     --checkbox-size: 16px;

@@ -1,4 +1,5 @@
 @import "../abstracts/variables";
+@import "../abstracts/mixins";
 
 .weave-tabs {
   display: flex;
@@ -101,7 +102,7 @@
 
   .weave-tabs--top &,
   .weave-tabs--bottom & {
-    padding: 12px 16px;
+    padding: density-spacing(8, 4) density-spacing(12, 4);
     min-width: 72px;
   }
 
@@ -109,8 +110,8 @@
   .weave-tabs--right &,
   .weave-tabs--start &,
   .weave-tabs--end & {
-    padding: 12px 20px;
-    min-height: 48px;
+    padding: density-spacing(8, 4) density-spacing(16, 4);
+    min-height: density-spacing(38, 10);
     width: 100%;
     justify-content: flex-start;
   }

@@ -76,7 +76,6 @@ type WeaveList =
   /// <param name="selectedValue">Shared reactive variable for single/toggle selection across items.</param>
   /// <param name="selectedValues">Shared reactive variable for multi-selection across items.</param>
   /// <param name="selectionMode">Determines click behaviour. Defaults to SingleSelection.</param>
-  /// <param name="dense">When true, reduces vertical padding on items.</param>
   /// <param name="readOnly">When true, items display their state but do not respond to clicks.</param>
   /// <param name="bordered">When true, draws a border around the list. Defaults to true.</param>
   /// <param name="attrs">Additional HTML attributes.</param>
@@ -86,12 +85,10 @@ type WeaveList =
       ?selectedValue: Var<string option>,
       ?selectedValues: Var<Set<string>>,
       ?selectionMode: SelectionMode,
-      ?dense: View<bool>,
       ?readOnly: View<bool>,
       ?bordered: View<bool>,
       ?attrs: Attr list
     ) =
-    let dense = defaultArg dense (View.Const false)
     let readOnly = defaultArg readOnly (View.Const false)
     let bordered = defaultArg bordered (View.Const true)
     let selectionMode = defaultArg selectionMode SelectionMode.SingleSelection
@@ -238,7 +235,6 @@ type WeaveList =
     div
       [
         cl Css.``weave-list``
-        Attr.DynamicClassPred Css.``weave-list--dense`` dense
         Attr.DynamicClassPred Css.``weave-list--readonly`` readOnly
         Attr.DynamicClassPred Css.``weave-list--bordered`` bordered
         yield! attrs

@@ -324,6 +324,78 @@ visible.View
 
     Helpers.codeSampleSection "Close Button" description content code
 
+  let private densityExamples () =
+    let description =
+      Helpers.bodyText
+        "Density controls alert padding. Pass the density class in attrs to set it per-instance."
+
+    let content =
+      let col density =
+        let label = sprintf "%A" density
+
+        div [ cl (Density.toClass density) ] [
+          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+          Alert.Create(
+            text "This is an alert message.",
+            attrs = [
+              Alert.Variant.toClass Alert.Variant.Standard |> cl
+              Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
+              |> Option.map cl
+              |> Option.defaultValue Attr.Empty
+            ]
+          )
+        ]
+
+      Grid.Create(
+        [
+          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+        ],
+        spacing = Grid.GutterSpacing.create 2,
+        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+Alert.Create(
+    text "Compact alert.",
+    attrs = [
+        cl (Density.toClass Density.Compact) // see here
+        Alert.Variant.toClass Alert.Variant.Standard |> cl
+        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
+        |> Option.map cl
+        |> Option.defaultValue Attr.Empty
+    ]
+)
+
+Alert.Create(
+    text "Standard alert.",
+    attrs = [
+        cl (Density.toClass Density.Standard) // see here
+        Alert.Variant.toClass Alert.Variant.Standard |> cl
+        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
+        |> Option.map cl
+        |> Option.defaultValue Attr.Empty
+    ]
+)
+
+Alert.Create(
+    text "Spacious alert.",
+    attrs = [
+        cl (Density.toClass Density.Spacious) // see here
+        Alert.Variant.toClass Alert.Variant.Standard |> cl
+        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
+        |> Option.map cl
+        |> Option.defaultValue Attr.Empty
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Density" description content code
+
   let render () =
     Container.Create(
       div [] [
@@ -339,6 +411,8 @@ visible.View
         iconExamples ()
         Helpers.divider ()
         closeExamples ()
+        Helpers.divider ()
+        densityExamples ()
       ],
       maxWidth = Container.MaxWidth.Large
     )

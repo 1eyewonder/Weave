@@ -1,4 +1,5 @@
 @import "../core/variables";
+@import "../abstracts/mixins";
 
 .weave-dialog {
   display: flex;
@@ -14,7 +15,8 @@
   z-index: 1;
   flex: 0 0 auto;
   margin: 0;
-  padding: 16px 24px;
+  // density 0 (Compact): 12px 24px | density 1 (Standard): 16px 24px | density 2 (Spacious): 20px 24px
+  padding: density-spacing(12, 4) 24px;
   overflow-wrap: anywhere;
   border-top-left-radius: var(--default-borderradius);
   border-top-right-radius: var(--default-borderradius);
@@ -25,7 +27,8 @@
   position: relative;
   flex: 1 1 auto;
   overflow: auto;
-  padding: 8px 24px;
+  // density 0 (Compact): 4px 24px | density 1 (Standard): 8px 24px | density 2 (Spacious): 12px 24px
+  padding: density-spacing(4, 4) 24px;
   margin: 0;
   -webkit-overflow-scrolling: touch;
   border-top-left-radius: var(--default-borderradius);

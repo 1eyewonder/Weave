@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 .weave-list {
   display: flex;
   flex-direction: column;
@@ -10,18 +13,6 @@
 
 .weave-list--bordered {
   border: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
-}
-
-.weave-list--dense .weave-list-item {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  min-height: 36px;
-}
-
-.weave-list--dense .weave-list-subheader {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  line-height: 1.5;
 }
 
 .weave-list--readonly .weave-list-item {
@@ -47,8 +38,8 @@
 .weave-list-item {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
-  min-height: 48px;
+  padding: density-spacing(4, 4) density-spacing(12, 4);
+  min-height: density-spacing(38, 10);
   cursor: pointer;
   transition: background-color 0.15s ease;
   position: relative;

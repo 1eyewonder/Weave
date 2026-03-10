@@ -1,6 +1,17 @@
 $palette-colors:
   primary, secondary, tertiary, info, success, warning, error;
 
+// Density scale — 3 steps, Standard is the midpoint at step 1.
+// --weave-density must be a bare unitless integer; adding a unit (e.g. 2px) will
+// silently invalidate all density-spacing() calc() expressions.
+$density-steps: (
+  compact:  0,
+  standard: 1,
+  spacious: 2,
+);
+
+$density-standard-step: map-get($density-steps, standard); // = 1
+
 $field-colors: primary, secondary, tertiary, error, warning, success, info;
 
 // Base spacing unit for utilities (1 step = 0.25rem)

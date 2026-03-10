@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 .weave-expansion-panels {
   flex: 0 1 auto;
   position: relative;
@@ -16,7 +19,8 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding: 1rem;
+    // density 0 (Compact): 12px | density 1 (Standard): 16px | density 2 (Spacious): 20px
+    padding: density-spacing(12, 4);
     background: var(--palette-surface);
     border-bottom: 1px solid var(--palette-divider);
     transition: background 0.2s;

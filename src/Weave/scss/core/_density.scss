@@ -1,0 +1,18 @@
+@import "../abstracts/variables";
+
+// =============================================================================
+// DENSITY CONTAINER CLASSES
+// =============================================================================
+// Apply .weave-density--{name} to any ancestor element to set the density
+// for all Weave components within it via CSS custom property inheritance.
+//
+// Density can also be set inline on a single component's root element
+// (e.g. <button class="weave-button weave-density--compact">) to override
+// a container's density for that instance only.
+// =============================================================================
+
+@each $name, $step in $density-steps {
+  .weave-density--#{$name} {
+    --weave-density: #{$step};
+  }
+}

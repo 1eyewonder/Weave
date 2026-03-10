@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 .weave-dropdown {
   display: inline-flex;
   align-self: center;
@@ -119,6 +122,8 @@
   border: none;
   cursor: pointer;
   transition: background 0.1s;
+  // density 0 (Compact): 38px | density 1 (Standard): 48px | density 2 (Spacious): 58px
+  min-height: density-spacing(38, 10);
 }
 .weave-dropdown__item:hover:not(.weave-dropdown__item--disabled) {
   background: var(--palette-action-hover);

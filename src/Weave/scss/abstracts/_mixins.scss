@@ -1,3 +1,20 @@
+@import "variables";
+
+// density-spacing($compact-base, $step)
+//
+// Returns a calc() expression for a single density-responsive spacing value.
+//
+// $compact-base — the value at Compact density (step 0), in px (unitless number)
+// $step         — px change per density step
+//
+// Example: density-spacing(6, 4) produces calc(6px + (var(--weave-density) * 4px))
+//   density 0 (Compact):  6px
+//   density 1 (Standard): 10px
+//   density 2 (Spacious): 14px
+@function density-spacing($compact-base, $step) {
+  @return calc(#{$compact-base * 1px} + (var(--weave-density) * #{$step * 1px}));
+}
+
 @mixin inputplaceholder {
   // CSS Pseudo-Element
   &::placeholder {

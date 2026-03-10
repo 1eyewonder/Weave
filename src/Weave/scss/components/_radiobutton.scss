@@ -1,3 +1,6 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 $radio-size: 20px;
 $dot-size: 10px;
 
@@ -9,10 +12,8 @@ $dot-size: 10px;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
   margin: 6px 10px;
-
-  &--dense {
-    padding: 4px;
-  }
+  // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
+  padding: density-spacing(4, 4);
 
   &--small {
     --radio-size: 16px;

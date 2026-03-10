@@ -142,10 +142,9 @@ module DrawerExamples =
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.Create(
+            Drawer.CreateTemporary(
               navList (),
               isOpen.View,
-              variant = Drawer.Variant.Temporary,
               position = Drawer.Position.Left,
               overlayClose = (fun () -> Var.Set isOpen false),
               isFixed = false
@@ -162,10 +161,9 @@ DrawerContainer.Create(
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.Create(
+        Drawer.CreateTemporary(
             navList,
             isOpen.View,
-            variant = Drawer.Variant.Temporary,
             position = Drawer.Position.Left,
             overlayClose = (fun () -> Var.Set isOpen false)
         )
@@ -210,10 +208,9 @@ DrawerContainer.Create(
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.Create(
+            Drawer.CreatePersistent(
               navList (),
               isOpen.View,
-              variant = Drawer.Variant.Persistent,
               position = Drawer.Position.Left,
               isFixed = false
             )
@@ -229,10 +226,9 @@ DrawerContainer.Create(
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.Create(
+        Drawer.CreatePersistent(
             navList,
             isOpen.View,
-            variant = Drawer.Variant.Persistent,
             position = Drawer.Position.Left
             // No overlayClose — persistent drawers have no backdrop
         )
@@ -265,10 +261,9 @@ DrawerContainer.Create(
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.Create(
+            Drawer.CreateResponsive(
               navList (),
               isOpen.View,
-              variant = Drawer.Variant.Responsive,
               position = Drawer.Position.Left,
               breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
               overlayClose = (fun () -> Var.Set isOpen false),
@@ -286,10 +281,9 @@ DrawerContainer.Create(
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.Create(
+        Drawer.CreateResponsive(
             navList,
             isOpen.View,
-            variant = Drawer.Variant.Responsive,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set isOpen false)
@@ -340,10 +334,9 @@ DrawerContainer.Create(
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.Create(
+            Drawer.CreateMini(
               miniNavList isOpen.View,
               isOpen.View,
-              variant = Drawer.Variant.Mini,
               position = Drawer.Position.Left,
               breakpoint = Drawer.DrawerBreakpoint.Always,
               expandOnHover = hoverEnabled.View,
@@ -370,10 +363,9 @@ DrawerContainer.Create(
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.Create(
+        Drawer.CreateMini(
             miniNavList (),
             isOpen.View,
-            variant = Drawer.Variant.Mini,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.Always,
             expandOnHover = hoverEnabled.View
@@ -406,10 +398,9 @@ DrawerContainer.Create(
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.Create(
+            Drawer.CreateTemporary(
               navList (),
               isOpen.View,
-              variant = Drawer.Variant.Temporary,
               position = Drawer.Position.Left,
               header =
                 DrawerHeader.Create(
@@ -428,10 +419,9 @@ DrawerContainer.Create(
       )
 
     let code =
-      """Drawer.Create(
+      """Drawer.CreateTemporary(
     navList,
     isOpen.View,
-    variant = Drawer.Variant.Temporary,
     position = Drawer.Position.Left,
     header =
         DrawerHeader.Create(
@@ -520,10 +510,9 @@ DrawerContainer.Create(
                 DrawerContainer.Create(
                   mainContent = div [ cl "weave-main-content" ] [ pageContent () ],
                   leftDrawer =
-                    Drawer.Create(
+                    Drawer.CreatePersistent(
                       navList (),
                       isOpen.View,
-                      variant = Drawer.Variant.Persistent,
                       position = Drawer.Position.Left,
                       isFixed = false
                     ),
@@ -544,10 +533,9 @@ DrawerContainer.Create(
                     div [ cl "weave-main-content" ] [ pageContent () ]
                   ],
                 leftDrawer =
-                  Drawer.Create(
+                  Drawer.CreatePersistent(
                     navList (),
                     isOpen.View,
-                    variant = Drawer.Variant.Persistent,
                     position = Drawer.Position.Left,
                     clipMode = Drawer.ClipMode.FullHeight,
                     isFixed = false
@@ -562,14 +550,14 @@ DrawerContainer.Create(
 AppBar.Create(toolbar ...)
 DrawerContainer.Create(
     mainContent = div [ cl "weave-main-content" ] [ pageContent ],
-    leftDrawer = Drawer.Create(navList, isOpen.View, variant = Drawer.Variant.Persistent)
+    leftDrawer = Drawer.CreatePersistent(navList, isOpen.View)
 )
 
 // FullHeight mode (default) — AppBar is inside mainContent, drawer covers full height:
 DrawerContainer.Create(
     mainContent = Doc.Concat [ AppBar.Create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
-    leftDrawer = Drawer.Create(navList, isOpen.View, variant = Drawer.Variant.Persistent,
-                               clipMode = Drawer.ClipMode.FullHeight)
+    leftDrawer = Drawer.CreatePersistent(navList, isOpen.View,
+                                         clipMode = Drawer.ClipMode.FullHeight)
 )"""
 
     Helpers.codeSampleSection "Clip Mode" description preview code

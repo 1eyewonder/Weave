@@ -1321,7 +1321,7 @@ module ExamplesRouter =
       tryScroll ()
 
     let selectedNav = Var.Create<string option>(Some(pageToString initialPage))
-    let drawerOpen = Var.Create false
+    let drawerOpen = Var.Create true
 
     let navigateTo (page: Page) =
       setLocationHash (pageToHash page)
@@ -1584,10 +1584,9 @@ module ExamplesRouter =
             ]
           ],
         leftDrawer =
-          Drawer.Create(
+          Drawer.CreateResponsive(
             navList,
             drawerOpen.View,
-            variant = Drawer.Variant.Temporary,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set drawerOpen false),

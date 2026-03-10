@@ -31,6 +31,7 @@
     <Compile Include="examples/AlertExamples.fs" />
     <Compile Include="examples/DividerExamples.fs" />
     <Compile Include="examples/DensityExamples.fs" />
+    <Compile Include="examples/GettingStartedExamples.fs" />
     <Compile Include="ExamplesRouter.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Startup.fs" />

@@ -16,6 +16,7 @@ module ExamplesRouter =
   [<Struct>]
   type Page =
     | Home
+    | GettingStartedExamples
     | AppBarExamples
     | SpacerExamples
     | ButtonExamples
@@ -41,10 +42,12 @@ module ExamplesRouter =
     | LinkExamples
     | DividerExamples
     | DensityExamples
+    | ThemingExamples
 
   let private pageToString page =
     match page with
     | Home -> "Home"
+    | GettingStartedExamples -> "Getting Started"
     | AppBarExamples -> "App Bar"
     | SpacerExamples -> "Spacer"
     | ButtonExamples -> "Button"
@@ -70,10 +73,12 @@ module ExamplesRouter =
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
     | DensityExamples -> "Density"
+    | ThemingExamples -> "Theming"
 
   let private stringToPage s =
     match s with
     | "Home" -> Some Home
+    | "Getting Started" -> Some GettingStartedExamples
     | "App Bar" -> Some AppBarExamples
     | "Spacer" -> Some SpacerExamples
     | "Button" -> Some ButtonExamples
@@ -99,11 +104,13 @@ module ExamplesRouter =
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
     | "Density" -> Some DensityExamples
+    | "Theming" -> Some ThemingExamples
     | _ -> None
 
   let private pageToHash page =
     match page with
     | Home -> ""
+    | GettingStartedExamples -> "#getting-started"
     | AppBarExamples -> "#app-bar"
     | SpacerExamples -> "#spacer"
     | ButtonExamples -> "#button"
@@ -129,11 +136,13 @@ module ExamplesRouter =
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
     | DensityExamples -> "#density"
+    | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
     match hash with
     | s when String.length s = 0 -> Some Home
     | "#home" -> Some Home
+    | "#getting-started" -> Some GettingStartedExamples
     | "#app-bar" -> Some AppBarExamples
     | "#spacer" -> Some SpacerExamples
     | "#button" -> Some ButtonExamples
@@ -159,6 +168,7 @@ module ExamplesRouter =
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
     | "#density" -> Some DensityExamples
+    | "#theming" -> Some ThemingExamples
     | _ -> None
 
   [<Inline "window.location.hash">]
@@ -1117,6 +1127,24 @@ module ExamplesRouter =
           Attr.Style "height" "24px"
         ] []
       ]
+    | ThemingExamples ->
+      cp [
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "12px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "50%"
+          Attr.Style "height" "10px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "32px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "50px"
+          Attr.Style "border-radius" "6px"
+        ] []
+      ]
     | _ -> Doc.Empty
 
   let private renderPage (navigate: Page -> unit) page =
@@ -1192,6 +1220,31 @@ module ExamplesRouter =
               )
             ]
 
+          div [ Margin.toClasses Margin.Bottom.medium |> cls ] [
+            div [
+              SurfaceColor.toBackgroundColor SurfaceColor.Surface
+              BorderRadius.toClass BorderRadius.All.medium |> cl
+              cls [
+                Flex.Flex.allSizes
+                AlignItems.toClass AlignItems.Center
+                yield! Padding.toClasses Padding.All.small
+              ]
+              Attr.Style "cursor" "pointer"
+              Attr.Style "gap" "16px"
+              Attr.Class "docs-component-card"
+              on.click (fun _ _ -> navigate GettingStartedExamples)
+            ] [
+              Icon.Create(
+                Icon.Social Social.RocketLaunch,
+                attrs = [ Attr.Style "font-size" "28px"; Attr.Style "color" "var(--palette-primary)" ]
+              )
+              div [] [
+                H5.Div("Getting Started")
+                Body2.Div("Learn the basics: installation, setup, and core concepts.")
+              ]
+            ]
+          ]
+
           categorySection "Layout" [
             "App Bar", AppBarExamples
             "Container", ContainerExamples
@@ -1228,10 +1281,11 @@ module ExamplesRouter =
             "Expansion Panel", ExpansionPanelExamples
           ]
 
-          categorySection "Styling" [ "Density", DensityExamples ]
+          categorySection "Styling" [ "Density", DensityExamples; "Theming", ThemingExamples ]
         ],
         maxWidth = Container.MaxWidth.Large
       )
+    | GettingStartedExamples -> GettingStartedExamples.render ()
     | AppBarExamples -> AppBarExamples.render ()
     | SpacerExamples -> SpacerExamples.render ()
     | ButtonExamples -> ButtonExamples.render ()
@@ -1257,6 +1311,7 @@ module ExamplesRouter =
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
     | DensityExamples -> DensityExamples.render ()
+    | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
     Doc.Verbatim
@@ -1450,6 +1505,27 @@ module ExamplesRouter =
           Body2.Div("Home")
         ]
 
+        div [
+          cls [
+            Flex.Flex.allSizes
+            AlignItems.toClass AlignItems.Center
+            yield! Padding.toClasses Padding.Vertical.extraSmall
+            yield! Padding.toClasses Padding.Horizontal.small
+          ]
+          Attr.Style "cursor" "pointer"
+          Attr.Style "border-radius" "6px"
+          Attr.Style "margin" "1px 8px"
+          Attr.Style "gap" "8px"
+          Attr.Class "weave-nav-leaf"
+          Attr.DynamicClassPred
+            "weave-nav-item--active"
+            (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
+          on.click (fun _ _ -> navigateTo GettingStartedExamples)
+        ] [
+          Icon.Create(Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
+          Body2.Div("Getting Started")
+        ]
+
         Divider.Create(attrs = [ Margin.toClasses Margin.Vertical.extraSmall |> cls ])
 
         navGroup (Icon.Android Android.Widgets) "Layout" layoutExpanded [
@@ -1491,7 +1567,10 @@ module ExamplesRouter =
           navLeafItem "Expansion Panel"
         ]
 
-        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [ navLeafItem "Density" ]
+        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
+          navLeafItem "Density"
+          navLeafItem "Theming"
+        ]
       ]
 
     let appBarContent =

@@ -75,8 +75,7 @@ type Link =
     let textLabel = Html.span [ cl Css.``weave-link__text`` ] [ innerContents ]
 
     a [
-      cl Css.``weave-link``
-      Underline.toClass underline |> cl
+      cls [ Css.``weave-link``; Underline.toClass underline ]
 
       attr.href href
 

@@ -124,7 +124,7 @@ module Helpers =
             content = Subtitle2.Div(headerText),
             icon = icon,
             expanded = codeIsExpanded,
-            attrs = [ cls [ ExpansionPanel.Color.toColor BrandColor.Primary ] ]
+            attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
           )
 
         let codeContent =

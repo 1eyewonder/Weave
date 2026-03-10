@@ -46,7 +46,7 @@ module ExpansionPanelExamples =
       ExpansionPanelHeader.CreateWithDefaultIcons(
         Body1.Div(sprintf "%A" color),
         expanded,
-        attrs = [ cls [ ExpansionPanel.Color.toColor color ] ]
+        attrs = [ cls [ ExpansionPanel.Color.toClass color ] ]
       )
 
     let content (color: BrandColor) =
@@ -89,7 +89,7 @@ module ExpansionPanelExamples =
         Body1.Div(sprintf "%A" variant),
         expanded,
         highlightVariant = View.Const variant,
-        attrs = [ cls [ ExpansionPanel.Color.toColor BrandColor.Primary ] ]
+        attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
       )
 
     let content displayText =

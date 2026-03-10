@@ -5,11 +5,8 @@ open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Templating
-open WebSharper
-open WebSharper.UI
 open WebSharper.Sitelets
 open Zanaptak.TypedCssClasses
-open WebSharper.UI.Client
 open Weave.Theming
 
 [<JavaScript>]

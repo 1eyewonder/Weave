@@ -42,7 +42,7 @@ module Tooltip =
       | BrandColor.Success -> Css.``weave-tooltip--success``
       | BrandColor.Info -> Css.``weave-tooltip--info``
 
-  [<Struct>]
+  [<RequireQualifiedAccess; Struct>]
   type Activation =
     | Hover
     | Focus
@@ -66,7 +66,9 @@ type Tooltip =
     let direction = defaultArg direction Direction.Top
     let showArrow = defaultArg showArrow true
     let attrs = defaultArg wrapperAttrs List.empty
-    let activationEvents = defaultArg activationEvents [ Hover; Focus ]
+
+    let activationEvents =
+      defaultArg activationEvents [ Activation.Hover; Activation.Focus ]
 
     let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
 
@@ -93,15 +95,15 @@ type Tooltip =
       yield!
         activationEvents
         |> List.collect (function
-          | Hover -> [
+          | Activation.Hover -> [
               on.mouseEnter (fun _ _ -> Var.Set isVisible true)
               on.mouseLeave (fun _ _ -> Var.Set isVisible false)
             ]
-          | Focus -> [
+          | Activation.Focus -> [
               on.focus (fun _ _ -> Var.Set isVisible true)
               on.blur (fun _ _ -> Var.Set isVisible false)
             ]
-          | Click -> [ on.clickTap (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
+          | Activation.Click -> [ on.clickTap (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
     ] [
       innerContent
 

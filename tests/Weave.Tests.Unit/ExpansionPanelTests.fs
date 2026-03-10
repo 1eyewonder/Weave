@@ -7,7 +7,7 @@ open Weave.CssHelpers
 [<Tests>]
 let expansionPanelTests =
   testList "ExpansionPanel" [
-    testList "Color.toColor" [
+    testList "Color.toClass" [
       testTheory "each color maps to the correct class" [
         BrandColor.Primary, "weave-expansion-panel__header--primary"
         BrandColor.Secondary, "weave-expansion-panel__header--secondary"
@@ -17,7 +17,7 @@ let expansionPanelTests =
         BrandColor.Success, "weave-expansion-panel__header--success"
         BrandColor.Info, "weave-expansion-panel__header--info"
       ]
-      <| fun (color, expected) -> Expect.equal (ExpansionPanel.Color.toColor color) expected ""
+      <| fun (color, expected) -> Expect.equal (ExpansionPanel.Color.toClass color) expected ""
 
       testCase "all colors produce distinct classes"
       <| fun () ->
@@ -31,7 +31,7 @@ let expansionPanelTests =
             BrandColor.Success
             BrandColor.Info
           ]
-          |> List.map ExpansionPanel.Color.toColor
+          |> List.map ExpansionPanel.Color.toClass
 
         Expect.equal (List.distinct classes).Length classes.Length "each color maps to a unique class"
     ]

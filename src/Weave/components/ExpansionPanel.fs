@@ -6,7 +6,6 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open WebSharper.JavaScript
 open Weave.CssHelpers
-open WebSharper.UI.Client
 
 [<JavaScript>]
 module ExpansionPanel =
@@ -18,7 +17,7 @@ module ExpansionPanel =
 
   module Color =
 
-    let toColor color =
+    let toClass color =
       match color with
       | BrandColor.Primary -> Css.``weave-expansion-panel__header--primary``
       | BrandColor.Secondary -> Css.``weave-expansion-panel__header--secondary``

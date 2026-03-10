@@ -167,7 +167,7 @@
 
 .weave-switch--primary .weave-switch__input:checked ~ .weave-switch__thumb {
   background: var(--palette-primary);
-  border-color: #f0f0f0;
+  border-color: var(--palette-lines-default, #f0f0f0);
   border-radius: 50%;
 }
 .weave-switch--primary
@@ -267,7 +267,7 @@
   padding: 9px;
   top: 0;
   left: 0;
-  color: #fafafa;
+  color: var(--palette-background-paper, #fafafa);
   z-index: 1;
   position: absolute;
   transition: left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,

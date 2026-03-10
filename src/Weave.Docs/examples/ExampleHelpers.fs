@@ -23,7 +23,7 @@ module Helpers =
     title.ToLower().Replace(" ", "-").Replace("'", "").Replace("`", "").Replace("(", "").Replace(")", "")
 
   /// Section header with an anchor link for deep-linking
-  let private sectionHeader title =
+  let sectionHeader title =
     let slug = slugify title
 
     div [
@@ -79,6 +79,17 @@ module Helpers =
         SurfaceColor.toBackgroundColor SurfaceColor.Surface
         BorderRadius.toClass BorderRadius.All.small |> cl
       ] [ content ]
+    ]
+
+  let textSection title (children: Doc list) =
+    div [ Margin.toClasses Margin.Bottom.small |> cls ] [
+      sectionHeader title
+
+      div [
+        Padding.toClasses Padding.All.small |> cls
+        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        BorderRadius.toClass BorderRadius.All.small |> cl
+      ] [ yield! children ]
     ]
 
   [<Inline "window.highlightCodeElement($0)">]

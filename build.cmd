@@ -1,5 +1,7 @@
-echo Configuring git hooks path...
-git config core.hooksPath hooks
+git rev-parse --git-dir >NUL 2>&1 && (
+  echo Configuring git hooks path...
+  git config core.hooksPath hooks
+)
 
 echo Restoring dotnet tools...
 dotnet tool restore

@@ -4,8 +4,10 @@
 set -eu
 set -o pipefail
 
-echo "Configuring git hooks path..."
-git config core.hooksPath hooks
+if git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "Configuring git hooks path..."
+  git config core.hooksPath hooks
+fi
 
 echo "Restoring dotnet tools..."
 dotnet tool restore

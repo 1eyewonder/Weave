@@ -464,7 +464,7 @@ type Drawer =
         Attr.DynamicClassPred Css.``weave-drawer--open`` config.Open
         Attr.DynamicClassPred Css.``weave-drawer--closed`` (config.Open |> View.Map not)
         Attr.DynamicClassPred Css.``weave-drawer--initial`` isInitial.View
-        Attr.DynamicClassPred "weave-drawer--hover-expand" config.ExpandOnHover
+        Attr.DynamicClassPred Css.``weave-drawer--hover-expand`` config.ExpandOnHover
         yield! config.Attrs
       ] [
         trackInitial
@@ -550,7 +550,7 @@ type DrawerContainer =
       ]
 
     let containerAttrs: Attr list = [
-      cl "weave-drawer-container"
+      cl Css.``weave-drawer-container``
       yield! leftDrawer |> Option.map drawerContainerAttrs |> Option.defaultValue []
       yield! rightDrawer |> Option.map drawerContainerAttrs |> Option.defaultValue []
       yield! attrs

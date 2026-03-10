@@ -98,4 +98,4 @@ type GridItem =
 type FlexBreak =
 
   static member Create() =
-    div [ cl Css.``weave-flex-break``; Attr.Style "aria-hidden" "true" ] []
+    div [ cl Css.``weave-flex-break``; Attr.Create "aria-hidden" "true" ] []

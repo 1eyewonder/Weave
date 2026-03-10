@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      .link-stack > * + * {
+        margin-top: 8px;
+      }
+
+      .link-stack {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="link-stack">
+      <!-- Standard link -->
+      <a id="link-standard" class="weave-link" href="#">
+        <span class="weave-link__text">Standard Link</span>
+      </a>
+
+      <!-- Icon link -->
+      <a id="link-icon" class="weave-link weave-link--icon" href="#">
+        <span class="weave-link__start-icon" style="font-size: 20px;">&#x2197;</span>
+      </a>
+
+      <!-- Link with start icon and text -->
+      <a id="link-with-start-icon" class="weave-link" href="#">
+        <span class="weave-link__start-icon" style="font-size: 20px;">&#x2197;</span>
+        <span class="weave-link__text">Link with Icon</span>
+      </a>
+
+      <!-- Primary color link -->
+      <a id="link-primary" class="weave-link weave-link--primary" href="#">
+        <span class="weave-link__text">Primary Link</span>
+      </a>
+
+      <!-- Secondary color link -->
+      <a id="link-secondary" class="weave-link weave-link--secondary" href="#">
+        <span class="weave-link__text">Secondary Link</span>
+      </a>
+
+      <!-- Underline always link -->
+      <a id="link-underline-always" class="weave-link weave-link--underline-always" href="#">
+        <span class="weave-link__text">Always Underline</span>
+      </a>
+
+      <!-- Disabled link -->
+      <a id="link-disabled" class="weave-link weave-link--disabled" href="#">
+        <span class="weave-link__text">Disabled Link</span>
+      </a>
+    </div>
+  </body>
+</html>

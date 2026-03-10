@@ -20,6 +20,14 @@
     <Compile Include="ExpansionPanelLayoutTests.fs" />
     <Compile Include="TypographyLayoutTests.fs" />
     <Compile Include="FieldLayoutTests.fs" />
+    <Compile Include="DialogLayoutTests.fs" />
+    <Compile Include="DropdownLayoutTests.fs" />
+    <Compile Include="LinkLayoutTests.fs" />
+    <Compile Include="TooltipLayoutTests.fs" />
+    <Compile Include="ButtonMenuLayoutTests.fs" />
+    <Compile Include="DrawerLayoutTests.fs" />
+    <Compile Include="SpacerLayoutTests.fs" />
+    <Compile Include="NumericFieldLayoutTests.fs" />
   </ItemGroup>
   <Import Project="../../.paket/Paket.Restore.targets" />
 </Project>

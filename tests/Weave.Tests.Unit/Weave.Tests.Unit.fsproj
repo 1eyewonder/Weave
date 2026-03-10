@@ -18,6 +18,14 @@
     <Compile Include="TabsTests.fs" />
     <Compile Include="DropdownTests.fs" />
     <Compile Include="LinkTests.fs" />
+    <Compile Include="AppBarTests.fs" />
+    <Compile Include="ButtonMenuTests.fs" />
+    <Compile Include="ContainerTests.fs" />
+    <Compile Include="FieldTests.fs" />
+    <Compile Include="ExpansionPanelTests.fs" />
+    <Compile Include="ListTests.fs" />
+    <Compile Include="TooltipTests.fs" />
+    <Compile Include="DrawerTests.fs" />
   </ItemGroup>
 
   <Import Project="../../.paket/Paket.Restore.targets" />

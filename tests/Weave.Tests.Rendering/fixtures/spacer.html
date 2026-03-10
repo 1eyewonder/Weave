@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spacer Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Flex row with spacer pushing items apart -->
+    <div id="flex-row" style="display: flex; width: 400px; align-items: center;">
+      <span id="item-left" style="white-space: nowrap;">Left</span>
+      <div id="spacer" class="weave-spacer"></div>
+      <span id="item-right" style="white-space: nowrap;">Right</span>
+    </div>
+
+    <!-- Flex row without spacer for comparison -->
+    <div id="flex-row-no-spacer" style="display: flex; width: 400px; align-items: center; margin-top: 16px;">
+      <span id="no-spacer-left" style="white-space: nowrap;">Left</span>
+      <span id="no-spacer-right" style="white-space: nowrap;">Right</span>
+    </div>
+  </body>
+</html>

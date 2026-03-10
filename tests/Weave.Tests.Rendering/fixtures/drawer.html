@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drawer Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        box-sizing: border-box;
+      }
+      /* Provide drawer width variables since they come from the theme */
+      :root {
+        --drawer-width-left: 256px;
+        --drawer-width-right: 256px;
+        --zindex-drawer: 100;
+        --zindex-appbar: 200;
+        --palette-drawer-text: #333;
+        --palette-drawer-background: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="drawer-container" class="weave-drawer-container weave-drawer-container--open-persistent weave-drawer-container--side-left" style="height: 100%;">
+      <!-- Open persistent left drawer -->
+      <aside id="drawer-left" class="weave-drawer weave-drawer--persistent weave-drawer--pos-left weave-drawer--open weave-drawer--initial" style="width: 256px; position: absolute;">
+        <div id="drawer-content" class="weave-drawer__content">
+          <nav>
+            <ul>
+              <li>Item 1</li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <div id="main-content" class="weave-drawer-container__main">
+        <div class="weave-main-content" style="padding: 16px;">
+          <h1>Main Content</h1>
+          <p>This is the main content area next to the drawer.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

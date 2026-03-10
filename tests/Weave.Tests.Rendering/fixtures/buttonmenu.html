@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ButtonMenu Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 80px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Open button menu with bottom direction -->
+    <div id="menu-open" class="weave-button-menu weave-button-menu--open weave-button-menu--bottom">
+      <button id="menu-trigger" class="weave-button weave-button--filled weave-button-menu__trigger" type="button">
+        <span class="weave-button__label">Menu</span>
+      </button>
+      <div class="weave-button-menu__items">
+        <div class="weave-button-menu__item">
+          <button class="weave-button weave-button--filled weave-button--icon" type="button">
+            <span>1</span>
+          </button>
+        </div>
+        <div class="weave-button-menu__item">
+          <button class="weave-button weave-button--filled weave-button--icon" type="button">
+            <span>2</span>
+          </button>
+        </div>
+        <div class="weave-button-menu__item">
+          <button class="weave-button weave-button--filled weave-button--icon" type="button">
+            <span>3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closed button menu for comparison -->
+    <div id="menu-closed" class="weave-button-menu weave-button-menu--bottom" style="margin-top: 120px;">
+      <button id="menu-trigger-closed" class="weave-button weave-button--filled weave-button-menu__trigger" type="button">
+        <span class="weave-button__label">Closed</span>
+      </button>
+      <div class="weave-button-menu__items">
+        <div class="weave-button-menu__item">
+          <button class="weave-button weave-button--filled weave-button--icon" type="button">
+            <span>A</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

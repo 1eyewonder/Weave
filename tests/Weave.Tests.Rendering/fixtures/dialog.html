@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dialog Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Open, centered dialog with title, content, and actions -->
+    <div id="dialog-open" class="weave-dialog weave-dialog--center">
+      <div class="weave-dialog__backdrop"></div>
+      <div id="dialog-window" class="weave-dialog__window" style="width: 400px;">
+        <div id="dialog-title" class="weave-dialog__title">Dialog Title</div>
+        <div id="dialog-content" class="weave-dialog__content">
+          <p>Dialog body content goes here.</p>
+        </div>
+        <div id="dialog-actions" style="display: flex; justify-content: flex-end; padding: 8px 24px;">
+          <button type="button">Cancel</button>
+          <button type="button">OK</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

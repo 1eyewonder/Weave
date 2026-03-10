@@ -70,7 +70,7 @@ module Drawer =
     /// <summary>Drawer is always expanded — always pushes layout.</summary>
     | Always
 
-  module internal Variant =
+  module Variant =
 
     let toClass variant =
       match variant with
@@ -86,21 +86,21 @@ module Drawer =
       | Variant.Mini -> Some Css.``weave-drawer__overlay--mini``
       | Variant.Persistent -> Option.None
 
-  module internal Position =
+  module Position =
 
     let toClass position =
       match position with
       | Position.Left -> Css.``weave-drawer--pos-left``
       | Position.Right -> Css.``weave-drawer--pos-right``
 
-  module internal ClipMode =
+  module ClipMode =
 
     let toDrawerClass clipMode =
       match clipMode with
       | ClipMode.AppBar -> Some Css.``weave-drawer--clip-appbar``
       | ClipMode.FullHeight -> Some Css.``weave-drawer--clip-fullheight``
 
-  module internal DrawerBreakpoint =
+  module DrawerBreakpoint =
 
     let toDrawerClass =
       function

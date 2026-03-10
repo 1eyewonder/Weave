@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo "Checking code formatting with Fantomas..."
+dotnet fantomas --check .
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "Formatting check failed. Run 'dotnet fantomas .' to fix."
+  exit 1
+fi

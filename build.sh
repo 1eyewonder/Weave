@@ -4,6 +4,9 @@
 set -eu
 set -o pipefail
 
+echo "Configuring git hooks path..."
+git config core.hooksPath hooks
+
 echo "Restoring dotnet tools..."
 dotnet tool restore
 

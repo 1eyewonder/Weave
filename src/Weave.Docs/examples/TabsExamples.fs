@@ -211,7 +211,7 @@ Tabs.Create(
               )
             ],
             xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            lg = Grid.Width.create 6
           )
 
           GridItem.Create(
@@ -223,7 +223,7 @@ Tabs.Create(
               )
             ],
             xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            lg = Grid.Width.create 6
           )
 
           GridItem.Create(
@@ -235,7 +235,7 @@ Tabs.Create(
               )
             ],
             xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            lg = Grid.Width.create 6
           )
         ],
         justify = JustifyContent.SpaceAround

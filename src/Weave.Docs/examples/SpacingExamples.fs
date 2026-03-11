@@ -11,6 +11,26 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module SpacingExamples =
 
+  let private responsiveLabel (breakpoints: (Breakpoint * string) list) (fallback: string) =
+    Breakpoint.browser
+    |> View.Map(fun currentBp ->
+      let bpOrder = [
+        Breakpoint.ExtraSmall
+        Breakpoint.Small
+        Breakpoint.Medium
+        Breakpoint.Large
+        Breakpoint.ExtraLarge
+        Breakpoint.ExtraExtraLarge
+      ]
+
+      let currentIdx = bpOrder |> List.findIndex ((=) currentBp)
+
+      breakpoints
+      |> List.sortByDescending (fun (bp, _) -> bpOrder |> List.findIndex ((=) bp))
+      |> List.tryFind (fun (bp, _) -> currentIdx >= (bpOrder |> List.findIndex ((=) bp)))
+      |> Option.map snd
+      |> Option.defaultValue fallback)
+
   let private inlineCode (value: string) =
     Caption.Span(value, attrs = [ Typography.Color.toClass BrandColor.Primary |> cl ])
 
@@ -435,6 +455,216 @@ div [
 
     Helpers.codeSampleSection "Padding" description content code
 
+  let private responsiveSection () =
+    let description =
+      Helpers.bodyText
+        "Spacing values can be scoped to a breakpoint so they only apply at that viewport width and above. Chain a breakpoint module between the direction and the size: Direction.Breakpoint.size. Resize your browser to see the values change."
+
+    let content =
+      let reactiveCaption (labelView: View<string>) =
+        div [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ] [
+          textView labelView
+        ]
+
+      div [] [
+        div [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "overflow-x" "auto" ] [
+          table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
+            thead [] [
+              tr [] [
+                tableHeaderCell "Breakpoint"
+                tableHeaderCell "Min width"
+                tableHeaderCell "Module path"
+                tableHeaderCell "CSS prefix"
+              ]
+            ]
+            tbody [] [
+              tr [] [
+                tableCell [ text "ExtraSmall" ]
+                tableCell [ text "0px" ]
+                tableCell [ inlineCode "Margin.All.ExtraSmall.small" ]
+                tableCell [ inlineCode "(none)" ]
+              ]
+              tr [] [
+                tableCell [ text "Small" ]
+                tableCell [ text "600px" ]
+                tableCell [ inlineCode "Margin.All.Small.small" ]
+                tableCell [ inlineCode "sm-" ]
+              ]
+              tr [] [
+                tableCell [ text "Medium" ]
+                tableCell [ text "960px" ]
+                tableCell [ inlineCode "Margin.All.Medium.small" ]
+                tableCell [ inlineCode "md-" ]
+              ]
+              tr [] [
+                tableCell [ text "Large" ]
+                tableCell [ text "1280px" ]
+                tableCell [ inlineCode "Margin.All.Large.small" ]
+                tableCell [ inlineCode "lg-" ]
+              ]
+              tr [] [
+                tableCell [ text "ExtraLarge" ]
+                tableCell [ text "1920px" ]
+                tableCell [ inlineCode "Margin.All.ExtraLarge.small" ]
+                tableCell [ inlineCode "xl-" ]
+              ]
+              tr [] [
+                tableCell [ text "ExtraExtraLarge" ]
+                tableCell [ text "2560px" ]
+                tableCell [ inlineCode "Margin.All.ExtraExtraLarge.small" ]
+                tableCell [ inlineCode "xxl-" ]
+              ]
+            ]
+          ]
+        ]
+
+        Subtitle2.Div("Live demo", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+
+        Body2.Div(
+          "The boxes below change their spacing at different breakpoints. Resize the browser to see the labels and values update.",
+          attrs = [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "opacity" "0.7" ]
+        )
+
+        Grid.Create(
+          [
+            GridItem.Create(
+              div [
+                cls [
+                  Flex.Flex.allSizes
+                  FlexDirection.Column.allSizes
+                  AlignItems.toClass AlignItems.Center
+                ]
+              ] [
+                marginDemoBox "sm: ma-8" [
+                  Margin.toClasses Margin.All.none |> cls
+                  Margin.toClasses Margin.All.Small.small |> cls
+                ]
+                reactiveCaption (
+                  responsiveLabel
+                    [ (Breakpoint.Small, "margin: 8px (Small active)") ]
+                    "margin: 0px (below Small)"
+                )
+              ],
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6
+            )
+            GridItem.Create(
+              div [
+                cls [
+                  Flex.Flex.allSizes
+                  FlexDirection.Column.allSizes
+                  AlignItems.toClass AlignItems.Center
+                ]
+              ] [
+                marginDemoBox "md: ma-16" [
+                  Margin.toClasses Margin.All.none |> cls
+                  Margin.toClasses Margin.All.Medium.large |> cls
+                ]
+                reactiveCaption (
+                  responsiveLabel
+                    [ (Breakpoint.Medium, "margin: 16px (Medium active)") ]
+                    "margin: 0px (below Medium)"
+                )
+              ],
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6
+            )
+            GridItem.Create(
+              div [
+                cls [
+                  Flex.Flex.allSizes
+                  FlexDirection.Column.allSizes
+                  AlignItems.toClass AlignItems.Center
+                ]
+              ] [
+                paddingDemoBox "lg: pa-20" [
+                  Padding.toClasses Padding.All.extraSmall |> cls
+                  Padding.toClasses Padding.All.Large.extraLarge |> cls
+                ]
+                reactiveCaption (
+                  responsiveLabel
+                    [ (Breakpoint.Large, "padding: 20px (Large active)") ]
+                    "padding: 4px (Extra small active)"
+                )
+              ],
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6
+            )
+            GridItem.Create(
+              div [
+                cls [
+                  Flex.Flex.allSizes
+                  FlexDirection.Column.allSizes
+                  AlignItems.toClass AlignItems.Center
+                ]
+              ] [
+                marginDemoBox "multi-bp" [
+                  Margin.toClasses Margin.All.extraSmall |> cls
+                  Margin.toClasses Margin.All.Small.small |> cls
+                  Margin.toClasses Margin.All.Medium.medium |> cls
+                  Margin.toClasses Margin.All.Large.large |> cls
+                ]
+                reactiveCaption (
+                  responsiveLabel
+                    [
+                      (Breakpoint.Small, "margin: 8px (Small active)")
+                      (Breakpoint.Medium, "margin: 12px (Medium active)")
+                      (Breakpoint.Large, "margin: 16px (Large active)")
+                    ]
+                    "margin: 4px (Extra small active)"
+                )
+              ],
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6
+            )
+          ],
+          spacing = Grid.GutterSpacing.create 2
+        )
+      ]
+
+    let code =
+      """open Weave
+
+
+// Responsive margin: applies small (8px) margin at the Small breakpoint (600px) and above
+div [ Margin.toClasses Margin.All.Small.small |> cls ] [
+    text "No margin on mobile, 8px margin at >= 600px"
+]
+
+// Combine a mobile default with a larger breakpoint override
+div [
+    cls [
+        yield! Margin.toClasses Margin.All.extraSmall        // 4px on all viewports
+        yield! Margin.toClasses Margin.All.Medium.large       // 16px at >= 960px
+    ]
+] [
+    text "4px margin on mobile, 16px at medium screens and above"
+]
+
+// Progressive scaling across multiple breakpoints
+div [
+    cls [
+        yield! Margin.toClasses Margin.All.extraSmall         // 4px  base
+        yield! Margin.toClasses Margin.All.Small.small         // 8px  >= 600px
+        yield! Margin.toClasses Margin.All.Medium.medium       // 12px >= 960px
+        yield! Margin.toClasses Margin.All.Large.large         // 16px >= 1280px
+    ]
+] [
+    text "Spacing grows with the viewport"
+]
+
+// Works the same way for Padding
+div [
+    cls [
+        yield! Padding.toClasses Padding.Horizontal.small              // 8px always
+        yield! Padding.toClasses Padding.Horizontal.Large.extraLarge   // 20px >= 1280px
+    ]
+] [
+    text "Tight on mobile, roomy on desktop"
+]"""
+
+    Helpers.codeSampleSection "Responsive breakpoints" description content code
+
   let private densitySection () =
     let description =
       Helpers.bodyText
@@ -541,6 +771,8 @@ Button.Create(
         marginSection ()
         Helpers.divider ()
         paddingSection ()
+        Helpers.divider ()
+        responsiveSection ()
         Helpers.divider ()
         densitySection ()
       ],

@@ -188,7 +188,31 @@ module SpacingExamples =
         )
       ]
 
-    Helpers.section "How it works" description content
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+// Margin: pick a direction and size
+div [ Margin.toClasses Margin.Bottom.small |> cls ] [ // see here
+    text "8px below this element"
+]
+
+// Padding: same pattern, applied inside the element
+div [ Padding.toClasses Padding.All.medium |> cls ] [ // see here
+    text "12px on all sides"
+]
+
+// Combine directions for fine-grained control
+div [
+    cls [
+        yield! Margin.toClasses Margin.Bottom.large
+        yield! Padding.toClasses Padding.Horizontal.small
+    ]
+] [
+    text "16px margin below, 8px padding left and right"
+]"""
+
+    Helpers.codeSampleSection "How it works" description content code
 
   let private marginSection () =
     let description =

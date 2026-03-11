@@ -13,47 +13,62 @@ open WebSharper.JavaScript
 [<JavaScript>]
 module IconsExamples =
 
-  let referenceGoogleFonts () =
+  let private referenceGoogleFonts () =
     let description =
       Helpers.bodyText
-        "To use Material Symbols icons in your project, you need to include the appropriate Google Fonts link in your HTML head section. Depending on the style of icons you want to use, you can choose from the following options:"
+        "To use Material Symbols icons in your project, include the appropriate Google Fonts link in your HTML head section. Choose the link that matches the icon style you want to use."
 
-    div [] [
-      H6.Div("Outlined Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Div(
-        "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />",
-        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
-      )
+    let content =
+      div [] [
+        H6.Div("Outlined Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
+          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />",
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+        )
 
-      H6.Div("Rounded Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Div(
-        "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />",
-        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
-      )
+        H6.Div("Rounded Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
+          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />",
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+        )
 
-      H6.Div("Sharp Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-      Body1.Div(
-        "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />",
-        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
-      )
+        H6.Div("Sharp Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.Div(
+          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />",
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+        )
 
-      H6.Div("More Styles", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        H6.Div("More Styles", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
 
-      let body =
-        div [] [
-          text "For more styles and options, visit "
-          a [
-            attr.href "https://developers.google.com/fonts/docs/material_symbols"
-            Attr.Style "text-decoration" "underline"
-            Typography.Color.toClass BrandColor.Primary |> cl
-          ] [ text "Google's developer's guide" ]
-        ]
+        let body =
+          div [] [
+            text "For more styles and options, visit "
+            a [
+              attr.href "https://developers.google.com/fonts/docs/material_symbols"
+              Attr.Style "text-decoration" "underline"
+              Typography.Color.toClass BrandColor.Primary |> cl
+            ] [ text "Google's developer's guide" ]
+          ]
 
-      Body1.Div(body, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-    ]
-    |> Helpers.section "Reference Google Fonts" description
+        Body1.Div(body, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      ]
 
-  let icons () =
+    let code =
+      """<!-- Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet" />
+
+<!-- Rounded -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet" />
+
+<!-- Sharp -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp"
+      rel="stylesheet" />"""
+
+    Helpers.codeSampleSection "Reference Google Fonts" description content code
+
+  let private icons () =
     let filled = Var.Create false
     let style = Var.Create<MaterialSymbols.Style> Style.Outlined
     let opticalSize = Var.Create MaterialSymbols.OpticalSize.``24``
@@ -406,70 +421,99 @@ module IconsExamples =
         )
       ]
 
-    div [] [
-      H6.Div("Select Fill")
+    let content =
+      div [] [
+        H6.Div("Select Fill")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! filledRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! filledRadios ]
 
-      H6.Div("Select Style")
+        H6.Div("Select Style")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! styleRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! styleRadios ]
 
-      H6.Div("Select Optical Size")
+        H6.Div("Select Optical Size")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! opticalSizeRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! opticalSizeRadios ]
 
-      H6.Div("Select Weight")
+        H6.Div("Select Weight")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! weightRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! weightRadios ]
 
-      H6.Div("Select Grade")
+        H6.Div("Select Grade")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! gradeRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! gradeRadios ]
 
-      H6.Div("Select Color")
+        H6.Div("Select Color")
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          JustifyContent.toClass JustifyContent.FlexStart
-        ]
-      ] [ yield! colorRadios ]
+        div [
+          cls [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.toClass JustifyContent.FlexStart
+          ]
+        ] [ yield! colorRadios ]
 
-      examples
+        examples
+      ]
+
+    let code =
+      """open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
+open Weave.CssHelpers
+open WebSharper.UI
+
+Icon.Create(
+    Icon.Action Action.Alarm,
+    style = View.Const Style.Rounded, // see here
+    weight = View.Const MaterialSymbols.IconWeight.``400``,
+    opticalSize = View.Const MaterialSymbols.OpticalSize.``24``,
+    grade = View.Const MaterialSymbols.IconGrade.``0``,
+    attrs = [
+        Typography.Color.toClass BrandColor.Primary |> cl // see here
     ]
-    |> Helpers.section "Icons" Doc.Empty
+)
+
+Icon.Create(
+    Icon.UiActions UiActions.Favorite,
+    style = View.Const Style.OutlinedFilled,
+    weight = View.Const MaterialSymbols.IconWeight.``700``,
+    attrs = [
+        Typography.Color.toClass BrandColor.Error |> cl
+    ]
+)"""
+
+    Helpers.codeSampleSection "Icons" Doc.Empty content code
 
   // Grid.Create(
   //   [

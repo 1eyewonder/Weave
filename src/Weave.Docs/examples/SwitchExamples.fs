@@ -11,113 +11,240 @@ open Weave
 module SwitchExamples =
 
   let private basicSwitchExample () =
-    let basicIsChecked = Var.Create false
+    let description =
+      Helpers.bodyText "A simple switch with a label and reactive state output."
 
-    div [] [
-      basicIsChecked.View
-      |> View.MapCached(sprintf "Basic is Checked: %b")
-      |> View.printfn
-      Switch.Create(basicIsChecked, View.Const "Default Switch")
-    ]
-    |> Helpers.section "Basic Switch" (Helpers.bodyText "A simple switch with a label.")
+    let content =
+      let basicIsChecked = Var.Create false
+
+      div [] [
+        basicIsChecked.View
+        |> View.MapCached(sprintf "Basic is Checked: %b")
+        |> View.printfn
+        Switch.Create(basicIsChecked, View.Const "Default Switch")
+      ]
+
+    let code =
+      """open Weave
+open WebSharper.UI
+
+let isChecked = Var.Create false // see here
+
+Switch.Create(isChecked, View.Const "Default Switch")
+"""
+
+    Helpers.codeSampleSection "Basic Switch" description content code
 
   let private disabledSwitchExample () =
-    let isChecked = Var.Create true
+    let description =
+      Helpers.bodyText "A switch that is disabled and cannot be toggled."
 
-    Switch.Create(isChecked, View.Const "Disabled Switch", enabled = View.Const false)
-    |> Helpers.section "Disabled Switch" (Helpers.bodyText "A switch that is disabled and cannot be toggled.")
+    let content =
+      let isChecked = Var.Create true
+      Switch.Create(isChecked, View.Const "Disabled Switch", enabled = View.Const false)
+
+    let code =
+      """open Weave
+open WebSharper.UI
+
+let isChecked = Var.Create true
+
+Switch.Create(
+    isChecked,
+    View.Const "Disabled Switch",
+    enabled = View.Const false // see here
+)
+"""
+
+    Helpers.codeSampleSection "Disabled Switch" description content code
 
   let private switchWithDynamicLabel () =
-    let isChecked = Var.Create false
+    let description =
+      Helpers.bodyText "A switch with a label that updates based on its state."
 
-    let label =
-      isChecked.View |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
+    let content =
+      let isChecked = Var.Create false
 
-    Switch.Create(isChecked, label)
-    |> Helpers.section
-      "Dynamic Label"
-      (Helpers.bodyText "A switch with a label that updates based on its state.")
+      let label =
+        isChecked.View |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
+
+      Switch.Create(isChecked, label)
+
+    let code =
+      """open Weave
+open WebSharper.UI
+
+let isChecked = Var.Create false
+
+let label =
+    isChecked.View
+    |> View.Map(fun v -> if v then "I am on!" else "Turn me on!") // see here
+
+Switch.Create(isChecked, label)
+"""
+
+    Helpers.codeSampleSection "Dynamic Label" description content code
 
   let private switchSizesExample () =
-    let sizes = [
-      Switch.Size.Small, "Small", Var.Create false
-      Switch.Size.Medium, "Medium", Var.Create true
-      Switch.Size.Large, "Large", Var.Create false
-    ]
+    let description =
+      Helpers.bodyText "Switches come in three sizes: Small, Medium, and Large."
 
-    Grid.Create(
-      sizes
-      |> List.map (fun (size, label, v) ->
-        GridItem.Create(
-          Switch.Create(v, View.Const label, attrs = [ Switch.Size.toClass size |> cl ]),
-          xs = Grid.Width.create 12,
-          sm = Grid.Width.create 6,
-          md = Grid.Width.create 4
-        ))
-    )
-    |> Helpers.section "Sizes" (Helpers.bodyText "Switches in different sizes.")
-
-  let private switchColorsExample () =
-    let switches =
-      [
-        BrandColor.Primary, "Primary"
-        BrandColor.Secondary, "Secondary"
-        BrandColor.Tertiary, "Tertiary"
-        BrandColor.Error, "Error"
-        BrandColor.Warning, "Warning"
-        BrandColor.Success, "Success"
-        BrandColor.Info, "Info"
+    let content =
+      let sizes = [
+        Switch.Size.Small, "Small", Var.Create false
+        Switch.Size.Medium, "Medium", Var.Create true
+        Switch.Size.Large, "Large", Var.Create false
       ]
-      |> List.map (fun (color, label) -> Var.Create false, color, label)
 
-    Grid.Create(
-      switches
-      |> List.map (fun (v, color, label) ->
-        GridItem.Create(
-          Switch.Create(v, View.Const label, attrs = [ Switch.Color.toClass color |> cl ]),
-          xs = Grid.Width.create 12,
-          sm = Grid.Width.create 6,
-          md = Grid.Width.create 1
-        ))
-    )
-    |> Helpers.section "Colors" (Helpers.bodyText "Switches with different color themes.")
-
-  let private contentPlacementExample () =
-    let placement = Var.Create Switch.ContentPlacement.Right
-
-    let radioOptions = [
-      Switch.ContentPlacement.Left, "Left"
-      Switch.ContentPlacement.Right, "Right"
-      Switch.ContentPlacement.Top, "Top"
-      Switch.ContentPlacement.Bottom, "Bottom"
-    ]
-
-    let radioButtons =
-      radioOptions
-      |> List.map (fun (value, label) ->
-        GridItem.Create(
-          Radio.Create(placement, value, displayText = View.Const label),
-          xs = Grid.Width.create 6,
-          md = Grid.Width.create 3
-        ))
-
-    let demoChecked = Var.Create false
-
-    let demoSwitch =
-      Switch.Create(
-        demoChecked,
-        placement.View |> View.MapCached(sprintf "%A"),
-        contentPlacement = placement.View,
-        attrs = [
-          Switch.Size.toClass Switch.Size.Large |> cl
-          Switch.Color.toClass BrandColor.Primary |> cl
-        ]
+      Grid.Create(
+        sizes
+        |> List.map (fun (size, label, v) ->
+          GridItem.Create(
+            Switch.Create(v, View.Const label, attrs = [ Switch.Size.toClass size |> cl ]),
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 6,
+            md = Grid.Width.create 4
+          ))
       )
 
-    Grid.Create(radioButtons @ [ GridItem.Create(demoSwitch, xs = Grid.Width.create 12) ])
-    |> Helpers.section
-      "Content Placement"
-      (Helpers.bodyText "Change the label position using the ContentPlacement option.")
+    let code =
+      """open Weave
+open Weave.CssHelpers
+open WebSharper.UI
+
+let isChecked = Var.Create false
+
+Switch.Create(
+    isChecked,
+    View.Const "Small",
+    attrs = [ Switch.Size.toClass Switch.Size.Small |> cl ] // see here
+)
+
+Switch.Create(
+    isChecked,
+    View.Const "Medium",
+    attrs = [ Switch.Size.toClass Switch.Size.Medium |> cl ] // see here
+)
+
+Switch.Create(
+    isChecked,
+    View.Const "Large",
+    attrs = [ Switch.Size.toClass Switch.Size.Large |> cl ] // see here
+)
+"""
+
+    Helpers.codeSampleSection "Sizes" description content code
+
+  let private switchColorsExample () =
+    let description =
+      Helpers.bodyText "Switches support all theme colors via the Switch.Color module."
+
+    let content =
+      let switches =
+        [
+          BrandColor.Primary, "Primary"
+          BrandColor.Secondary, "Secondary"
+          BrandColor.Tertiary, "Tertiary"
+          BrandColor.Error, "Error"
+          BrandColor.Warning, "Warning"
+          BrandColor.Success, "Success"
+          BrandColor.Info, "Info"
+        ]
+        |> List.map (fun (color, label) -> Var.Create false, color, label)
+
+      Grid.Create(
+        switches
+        |> List.map (fun (v, color, label) ->
+          GridItem.Create(
+            Switch.Create(v, View.Const label, attrs = [ Switch.Color.toClass color |> cl ]),
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 6,
+            md = Grid.Width.create 1
+          ))
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+open WebSharper.UI
+
+let isChecked = Var.Create false
+
+Switch.Create(
+    isChecked,
+    View.Const "Primary",
+    attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ] // see here
+)
+
+Switch.Create(
+    isChecked,
+    View.Const "Error",
+    attrs = [ Switch.Color.toClass BrandColor.Error |> cl ] // see here
+)
+"""
+
+    Helpers.codeSampleSection "Colors" description content code
+
+  let private contentPlacementExample () =
+    let description =
+      Helpers.bodyText
+        "Change the label position using the contentPlacement parameter. Use the radio buttons below to see each placement in action."
+
+    let content =
+      let placement = Var.Create Switch.ContentPlacement.Right
+
+      let radioOptions = [
+        Switch.ContentPlacement.Left, "Left"
+        Switch.ContentPlacement.Right, "Right"
+        Switch.ContentPlacement.Top, "Top"
+        Switch.ContentPlacement.Bottom, "Bottom"
+      ]
+
+      let radioButtons =
+        radioOptions
+        |> List.map (fun (value, label) ->
+          GridItem.Create(
+            Radio.Create(placement, value, displayText = View.Const label),
+            xs = Grid.Width.create 6,
+            md = Grid.Width.create 3
+          ))
+
+      let demoChecked = Var.Create false
+
+      let demoSwitch =
+        Switch.Create(
+          demoChecked,
+          placement.View |> View.MapCached(sprintf "%A"),
+          contentPlacement = placement.View,
+          attrs = [
+            Switch.Size.toClass Switch.Size.Large |> cl
+            Switch.Color.toClass BrandColor.Primary |> cl
+          ]
+        )
+
+      Grid.Create(radioButtons @ [ GridItem.Create(demoSwitch, xs = Grid.Width.create 12) ])
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+open WebSharper.UI
+
+let isChecked = Var.Create false
+
+Switch.Create(
+    isChecked,
+    View.Const "Left",
+    contentPlacement = View.Const Switch.ContentPlacement.Left // see here
+)
+
+Switch.Create(
+    isChecked,
+    View.Const "Top",
+    contentPlacement = View.Const Switch.ContentPlacement.Top // see here
+)
+"""
+
+    Helpers.codeSampleSection "Content Placement" description content code
 
   let private densityExample () =
     let description =

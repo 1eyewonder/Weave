@@ -11,120 +11,194 @@ open Weave.CssHelpers
 [<JavaScript>]
 module ExpansionPanelExamples =
 
-  let multiplePanels () =
-    let headerContent n expanded =
-      ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div(sprintf "Expansion Panel %i" n), expanded)
+  let private multiplePanels () =
+    let description =
+      Helpers.bodyText "Expansion panels can hold any type of content and can be expanded or collapsed."
 
-    let expansionContent n =
-      ExpansionPanelContent.Create(text (sprintf "Content %i" n))
+    let content =
+      let headerContent n expanded =
+        ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div(sprintf "Expansion Panel %i" n), expanded)
 
-    ExpansionPanelContainer.Create(
-      [
-        let oneExpanded = Var.Create false
+      let expansionContent n =
+        ExpansionPanelContent.Create(text (sprintf "Content %i" n))
 
-        ExpansionPanel.Create(
-          headerContent 1 oneExpanded,
-          expanded = oneExpanded,
-          content = expansionContent 1
-        )
+      ExpansionPanelContainer.Create(
+        [
+          let oneExpanded = Var.Create false
 
-        let twoExpanded = Var.Create false
+          ExpansionPanel.Create(
+            headerContent 1 oneExpanded,
+            expanded = oneExpanded,
+            content = expansionContent 1
+          )
 
-        ExpansionPanel.Create(
-          headerContent 2 twoExpanded,
-          expanded = twoExpanded,
-          content = expansionContent 2
-        )
-      ]
-    )
-    |> Helpers.section
-      "Expansion Panel"
-      (Helpers.bodyText "Expansion panels can hold any type of content and can be expanded or collapsed.")
+          let twoExpanded = Var.Create false
 
-  let color () =
-    let header expanded color =
-      ExpansionPanelHeader.CreateWithDefaultIcons(
-        Body1.Div(sprintf "%A" color),
-        expanded,
-        attrs = [ cls [ ExpansionPanel.Color.toClass color ] ]
+          ExpansionPanel.Create(
+            headerContent 2 twoExpanded,
+            expanded = twoExpanded,
+            content = expansionContent 2
+          )
+        ]
       )
 
-    let content (color: BrandColor) =
-      ExpansionPanelContent.Create(text (sprintf "%A" color))
+    let code =
+      """open Weave
+open WebSharper.UI
 
-    let panel color expanded =
-      ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
+let expanded = Var.Create false // see here
 
-    ExpansionPanelContainer.Create(
-      [
-        let primaryExpanded = Var.Create false
-        panel BrandColor.Primary primaryExpanded
+ExpansionPanelContainer.Create(
+    [
+        ExpansionPanel.Create(
+            ExpansionPanelHeader.CreateWithDefaultIcons(
+                Body1.Div("Expansion Panel 1"),
+                expanded
+            ),
+            expanded = expanded,
+            content = ExpansionPanelContent.Create(text "Content 1")
+        )
+    ]
+)
+"""
 
-        let secondaryExpanded = Var.Create false
-        panel BrandColor.Secondary secondaryExpanded
+    Helpers.codeSampleSection "Expansion Panel" description content code
 
-        let tertiaryExpanded = Var.Create false
-        panel BrandColor.Tertiary tertiaryExpanded
+  let private color () =
+    let description =
+      Helpers.bodyText "Expansion panel headers can be colored using different brand colors."
 
-        let errorExpanded = Var.Create false
-        panel BrandColor.Error errorExpanded
+    let content =
+      let header expanded color =
+        ExpansionPanelHeader.CreateWithDefaultIcons(
+          Body1.Div(sprintf "%A" color),
+          expanded,
+          attrs = [ cls [ ExpansionPanel.Color.toClass color ] ]
+        )
 
-        let warningExpanded = Var.Create false
-        panel BrandColor.Warning warningExpanded
+      let content (color: BrandColor) =
+        ExpansionPanelContent.Create(text (sprintf "%A" color))
 
-        let successExpanded = Var.Create false
-        panel BrandColor.Success successExpanded
+      let panel color expanded =
+        ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
 
-        let infoExpanded = Var.Create false
-        panel BrandColor.Info infoExpanded
-      ]
-    )
-    |> Helpers.section
-      "Coloring"
-      (Helpers.bodyText "Expansion panel headers can be colored using different brand colors.")
+      ExpansionPanelContainer.Create(
+        [
+          let primaryExpanded = Var.Create false
+          panel BrandColor.Primary primaryExpanded
 
-  let highlightVariants () =
-    let headerContent expanded variant =
-      ExpansionPanelHeader.CreateWithDefaultIcons(
-        Body1.Div(sprintf "%A" variant),
-        expanded,
-        highlightVariant = View.Const variant,
-        attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
+          let secondaryExpanded = Var.Create false
+          panel BrandColor.Secondary secondaryExpanded
+
+          let tertiaryExpanded = Var.Create false
+          panel BrandColor.Tertiary tertiaryExpanded
+
+          let errorExpanded = Var.Create false
+          panel BrandColor.Error errorExpanded
+
+          let warningExpanded = Var.Create false
+          panel BrandColor.Warning warningExpanded
+
+          let successExpanded = Var.Create false
+          panel BrandColor.Success successExpanded
+
+          let infoExpanded = Var.Create false
+          panel BrandColor.Info infoExpanded
+        ]
       )
 
-    let content displayText =
-      ExpansionPanelContent.Create(text displayText)
+    let code =
+      """open Weave
+open Weave.CssHelpers
+open WebSharper.UI
 
-    ExpansionPanelContainer.Create(
-      [
-        let oneExpanded = Var.Create false
+let expanded = Var.Create false
 
+ExpansionPanelContainer.Create(
+    [
         ExpansionPanel.Create(
-          headerContent oneExpanded ExpansionPanel.HeaderVariant.Filled,
-          expanded = oneExpanded,
-          content = content "Filled"
+            ExpansionPanelHeader.CreateWithDefaultIcons(
+                Body1.Div("Primary"),
+                expanded,
+                attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ] // see here
+            ),
+            expanded = expanded,
+            content = ExpansionPanelContent.Create(text "Primary")
+        )
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Coloring" description content code
+
+  let private highlightVariants () =
+    let description =
+      Helpers.bodyText "Expansion panel headers can have different variants: Filled, Highlight, and None."
+
+    let content =
+      let headerContent expanded variant =
+        ExpansionPanelHeader.CreateWithDefaultIcons(
+          Body1.Div(sprintf "%A" variant),
+          expanded,
+          highlightVariant = View.Const variant,
+          attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
         )
 
-        let twoExpanded = Var.Create false
+      let panelContent displayText =
+        ExpansionPanelContent.Create(text displayText)
 
+      ExpansionPanelContainer.Create(
+        [
+          let oneExpanded = Var.Create false
+
+          ExpansionPanel.Create(
+            headerContent oneExpanded ExpansionPanel.HeaderVariant.Filled,
+            expanded = oneExpanded,
+            content = panelContent "Filled"
+          )
+
+          let twoExpanded = Var.Create false
+
+          ExpansionPanel.Create(
+            headerContent twoExpanded ExpansionPanel.HeaderVariant.Highlight,
+            expanded = twoExpanded,
+            content = panelContent "Highlight"
+          )
+
+          let threeExpanded = Var.Create false
+
+          ExpansionPanel.Create(
+            headerContent threeExpanded ExpansionPanel.HeaderVariant.None,
+            expanded = threeExpanded,
+            content = panelContent "None"
+          )
+        ]
+      )
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+open WebSharper.UI
+
+let expanded = Var.Create false
+
+ExpansionPanelContainer.Create(
+    [
         ExpansionPanel.Create(
-          headerContent twoExpanded ExpansionPanel.HeaderVariant.Highlight,
-          expanded = twoExpanded,
-          content = content "Highlight"
+            ExpansionPanelHeader.CreateWithDefaultIcons(
+                Body1.Div("Filled"),
+                expanded,
+                highlightVariant = View.Const ExpansionPanel.HeaderVariant.Filled, // see here
+                attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
+            ),
+            expanded = expanded,
+            content = ExpansionPanelContent.Create(text "Filled")
         )
+    ]
+)
+"""
 
-        let threeExpanded = Var.Create false
-
-        ExpansionPanel.Create(
-          headerContent threeExpanded ExpansionPanel.HeaderVariant.None,
-          expanded = threeExpanded,
-          content = content "None"
-        )
-      ]
-    )
-    |> Helpers.section
-      "Header Highlight Variants"
-      (Helpers.bodyText "Expansion panel headers can have different variants: Filled, Highlight, and None.")
+    Helpers.codeSampleSection "Header Highlight Variants" description content code
 
   let private densityExample () =
     let description =

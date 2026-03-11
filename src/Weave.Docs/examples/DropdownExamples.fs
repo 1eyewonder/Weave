@@ -48,24 +48,52 @@ module DropdownExamples =
 
     let items = [ 1..3 ] |> List.map (clickableItem alertVar)
 
-    div [] [
-      alertDialog alertVar
-      Dropdown.Create(
-        buttonContents = text "Open Dropdown",
-        items = items,
-        attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ],
-        buttonAttrs = [
-          cls [
+    let description =
+      Helpers.bodyText
+        "A simple dropdown with a few items. Clicking on the button or anywhere else on screen while the dropdown is open will close the dropdown."
+
+    let content =
+      div [] [
+        alertDialog alertVar
+        Dropdown.Create(
+          buttonContents = text "Open Dropdown",
+          items = items,
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ],
+          buttonAttrs = [
+            cls [
+              Button.Variant.toClass Button.Variant.Filled
+              Button.Color.toClass BrandColor.Primary
+            ]
+          ]
+        )
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let items =
+    [ 1..3 ]
+    |> List.map (fun n ->
+        DropdownItem.Create(
+            text (sprintf "Item %d" n),
+            onClick = (fun () -> printfn "Clicked item %d" n)
+        )
+    )
+
+Dropdown.Create(
+    buttonContents = text "Open Dropdown",
+    items = items, // see here
+    buttonAttrs = [
+        cls [
             Button.Variant.toClass Button.Variant.Filled
             Button.Color.toClass BrandColor.Primary
-          ]
         ]
-      )
-      |> Helpers.section
-        "Basic Usage"
-        (Helpers.bodyText
-          "A simple dropdown with a few items. Clicking on the button or anywhere else on screen while the dropdown is open will close the dropdown.")
     ]
+)
+"""
+
+    Helpers.codeSampleSection "Basic Usage" description content code
 
   let private placementExample () =
     let alertVar = Var.Create None
@@ -113,72 +141,103 @@ module DropdownExamples =
             ))
       ]
 
-    div [] [
-      alertDialog alertVar
-      Grid.Create(
-        [
-          GridItem.Create(
-            div [] [
-              H6.Div("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
-            ],
-            xs = Grid.Width.create 6
-          )
+    let description =
+      Helpers.bodyText "Dropdowns can be positioned using both anchor origin and transform origin."
 
-          GridItem.Create(
-            div [] [
-              H6.Div("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
-            ],
-            xs = Grid.Width.create 6
-          )
-
-          GridItem.Create(
-            Grid.Create(
-              [
-                GridItem.Create(
-                  Body1.Div(
-                    "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
-                    attrs = [ Attr.Style "text-align" "center" ]
-                  )
-                )
-                GridItem.Create(
-                  Dropdown.Create(
-                    buttonContents = text "Placement",
-                    items = items,
-                    anchorOrigin = anchorVar.View,
-                    transformOrigin = transformVar.View,
-                    closeOnOutsideClick = View.Const false,
-                    attrs = [ cls [ yield! Margin.toClasses Margin.Top.large ] ],
-                    buttonAttrs = [
-                      cls [
-                        Button.Variant.toClass Button.Variant.Filled
-                        Button.Color.toClass BrandColor.Primary
-                      ]
-                    ]
-                  ),
-                  xs = Grid.Width.create 12
-                )
+    let content =
+      div [] [
+        alertDialog alertVar
+        Grid.Create(
+          [
+            GridItem.Create(
+              div [] [
+                H6.Div("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+                radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
               ],
-              justify = JustifyContent.Center,
-              attrs = [
-                cls [
-                  AlignItems.toClass AlignItems.Center
-                  AlignContent.toClass AlignContent.Center
-                ]
-              ]
-            ),
-            xs = Grid.Width.create 10,
-            attrs = [ cls [ yield! Margin.toClasses Margin.Top.small ] ]
-          )
+              xs = Grid.Width.create 6
+            )
 
-        ],
-        justify = JustifyContent.SpaceAround
-      )
-      |> Helpers.section
-        "Placement"
-        (Helpers.bodyText "Dropdowns can be positioned using both anchor origin and transform origin.")
+            GridItem.Create(
+              div [] [
+                H6.Div("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+                radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
+              ],
+              xs = Grid.Width.create 6
+            )
+
+            GridItem.Create(
+              Grid.Create(
+                [
+                  GridItem.Create(
+                    Body1.Div(
+                      "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
+                      attrs = [ Attr.Style "text-align" "center" ]
+                    )
+                  )
+                  GridItem.Create(
+                    Dropdown.Create(
+                      buttonContents = text "Placement",
+                      items = items,
+                      anchorOrigin = anchorVar.View,
+                      transformOrigin = transformVar.View,
+                      closeOnOutsideClick = View.Const false,
+                      attrs = [ cls [ yield! Margin.toClasses Margin.Top.large ] ],
+                      buttonAttrs = [
+                        cls [
+                          Button.Variant.toClass Button.Variant.Filled
+                          Button.Color.toClass BrandColor.Primary
+                        ]
+                      ]
+                    ),
+                    xs = Grid.Width.create 12
+                  )
+                ],
+                justify = JustifyContent.Center,
+                attrs = [
+                  cls [
+                    AlignItems.toClass AlignItems.Center
+                    AlignContent.toClass AlignContent.Center
+                  ]
+                ]
+              ),
+              xs = Grid.Width.create 10,
+              attrs = [ cls [ yield! Margin.toClasses Margin.Top.small ] ]
+            )
+
+          ],
+          justify = JustifyContent.SpaceAround
+        )
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let items =
+    [ 1..3 ]
+    |> List.map (fun n ->
+        DropdownItem.Create(
+            text (sprintf "Item %d" n),
+            onClick = (fun () -> printfn "Clicked item %d" n)
+        )
+    )
+
+Dropdown.Create(
+    buttonContents = text "Placement",
+    items = items,
+    anchorOrigin = anchorVar.View, // see here
+    transformOrigin = transformVar.View, // see here
+    closeOnOutsideClick = View.Const false,
+    buttonAttrs = [
+        cls [
+            Button.Variant.toClass Button.Variant.Filled
+            Button.Color.toClass BrandColor.Primary
+        ]
     ]
+)
+"""
+
+    Helpers.codeSampleSection "Placement" description content code
 
   let private nestedDropdownExample () =
     let alertVar = Var.Create None
@@ -227,42 +286,86 @@ module DropdownExamples =
     let items = [ clickableItem alertVar 1; clickableItem alertVar 2; nestedDropdownUnstyled ]
     let styledItems = [ clickableItem alertVar 1; clickableItem alertVar 2; nestedDropdownStyled ]
 
-    div [] [
-      alertDialog alertVar
-      Grid.Create(
-        [
-          GridItem.Create(
-            Dropdown.Create(
-              buttonContents = text "Dropdown w/o Styling",
-              items = items,
-              buttonAttrs = [
-                cls [
-                  Button.Variant.toClass Button.Variant.Filled
-                  Button.Color.toClass BrandColor.Primary
-                ]
-              ]
-            )
-          )
+    let description =
+      Helpers.bodyText
+        "Dropdowns can contain nested dropdown menus. There are no default stylings for nested dropdowns, however utilizing the `isOpen` parameter, you can build reactive styling based on if the given menu is open."
 
-          GridItem.Create(
-            Dropdown.Create(
-              buttonContents = text "Dropdown w/ Styling",
-              items = styledItems,
-              buttonAttrs = [
-                cls [
-                  Button.Variant.toClass Button.Variant.Filled
-                  Button.Color.toClass BrandColor.Secondary
+    let content =
+      div [] [
+        alertDialog alertVar
+        Grid.Create(
+          [
+            GridItem.Create(
+              Dropdown.Create(
+                buttonContents = text "Dropdown w/o Styling",
+                items = items,
+                buttonAttrs = [
+                  cls [
+                    Button.Variant.toClass Button.Variant.Filled
+                    Button.Color.toClass BrandColor.Primary
+                  ]
                 ]
-              ]
+              )
             )
-          )
+
+            GridItem.Create(
+              Dropdown.Create(
+                buttonContents = text "Dropdown w/ Styling",
+                items = styledItems,
+                buttonAttrs = [
+                  cls [
+                    Button.Variant.toClass Button.Variant.Filled
+                    Button.Color.toClass BrandColor.Secondary
+                  ]
+                ]
+              )
+            )
+          ]
+        )
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let nestedIsOpen = Var.Create false
+
+let nestedDropdown =
+    NestedDropdown.Create( // see here
+        buttonContents = text "Open Nested",
+        items = [
+            DropdownItem.Create(
+                text "Nested Item 1",
+                onClick = (fun () -> printfn "Clicked Nested Item 1")
+            )
+            DropdownItem.Create(
+                text "Nested Item 2",
+                onClick = (fun () -> printfn "Clicked Nested Item 2")
+            )
+        ],
+        isOpen = nestedIsOpen,
+        buttonAttrs = [
+            nestedIsOpen.View
+            |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Tertiary) // see here
+
+            nestedIsOpen.View
+            |> Attr.DynamicClassPred(Button.Variant.toClass Button.Variant.Outlined)
         ]
-      )
-      |> Helpers.section
-        "Nested Dropdowns"
-        (Helpers.bodyText
-          "Dropdowns can contain nested dropdown menus. There are no default stylings for nested dropdowns, however utilizing the `isOpen` parameter, you can build reactive styling based on if the given menu is open.")
+    )
+
+Dropdown.Create(
+    buttonContents = text "Dropdown w/ Styling",
+    items = [ clickableItem 1; clickableItem 2; nestedDropdown ],
+    buttonAttrs = [
+        cls [
+            Button.Variant.toClass Button.Variant.Filled
+            Button.Color.toClass BrandColor.Secondary
+        ]
     ]
+)
+"""
+
+    Helpers.codeSampleSection "Nested Dropdowns" description content code
 
   let private openOnExamples () =
     let alertVar = Var.Create None
@@ -376,41 +479,83 @@ module DropdownExamples =
         ]
       )
 
-    div [] [
-      alertDialog alertVar
-      Grid.Create(
-        [
-          GridItem.Create(
-            clickableDropdown,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
-          )
-          GridItem.Create(
-            hoverDropdown,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
-          )
-          GridItem.Create(
-            nestedClickableDropdown,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
-          )
-          GridItem.Create(
-            nestedHoverDropdown,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
-          )
+    let description =
+      Helpers.bodyText
+        "The OpenOn property allows you to specify whether the dropdown opens on click or hover. The default behavior for the Dropdown and NestedDropdown component is to open on click. You can override this by specifying the OpenOn property when creating either component."
+
+    let content =
+      div [] [
+        alertDialog alertVar
+        Grid.Create(
+          [
+            GridItem.Create(
+              clickableDropdown,
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6,
+              md = Grid.Width.create 3
+            )
+            GridItem.Create(
+              hoverDropdown,
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6,
+              md = Grid.Width.create 3
+            )
+            GridItem.Create(
+              nestedClickableDropdown,
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6,
+              md = Grid.Width.create 3
+            )
+            GridItem.Create(
+              nestedHoverDropdown,
+              xs = Grid.Width.create 12,
+              sm = Grid.Width.create 6,
+              md = Grid.Width.create 3
+            )
+          ]
+        )
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+Dropdown.Create(
+    buttonContents = text "Click to Open",
+    items = items,
+    openOn = View.Const Dropdown.OpenOn.Click, // see here
+    buttonAttrs = [
+        cls [
+            Button.Variant.toClass Button.Variant.Filled
+            Button.Color.toClass BrandColor.Primary
         ]
-      )
-      |> Helpers.section
-        "OpenOn Property"
-        (Helpers.bodyText
-          "The OpenOn property allows you to specify whether the dropdown opens on click or hover. The default behavior for the Dropdown and NestedDropdown component is to open on click. You can override this by specifying the OpenOn property when creating either component.")
     ]
+)
+
+Dropdown.Create(
+    buttonContents = text "Hover to Open",
+    items = items,
+    openOn = View.Const Dropdown.OpenOn.Hover, // see here
+    buttonAttrs = [
+        cls [
+            Button.Variant.toClass Button.Variant.Filled
+            Button.Color.toClass BrandColor.Secondary
+        ]
+    ]
+)
+
+NestedDropdown.Create(
+    buttonContents = text "Open Nested",
+    items = nestedItems,
+    openOn = View.Const Dropdown.OpenOn.Hover, // see here
+    buttonAttrs = [
+        nestedIsOpen.View
+        |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Primary)
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "OpenOn Property" description content code
 
   let private disabledExample () =
     let alertVar = Var.Create None
@@ -429,23 +574,56 @@ module DropdownExamples =
       )
     ]
 
-    div [] [
-      alertDialog alertVar
-      Dropdown.Create(
-        buttonContents = text "Dropdown",
-        items = items,
-        attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ],
-        buttonAttrs = [
-          cls [
+    let description =
+      Helpers.bodyText "Dropdown items can be disabled using the `enabled` property."
+
+    let content =
+      div [] [
+        alertDialog alertVar
+        Dropdown.Create(
+          buttonContents = text "Dropdown",
+          items = items,
+          attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ],
+          buttonAttrs = [
+            cls [
+              Button.Variant.toClass Button.Variant.Filled
+              Button.Color.toClass BrandColor.Primary
+            ]
+          ]
+        )
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers
+
+let items = [
+    DropdownItem.Create(
+        text "Enabled Item",
+        onClick = (fun () -> printfn "Clicked enabled item"),
+        enabled = View.Const true // see here
+    )
+
+    DropdownItem.Create(
+        text "Disabled Item",
+        onClick = (fun () -> printfn "Clicked disabled item"),
+        enabled = View.Const false // see here
+    )
+]
+
+Dropdown.Create(
+    buttonContents = text "Dropdown",
+    items = items,
+    buttonAttrs = [
+        cls [
             Button.Variant.toClass Button.Variant.Filled
             Button.Color.toClass BrandColor.Primary
-          ]
         ]
-      )
-      |> Helpers.section
-        "Disabled Items"
-        (Helpers.bodyText "Dropdown items can be disabled using the `enabled` property.")
     ]
+)
+"""
+
+    Helpers.codeSampleSection "Disabled Items" description content code
 
   let private densityExample () =
     let description =

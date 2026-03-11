@@ -80,12 +80,15 @@
     }
   }
 
-  // Let button menus & dropdowns inside an item still behave normally
+  // Let button menus & dropdowns stretch to fill the group item height
   > .weave-button-menu,
   > .weave-dropdown {
+    height: 100%;
+
     > .weave-button {
       box-shadow: none;
       border-radius: var(--default-button-borderradius);
+      height: 100%;
 
       &:hover,
       &:focus-visible,
@@ -302,7 +305,7 @@
   }
 }
 
-.weave-button-group--small {
+.weave-button-group--compact {
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
   .weave-button-group__item > .weave-dropdown > .weave-button {
@@ -312,7 +315,7 @@
   }
 }
 
-.weave-button-group--medium {
+.weave-button-group--standard {
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
   .weave-button-group__item > .weave-dropdown > .weave-button {
@@ -322,7 +325,7 @@
   }
 }
 
-.weave-button-group--large {
+.weave-button-group--spacious {
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
   .weave-button-group__item > .weave-dropdown > .weave-button {

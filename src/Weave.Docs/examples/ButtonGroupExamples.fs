@@ -140,14 +140,15 @@ ButtonGroup.Create(
 
     Helpers.codeSampleSection "Vertical Orientation" description content code
 
-  let private sizesAndColorsExample () =
+  let private densityAndColorsExample () =
     let description =
-      Helpers.bodyText "Button groups support all theme colors and three sizes: Small, Medium, and Large."
+      Helpers.bodyText
+        "Button groups support all theme colors and three density levels: Compact, Standard, and Spacious."
 
     let content =
       Grid.Create(
         [
-          let makeGroup size color =
+          let makeGroup density color =
             GridItem.Create(
               ButtonGroup.Create(
                 [
@@ -157,15 +158,15 @@ ButtonGroup.Create(
                 ],
                 attrs = [
                   ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-                  ButtonGroup.Size.toClass size |> cl
+                  ButtonGroup.Density.toClass density |> cl
                   ButtonGroup.Color.toClass color |> cl
                 ]
               )
             )
 
-          makeGroup ButtonGroup.Size.Small BrandColor.Primary
-          makeGroup ButtonGroup.Size.Medium BrandColor.Error
-          makeGroup ButtonGroup.Size.Large BrandColor.Success
+          makeGroup Density.Compact BrandColor.Primary
+          makeGroup Density.Standard BrandColor.Error
+          makeGroup Density.Spacious BrandColor.Success
         ],
         spacing = Grid.GutterSpacing.create 2,
         justify = JustifyContent.SpaceAround,
@@ -184,7 +185,7 @@ ButtonGroup.Create(
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-        ButtonGroup.Size.toClass ButtonGroup.Size.Small |> cl
+        ButtonGroup.Density.toClass Density.Compact |> cl
         ButtonGroup.Color.toClass BrandColor.Primary |> cl
     ]
 )
@@ -197,13 +198,13 @@ ButtonGroup.Create(
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-        ButtonGroup.Size.toClass ButtonGroup.Size.Large |> cl
+        ButtonGroup.Density.toClass Density.Spacious |> cl
         ButtonGroup.Color.toClass BrandColor.Success |> cl
     ]
 )
     """
 
-    Helpers.codeSampleSection "Sizes and Colors" description content code
+    Helpers.codeSampleSection "Density and Colors" description content code
 
   let private splitButtonExample () =
     let description =
@@ -436,7 +437,7 @@ ButtonGroup.Create(
         Helpers.divider ()
         verticalExample ()
         Helpers.divider ()
-        sizesAndColorsExample ()
+        densityAndColorsExample ()
         Helpers.divider ()
         splitButtonExample ()
         Helpers.divider ()

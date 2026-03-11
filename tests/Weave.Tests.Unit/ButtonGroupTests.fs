@@ -43,21 +43,21 @@ let buttonGroupTests =
           ""
     ]
 
-    testList "Size.toClass" [
-      testTheory "each size maps to the correct class" [
-        ButtonGroup.Size.Small, "weave-button-group--small"
-        ButtonGroup.Size.Medium, "weave-button-group--medium"
-        ButtonGroup.Size.Large, "weave-button-group--large"
+    testList "Density.toClass" [
+      testTheory "each density maps to the correct class" [
+        Density.Compact, "weave-button-group--compact"
+        Density.Standard, "weave-button-group--standard"
+        Density.Spacious, "weave-button-group--spacious"
       ]
-      <| fun (size, expected) -> Expect.equal (ButtonGroup.Size.toClass size) expected ""
+      <| fun (density, expected) -> Expect.equal (ButtonGroup.Density.toClass density) expected ""
 
-      testCase "all sizes produce distinct classes"
+      testCase "all densities produce distinct classes"
       <| fun () ->
         let classes =
-          [ ButtonGroup.Size.Small; ButtonGroup.Size.Medium; ButtonGroup.Size.Large ]
-          |> List.map ButtonGroup.Size.toClass
+          [ Density.Compact; Density.Standard; Density.Spacious ]
+          |> List.map ButtonGroup.Density.toClass
 
-        Expect.equal (List.distinct classes).Length classes.Length "each size maps to a unique class"
+        Expect.equal (List.distinct classes).Length classes.Length "each density maps to a unique class"
     ]
 
     testList "Color.toClass" [

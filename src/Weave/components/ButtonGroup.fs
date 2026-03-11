@@ -37,19 +37,13 @@ module ButtonGroup =
       | Orientation.Horizontal -> None
       | Orientation.Vertical -> Some Css.``weave-button-group--vertical``
 
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
+  module Density =
 
-  module Size =
-
-    let toClass size =
-      match size with
-      | Size.Small -> Css.``weave-button-group--small``
-      | Size.Medium -> Css.``weave-button-group--medium``
-      | Size.Large -> Css.``weave-button-group--large``
+    let toClass density =
+      match density with
+      | Density.Compact -> Css.``weave-button-group--compact``
+      | Density.Standard -> Css.``weave-button-group--standard``
+      | Density.Spacious -> Css.``weave-button-group--spacious``
 
   module Color =
 

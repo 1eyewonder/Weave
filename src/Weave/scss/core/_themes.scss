@@ -12,17 +12,17 @@
   // --- Text Colors ---
   --palette-text-primary: rgba(66, 66, 66, 1);
   --palette-text-primary-rgb: 66, 66, 66;
-  --palette-text-secondary: rgba(0, 0, 0, 0.54);
+  --palette-text-secondary: rgba(0, 0, 0, 0.64);
   --palette-text-disabled: rgba(0, 0, 0, 0.38);
 
   // --- Divider & Border Colors ---
-  --palette-divider: rgba(0, 0, 0, 0.12);
+  --palette-divider: rgba(0, 0, 0, 0.20);
   --palette-divider-light: rgba(0, 0, 0, 0.8);
-  --palette-lines-default: rgba(0, 0, 0, 0.12);
-  --palette-lines-inputs: #bdbdbd;
+  --palette-lines-default: rgba(0, 0, 0, 0.20);
+  --palette-lines-inputs: #9e9e9e;
 
   // --- Action Colors ---
-  --palette-action-default: rgba(0, 0, 0, 0.54);
+  --palette-action-default: rgba(0, 0, 0, 0.64);
   --palette-action-default-hover: rgba(0, 0, 0, 0.04);
   --palette-action-disabled: rgba(0, 0, 0, 0.26);
   --palette-action-disabled-background: rgba(0, 0, 0, 0.12);
@@ -33,7 +33,7 @@
   --palette-primary-text: #ffffff;
   --palette-primary-lighten: #0187f1;
   --palette-primary-darken: #002fc6;
-  --palette-primary-rgb: 1, 70, 176;
+  --palette-primary-rgb: 1, 100, 252;
 
   --palette-secondary: #594ae2;
   --palette-secondary-text: #ffffff;
@@ -47,11 +47,11 @@
   --palette-tertiary-darken: #d91d63;
   --palette-tertiary-rgb: 255, 64, 129;
 
-  --palette-success: #00c853;
+  --palette-success: #00aa47;
   --palette-success-text: #ffffff;
-  --palette-success-lighten: #33d672;
+  --palette-success-lighten: #21ca62;
   --palette-success-darken: #009638;
-  --palette-success-rgb: 0, 200, 83;
+  --palette-success-rgb: 0, 170, 71;
 
   --palette-error: #f44336;
   --palette-error-text: #ffffff;
@@ -59,17 +59,17 @@
   --palette-error-darken: #d32f2f;
   --palette-error-rgb: 244, 67, 54;
 
-  --palette-warning: #ff9800;
+  --palette-warning: #f19306;
   --palette-warning-text: #ffffff;
-  --palette-warning-lighten: #ffac33;
-  --palette-warning-darken: #c77700;
-  --palette-warning-rgb: 255, 152, 0;
+  --palette-warning-lighten: #ff9800;
+  --palette-warning-darken: #d4840b;
+  --palette-warning-rgb: 241, 147, 6;
 
-  --palette-info: #17cdd3;
+  --palette-info: #15b9be;
   --palette-info-text: #ffffff;
-  --palette-info-lighten: #63f8fd;
-  --palette-info-darken: #09b2b8;
-  --palette-info-rgb: 30, 200, 165;
+  --palette-info-lighten: #12dde4;
+  --palette-info-darken: #119397;
+  --palette-info-rgb: 21, 185, 190;
 
   // --- Component-Specific Colors ---
   --palette-appbar-background: #594ae2;
@@ -81,7 +81,7 @@
 
   // --- Input Component Colors ---
   --input-border-color: rgba(0, 0, 0, 0.42);
-  --input-outlined-border: rgba(0, 0, 0, 0.23);
+  --input-outlined-border: rgba(0, 0, 0, 0.32);
   --input-filled-background: rgba(0, 0, 0, 0.04);
   --input-label-color: rgba(0, 0, 0, 0.6);
   --input-help-text-color: rgba(0, 0, 0, 0.6);
@@ -157,13 +157,13 @@
   --palette-primary-text: #ffffff;
   --palette-primary-lighten: #35d7ff;
   --palette-primary-darken: #0164fc;
-  --palette-primary-rgb: 1, 70, 176;
+  --palette-primary-rgb: 8, 143, 253;
 
   --palette-secondary: #594ae2;
   --palette-secondary-text: #ffffff;
   --palette-secondary-lighten: #695be2;
   --palette-secondary-darken: #4d40c2;
-  --palette-secondary-rgb: 119, 107, 231;
+  --palette-secondary-rgb: 89, 74, 226;
 
   --palette-tertiary: #ff4081;
   --palette-tertiary-text: #ffffff;
@@ -193,7 +193,7 @@
   --palette-info-text: #ffffff;
   --palette-info-lighten: #63f8fd;
   --palette-info-darken: #09b2b8;
-  --palette-info-rgb: 30, 200, 165;
+  --palette-info-rgb: 23, 205, 211;
 
   // --- Component-Specific Colors ---
   --palette-appbar-background: #27272f;

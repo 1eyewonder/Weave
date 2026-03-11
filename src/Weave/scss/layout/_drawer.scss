@@ -262,9 +262,19 @@
     min-height: var(--appbar-height);
     padding: 12px 24px;
 
-    &--dense {
+    &--compact {
       min-height: calc(var(--appbar-height) - var(--appbar-height) / 4);
       padding: 8px 24px;
+    }
+
+    &--standard {
+      min-height: var(--appbar-height);
+      padding: 12px 24px;
+    }
+
+    &--spacious {
+      min-height: calc(var(--appbar-height) + var(--appbar-height) / 4);
+      padding: 16px 24px;
     }
   }
 

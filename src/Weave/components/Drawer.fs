@@ -143,6 +143,14 @@ module Drawer =
       | DrawerBreakpoint.None -> Css.``weave-drawer-container--bp-none``
       | DrawerBreakpoint.Always -> Css.``weave-drawer-container--bp-always``
 
+  module Density =
+
+    let toClass density =
+      match density with
+      | Density.Compact -> Css.``weave-drawer__header--compact``
+      | Density.Standard -> Css.``weave-drawer__header--standard``
+      | Density.Spacious -> Css.``weave-drawer__header--spacious``
+
   /// <summary>
   /// An immutable specification for a single drawer pane. Construct one via
   /// <c>Drawer.Create</c> and pass it to <c>DrawerContainer.Create</c> or
@@ -178,23 +186,11 @@ type DrawerHeader =
   /// matches the AppBar so the two align when both are visible.
   /// </summary>
   /// <param name="content">The content to render inside the header.</param>
-  /// <param name="dense">
-  /// When true, reduces the header height to match a dense AppBar.
-  /// Defaults to false.
-  /// </param>
   /// <param name="attrs">Additional attributes applied to the root element.</param>
-  static member Create(content: Doc, ?dense: bool, ?attrs: Attr list) =
-    let isDense = defaultArg dense false
+  static member Create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
-    div [
-      cls [
-        Css.``weave-drawer__header``
-        if isDense then
-          Css.``weave-drawer__header--dense``
-      ]
-      yield! attrs
-    ] [ content ]
+    div [ cl Css.``weave-drawer__header``; yield! attrs ] [ content ]
 
 [<JavaScript>]
 type Drawer =

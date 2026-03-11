@@ -222,6 +222,7 @@
 
 .weave-button--icon {
   min-width: auto;
+  aspect-ratio: 1;
   // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
   padding: density-spacing(4, 4);
 

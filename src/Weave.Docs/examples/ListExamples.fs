@@ -13,7 +13,6 @@ open WeaveList
 [<JavaScript>]
 module ListExamples =
 
-  /// Renders an icon and a text label side-by-side with vertical centering.
   let private iconLabel (icon: Doc) (label: string) =
     div [
       cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
@@ -161,7 +160,6 @@ WeaveList.Create(
 
     let content =
       div [] [
-        // Display selected value as a chip
         div [
           cls [
             Flex.Flex.allSizes
@@ -187,20 +185,17 @@ WeaveList.Create(
             | None -> Doc.Empty)
         ]
 
-        // List re-renders when selection mode changes
         selectionMode.View
         |> Doc.BindView(fun mode ->
           WeaveList.Create(
             [
               yield! drinks |> List.map (fun d -> ListItem.Create(text d, value = d))
 
-              // Tea group
               ListItem.Create(
                 text "Teas",
                 nestedChildren = (teaGroup |> List.map (fun t -> ListItem.Create(text t, value = t)))
               )
 
-              // Coffee group
               ListItem.Create(
                 text "Coffees",
                 nestedChildren = (coffeeGroup |> List.map (fun c -> ListItem.Create(text c, value = c)))
@@ -211,9 +206,14 @@ WeaveList.Create(
             readOnly = readOnly.View
           ))
 
-        // Controls
         div [
-          cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+          cls [
+            Flex.Flex.allSizes
+            AlignItems.toClass AlignItems.Center
+            FlexDirection.Column.xs
+            FlexDirection.Row.sm
+            JustifyContent.toClass JustifyContent.SpaceAround
+          ]
           Attr.Style "gap" "16px"
           Margin.toClasses Margin.Top.extraSmall |> cls
         ] [
@@ -238,7 +238,6 @@ WeaveList.Create(
           )
         ]
 
-        // Show all selected values as chips
         div [
           cls [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ]
           Attr.Style "gap" "8px"
@@ -346,7 +345,6 @@ Switch.Create(readOnly, displayText = View.Const "ReadOnly", attrs = [ Switch.Co
           readOnly = readOnly.View
         )
 
-        // Show selected values as chips
         div [
           cls [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ]
           Attr.Style "gap" "8px"

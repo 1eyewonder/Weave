@@ -133,7 +133,7 @@
 // Open state
 .weave-button-menu--open > .weave-button-menu__items {
   pointer-events: auto;
-  z-index: 10;
+  z-index: var(--weave-zindex-buttonmenu);
 }
 
 .weave-button-menu--open

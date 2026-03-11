@@ -26,7 +26,7 @@
   background: var(--palette-surface);
   box-shadow: var(--palette-shadow-2);
   border: 1px solid rgba(var(--palette-text-primary-rgb), 0.5);
-  z-index: 10;
+  z-index: var(--weave-zindex-dropdown);
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -167,7 +167,7 @@
   color: var(--palette-action-default);
 }
 .weave-dropdown--open {
-  z-index: 20;
+  z-index: var(--weave-zindex-dropdown);
 }
 
 .weave-popover:has(> .weave-dropdown__list) {

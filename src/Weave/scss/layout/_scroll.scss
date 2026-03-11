@@ -40,7 +40,7 @@
 .weave-scroll-to-top {
   position: fixed;
   cursor: pointer;
-  z-index: 100;
+  z-index: var(--weave-zindex-scroll-to-top);
 
   &--visible {
     bottom: 16px;
@@ -68,6 +68,6 @@
     left: 0;
     right: 0;
     position: absolute;
-    z-index: var(--zindex-tooltip);
+    z-index: var(--weave-zindex-tooltip);
   }
 }

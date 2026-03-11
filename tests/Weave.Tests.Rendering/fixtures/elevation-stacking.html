@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elevation Stacking Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      This fixture places overlapping components to verify that the z-index
+      hierarchy is correct.  Each scenario puts a lower-tier element underneath
+      a higher-tier element; the rendering tests assert the computed z-index
+      ordering.
+    -->
+
+    <!-- Scenario 1: Open dropdown behind an open dialog -->
+    <div id="scene-dropdown-dialog" style="position: relative; height: 400px;">
+      <!-- Dropdown (should be below dialog) -->
+      <div
+        id="stacking-dropdown"
+        class="weave-dropdown weave-dropdown--open"
+        style="position: absolute; top: 50px; left: 50px;"
+      >
+        <button type="button">Dropdown trigger</button>
+        <div id="stacking-dropdown-list" class="weave-dropdown__list">
+          <div class="weave-dropdown__item">
+            <span class="weave-dropdown__item-text">Dropdown Item</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog (should be above dropdown) -->
+      <div id="stacking-dialog" class="weave-dialog weave-dialog--center">
+        <div id="stacking-dialog-backdrop" class="weave-dialog__backdrop"></div>
+        <div id="stacking-dialog-window" class="weave-dialog__window" style="width: 300px;">
+          <div class="weave-dialog__title">Dialog Title</div>
+          <div class="weave-dialog__content">Dialog content</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 2: Open button menu behind an open dialog -->
+    <div id="scene-buttonmenu-dialog" style="position: relative; height: 300px;">
+      <div
+        id="stacking-buttonmenu"
+        class="weave-button-menu weave-button-menu--open weave-button-menu--bottom"
+        style="position: absolute; top: 50px; left: 50px;"
+      >
+        <button class="weave-button weave-button--filled weave-button-menu__trigger" type="button">
+          <span class="weave-button__label">Menu</span>
+        </button>
+        <div id="stacking-buttonmenu-items" class="weave-button-menu__items">
+          <div class="weave-button-menu__item">
+            <button class="weave-button weave-button--filled weave-button--icon" type="button">
+              <span>1</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 3: Tooltip (should be above everything except its own tier) -->
+    <div id="scene-tooltip" style="position: relative; padding: 80px;">
+      <div class="weave-tooltip-root" style="display: inline-block;">
+        <button id="stacking-tooltip-trigger" type="button">Hover</button>
+        <div
+          id="stacking-tooltip"
+          class="weave-tooltip weave-tooltip--default weave-tooltip--top-center"
+          style="display: flex;"
+        >
+          Tooltip text
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 4: AppBar (fixed) -->
+    <div id="scene-appbar" style="position: relative; height: 100px;">
+      <div
+        id="stacking-appbar"
+        class="weave-appbar weave-appbar--fixed-top"
+        style="position: absolute;"
+      >
+        AppBar content
+      </div>
+    </div>
+
+    <!-- Scenario 5: Scroll-to-top -->
+    <div id="scene-scroll-to-top" style="position: relative; height: 100px;">
+      <div id="stacking-scroll-to-top" class="weave-scroll-to-top weave-scroll-to-top--visible">
+        <button type="button">Top</button>
+      </div>
+    </div>
+  </body>
+</html>

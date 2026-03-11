@@ -6,7 +6,7 @@
   flex: 0 0 auto;
   outline: 0;
   position: fixed;
-  z-index: var(--zindex-drawer);
+  z-index: var(--weave-zindex-drawer);
   overflow-y: auto;
   flex-direction: column;
   color: var(--palette-drawer-text);
@@ -29,7 +29,7 @@
     &--mini.weave-drawer--#{$breakpoint}:not(.weave-drawer--closed),
     &--responsive.weave-drawer--#{$breakpoint} {
       @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
-        z-index: calc(var(--zindex-appbar) + 2);
+        z-index: calc(var(--weave-zindex-appbar) + 2);
 
         &.weave-drawer--initial:not(.weave-drawer--mini) {
           display: none !important;
@@ -155,7 +155,7 @@
 
   &--temporary {
     margin: 0 !important;
-    z-index: calc(var(--zindex-appbar) + 2);
+    z-index: calc(var(--weave-zindex-appbar) + 2);
     transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
     &.weave-drawer--pos-left {
@@ -273,7 +273,7 @@
     position: absolute;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: calc(var(--zindex-appbar) + 1);
+    z-index: calc(var(--weave-zindex-appbar) + 1);
     cursor: pointer;
 
     // When the drawer is viewport-fixed, the overlay must also be fixed so

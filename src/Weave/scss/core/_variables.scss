@@ -15,12 +15,15 @@ $font-family-heading: $font-family-base;
   --default-button-borderradius: #{map.get($border-radiuses, "md")};
   --grid-item-min-height: 24px;
   --palette-border-opacity: 0.8;
-  --weave-zindex-dialog: 10;
+  --weave-zindex-dropdown: 100;
+  --weave-zindex-buttonmenu: 100;
+  --weave-zindex-dialog: 200;
+  --weave-zindex-scroll-to-top: 300;
 
   --appbar-height: 64px;
-  --zindex-appbar: 1100;
-  --zindex-drawer: 1200;
-  --zindex-tooltip: 1300;
+  --weave-zindex-appbar: 1100;
+  --weave-zindex-drawer: 1200;
+  --weave-zindex-tooltip: 1300;
 
   --drawer-width-left: 256px;
   --drawer-width-right: 256px;

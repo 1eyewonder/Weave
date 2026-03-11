@@ -6,7 +6,7 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 open Weave.Tabs
-open Weave.CssHelpers
+
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
@@ -568,7 +568,7 @@ div [ Attr.Style "max-width" "500px" ] [
     let code =
       """open Weave
 open Weave.Tabs
-open Weave.CssHelpers
+
 
 let tabs =
     View.Const [

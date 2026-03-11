@@ -4,7 +4,7 @@ open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
-open Weave.CssHelpers
+
 open Weave
 
 [<JavaScript>]
@@ -109,7 +109,7 @@ Switch.Create(isChecked, label)
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let isChecked = Var.Create false
@@ -165,7 +165,7 @@ Switch.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let isChecked = Var.Create false
@@ -226,7 +226,7 @@ Switch.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let isChecked = Var.Create false
@@ -281,7 +281,7 @@ Switch.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Per-instance: pass the density class in attrs to set it on one component
 Switch.Create(

@@ -5,7 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
+
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
@@ -405,7 +405,7 @@ Field.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let value = Var.Create ""
 
@@ -519,7 +519,7 @@ Field.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let value = Var.Create "Looks good!"
 
@@ -669,7 +669,7 @@ Field.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let value = Var.Create ""
 
@@ -761,7 +761,7 @@ mkField BrandColor.Info "Info"
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let value = Var.Create ""
 

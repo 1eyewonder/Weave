@@ -5,7 +5,6 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
 
 [<JavaScript>]
 module DividerExamples =
@@ -49,7 +48,7 @@ Divider.Create()
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Divider.Create(
     attrs = [ Divider.Variant.toClass Divider.Variant.FullWidth |> cl ] // see here
@@ -96,7 +95,7 @@ Divider.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 div [
     cls [

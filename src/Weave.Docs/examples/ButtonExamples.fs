@@ -5,10 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
-open WebSharper.JavaScript
 
 [<JavaScript>]
 module ButtonExamples =
@@ -41,7 +38,7 @@ module ButtonExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let doNothing () = ()
 
@@ -96,7 +93,7 @@ Button.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let onClick name = printfn "%s clicked" name
@@ -209,7 +206,7 @@ colors
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Button.Create(
     text "Compact",
@@ -276,7 +273,7 @@ Button.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Button.Create(
     text "Enabled",
@@ -319,7 +316,7 @@ Button.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 Button.Create(
@@ -368,7 +365,7 @@ Button.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let btn (radius: BorderRadius) =
     let displayText = sprintf "%A" radius
@@ -429,7 +426,7 @@ btn BorderRadius.Circle
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 let btn icon ariaLabel color =
     Button.CreateIcon(
@@ -516,7 +513,7 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 Button.CreateIcon(
     Icon.Create(Icon.UiActions UiActions.Favorite),
@@ -592,7 +589,7 @@ Button.CreateIcon(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 Button.CreateIcon(
     Icon.Create(Icon.UiActions UiActions.Favorite),

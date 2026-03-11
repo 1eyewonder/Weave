@@ -7,6 +7,8 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open WebSharper.JavaScript
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 [<JavaScript>]
 module NumericField =

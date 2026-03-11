@@ -4,7 +4,7 @@ open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
-open Weave.CssHelpers
+
 open Weave
 
 [<JavaScript>]
@@ -132,7 +132,7 @@ Radio.Create(selected, true, displayText = label)
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let selected = Var.Create Radio.Size.Medium
@@ -195,7 +195,7 @@ Radio.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let selected = Var.Create BrandColor.Primary
@@ -264,7 +264,7 @@ colors
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let placement = Var.Create Radio.ContentPlacement.Right
@@ -322,7 +322,7 @@ Radio.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Per-instance: pass the density class in attrs to set it on one component
 Radio.Create(

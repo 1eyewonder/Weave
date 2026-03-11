@@ -7,7 +7,6 @@ open WebSharper.UI.Html
 open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module SpacingExamples =
@@ -190,7 +189,7 @@ module SpacingExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Margin: pick a direction and size
 div [ Margin.toClasses Margin.Bottom.small |> cls ] [ // see here
@@ -296,7 +295,7 @@ div [
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Bottom margin (most common: space between stacked elements)
 div [ Margin.toClasses Margin.Bottom.small |> cls ] [
@@ -407,7 +406,7 @@ div [ Margin.toClasses Margin.Vertical.small |> cls ] [
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // All sides
 div [ Padding.toClasses Padding.All.small |> cls ] [
@@ -491,7 +490,7 @@ div [
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Container-level: all children inherit the density via CSS cascade
 div [ cl (Density.toClass Density.Compact) ] [ // see here

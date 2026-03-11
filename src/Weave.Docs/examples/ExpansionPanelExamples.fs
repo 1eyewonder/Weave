@@ -6,7 +6,6 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 open Weave.Container
-open Weave.CssHelpers
 
 [<JavaScript>]
 module ExpansionPanelExamples =
@@ -109,7 +108,7 @@ ExpansionPanelContainer.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let expanded = Var.Create false
@@ -177,7 +176,7 @@ ExpansionPanelContainer.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let expanded = Var.Create false
@@ -235,7 +234,7 @@ ExpansionPanelContainer.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let expanded = Var.Create false
 

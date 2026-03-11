@@ -3,6 +3,8 @@ namespace Weave
 open WebSharper
 open WebSharper.UI
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 [<JavaScript>]
 module Container =

@@ -5,7 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 
-[<AutoOpen; JavaScript>]
+[<JavaScript>]
 module Generic =
 
   [<Inline>]
@@ -164,7 +164,7 @@ module ViewOption =
     | Some v -> v |> View.Map Some
     | None -> View.Const None
 
-[<JavaScript; AutoOpen>]
+[<JavaScript>]
 module Operators =
 
   let (<||>) a b = (a, b) ||> View.Map2(fun a b -> a || b)

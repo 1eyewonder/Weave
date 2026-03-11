@@ -5,7 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
+
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
@@ -53,7 +53,7 @@ module TooltipExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let tooltipBtn direction =
     let displayText = sprintf "%A" direction
@@ -125,7 +125,7 @@ tooltipBtn Tooltip.Direction.Right
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let tooltipButton color =
     let displayText = sprintf "%A" color
@@ -212,7 +212,7 @@ tooltipButton BrandColor.Info
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Tooltip.Create(
     Button.Create(
@@ -290,7 +290,7 @@ Tooltip.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Tooltip.Create(
     Button.Create(
@@ -355,7 +355,7 @@ Tooltip.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Tooltip.Create(
     Button.Create(
@@ -420,7 +420,7 @@ Tooltip.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 Body1.Span("Hover over ")
@@ -511,7 +511,7 @@ Body1.Span(" for more information.")"""
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 Tooltip.Create(

@@ -6,7 +6,6 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open WebSharper.JavaScript
 open Weave
-open Weave.CssHelpers
 
 [<JavaScript>]
 module GridExamples =
@@ -470,7 +469,7 @@ Grid.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 open WebSharper.UI.Html
 

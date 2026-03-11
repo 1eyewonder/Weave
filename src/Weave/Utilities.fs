@@ -5,6 +5,8 @@ open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 /// <summary>
 /// Listens for events on the document and invokes a callback when the event

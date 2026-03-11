@@ -5,7 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
+
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 open WeaveList
@@ -514,7 +514,7 @@ WeaveList.Create(
         "Density controls list item padding and height. Pass the density class in attrs to set it per-instance.")
       content
       """open Weave
-open Weave.CssHelpers
+
 
 WeaveList.Create(
   [

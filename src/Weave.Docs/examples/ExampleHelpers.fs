@@ -6,7 +6,7 @@ open WebSharper.UI.Html
 open WebSharper.UI.Client
 open WebSharper.JavaScript
 open Weave
-open Weave.CssHelpers
+
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 

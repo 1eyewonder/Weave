@@ -6,8 +6,11 @@
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="Theming.fs" />
-    <Compile Include="components/Core.fs" />
-    <Compile Include="components/Utilities.fs" />
+    <Compile Include="Core.fs" />
+    <Compile Include="Spacing.fs" />
+    <Compile Include="Layout.fs" />
+    <Compile Include="Decorations.fs" />
+    <Compile Include="Utilities.fs" />
     <Compile Include="components/Icons.fs" />
     <Compile Include="components/Typography.fs" />
     <Compile Include="components/Container.fs" />
@@ -32,6 +35,7 @@
     <Compile Include="components/Spacer.fs" />
     <Compile Include="components/AppBar.fs" />
     <Compile Include="components/Drawer.fs" />
+    <Compile Include="AutoOpens.fs" />
     <None Include="wsconfig.json" />
     <None Include="scss/*" />
   </ItemGroup>

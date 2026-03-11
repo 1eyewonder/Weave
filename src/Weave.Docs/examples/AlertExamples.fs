@@ -5,9 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module AlertExamples =
@@ -29,7 +27,7 @@ module AlertExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Alert.Create(
     text "This is an alert.",
@@ -73,7 +71,7 @@ Alert.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Alert.Create(
     text "Standard",
@@ -156,7 +154,7 @@ Alert.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let colors = [
     Alert.AlertColor.Default
@@ -253,7 +251,7 @@ colors
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 Alert.Create(
     text "Your changes have been saved.",
@@ -303,7 +301,7 @@ Alert.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let visible = Var.Create true
@@ -361,7 +359,7 @@ visible.View
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Alert.Create(
     text "Compact alert.",

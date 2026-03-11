@@ -4,6 +4,8 @@ open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Html
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 [<JavaScript>]
 module Alert =

@@ -5,19 +5,17 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Container
-open Weave.CssHelpers
 
 [<JavaScript>]
 module ContainerExamples =
 
   let options = [
-    MaxWidth.ExtraSmall
-    MaxWidth.Small
-    MaxWidth.Medium
-    MaxWidth.Large
-    MaxWidth.ExtraLarge
-    MaxWidth.ExtraExtraLarge
+    Container.MaxWidth.ExtraSmall
+    Container.MaxWidth.Small
+    Container.MaxWidth.Medium
+    Container.MaxWidth.Large
+    Container.MaxWidth.ExtraLarge
+    Container.MaxWidth.ExtraExtraLarge
   ]
 
   let centeredText (displayText: string) =

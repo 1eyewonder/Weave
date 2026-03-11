@@ -5,7 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
+
 open WebSharper.JavaScript
 
 [<JavaScript>]
@@ -52,7 +52,7 @@ module TypographyExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 H1.H1("Heading 1")
 H2.H2("Heading 2")
@@ -95,7 +95,7 @@ Overline.Div("OVERLINE TEXT")
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Body1.Div(
     text "Left",
@@ -161,7 +161,7 @@ Body1.Div(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Body1.Div(
     "This is a very long line of text that will wrap naturally when it reaches the edge of its container.",
@@ -203,7 +203,7 @@ Body1.Div(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let item color =
     H5.Div(
@@ -254,7 +254,7 @@ item BrandColor.Info
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 H2.Div("Article Title")
 Subtitle1.Div("A subtitle that provides context")

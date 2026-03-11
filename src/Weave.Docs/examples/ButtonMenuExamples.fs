@@ -5,9 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module ButtonMenuExamples =
@@ -83,7 +81,7 @@ module ButtonMenuExamples =
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 ButtonMenu.CreateIcon(
     closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
@@ -258,7 +256,7 @@ ButtonMenu.CreateIcon(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 // With openIcon: swaps between send and close icons
 ButtonMenu.CreateIcon(
@@ -365,7 +363,7 @@ ButtonMenu.CreateIcon(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 let items = [
     Button.CreateIcon(
@@ -500,7 +498,7 @@ ButtonMenu.CreateIcon(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 let isMenuOpen = Var.Create false
@@ -647,7 +645,7 @@ ButtonMenu.CreateIcon(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 // Icon button with hover
 ButtonMenu.CreateIcon(
@@ -813,7 +811,7 @@ ButtonMenu.Create(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 let menuItems = [
     Button.CreateIcon(

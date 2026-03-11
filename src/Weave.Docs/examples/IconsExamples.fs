@@ -7,7 +7,7 @@ open WebSharper.UI.Html
 open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 open WebSharper.JavaScript
 
 [<JavaScript>]
@@ -490,7 +490,7 @@ module IconsExamples =
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 Icon.Create(

@@ -5,6 +5,8 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.JavaScript
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 [<JavaScript>]
 module Dialog =

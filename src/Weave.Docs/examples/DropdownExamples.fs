@@ -5,7 +5,6 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.CssHelpers
 
 [<JavaScript>]
 module DropdownExamples =
@@ -70,7 +69,7 @@ module DropdownExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let items =
     [ 1..3 ]
@@ -211,7 +210,7 @@ Dropdown.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let items =
     [ 1..3 ]
@@ -326,7 +325,7 @@ Dropdown.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let nestedIsOpen = Var.Create false
 
@@ -518,7 +517,7 @@ Dropdown.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Dropdown.Create(
     buttonContents = text "Click to Open",
@@ -595,7 +594,7 @@ NestedDropdown.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let items = [
     DropdownItem.Create(
@@ -664,7 +663,7 @@ Dropdown.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 // Per-instance: pass the density class in attrs to set it on the dropdown root
 Dropdown.Create(

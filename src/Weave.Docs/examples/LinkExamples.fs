@@ -5,9 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module LinkExamples =
@@ -116,7 +114,7 @@ Body1.Div(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 Link.Create(
   H3.Div("OnHover (default)"),
@@ -171,7 +169,7 @@ Link.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 let colors = [ BrandColor.Primary; BrandColor.Secondary; (* ... *) ]
 
@@ -238,7 +236,7 @@ colors |> List.map (fun color ->
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 // Start icon only
 Link.Create(
@@ -293,7 +291,7 @@ Link.Create(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 // Icon-only link (no text)
 Link.CreateIcon(
@@ -345,7 +343,7 @@ Link.CreateIcon(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 open WebSharper.UI
 
 // Enabled (default)

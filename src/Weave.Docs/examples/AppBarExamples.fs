@@ -5,9 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module AppBarExamples =

@@ -5,9 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
 
 [<JavaScript>]
 module ButtonGroupExamples =
@@ -45,7 +43,7 @@ module ButtonGroupExamples =
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 ButtonGroup.Create(
     [
@@ -122,7 +120,7 @@ ButtonGroup.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 ButtonGroup.Create(
     [
@@ -176,7 +174,7 @@ ButtonGroup.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 ButtonGroup.Create(
     [
@@ -269,7 +267,7 @@ ButtonGroup.Create(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 let isOpen = Var.Create false
 
@@ -346,7 +344,7 @@ ButtonGroup.Create(
       """open Weave
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
-open Weave.CssHelpers
+
 
 ButtonGroup.Create(
     [
@@ -399,7 +397,7 @@ ButtonGroup.Create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
+
 
 ButtonGroup.Create(
     [

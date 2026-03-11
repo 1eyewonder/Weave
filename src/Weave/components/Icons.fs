@@ -5,6 +5,8 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Operators
 
 // Note: There are a lot of snake case matches here because I was too lazy to write a converter from Pascal case
 // which didn't use any System.* functions which don't work during WebSharper compilation.

@@ -39,7 +39,9 @@ module TooltipExamples =
             tooltipContent = Body1.Div(sprintf "Tooltip on %A" direction),
             direction = direction
           ),
-        xs = Grid.Width.create 3
+        xs = Grid.Width.create 12,
+        sm = Grid.Width.create 6,
+        md = Grid.Width.create 3
       )
 
     let content =

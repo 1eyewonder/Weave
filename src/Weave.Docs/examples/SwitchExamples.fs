@@ -159,7 +159,7 @@ Switch.Create(
             Switch.Create(v, View.Const label, attrs = [ Switch.Color.toClass color |> cl ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
-            md = Grid.Width.create 1
+            md = Grid.Width.create 4
           ))
       )
 

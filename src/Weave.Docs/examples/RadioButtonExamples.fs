@@ -189,7 +189,7 @@ Radio.Create(
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
-            md = Grid.Width.create 1
+            md = Grid.Width.create 4
           ))
       )
 

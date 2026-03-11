@@ -190,6 +190,38 @@ module on =
 module ScrollListener =
 
   /// <summary>
+  /// Detects the topmost visible section heading inside a scrollable container.
+  /// Returns the id of the best matching heading, or <c>""</c> if none qualifies.
+  /// </summary>
+  let detectActiveSection (container: Dom.Element) (sectionSelector: string) (threshold: float) : string =
+    let headers = JS.Document.QuerySelectorAll sectionSelector
+    let mTop = container.GetBoundingClientRect().Top
+    let mutable bestId = ""
+    let mutable bestRelTop = -1.0e10
+    let mutable lastVisibleId = ""
+
+    for i in 0 .. headers.Length - 1 do
+      let h = As<Dom.Element>(headers.Item i)
+      let relTop = h.GetBoundingClientRect().Top - mTop
+
+      if relTop <= threshold && relTop > bestRelTop then
+        bestRelTop <- relTop
+        bestId <- h.Id
+
+      let containerHeight = As<float>(container?clientHeight)
+
+      if relTop >= 0.0 && relTop < containerHeight then
+        lastVisibleId <- h.Id
+
+    if
+      System.String.IsNullOrEmpty bestId
+      && not (System.String.IsNullOrEmpty lastVisibleId)
+    then
+      bestId <- lastVisibleId
+
+    bestId
+
+  /// <summary>
   /// Returns an <c>Attr</c> that, when applied to a scrollable element, tracks
   /// the topmost visible section heading and fires <c>onSection</c> with its id.
   /// A heading qualifies when its top edge is at or below <c>threshold</c> pixels
@@ -209,19 +241,6 @@ module ScrollListener =
 
             JS.Window?requestAnimationFrame(fun _ ->
               ticking <- false
-              let headers = JS.Document.QuerySelectorAll sectionSelector
-              let mTop = el.GetBoundingClientRect().Top
-              let mutable bestId = ""
-              let mutable bestRelTop = -1.0e10
-
-              for i in 0 .. headers.Length - 1 do
-                let h = As<Dom.Element>(headers.Item i)
-                let relTop = h.GetBoundingClientRect().Top - mTop
-
-                if relTop <= threshold && relTop > bestRelTop then
-                  bestRelTop <- relTop
-                  bestId <- h.Id
-
-              onSection bestId)
+              onSection (detectActiveSection el sectionSelector threshold))
             |> ignore
       ))

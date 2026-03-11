@@ -1336,44 +1336,32 @@ module ExamplesRouter =
     let scrollMainToTop () =
       mainEl.Value |> Option.iter (fun el -> el?scrollTop <- 0)
 
-    let scrollToSectionAfterDelay (id: string) (ms: int) =
-      JS.Window?setTimeout(
-        (fun () ->
-          let target = JS.Document.GetElementById id
+    let scrollElementTo (m: Dom.Element) (id: string) =
+      let target = JS.Document.GetElementById id
 
           if not (isNull target) then
             mainEl.Value
-            |> Option.iter (fun m ->
-              m?scrollTop <-
-                As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
-                - m.GetBoundingClientRect().Top
-                - 16.0)),
+      if not (isNull target) then
+        m?scrollTop <-
+          As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
+          - m.GetBoundingClientRect().Top
+          - 16.0
+
+        true
+      else
+        false
+
+    let scrollToSectionAfterDelay (id: string) (ms: int) =
+      JS.Window?setTimeout(
+        (fun () -> mainEl.Value |> Option.iter (fun m -> scrollElementTo m id |> ignore)),
         ms
       )
       |> ignore
 
-    // Retries every 50ms (up to ~2s) until the target element exists in the DOM,
-    // then scrolls to it. Needed when the page content renders asynchronously.
-    let scrollToSectionWhenReady (id: string) =
-      let maxAttempts = 40
-      let interval = 50
-      let mutable attempt = 0
-
-      let rec tryScroll () =
-        attempt <- attempt + 1
-        let target = JS.Document.GetElementById id
-
-        if not (isNull target) then
-          mainEl.Value
-          |> Option.iter (fun m ->
-            m?scrollTop <-
-              As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
-              - m.GetBoundingClientRect().Top
-              - 16.0)
-        elif attempt < maxAttempts then
-          JS.Window?setTimeout(tryScroll, interval) |> ignore
-
-      tryScroll ()
+    /// Section to scroll to once the page content has rendered and sections have
+    /// been collected. Set during initial load or cross-page hash navigation;
+    /// consumed by collectSectionsWithRetry when sections first appear.
+    let mutable pendingSection: string option = initialSection
 
     let selectedNav = Var.Create<string option>(Some(pageToString initialPage))
     let drawerOpen = Var.Create true
@@ -1386,10 +1374,100 @@ module ExamplesRouter =
       selectedNav.View
       |> View.Map(fun sel -> sel |> Option.bind stringToPage |> Option.defaultValue Home)
 
+    let activeSectionId = Var.Create ""
+
+    let tocSections = Var.Create<(string * string)[]> [||]
+
+    let rec collectSectionsWithRetry attempt =
+      let headers = JS.Document.QuerySelectorAll ".section-header[id]"
+
+      let sections = [|
+        for i in 0 .. headers.Length - 1 do
+          let h = As<Dom.Element>(headers.Item i)
+          (h.Id, As<string>(h?textContent).Replace("#", "").Trim())
+      |]
+
+      Var.Set tocSections sections
+
+      if sections.Length > 0 then
+        // If there's a pending section scroll (from initial URL or cross-page nav),
+        // scroll to it now that the content is in the DOM.
+        match pendingSection, mainEl.Value with
+        | Some id, Some m ->
+          pendingSection <- None
+          scrollElementTo m id |> ignore
+          Var.Set activeSectionId id
+          // Re-scroll after layout fully settles
+          JS.Window?setTimeout((fun () -> scrollElementTo m id |> ignore), 300) |> ignore
+        | _ ->
+          mainEl.Value
+          |> Option.iter (fun m ->
+            let activeId = ScrollListener.detectActiveSection m ".section-header[id]" 80.0
+
+            let id =
+              if System.String.IsNullOrEmpty activeId && sections.Length > 0 then
+                fst sections.[0]
+              else
+                activeId
+
+            Var.Set activeSectionId id)
+      elif attempt < 20 then
+        JS.Window?setTimeout((fun () -> collectSectionsWithRetry (attempt + 1)), 100)
+        |> ignore
+
+    let scrollToSection (id: string) =
+      mainEl.Value |> Option.iter (fun m -> scrollElementTo m id |> ignore)
+
+    let refreshTocSections () =
+      Var.Set tocSections [||]
+      Var.Set activeSectionId ""
+      // Try immediately, then retry with polling for async WebSharper renders
+      collectSectionsWithRetry 0
+
+    let tableOfContents =
+      currentPageView
+      |> Doc.BindView(fun page ->
+        match page with
+        | Home -> Doc.Empty
+        | _ ->
+          div [ Attr.Class "docs-toc" ] [
+            Subtitle2.Div("Contents", attrs = [ Attr.Class "docs-toc__title" ])
+
+            tocSections.View
+            |> Doc.BindView(fun sections ->
+              Doc.Concat [
+                for (id, title) in sections do
+                  div [
+                    Attr.Class "docs-toc__item"
+
+                    Attr.DynamicClassPred
+                      "docs-toc__item--active"
+                      (activeSectionId.View |> View.Map(fun a -> a = id))
+
+                    on.click (fun _ _ ->
+                      scrollToSection id
+                      Var.Set activeSectionId id
+
+                      let pageHash =
+                        selectedNav.Value
+                        |> Option.bind stringToPage
+                        |> Option.map pageToHash
+                        |> Option.defaultValue "#home"
+
+                      replaceStateHash (pageHash + "/" + id))
+                  ] [ Body2.Div(title) ]
+              ])
+          ])
+
+    let mutable suppressScrollToTop = initialSection.IsSome
+
     let navEffects =
       selectedNav.View
       |> Doc.sink (fun _ ->
-        scrollMainToTop ()
+        if suppressScrollToTop && mainEl.Value.IsSome then
+          suppressScrollToTop <- false
+        elif not suppressScrollToTop then
+          scrollMainToTop ()
 
         if BrowserUtils.windowWidth.Value < 960 then
           Var.Set drawerOpen false)
@@ -1407,12 +1485,13 @@ module ExamplesRouter =
         if isPageChange then
           Var.Set selectedNav (Some(pageToString page))
 
-        // If the page changed, the new content renders async — poll until element exists.
+        // If the page changed, the new content renders async — defer the scroll
+        // until collectSectionsWithRetry finds the new sections in the DOM.
         // If we're already on the page, the element is present so a short delay is fine.
         sectionPart
         |> Option.iter (fun id ->
           if isPageChange then
-            scrollToSectionWhenReady id
+            pendingSection <- Some id
           else
             scrollToSectionAfterDelay id 50)
       | None ->
@@ -1640,11 +1719,13 @@ module ExamplesRouter =
             Attr.Style "overflow-y" "auto"
             Attr.Style "scroll-behavior" "smooth"
             Attr.Style "height" "100%"
-            on.afterRender (fun el ->
-              Var.Set mainEl (Some el)
-              // If the initial URL contained a section, poll until the page content renders
-              initialSection |> Option.iter scrollToSectionWhenReady)
+            on.afterRender (fun el -> Var.Set mainEl (Some el))
             ScrollListener.trackSections ".section-header[id]" 80.0 (fun sectionId ->
+              Var.Set activeSectionId sectionId
+
+              if tocSections.Value.Length = 0 then
+                collectSectionsWithRetry 0
+
               let pageHash =
                 selectedNav.Value
                 |> Option.bind stringToPage
@@ -1656,14 +1737,22 @@ module ExamplesRouter =
               else
                 replaceStateHash pageHash)
           ] [
-            div [
-              cls [
-                FlexDirection.toClass None FlexDirection.Column
-                FlexDirection.toClass (Some Breakpoint.Medium) FlexDirection.Row
-                yield! Padding.toClasses Padding.All.Medium.small
-                yield! Padding.toClasses Padding.All.ExtraSmall.extraSmall
+            div [ Attr.Class "docs-page-layout" ] [
+              div [
+                Attr.Style "flex" "1"
+                Attr.Style "min-width" "0"
+                cls [
+                  yield! Padding.toClasses Padding.All.Medium.small
+                  yield! Padding.toClasses Padding.All.ExtraSmall.extraSmall
+                ]
+              ] [
+                currentPageView
+                |> Doc.BindView(fun page ->
+                  div [ on.afterRender (fun _ -> refreshTocSections ()) ] [ renderPage navigateTo page ])
               ]
-            ] [ currentPageView |> Doc.BindView(renderPage navigateTo) ]
+
+              tableOfContents
+            ]
           ],
         leftDrawer =
           Drawer.CreateResponsive(

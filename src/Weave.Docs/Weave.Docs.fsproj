@@ -30,7 +30,7 @@
     <Compile Include="examples/LinkExamples.fs" />
     <Compile Include="examples/AlertExamples.fs" />
     <Compile Include="examples/DividerExamples.fs" />
-    <Compile Include="examples/DensityExamples.fs" />
+    <Compile Include="examples/SpacingExamples.fs" />
     <Compile Include="examples/GettingStartedExamples.fs" />
     <Compile Include="ExamplesRouter.fs" />
     <Compile Include="Client.fs" />

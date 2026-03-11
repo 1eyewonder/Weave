@@ -41,7 +41,7 @@ module ExamplesRouter =
     | AlertExamples
     | LinkExamples
     | DividerExamples
-    | DensityExamples
+    | SpacingExamples
     | ThemingExamples
 
   let private pageToString page =
@@ -72,7 +72,7 @@ module ExamplesRouter =
     | AlertExamples -> "Alert"
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
-    | DensityExamples -> "Density"
+    | SpacingExamples -> "Spacing"
     | ThemingExamples -> "Theming"
 
   let private stringToPage s =
@@ -103,7 +103,7 @@ module ExamplesRouter =
     | "Alert" -> Some AlertExamples
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
-    | "Density" -> Some DensityExamples
+    | "Spacing" -> Some SpacingExamples
     | "Theming" -> Some ThemingExamples
     | _ -> None
 
@@ -135,7 +135,7 @@ module ExamplesRouter =
     | AlertExamples -> "#alert"
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
-    | DensityExamples -> "#density"
+    | SpacingExamples -> "#spacing"
     | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
@@ -167,7 +167,7 @@ module ExamplesRouter =
     | "#alert" -> Some AlertExamples
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
-    | "#density" -> Some DensityExamples
+    | "#spacing" -> Some SpacingExamples
     | "#theming" -> Some ThemingExamples
     | _ -> None
 
@@ -1103,7 +1103,7 @@ module ExamplesRouter =
           Attr.Style "height" "7px"
         ] []
       ]
-    | DensityExamples ->
+    | SpacingExamples ->
       cp [
         div [
           cl "cp-pill"
@@ -1281,7 +1281,7 @@ module ExamplesRouter =
             "Expansion Panel", ExpansionPanelExamples
           ]
 
-          categorySection "Styling" [ "Density", DensityExamples; "Theming", ThemingExamples ]
+          categorySection "Styling" [ "Spacing", SpacingExamples; "Theming", ThemingExamples ]
         ],
         maxWidth = Container.MaxWidth.Large
       )
@@ -1310,7 +1310,7 @@ module ExamplesRouter =
     | AlertExamples -> AlertExamples.render ()
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
-    | DensityExamples -> DensityExamples.render ()
+    | SpacingExamples -> SpacingExamples.render ()
     | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
@@ -1339,8 +1339,6 @@ module ExamplesRouter =
     let scrollElementTo (m: Dom.Element) (id: string) =
       let target = JS.Document.GetElementById id
 
-          if not (isNull target) then
-            mainEl.Value
       if not (isNull target) then
         m?scrollTop <-
           As<float>(m?scrollTop) + target.GetBoundingClientRect().Top
@@ -1647,7 +1645,7 @@ module ExamplesRouter =
         ]
 
         navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
-          navLeafItem "Density"
+          navLeafItem "Spacing"
           navLeafItem "Theming"
         ]
       ]

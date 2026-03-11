@@ -15,7 +15,7 @@ module NumericField =
 
   type Variant = Field.Variant
 
-  let internal clamp lo hi v = Operators.max lo (Operators.min hi v)
+  let clamp lo hi v = Operators.max lo (Operators.min hi v)
 
 open NumericField
 

@@ -2,7 +2,6 @@ module Weave.Tests.Unit.TabsTests
 
 open Expecto
 open Weave
-open Weave.CssHelpers
 
 [<Tests>]
 let tabsTests =
@@ -54,6 +53,23 @@ let tabsTests =
       testCase "Center returns Some weave-tabs--centered"
       <| fun () ->
         Expect.equal (Tabs.Alignment.toClass Tabs.Alignment.Center) (Some "weave-tabs--centered") ""
+    ]
+
+    testList "Variant.toClass" [
+      testTheory "each variant maps to the correct class" [
+        Tabs.Variant.Text, "weave-tabs--text"
+        Tabs.Variant.Outlined, "weave-tabs--outlined"
+        Tabs.Variant.Filled, "weave-tabs--filled"
+      ]
+      <| fun (variant, expected) -> Expect.equal (Tabs.Variant.toClass variant) expected ""
+
+      testCase "all variants produce distinct classes"
+      <| fun () ->
+        let classes =
+          [ Tabs.Variant.Text; Tabs.Variant.Outlined; Tabs.Variant.Filled ]
+          |> List.map Tabs.Variant.toClass
+
+        Expect.equal (List.distinct classes).Length classes.Length "each variant maps to a unique class"
     ]
 
     testList "Color.toClass" [

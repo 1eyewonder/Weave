@@ -2,7 +2,6 @@ module Weave.Tests.Unit.DrawerTests
 
 open Expecto
 open Weave
-open Weave.CssHelpers
 
 [<Tests>]
 let drawerTests =
@@ -83,5 +82,14 @@ let drawerTests =
         Drawer.DrawerBreakpoint.Always, "weave-drawer-container--bp-always"
       ]
       <| fun (bp, expected) -> Expect.equal (Drawer.DrawerBreakpoint.toContainerClass bp) expected ""
+    ]
+
+    testList "Density.toClass" [
+      testTheory "each density maps to the correct header class" [
+        Density.Compact, "weave-drawer__header--compact"
+        Density.Standard, "weave-drawer__header--standard"
+        Density.Spacious, "weave-drawer__header--spacious"
+      ]
+      <| fun (density, expected) -> Expect.equal (Drawer.Density.toClass density) expected ""
     ]
   ]

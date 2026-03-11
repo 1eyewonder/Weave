@@ -42,7 +42,7 @@ module TypographyExamples =
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
         )
 
-        Typography.Button.Div("BUTTON TEXT", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Typography.ButtonText.Div("BUTTON TEXT", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
         Caption.Div(
           "Caption text - Small text for annotations",
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
@@ -64,7 +64,7 @@ Subtitle1.Div("Subtitle 1 - Slightly larger secondary text")
 Subtitle2.Div("Subtitle 2 - Smaller secondary text")
 Body1.Div("Body 1 - This is the default body text style. It's used for most content and provides good readability for longer paragraphs of text.")
 Body2.Div("Body 2 - A slightly smaller body text variant that can be used for less prominent content or to create visual hierarchy.")
-Typography.Button.Div("BUTTON TEXT")
+Typography.ButtonText.Div("BUTTON TEXT")
 Caption.Div("Caption text - Small text for annotations")
 Overline.Div("OVERLINE TEXT")
 """

@@ -12,7 +12,7 @@ module GridExamples =
 
   let private demoBox (label: View<string>) color =
     Container.Create(
-      content = Typography.Button.Div(label),
+      content = Typography.ButtonText.Div(label),
       attrs = [
         BrandColor.toBackgroundColor color
 

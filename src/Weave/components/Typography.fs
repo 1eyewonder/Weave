@@ -94,7 +94,7 @@ module Typography =
       | Align.Start -> Css.``weave-typography--align-start``
       | Align.End -> Css.``weave-typography--align-end``
 
-  type Button =
+  type ButtonText =
 
     static member Create(element: WebSharperElement, content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
       let attr = Typo.toClass Typo.Button |> cl
@@ -105,22 +105,22 @@ module Typography =
       |> Text.create element content textWrap
 
     static member Div(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(div, content, ?textWrap = textWrap, ?attrs = attrs)
 
     static member Div(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(div, textView content, ?textWrap = textWrap, ?attrs = attrs)
 
     static member Div(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(div, text content, ?textWrap = textWrap, ?attrs = attrs)
 
     static member Span(content: Doc, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(span, content, ?textWrap = textWrap, ?attrs = attrs)
 
     static member Span(content: View<string>, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(span, textView content, ?textWrap = textWrap, ?attrs = attrs)
 
     static member Span(content: string, ?textWrap: View<bool>, ?attrs: Attr list) =
-      Button.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
+      ButtonText.Create(span, text content, ?textWrap = textWrap, ?attrs = attrs)
 
 open Typography
 

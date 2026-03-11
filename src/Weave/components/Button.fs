@@ -60,7 +60,7 @@ type Button =
     let attrs = defaultArg attrs List.empty
 
     let content =
-      Typography.Button.Div(
+      Typography.ButtonText.Div(
         innerContents,
         textWrap = View.Const false,
         attrs = [ cls [ Css.``weave-button__label``; Flex.Inline.allSizes ] ]

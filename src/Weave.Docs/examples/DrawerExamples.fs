@@ -313,7 +313,7 @@ DrawerContainer.Create(
             ]
           ]
         )
-        Switch.Create(hoverEnabled, displayText = View.Const "Hover expand")
+        Switch.Create(hoverEnabled, Body1.Div("Hover expand"))
       ]
 
     let preview =

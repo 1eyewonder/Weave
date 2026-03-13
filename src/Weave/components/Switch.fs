@@ -96,27 +96,6 @@ type Switch =
   static member Create
     (
       isChecked: Var<bool>,
-      ?displayText: View<string>,
-      ?enabled: View<bool>,
-      ?contentPlacement: View<ContentPlacement>,
-      ?attrs: Attr list
-    ) =
-    let attrs = defaultArg attrs []
-    let enabled = defaultArg enabled (View.Const true)
-
-    let contentPlacement =
-      defaultArg contentPlacement (View.Const ContentPlacement.Right)
-
-    let content =
-      match displayText with
-      | Some v -> Body1.Div(v, View.Const false, attrs = [ cls [ Css.``weave-switch__label`` ] ])
-      | None -> Doc.Empty
-
-    Switch.Render(isChecked, content, enabled, contentPlacement, attrs)
-
-  static member Create
-    (
-      isChecked: Var<bool>,
       ?content: Doc,
       ?enabled: View<bool>,
       ?contentPlacement: View<ContentPlacement>,

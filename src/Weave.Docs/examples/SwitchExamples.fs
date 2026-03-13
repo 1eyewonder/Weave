@@ -21,7 +21,7 @@ module SwitchExamples =
         basicIsChecked.View
         |> View.MapCached(sprintf "Basic is Checked: %b")
         |> View.printfn
-        Switch.Create(basicIsChecked, View.Const "Default Switch")
+        Switch.Create(basicIsChecked, Body1.Div("Default Switch"))
       ]
 
     let code =
@@ -41,7 +41,7 @@ Switch.Create(isChecked, View.Const "Default Switch")
 
     let content =
       let isChecked = Var.Create true
-      Switch.Create(isChecked, View.Const "Disabled Switch", enabled = View.Const false)
+      Switch.Create(isChecked, Body1.Div("Disabled Switch"), enabled = View.Const false)
 
     let code =
       """open Weave
@@ -66,7 +66,9 @@ Switch.Create(
       let isChecked = Var.Create false
 
       let label =
-        isChecked.View |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
+        isChecked.View
+        |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
+        |> Doc.BindView(fun text -> Body1.Div(text))
 
       Switch.Create(isChecked, label)
 
@@ -100,7 +102,7 @@ Switch.Create(isChecked, label)
         sizes
         |> List.map (fun (size, label, v) ->
           GridItem.Create(
-            Switch.Create(v, View.Const label, attrs = [ Switch.Size.toClass size |> cl ]),
+            Switch.Create(v, Body1.Div(label), attrs = [ Switch.Size.toClass size |> cl ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -156,7 +158,7 @@ Switch.Create(
         switches
         |> List.map (fun (v, color, label) ->
           GridItem.Create(
-            Switch.Create(v, View.Const label, attrs = [ Switch.Color.toClass color |> cl ]),
+            Switch.Create(v, Body1.Div(label), attrs = [ Switch.Color.toClass color |> cl ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -214,7 +216,9 @@ Switch.Create(
       let demoSwitch =
         Switch.Create(
           demoChecked,
-          placement.View |> View.MapCached(sprintf "%A"),
+          placement.View
+          |> View.MapCached(sprintf "%A")
+          |> Doc.BindView(fun text -> Body1.Div(text)),
           contentPlacement = placement.View,
           attrs = [
             Switch.Size.toClass Switch.Size.Large |> cl
@@ -259,12 +263,12 @@ Switch.Create(
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
           Switch.Create(
             Var.Create false,
-            View.Const "Off",
+            Body1.Div("Off"),
             attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ]
           )
           Switch.Create(
             Var.Create true,
-            View.Const "On",
+            Body1.Div("On"),
             attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ]
           )
         ]

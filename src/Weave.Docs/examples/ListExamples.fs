@@ -89,7 +89,7 @@ module ListExamples =
           ListChild.Content(
             Switch.Create(
               sentMailExpanded,
-              displayText = View.Const "\"Sent mail\" Expansion",
+              Body1.Div("\"Sent mail\" Expansion"),
               attrs = [
                 cls [
                   Switch.Color.toClass BrandColor.Secondary
@@ -233,7 +233,7 @@ WeaveList.Create(
         div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
           Switch.Create(
             readOnly,
-            displayText = View.Const "ReadOnly",
+            Body1.Div("ReadOnly"),
             attrs = [ Switch.Color.toClass BrandColor.Secondary |> cl ]
           )
         ]
@@ -372,7 +372,7 @@ Switch.Create(readOnly, displayText = View.Const "ReadOnly", attrs = [ Switch.Co
         div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
           Switch.Create(
             readOnly,
-            displayText = View.Const "ReadOnly",
+            Body1.Div("ReadOnly"),
             attrs = [ Switch.Color.toClass BrandColor.Secondary |> cl ]
           )
         ]

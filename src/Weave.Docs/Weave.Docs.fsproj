@@ -13,6 +13,8 @@
     <Compile Include="examples/TooltipExamples.fs" />
     <Compile Include="examples/TypographyExamples.fs" />
     <Compile Include="examples/CheckboxExamples.fs" />
+    <Compile Include="examples/ChipExamples.fs" />
+    <Compile Include="examples/ChipSetExamples.fs" />
     <Compile Include="examples/RadioButtonExamples.fs" />
     <Compile Include="examples/SwitchExamples.fs" />
     <Compile Include="examples/DropdownExamples.fs" />

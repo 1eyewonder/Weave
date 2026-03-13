@@ -1,0 +1,212 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-chip {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  border-radius: 9999px;
+  height: density-spacing(28, 8);
+  padding: 0 density-spacing(8, 4);
+  font-family: var(--typography-body2-family);
+  font-size: var(--typography-body2-size);
+  font-weight: var(--typography-body2-weight);
+  line-height: var(--typography-body2-lineheight);
+  letter-spacing: var(--typography-body2-letterspacing);
+  cursor: default;
+  user-select: none;
+  box-sizing: border-box;
+  transition:
+    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border: 1px solid transparent;
+  color: var(--palette-text-primary);
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: density-spacing(24, 4);
+    height: density-spacing(24, 4);
+    overflow: hidden;
+    border-radius: 50%;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    margin-left: -4px;
+    margin-right: 4px;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: density-spacing(4, 2);
+  }
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: inherit;
+    font-size: 16px;
+    line-height: 1;
+    margin-left: density-spacing(4, 2);
+    cursor: pointer;
+    // TODO: candidate for tokenization -- no suitable opacity variable in _themes.scss yet
+    opacity: 0.7;
+    transition: opacity 150ms ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Variant: Filled
+.weave-chip--filled {
+  background-color: var(--palette-action-default-hover);
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      background-color: var(--palette-#{$color});
+      color: var(--palette-#{$color}-text);
+    }
+  }
+}
+
+.weave-chip--filled.weave-chip--clickable {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-action-disabled-background);
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    background-color: var(--palette-action-disabled-background);
+  }
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background-color: var(--palette-#{$color}-darken);
+        }
+      }
+
+      &:focus-visible,
+      &:active {
+        background-color: var(--palette-#{$color}-darken);
+      }
+    }
+  }
+}
+
+.weave-chip--text {
+  background-color: transparent;
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-chip--outlined {
+  background-color: transparent;
+  border: 1px solid var(--palette-divider);
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      border-color: var(--palette-#{$color});
+      color: var(--palette-#{$color});
+    }
+  }
+}
+
+.weave-chip--text.weave-chip--clickable,
+.weave-chip--outlined.weave-chip--clickable {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    background-color: var(--palette-action-default-hover);
+  }
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background-color: rgba(var(--palette-#{$color}-rgb), 0.2);
+        }
+      }
+
+      &:focus-visible,
+      &:active {
+        background-color: rgba(var(--palette-#{$color}-rgb), 0.25);
+      }
+    }
+  }
+}
+
+.weave-chip--clickable {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--palette-primary);
+    outline-offset: 2px;
+  }
+}
+
+.weave-chip--disabled {
+  opacity: 0.38;
+  pointer-events: none;
+  cursor: default;
+}
+
+.weave-chip--selected {
+  background-color: var(--palette-action-disabled-background);
+  color: var(--palette-text-primary);
+
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      background-color: var(--palette-#{$color});
+      color: var(--palette-#{$color}-text);
+    }
+  }
+}
+
+// Filled + selected needs a darker shade to visually distinguish from the filled base state
+.weave-chip--filled.weave-chip--selected {
+  @each $color in $palette-colors {
+    &.weave-chip--#{$color} {
+      background-color: var(--palette-#{$color}-darken);
+    }
+  }
+}
+
+@each $name, $step in $density-steps {
+  .weave-chip--#{$name} {
+    --weave-density: #{$step};
+  }
+}
+
+// TODO: not yet wired into Chip.fs -- reserved for future "label" shape variant
+.weave-chip--label {
+  border-radius: var(--default-borderradius);
+}
+

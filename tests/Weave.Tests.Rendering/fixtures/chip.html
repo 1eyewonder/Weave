@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chip Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Basic filled chip -->
+    <span id="chip-basic" class="weave-chip weave-chip--filled">
+      <span class="weave-chip__label">Basic</span>
+    </span>
+
+    <!-- Outlined variant -->
+    <span id="chip-outlined" class="weave-chip weave-chip--outlined" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Outlined</span>
+    </span>
+
+    <!-- Text variant -->
+    <span id="chip-text" class="weave-chip weave-chip--text" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Text</span>
+    </span>
+
+    <!-- With icon -->
+    <span id="chip-icon" class="weave-chip weave-chip--filled weave-chip--primary" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__content">&#9733;</span>
+      <span class="weave-chip__label">Starred</span>
+    </span>
+
+    <!-- With empty content (should be hidden via :empty) -->
+    <span id="chip-empty-content" class="weave-chip weave-chip--filled" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__content"></span>
+      <span class="weave-chip__label">Empty Content</span>
+    </span>
+
+    <!-- With close button -->
+    <span id="chip-closable" class="weave-chip weave-chip--filled weave-chip--primary" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Closable</span>
+      <span class="weave-chip__close" role="button" tabindex="0" aria-label="remove">&times;</span>
+    </span>
+
+    <!-- Compact density -->
+    <span id="chip-compact" class="weave-chip weave-chip--filled weave-chip--compact" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Compact</span>
+    </span>
+
+    <!-- Standard density -->
+    <span id="chip-standard" class="weave-chip weave-chip--filled weave-chip--standard" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Standard</span>
+    </span>
+
+    <!-- Spacious density -->
+    <span id="chip-spacious" class="weave-chip weave-chip--filled weave-chip--spacious" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Spacious</span>
+    </span>
+
+    <!-- Disabled -->
+    <span id="chip-disabled" class="weave-chip weave-chip--filled weave-chip--disabled" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Disabled</span>
+    </span>
+
+    <!-- Label style (non-pill) -->
+    <span id="chip-label" class="weave-chip weave-chip--filled weave-chip--label" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Label</span>
+    </span>
+
+    <!-- Selected -->
+    <span id="chip-selected" class="weave-chip weave-chip--filled weave-chip--selected" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Selected</span>
+    </span>
+
+    <!-- Clickable -->
+    <span id="chip-clickable" class="weave-chip weave-chip--filled weave-chip--primary weave-chip--clickable" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Clickable</span>
+    </span>
+
+    <!-- Primary color -->
+    <span id="chip-primary" class="weave-chip weave-chip--filled weave-chip--primary" style="margin-top: 16px; display: inline-flex;">
+      <span class="weave-chip__label">Primary</span>
+    </span>
+  </body>
+</html>

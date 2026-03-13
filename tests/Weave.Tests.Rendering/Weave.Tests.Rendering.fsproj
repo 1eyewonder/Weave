@@ -29,6 +29,8 @@
     <Compile Include="SpacerLayoutTests.fs" />
     <Compile Include="NumericFieldLayoutTests.fs" />
     <Compile Include="SpacingLayoutTests.fs" />
+    <Compile Include="ChipLayoutTests.fs" />
+    <Compile Include="ChipSetLayoutTests.fs" />
     <Compile Include="ElevationStackingTests.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,10 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-chipset {
+  display: flex;
+  flex-wrap: wrap;
+  // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
+  gap: density-spacing(4, 4);
+  align-items: center;
+}

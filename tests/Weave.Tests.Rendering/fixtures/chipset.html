@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChipSet Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chipset-basic" class="weave-chipset">
+      <span id="chipset-chip-0" class="weave-chip weave-chip--filled weave-chip--standard">
+        <span class="weave-chip__label">Chip 1</span>
+      </span>
+      <span id="chipset-chip-1" class="weave-chip weave-chip--filled weave-chip--standard">
+        <span class="weave-chip__label">Chip 2</span>
+      </span>
+      <span id="chipset-chip-2" class="weave-chip weave-chip--filled weave-chip--standard">
+        <span class="weave-chip__label">Chip 3</span>
+      </span>
+    </div>
+
+    <!-- ChipSet with selected and unselected chips -->
+    <div id="chipset-mixed" class="weave-chipset" style="margin-top: 16px;">
+      <span id="chipset-mixed-selected" class="weave-chip weave-chip--filled weave-chip--standard weave-chip--primary weave-chip--selected">
+        <span class="weave-chip__label">Selected</span>
+      </span>
+      <span id="chipset-mixed-unselected" class="weave-chip weave-chip--filled weave-chip--standard weave-chip--primary">
+        <span class="weave-chip__label">Unselected</span>
+      </span>
+      <span id="chipset-mixed-disabled" class="weave-chip weave-chip--filled weave-chip--standard weave-chip--primary weave-chip--disabled">
+        <span class="weave-chip__label">Disabled</span>
+      </span>
+    </div>
+  </body>
+</html>

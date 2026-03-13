@@ -18,6 +18,8 @@
     <Compile Include="components/Alert.fs" />
     <Compile Include="components/ButtonGroup.fs" />
     <Compile Include="components/ButtonMenu.fs" />
+    <Compile Include="components/Chip.fs" />
+    <Compile Include="components/ChipSet.fs" />
     <Compile Include="components/Tooltip.fs" />
     <Compile Include="components/Divider.fs" />
     <Compile Include="components/Grid.fs" />

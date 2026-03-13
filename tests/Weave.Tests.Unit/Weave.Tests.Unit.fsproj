@@ -10,6 +10,8 @@
     <Compile Include="ButtonTests.fs" />
     <Compile Include="ButtonGroupTests.fs" />
     <Compile Include="CheckboxTests.fs" />
+    <Compile Include="ChipTests.fs" />
+    <Compile Include="ChipSetTests.fs" />
     <Compile Include="SwitchTests.fs" />
     <Compile Include="RadioButtonTests.fs" />
     <Compile Include="TypographyTests.fs" />

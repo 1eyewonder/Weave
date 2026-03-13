@@ -26,6 +26,8 @@ module ExamplesRouter =
     | TooltipExamples
     | GridExamples
     | CheckboxExamples
+    | ChipExamples
+    | ChipSetExamples
     | RadioButtonExamples
     | SwitchExamples
     | ContainerExamples
@@ -57,6 +59,8 @@ module ExamplesRouter =
     | TooltipExamples -> "Tooltip"
     | GridExamples -> "Grid"
     | CheckboxExamples -> "Checkbox"
+    | ChipExamples -> "Chip"
+    | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
     | SwitchExamples -> "Switch"
     | ContainerExamples -> "Container"
@@ -88,6 +92,8 @@ module ExamplesRouter =
     | "Tooltip" -> Some TooltipExamples
     | "Grid" -> Some GridExamples
     | "Checkbox" -> Some CheckboxExamples
+    | "Chip" -> Some ChipExamples
+    | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
     | "Switch" -> Some SwitchExamples
     | "Container" -> Some ContainerExamples
@@ -120,6 +126,8 @@ module ExamplesRouter =
     | TooltipExamples -> "#tooltip"
     | GridExamples -> "#grid"
     | CheckboxExamples -> "#checkbox"
+    | ChipExamples -> "#chip"
+    | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
     | SwitchExamples -> "#switch"
     | ContainerExamples -> "#container"
@@ -152,6 +160,8 @@ module ExamplesRouter =
     | "#tooltip" -> Some TooltipExamples
     | "#grid" -> Some GridExamples
     | "#checkbox" -> Some CheckboxExamples
+    | "#chip" -> Some ChipExamples
+    | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples
     | "#switch" -> Some SwitchExamples
     | "#container" -> Some ContainerExamples
@@ -535,6 +545,84 @@ module ExamplesRouter =
           Attr.Style "width" "24%"
           Attr.Style "height" "26px"
           Attr.Style "border-radius" "10px"
+        ] []
+      ]
+    | ChipExamples ->
+      cp [
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "20px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "30%"
+          Attr.Style "height" "20px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "20px"
+          Attr.Style "left" "44%"
+          Attr.Style "width" "24%"
+          Attr.Style "height" "20px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "28%"
+          Attr.Style "height" "20px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "42%"
+          Attr.Style "width" "32%"
+          Attr.Style "height" "20px"
+        ] []
+      ]
+    | ChipSetExamples ->
+      cp [
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "6%"
+          Attr.Style "right" "6%"
+          Attr.Style "bottom" "10px"
+          Attr.Style "border-radius" "6px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "24px"
+          Attr.Style "left" "12%"
+          Attr.Style "width" "22%"
+          Attr.Style "height" "18px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "24px"
+          Attr.Style "left" "40%"
+          Attr.Style "width" "22%"
+          Attr.Style "height" "18px"
+          Attr.Style "border-radius" "9px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "24px"
+          Attr.Style "left" "68%"
+          Attr.Style "width" "20%"
+          Attr.Style "height" "18px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "52px"
+          Attr.Style "left" "12%"
+          Attr.Style "width" "26%"
+          Attr.Style "height" "18px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "52px"
+          Attr.Style "left" "44%"
+          Attr.Style "width" "20%"
+          Attr.Style "height" "18px"
         ] []
       ]
     | CheckboxExamples ->
@@ -1261,6 +1349,8 @@ module ExamplesRouter =
             "Button Group", ButtonGroupExamples
             "Button Menu", ButtonMenuExamples
             "Checkbox", CheckboxExamples
+            "Chip", ChipExamples
+            "Chip Set", ChipSetExamples
             "Dropdown", DropdownExamples
             "Field", FieldExamples
             "Numeric Field", NumericFieldExamples
@@ -1295,6 +1385,8 @@ module ExamplesRouter =
     | TooltipExamples -> TooltipExamples.render ()
     | GridExamples -> GridExamples.render ()
     | CheckboxExamples -> CheckboxExamples.render ()
+    | ChipExamples -> ChipExamples.render ()
+    | ChipSetExamples -> ChipSetExamples.render ()
     | RadioButtonExamples -> RadioButtonExamples.render ()
     | SwitchExamples -> SwitchExamples.render ()
     | ContainerExamples -> ContainerExamples.render ()
@@ -1624,6 +1716,8 @@ module ExamplesRouter =
           navLeafItem "Button Group"
           navLeafItem "Button Menu"
           navLeafItem "Checkbox"
+          navLeafItem "Chip"
+          navLeafItem "Chip Set"
           navLeafItem "Dropdown"
           navLeafItem "Field"
           navLeafItem "Numeric Field"

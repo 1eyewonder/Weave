@@ -22,6 +22,12 @@ type TabsLayoutTests() =
     ()
   }
 
+  member this.LoadFixture(viewportWidth: int) = task {
+    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
+    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
+    ()
+  }
+
   [<Fact>]
   member this.``horizontal tab buttons are arranged left to right``() = task {
     do! this.LoadFixture()
@@ -79,4 +85,45 @@ type TabsLayoutTests() =
       this.Page.EvaluateAsync<string>("() => getComputedStyle(document.querySelector('#panel-1')).display")
 
     Assert.Equal("none", display)
+  }
+
+  [<Fact>]
+  member this.``bottom tabs use column-reverse layout``() = task {
+    do! this.LoadFixture()
+
+    let! flexDirection =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#tabs-bottom')).flexDirection"
+      )
+
+    Assert.Equal("column-reverse", flexDirection)
+  }
+
+  [<Fact>]
+  member this.``start tabs header is left of panels``() = task {
+    do! this.LoadFixture()
+    let! headerBox = this.Page.Locator("#tabs-start-header-wrapper").BoundingBoxAsync()
+    let! tabsBox = this.Page.Locator("#tabs-start").BoundingBoxAsync()
+
+    // Header wrapper should be on the left side of the tabs container
+    Assert.True(
+      headerBox.X <= tabsBox.X + 1.0f,
+      $"Start tabs header X ({headerBox.X}px) should be at left of tabs container (X={tabsBox.X}px)"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData(375)>]
+  [<InlineData(599)>]
+  [<InlineData(960)>]
+  [<InlineData(1280)>]
+  member this.``tabs header fills container width at all viewports``(viewportWidth: int) = task {
+    do! this.LoadFixture viewportWidth
+    let! tabsBox = this.Page.Locator("#tabs-top").BoundingBoxAsync()
+    let! headerBox = this.Page.Locator("#tabs-header-wrapper").BoundingBoxAsync()
+
+    Assert.True(
+      abs (headerBox.Width - tabsBox.Width) <= 1.0f,
+      $"Tabs header width ({headerBox.Width}px) should fill container ({tabsBox.Width}px) at {viewportWidth}px viewport"
+    )
   }

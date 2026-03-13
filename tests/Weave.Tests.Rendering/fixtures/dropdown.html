@@ -30,6 +30,26 @@
       </div>
     </div>
 
+    <!-- Closed dropdown: list should not be visible -->
+    <div id="dropdown-closed" class="weave-dropdown" style="margin-top: 16px;">
+      <button type="button">Closed Menu</button>
+      <div id="dropdown-closed-list" class="weave-dropdown__list">
+        <div class="weave-dropdown__item">
+          <span class="weave-dropdown__item-text">Hidden Item</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anchor origin: top-right with transform-origin top-right -->
+    <div id="dropdown-anchor-top-right" class="weave-dropdown weave-dropdown--open" style="margin-top: 16px; position: relative;">
+      <button type="button">Top Right</button>
+      <div id="dropdown-list-top-right" class="weave-dropdown__list weave-dropdown__list--anchor-origin-top-right weave-dropdown__list--transform-origin-top-right">
+        <div class="weave-dropdown__item">
+          <span class="weave-dropdown__item-text">Anchored Item</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Dropdown with divider and disabled item -->
     <div id="dropdown-divider" class="weave-dropdown weave-dropdown--open" style="margin-top: 200px;">
       <button type="button">Actions</button>

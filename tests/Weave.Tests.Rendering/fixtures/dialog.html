@@ -28,5 +28,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Dialog with topcenter position -->
+    <div id="dialog-topcenter" class="weave-dialog weave-dialog--topcenter" style="position: relative; height: 400px;">
+      <div class="weave-dialog__backdrop"></div>
+      <div id="dialog-topcenter-window" class="weave-dialog__window" style="width: 400px;">
+        <div class="weave-dialog__title">Top Center Dialog</div>
+        <div class="weave-dialog__content">Top center content</div>
+      </div>
+    </div>
+
+    <!-- Bottom-center dialog -->
+    <div id="dialog-bottomcenter" class="weave-dialog weave-dialog--bottomcenter">
+      <div class="weave-dialog__backdrop"></div>
+      <div id="dialog-window-bottomcenter" class="weave-dialog__window" style="width: 300px;">
+        <div class="weave-dialog__title">Bottom Center</div>
+        <div class="weave-dialog__content">Bottom center content.</div>
+      </div>
+    </div>
+
+    <!-- Backdrop should cover its container -->
+    <div id="dialog-backdrop-test" class="weave-dialog weave-dialog--center" style="position: relative; width: 800px; height: 600px;">
+      <div id="dialog-backdrop" class="weave-dialog__backdrop"></div>
+      <div class="weave-dialog__window" style="width: 300px;">
+        <div class="weave-dialog__title">Backdrop Test</div>
+        <div class="weave-dialog__content">Content</div>
+      </div>
+    </div>
   </body>
 </html>

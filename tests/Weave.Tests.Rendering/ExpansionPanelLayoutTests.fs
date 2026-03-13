@@ -81,3 +81,56 @@ type ExpansionPanelLayoutTests() =
 
     Assert.True(header.Height > 0.0f, $"Collapsed panel header height {header.Height}px should be > 0")
   }
+
+  [<Fact>]
+  member this.``group panels stack vertically``() = task {
+    do! this.LoadFixture()
+    let! panel1 = this.Page.Locator("#group-panel-1").BoundingBoxAsync()
+    let! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
+    let! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
+
+    Assert.True(panel1.Y < panel2.Y, $"Panel 1 (y={panel1.Y}) should be above panel 2 (y={panel2.Y})")
+    Assert.True(panel2.Y < panel3.Y, $"Panel 2 (y={panel2.Y}) should be above panel 3 (y={panel3.Y})")
+  }
+
+  [<Fact>]
+  member this.``only expanded panel in group has visible content``() = task {
+    do! this.LoadFixture()
+
+    let! content1MaxHeight =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#group-content-1')).maxHeight"
+      )
+
+    let! content2Height =
+      this.Page.EvaluateAsync<float>(
+        "() => document.querySelector('#group-content-2').getBoundingClientRect().height"
+      )
+
+    let! content3MaxHeight =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#group-content-3')).maxHeight"
+      )
+
+    Assert.Equal("0px", content1MaxHeight)
+    Assert.True(content2Height > 0.0, $"Expanded panel content height {content2Height}px should be > 0")
+    Assert.Equal("0px", content3MaxHeight)
+  }
+
+  [<Fact>]
+  member this.``expanded panel in group is taller than collapsed siblings``() = task {
+    do! this.LoadFixture()
+    let! panel1 = this.Page.Locator("#group-panel-1").BoundingBoxAsync()
+    let! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
+    let! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
+
+    Assert.True(
+      panel2.Height > panel1.Height,
+      $"Expanded panel ({panel2.Height}px) should be taller than collapsed panel 1 ({panel1.Height}px)"
+    )
+
+    Assert.True(
+      panel2.Height > panel3.Height,
+      $"Expanded panel ({panel2.Height}px) should be taller than collapsed panel 3 ({panel3.Height}px)"
+    )
+  }

@@ -65,3 +65,38 @@ type AppBarLayoutTests() =
 
     Assert.Equal("fixed", position)
   }
+
+  member this.LoadFixtureAtWidth(viewportWidth: int) = task {
+    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
+    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
+    ()
+  }
+
+  [<Theory>]
+  [<InlineData(375)>]
+  [<InlineData(599)>]
+  [<InlineData(600)>]
+  [<InlineData(960)>]
+  [<InlineData(1280)>]
+  member this.``static appbar spans full width at all viewport sizes``(viewportWidth: int) = task {
+    do! this.LoadFixtureAtWidth(viewportWidth)
+    let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
+
+    Assert.True(
+      abs (bar.Width - float32 viewportWidth) <= 1.0f,
+      $"AppBar width {bar.Width}px should match viewport {viewportWidth}px"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData(375)>]
+  [<InlineData(1280)>]
+  member this.``appbar min height is preserved at mobile and desktop``(viewportWidth: int) = task {
+    do! this.LoadFixtureAtWidth(viewportWidth)
+    let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
+
+    Assert.True(
+      bar.Height >= 48.0f,
+      $"AppBar height {bar.Height}px should be >= 48px at {viewportWidth}px viewport"
+    )
+  }

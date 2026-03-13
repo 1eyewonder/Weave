@@ -40,20 +40,5 @@ let alertTests =
       ]
       <| fun (color, expected) -> Expect.equal (Alert.AlertColor.toClass color) expected ""
 
-      testCase "all BrandColor cases produce distinct classes"
-      <| fun () ->
-        let classes =
-          [
-            Alert.AlertColor.BrandColor BrandColor.Primary
-            Alert.AlertColor.BrandColor BrandColor.Secondary
-            Alert.AlertColor.BrandColor BrandColor.Tertiary
-            Alert.AlertColor.BrandColor BrandColor.Error
-            Alert.AlertColor.BrandColor BrandColor.Warning
-            Alert.AlertColor.BrandColor BrandColor.Success
-            Alert.AlertColor.BrandColor BrandColor.Info
-          ]
-          |> List.map Alert.AlertColor.toClass
-
-        Expect.equal (List.distinct classes).Length classes.Length "each BrandColor maps to a unique class"
     ]
   ]

@@ -109,6 +109,44 @@ type FieldLayoutTests() =
     Assert.True(maxHeight <> "0px")
   }
 
+  member private this.SetTheme(theme: string) = task {
+    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    ()
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``field border is visible in both themes``(theme: string) = task {
+    do! this.LoadFixture()
+    do! this.SetTheme(theme)
+
+    let! borderColor =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#field-outlined .weave-field__outline')).borderColor"
+      )
+
+    Assert.False(
+      borderColor = "transparent" || borderColor = "rgba(0, 0, 0, 0)",
+      $"Field border in {theme} theme ('{borderColor}') should not be transparent"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``field layout is stable across themes``(theme: string) = task {
+    do! this.LoadFixture()
+    let! defaultBox = this.Page.Locator("#field-standard").BoundingBoxAsync()
+    do! this.SetTheme(theme)
+    let! themedBox = this.Page.Locator("#field-standard").BoundingBoxAsync()
+
+    Assert.True(
+      abs (defaultBox.Height - themedBox.Height) <= 1.0f,
+      $"Field height should not shift between themes (default={defaultBox.Height}px, {theme}={themedBox.Height}px)"
+    )
+  }
+
   [<Fact>]
   member this.``outlined field renders a fieldset outline``() = task {
     do! this.LoadFixture()

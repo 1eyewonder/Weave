@@ -1,8 +1,12 @@
 module Weave.Tests.Unit.SpacingTests
 
 open Expecto
+open Expecto.ExpectoFsCheck
+open FsCheck
 open Weave
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
+open Weave.Tests.Unit.Generators
 
 [<Tests>]
 let spacingTests =
@@ -191,5 +195,210 @@ let spacingTests =
           (Set.intersect marginClasses paddingClasses)
           Set.empty
           "margin and padding classes should not overlap"
+    ]
+  ]
+
+let fsCheckConfig = FsCheckConfig.defaultConfig
+
+[<Tests>]
+let spacingPropertyTests =
+  testList "Spacing Properties" [
+
+    testList "Margin.toClasses" [
+
+      testPropertyWithConfig fsCheckConfig "never returns empty list"
+      <| fun () ->
+        Prop.forAll (Arb.fromGen marginGen) (fun margin ->
+          let classes = Margin.toClasses margin
+          not (List.isEmpty classes))
+
+      testPropertyWithConfig fsCheckConfig "all classes match spacing format"
+      <| fun () ->
+        let formatRegex =
+          System.Text.RegularExpressions.Regex @"^m[tblra]-(sm-|md-|lg-|xl-|xxl-)?\d+$"
+
+        Prop.forAll (Arb.fromGen marginGen) (fun margin ->
+          let classes = Margin.toClasses margin
+
+          classes |> List.forall (fun c -> formatRegex.IsMatch c))
+
+      testPropertyWithConfig fsCheckConfig "single directions return exactly 1 class"
+      <| fun () ->
+        let singleDirGen = gen {
+          let! build = Gen.elements singleMarginBuilders
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+          return build (size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen singleDirGen) (fun margin ->
+          let classes = Margin.toClasses margin
+          List.length classes = 1)
+
+      testPropertyWithConfig fsCheckConfig "Vertical always returns exactly 2 classes (top then bottom)"
+      <| fun () ->
+        let verticalGen = gen {
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+          return Margin.Vertical(size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen verticalGen) (fun margin ->
+          let classes = Margin.toClasses margin
+
+          List.length classes = 2
+          && classes.[0].StartsWith("mt-")
+          && classes.[1].StartsWith("mb-"))
+
+      testPropertyWithConfig fsCheckConfig "Horizontal always returns exactly 2 classes (left then right)"
+      <| fun () ->
+        let horizontalGen = gen {
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+          return Margin.Horizontal(size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen horizontalGen) (fun margin ->
+          let classes = Margin.toClasses margin
+
+          List.length classes = 2
+          && classes.[0].StartsWith("ml-")
+          && classes.[1].StartsWith("mr-"))
+
+      testPropertyWithConfig fsCheckConfig "None and ExtraSmall breakpoint produce no prefix"
+      <| fun () ->
+        let noPrefixGen = gen {
+          let! build = Gen.elements marginBuilders
+          let! size = sizeOptionGen
+          let! bp = Gen.elements [ None; Some Breakpoint.ExtraSmall ]
+          return build (size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen noPrefixGen) (fun margin ->
+          let classes = Margin.toClasses margin
+
+          classes
+          |> List.forall (fun c ->
+            let afterPrefix = c.Substring(3)
+
+            not (
+              afterPrefix.StartsWith("sm-")
+              || afterPrefix.StartsWith("md-")
+              || afterPrefix.StartsWith("lg-")
+              || afterPrefix.StartsWith("xl-")
+              || afterPrefix.StartsWith("xxl-")
+            )))
+
+      testPropertyWithConfig fsCheckConfig "size numeral is consistent regardless of direction"
+      <| fun () ->
+        let singleDirs: (Size option * Breakpoint option -> Margin) list = [
+          Margin.Top
+          Margin.Bottom
+          Margin.Left
+          Margin.Right
+        ]
+
+        let pairGen = gen {
+          let! size = sizeOptionGen
+          let! build1 = Gen.elements singleDirs
+          let! build2 = Gen.elements singleDirs
+
+          return build1 (size, None), build2 (size, None)
+        }
+
+        Prop.forAll (Arb.fromGen pairGen) (fun (m1, m2) ->
+          let numeral1 =
+            (Margin.toClasses m1).[0] |> fun s -> s.Substring(s.LastIndexOf('-') + 1)
+
+          let numeral2 =
+            (Margin.toClasses m2).[0] |> fun s -> s.Substring(s.LastIndexOf('-') + 1)
+
+          numeral1 = numeral2)
+    ]
+
+    testList "Padding.toClasses" [
+
+      testPropertyWithConfig fsCheckConfig "never returns empty list"
+      <| fun () ->
+        Prop.forAll (Arb.fromGen paddingGen) (fun padding ->
+          let classes = Padding.toClasses padding
+          not (List.isEmpty classes))
+
+      testPropertyWithConfig fsCheckConfig "all classes match spacing format"
+      <| fun () ->
+        let formatRegex =
+          System.Text.RegularExpressions.Regex @"^p[tblra]-(sm-|md-|lg-|xl-|xxl-)?\d+$"
+
+        Prop.forAll (Arb.fromGen paddingGen) (fun padding ->
+          let classes = Padding.toClasses padding
+
+          classes |> List.forall (fun c -> formatRegex.IsMatch c))
+
+      testPropertyWithConfig fsCheckConfig "Vertical always returns exactly 2 classes (top then bottom)"
+      <| fun () ->
+        let verticalGen = gen {
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+          return Padding.Vertical(size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen verticalGen) (fun padding ->
+          let classes = Padding.toClasses padding
+
+          List.length classes = 2
+          && classes.[0].StartsWith("pt-")
+          && classes.[1].StartsWith("pb-"))
+
+      testPropertyWithConfig fsCheckConfig "Horizontal always returns exactly 2 classes (left then right)"
+      <| fun () ->
+        let horizontalGen = gen {
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+          return Padding.Horizontal(size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen horizontalGen) (fun padding ->
+          let classes = Padding.toClasses padding
+
+          List.length classes = 2
+          && classes.[0].StartsWith("pl-")
+          && classes.[1].StartsWith("pr-"))
+    ]
+
+    testList "Margin vs Padding disjointness" [
+
+      testPropertyWithConfig
+        fsCheckConfig
+        "margin and padding classes never collide for same direction and size"
+      <| fun () ->
+        let pairGen = gen {
+          let! size = sizeOptionGen
+          let! bp = breakpointOptionGen
+
+          return Margin.Top(size, bp), Padding.Top(size, bp)
+        }
+
+        Prop.forAll (Arb.fromGen pairGen) (fun (margin, padding) ->
+          let mClasses = Margin.toClasses margin |> Set.ofList
+          let pClasses = Padding.toClasses padding |> Set.ofList
+          Set.intersect mClasses pClasses = Set.empty)
+    ]
+
+    testList "Density" [
+
+      testCase "Spacing.Density.toClass produces distinct classes"
+      <| fun () ->
+        let classes =
+          [ Density.Compact; Density.Standard; Density.Spacious ]
+          |> List.map Spacing.Density.toClass
+
+        Expect.equal (List.distinct classes).Length classes.Length "each density maps to a unique class"
+
+      testCase "all density classes start with weave-"
+      <| fun () ->
+        [ Density.Compact; Density.Standard; Density.Spacious ]
+        |> List.iter (fun d ->
+          let cls = Spacing.Density.toClass d
+          Expect.isTrue (cls.StartsWith("weave-")) $"Density class '{cls}' should start with 'weave-'")
     ]
   ]

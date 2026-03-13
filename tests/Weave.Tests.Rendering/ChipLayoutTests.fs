@@ -51,6 +51,42 @@ type ChipLayoutTests() =
     Assert.Equal("9999px", radius)
   }
 
+  member private this.SetTheme(theme: string) = task {
+    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    ()
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``filled chip has opaque background in both themes``(theme: string) = task {
+    do! this.LoadFixture()
+    do! this.SetTheme(theme)
+
+    let! bg =
+      this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
+
+    Assert.False(
+      bg = "transparent" || bg = "rgba(0, 0, 0, 0)",
+      $"Filled chip background in {theme} theme ('{bg}') should not be transparent"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``chip layout is stable across themes``(theme: string) = task {
+    do! this.LoadFixture()
+    let! defaultBox = this.Page.Locator("#chip-basic").BoundingBoxAsync()
+    do! this.SetTheme(theme)
+    let! themedBox = this.Page.Locator("#chip-basic").BoundingBoxAsync()
+
+    Assert.True(
+      abs (defaultBox.Height - themedBox.Height) <= 1.0f,
+      $"Chip height should not shift between themes (default={defaultBox.Height}px, {theme}={themedBox.Height}px)"
+    )
+  }
+
   [<Fact>]
   member this.``filled chip has opaque background``() = task {
     do! this.LoadFixture()

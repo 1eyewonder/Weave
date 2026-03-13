@@ -46,5 +46,29 @@
         </div>
       </div>
     </div>
+
+    <!-- Closed drawer (should be transformed off-screen or have 0 width) -->
+    <div id="drawer-closed-container" class="weave-drawer-container weave-drawer-container--side-left" style="height: 300px; position: relative; margin-top: 16px;">
+      <aside id="drawer-closed" class="weave-drawer weave-drawer--persistent weave-drawer--pos-left weave-drawer--closed weave-drawer--initial" style="width: 256px; position: absolute;">
+        <div class="weave-drawer__content">
+          <nav><ul><li>Hidden Item</li></ul></nav>
+        </div>
+      </aside>
+      <div class="weave-drawer-container__main">
+        <div class="weave-main-content" style="padding: 16px;">Closed drawer main content</div>
+      </div>
+    </div>
+
+    <!-- Right-side drawer -->
+    <div id="drawer-right-container" class="weave-drawer-container weave-drawer-container--open-persistent weave-drawer-container--side-right" style="height: 300px; position: relative; margin-top: 16px;">
+      <aside id="drawer-right" class="weave-drawer weave-drawer--persistent weave-drawer--pos-right weave-drawer--open weave-drawer--initial" style="width: 256px; position: absolute;">
+        <div class="weave-drawer__content">
+          <nav><ul><li>Right Item</li></ul></nav>
+        </div>
+      </aside>
+      <div class="weave-drawer-container__main">
+        <div class="weave-main-content" style="padding: 16px;">Right drawer main content</div>
+      </div>
+    </div>
   </body>
 </html>

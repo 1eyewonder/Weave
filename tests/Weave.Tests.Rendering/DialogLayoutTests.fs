@@ -67,7 +67,7 @@ type DialogLayoutTests() =
   [<Fact>]
   member this.``backdrop covers the full viewport``() = task {
     do! this.LoadFixture()
-    let! backdrop = this.Page.Locator(".weave-dialog__backdrop").BoundingBoxAsync()
+    let! backdrop = this.Page.Locator("#dialog-open .weave-dialog__backdrop").BoundingBoxAsync()
     let viewport = this.Page.ViewportSize
 
     Assert.True(
@@ -78,5 +78,48 @@ type DialogLayoutTests() =
     Assert.True(
       backdrop.Height >= float32 viewport.Height - 1.0f,
       $"Backdrop height {backdrop.Height}px should cover viewport height {viewport.Height}px"
+    )
+  }
+
+  [<Fact>]
+  member this.``topcenter dialog window is near top of container``() = task {
+    do! this.LoadFixture()
+    let! containerBox = this.Page.Locator("#dialog-topcenter").BoundingBoxAsync()
+    let! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
+
+    // Window should be near the top of the dialog container
+    Assert.True(
+      windowBox.Y - containerBox.Y < 100.0f,
+      $"Top center dialog window (Y={windowBox.Y}) should be near top of container (Y={containerBox.Y})"
+    )
+  }
+
+  [<Fact>]
+  member this.``topcenter dialog is horizontally centered``() = task {
+    do! this.LoadFixture()
+    let! containerBox = this.Page.Locator("#dialog-topcenter").BoundingBoxAsync()
+    let! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
+
+    let windowCenter = windowBox.X + windowBox.Width / 2.0f
+    let containerCenter = containerBox.X + containerBox.Width / 2.0f
+
+    Assert.True(
+      abs (windowCenter - containerCenter) <= 2.0f,
+      $"Top center dialog ({windowCenter}px) should be horizontally centered ({containerCenter}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``bottomcenter dialog window is near bottom``() = task {
+    do! this.LoadFixture()
+    let! windowBox = this.Page.Locator("#dialog-window-bottomcenter").BoundingBoxAsync()
+
+    // Bottom-center dialog's window bottom should be near the viewport bottom
+    let windowBottom = windowBox.Y + windowBox.Height
+    let viewportHeight = float32 this.Page.ViewportSize.Height
+
+    Assert.True(
+      viewportHeight - windowBottom < 100.0f,
+      $"Bottom center dialog bottom ({windowBottom}px) should be near viewport bottom ({viewportHeight}px)"
     )
   }

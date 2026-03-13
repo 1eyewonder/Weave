@@ -109,6 +109,49 @@ type ButtonLayoutTests() =
     )
   }
 
+  member private this.LoadFixtureWithTheme(viewportWidth: int, theme: string) = task {
+    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
+    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
+    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    ()
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``filled button has opaque background in both themes``(theme: string) = task {
+    do! this.LoadFixtureWithTheme(1280, theme)
+
+    let! bg =
+      this.Page.Locator("#btn-filled").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
+
+    Assert.False(
+      bg = "transparent" || bg = "rgba(0, 0, 0, 0)",
+      $"Filled button background in {theme} theme ('{bg}') should not be transparent"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``button layout is stable across themes``(theme: string) = task {
+    do! this.LoadFixture 1280
+    let! lightBox = this.Page.Locator("#btn-standard").BoundingBoxAsync()
+    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    ()
+    let! themedBox = this.Page.Locator("#btn-standard").BoundingBoxAsync()
+
+    Assert.True(
+      abs (lightBox.Height - themedBox.Height) <= 1.0f,
+      $"Button height should not shift between themes (default={lightBox.Height}px, {theme}={themedBox.Height}px)"
+    )
+
+    Assert.True(
+      abs (lightBox.Width - themedBox.Width) <= 1.0f,
+      $"Button width should not shift between themes (default={lightBox.Width}px, {theme}={themedBox.Width}px)"
+    )
+  }
+
   [<Fact>]
   member this.``standard button height is consistent across variants``() = task {
     do! this.LoadFixture 1280

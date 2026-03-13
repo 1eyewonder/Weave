@@ -70,6 +70,42 @@ type AlertLayoutTests() =
     Assert.True(icon.X < content.X, $"Icon (x={icon.X}) should be left of content (x={content.X})")
   }
 
+  member private this.SetTheme(theme: string) = task {
+    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    ()
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``filled alert has opaque background in both themes``(theme: string) = task {
+    do! this.LoadFixture()
+    do! this.SetTheme(theme)
+
+    let! bg =
+      this.Page.Locator("#alert-filled").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
+
+    Assert.False(
+      bg = "transparent" || bg = "rgba(0, 0, 0, 0)",
+      $"Filled alert background in {theme} theme ('{bg}') should not be transparent"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData("light")>]
+  [<InlineData("dark")>]
+  member this.``alert layout is stable across themes``(theme: string) = task {
+    do! this.LoadFixture()
+    let! defaultBox = this.Page.Locator("#alert-standard").BoundingBoxAsync()
+    do! this.SetTheme(theme)
+    let! themedBox = this.Page.Locator("#alert-standard").BoundingBoxAsync()
+
+    Assert.True(
+      abs (defaultBox.Height - themedBox.Height) <= 1.0f,
+      $"Alert height should not shift between themes (default={defaultBox.Height}px, {theme}={themedBox.Height}px)"
+    )
+  }
+
   [<Fact>]
   member this.``close button is right of content``() = task {
     do! this.LoadFixture()

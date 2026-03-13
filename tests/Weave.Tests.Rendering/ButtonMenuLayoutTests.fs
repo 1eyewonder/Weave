@@ -72,7 +72,7 @@ type ButtonMenuLayoutTests() =
 
     let! opacity =
       this.Page.EvaluateAsync<string>(
-        "getComputedStyle(document.querySelector('#menu-closed .weave-button-menu__item')).opacity"
+        "() => getComputedStyle(document.querySelector('#menu-closed .weave-button-menu__item')).opacity"
       )
 
     Assert.Equal("0", opacity)

@@ -76,3 +76,28 @@ type DropdownLayoutTests() =
 
     Assert.True(divider.Height <= 2.0f, $"Dropdown divider height {divider.Height}px should be <= 2px")
   }
+
+  [<Fact>]
+  member this.``anchor-origin-top-right positions list at trigger top``() = task {
+    do! this.LoadFixture()
+    let! trigger = this.Page.Locator("#dropdown-anchor-top-right > button").BoundingBoxAsync()
+    let! list = this.Page.Locator("#dropdown-list-top-right").BoundingBoxAsync()
+
+    // With anchor-origin-top-right + transform-origin-top-right, list aligns to trigger's top-right
+    Assert.True(
+      abs (list.Y - trigger.Y) <= 2.0f,
+      $"Top-right anchored list top ({list.Y}px) should align to trigger top ({trigger.Y}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``disabled dropdown item has pointer-events none``() = task {
+    do! this.LoadFixture()
+
+    let! pointerEvents =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('.weave-dropdown__item--disabled')).pointerEvents"
+      )
+
+    Assert.Equal("none", pointerEvents)
+  }

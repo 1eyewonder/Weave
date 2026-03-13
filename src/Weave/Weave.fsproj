@@ -30,6 +30,7 @@
     <Compile Include="components/Switch.fs" />
     <Compile Include="components/Dropdown.fs" />
     <Compile Include="components/List.fs" />
+    <Compile Include="components/Select.fs" />
     <Compile Include="components/Link.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Closed single-select (default state) -->
+    <div id="select-closed" class="weave-select">
+      <div class="weave-select__sizer" aria-hidden="true">
+        <div class="weave-select__sizer-item">Item One</div>
+        <div class="weave-select__sizer-item">Item Two</div>
+        <div class="weave-select__sizer-item">Item Three</div>
+      </div>
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Label</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+            <span class="weave-select__placeholder">Choose an option</span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__clear" tabindex="0" role="button" aria-label="Clear selection">&times;</span>
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option">
+            <span class="weave-select__item-content">Item One</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open single-select with items -->
+    <div id="select-open" class="weave-select weave-select--open" style="margin-top: 16px;">
+      <div class="weave-select__sizer" aria-hidden="true">
+        <div class="weave-select__sizer-item">Item One</div>
+        <div class="weave-select__sizer-item">Item Two</div>
+        <div class="weave-select__sizer-item">Item Three</div>
+      </div>
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__clear" tabindex="0" role="button" aria-label="Clear selection">&times;</span>
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div id="select-item-1" class="weave-select__item" role="option">
+            <span class="weave-select__item-content">Item One</span>
+          </div>
+          <div id="select-item-2" class="weave-select__item weave-select__item--selected" role="option" aria-selected="true">
+            <span class="weave-select__item-content">Item Two</span>
+          </div>
+          <div id="select-item-3" class="weave-select__item weave-select__item--disabled" role="option">
+            <span class="weave-select__item-content">Item Three</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disabled select (also clearable + has-value to test clear suppression) -->
+    <div id="select-disabled" class="weave-select weave-select--disabled weave-select--clearable weave-select--has-value" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Disabled</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="-1" role="combobox">
+            Selected Value
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__clear" tabindex="0" role="button" aria-label="Clear selection">&times;</span>
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Readonly select (open + clearable + has-value to test overrides) -->
+    <div id="select-readonly" class="weave-select weave-select--readonly weave-select--open weave-select--clearable weave-select--has-value" style="margin-top: 16px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Readonly</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+            Read Only Value
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__clear" tabindex="0" role="button" aria-label="Clear selection">&times;</span>
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option">
+            <span class="weave-select__item-content">Hidden Item</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-width select inside a container -->
+    <div id="select-full-width-container" style="width: 400px; margin-top: 16px;">
+      <div id="select-full-width" class="weave-select weave-select--full-width weave-select--open">
+        <div class="weave-select__sizer" aria-hidden="true">
+          <div class="weave-select__sizer-item">Full Width Item</div>
+        </div>
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Full Width</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder">Select...</span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="weave-select__popover">
+          <div class="weave-select__list" role="listbox">
+            <div class="weave-select__item" role="option">
+              <span class="weave-select__item-content">Full Width Item</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fit-content select -->
+    <div id="select-fit-content" class="weave-select weave-select--fit-content" style="margin-top: 250px;">
+      <div class="weave-select__sizer" aria-hidden="true">
+        <div class="weave-select__sizer-item">Fit Content Item One</div>
+        <div class="weave-select__sizer-item">Fit Content Item Two</div>
+      </div>
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Fit Content</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+            <span class="weave-select__placeholder">Select...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clearable with value (clear button visible) -->
+    <div id="select-clearable-value" class="weave-select weave-select--clearable weave-select--has-value" style="margin-top: 16px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Clearable</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+            Some Value
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__clear" tabindex="0" role="button" aria-label="Clear selection">&times;</span>
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open multi-select with select-all, divider, and checkboxes -->
+    <div id="select-multi-open" class="weave-select weave-select--multi weave-select--open" style="margin-top: 16px;">
+      <div class="weave-select__sizer" aria-hidden="true">
+        <div class="weave-select__sizer-item">Option A</div>
+        <div class="weave-select__sizer-item">Option B</div>
+        <div class="weave-select__sizer-item">Option C</div>
+      </div>
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Multi Select</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            Option A, Option B
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__select-all">
+          <span class="weave-select__item-checkbox weave-select__item-checkbox--indeterminate"></span>
+          <span class="weave-select__item-content">Select All</span>
+        </div>
+        <div class="weave-select__divider"></div>
+        <div class="weave-select__list" role="listbox" aria-multiselectable="true">
+          <div class="weave-select__item weave-select__item--selected" role="option" aria-selected="true">
+            <span class="weave-select__item-checkbox weave-select__item-checkbox--checked"></span>
+            <span class="weave-select__item-content">Option A</span>
+          </div>
+          <div class="weave-select__item weave-select__item--selected" role="option" aria-selected="true">
+            <span class="weave-select__item-checkbox weave-select__item-checkbox--checked"></span>
+            <span class="weave-select__item-content">Option B</span>
+          </div>
+          <div class="weave-select__item" role="option">
+            <span class="weave-select__item-checkbox"></span>
+            <span class="weave-select__item-content">Option C</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Searchable open select -->
+    <div id="select-searchable" class="weave-select weave-select--open" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Search</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__search">
+          <input type="text" class="weave-select__search-input" placeholder="Search..." aria-label="Search options" />
+        </div>
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option">
+            <span class="weave-select__item-content">Searchable Item</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open select with no items -->
+    <div id="select-no-items" class="weave-select weave-select--open" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label weave-field__label--float"><span>Empty</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__no-items">No items found</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

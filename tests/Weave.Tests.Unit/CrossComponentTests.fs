@@ -3,6 +3,7 @@ module Weave.Tests.Unit.CrossComponentTests
 open Expecto
 open Weave
 open Weave.Tests.Unit.Generators
+open Weave
 
 let colorMappings: (string * (BrandColor -> string)) list = [
   "Button", Button.Color.toClass
@@ -13,6 +14,7 @@ let colorMappings: (string * (BrandColor -> string)) list = [
   "Field", Field.Color.toClass
   "Link", Link.Color.toClass
   "Radio", Radio.Color.toClass
+  "Select", Select.Color.toClass
   "Switch", Switch.Color.toClass
   "Tabs", Tabs.Color.toClass
   "Tooltip", Tooltip.Color.toClass

@@ -31,6 +31,7 @@
     <Compile Include="SpacingLayoutTests.fs" />
     <Compile Include="ChipLayoutTests.fs" />
     <Compile Include="ChipSetLayoutTests.fs" />
+    <Compile Include="SelectLayoutTests.fs" />
     <Compile Include="ElevationStackingTests.fs" />
   </ItemGroup>
   <ItemGroup>

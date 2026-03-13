@@ -1,0 +1,543 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-select {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 120px;
+  vertical-align: top;
+  color: var(--palette-text-primary, currentColor);
+
+  .weave-field__control {
+    cursor: pointer;
+  }
+}
+
+.weave-select__value {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 1.4375em;
+  padding: var(--field-input-padding, 0);
+  font: inherit;
+  color: currentColor;
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.weave-select__placeholder {
+  color: var(--input-label-color, var(--palette-text-primary, currentColor));
+  opacity: 0.42;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weave-select__actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+  color: var(--palette-text-secondary, currentColor);
+}
+
+.weave-select__clear {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 150ms ease, background-color 150ms ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-action-hover);
+      opacity: 1;
+    }
+  }
+}
+
+.weave-select--clearable.weave-select--has-value .weave-select__clear {
+  display: inline-flex;
+  opacity: 0.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .weave-select--clearable.weave-select--has-value:hover .weave-select__clear {
+    opacity: 0.7;
+  }
+}
+
+.weave-select__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--palette-action-default);
+  flex-shrink: 0;
+}
+
+.weave-select--open .weave-select__chevron {
+  transform: rotate(180deg);
+}
+
+.weave-select__popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  z-index: var(--weave-zindex-dropdown);
+  background: var(--palette-surface);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
+  border-radius: var(--default-borderradius);
+  box-shadow: var(--palette-shadow-2);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin-top: 2px;
+
+  // Entry animation
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top center;
+  pointer-events: none;
+  transition:
+    opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.weave-select--open .weave-select__popover {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+  transition:
+    opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.weave-select__search {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
+  flex-shrink: 0;
+}
+
+.weave-select__search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--typography-body1-size, 1rem);
+  color: var(--palette-text-primary, currentColor);
+  padding: 4px 0;
+
+  @include inputplaceholder {
+    color: var(--palette-text-secondary, currentColor);
+    opacity: 0.6;
+  }
+}
+
+.weave-select__select-all {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  min-height: density-spacing(38, 10);
+  cursor: pointer;
+  gap: 12px;
+  flex-shrink: 0;
+  user-select: none;
+  font-weight: 500;
+  font-size: var(--typography-body2-size, 0.875rem);
+  color: var(--palette-text-secondary);
+  transition: background-color 150ms ease;
+  box-sizing: border-box;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-action-default-hover);
+    }
+  }
+}
+
+.weave-select__divider {
+  height: 1px;
+  background: rgba(var(--palette-text-primary-rgb), 0.12);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.weave-select__list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--palette-text-primary-rgb), 0.2);
+    border-radius: 3px;
+  }
+}
+
+.weave-select__item {
+  display: flex;
+  align-items: center;
+  padding: density-spacing(4, 4) 16px;
+  min-height: density-spacing(38, 10);
+  cursor: pointer;
+  gap: 12px;
+  user-select: none;
+  box-sizing: border-box;
+  color: var(--palette-text-primary);
+  font-family: var(--typography-body1-family);
+  font-size: var(--typography-body1-size);
+  font-weight: var(--typography-body1-weight);
+  line-height: var(--typography-body1-lineheight);
+  letter-spacing: var(--typography-body1-letterspacing);
+  transition: background-color 150ms ease;
+  position: relative;
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: start;
+}
+
+.weave-select__item:hover:not(.weave-select__item--disabled) {
+  background-color: var(--palette-action-default-hover);
+}
+
+.weave-select__item:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.weave-select__item--highlighted:not(.weave-select__item--disabled) {
+  background-color: var(--palette-action-default-hover);
+}
+
+.weave-select__item:active:not(.weave-select__item--disabled) {
+  background-color: var(--palette-action-hover);
+}
+
+.weave-select__item--selected {
+  --select-brand-color: var(--palette-primary);
+  --select-brand-rgb: var(--palette-primary-rgb);
+
+  background-color: rgba(var(--select-brand-rgb), 0.08);
+  color: var(--select-brand-color);
+}
+
+.weave-select__item--selected:hover:not(.weave-select__item--disabled) {
+  background-color: rgba(var(--select-brand-rgb), 0.16);
+}
+
+.weave-select__item--disabled {
+  color: var(--palette-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+.weave-select__item-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weave-select__item-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--palette-action-default);
+  border-radius: var(--default-borderradius);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.weave-select__item-checkbox--checked {
+  background-color: var(--select-brand-color, var(--palette-primary));
+  border-color: var(--select-brand-color, var(--palette-primary));
+}
+
+.weave-select__item-checkbox--checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 8px;
+  border: solid var(--palette-background);
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+
+.weave-select__item-checkbox--indeterminate {
+  background-color: var(--select-brand-color, var(--palette-primary));
+  border-color: var(--select-brand-color, var(--palette-primary));
+}
+
+.weave-select__item-checkbox--indeterminate::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 2px;
+  background: var(--palette-background);
+  transform: translate(-50%, -50%);
+}
+
+.weave-select__item--disabled .weave-select__item-checkbox {
+  border-color: var(--palette-action-disabled);
+}
+
+.weave-select__item--disabled .weave-select__item-checkbox--checked,
+.weave-select__item--disabled .weave-select__item-checkbox--indeterminate {
+  background-color: var(--palette-action-disabled);
+  border-color: var(--palette-action-disabled);
+}
+
+.weave-select__no-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  color: var(--palette-text-secondary);
+  font-size: var(--typography-body2-size, 0.875rem);
+  font-style: italic;
+  min-height: density-spacing(38, 10);
+}
+
+@each $color in $palette-colors {
+  .weave-select--#{$color} {
+    --select-brand-color: var(--palette-#{$color});
+    --select-brand-rgb: var(--palette-#{$color}-rgb);
+
+    .weave-select__item--selected {
+      --select-brand-color: var(--palette-#{$color});
+      --select-brand-rgb: var(--palette-#{$color}-rgb);
+      background-color: rgba(var(--palette-#{$color}-rgb), 0.08);
+      color: var(--palette-#{$color});
+    }
+
+    .weave-select__item--selected:hover:not(.weave-select__item--disabled) {
+      background-color: rgba(var(--palette-#{$color}-rgb), 0.16);
+    }
+
+    .weave-select__item-checkbox--checked,
+    .weave-select__item-checkbox--indeterminate {
+      background-color: var(--palette-#{$color});
+      border-color: var(--palette-#{$color});
+    }
+
+    &.weave-select--open .weave-select__chevron,
+    &.weave-select--focused .weave-select__chevron {
+      color: var(--palette-#{$color});
+    }
+
+    .weave-select__item:focus-visible {
+      outline-color: var(--palette-#{$color});
+    }
+
+    // Propagate color to the inner Field's focus outline / border
+    .weave-field--focused {
+      .weave-field__label--float {
+        color: var(--palette-#{$color});
+      }
+
+      &.weave-field--standard,
+      &.weave-field--filled {
+        .weave-field__control {
+          border-bottom-color: var(--palette-#{$color});
+        }
+      }
+
+      &.weave-field--outlined .weave-field__outline {
+        border-color: var(--palette-#{$color});
+      }
+    }
+  }
+}
+
+.weave-select--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+
+  .weave-field__control {
+    cursor: default;
+  }
+
+  .weave-select__chevron {
+    color: var(--palette-action-disabled);
+  }
+
+  .weave-select__clear {
+    display: none;
+  }
+}
+
+.weave-select--readonly {
+  .weave-field__control {
+    cursor: default;
+  }
+
+  .weave-select__chevron {
+    opacity: 0.5;
+  }
+
+  .weave-select__clear {
+    display: none;
+  }
+
+  .weave-select__popover {
+    display: none;
+  }
+}
+
+// Hidden sizer element — contains all item texts so the select can pre-size
+// to the widest dropdown option. Out-of-flow by default (position: absolute);
+// fit-content mode puts it back in flow (position: relative) so it
+// contributes to the inline-flex container's cross-axis width.
+.weave-select__sizer {
+  position: absolute;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.weave-select__sizer-item {
+  white-space: nowrap;
+  font-family: var(--typography-body1-family, inherit);
+  font-size: var(--typography-body1-size, 1rem);
+  letter-spacing: var(--typography-body1-letterspacing, normal);
+  // Left padding matches the field's inline start; right padding accounts for
+  // the field's inline end + the end adornment (chevron ≈ 24px + padding).
+  padding-left: 0.875em;
+  padding-right: calc(2em + 24px);
+}
+
+.weave-select--full-width {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+
+  .weave-field {
+    display: flex;
+    width: 100%;
+  }
+
+  .weave-select__popover {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.weave-select--fit-content {
+  .weave-select__sizer {
+    position: relative;
+  }
+
+  .weave-select__popover {
+    min-width: 100%;
+    width: max-content;
+    max-width: min(400px, 90vw);
+  }
+}
+
+.weave-select--dense {
+  --weave-density: 0;
+
+  .weave-select__value {
+    gap: 2px;
+  }
+
+  .weave-select__search {
+    padding: 6px 10px;
+  }
+
+  .weave-select__search-input {
+    font-size: var(--typography-body2-size, 0.875rem);
+    padding: 2px 0;
+  }
+
+  .weave-select__list {
+    max-height: 240px;
+    padding: 2px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-select__popover,
+  .weave-select--open .weave-select__popover {
+    transition-duration: 0s;
+  }
+
+  .weave-select__chevron {
+    transition-duration: 0s;
+  }
+
+  .weave-select__clear {
+    transition-duration: 0s;
+  }
+
+  .weave-select__item {
+    transition-duration: 0s;
+  }
+
+  .weave-select__item-checkbox {
+    transition-duration: 0s;
+  }
+
+  .weave-select__select-all {
+    transition-duration: 0s;
+  }
+}
+
+.weave-select--multi {
+  .weave-select__value {
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+}
+
+@each $name, $step in $density-steps {
+  .weave-select--#{$name} {
+    --weave-density: #{$step};
+  }
+}

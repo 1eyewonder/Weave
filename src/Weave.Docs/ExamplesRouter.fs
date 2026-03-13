@@ -34,6 +34,7 @@ module ExamplesRouter =
     | FieldExamples
     | NumericFieldExamples
     | DropdownExamples
+    | SelectExamples
     | ExpansionPanelExamples
     | DialogExamples
     | DrawerExamples
@@ -67,6 +68,7 @@ module ExamplesRouter =
     | FieldExamples -> "Field"
     | NumericFieldExamples -> "Numeric Field"
     | DropdownExamples -> "Dropdown"
+    | SelectExamples -> "Select"
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
     | DrawerExamples -> "Drawer"
@@ -100,6 +102,7 @@ module ExamplesRouter =
     | "Field" -> Some FieldExamples
     | "Numeric Field" -> Some NumericFieldExamples
     | "Dropdown" -> Some DropdownExamples
+    | "Select" -> Some SelectExamples
     | "Expansion Panel" -> Some ExpansionPanelExamples
     | "Dialog" -> Some DialogExamples
     | "Drawer" -> Some DrawerExamples
@@ -134,6 +137,7 @@ module ExamplesRouter =
     | FieldExamples -> "#field"
     | NumericFieldExamples -> "#numeric-field"
     | DropdownExamples -> "#dropdown"
+    | SelectExamples -> "#select"
     | ExpansionPanelExamples -> "#expansion-panel"
     | DialogExamples -> "#dialog"
     | DrawerExamples -> "#drawer"
@@ -168,6 +172,7 @@ module ExamplesRouter =
     | "#field" -> Some FieldExamples
     | "#numeric-field" -> Some NumericFieldExamples
     | "#dropdown" -> Some DropdownExamples
+    | "#select" -> Some SelectExamples
     | "#expansion-panel" -> Some ExpansionPanelExamples
     | "#dialog" -> Some DialogExamples
     | "#drawer" -> Some DrawerExamples
@@ -725,6 +730,69 @@ module ExamplesRouter =
           Attr.Style "top" "63px"
           Attr.Style "left" "18%"
           Attr.Style "right" "38%"
+          Attr.Style "height" "5px"
+        ] []
+      ]
+    | SelectExamples ->
+      cp [
+        div [
+          cl "cp-box"
+          Attr.Style "top" "8px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "24px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "16%"
+          Attr.Style "right" "32%"
+          Attr.Style "height" "5px"
+          Attr.Style "opacity" "0.3"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "18px"
+          Attr.Style "left" "16%"
+          Attr.Style "right" "44%"
+          Attr.Style "height" "6px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "14px"
+          Attr.Style "right" "16%"
+          Attr.Style "width" "6px"
+          Attr.Style "height" "6px"
+          Attr.Style "border-radius" "1px"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "34px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "48px"
+          Attr.Style "border-radius" "4px"
+          Attr.Style "box-shadow" "0 4px 12px rgba(0,0,0,0.4)"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "42px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "44%"
+          Attr.Style "height" "5px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "54px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "36%"
+          Attr.Style "height" "5px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "66px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "50%"
           Attr.Style "height" "5px"
         ] []
       ]
@@ -1352,6 +1420,7 @@ module ExamplesRouter =
             "Chip", ChipExamples
             "Chip Set", ChipSetExamples
             "Dropdown", DropdownExamples
+            "Select", SelectExamples
             "Field", FieldExamples
             "Numeric Field", NumericFieldExamples
             "Radio Button", RadioButtonExamples
@@ -1393,6 +1462,7 @@ module ExamplesRouter =
     | FieldExamples -> FieldExamples.render ()
     | NumericFieldExamples -> NumericFieldExamples.render ()
     | DropdownExamples -> DropdownExamples.render ()
+    | SelectExamples -> SelectExamples.render ()
     | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
     | DialogExamples -> DialogExamples.render ()
     | DrawerExamples -> DrawerExamples.render ()
@@ -1719,6 +1789,7 @@ module ExamplesRouter =
           navLeafItem "Chip"
           navLeafItem "Chip Set"
           navLeafItem "Dropdown"
+          navLeafItem "Select"
           navLeafItem "Field"
           navLeafItem "Numeric Field"
           navLeafItem "Radio Button"

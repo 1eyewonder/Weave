@@ -131,10 +131,13 @@ type NumericField =
     let clickState = View.Map2 (fun s e -> s, e) step editable
 
     // Build the native input element.
+    let inputId = FieldId.fresh ()
+
     let inputElement =
       Doc.InputType.Text
         [
           cls [ Css.``weave-field__input`` ]
+          Attr.Create "id" inputId
           attr.``type`` "number"
 
           Attr.DynamicProp "placeholder" effectivePlaceholder
@@ -229,6 +232,7 @@ type NumericField =
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
         ?typoAttrs = typoAttrs,
+        inputId = inputId,
         attrs = [
           Css.``weave-field--numeric`` |> cl
           Attr.DynamicClassPred Css.``weave-field--has-spin`` showSpinButtons
@@ -341,10 +345,13 @@ type NumericField =
 
     let clickState = View.Map2 (fun s e -> s, e) step editable
 
+    let inputId = FieldId.fresh ()
+
     let inputElement =
       Doc.InputType.Text
         [
           cls [ Css.``weave-field__input`` ]
+          Attr.Create "id" inputId
           attr.``type`` "number"
           Attr.Create "step" "any"
 
@@ -439,6 +446,7 @@ type NumericField =
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
         ?typoAttrs = typoAttrs,
+        inputId = inputId,
         attrs = [
           Css.``weave-field--numeric`` |> cl
           Attr.DynamicClassPred Css.``weave-field--has-spin`` showSpinButtons

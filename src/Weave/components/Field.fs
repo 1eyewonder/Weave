@@ -65,6 +65,15 @@ module Field =
 open Field
 
 [<JavaScript>]
+module internal FieldId =
+
+  let mutable private counter = 0
+
+  let fresh () =
+    counter <- counter + 1
+    sprintf "weave-field-%d" counter
+
+[<JavaScript>]
 type FieldHelpText =
 
   static member Create(content: Doc, ?attrs: Attr list) =
@@ -93,6 +102,7 @@ type Field =
       ?startAdornment: Doc,
       ?endAdornment: Doc,
       ?typoAttrs: Attr list,
+      ?inputId: string,
       ?attrs: Attr list
     ) =
 
@@ -114,6 +124,9 @@ type Field =
           Html.label [
             cls [ Css.``weave-field__label`` ]
             Attr.DynamicClassPred Css.``weave-field__label--float`` shouldFloat
+            match inputId with
+            | Some id -> Attr.Create "for" id
+            | None -> ()
           ] [ Html.span [] [ text txt ] ]
         else
           Doc.Empty)
@@ -225,10 +238,13 @@ type Field =
         elif floated then ph
         else "")
 
+    let inputId = FieldId.fresh ()
+
     let inputElement =
       Doc.InputType.Text
         [
           cls [ Css.``weave-field__input`` ]
+          Attr.Create "id" inputId
 
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
@@ -255,5 +271,6 @@ type Field =
       ?startAdornment = startAdornment,
       ?endAdornment = endAdornment,
       ?typoAttrs = typoAttrs,
+      inputId = inputId,
       ?attrs = attrs
     )

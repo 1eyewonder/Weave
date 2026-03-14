@@ -376,6 +376,7 @@ temp-reference/*
 src/Weave/styles.css
 src/Weave.Docs/build/
 src/Weave.Docs/wwwroot/Scripts/
+tests/Weave.Tests.E2E.Site/wwwroot/Scripts/
 src/Weave.Docs/wwwroot/assets/weave-logo.png
 .vscode/
 .paket/

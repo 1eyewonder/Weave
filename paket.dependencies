@@ -17,6 +17,7 @@ group test
   nuget Microsoft.NET.Test.Sdk
   nuget YoloDev.Expecto.TestSdk
   nuget Microsoft.Playwright.Xunit
+  nuget Deque.AxeCore.Playwright
   nuget xunit
   nuget xunit.runner.visualstudio
 

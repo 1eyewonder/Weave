@@ -383,8 +383,15 @@ type Select =
         Attr.Create "tabindex" "0"
         Attr.Create "role" "combobox"
         Attr.Create "aria-haspopup" "listbox"
-        Attr.DynamicProp "aria-expanded" (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
-        Attr.DynamicProp "aria-activedescendant" activeDescendantView
+        Attr.DynamicCustom
+          (fun el v -> el.SetAttribute("aria-expanded", v))
+          (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
+        Attr.DynamicCustom (fun el v -> el.SetAttribute("aria-activedescendant", v)) activeDescendantView
+        Attr.DynamicCustom
+          (fun el v ->
+            if not (String.IsNullOrEmpty v) then
+              el.SetAttribute("aria-label", v))
+          labelText
 
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)
@@ -629,8 +636,15 @@ type Select =
         Attr.Create "tabindex" "0"
         Attr.Create "role" "combobox"
         Attr.Create "aria-haspopup" "listbox"
-        Attr.DynamicProp "aria-expanded" (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
-        Attr.DynamicProp "aria-activedescendant" activeDescendantView
+        Attr.DynamicCustom
+          (fun el v -> el.SetAttribute("aria-expanded", v))
+          (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
+        Attr.DynamicCustom (fun el v -> el.SetAttribute("aria-activedescendant", v)) activeDescendantView
+        Attr.DynamicCustom
+          (fun el v ->
+            if not (String.IsNullOrEmpty v) then
+              el.SetAttribute("aria-label", v))
+          labelText
 
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)

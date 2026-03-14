@@ -56,5 +56,5 @@
     <Exec Command="yarn install" WorkingDirectory="$(ProjectDir)../.." />
     <Exec Command="node src/Weave.Docs/esbuild.config.mjs" WorkingDirectory="$(ProjectDir)../.." />
   </Target>
-  <Import Project="../../.paket/Paket.Restore.targets" />
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

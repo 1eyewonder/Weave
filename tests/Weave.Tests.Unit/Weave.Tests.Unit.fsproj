@@ -34,7 +34,5 @@
     <Compile Include="SelectTests.fs" />
     <Compile Include="CrossComponentTests.fs" />
   </ItemGroup>
-
-  <Import Project="../../.paket/Paket.Restore.targets" />
-
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

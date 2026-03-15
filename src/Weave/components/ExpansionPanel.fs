@@ -29,6 +29,18 @@ module ExpansionPanel =
       | BrandColor.Success -> Css.``weave-expansion-panel__header--success``
       | BrandColor.Info -> Css.``weave-expansion-panel__header--info``
 
+  module FocusColor =
+
+    let toClass color =
+      match color with
+      | BrandColor.Primary -> Css.``weave-expansion-panel__header--focus-primary``
+      | BrandColor.Secondary -> Css.``weave-expansion-panel__header--focus-secondary``
+      | BrandColor.Tertiary -> Css.``weave-expansion-panel__header--focus-tertiary``
+      | BrandColor.Error -> Css.``weave-expansion-panel__header--focus-error``
+      | BrandColor.Warning -> Css.``weave-expansion-panel__header--focus-warning``
+      | BrandColor.Success -> Css.``weave-expansion-panel__header--focus-success``
+      | BrandColor.Info -> Css.``weave-expansion-panel__header--focus-info``
+
   [<RequireQualifiedAccess; Struct>]
   type HeaderVariant =
     | Filled
@@ -77,6 +89,8 @@ type ExpansionPanelHeader =
       | Some icon -> [ content; icon ]
       | None -> [ content ]
 
+    let enabledRef: bool ref = ref true
+
     div
       [
         cls [
@@ -87,6 +101,12 @@ type ExpansionPanelHeader =
           JustifyContent.toClass JustifyContent.SpaceBetween
         ]
         Attr.Style "width" "100%"
+        Attr.Create "tabindex" "0"
+        Attr.Create "role" "button"
+        on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
+        expanded.View
+        |> View.Map(fun v -> if v then "true" else "false")
+        |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
 
         let clickable = View.zipCached expanded.View enabled
 
@@ -94,6 +114,13 @@ type ExpansionPanelHeader =
         <| fun _ _ (isExpanded, isEnabled) ->
           if isEnabled then
             Var.Set expanded (not isExpanded)
+
+        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
+          if ev.Key = "Enter" || ev.Key = " " then
+            ev.PreventDefault()
+
+            if enabledRef.Value then
+              Var.Set expanded (not expanded.Value))
 
         Map.ofList [
           HeaderVariant.Filled, Css.``weave-expansion-panel__header--filled``

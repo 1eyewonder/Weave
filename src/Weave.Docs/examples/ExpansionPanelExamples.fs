@@ -199,6 +199,62 @@ ExpansionPanelContainer.Create(
 
     Helpers.codeSampleSection "Header Highlight Variants" description content code
 
+  let private focusColor () =
+    let description =
+      Helpers.bodyText
+        "The focus outline color can be customized per-header using FocusColor.toClass. The default focus color is action-default."
+
+    let content =
+      let header expanded color =
+        ExpansionPanelHeader.CreateWithDefaultIcons(
+          Body1.Div(sprintf "%A" color),
+          expanded,
+          attrs = [ cls [ ExpansionPanel.FocusColor.toClass color ] ]
+        )
+
+      let content (color: BrandColor) =
+        ExpansionPanelContent.Create(text (sprintf "Tab into this panel to see the %A focus outline" color))
+
+      let panel color expanded =
+        ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
+
+      ExpansionPanelContainer.Create(
+        [
+          let primaryExpanded = Var.Create false
+          panel BrandColor.Primary primaryExpanded
+
+          let secondaryExpanded = Var.Create false
+          panel BrandColor.Secondary secondaryExpanded
+
+          let errorExpanded = Var.Create false
+          panel BrandColor.Error errorExpanded
+        ]
+      )
+
+    let code =
+      """open Weave
+
+open WebSharper.UI
+
+let expanded = Var.Create false
+
+ExpansionPanelContainer.Create(
+    [
+        ExpansionPanel.Create(
+            ExpansionPanelHeader.CreateWithDefaultIcons(
+                Body1.Div("Primary"),
+                expanded,
+                attrs = [ cls [ ExpansionPanel.FocusColor.toClass BrandColor.Primary ] ] // see here
+            ),
+            expanded = expanded,
+            content = ExpansionPanelContent.Create(text "Primary focus outline")
+        )
+    ]
+)
+"""
+
+    Helpers.codeSampleSection "Focus Color" description content code
+
   let private densityExample () =
     let description =
       Helpers.bodyText
@@ -267,6 +323,8 @@ ExpansionPanelContainer.Create(
         color ()
         Helpers.divider ()
         highlightVariants ()
+        Helpers.divider ()
+        focusColor ()
         Helpers.divider ()
         densityExample ()
       ],

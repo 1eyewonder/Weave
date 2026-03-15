@@ -16,6 +16,7 @@
   }
 
   .weave-expansion-panel__header {
+    --expansion-panel-focus-color: var(--palette-action-default);
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -29,6 +30,17 @@
     font-weight: var(--typography-h6-weight);
     color: var(--palette-text-primary);
     user-select: none;
+
+    &:focus-visible {
+      outline: 2px solid var(--expansion-panel-focus-color);
+      outline-offset: -2px;
+    }
+  }
+
+  @each $color in $palette-colors {
+    .weave-expansion-panel__header--focus-#{$color} {
+      --expansion-panel-focus-color: var(--palette-#{$color});
+    }
   }
 
   .weave-expansion-panel--expanded {

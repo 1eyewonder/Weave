@@ -197,6 +197,7 @@ module Pages =
   let private expansionPanelPage () =
     let expanded1 = Var.Create true
     let expanded2 = Var.Create false
+    let expanded3 = Var.Create false
 
     ExpansionPanelContainer.Create(
       [
@@ -209,6 +210,15 @@ module Pages =
           ExpansionPanelHeader.CreateWithDefaultIcons(text "Collapsed Panel", expanded2),
           ExpansionPanelContent.Create(Body1.Div("Collapsed content")),
           expanded = expanded2
+        )
+        ExpansionPanel.Create(
+          ExpansionPanelHeader.CreateWithDefaultIcons(
+            text "Focus Color Panel",
+            expanded3,
+            attrs = [ ExpansionPanel.FocusColor.toClass BrandColor.Error |> cl ]
+          ),
+          ExpansionPanelContent.Create(Body1.Div("Focus color content")),
+          expanded = expanded3
         )
       ]
     )

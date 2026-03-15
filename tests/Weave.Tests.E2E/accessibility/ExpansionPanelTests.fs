@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open System.Text.RegularExpressions
 open Microsoft.Playwright.Xunit
 open Xunit
 
@@ -10,26 +11,28 @@ type ExpansionPanelTests(server: TestServerFixture) =
   [<Fact>]
   member this.``passes axe-core accessibility scan``() = this.RunAxeScan("expansion-panel")
 
-  [<Fact(Skip = "Known gap: ExpansionPanel header has no tabindex — not reachable by Tab")>]
+  [<Fact>]
   member this.``expansion panel header is reachable by Tab``() = task {
     do! this.NavigateTo("expansion-panel")
     do! this.Page.Keyboard.PressAsync("Tab")
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-expansion-panel__header", activeClass)
+    let header = this.Page.Locator(".weave-expansion-panel__header").First
+    do! this.Expect(header).ToBeFocusedAsync()
   }
 
-  [<Fact(Skip = "Known gap: ExpansionPanel header is a <div>, not a <button> — Enter/Space do not toggle")>]
+  [<Fact>]
   member this.``Enter toggles the expansion panel``() = task {
     do! this.NavigateTo("expansion-panel")
     // The second panel starts collapsed
     let header = this.Page.Locator(".weave-expansion-panel__header").Nth(1)
     do! header.FocusAsync()
     do! header.PressAsync("Enter")
+    let panel = this.Page.Locator(".weave-expansion-panel").Nth(1)
+    do! this.Expect(panel).ToHaveClassAsync(Regex("weave-expansion-panel--expanded"))
+  }
 
-    let! isExpanded =
-      this.Page.EvaluateAsync<bool>(
-        "() => document.querySelectorAll('.weave-expansion-panel')[1].classList.contains('weave-expansion-panel--expanded')"
-      )
-
-    Assert.True(isExpanded, "Panel should be expanded after pressing Enter on its header")
+  [<Fact>]
+  member this.``focus color class is present on header with custom focus color``() = task {
+    do! this.NavigateTo("expansion-panel")
+    let header = this.Page.Locator(".weave-expansion-panel__header").Nth(2)
+    do! this.Expect(header).ToHaveClassAsync(Regex("weave-expansion-panel__header--focus-error"))
   }

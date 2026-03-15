@@ -118,6 +118,23 @@ type ExpansionPanelLayoutTests() =
   }
 
   [<Fact>]
+  member this.``focus color class overrides the focus color custom property``() = task {
+    do! this.LoadFixture()
+
+    let! defaultColor =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#header-collapsed')).getPropertyValue('--expansion-panel-focus-color').trim()"
+      )
+
+    let! focusColor =
+      this.Page.EvaluateAsync<string>(
+        "() => getComputedStyle(document.querySelector('#header-focus-color')).getPropertyValue('--expansion-panel-focus-color').trim()"
+      )
+
+    Assert.NotEqual<string>(defaultColor, focusColor)
+  }
+
+  [<Fact>]
   member this.``expanded panel in group is taller than collapsed siblings``() = task {
     do! this.LoadFixture()
     let! panel1 = this.Page.Locator("#group-panel-1").BoundingBoxAsync()

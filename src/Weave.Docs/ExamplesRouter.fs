@@ -45,6 +45,8 @@ module ExamplesRouter =
     | LinkExamples
     | DividerExamples
     | SpacingExamples
+    | OpacityExamples
+    | TransitionExamples
     | ThemingExamples
 
   let private pageToString page =
@@ -79,6 +81,8 @@ module ExamplesRouter =
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
     | SpacingExamples -> "Spacing"
+    | OpacityExamples -> "Opacity"
+    | TransitionExamples -> "Transitions"
     | ThemingExamples -> "Theming"
 
   let private stringToPage s =
@@ -113,6 +117,8 @@ module ExamplesRouter =
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
     | "Spacing" -> Some SpacingExamples
+    | "Opacity" -> Some OpacityExamples
+    | "Transitions" -> Some TransitionExamples
     | "Theming" -> Some ThemingExamples
     | _ -> None
 
@@ -148,6 +154,8 @@ module ExamplesRouter =
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
     | SpacingExamples -> "#spacing"
+    | OpacityExamples -> "#opacity"
+    | TransitionExamples -> "#transitions"
     | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
@@ -183,6 +191,8 @@ module ExamplesRouter =
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
     | "#spacing" -> Some SpacingExamples
+    | "#opacity" -> Some OpacityExamples
+    | "#transitions" -> Some TransitionExamples
     | "#theming" -> Some ThemingExamples
     | _ -> None
 
@@ -1283,6 +1293,64 @@ module ExamplesRouter =
           Attr.Style "height" "24px"
         ] []
       ]
+    | OpacityExamples ->
+      cp [
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "14px"
+          Attr.Style "opacity" "0.2"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "14px"
+          Attr.Style "opacity" "0.5"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "14px"
+          Attr.Style "opacity" "0.8"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "70px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "14px"
+        ] []
+      ]
+    | TransitionExamples ->
+      cp [
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "50%"
+          Attr.Style "height" "12px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "34px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "30%"
+          Attr.Style "height" "12px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "54px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "12px"
+        ] []
+      ]
     | ThemingExamples ->
       cp [
         div [
@@ -1440,7 +1508,12 @@ module ExamplesRouter =
             "Expansion Panel", ExpansionPanelExamples
           ]
 
-          categorySection "Styling" [ "Spacing", SpacingExamples; "Theming", ThemingExamples ]
+          categorySection "Styling" [
+            "Spacing", SpacingExamples
+            "Opacity", OpacityExamples
+            "Transitions", TransitionExamples
+            "Theming", ThemingExamples
+          ]
         ],
         maxWidth = Container.MaxWidth.Large
       )
@@ -1473,6 +1546,8 @@ module ExamplesRouter =
     | LinkExamples -> LinkExamples.render ()
     | DividerExamples -> DividerExamples.render ()
     | SpacingExamples -> SpacingExamples.render ()
+    | OpacityExamples -> OpacityExamples.render ()
+    | TransitionExamples -> TransitionExamples.render ()
     | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
@@ -1811,6 +1886,8 @@ module ExamplesRouter =
 
         navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
           navLeafItem "Spacing"
+          navLeafItem "Opacity"
+          navLeafItem "Transitions"
           navLeafItem "Theming"
         ]
       ]

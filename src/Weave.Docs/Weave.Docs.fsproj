@@ -33,6 +33,8 @@
     <Compile Include="examples/AlertExamples.fs" />
     <Compile Include="examples/DividerExamples.fs" />
     <Compile Include="examples/SpacingExamples.fs" />
+    <Compile Include="examples/OpacityExamples.fs" />
+    <Compile Include="examples/TransitionExamples.fs" />
     <Compile Include="examples/SelectExamples.fs" />
     <Compile Include="examples/GettingStartedExamples.fs" />
     <Compile Include="ExamplesRouter.fs" />

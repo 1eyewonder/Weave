@@ -6,7 +6,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TestServerFixture.fs" />
-    <Compile Include="AccessibilityTests.fs" />
+    <Compile Include="accessibility/TestBase.fs" />
+    <Compile Include="accessibility/AlertTests.fs" />
+    <Compile Include="accessibility/AppBarTests.fs" />
+    <Compile Include="accessibility/ButtonGroupTests.fs" />
+    <Compile Include="accessibility/ButtonMenuTests.fs" />
+    <Compile Include="accessibility/ButtonTests.fs" />
+    <Compile Include="accessibility/CheckboxTests.fs" />
+    <Compile Include="accessibility/ChipSetTests.fs" />
+    <Compile Include="accessibility/ChipTests.fs" />
+    <Compile Include="accessibility/DialogTests.fs" />
+    <Compile Include="accessibility/DrawerTests.fs" />
+    <Compile Include="accessibility/DropdownTests.fs" />
+    <Compile Include="accessibility/ExpansionPanelTests.fs" />
+    <Compile Include="accessibility/FieldTests.fs" />
+    <Compile Include="accessibility/LinkTests.fs" />
+    <Compile Include="accessibility/ListTests.fs" />
+    <Compile Include="accessibility/NumericFieldTests.fs" />
+    <Compile Include="accessibility/RadioTests.fs" />
+    <Compile Include="accessibility/SelectTests.fs" />
+    <Compile Include="accessibility/SwitchTests.fs" />
+    <Compile Include="accessibility/TabsTests.fs" />
+    <Compile Include="accessibility/TooltipTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />

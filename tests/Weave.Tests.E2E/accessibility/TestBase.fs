@@ -1,16 +1,15 @@
-module Weave.Tests.E2E.AccessibilityTests
+namespace Weave.Tests.E2E
 
 open Deque.AxeCore.Commons
 open Deque.AxeCore.Playwright
 open Microsoft.Playwright.Xunit
 open Xunit
-open System.Threading.Tasks
 
-[<Collection("E2E")>]
-type AccessibilityTests(server: TestServerFixture) =
+[<AbstractClass>]
+type E2ETestBase(server: TestServerFixture) =
   inherit PageTest()
 
-  member private this.RunAxeScan(page: string) = task {
+  member this.NavigateTo(page: string) = task {
     do! this.Page.SetViewportSizeAsync(1280, 800)
     let! _ = this.Page.GotoAsync($"%s{server.BaseUrl}/#%s{page}")
 
@@ -21,6 +20,12 @@ type AccessibilityTests(server: TestServerFixture) =
           State = Microsoft.Playwright.WaitForSelectorState.Attached
         )
       )
+
+    ()
+  }
+
+  member this.RunAxeScan(page: string) = task {
+    do! this.NavigateTo(page)
 
     let options = AxeRunOptions()
 
@@ -48,27 +53,3 @@ type AccessibilityTests(server: TestServerFixture) =
 
       Assert.Fail($"Accessibility violations on #{page}:\n\n{violations}")
   }
-
-  [<Theory>]
-  [<InlineData("checkbox")>]
-  [<InlineData("radio")>]
-  [<InlineData("switch")>]
-  [<InlineData("field")>]
-  [<InlineData("numericfield")>]
-  [<InlineData("select")>]
-  [<InlineData("button")>]
-  [<InlineData("dialog")>]
-  [<InlineData("tabs")>]
-  [<InlineData("dropdown")>]
-  [<InlineData("expansion-panel")>]
-  [<InlineData("alert")>]
-  [<InlineData("appbar")>]
-  [<InlineData("drawer")>]
-  [<InlineData("link")>]
-  [<InlineData("list")>]
-  [<InlineData("chip")>]
-  [<InlineData("chipset")>]
-  [<InlineData("buttonmenu")>]
-  [<InlineData("buttongroup")>]
-  [<InlineData("tooltip")>]
-  member this.``component passes axe-core accessibility scan``(page: string) = this.RunAxeScan(page)

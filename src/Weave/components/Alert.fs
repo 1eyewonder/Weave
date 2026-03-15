@@ -68,8 +68,9 @@ type Alert =
         )
       | None -> Doc.Empty
 
-    div [ cl Css.``weave-alert``; yield! attrs ] [
-      iconDoc
-      div [ cl Css.``weave-alert__content`` ] [ content ]
-      closeDoc
-    ]
+    div [
+      cl Css.``weave-alert``
+      Attr.Create "role" "alert"
+      Attr.Create "aria-live" "polite"
+      yield! attrs
+    ] [ iconDoc; div [ cl Css.``weave-alert__content`` ] [ content ]; closeDoc ]

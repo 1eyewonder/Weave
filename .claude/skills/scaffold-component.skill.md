@@ -524,6 +524,79 @@ The fixture is a hand-written static HTML file using the component's BEM classes
 
 ---
 
+## 9. E2E Accessibility Tests — `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs`
+
+E2E tests validate keyboard navigation and accessibility in a live WebSharper-rendered page using **Playwright** (xUnit) and **axe-core**.
+
+**Rules:**
+
+- Inherit from `E2ETestBase(server)` (in `TestBase.fs`), which provides `NavigateTo`, `RunAxeScan`, and `Expect` helpers.
+- Every component must have at least a `passes axe-core accessibility scan` test.
+- **Use Playwright's typed Locator assertions instead of raw `EvaluateAsync` JavaScript strings wherever possible.** This gives compile-time safety on the F# side and catches selector/assertion errors earlier. Only fall back to `EvaluateAsync` when there is no typed API (e.g. DOM containment checks, injecting custom event listeners).
+- Use `this.Expect(locator)` (defined on `E2ETestBase`) to access Playwright assertions: `ToBeFocusedAsync()`, `ToBeCheckedAsync()`, `ToHaveAttributeAsync()`, `ToHaveClassAsync(Regex)`, `ToHaveCountAsync()`, `ToBeVisibleAsync()`, `ToBeHiddenAsync()`.
+- Playwright assertions auto-retry until the condition is met (or timeout), so they replace both `WaitForFunctionAsync` + `EvaluateAsync` in most cases.
+- When WebSharper's reactive DOM update needs time to propagate, use auto-retrying assertions (e.g. `Expect(panel).ToHaveClassAsync(Regex("expanded"))`) rather than `WaitForFunctionAsync` with JS strings.
+- Mark tests for known unimplemented features with `[<Fact(Skip = "Known gap: ...")>]` so they serve as a roadmap.
+
+```fsharp
+namespace Weave.Tests.E2E
+
+open System.Text.RegularExpressions
+open Microsoft.Playwright.Xunit
+open Xunit
+
+[<Collection("E2E")>]
+type {Name}Tests(server: TestServerFixture) =
+  inherit E2ETestBase(server)
+
+  [<Fact>]
+  member this.``passes axe-core accessibility scan``() = this.RunAxeScan("{name}")
+
+  [<Fact>]
+  member this.``element is focusable``() = task {
+    do! this.NavigateTo("{name}")
+    let element = this.Page.Locator(".weave-{name}").First
+    do! element.FocusAsync()
+    // Typed assertion — no raw JS needed
+    do! this.Expect(element).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``keyboard interaction works``() = task {
+    do! this.NavigateTo("{name}")
+    let element = this.Page.Locator(".weave-{name}").First
+    do! element.FocusAsync()
+    do! element.PressAsync("Enter")
+    // Auto-retrying assertion — handles async reactive DOM updates
+    do! this.Expect(element).ToHaveClassAsync(Regex("weave-{name}--active"))
+  }
+```
+
+### 9a. Register the E2E test page in `tests/Weave.Tests.E2E.Site/Pages.fs`
+
+Add a page function and register it in `renderPage`:
+
+```fsharp
+let private {name}Page () =
+  div [] [
+    {Name}.Create(...)
+  ]
+
+// In renderPage:
+| "{name}" -> {name}Page ()
+```
+
+### 9b. Register in `tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj`
+
+```xml
+<ItemGroup>
+  <!-- ... existing entries ... -->
+  <Compile Include="accessibility/{Name}Tests.fs" />
+</ItemGroup>
+```
+
+---
+
 ## Checklist
 
 Before marking the component as done, verify:
@@ -540,4 +613,7 @@ Before marking the component as done, verify:
 - [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship
 - [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link
 - [ ] `tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj` has `<Compile Include="{Name}LayoutTests.fs" />`
+- [ ] `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` created with axe-core scan and keyboard/focus tests using typed Playwright assertions
+- [ ] `tests/Weave.Tests.E2E.Site/Pages.fs` has page function and `renderPage` entry for the component
+- [ ] `tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj` has `<Compile Include="accessibility/{Name}Tests.fs" />`
 - [ ] Run `dotnet fantomas .` in the root of the repo to format all files

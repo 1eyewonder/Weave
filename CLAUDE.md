@@ -161,7 +161,9 @@ When asked to scaffold a new component, use the `/scaffold-component` skill — 
 7. `tests/Weave.Tests.Unit/{Name}Tests.fs` — Expecto tests for `toClass` mappings
 8. `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` — Playwright layout tests
 9. `tests/Weave.Tests.Rendering/fixtures/{name}.html` — static HTML fixture using compiled CSS
-10. Run `dotnet fantomas .` to format
+10. `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` — axe-core scan + keyboard/focus tests
+11. Register E2E page in `tests/Weave.Tests.E2E.Site/Pages.fs`
+12. Run `dotnet fantomas .` to format
 
 ## Testing Patterns
 
@@ -188,6 +190,15 @@ let {name}Tests =
 - Use `BoundingBoxAsync()` for positional assertions; allow ±1px tolerance
 - Use `Page.EvaluateAsync<string>` for computed styles on hidden elements
 - Fixtures link to `../../../src/Weave/styles.css` and use BEM classes directly
+
+**E2E accessibility tests** (Playwright/xUnit + axe-core) — test against live WebSharper-rendered pages:
+
+- Inherit `E2ETestBase(server)` (provides `NavigateTo`, `RunAxeScan`, `Expect`)
+- Every component needs at least `this.RunAxeScan("{name}")` for automated a11y scanning
+- **Prefer typed Playwright assertions over `EvaluateAsync` JS strings:** use `this.Expect(locator).ToBeFocusedAsync()`, `.ToBeCheckedAsync()`, `.ToHaveAttributeAsync()`, `.ToHaveClassAsync(Regex(...))`, `.ToHaveCountAsync()`, `.ToBeVisibleAsync()`, `.ToBeHiddenAsync()`
+- Playwright assertions auto-retry, so they replace `WaitForFunctionAsync` + `EvaluateAsync` in most cases
+- Only use `EvaluateAsync` when no typed API exists (e.g. DOM containment, injecting event listeners)
+- Mark unimplemented keyboard features with `[<Fact(Skip = "Known gap: ...")>]`
 
 ## Key Utilities
 

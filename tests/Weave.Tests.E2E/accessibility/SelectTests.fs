@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open System.Text.RegularExpressions
 open Microsoft.Playwright.Xunit
 open Xunit
 
@@ -15,8 +16,7 @@ type SelectTests(server: TestServerFixture) =
     do! this.NavigateTo("select")
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-select__value", activeClass)
+    do! this.Expect(combobox).ToBeFocusedAsync()
   }
 
   [<Fact>]
@@ -25,10 +25,8 @@ type SelectTests(server: TestServerFixture) =
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
     do! combobox.PressAsync("Enter")
-    // WebSharper reactive DOM updates are async — wait for the popover to appear
-    let! _ = this.Page.WaitForSelectorAsync(".weave-select__popover")
-    let! expanded = combobox.GetAttributeAsync("aria-expanded")
-    Assert.Equal("true", expanded)
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeVisibleAsync()
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-expanded", "true")
   }
 
   [<Fact>]
@@ -37,20 +35,9 @@ type SelectTests(server: TestServerFixture) =
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
     do! combobox.PressAsync("Enter")
-    let! _ = this.Page.WaitForSelectorAsync(".weave-select__popover")
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeVisibleAsync()
     do! this.Page.Keyboard.PressAsync("ArrowDown")
-
-    let! _ =
-      this.Page.WaitForFunctionAsync(
-        "() => (document.querySelector('.weave-select__value')?.getAttribute('aria-activedescendant') ?? '') !== ''"
-      )
-
-    let! activedescendant = combobox.GetAttributeAsync("aria-activedescendant")
-
-    Assert.False(
-      System.String.IsNullOrEmpty(activedescendant),
-      "aria-activedescendant should be set after ArrowDown"
-    )
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", Regex(".+"))
   }
 
   [<Fact>]
@@ -59,30 +46,12 @@ type SelectTests(server: TestServerFixture) =
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
     do! combobox.PressAsync("Enter")
-    let! _ = this.Page.WaitForSelectorAsync(".weave-select__popover")
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeVisibleAsync()
     do! this.Page.Keyboard.PressAsync("ArrowDown")
-
-    let! _ =
-      this.Page.WaitForFunctionAsync(
-        "() => (document.querySelector('.weave-select__value')?.getAttribute('aria-activedescendant') ?? '') !== ''"
-      )
-
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", Regex(".+"))
     do! this.Page.Keyboard.PressAsync("Enter")
-
-    let! _ =
-      this.Page.WaitForSelectorAsync(
-        ".weave-select__popover",
-        Microsoft.Playwright.PageWaitForSelectorOptions(
-          State = Microsoft.Playwright.WaitForSelectorState.Detached
-        )
-      )
-
-    let! expanded = combobox.GetAttributeAsync("aria-expanded")
-
-    Assert.True(
-      expanded <> "true",
-      $"Dropdown should be closed after selecting an item but aria-expanded was: {expanded}"
-    )
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeHiddenAsync()
+    do! this.Expect(combobox).Not.ToHaveAttributeAsync("aria-expanded", "true")
   }
 
   [<Fact>]
@@ -91,23 +60,10 @@ type SelectTests(server: TestServerFixture) =
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
     do! combobox.PressAsync("Enter")
-    let! _ = this.Page.WaitForSelectorAsync(".weave-select__popover")
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeVisibleAsync()
     do! this.Page.Keyboard.PressAsync("Escape")
-
-    let! _ =
-      this.Page.WaitForSelectorAsync(
-        ".weave-select__popover",
-        Microsoft.Playwright.PageWaitForSelectorOptions(
-          State = Microsoft.Playwright.WaitForSelectorState.Detached
-        )
-      )
-
-    let! expanded = combobox.GetAttributeAsync("aria-expanded")
-
-    Assert.True(
-      expanded <> "true",
-      $"Dropdown should be closed after Escape but aria-expanded was: {expanded}"
-    )
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeHiddenAsync()
+    do! this.Expect(combobox).Not.ToHaveAttributeAsync("aria-expanded", "true")
   }
 
   [<Fact>]
@@ -116,17 +72,8 @@ type SelectTests(server: TestServerFixture) =
     let combobox = this.Page.Locator(".weave-select__value").First
     do! combobox.FocusAsync()
     do! combobox.PressAsync("Enter")
-    let! _ = this.Page.WaitForSelectorAsync(".weave-select__popover")
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeVisibleAsync()
     do! this.Page.Keyboard.PressAsync("Tab")
-
-    let! _ =
-      this.Page.WaitForSelectorAsync(
-        ".weave-select__popover",
-        Microsoft.Playwright.PageWaitForSelectorOptions(
-          State = Microsoft.Playwright.WaitForSelectorState.Detached
-        )
-      )
-
-    let! expanded = combobox.GetAttributeAsync("aria-expanded")
-    Assert.True(expanded <> "true", $"Dropdown should be closed after Tab but aria-expanded was: {expanded}")
+    do! this.Expect(this.Page.Locator(".weave-select__popover")).ToBeHiddenAsync()
+    do! this.Expect(combobox).Not.ToHaveAttributeAsync("aria-expanded", "true")
   }

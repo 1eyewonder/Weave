@@ -24,6 +24,9 @@ type E2ETestBase(server: TestServerFixture) =
     ()
   }
 
+  member _.Expect(locator: Microsoft.Playwright.ILocator) =
+    Microsoft.Playwright.Assertions.Expect(locator)
+
   member this.RunAxeScan(page: string) = task {
     do! this.NavigateTo(page)
 

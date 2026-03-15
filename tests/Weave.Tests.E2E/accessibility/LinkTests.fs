@@ -15,6 +15,5 @@ type LinkTests(server: TestServerFixture) =
     do! this.NavigateTo("link")
     let link = this.Page.Locator(".weave-link").First
     do! link.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-link", activeClass)
+    do! this.Expect(link).ToBeFocusedAsync()
   }

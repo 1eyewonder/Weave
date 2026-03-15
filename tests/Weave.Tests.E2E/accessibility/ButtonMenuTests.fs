@@ -13,51 +13,38 @@ type ButtonMenuTests(server: TestServerFixture) =
   [<Fact>]
   member this.``button menu trigger is focusable``() = task {
     do! this.NavigateTo("buttonmenu")
-    let trigger = this.Page.Locator(".weave-button-menu__trigger")
-    do! trigger.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-button", activeClass)
+    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    do! button.FocusAsync()
+    do! this.Expect(button).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: ButtonMenu trigger uses clickTapViewGuarded (pointerup) — keyboard Enter fires a synthetic click but not pointerup, so the menu does not open")>]
   member this.``Enter on trigger opens the button menu``() = task {
     do! this.NavigateTo("buttonmenu")
-    let trigger = this.Page.Locator(".weave-button-menu__trigger")
-    do! trigger.FocusAsync()
-    do! trigger.PressAsync("Enter")
-    let! _ = this.Page.WaitForSelectorAsync(".weave-button-menu--open")
+    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
 
-    let! hasOpenClass =
-      this.Page.EvaluateAsync<bool>(
-        "() => document.querySelector('.weave-button-menu').classList.contains('weave-button-menu--open')"
-      )
-
-    Assert.True(hasOpenClass, "Button menu should have weave-button-menu--open class after Enter")
+    do! this.Expect(this.Page.Locator(".weave-button-menu--open")).ToHaveCountAsync(1)
   }
 
   [<Fact(Skip = "Known gap: ButtonMenu has no ArrowDown/Up item navigation")>]
   member this.``ArrowDown navigates button menu items``() = task {
     do! this.NavigateTo("buttonmenu")
-    let trigger = this.Page.Locator(".weave-button-menu__trigger")
-    do! trigger.FocusAsync()
-    do! trigger.PressAsync("Enter")
+    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
     do! this.Page.Keyboard.PressAsync("ArrowDown")
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-button-menu__item", activeClass)
+    do! this.Expect(this.Page.Locator(".weave-button-menu__item").First).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: ButtonMenu has no Escape handler")>]
   member this.``Escape closes the open button menu``() = task {
     do! this.NavigateTo("buttonmenu")
-    let trigger = this.Page.Locator(".weave-button-menu__trigger")
-    do! trigger.FocusAsync()
-    do! trigger.PressAsync("Enter")
+    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
     do! this.Page.Keyboard.PressAsync("Escape")
 
-    let! hasOpenClass =
-      this.Page.EvaluateAsync<bool>(
-        "() => document.querySelector('.weave-button-menu').classList.contains('weave-button-menu--open')"
-      )
-
-    Assert.False(hasOpenClass, "Button menu should be closed after Escape")
+    do! this.Expect(this.Page.Locator(".weave-button-menu--open")).ToHaveCountAsync(0)
   }

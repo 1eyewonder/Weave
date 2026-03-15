@@ -15,8 +15,7 @@ type RadioTests(server: TestServerFixture) =
     do! this.NavigateTo("radio")
     let input = this.Page.Locator(".weave-radio__input").First
     do! input.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-radio__input", activeClass)
+    do! this.Expect(input).ToBeFocusedAsync()
   }
 
   [<Fact>]
@@ -26,8 +25,7 @@ type RadioTests(server: TestServerFixture) =
     let inputB = this.Page.Locator(".weave-radio__input").Nth(1)
     do! inputB.FocusAsync()
     do! inputB.PressAsync("Space")
-    let! isChecked = inputB.EvaluateAsync<bool>("el => el.checked")
-    Assert.True(isChecked, "Radio B should be selected after pressing Space")
+    do! this.Expect(inputB).ToBeCheckedAsync()
   }
 
   [<Fact>]
@@ -38,6 +36,5 @@ type RadioTests(server: TestServerFixture) =
     let inputB = this.Page.Locator(".weave-radio__input").Nth(1)
     do! inputA.FocusAsync()
     do! this.Page.Keyboard.PressAsync("ArrowDown")
-    let! isChecked = inputB.EvaluateAsync<bool>("el => el.checked")
-    Assert.True(isChecked, "Radio B should be selected after ArrowDown from radio A")
+    do! this.Expect(inputB).ToBeCheckedAsync()
   }

@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open System.Text.RegularExpressions
 open Microsoft.Playwright.Xunit
 open Xunit
 
@@ -15,8 +16,7 @@ type TabsTests(server: TestServerFixture) =
     do! this.NavigateTo("tabs")
     let firstTab = this.Page.Locator(".weave-tabs__tab").First
     do! firstTab.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-tabs__tab", activeClass)
+    do! this.Expect(firstTab).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: Tab buttons use clickTapView (pointerup) — keyboard Enter fires a synthetic click but not pointerup, so the tab does not activate")>]
@@ -26,31 +26,15 @@ type TabsTests(server: TestServerFixture) =
     let secondTab = this.Page.Locator(".weave-tabs__tab").Nth(1)
     do! secondTab.FocusAsync()
     do! secondTab.PressAsync("Enter")
-
-    let! _ =
-      this.Page.WaitForFunctionAsync(
-        "() => document.querySelectorAll('.weave-tabs__tab')[1].classList.contains('weave-tabs__tab--active')"
-      )
-
-    let! hasActiveClass =
-      secondTab.EvaluateAsync<bool>("el => el.classList.contains('weave-tabs__tab--active')")
-
-    Assert.True(hasActiveClass, "Second tab should be active after pressing Enter")
+    do! this.Expect(secondTab).ToHaveClassAsync(Regex("weave-tabs__tab--active"))
   }
 
   [<Fact(Skip = "Known gap: Tabs has no ArrowLeft/ArrowRight navigation")>]
   member this.``ArrowRight moves focus to the next tab``() = task {
     do! this.NavigateTo("tabs")
     let firstTab = this.Page.Locator(".weave-tabs__tab").First
+    let secondTab = this.Page.Locator(".weave-tabs__tab").Nth(1)
     do! firstTab.FocusAsync()
     do! this.Page.Keyboard.PressAsync("ArrowRight")
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-tabs__tab", activeClass)
-
-    let! isFirst =
-      this.Page.EvaluateAsync<bool>(
-        "() => document.activeElement === document.querySelectorAll('.weave-tabs__tab')[0]"
-      )
-
-    Assert.False(isFirst, "Focus should have moved away from the first tab")
+    do! this.Expect(secondTab).ToBeFocusedAsync()
   }

@@ -15,14 +15,13 @@ type ButtonTests(server: TestServerFixture) =
     do! this.NavigateTo("button")
     let button = this.Page.Locator(".weave-button").First
     do! button.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-button", activeClass)
+    do! this.Expect(button).ToBeFocusedAsync()
   }
 
   [<Fact>]
   member this.``Enter activates a button``() = task {
     do! this.NavigateTo("button")
-    // Inject a click counter before pressing Enter
+    // Inject a click counter
     let! _ =
       this.Page.EvaluateAsync<obj>(
         "() => { window.__clickCount = 0; document.querySelector('.weave-button').addEventListener('click', () => window.__clickCount++) }"
@@ -39,6 +38,5 @@ type ButtonTests(server: TestServerFixture) =
     do! this.NavigateTo("button")
     let disabledButton = this.Page.Locator(".weave-button--disabled").First
     do! disabledButton.FocusAsync()
-    let! activeTag = this.Page.EvaluateAsync<string>("() => document.activeElement?.tagName ?? 'BODY'")
-    Assert.NotEqual<string>("BUTTON", activeTag)
+    do! this.Expect(disabledButton).Not.ToBeFocusedAsync()
   }

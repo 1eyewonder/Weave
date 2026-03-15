@@ -15,16 +15,14 @@ type DialogTests(server: TestServerFixture) =
     do! this.NavigateTo("dialog")
     let actionButton = this.Page.Locator(".weave-dialog__window .weave-button").First
     do! actionButton.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-button", activeClass)
+    do! this.Expect(actionButton).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: Dialog has no Escape handler")>]
   member this.``Escape closes the dialog``() = task {
     do! this.NavigateTo("dialog")
     do! this.Page.Keyboard.PressAsync("Escape")
-    let! count = this.Page.Locator(".weave-dialog").CountAsync()
-    Assert.Equal(0, count)
+    do! this.Expect(this.Page.Locator(".weave-dialog")).ToHaveCountAsync(0)
   }
 
   [<Fact(Skip = "Known gap: Dialog has no focus trap")>]

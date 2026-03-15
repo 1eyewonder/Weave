@@ -15,8 +15,7 @@ type DropdownTests(server: TestServerFixture) =
     do! this.NavigateTo("dropdown")
     let trigger = this.Page.Locator(".weave-dropdown .weave-button").First
     do! trigger.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-button", activeClass)
+    do! this.Expect(trigger).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: Dropdown trigger uses clickTapViewGuarded (pointerup) — keyboard Enter fires a synthetic click but not pointerup, so the list does not open")>]
@@ -25,9 +24,7 @@ type DropdownTests(server: TestServerFixture) =
     let trigger = this.Page.Locator(".weave-dropdown .weave-button").First
     do! trigger.FocusAsync()
     do! trigger.PressAsync("Enter")
-    do! this.Page.Locator(".weave-dropdown__list").WaitForAsync()
-    let! count = this.Page.Locator(".weave-dropdown__list").CountAsync()
-    Assert.True(count > 0, "Dropdown list should be in DOM after Enter")
+    do! this.Expect(this.Page.Locator(".weave-dropdown__list")).ToBeVisibleAsync()
   }
 
   [<Fact(Skip = "Known gap: Dropdown has no ArrowDown/Up item navigation")>]
@@ -37,8 +34,7 @@ type DropdownTests(server: TestServerFixture) =
     do! trigger.FocusAsync()
     do! trigger.PressAsync("Enter")
     do! this.Page.Keyboard.PressAsync("ArrowDown")
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-dropdown__item", activeClass)
+    do! this.Expect(this.Page.Locator(".weave-dropdown__item").First).ToBeFocusedAsync()
   }
 
   [<Fact(Skip = "Known gap: Dropdown has no Escape handler")>]
@@ -48,6 +44,5 @@ type DropdownTests(server: TestServerFixture) =
     do! trigger.FocusAsync()
     do! trigger.PressAsync("Enter")
     do! this.Page.Keyboard.PressAsync("Escape")
-    let! count = this.Page.Locator(".weave-dropdown__list").CountAsync()
-    Assert.Equal(0, count)
+    do! this.Expect(this.Page.Locator(".weave-dropdown__list")).ToHaveCountAsync(0)
   }

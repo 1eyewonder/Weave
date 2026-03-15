@@ -15,8 +15,7 @@ type CheckboxTests(server: TestServerFixture) =
     do! this.NavigateTo("checkbox")
     let input = this.Page.Locator(".weave-checkbox__input").First
     do! input.FocusAsync()
-    let! activeClass = this.Page.EvaluateAsync<string>("() => document.activeElement?.className ?? ''")
-    Assert.Contains("weave-checkbox__input", activeClass)
+    do! this.Expect(input).ToBeFocusedAsync()
   }
 
   [<Fact>]
@@ -25,8 +24,7 @@ type CheckboxTests(server: TestServerFixture) =
     let input = this.Page.Locator(".weave-checkbox__input").First
     do! input.FocusAsync()
     do! input.PressAsync("Space")
-    let! isChecked = input.EvaluateAsync<bool>("el => el.checked")
-    Assert.True(isChecked, "Checkbox should be checked after pressing Space")
+    do! this.Expect(input).ToBeCheckedAsync()
   }
 
   [<Fact>]
@@ -34,6 +32,5 @@ type CheckboxTests(server: TestServerFixture) =
     do! this.NavigateTo("checkbox")
     let disabledInput = this.Page.Locator(".weave-checkbox__input[disabled]").First
     do! disabledInput.FocusAsync()
-    let! activeTag = this.Page.EvaluateAsync<string>("() => document.activeElement?.tagName ?? 'BODY'")
-    Assert.NotEqual<string>("INPUT", activeTag)
+    do! this.Expect(disabledInput).Not.ToBeFocusedAsync()
   }

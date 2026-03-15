@@ -159,11 +159,22 @@ type TabPanel =
   /// <summary>
   /// Renders a single tab panel that is visible only when its index matches the active tab.
   /// </summary>
-  static member Create(content: Doc, index: int, activeIndex: View<int>, ?attrs: Attr list) =
+  static member Create(content: Doc, index: int, activeIndex: View<int>, ?groupId: int, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
+
+    let idAttrs =
+      match groupId with
+      | Some gid -> [
+          Attr.Create "id" (sprintf "weave-tabs-%d-panel-%d" gid index)
+          Attr.Create "aria-labelledby" (sprintf "weave-tabs-%d-tab-%d" gid index)
+        ]
+      | None -> []
 
     div [
       cl Css.``weave-tabs__panel``
+      Attr.Create "role" "tabpanel"
+      Attr.Create "tabindex" "0"
+      yield! idAttrs
       activeIndex
       |> View.Map(fun ai -> if ai = index then "block" else "none")
       |> Attr.DynamicStyle "display"
@@ -262,6 +273,58 @@ module private TabsInternal =
         indicatorEl?style?top <- string<float> tabTop + "px"
         indicatorEl?style?height <- string<float> tabHeight + "px"
 
+  let mutable private nextGroupId = 0
+
+  let newGroupId () =
+    let id = nextGroupId
+    nextGroupId <- nextGroupId + 1
+    id
+
+  let private isTabDisabled (el: Dom.Element) : bool = el?disabled
+
+  let findEnabledTabIndex (headerEl: Dom.Element) (fromIndex: int) (direction: int) =
+    let tabs = headerEl.QuerySelectorAll("[role='tab']")
+    let count = tabs.Length
+
+    if count = 0 then
+      None
+    else
+      let mutable i = (fromIndex + direction + count) % count
+      let mutable iterations = 0
+
+      while iterations < count && isTabDisabled (tabs.[i] :?> Dom.Element) do
+        i <- (i + direction + count) % count
+        iterations <- iterations + 1
+
+      if iterations < count then Some i else None
+
+  let findFirstEnabledTabIndex (headerEl: Dom.Element) =
+    let tabs = headerEl.QuerySelectorAll("[role='tab']")
+    let count = tabs.Length
+    let mutable i = 0
+
+    while i < count && isTabDisabled (tabs.[i] :?> Dom.Element) do
+      i <- i + 1
+
+    if i < count then Some i else None
+
+  let findLastEnabledTabIndex (headerEl: Dom.Element) =
+    let tabs = headerEl.QuerySelectorAll("[role='tab']")
+    let count = tabs.Length
+    let mutable i = count - 1
+
+    while i >= 0 && isTabDisabled (tabs.[i] :?> Dom.Element) do
+      i <- i - 1
+
+    if i >= 0 then Some i else None
+
+  let focusTabAtIndex (headerEl: Dom.Element) (index: int) =
+    let tabs = headerEl.QuerySelectorAll("[role='tab']")
+
+    if index >= 0 && index < tabs.Length then
+      let el = tabs.[index] :?> Dom.Element
+      el?focus ()
+
 [<JavaScript>]
 type Tabs =
 
@@ -278,6 +341,7 @@ type Tabs =
     let activeIndex = defaultArg activeIndex (Var.Create 0)
     let position = defaultArg position Position.Top
     let attrs = defaultArg attrs []
+    let groupId = TabsInternal.newGroupId ()
 
     let headerRef = Var.Create<Dom.Element option> None
     let showScrollButtons = Var.Create false
@@ -338,15 +402,62 @@ type Tabs =
     let tabItem (tabDef: TabDef) (index: int) =
       let isActive = activeIndex.View |> View.Map(fun ai -> ai = index)
 
+      let navigateTo findFn =
+        match headerRef.Value with
+        | Some el ->
+          match findFn el with
+          | Some targetIndex ->
+            selectTab targetIndex
+            TabsInternal.focusTabAtIndex el targetIndex
+          | None -> ()
+        | None -> ()
+
+      let isHorizontal = Position.isHorizontal position
+      let nextKey = if isHorizontal then "ArrowRight" else "ArrowDown"
+      let prevKey = if isHorizontal then "ArrowLeft" else "ArrowUp"
+
       button [
         cl Css.``weave-tabs__tab``
         attr.``type`` "button"
+        Attr.Create "role" "tab"
+        Attr.Create "id" (sprintf "weave-tabs-%d-tab-%d" groupId index)
+        Attr.Create "aria-controls" (sprintf "weave-tabs-%d-panel-%d" groupId index)
+
+        isActive
+        |> View.Map(fun active -> if active then "true" else "false")
+        |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-selected", v))
+
+        isActive
+        |> View.Map(fun active -> if active then "0" else "-1")
+        |> Attr.DynamicCustom(fun el v -> el.SetAttribute("tabindex", v))
+
         isActive |> Attr.DynamicClassPred Css.``weave-tabs__tab--active``
         tabDef.Disabled |> Attr.DynamicClassPred Css.``weave-tabs__tab--disabled``
         Attr.enabled (View.not tabDef.Disabled)
+
         on.clickTapView tabDef.Disabled (fun _ _ disabled ->
           if not disabled then
             selectTab index)
+
+        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
+          match ev.Key with
+          | k when k = nextKey ->
+            ev.PreventDefault()
+            navigateTo (fun el -> TabsInternal.findEnabledTabIndex el index 1)
+          | k when k = prevKey ->
+            ev.PreventDefault()
+            navigateTo (fun el -> TabsInternal.findEnabledTabIndex el index -1)
+          | "Home" ->
+            ev.PreventDefault()
+            navigateTo TabsInternal.findFirstEnabledTabIndex
+          | "End" ->
+            ev.PreventDefault()
+            navigateTo TabsInternal.findLastEnabledTabIndex
+          | "Enter"
+          | " " ->
+            ev.PreventDefault()
+            selectTab index
+          | _ -> ())
       ] [ tabDef.Header ]
 
     let indicator = div [ cl Css.``weave-tabs__indicator`` ] []
@@ -354,6 +465,7 @@ type Tabs =
     let header =
       div [
         cl Css.``weave-tabs__header``
+        Attr.Create "role" "tablist"
         on.afterRender (fun el ->
           Var.Set headerRef (Some el)
 
@@ -384,6 +496,8 @@ type Tabs =
       button [
         cl Css.``weave-tabs__scroll-btn``
         attr.``type`` "button"
+        Attr.Create "tabindex" "-1"
+        Attr.Create "aria-label" "Scroll tabs backward"
         on.clickTap (fun _ _ -> scrollBack ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
       ] [ scrollBackIcon ]
@@ -392,6 +506,8 @@ type Tabs =
       button [
         cl Css.``weave-tabs__scroll-btn``
         attr.``type`` "button"
+        Attr.Create "tabindex" "-1"
+        Attr.Create "aria-label" "Scroll tabs forward"
         on.clickTap (fun _ _ -> scrollForward ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
       ] [ scrollForwardIcon ]
@@ -400,7 +516,7 @@ type Tabs =
       div [ cl Css.``weave-tabs__panels`` ] [
         tabs
         |> Doc.BindView(
-          List.mapi (fun i t -> TabPanel.Create(t.Panel, i, activeIndex.View))
+          List.mapi (fun i t -> TabPanel.Create(t.Panel, i, activeIndex.View, groupId = groupId))
           >> Doc.Concat
         )
       ]

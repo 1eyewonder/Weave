@@ -17,10 +17,10 @@
   user-select: none;
   box-sizing: border-box;
   transition:
-    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    background-color var(--weave-duration-medium) $ease-standard 0ms,
+    border-color var(--weave-duration-medium) $ease-standard 0ms,
+    box-shadow var(--weave-duration-medium) $ease-standard 0ms,
+    opacity var(--weave-duration-medium) $ease-standard 0ms;
   border: 1px solid transparent;
   color: var(--palette-text-primary);
 
@@ -60,9 +60,8 @@
     line-height: 1;
     margin-left: density-spacing(4, 2);
     cursor: pointer;
-    // TODO: candidate for tokenization -- no suitable opacity variable in _themes.scss yet
-    opacity: 0.7;
-    transition: opacity 150ms ease;
+    opacity: var(--weave-opacity-secondary-hover);
+    transition: opacity var(--weave-duration-short) $ease-standard;
 
     @media (hover: hover) and (pointer: fine) {
       &:hover {
@@ -151,13 +150,13 @@
     &.weave-chip--#{$color} {
       @media (hover: hover) and (pointer: fine) {
         &:hover {
-          background-color: rgba(var(--palette-#{$color}-rgb), 0.2);
+          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-hover));
         }
       }
 
       &:focus-visible,
       &:active {
-        background-color: rgba(var(--palette-#{$color}-rgb), 0.25);
+        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-focus));
       }
     }
   }
@@ -173,7 +172,7 @@
 }
 
 .weave-chip--disabled {
-  opacity: 0.38;
+  opacity: var(--weave-opacity-disabled);
   pointer-events: none;
   cursor: default;
 }

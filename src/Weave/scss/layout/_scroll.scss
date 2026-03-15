@@ -1,3 +1,5 @@
+@use "../abstracts/variables" as *;
+
 .weave-scroll-locked {
   padding-right: 8px;
   overflow: hidden;
@@ -46,7 +48,7 @@
     bottom: 16px;
     right: 16px;
     opacity: 1;
-    transition: transform 0.5s;
+    transition: transform var(--weave-duration-long) $ease-standard;
     flex: 1;
   }
 
@@ -54,7 +56,7 @@
     bottom: 16px;
     right: 16px;
     opacity: 0;
-    transition: all 0.5s;
+    transition: all var(--weave-duration-long) $ease-standard;
     visibility: hidden;
     transform: scale(0) rotate(180deg);
     flex: 0;

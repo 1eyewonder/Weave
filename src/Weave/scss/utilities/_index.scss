@@ -6,7 +6,9 @@
 @use 'flexbox';
 
 @use 'interactivity/cursor';
+@use 'interactivity/opacity';
 @use 'interactivity/pointerevents';
+@use 'interactivity/transition-speed';
 
 @use 'layout/display';
 @use 'layout/object-fit';

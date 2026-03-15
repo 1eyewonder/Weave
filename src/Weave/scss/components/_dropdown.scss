@@ -1,3 +1,4 @@
+@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 .weave-dropdown {
@@ -14,7 +15,7 @@
 .weave-dropdown__chevron {
   display: inline-flex;
   margin-left: 8px;
-  transition: transform 0.1s;
+  transition: transform var(--weave-duration-shorter) $ease-standard;
 }
 .weave-dropdown__chevron--open {
   transform: rotate(180deg);
@@ -25,7 +26,7 @@
   max-width: none;
   background: var(--palette-surface);
   box-shadow: var(--palette-shadow-2);
-  border: 1px solid rgba(var(--palette-text-primary-rgb), 0.5);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-scrim));
   z-index: var(--weave-zindex-dropdown);
   position: absolute;
   display: flex;
@@ -120,7 +121,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background var(--weave-duration-shorter) $ease-standard;
   // density 0 (Compact): 38px | density 1 (Standard): 48px | density 2 (Spacious): 58px
   min-height: density-spacing(38, 10);
 }

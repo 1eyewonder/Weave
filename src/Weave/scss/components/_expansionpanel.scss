@@ -5,14 +5,14 @@
   flex: 0 1 auto;
   position: relative;
   max-width: 100%;
-  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  transition: var(--weave-duration-long) $ease-expansion;
   border-radius: var(--default-borderradius);
 
   .weave-expansion-panel {
     border-radius: var(--default-borderradius);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, var(--weave-alpha-subtle));
     overflow: hidden;
-    transition: box-shadow 0.2s;
+    transition: box-shadow var(--weave-duration-standard) $ease-standard;
   }
 
   .weave-expansion-panel__header {
@@ -24,7 +24,7 @@
     padding: density-spacing(12, 4);
     background: var(--palette-surface);
     border-bottom: 1px solid var(--palette-divider);
-    transition: background 0.2s;
+    transition: background var(--weave-duration-standard) $ease-standard;
     font-family: var(--typography-h6-family);
     font-size: var(--typography-h6-size);
     font-weight: var(--typography-h6-weight);
@@ -45,7 +45,7 @@
 
   .weave-expansion-panel--expanded {
     .weave-expansion-panel__header {
-      transition: color 0.2s, background 0.2s;
+      transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
     }
 
     .weave-expansion-panel__content {
@@ -54,7 +54,7 @@
     }
 
     .weave-expansion-panel__header--filled {
-      transition: color 0.2s, background 0.2s;
+      transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
       background-color: var(--palette-background);
     }
     @each $color in $palette-colors {
@@ -66,7 +66,7 @@
 
   // Hover highlights regardless of expanded/collapsed state
   .weave-expansion-panel__header--highlight {
-    transition: color 0.2s, background 0.2s;
+    transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
     &:hover {
       color: var(--palette-action-default-hover);
     }
@@ -89,7 +89,7 @@
 
   .weave-expansion-panel__icon {
     width: 40px;
-    transition: transform 0.2s;
+    transition: transform var(--weave-duration-standard) $ease-standard;
   }
 
   .weave-expansion-panel__content {
@@ -99,7 +99,7 @@
     font-size: var(--typography-body1-size);
     font-weight: var(--typography-body1-weight);
     line-height: var(--typography-body1-lineheight);
-    transition: max-height 0.2s, padding 0.2s;
+    transition: max-height var(--weave-duration-standard) $ease-standard, padding var(--weave-duration-standard) $ease-standard;
   }
 
   .weave-expansion-panel__content--with-gutters {

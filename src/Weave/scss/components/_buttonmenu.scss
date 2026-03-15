@@ -1,3 +1,4 @@
+@use "../abstracts/variables" as *;
 
 .weave-button-menu {
   position: relative;
@@ -8,7 +9,7 @@
 
 // Trigger button icon rotation when no openIcon is provided
 .weave-button-menu__trigger {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--weave-duration-long) $ease-standard;
   z-index: 1;
 }
 
@@ -29,8 +30,8 @@
   align-items: center;
   justify-content: center;
   transition:
-    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--weave-duration-long) $ease-standard,
+    transform var(--weave-duration-long) $ease-standard;
   font-size: inherit;
 }
 
@@ -103,8 +104,8 @@
   opacity: 0;
   transform: scale(0.4);
   transition:
-    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--weave-duration-standard) $ease-standard,
+    transform var(--weave-duration-standard) $ease-standard;
   pointer-events: none;
 }
 

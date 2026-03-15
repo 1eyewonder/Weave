@@ -97,8 +97,8 @@
   letter-spacing: var(--typography-button-letterspacing);
   text-transform: var(--typography-button-text-transform);
   transition:
-    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    color var(--weave-duration-standard) $ease-standard,
+    background-color var(--weave-duration-standard) $ease-standard;
 
   .weave-tabs--top &,
   .weave-tabs--bottom & {
@@ -148,10 +148,10 @@
 .weave-tabs__indicator {
   position: absolute;
   transition:
-    left 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    top 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    width 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    left var(--weave-duration-long) $ease-standard,
+    top var(--weave-duration-long) $ease-standard,
+    width var(--weave-duration-long) $ease-standard,
+    height var(--weave-duration-long) $ease-standard;
   pointer-events: none;
   z-index: 1;
 
@@ -197,7 +197,7 @@
   color: var(--palette-text-primary);
   padding: 4px;
   z-index: 2;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color var(--weave-duration-short) $ease-standard;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {

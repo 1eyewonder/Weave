@@ -119,12 +119,12 @@
   }
 
   > .weave-button-group__item:not(:last-child) {
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-right: 1px solid rgba(0, 0, 0, var(--weave-alpha-border));
   }
 
   &.weave-button-group--vertical > .weave-button-group__item:not(:last-child) {
     border-right: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, var(--weave-alpha-border));
   }
 
   @each $color in $palette-colors {
@@ -148,13 +148,13 @@
       }
 
       > .weave-button-group__item:not(:last-child) {
-        border-right-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+        border-right-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-medium));
       }
 
       &.weave-button-group--vertical
         > .weave-button-group__item:not(:last-child) {
         border-right: none;
-        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), 0.3);
+        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-medium));
       }
     }
   }
@@ -211,13 +211,13 @@
 
         @media (hover: hover) and (pointer: fine) {
           &:hover {
-            background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+            background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
           }
         }
 
         &:focus-visible,
         &:active {
-          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
         }
       }
 
@@ -282,24 +282,24 @@
 
         @media (hover: hover) and (pointer: fine) {
           &:hover {
-            background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+            background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
           }
         }
 
         &:focus-visible,
         &:active {
-          background-color: rgba(var(--palette-#{$color}-rgb), 0.4);
+          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
         }
       }
 
       > .weave-button-group__item:not(:last-child) {
-        border-right-color: rgba(var(--palette-#{$color}-rgb), 0.3);
+        border-right-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-medium));
       }
 
       &.weave-button-group--vertical
         > .weave-button-group__item:not(:last-child) {
         border-right: none;
-        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), 0.3);
+        border-bottom: 1px solid rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-medium));
       }
     }
   }
@@ -363,7 +363,7 @@
     transform: none;
 
     > * {
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform var(--weave-duration-long) $ease-standard;
       transform: rotate(45deg);
     }
   }

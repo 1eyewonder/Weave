@@ -1,7 +1,9 @@
+@use "../abstracts/variables" as *;
+
 .weave-main-content {
   margin: 0;
   flex: 1 1 auto;
-  transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  transition: margin var(--weave-duration-drawer) $ease-decelerate 0ms;
 }
 
 // AppBar --dense modifier offsets the main content padding

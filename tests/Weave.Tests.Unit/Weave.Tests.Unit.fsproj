@@ -30,6 +30,8 @@
     <Compile Include="TooltipTests.fs" />
     <Compile Include="DrawerTests.fs" />
     <Compile Include="SpacingTests.fs" />
+    <Compile Include="TransitionSpeedTests.fs" />
+    <Compile Include="OpacityTests.fs" />
     <Compile Include="NumericFieldTests.fs" />
     <Compile Include="SelectTests.fs" />
     <Compile Include="CrossComponentTests.fs" />

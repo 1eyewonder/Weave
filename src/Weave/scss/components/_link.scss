@@ -24,8 +24,8 @@
   color: var(--palette-primary);
 
   transition:
-    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    color var(--weave-duration-medium) $ease-standard 0ms,
+    opacity var(--weave-duration-medium) $ease-standard 0ms;
 
   &.weave-link--disabled {
     color: var(--palette-action-disabled);
@@ -36,7 +36,7 @@
   // Hover — gate behind media query to avoid sticky hover on touch devices
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      opacity: 0.8;
+      opacity: var(--weave-opacity-muted);
     }
   }
 

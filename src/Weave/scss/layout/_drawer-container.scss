@@ -187,6 +187,6 @@
     overflow: auto;
     scroll-behavior: smooth;
     // Margin transitions for persistent/mini drawer push behaviour
-    transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    transition: margin var(--weave-duration-drawer) $ease-decelerate 0ms;
   }
 }

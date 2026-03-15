@@ -27,9 +27,9 @@
     scale(1);
   color: var(--input-label-color, var(--palette-text-primary, currentColor));
   transition:
-    color 200ms cubic-bezier(0, 0, 0.2, 1),
-    transform 200ms cubic-bezier(0, 0, 0.2, 1),
-    max-width 200ms cubic-bezier(0, 0, 0.2, 1);
+    color var(--weave-duration-standard) $ease-decelerate,
+    transform var(--weave-duration-standard) $ease-decelerate,
+    max-width var(--weave-duration-standard) $ease-decelerate;
   z-index: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -62,8 +62,8 @@
 
   @include inputplaceholder {
     color: var(--input-label-color, var(--palette-text-primary, currentColor));
-    opacity: 0.42;
-    transition: opacity 200ms cubic-bezier(0, 0, 0.2, 1);
+    opacity: var(--weave-opacity-placeholder);
+    transition: opacity var(--weave-duration-standard) $ease-decelerate;
   }
 }
 
@@ -118,7 +118,7 @@
   font-size: 0.75em;
   visibility: hidden;
   max-width: 0.01px;
-  transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  transition: max-width var(--weave-duration-shortest) $ease-decelerate 0ms;
   white-space: nowrap;
 
   > span {
@@ -136,7 +136,7 @@
 
 .weave-field__outline-legend--float {
   max-width: 100%;
-  transition: max-width 100ms cubic-bezier(0, 0, 0.2, 1) 50ms;
+  transition: max-width var(--weave-duration-shorter) $ease-decelerate var(--weave-duration-shortest);
 }
 
 .weave-field__help-text {
@@ -151,15 +151,15 @@
   color: var(--input-help-text-color, currentColor);
   opacity: 0;
   transition:
-    max-height 200ms cubic-bezier(0, 0, 0.2, 1),
-    margin-top 200ms cubic-bezier(0, 0, 0.2, 1),
-    opacity 200ms cubic-bezier(0, 0, 0.2, 1);
+    max-height var(--weave-duration-standard) $ease-decelerate,
+    margin-top var(--weave-duration-standard) $ease-decelerate,
+    opacity var(--weave-duration-standard) $ease-decelerate;
 }
 
 .weave-field--show-help-text .weave-field__help-text {
   max-height: 3em;
   margin-top: 0.1875rem;
-  opacity: 0.7;
+  opacity: var(--weave-opacity-secondary-hover);
 }
 
 // ===========================================================================
@@ -279,7 +279,7 @@
 }
 
 .weave-field--disabled {
-  opacity: 0.6;
+  opacity: var(--weave-opacity-disabled-container);
   pointer-events: none;
 }
 
@@ -374,14 +374,14 @@
   color: currentColor;
   min-width: 24px;
   user-select: none;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color var(--weave-duration-short) $ease-standard;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgba(0, 0, 0, var(--weave-alpha-subtle));
   }
 
   &:active {
-    background-color: rgba(0, 0, 0, 0.08);
+    background-color: rgba(0, 0, 0, var(--weave-alpha-selected));
   }
 
   // Divider between the two buttons.

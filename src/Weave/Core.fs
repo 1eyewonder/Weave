@@ -151,6 +151,35 @@ module Core =
     | Spacious
 
   [<RequireQualifiedAccess; Struct>]
+  type TransitionSpeed =
+    | None
+    | Fast
+    | Standard
+    | Slow
+
+  module TransitionSpeed =
+
+    let toClass speed =
+      match speed with
+      | TransitionSpeed.None -> Css.``weave-transition--none``
+      | TransitionSpeed.Fast -> Css.``weave-transition--fast``
+      | TransitionSpeed.Standard -> Css.``weave-transition--standard``
+      | TransitionSpeed.Slow -> Css.``weave-transition--slow``
+
+  [<Struct>]
+  type Opacity = private Opacity of int
+
+  module Opacity =
+
+    let create percent =
+      match percent with
+      | p when p < 0 -> Opacity 0
+      | p when p > 100 -> Opacity 100
+      | p -> Opacity p
+
+    let toClass (Opacity percent) = $"weave-opacity-{percent}"
+
+  [<RequireQualifiedAccess; Struct>]
   type SurfaceColor =
     | Background
     | BackgroundDarker

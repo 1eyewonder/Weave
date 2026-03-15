@@ -30,7 +30,7 @@
 
 .weave-select__placeholder {
   color: var(--input-label-color, var(--palette-text-primary, currentColor));
-  opacity: 0.42;
+  opacity: var(--weave-opacity-placeholder);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -59,7 +59,7 @@
   font-size: 18px;
   line-height: 1;
   opacity: 0;
-  transition: opacity 150ms ease, background-color 150ms ease;
+  transition: opacity var(--weave-duration-short) $ease-standard, background-color var(--weave-duration-short) $ease-standard;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -71,12 +71,12 @@
 
 .weave-select--clearable.weave-select--has-value .weave-select__clear {
   display: inline-flex;
-  opacity: 0.5;
+  opacity: var(--weave-opacity-secondary);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .weave-select--clearable.weave-select--has-value:hover .weave-select__clear {
-    opacity: 0.7;
+    opacity: var(--weave-opacity-secondary-hover);
   }
 }
 
@@ -86,7 +86,7 @@
   justify-content: center;
   font-size: 20px;
   line-height: 1;
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--weave-duration-standard) $ease-standard;
   color: var(--palette-action-default);
   flex-shrink: 0;
 }
@@ -102,7 +102,7 @@
   min-width: 100%;
   z-index: var(--weave-zindex-dropdown);
   background: var(--palette-surface);
-  border: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
   border-radius: var(--default-borderradius);
   box-shadow: var(--palette-shadow-2);
   display: flex;
@@ -116,8 +116,8 @@
   transform-origin: top center;
   pointer-events: none;
   transition:
-    opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--weave-duration-standard) $ease-standard,
+    transform var(--weave-duration-standard) $ease-standard;
 }
 
 .weave-select--open .weave-select__popover {
@@ -125,15 +125,15 @@
   transform: scaleY(1);
   pointer-events: auto;
   transition:
-    opacity 150ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--weave-duration-short) $ease-standard,
+    transform var(--weave-duration-short) $ease-standard;
 }
 
 .weave-select__search {
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  border-bottom: 1px solid rgba(var(--palette-text-primary-rgb), 0.12);
+  border-bottom: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
   flex-shrink: 0;
 }
 
@@ -150,7 +150,7 @@
 
   @include inputplaceholder {
     color: var(--palette-text-secondary, currentColor);
-    opacity: 0.6;
+    opacity: var(--weave-opacity-disabled-container);
   }
 }
 
@@ -166,7 +166,7 @@
   font-weight: 500;
   font-size: var(--typography-body2-size, 0.875rem);
   color: var(--palette-text-secondary);
-  transition: background-color 150ms ease;
+  transition: background-color var(--weave-duration-short) $ease-standard;
   box-sizing: border-box;
 
   @media (hover: hover) and (pointer: fine) {
@@ -178,7 +178,7 @@
 
 .weave-select__divider {
   height: 1px;
-  background: rgba(var(--palette-text-primary-rgb), 0.12);
+  background: rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
   margin: 0;
   flex-shrink: 0;
 }
@@ -199,7 +199,7 @@
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(var(--palette-text-primary-rgb), 0.2);
+    background-color: rgba(var(--palette-text-primary-rgb), var(--weave-alpha-hover));
     border-radius: 3px;
   }
 }
@@ -219,7 +219,7 @@
   font-weight: var(--typography-body1-weight);
   line-height: var(--typography-body1-lineheight);
   letter-spacing: var(--typography-body1-letterspacing);
-  transition: background-color 150ms ease;
+  transition: background-color var(--weave-duration-short) $ease-standard;
   position: relative;
   text-decoration: none;
   background: none;
@@ -250,12 +250,12 @@
   --select-brand-color: var(--palette-primary);
   --select-brand-rgb: var(--palette-primary-rgb);
 
-  background-color: rgba(var(--select-brand-rgb), 0.08);
+  background-color: rgba(var(--select-brand-rgb), var(--weave-alpha-selected));
   color: var(--select-brand-color);
 }
 
 .weave-select__item--selected:hover:not(.weave-select__item--disabled) {
-  background-color: rgba(var(--select-brand-rgb), 0.16);
+  background-color: rgba(var(--select-brand-rgb), var(--weave-alpha-selected-hover));
 }
 
 .weave-select__item--disabled {
@@ -284,8 +284,8 @@
   box-sizing: border-box;
   position: relative;
   transition:
-    background-color 150ms ease,
-    border-color 150ms ease;
+    background-color var(--weave-duration-short) $ease-standard,
+    border-color var(--weave-duration-short) $ease-standard;
 }
 
 .weave-select__item-checkbox--checked {
@@ -350,12 +350,12 @@
     .weave-select__item--selected {
       --select-brand-color: var(--palette-#{$color});
       --select-brand-rgb: var(--palette-#{$color}-rgb);
-      background-color: rgba(var(--palette-#{$color}-rgb), 0.08);
+      background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
       color: var(--palette-#{$color});
     }
 
     .weave-select__item--selected:hover:not(.weave-select__item--disabled) {
-      background-color: rgba(var(--palette-#{$color}-rgb), 0.16);
+      background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected-hover));
     }
 
     .weave-select__item-checkbox--checked,
@@ -394,7 +394,7 @@
 }
 
 .weave-select--disabled {
-  opacity: 0.6;
+  opacity: var(--weave-opacity-disabled-container);
   pointer-events: none;
 
   .weave-field__control {
@@ -416,7 +416,7 @@
   }
 
   .weave-select__chevron {
-    opacity: 0.5;
+    opacity: var(--weave-opacity-secondary);
   }
 
   .weave-select__clear {
@@ -499,33 +499,6 @@
   .weave-select__list {
     max-height: 240px;
     padding: 2px 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .weave-select__popover,
-  .weave-select--open .weave-select__popover {
-    transition-duration: 0s;
-  }
-
-  .weave-select__chevron {
-    transition-duration: 0s;
-  }
-
-  .weave-select__clear {
-    transition-duration: 0s;
-  }
-
-  .weave-select__item {
-    transition-duration: 0s;
-  }
-
-  .weave-select__item-checkbox {
-    transition-duration: 0s;
-  }
-
-  .weave-select__select-all {
-    transition-duration: 0s;
   }
 }
 

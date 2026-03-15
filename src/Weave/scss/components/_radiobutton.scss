@@ -1,3 +1,4 @@
+@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 $radio-size: 20px;
@@ -96,7 +97,7 @@ $dot-size: 10px;
   border: 2px solid var(--radio-brand-color, var(--palette-action-default));
   background: var(--palette-background);
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background var(--weave-duration-standard) $ease-standard, border-color var(--weave-duration-standard) $ease-standard;
   position: relative;
 }
 

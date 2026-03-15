@@ -1,0 +1,43 @@
+.weave-transition--none {
+  --weave-duration-shortest: 0s;
+  --weave-duration-shorter: 0s;
+  --weave-duration-short: 0s;
+  --weave-duration-standard: 0s;
+  --weave-duration-medium: 0s;
+  --weave-duration-long: 0s;
+  --weave-duration-drawer: 0s;
+  --weave-duration-ripple: 0s;
+}
+
+.weave-transition--fast {
+  --weave-duration-shortest: 25ms;
+  --weave-duration-shorter: 50ms;
+  --weave-duration-short: 75ms;
+  --weave-duration-standard: 100ms;
+  --weave-duration-medium: 125ms;
+  --weave-duration-long: 150ms;
+  --weave-duration-drawer: 112ms;
+  --weave-duration-ripple: 300ms;
+}
+
+.weave-transition--standard {
+  --weave-duration-shortest: 50ms;
+  --weave-duration-shorter: 100ms;
+  --weave-duration-short: 150ms;
+  --weave-duration-standard: 200ms;
+  --weave-duration-medium: 250ms;
+  --weave-duration-long: 300ms;
+  --weave-duration-drawer: 225ms;
+  --weave-duration-ripple: 600ms;
+}
+
+.weave-transition--slow {
+  --weave-duration-shortest: 100ms;
+  --weave-duration-shorter: 200ms;
+  --weave-duration-short: 300ms;
+  --weave-duration-standard: 400ms;
+  --weave-duration-medium: 500ms;
+  --weave-duration-long: 600ms;
+  --weave-duration-drawer: 450ms;
+  --weave-duration-ripple: 1200ms;
+}

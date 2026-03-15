@@ -11,6 +11,35 @@ $font-family-heading: $font-family-base;
   // Must be a bare unitless integer — never set with a unit (e.g. 1px).
   --weave-density: 1;
 
+  // Transition duration scale
+  --weave-duration-shortest: 50ms;
+  --weave-duration-shorter:  100ms;
+  --weave-duration-short:    150ms;
+  --weave-duration-standard: 200ms;
+  --weave-duration-medium:   250ms;
+  --weave-duration-long:     300ms;
+  --weave-duration-drawer:   225ms;
+  --weave-duration-ripple:   600ms;
+
+  // Opacity scale — element opacity (used as `opacity: var(...)`)
+  --weave-opacity-disabled:          0.38;
+  --weave-opacity-disabled-container: 0.6;
+  --weave-opacity-placeholder:       0.42;
+  --weave-opacity-secondary:         0.5;
+  --weave-opacity-secondary-hover:   0.7;
+  --weave-opacity-muted:             0.8;
+
+  // Opacity scale — alpha channel (used in `rgba(color, var(...))`)
+  --weave-alpha-subtle:    0.04;
+  --weave-alpha-selected:  0.08;
+  --weave-alpha-border:    0.12;
+  --weave-alpha-selected-hover: 0.16;
+  --weave-alpha-hover:     0.2;
+  --weave-alpha-focus:     0.25;
+  --weave-alpha-medium:    0.3;
+  --weave-alpha-overlay:   0.4;
+  --weave-alpha-scrim:     0.5;
+
   --default-borderradius: #{map.get($border-radiuses, "sm")};
   --default-button-borderradius: #{map.get($border-radiuses, "md")};
   --grid-item-min-height: 24px;
@@ -145,4 +174,17 @@ $font-family-heading: $font-family-base;
   --typography-default-lineheight: 1.6;
   --typography-default-letterspacing: 0.01em;
   --typography-default-text-transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --weave-duration-shortest: 0s;
+    --weave-duration-shorter:  0s;
+    --weave-duration-short:    0s;
+    --weave-duration-standard: 0s;
+    --weave-duration-medium:   0s;
+    --weave-duration-long:     0s;
+    --weave-duration-drawer:   0s;
+    --weave-duration-ripple:   0s;
+  }
 }

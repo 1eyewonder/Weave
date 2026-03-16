@@ -59,7 +59,10 @@
   max-height: calc(100vh - var(--appbar-height)); // keep as fallback
   max-height: calc(100dvh - var(--appbar-height));
   overflow-y: auto;
-  outline-style: none;
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 .weave-dialog--center {

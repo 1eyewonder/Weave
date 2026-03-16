@@ -128,6 +128,45 @@ module ResizeListener =
       let size, _ = observe el
       sizeVar.Value <- Some size)
 
+/// <summary>
+/// Watches a DOM element and invokes a callback when it is removed from the
+/// document. Uses a MutationObserver on <c>document.body</c> with subtree
+/// observation. Call <c>Disconnect</c> to stop observing early.
+/// </summary>
+[<JavaScript>]
+module DomRemovalListener =
+
+  [<Inline "new MutationObserver($0)">]
+  let private createObserver (callback: unit -> unit) : obj = X<obj>
+
+  [<Inline "$0.observe($1, $2)">]
+  let private observe (obs: obj) (target: obj) (options: obj) : unit = X<unit>
+
+  type Listener = {
+    mutable Observer: obj option
+  } with
+
+    member this.Watch(el: Dom.Element, onRemoved: unit -> unit) =
+      this.Disconnect()
+
+      let obs =
+        createObserver (fun () ->
+          if not (As<bool>(el?isConnected)) then
+            this.Disconnect()
+            onRemoved ())
+
+      this.Observer <- Some obs
+      observe obs JS.Document?body (New [ "childList" => true; "subtree" => true ])
+
+    member this.Disconnect() =
+      match this.Observer with
+      | Some obs ->
+        obs?disconnect ()
+        this.Observer <- None
+      | None -> ()
+
+  let create () = { Observer = None }
+
 [<JavaScript>]
 module Disabled =
 

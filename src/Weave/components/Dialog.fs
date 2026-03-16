@@ -31,7 +31,36 @@ module Dialog =
     | Force
     | Optional of closeDialog: (unit -> unit)
 
+[<JavaScript>]
+module private DialogInternal =
+
+  let mutable idCounter = 0
+
+  let nextTitleId () =
+    idCounter <- idCounter + 1
+    sprintf "weave-dialog-title-%d" idCounter
+
+  let focusableSelector =
+    "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex=\"-1\"])"
+
+  let trapFocus (container: Dom.Element) (ev: Dom.KeyboardEvent) =
+    let focusable = container.QuerySelectorAll(focusableSelector)
+
+    if focusable.Length > 0 then
+      let first = As<Dom.Element>(focusable.Item 0)
+      let last = As<Dom.Element>(focusable.Item(focusable.Length - 1))
+      let active = As<Dom.Element>(JS.Document?activeElement)
+
+      if ev.ShiftKey then
+        if active = first || active = container then
+          ev.PreventDefault()
+          last?focus ()
+      else if active = last then
+        ev.PreventDefault()
+        first?focus ()
+
 open Dialog
+open DialogInternal
 
 [<JavaScript>]
 type DialogTitle =
@@ -66,6 +95,17 @@ type Dialog =
 
     let dialogPosition = defaultArg dialogPosition (View.Const DialogPosition.Center)
 
+    let titleId = nextTitleId ()
+    let previousFocus: obj option ref = ref None
+    let removalListener = DomRemovalListener.create ()
+
+    let restoreFocus () =
+      removalListener.Disconnect()
+
+      match previousFocus.Value with
+      | Some el -> el?focus ()
+      | None -> ()
+
     div [
       cls [ Css.``weave-dialog`` ]
 
@@ -87,8 +127,46 @@ type Dialog =
         on.mouseDownView forceInteraction
         <| fun _ _ interaction ->
           match interaction with
-          | Interaction.Optional closeDialog -> closeDialog ()
+          | Interaction.Optional closeDialog ->
+            restoreFocus ()
+            closeDialog ()
           | _ -> ()
       ] []
-      div [ cls [ Css.``weave-dialog__window`` ] ] [ title; content ]
+      div [
+        cls [ Css.``weave-dialog__window`` ]
+        Attr.Create "role" "dialog"
+        Attr.Create "aria-modal" "true"
+        Attr.Create "aria-labelledby" titleId
+        Attr.Create "tabindex" "-1"
+
+        on.afterRender (fun el ->
+          let active = JS.Document?activeElement
+
+          previousFocus.Value <-
+            if active <> null && active <> JS.Undefined then
+              Some active
+            else
+              None
+
+          let titleEl = el.QuerySelector("." + Css.``weave-dialog__title``)
+
+          if not (isNull titleEl) then
+            titleEl?id <- titleId
+
+          el?focus ()
+
+          removalListener.Watch(el, restoreFocus))
+
+        on.keyDownView forceInteraction
+        <| fun el ev interaction ->
+          match ev.Key with
+          | "Escape" ->
+            match interaction with
+            | Interaction.Optional closeDialog ->
+              restoreFocus ()
+              closeDialog ()
+            | Interaction.Force -> ()
+          | "Tab" -> trapFocus el ev
+          | _ -> ()
+      ] [ title; content ]
     ]

@@ -17,7 +17,7 @@
     <!-- Open, centered dialog with title, content, and actions -->
     <div id="dialog-open" class="weave-dialog weave-dialog--center">
       <div class="weave-dialog__backdrop"></div>
-      <div id="dialog-window" class="weave-dialog__window" style="width: 400px;">
+      <div id="dialog-window" class="weave-dialog__window" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabindex="-1" style="width: 400px;">
         <div id="dialog-title" class="weave-dialog__title">Dialog Title</div>
         <div id="dialog-content" class="weave-dialog__content">
           <p>Dialog body content goes here.</p>
@@ -32,8 +32,8 @@
     <!-- Dialog with topcenter position -->
     <div id="dialog-topcenter" class="weave-dialog weave-dialog--topcenter" style="position: relative; height: 400px;">
       <div class="weave-dialog__backdrop"></div>
-      <div id="dialog-topcenter-window" class="weave-dialog__window" style="width: 400px;">
-        <div class="weave-dialog__title">Top Center Dialog</div>
+      <div id="dialog-topcenter-window" class="weave-dialog__window" role="dialog" aria-modal="true" aria-labelledby="fixture-topcenter-title" tabindex="-1" style="width: 400px;">
+        <div id="fixture-topcenter-title" class="weave-dialog__title">Top Center Dialog</div>
         <div class="weave-dialog__content">Top center content</div>
       </div>
     </div>
@@ -41,8 +41,8 @@
     <!-- Bottom-center dialog -->
     <div id="dialog-bottomcenter" class="weave-dialog weave-dialog--bottomcenter">
       <div class="weave-dialog__backdrop"></div>
-      <div id="dialog-window-bottomcenter" class="weave-dialog__window" style="width: 300px;">
-        <div class="weave-dialog__title">Bottom Center</div>
+      <div id="dialog-window-bottomcenter" class="weave-dialog__window" role="dialog" aria-modal="true" aria-labelledby="fixture-bottomcenter-title" tabindex="-1" style="width: 300px;">
+        <div id="fixture-bottomcenter-title" class="weave-dialog__title">Bottom Center</div>
         <div class="weave-dialog__content">Bottom center content.</div>
       </div>
     </div>
@@ -50,8 +50,8 @@
     <!-- Backdrop should cover its container -->
     <div id="dialog-backdrop-test" class="weave-dialog weave-dialog--center" style="position: relative; width: 800px; height: 600px;">
       <div id="dialog-backdrop" class="weave-dialog__backdrop"></div>
-      <div class="weave-dialog__window" style="width: 300px;">
-        <div class="weave-dialog__title">Backdrop Test</div>
+      <div class="weave-dialog__window" role="dialog" aria-modal="true" aria-labelledby="fixture-backdrop-title" tabindex="-1" style="width: 300px;">
+        <div id="fixture-backdrop-title" class="weave-dialog__title">Backdrop Test</div>
         <div class="weave-dialog__content">Content</div>
       </div>
     </div>

@@ -143,21 +143,82 @@ module Pages =
     ]
 
   let private dialogPage () =
+    let isOpen = Var.Create true
+
+    isOpen.View
+    |> Doc.BindView(fun visible ->
+      if visible then
+        Dialog.Create(
+          DialogTitle.Create(text "Dialog Title"),
+          DialogContent.Create(
+            div [] [
+              Body1.Div("Dialog content goes here.")
+              div [] [
+                Button.Create(
+                  text "Action",
+                  (fun () -> ()),
+                  attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
+                )
+              ]
+            ]
+          ),
+          dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> isOpen.Value <- false))
+        )
+      else
+        Doc.Empty)
+
+  let private dialogForcePage () =
     Dialog.Create(
-      DialogTitle.Create(text "Dialog Title"),
+      DialogTitle.Create(text "Force Dialog Title"),
       DialogContent.Create(
         div [] [
-          Body1.Div("Dialog content goes here.")
+          Body1.Div("You must complete this action.")
           div [] [
             Button.Create(
-              text "Action",
+              text "Confirm",
               (fun () -> ()),
               attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
             )
           ]
         ]
-      )
+      ),
+      dialogInteraction = View.Const Dialog.Interaction.Force
     )
+
+  let private dialogTriggeredPage () =
+    let isOpen = Var.Create false
+
+    div [] [
+      Button.Create(
+        text "Open Dialog",
+        (fun () -> isOpen.Value <- true),
+        attrs = [
+          Attr.Create "id" "open-dialog-btn"
+          Button.Variant.toClass Button.Variant.Filled |> cl
+        ]
+      )
+      isOpen.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          Dialog.Create(
+            DialogTitle.Create(text "Triggered Dialog"),
+            DialogContent.Create(
+              div [] [
+                Body1.Div("Dialog opened by button.")
+                div [] [
+                  Button.Create(
+                    text "Action",
+                    (fun () -> ()),
+                    attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
+                  )
+                ]
+              ]
+            ),
+            dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> isOpen.Value <- false))
+          )
+        else
+          Doc.Empty)
+    ]
 
   let private tabsPage () =
     let tabs =
@@ -387,6 +448,8 @@ module Pages =
     | "select" -> selectPage ()
     | "button" -> buttonPage ()
     | "dialog" -> dialogPage ()
+    | "dialog-force" -> dialogForcePage ()
+    | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
     | "dropdown" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()

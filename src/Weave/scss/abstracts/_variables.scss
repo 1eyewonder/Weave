@@ -39,5 +39,5 @@ $breakpoints: (
 // Easing curves (compile-time constants, used via Sass interpolation)
 $ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
 $ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
-$ease-expansion:  cubic-bezier(0.25, 0.8, 0.5, 1);
+$ease-expansion:  cubic-bezier(0.25, 0, 1, 1);
 $ease-dialog:     cubic-bezier(0.39, 0.575, 0.565, 1);

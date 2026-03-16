@@ -220,4 +220,7 @@ type ExpansionPanel =
       |> Attr.DynamicClassPred Css.``weave-expansion-panel--collapsed``
 
       yield! attrs
-    ] [ header; content ]
+    ] [
+      header
+      div [ cl Css.``weave-expansion-panel__content-wrapper`` ] [ content ]
+    ]

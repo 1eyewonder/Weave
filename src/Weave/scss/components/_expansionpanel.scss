@@ -48,6 +48,10 @@
       transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
     }
 
+    .weave-expansion-panel__content-wrapper {
+      grid-template-rows: 1fr;
+    }
+
     .weave-expansion-panel__content {
       margin-top: 1rem;
       margin-bottom: 1rem;
@@ -77,12 +81,16 @@
     }
   }
 
+  .weave-expansion-panel__content-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--weave-duration-standard) $ease-expansion;
+  }
+
   .weave-expansion-panel--collapsed {
     .weave-expansion-panel__content {
-      max-height: 0;
       padding-top: 0;
       padding-bottom: 0;
-      overflow: hidden;
       border-top: none;
     }
   }
@@ -93,13 +101,14 @@
   }
 
   .weave-expansion-panel__content {
+    overflow: hidden;
     background: var(--palette-surface);
     color: var(--palette-text-primary);
     font-family: var(--typography-body1-family);
     font-size: var(--typography-body1-size);
     font-weight: var(--typography-body1-weight);
     line-height: var(--typography-body1-lineheight);
-    transition: max-height var(--weave-duration-standard) $ease-standard, padding var(--weave-duration-standard) $ease-standard;
+    transition: margin var(--weave-duration-standard) $ease-standard, padding var(--weave-duration-standard) $ease-standard;
   }
 
   .weave-expansion-panel__content--with-gutters {

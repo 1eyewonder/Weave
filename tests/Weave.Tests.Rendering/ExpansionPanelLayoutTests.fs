@@ -23,15 +23,15 @@ type ExpansionPanelLayoutTests() =
   }
 
   [<Fact>]
-  member this.``collapsed panel content has zero max-height``() = task {
+  member this.``collapsed panel content wrapper has zero-fraction grid rows``() = task {
     do! this.LoadFixture()
 
-    let! maxHeight =
+    let! gridRows =
       this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#content-collapsed')).maxHeight"
+        "() => getComputedStyle(document.querySelector('#wrapper-collapsed')).gridTemplateRows"
       )
 
-    Assert.Equal("0px", maxHeight)
+    Assert.Equal("0px", gridRows)
   }
 
   [<Fact>]
@@ -97,9 +97,9 @@ type ExpansionPanelLayoutTests() =
   member this.``only expanded panel in group has visible content``() = task {
     do! this.LoadFixture()
 
-    let! content1MaxHeight =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#group-content-1')).maxHeight"
+    let! content1Height =
+      this.Page.EvaluateAsync<float>(
+        "() => document.querySelector('#group-content-1').getBoundingClientRect().height"
       )
 
     let! content2Height =
@@ -107,14 +107,14 @@ type ExpansionPanelLayoutTests() =
         "() => document.querySelector('#group-content-2').getBoundingClientRect().height"
       )
 
-    let! content3MaxHeight =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#group-content-3')).maxHeight"
+    let! content3Height =
+      this.Page.EvaluateAsync<float>(
+        "() => document.querySelector('#group-content-3').getBoundingClientRect().height"
       )
 
-    Assert.Equal("0px", content1MaxHeight)
+    Assert.Equal(0.0, content1Height)
     Assert.True(content2Height > 0.0, $"Expanded panel content height {content2Height}px should be > 0")
-    Assert.Equal("0px", content3MaxHeight)
+    Assert.Equal(0.0, content3Height)
   }
 
   [<Fact>]

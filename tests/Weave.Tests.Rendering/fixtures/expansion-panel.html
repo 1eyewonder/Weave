@@ -14,12 +14,14 @@
     </style>
   </head>
   <body>
-    <!-- Collapsed panel: content has max-height: 0 -->
+    <!-- Collapsed panel: content hidden via grid-template-rows: 0fr -->
     <div class="weave-expansion-panels" style="width: 600px;">
       <div id="panel-collapsed" class="weave-expansion-panel weave-expansion-panel--collapsed">
         <div id="header-collapsed" class="weave-expansion-panel__header">Collapsed Panel</div>
-        <div id="content-collapsed" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Collapsed content
+        <div id="wrapper-collapsed" class="weave-expansion-panel__content-wrapper">
+          <div id="content-collapsed" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Collapsed content
+          </div>
         </div>
       </div>
     </div>
@@ -28,8 +30,10 @@
     <div class="weave-expansion-panels" style="width: 600px; margin-top: 16px;">
       <div id="panel-expanded" class="weave-expansion-panel weave-expansion-panel--expanded">
         <div id="header-expanded" class="weave-expansion-panel__header">Expanded Panel</div>
-        <div id="content-expanded" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Expanded content
+        <div id="wrapper-expanded" class="weave-expansion-panel__content-wrapper">
+          <div id="content-expanded" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Expanded content
+          </div>
         </div>
       </div>
     </div>
@@ -38,8 +42,10 @@
     <div class="weave-expansion-panels" style="width: 600px; margin-top: 16px;">
       <div id="panel-focus-color" class="weave-expansion-panel weave-expansion-panel--collapsed">
         <div id="header-focus-color" class="weave-expansion-panel__header weave-expansion-panel__header--focus-error" tabindex="0">Focus Color Panel</div>
-        <div id="content-focus-color" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Focus color content
+        <div class="weave-expansion-panel__content-wrapper">
+          <div id="content-focus-color" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Focus color content
+          </div>
         </div>
       </div>
     </div>
@@ -48,20 +54,26 @@
     <div id="panel-group" class="weave-expansion-panels" style="width: 600px; margin-top: 16px;">
       <div id="group-panel-1" class="weave-expansion-panel weave-expansion-panel--collapsed">
         <div id="group-header-1" class="weave-expansion-panel__header">Panel One</div>
-        <div id="group-content-1" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Content for panel one
+        <div class="weave-expansion-panel__content-wrapper">
+          <div id="group-content-1" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Content for panel one
+          </div>
         </div>
       </div>
       <div id="group-panel-2" class="weave-expansion-panel weave-expansion-panel--expanded">
         <div id="group-header-2" class="weave-expansion-panel__header">Panel Two</div>
-        <div id="group-content-2" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Content for panel two
+        <div class="weave-expansion-panel__content-wrapper">
+          <div id="group-content-2" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Content for panel two
+          </div>
         </div>
       </div>
       <div id="group-panel-3" class="weave-expansion-panel weave-expansion-panel--collapsed">
         <div id="group-header-3" class="weave-expansion-panel__header">Panel Three</div>
-        <div id="group-content-3" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
-          Content for panel three
+        <div class="weave-expansion-panel__content-wrapper">
+          <div id="group-content-3" class="weave-expansion-panel__content weave-expansion-panel__content--with-gutters">
+            Content for panel three
+          </div>
         </div>
       </div>
     </div>

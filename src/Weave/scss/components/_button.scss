@@ -48,7 +48,12 @@
     }
   }
 
-  &:focus-visible,
+  &:focus-visible {
+    outline: 2px solid var(--palette-primary);
+    outline-offset: 2px;
+    background-color: var(--palette-action-default-hover);
+  }
+
   &:active {
     background-color: var(--palette-action-default-hover);
   }
@@ -76,7 +81,12 @@
         }
       }
 
-      &:focus-visible,
+      &:focus-visible {
+        outline: 2px solid var(--palette-#{$color});
+        outline-offset: 2px;
+        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
+      }
+
       &:active {
         background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
       }
@@ -100,7 +110,12 @@
     }
   }
 
-  &:focus-visible,
+  &:focus-visible {
+    outline: 2px solid var(--palette-primary);
+    outline-offset: 2px;
+    background-color: var(--palette-action-default-hover);
+  }
+
   &:active {
     background-color: var(--palette-action-default-hover);
   }
@@ -121,7 +136,15 @@
         }
       }
 
-      &:focus-visible,
+      &:focus-visible {
+        outline: 2px solid var(--palette-#{$color});
+        outline-offset: 2px;
+        border: 2px
+          solid
+          rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-overlay));
+      }
+
       &:active {
         border: 2px
           solid
@@ -157,6 +180,8 @@
   }
 
   &:focus-visible {
+    outline: 2px solid var(--palette-primary);
+    outline-offset: 2px;
     box-shadow:
       0px 2px 4px -1px rgba(0, 0, 0, 0.2),
       0px 4px 5px 0px rgba(0, 0, 0, 0.14),
@@ -190,7 +215,12 @@
         }
       }
 
-      &:focus-visible,
+      &:focus-visible {
+        outline: 2px solid var(--palette-#{$color}-text);
+        outline-offset: 2px;
+        background-color: var(--palette-#{$color}-darken);
+      }
+
       &:active {
         background-color: var(--palette-#{$color}-darken);
       }
@@ -211,7 +241,7 @@
     box-shadow: none;
   }
 
-  &.focus-visible {
+  &:focus-visible {
     box-shadow: none;
   }
 

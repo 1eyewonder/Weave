@@ -176,6 +176,12 @@ module Disabled =
   let disabledClass (cssClass: string) (enabled: View<bool>) =
     View.not enabled |> Attr.DynamicClassPred cssClass
 
+  /// <summary>
+  /// Sets the native HTML disabled attribute when `enabled` is false.
+  /// </summary>
+  let nativeAttr (enabled: View<bool>) =
+    Attr.DynamicPred "disabled" (View.not enabled) (View.Const "")
+
 [<JavaScript>]
 module on =
 
@@ -204,10 +210,10 @@ module on =
   /// For input types, stick with on.clickView since these inputs have native toggle semantics tied to the click event.
   /// </remarks>
   let clickTapView (view: View<'T>) (handler: Dom.Element -> Dom.Event -> 'T -> unit) =
-    let current: 'T option ref = ref None
+    let current = Var.Create None
 
     Attr.Concat [
-      on.afterRender (fun _ -> view |> View.Sink(fun v -> current.Value <- Some v))
+      on.afterRender (fun _ -> view |> View.Sink(fun v -> Var.Set current (Some v)))
       Attr.Handler "pointerup" (fun el ev ->
         if ev?button = 0 then
           match current.Value with
@@ -224,6 +230,55 @@ module on =
   /// </remarks>
   let clickTapViewGuarded (enabled: View<bool>) (onClick: unit -> unit) =
     clickTapView enabled (fun _ _ isEnabled ->
+      if isEnabled then
+        onClick ())
+
+  /// <summary>
+  /// Like <c>clickTap</c> but also fires on keyboard Enter/Space.
+  /// Use on elements that don't already have their own keydown handler.
+  /// </summary>
+  let clickTapKey (handler: Dom.Element -> Dom.Event -> unit) =
+    Attr.Concat [
+      clickTap handler
+      Attr.Handler "keydown" (fun el ev ->
+        let key = ev?key: string
+
+        if key = "Enter" || key = " " then
+          ev.PreventDefault()
+          handler el ev)
+    ]
+
+  /// <summary>
+  /// Like <c>clickTapView</c> but also fires on keyboard Enter/Space.
+  /// Use on elements that don't already have their own keydown handler.
+  /// </summary>
+  let clickTapKeyView (view: View<'T>) (handler: Dom.Element -> Dom.Event -> 'T -> unit) =
+    let current = Var.Create None
+
+    Attr.Concat [
+      on.afterRender (fun _ -> view |> View.Sink(fun v -> Var.Set current (Some v)))
+      Attr.Handler "pointerup" (fun el ev ->
+        if ev?button = 0 then
+          match current.Value with
+          | Some v -> handler el ev v
+          | None -> ())
+      Attr.Handler "keydown" (fun el ev ->
+        let key = ev?key: string
+
+        if key = "Enter" || key = " " then
+          ev.PreventDefault()
+
+          match current.Value with
+          | Some v -> handler el ev v
+          | None -> ())
+    ]
+
+  /// <summary>
+  /// Like <c>clickTapViewGuarded</c> but also fires on keyboard Enter/Space.
+  /// Use on elements that don't already have their own keydown handler.
+  /// </summary>
+  let clickTapKeyViewGuarded (enabled: View<bool>) (onClick: unit -> unit) =
+    clickTapKeyView enabled (fun _ _ isEnabled ->
       if isEnabled then
         onClick ())
 

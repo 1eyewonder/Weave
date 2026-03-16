@@ -7,6 +7,7 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 open Weave.CssHelpers
+open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
 module Pages =
@@ -139,6 +140,31 @@ module Pages =
         (fun () -> ()),
         enabled = View.Const false,
         attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
+      )
+      Button.CreateIcon(
+        Icon.Create(Icon.UiActions UiActions.Home),
+        (fun () -> ()),
+        attrs = [
+          Attr.Create "aria-label" "home"
+          Button.Variant.toClass Button.Variant.Filled |> cl
+          Button.Color.toClass BrandColor.Primary |> cl
+        ]
+      )
+      Button.Create(
+        text "Primary",
+        (fun () -> ()),
+        attrs = [
+          Button.Variant.toClass Button.Variant.Filled |> cl
+          Button.Color.toClass BrandColor.Primary |> cl
+        ]
+      )
+      Button.Create(
+        text "Error",
+        (fun () -> ()),
+        attrs = [
+          Button.Variant.toClass Button.Variant.Filled |> cl
+          Button.Color.toClass BrandColor.Error |> cl
+        ]
       )
     ]
 

@@ -169,3 +169,78 @@ type ButtonLayoutTests() =
       $"Filled ({filled.Height}px) and text ({text.Height}px) standard buttons should have the same height"
     )
   }
+
+  [<Theory>]
+  [<InlineData("#btn-primary")>]
+  [<InlineData("#btn-error")>]
+  [<InlineData("#btn-success")>]
+  member this.``color variant buttons have opaque background``(buttonId: string) = task {
+    do! this.LoadFixture 1280
+
+    let! bg = this.Page.Locator(buttonId).EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
+
+    Assert.False(
+      bg = "transparent" || bg = "rgba(0, 0, 0, 0)",
+      $"{buttonId} should have an opaque background (got '{bg}')"
+    )
+  }
+
+  [<Fact>]
+  member this.``color variant button height matches default filled``() = task {
+    do! this.LoadFixture 1280
+    let! filled = this.Page.Locator("#btn-filled").BoundingBoxAsync()
+    let! primary = this.Page.Locator("#btn-primary").BoundingBoxAsync()
+    let! error = this.Page.Locator("#btn-error").BoundingBoxAsync()
+
+    Assert.True(
+      abs (filled.Height - primary.Height) <= 1.0f,
+      $"Primary ({primary.Height}px) height should match default filled ({filled.Height}px)"
+    )
+
+    Assert.True(
+      abs (filled.Height - error.Height) <= 1.0f,
+      $"Error ({error.Height}px) height should match default filled ({filled.Height}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``outlined color variant has visible border``() = task {
+    do! this.LoadFixture 1280
+
+    let! border =
+      this.Page
+        .Locator("#btn-outlined-primary")
+        .EvaluateAsync<string>("el => getComputedStyle(el).borderStyle")
+
+    Assert.False((border = "none"), $"Outlined primary button should have a visible border (got '{border}')")
+  }
+
+  [<Fact>]
+  member this.``disabled button has pointer-events none``() = task {
+    do! this.LoadFixture 1280
+
+    let! pointerEvents =
+      this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).pointerEvents")
+
+    Assert.Equal("none", pointerEvents)
+  }
+
+  [<Fact>]
+  member this.``disabled button has default cursor``() = task {
+    do! this.LoadFixture 1280
+
+    let! cursor =
+      this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).cursor")
+
+    Assert.Equal("default", cursor)
+  }
+
+  [<Fact>]
+  member this.``disabled button has no box shadow``() = task {
+    do! this.LoadFixture 1280
+
+    let! shadow =
+      this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).boxShadow")
+
+    Assert.Equal("none", shadow)
+  }

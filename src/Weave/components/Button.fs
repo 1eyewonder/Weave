@@ -32,8 +32,8 @@ module Button =
 
   module Width =
 
-    let toClass variant =
-      match variant with
+    let toClass width =
+      match width with
       | Width.Full -> Some Css.``weave-button--full-width``
       | Width.Auto -> None
 
@@ -75,7 +75,8 @@ type Button =
       yield! attrs
 
       Disabled.disabledClass Css.``weave-button--disabled`` enabled
-      on.clickTapViewGuarded enabled onClick
+      Disabled.nativeAttr enabled
+      on.clickTapKeyViewGuarded enabled onClick
     ] [ content ]
 
   static member CreateIcon(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
@@ -90,5 +91,6 @@ type Button =
       yield! attrs
 
       Disabled.disabledClass Css.``weave-button--disabled`` enabled
-      on.clickTapViewGuarded enabled onClick
+      Disabled.nativeAttr enabled
+      on.clickTapKeyViewGuarded enabled onClick
     ] [ icon ]

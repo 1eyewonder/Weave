@@ -1,0 +1,9 @@
+// Animation delay utilities — for staggering entrance animations on lists.
+// Apply .weave-animation-delay--{n} to the nth item in a sequence.
+// Each step adds one --weave-stagger-delay increment.
+
+@for $i from 1 through 10 {
+  .weave-animation-delay--#{$i} {
+    animation-delay: calc(#{$i} * var(--weave-stagger-delay));
+  }
+}

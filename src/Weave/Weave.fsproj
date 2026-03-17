@@ -10,6 +10,7 @@
     <Compile Include="Spacing.fs" />
     <Compile Include="Layout.fs" />
     <Compile Include="Decorations.fs" />
+    <Compile Include="Animation.fs" />
     <Compile Include="Utilities.fs" />
     <Compile Include="components/Icons.fs" />
     <Compile Include="components/Typography.fs" />

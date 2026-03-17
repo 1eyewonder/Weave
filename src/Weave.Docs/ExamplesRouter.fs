@@ -47,6 +47,7 @@ module ExamplesRouter =
     | SpacingExamples
     | OpacityExamples
     | TransitionExamples
+    | AnimationExamples
     | ThemingExamples
 
   let private pageToString page =
@@ -83,6 +84,7 @@ module ExamplesRouter =
     | SpacingExamples -> "Spacing"
     | OpacityExamples -> "Opacity"
     | TransitionExamples -> "Transitions"
+    | AnimationExamples -> "Animations"
     | ThemingExamples -> "Theming"
 
   let private stringToPage s =
@@ -119,6 +121,7 @@ module ExamplesRouter =
     | "Spacing" -> Some SpacingExamples
     | "Opacity" -> Some OpacityExamples
     | "Transitions" -> Some TransitionExamples
+    | "Animations" -> Some AnimationExamples
     | "Theming" -> Some ThemingExamples
     | _ -> None
 
@@ -156,6 +159,7 @@ module ExamplesRouter =
     | SpacingExamples -> "#spacing"
     | OpacityExamples -> "#opacity"
     | TransitionExamples -> "#transitions"
+    | AnimationExamples -> "#animations"
     | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
@@ -193,6 +197,7 @@ module ExamplesRouter =
     | "#spacing" -> Some SpacingExamples
     | "#opacity" -> Some OpacityExamples
     | "#transitions" -> Some TransitionExamples
+    | "#animations" -> Some AnimationExamples
     | "#theming" -> Some ThemingExamples
     | _ -> None
 
@@ -1512,6 +1517,7 @@ module ExamplesRouter =
             "Spacing", SpacingExamples
             "Opacity", OpacityExamples
             "Transitions", TransitionExamples
+            "Animations", AnimationExamples
             "Theming", ThemingExamples
           ]
         ],
@@ -1548,6 +1554,7 @@ module ExamplesRouter =
     | SpacingExamples -> SpacingExamples.render ()
     | OpacityExamples -> OpacityExamples.render ()
     | TransitionExamples -> TransitionExamples.render ()
+    | AnimationExamples -> AnimationExamples.render ()
     | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
@@ -1888,6 +1895,7 @@ module ExamplesRouter =
           navLeafItem "Spacing"
           navLeafItem "Opacity"
           navLeafItem "Transitions"
+          navLeafItem "Animations"
           navLeafItem "Theming"
         ]
       ]

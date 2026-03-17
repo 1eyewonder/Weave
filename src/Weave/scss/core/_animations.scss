@@ -1,9 +1,306 @@
-@keyframes animation-fadein {
-  0% {
+@use "sass:map";
+@use "../abstracts/variables" as *;
+
+// Prevent --weave-animation-name from inheriting to child elements.
+// Without this, a child element with only a trigger class (e.g., animation-on--hover)
+// would inherit its parent's animation name and play it on hover.
+@property --weave-animation-name {
+  syntax: "*";
+  inherits: false;
+  initial-value: none;
+}
+
+@keyframes weave-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes weave-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes weave-scale-in {
+  from {
     opacity: 0;
+    transform: scale(var(--weave-animation-scale-md));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes weave-scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(var(--weave-animation-scale-md));
+  }
+}
+
+@keyframes weave-scale-y-in {
+  from {
+    opacity: 0;
+    transform: scaleY(var(--weave-animation-scale-lg));
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes weave-scale-y-out {
+  from {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(var(--weave-animation-scale-lg));
+  }
+}
+
+@keyframes weave-slide-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--weave-animation-distance-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes weave-slide-down-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--weave-animation-distance-lg)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes weave-slide-left-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--weave-animation-distance-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes weave-slide-right-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--weave-animation-distance-lg)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes weave-slide-up-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--weave-animation-distance-lg)));
+  }
+}
+
+@keyframes weave-slide-down-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--weave-animation-distance-lg));
+  }
+}
+
+@keyframes weave-slide-left-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--weave-animation-distance-lg)));
+  }
+}
+
+@keyframes weave-slide-right-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(var(--weave-animation-distance-lg));
+  }
+}
+
+@keyframes weave-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(var(--weave-animation-scale-pulse)); }
+}
+
+@keyframes weave-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(calc(-1 * var(--weave-animation-distance-sm))); }
+  20%, 40%, 60%, 80% { transform: translateX(var(--weave-animation-distance-sm)); }
+}
+
+@keyframes weave-bounce {
+  0%, 100% { transform: translateY(0); }
+  40%      { transform: translateY(calc(-1 * var(--weave-animation-distance-md))); }
+  60%      { transform: translateY(calc(-0.5 * var(--weave-animation-distance-md))); }
+}
+
+@keyframes weave-skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes weave-spinner-rotate {
+  100% { transform: rotate(360deg); }
+}
+
+// --- Kind classes ---
+// Generated from a map so adding new animations is a one-line change.
+// Each class stores its keyframe name in --weave-animation-name for trigger
+// class composition, sets fill-mode to both, and applies type-appropriate
+// defaults for duration and easing.
+
+$animation-kinds: (
+  // Entrances — decelerate into resting position
+  "fade-in":        (duration: standard, easing: $ease-decelerate),
+  "scale-in":       (duration: standard, easing: $ease-decelerate),
+  "scale-y-in":     (duration: standard, easing: $ease-decelerate),
+  "slide-up-in":    (duration: standard, easing: $ease-decelerate),
+  "slide-down-in":  (duration: standard, easing: $ease-decelerate),
+  "slide-left-in":  (duration: standard, easing: $ease-decelerate),
+  "slide-right-in": (duration: standard, easing: $ease-decelerate),
+  // Exits — accelerate out of view
+  "fade-out":        (duration: standard, easing: $ease-accelerate),
+  "scale-out":       (duration: standard, easing: $ease-accelerate),
+  "scale-y-out":     (duration: standard, easing: $ease-accelerate),
+  "slide-up-out":    (duration: standard, easing: $ease-accelerate),
+  "slide-down-out":  (duration: standard, easing: $ease-accelerate),
+  "slide-left-out":  (duration: standard, easing: $ease-accelerate),
+  "slide-right-out": (duration: standard, easing: $ease-accelerate),
+  // Emphasis — standard easing, longer duration
+  "pulse":  (duration: long, easing: $ease-standard),
+  "shake":  (duration: long, easing: $ease-standard),
+  "bounce": (duration: long, easing: $ease-standard),
+);
+
+@each $name, $config in $animation-kinds {
+  .weave-animation--#{$name} {
+    --weave-animation-name: weave-#{$name};
+    animation-name: var(--weave-animation-name);
+    animation-duration: var(--weave-animation-duration-#{map.get($config, duration)});
+    animation-timing-function: #{map.get($config, easing)};
+    animation-fill-mode: both;
+  }
+}
+
+// --- Duration modifiers ---
+// Override the animation-duration set by the kind class.
+// These reference the animation-specific duration scale (--weave-animation-duration-*),
+// which is calibrated for keyframe animations (longer than transition durations).
+
+$animation-duration-names: shortest, shorter, short, standard, medium, long, longer, longest;
+
+@each $name in $animation-duration-names {
+  .weave-animation-duration--#{$name} {
+    animation-duration: var(--weave-animation-duration-#{$name});
+  }
+}
+
+// --- Easing modifiers ---
+.weave-animation-easing--standard {
+  animation-timing-function: $ease-standard;
+}
+
+.weave-animation-easing--decelerate {
+  animation-timing-function: $ease-decelerate;
+}
+
+.weave-animation-easing--accelerate {
+  animation-timing-function: $ease-accelerate;
+}
+
+.weave-animation-easing--bounce {
+  animation-timing-function: $ease-bounce;
+}
+
+// --- Iteration modifiers ---
+.weave-animation-iteration--infinite {
+  animation-iteration-count: infinite;
+}
+
+// --- Trigger modifiers ---
+// Defer animation playback to a pseudo-state instead of playing on mount.
+// Compose with any kind class: the kind class sets --weave-animation-name,
+// and the trigger class overrides animation-name to none at rest, restoring
+// it from the custom property on hover / focus-visible.
+//
+// The [class] attribute selector bumps rest-state specificity to (0,1,1),
+// which always beats the kind class's (0,1,0) regardless of source order.
+// The active states (:hover, :focus-visible) are already at (0,2,0).
+
+.weave-animation-on--hover[class] {
+  animation-name: none;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      animation-name: var(--weave-animation-name);
+    }
+  }
+}
+
+.weave-animation-on--focus[class] {
+  animation-name: none;
+
+  &:focus-visible {
+    animation-name: var(--weave-animation-name);
+  }
+}
+
+.weave-animation-on--hover-focus[class] {
+  animation-name: none;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      animation-name: var(--weave-animation-name);
+    }
   }
 
-  100% {
-    opacity: 1;
+  &:focus-visible {
+    animation-name: var(--weave-animation-name);
   }
+}
+
+// --- Animation suppression ---
+// Disables all animations and transitions within the element and its subtree.
+.weave-animation--none,
+.weave-animation--none * {
+  animation-name: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
 }

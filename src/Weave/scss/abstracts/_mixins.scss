@@ -13,6 +13,25 @@
   @return calc(#{$compact-base * 1px} + (var(--weave-density) * #{$step * 1px}));
 }
 
+// transition($properties, $duration-name, $easing, $delay)
+//
+// Generates a multi-property transition using the Weave duration token scale.
+// Avoids repeating the `property var(--weave-duration-X) easing` pattern
+// that appears 35+ times across component SCSS files.
+@mixin transition($properties, $duration-name: standard, $easing: $ease-standard, $delay: 0ms) {
+  $value: ();
+
+  @each $prop in $properties {
+    $value: append(
+      $value,
+      #{$prop} var(--weave-duration-#{$duration-name}) #{$easing} #{$delay},
+      comma
+    );
+  }
+
+  transition: $value;
+}
+
 @mixin inputplaceholder {
   // CSS Pseudo-Element
   &::placeholder {

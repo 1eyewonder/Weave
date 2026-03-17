@@ -18,8 +18,36 @@ $font-family-heading: $font-family-base;
   --weave-duration-standard: 200ms;
   --weave-duration-medium:   250ms;
   --weave-duration-long:     300ms;
+  --weave-duration-longer:   500ms;
+  --weave-duration-longest:  800ms;
   --weave-duration-drawer:   225ms;
   --weave-duration-ripple:   600ms;
+
+  // Animation distance scale — controls how far elements translate
+  --weave-animation-distance-sm: 8px;
+  --weave-animation-distance-md: 16px;
+  --weave-animation-distance-lg: 32px;
+  --weave-animation-distance-xl: 64px;
+
+  // Animation scale — controls scale transforms
+  --weave-animation-scale-sm: 0.9;
+  --weave-animation-scale-md: 0.8;
+  --weave-animation-scale-lg: 0.65;
+  --weave-animation-scale-pulse: 1.1;
+
+  // Animation duration scale — separate from transition durations because
+  // keyframe animations need longer times for easing/direction to be perceptible.
+  --weave-animation-duration-shortest: 100ms;
+  --weave-animation-duration-shorter:  200ms;
+  --weave-animation-duration-short:    300ms;
+  --weave-animation-duration-standard: 400ms;
+  --weave-animation-duration-medium:   500ms;
+  --weave-animation-duration-long:     600ms;
+  --weave-animation-duration-longer:   800ms;
+  --weave-animation-duration-longest:  1200ms;
+
+  // Stagger delay — base delay between items in a staggered sequence
+  --weave-stagger-delay: 50ms;
 
   // Opacity scale — element opacity (used as `opacity: var(...)`)
   --weave-opacity-disabled:          0.38;
@@ -184,7 +212,33 @@ $font-family-heading: $font-family-base;
     --weave-duration-standard: 0s;
     --weave-duration-medium:   0s;
     --weave-duration-long:     0s;
+    --weave-duration-longer:   0s;
+    --weave-duration-longest:  0s;
     --weave-duration-drawer:   0s;
     --weave-duration-ripple:   0s;
+
+    --weave-animation-duration-shortest: 0s;
+    --weave-animation-duration-shorter:  0s;
+    --weave-animation-duration-short:    0s;
+    --weave-animation-duration-standard: 0s;
+    --weave-animation-duration-medium:   0s;
+    --weave-animation-duration-long:     0s;
+    --weave-animation-duration-longer:   0s;
+    --weave-animation-duration-longest:  0s;
+
+    // Zero out animation distances so spatial motion collapses
+    --weave-animation-distance-sm: 0px;
+    --weave-animation-distance-md: 0px;
+    --weave-animation-distance-lg: 0px;
+    --weave-animation-distance-xl: 0px;
+
+    // Collapse scale transforms to identity
+    --weave-animation-scale-sm: 1;
+    --weave-animation-scale-md: 1;
+    --weave-animation-scale-lg: 1;
+    --weave-animation-scale-pulse: 1;
+
+    // Eliminate stagger
+    --weave-stagger-delay: 0ms;
   }
 }

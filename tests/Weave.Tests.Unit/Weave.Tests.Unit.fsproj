@@ -31,6 +31,7 @@
     <Compile Include="DrawerTests.fs" />
     <Compile Include="SpacingTests.fs" />
     <Compile Include="TransitionSpeedTests.fs" />
+    <Compile Include="AnimationTests.fs" />
     <Compile Include="OpacityTests.fs" />
     <Compile Include="NumericFieldTests.fs" />
     <Compile Include="SelectTests.fs" />

@@ -11,4 +11,5 @@ module AutoOpens =
   [<assembly: AutoOpen("Weave.CssHelpers.Spacing")>]
   [<assembly: AutoOpen("Weave.CssHelpers.Layout")>]
   [<assembly: AutoOpen("Weave.CssHelpers.Decorations")>]
+  [<assembly: AutoOpen("Weave.CssHelpers.Animation")>]
   do ()

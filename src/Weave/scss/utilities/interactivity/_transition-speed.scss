@@ -5,8 +5,18 @@
   --weave-duration-standard: 0s;
   --weave-duration-medium: 0s;
   --weave-duration-long: 0s;
+  --weave-duration-longer: 0s;
+  --weave-duration-longest: 0s;
   --weave-duration-drawer: 0s;
   --weave-duration-ripple: 0s;
+  --weave-animation-duration-shortest: 0s;
+  --weave-animation-duration-shorter: 0s;
+  --weave-animation-duration-short: 0s;
+  --weave-animation-duration-standard: 0s;
+  --weave-animation-duration-medium: 0s;
+  --weave-animation-duration-long: 0s;
+  --weave-animation-duration-longer: 0s;
+  --weave-animation-duration-longest: 0s;
 }
 
 .weave-transition--fast {
@@ -16,8 +26,18 @@
   --weave-duration-standard: 100ms;
   --weave-duration-medium: 125ms;
   --weave-duration-long: 150ms;
+  --weave-duration-longer: 250ms;
+  --weave-duration-longest: 400ms;
   --weave-duration-drawer: 112ms;
   --weave-duration-ripple: 300ms;
+  --weave-animation-duration-shortest: 50ms;
+  --weave-animation-duration-shorter: 100ms;
+  --weave-animation-duration-short: 150ms;
+  --weave-animation-duration-standard: 200ms;
+  --weave-animation-duration-medium: 250ms;
+  --weave-animation-duration-long: 300ms;
+  --weave-animation-duration-longer: 400ms;
+  --weave-animation-duration-longest: 600ms;
 }
 
 .weave-transition--standard {
@@ -27,8 +47,18 @@
   --weave-duration-standard: 200ms;
   --weave-duration-medium: 250ms;
   --weave-duration-long: 300ms;
+  --weave-duration-longer: 500ms;
+  --weave-duration-longest: 800ms;
   --weave-duration-drawer: 225ms;
   --weave-duration-ripple: 600ms;
+  --weave-animation-duration-shortest: 100ms;
+  --weave-animation-duration-shorter: 200ms;
+  --weave-animation-duration-short: 300ms;
+  --weave-animation-duration-standard: 400ms;
+  --weave-animation-duration-medium: 500ms;
+  --weave-animation-duration-long: 600ms;
+  --weave-animation-duration-longer: 800ms;
+  --weave-animation-duration-longest: 1200ms;
 }
 
 .weave-transition--slow {
@@ -38,6 +68,16 @@
   --weave-duration-standard: 400ms;
   --weave-duration-medium: 500ms;
   --weave-duration-long: 600ms;
+  --weave-duration-longer: 1000ms;
+  --weave-duration-longest: 1600ms;
   --weave-duration-drawer: 450ms;
   --weave-duration-ripple: 1200ms;
+  --weave-animation-duration-shortest: 200ms;
+  --weave-animation-duration-shorter: 400ms;
+  --weave-animation-duration-short: 600ms;
+  --weave-animation-duration-standard: 800ms;
+  --weave-animation-duration-medium: 1000ms;
+  --weave-animation-duration-long: 1200ms;
+  --weave-animation-duration-longer: 1600ms;
+  --weave-animation-duration-longest: 2400ms;
 }

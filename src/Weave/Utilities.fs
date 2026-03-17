@@ -4,9 +4,9 @@ open WebSharper
 open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
+open WebSharper.UI.Html
 open Weave.CssHelpers
 open Weave.CssHelpers.Core
-open Weave.Operators
 
 /// <summary>
 /// Listens for events on the document and invokes a callback when the event
@@ -452,3 +452,149 @@ module ScrollListener =
               onSection (detectActiveSection el sectionSelector threshold))
             |> ignore
       ))
+
+/// <summary>
+/// JS-driven animation helpers for reactive enter/exit, replay, and toggle.
+/// For CSS-only animation modifiers (duration, easing, iteration, triggers),
+/// see the Animation module types.
+/// </summary>
+[<JavaScript>]
+module Animate =
+
+  /// <summary>
+  /// Toggles between enter and exit animation classes based on a boolean view.
+  /// For elements that remain in the DOM (e.g., drawers, expansion panels).
+  /// Neither class is applied until the first state change, so elements that
+  /// start inactive do not play an exit animation on initial render.
+  /// </summary>
+  let toggleClass (pair: AnimationPair) (isActive: View<bool>) : Attr =
+    let enterClass = AnimationEntrance.toClass pair.Enter
+    let exitClass = AnimationExit.toClass pair.Exit
+    let hasChanged = Var.Create false
+
+    let guardedView =
+      isActive
+      |> View.Map(fun active ->
+        if active then
+          hasChanged.Value <- true
+
+        active)
+
+    let shouldAnimate = View.Map2 (fun changed _ -> changed) hasChanged.View guardedView
+
+    Attr.Concat [
+      Attr.DynamicClassPred
+        enterClass
+        (View.Map2 (fun guard active -> guard && active) shouldAnimate isActive)
+
+      Attr.DynamicClassPred
+        exitClass
+        (View.Map2 (fun guard active -> guard && not active) shouldAnimate isActive)
+    ]
+
+  /// <summary>
+  /// Extended version of <c>show</c> with additional options.
+  /// </summary>
+  /// <param name="wrapperAttrs">Additional attributes for the animation wrapper div
+  /// (e.g., duration/easing overrides, flex/grid styles). The wrapper is the element
+  /// that carries the enter/exit animation class.</param>
+  /// <param name="onExitComplete">Called after the exit animation finishes and the
+  /// content is removed from the DOM. Use this instead of hardcoded timeouts to
+  /// synchronize cleanup (e.g., removing items from a ListModel).</param>
+  let showWith
+    (pair: AnimationPair)
+    (isVisible: View<bool>)
+    (content: unit -> Doc)
+    (wrapperAttrs: Attr list)
+    (onExitComplete: (unit -> unit) option)
+    : Doc
+    =
+    let enterClass = AnimationEntrance.toClass pair.Enter
+    let exitClass = AnimationExit.toClass pair.Exit
+    let currentState = Var.Create Doc.Empty
+    let hasBeenShown = Var.Create false
+
+    isVisible
+    |> View.Sink(fun visible ->
+      if visible then
+        hasBeenShown.Value <- true
+
+        let doc = div [ cl enterClass; yield! wrapperAttrs ] [ content () ]
+
+        currentState.Value <- doc
+      else if hasBeenShown.Value then
+        let exitDoc =
+          div [
+            cl exitClass
+            yield! wrapperAttrs
+
+            on.afterRender (fun el ->
+              el.AddEventListener(
+                "animationend",
+                fun (ev: Dom.Event) ->
+                  // Guard against bubbled animationend from child elements
+                  if ev.Target = (el :> Dom.EventTarget) then
+                    currentState.Value <- Doc.Empty
+
+                    match onExitComplete with
+                    | Some cb -> cb ()
+                    | None -> ()
+              ))
+          ] [ content () ]
+
+        currentState.Value <- exitDoc)
+
+    currentState.View |> Doc.EmbedView
+
+  /// <summary>
+  /// Renders content reactively with enter/exit animations.
+  /// When <c>isVisible</c> becomes true, renders the content with the enter class.
+  /// When <c>isVisible</c> becomes false, applies the exit class, waits for the
+  /// animationend event, then removes the element from the DOM.
+  /// </summary>
+  let show (pair: AnimationPair) (isVisible: View<bool>) (content: unit -> Doc) : Doc =
+    showWith pair isVisible content [] None
+
+  /// <summary>
+  /// Replays the element's animation on a recurring interval by removing and
+  /// re-adding the animation-name CSS property. Compose with any animation
+  /// kind class — the first play is immediate, then replays every
+  /// <paramref name="intervalMs"/> milliseconds.
+  /// </summary>
+  let private replay (el: Dom.Element) =
+    el?style?animationName <- "none"
+    el?offsetHeight |> ignore
+    el?style?animationName <- ""
+
+  /// <summary>
+  /// Replays the element's animation on a recurring interval by removing and
+  /// re-adding the animation-name CSS property. Compose with any animation
+  /// kind class — the first play is immediate, then replays every
+  /// <paramref name="intervalMs"/> milliseconds. The interval self-clears
+  /// when the element is removed from the DOM.
+  /// Do not combine with AnimationOn trigger classes or Animate.replayOnClick —
+  /// these are mutually exclusive trigger mechanisms.
+  /// </summary>
+  let replayEvery (intervalMs: int) : Attr =
+    on.afterRender (fun (el: Dom.Element) ->
+      let handle = ref Unchecked.defaultof<JS.Handle>
+
+      handle.Value <-
+        JS.SetInterval
+          (fun () ->
+            if As<bool> el?isConnected then
+              replay el
+            else
+              JS.ClearInterval handle.Value)
+          intervalMs)
+
+  /// <summary>
+  /// Replays the element's animation each time it is clicked. The initial
+  /// mount animation is suppressed — the first play only happens on click.
+  /// Do not combine with AnimationOn trigger classes or Animate.replayEvery —
+  /// these are mutually exclusive trigger mechanisms.
+  /// </summary>
+  let replayOnClick: Attr =
+    on.afterRender (fun (el: Dom.Element) ->
+      el?style?animationName <- "none"
+      el.AddEventListener("click", fun (_: Dom.Event) -> replay el))

@@ -66,6 +66,25 @@ module Pages =
         showHelpText = View.Const true,
         helpText = text "Help text content"
       )
+      Field.Create(
+        Var.Create "not-an-email",
+        variant = Field.Variant.Outlined,
+        labelText = View.Const "Email",
+        showHelpText = View.Const true,
+        helpText =
+          FieldHelpText.Create(
+            text "Invalid email address",
+            attrs = [
+              Attr.Create "id" "email-error"
+              Field.HelpTextColor.toClass BrandColor.Error |> cl
+            ]
+          ),
+        inputAttrs = [
+          Attr.ariaInvalid (View.Const true)
+          Attr.Create "aria-describedby" "email-error"
+        ],
+        attrs = [ Field.Color.toClass BrandColor.Error |> cl ]
+      )
     ]
 
   let private numericFieldPage () =
@@ -81,6 +100,26 @@ module Pages =
         variant = Field.Variant.Outlined,
         labelText = View.Const "Outlined Numeric",
         showSpinButtons = View.Const true
+      )
+      NumericField.Create(
+        Var.Create 150,
+        variant = Field.Variant.Outlined,
+        labelText = View.Const "Max 100",
+        max = 100,
+        showHelpText = View.Const true,
+        helpText =
+          FieldHelpText.Create(
+            text "Value exceeds maximum",
+            attrs = [
+              Attr.Create "id" "numeric-error"
+              Field.HelpTextColor.toClass BrandColor.Error |> cl
+            ]
+          ),
+        inputAttrs = [
+          Attr.ariaInvalid (View.Const true)
+          Attr.Create "aria-describedby" "numeric-error"
+        ],
+        attrs = [ Field.Color.toClass BrandColor.Error |> cl ]
       )
     ]
 
@@ -279,6 +318,7 @@ module Pages =
           DropdownItem.Create(text "Disabled Item", (fun () -> ()), enabled = View.Const false)
         ]
       )
+      Button.Create(text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
   let private expansionPanelPage () =
@@ -429,6 +469,16 @@ module Pages =
           DropdownItem.Create(text "Action 2", fun () -> ())
         ]
       )
+      ButtonMenu.Create(
+        text "Horizontal Menu",
+        [
+          DropdownItem.Create(text "Left 1", fun () -> ())
+          DropdownItem.Create(text "Left 2", fun () -> ())
+        ],
+        direction = ButtonMenu.Direction.Right,
+        attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
+      )
+      Button.Create(text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
   let private buttongroupPage () =

@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open System.Text.RegularExpressions
 open Microsoft.Playwright.Xunit
 open Xunit
 
@@ -18,33 +19,165 @@ type ButtonMenuTests(server: TestServerFixture) =
     do! this.Expect(button).ToBeFocusedAsync()
   }
 
-  [<Fact(Skip = "Known gap: ButtonMenu trigger uses clickTapViewGuarded (pointerup) — keyboard Enter fires a synthetic click but not pointerup, so the menu does not open")>]
+  [<Fact>]
   member this.``Enter on trigger opens the button menu``() = task {
     do! this.NavigateTo("buttonmenu")
-    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
     do! button.FocusAsync()
     do! button.PressAsync("Enter")
 
-    do! this.Expect(this.Page.Locator(".weave-button-menu--open")).ToHaveCountAsync(1)
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
   }
 
-  [<Fact(Skip = "Known gap: ButtonMenu has no ArrowDown/Up item navigation")>]
-  member this.``ArrowDown navigates button menu items``() = task {
+  [<Fact>]
+  member this.``Space on trigger opens the button menu``() = task {
     do! this.NavigateTo("buttonmenu")
-    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
     do! button.FocusAsync()
-    do! button.PressAsync("Enter")
-    do! this.Page.Keyboard.PressAsync("ArrowDown")
-    do! this.Expect(this.Page.Locator(".weave-button-menu__item").First).ToBeFocusedAsync()
+    do! button.PressAsync(" ")
+
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
   }
 
-  [<Fact(Skip = "Known gap: ButtonMenu has no Escape handler")>]
+  [<Fact>]
+  member this.``Enter on trigger toggles the button menu closed``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).Not.ToHaveClassAsync(Regex("weave-button-menu--open"))
+  }
+
+  // Default direction is Top, so ArrowUp = next, ArrowDown = prev
+  [<Fact>]
+  member this.``next key navigates to first menu item (Top direction uses ArrowUp)``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    let items = container.Locator(".weave-button-menu__item")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``ArrowUp navigates forward and ArrowDown navigates backward (Top direction)``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    let items = container.Locator(".weave-button-menu__item")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``Escape closes the open button menu``() = task {
     do! this.NavigateTo("buttonmenu")
-    let button = this.Page.Locator(".weave-button-menu__trigger").First
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
     do! button.FocusAsync()
     do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
     do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(container).Not.ToHaveClassAsync(Regex("weave-button-menu--open"))
+  }
 
-    do! this.Expect(this.Page.Locator(".weave-button-menu--open")).ToHaveCountAsync(0)
+  [<Fact>]
+  member this.``Escape returns focus to the trigger``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(button).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``Home focuses the first menu item``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    let items = container.Locator(".weave-button-menu__item")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Home")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``End focuses the last menu item``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    let items = container.Locator(".weave-button-menu__item")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("End")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``Tab from trigger closes the button menu``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(container).Not.ToHaveClassAsync(Regex("weave-button-menu--open"))
+  }
+
+  [<Fact>]
+  member this.``arrow navigation does not close the button menu``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let button = container.Locator(".weave-button-menu__trigger")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+  }
+
+  [<Fact>]
+  member this.``horizontal menu navigates with ArrowRight and ArrowLeft``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator("[data-testid='horizontal-menu']")
+    let button = container.Locator(".weave-button-menu__trigger")
+    let items = container.Locator(".weave-button-menu__item")
+    do! button.FocusAsync()
+    do! button.PressAsync("Enter")
+
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+
+    do! this.Page.Keyboard.PressAsync("ArrowRight")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowRight")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowLeft")
+    do! this.Expect(items.First).ToBeFocusedAsync()
   }

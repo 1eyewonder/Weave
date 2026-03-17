@@ -210,6 +210,8 @@ type ExpansionPanel =
     =
     let expanded = defaultArg expanded (Var.Create false)
     let attrs = defaultArg attrs []
+    let headerId = WeaveId.create "weave-expansion-panel-header"
+    let panelId = WeaveId.create "weave-expansion-panel-content"
 
     div [
       cls [ Css.``weave-expansion-panel`` ]
@@ -219,8 +221,20 @@ type ExpansionPanel =
       View.not expanded.View
       |> Attr.DynamicClassPred Css.``weave-expansion-panel--collapsed``
 
+      on.afterRender (fun el ->
+        let headerEl = el.QuerySelector("." + Css.``weave-expansion-panel__header``)
+
+        if not (isNull headerEl) then
+          headerEl.SetAttribute("aria-controls", panelId)
+          headerEl.SetAttribute("id", headerId))
+
       yield! attrs
     ] [
       header
-      div [ cl Css.``weave-expansion-panel__content-wrapper`` ] [ content ]
+      div [
+        cl Css.``weave-expansion-panel__content-wrapper``
+        Attr.Create "id" panelId
+        Attr.Create "role" "region"
+        Attr.Create "aria-labelledby" headerId
+      ] [ content ]
     ]

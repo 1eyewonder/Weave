@@ -6,6 +6,15 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 
 [<JavaScript>]
+module WeaveId =
+
+  let mutable private counter = 0L
+
+  let create prefix =
+    counter <- counter + 1L
+    sprintf "%s-%d" prefix counter
+
+[<JavaScript>]
 module Generic =
 
   [<Inline>]
@@ -191,6 +200,11 @@ module Attr =
       |> View.MapCached(fun v -> Map.tryFind v map = Some className)
       |> Attr.DynamicClassPred className)
     |> Attr.Concat
+
+  let ariaInvalid (isInvalid: View<bool>) : Attr =
+    isInvalid
+    |> View.Map(sprintf "%b")
+    |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-invalid", v))
 
   module List =
 

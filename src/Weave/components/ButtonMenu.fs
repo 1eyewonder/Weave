@@ -43,15 +43,33 @@ module private ButtonMenuInternal =
     =
 
     let mutable containerEl = ref (JS.Document.CreateElement "div")
+    let triggerEl = ref (JS.Document.CreateElement "button")
     let currentHover = Var.Create false
     let hoverSync = openOnHover |> Doc.sinkCached (fun v -> currentHover.Value <- v)
+
+    let nextKey, prevKey =
+      match direction with
+      | Direction.Bottom -> "ArrowDown", "ArrowUp"
+      | Direction.Top -> "ArrowUp", "ArrowDown"
+      | Direction.Right -> "ArrowRight", "ArrowLeft"
+      | Direction.Left -> "ArrowLeft", "ArrowRight"
+
+    let keyboardWatcher =
+      MenuKeyboardNav.watch containerEl triggerEl isOpen nextKey prevKey
 
     let menuItems =
       items
       |> List.mapi (fun i item ->
         div [
           cl Css.``weave-button-menu__item``
+          Attr.Create "role" "menuitem"
+          Attr.Create "tabindex" "-1"
           Attr.Style "transition-delay" (sprintf "%dms" (i * 50))
+          on.afterRender (fun el ->
+            let children = el.QuerySelectorAll("button, a, [tabindex]")
+
+            for i in 0 .. children.Length - 1 do
+              As<Dom.Element>(children.Item(i)).SetAttribute("tabindex", "-1"))
         ] [ item ])
 
     let outsideClickWatcher =
@@ -62,7 +80,13 @@ module private ButtonMenuInternal =
       cl Css.``weave-button-menu``
       Direction.toClass direction |> cl
       isOpen.View |> Attr.DynamicClassPred Css.``weave-button-menu--open``
-      on.afterRender (fun el -> containerEl.Value <- el)
+
+      on.afterRender (fun el ->
+        containerEl.Value <- el
+        let trigger = el.QuerySelector("." + Css.``weave-button-menu__trigger``)
+
+        if not (isNull trigger) then
+          triggerEl.Value <- trigger)
 
       on.mouseEnter (fun _ _ ->
         if currentHover.Value then
@@ -74,8 +98,9 @@ module private ButtonMenuInternal =
       yield! attrs
     ] [
       outsideClickWatcher
+      keyboardWatcher
       hoverSync
-      div [ cl Css.``weave-button-menu__items`` ] menuItems
+      div [ cl Css.``weave-button-menu__items``; Attr.Create "role" "menu" ] menuItems
       triggerButton
     ]
 
@@ -129,7 +154,12 @@ type ButtonMenu =
         triggerIcon,
         onClick = (fun () -> isOpen.Value <- not isOpen.Value),
         attrs = [
+          Attr.Create "aria-label" "Menu"
           cl Css.``weave-button-menu__trigger``
+          Attr.Create "aria-haspopup" "true"
+          isOpen.View
+          |> View.Map(sprintf "%b")
+          |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
 
           match openIcon with
           | None -> isOpen.View |> Attr.DynamicClassPred Css.``weave-button-menu__trigger--rotated``
@@ -175,7 +205,14 @@ type ButtonMenu =
       Button.Create(
         triggerContent,
         onClick = (fun () -> isOpen.Value <- not isOpen.Value),
-        attrs = [ cl Css.``weave-button-menu__trigger``; yield! triggerAttrs ]
+        attrs = [
+          cl Css.``weave-button-menu__trigger``
+          Attr.Create "aria-haspopup" "true"
+          isOpen.View
+          |> View.Map(sprintf "%b")
+          |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
+          yield! triggerAttrs
+        ]
       )
 
     ButtonMenuInternal.renderMenu triggerButton items direction isOpen openOnHover attrs

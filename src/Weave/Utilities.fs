@@ -67,6 +67,118 @@ module DocumentEventListener =
   let onMouseDown = watch "mousedown"
 
 /// <summary>
+/// Provides scoped keyboard navigation for menu components (ButtonMenu, Dropdown).
+/// Listens on a container element for keydown events and manages focus among
+/// [role='menuitem'] descendants. The listener is scoped to the container,
+/// so it does not interfere with other components on the page.
+/// </summary>
+[<JavaScript>]
+module MenuKeyboardNav =
+
+  let private focusItemAt (container: Dom.Element) (focusedIdx: int ref) (index: int) =
+    let items = container.QuerySelectorAll("[role='menuitem']")
+
+    if index >= 0 && index < items.Length then
+      focusedIdx.Value <- index
+      let target = As<Dom.Element>(items.Item(index))
+      JS.Window.SetTimeout((fun () -> target?focus ()), 0) |> ignore
+
+  let private focusByOffset (container: Dom.Element) (focusedIdx: int ref) (offset: int) =
+    let items = container.QuerySelectorAll("[role='menuitem']")
+    let len = items.Length
+
+    if len > 0 then
+      let targetIdx =
+        if focusedIdx.Value = -1 then
+          if offset > 0 then 0 else len - 1
+        else
+          (focusedIdx.Value + offset + len) % len
+
+      focusItemAt container focusedIdx targetIdx
+
+  /// <summary>
+  /// Returns a Doc sink that attaches/detaches a keydown listener on the container
+  /// element based on the isOpen Var. Handles next/prev navigation (custom keys),
+  /// Home, End, and Escape. Escape closes the menu and returns focus to the trigger.
+  /// </summary>
+  let watch
+    (containerRef: Dom.Element ref)
+    (triggerRef: Dom.Element ref)
+    (isOpen: Var<bool>)
+    (nextKey: string)
+    (prevKey: string)
+    : Doc
+    =
+    let focusedIdx = ref -1
+    let keyHandler: (Dom.Event -> unit) option ref = ref None
+    let focusOutHandler: (Dom.Event -> unit) option ref = ref None
+
+    let handleKeyDown (ev: Dom.KeyboardEvent) =
+      let container = containerRef.Value
+
+      match ev.Key with
+      | "Escape" ->
+        ev.PreventDefault()
+        isOpen.Value <- false
+        focusedIdx.Value <- -1
+        triggerRef.Value?focus()
+      | key when key = nextKey ->
+        ev.PreventDefault()
+        focusByOffset container focusedIdx 1
+      | key when key = prevKey ->
+        ev.PreventDefault()
+        focusByOffset container focusedIdx -1
+      | "Home" ->
+        ev.PreventDefault()
+        let items = container.QuerySelectorAll("[role='menuitem']")
+
+        if items.Length > 0 then
+          focusItemAt container focusedIdx 0
+      | "End" ->
+        ev.PreventDefault()
+        let items = container.QuerySelectorAll("[role='menuitem']")
+
+        if items.Length > 0 then
+          focusItemAt container focusedIdx (items.Length - 1)
+      | _ -> ()
+
+    let handleFocusOut (ev: Dom.Event) =
+      let container = containerRef.Value
+      let related = ev?relatedTarget
+
+      if isNull related || not (As<bool>(container?contains (related))) then
+        isOpen.Value <- false
+        focusedIdx.Value <- -1
+
+    let detachAll () =
+      match keyHandler.Value with
+      | Some h ->
+        containerRef.Value.RemoveEventListener("keydown", h)
+        keyHandler.Value <- None
+      | None -> ()
+
+      match focusOutHandler.Value with
+      | Some h ->
+        containerRef.Value.RemoveEventListener("focusout", h)
+        focusOutHandler.Value <- None
+      | None -> ()
+
+    isOpen.View
+    |> Doc.sinkCached (fun opened ->
+      detachAll ()
+
+      if opened then
+        focusedIdx.Value <- -1
+
+        let kh = fun (e: Dom.Event) -> handleKeyDown (As<Dom.KeyboardEvent> e)
+        containerRef.Value.AddEventListener("keydown", kh)
+        keyHandler.Value <- Some kh
+
+        let fh = fun (e: Dom.Event) -> handleFocusOut e
+        containerRef.Value.AddEventListener("focusout", fh)
+        focusOutHandler.Value <- Some fh)
+
+/// <summary>
 /// Observes the size of a DOM element using the browser ResizeObserver API
 /// and exposes reactive Width and Height views.
 /// </summary>

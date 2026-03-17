@@ -750,7 +750,7 @@ ButtonMenu.Create(
               )
             ],
             triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
+              Button.Variant.Text |> Button.Variant.toClass |> cl
               Button.Color.toClass BrandColor.Primary |> cl
             ]
           )
@@ -841,7 +841,7 @@ ButtonMenu.Create(
     closedContent = text "Menu",
     items = menuItems,
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        Button.Variant.Text |> Button.Variant.toClass |> cl
         Button.Color.toClass BrandColor.Primary |> cl
     ]
 )

@@ -65,15 +65,6 @@ module Field =
 open Field
 
 [<JavaScript>]
-module internal FieldId =
-
-  let mutable private counter = 0
-
-  let fresh () =
-    counter <- counter + 1
-    sprintf "weave-field-%d" counter
-
-[<JavaScript>]
 type FieldHelpText =
 
   static member Create(content: Doc, ?attrs: Attr list) =
@@ -238,7 +229,7 @@ type Field =
         elif floated then ph
         else "")
 
-    let inputId = FieldId.fresh ()
+    let inputId = WeaveId.create "weave-field"
 
     let inputElement =
       Doc.InputType.Text

@@ -75,6 +75,7 @@ type Tooltip =
     let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
 
     let isVisible = Var.Create false
+    let tooltipId = WeaveId.create "weave-tooltip"
 
     let tooltipClasses = [
       Css.``weave-tooltip``
@@ -91,6 +92,7 @@ type Tooltip =
     div [
       AlignItems.toClass AlignItems.Center |> cl
       AlignContent.toClass AlignContent.Center |> cl
+      Attr.Create "aria-describedby" tooltipId
       yield! rootClasses |> List.map cl
       yield! attrs
 
@@ -110,6 +112,8 @@ type Tooltip =
       innerContent
 
       div [
+        Attr.Create "id" tooltipId
+        Attr.Create "role" "tooltip"
         yield! tooltipClasses |> List.map cl
         yield! tooltipAttrs
 

@@ -114,6 +114,7 @@ module Select =
       ]
 
     let singleItem
+      (selectId: string)
       (index: int)
       (def: SelectItemDef<'T>)
       (selectedValue: Var<'T option>)
@@ -127,7 +128,7 @@ module Select =
       let itemEnabled =
         (enabled, def.Disabled) ||> View.map2Cached (fun e d -> e && not d)
 
-      let itemId = sprintf "weave-select-item-%d" index
+      let itemId = sprintf "%s-item-%d" selectId index
 
       let isHighlighted = highlightedIndex.View |> View.MapCached(fun hi -> hi = index)
 
@@ -147,6 +148,7 @@ module Select =
       ] [ span [ cl Css.``weave-select__item-content`` ] [ def.Content ] ]
 
     let multiItem
+      (selectId: string)
       (index: int)
       (def: SelectItemDef<'T>)
       (selectedValues: Var<Set<'T>>)
@@ -167,7 +169,7 @@ module Select =
         else
           selectedValues.Value <- Set.add def.Value current
 
-      let itemId = sprintf "weave-select-item-%d" index
+      let itemId = sprintf "%s-item-%d" selectId index
 
       let isHighlighted = highlightedIndex.View |> View.MapCached(fun hi -> hi = index)
 
@@ -335,9 +337,11 @@ type Select =
     let selectRootRef = ref (JS.Document.CreateElement "div")
     let popoverRef = ref (JS.Document.CreateElement "div")
 
+    let selectId = WeaveId.create "weave-select"
+
     let activeDescendantView =
       highlightedIndex.View
-      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "weave-select-item-%d" idx else "")
+      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "%s-item-%d" selectId idx else "")
 
     let handleKeyNav (ev: Dom.KeyboardEvent) =
       let items = filteredSnapshot.Value
@@ -385,7 +389,7 @@ type Select =
         Attr.Create "aria-haspopup" "listbox"
         Attr.DynamicCustom
           (fun el v -> el.SetAttribute("aria-expanded", v))
-          (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
+          (openVar.View |> View.Map(sprintf "%b"))
         Attr.DynamicCustom (fun el v -> el.SetAttribute("aria-activedescendant", v)) activeDescendantView
         Attr.DynamicCustom
           (fun el v ->
@@ -438,7 +442,7 @@ type Select =
                 else
                   filtered
                   |> List.mapi (fun i def ->
-                    Render.singleItem i def selectedValue openVar highlightedIndex enabled)
+                    Render.singleItem selectId i def selectedValue openVar highlightedIndex enabled)
                   |> Doc.Concat)
             ]
           ]
@@ -584,9 +588,11 @@ type Select =
     let selectRootRef = ref (JS.Document.CreateElement "div")
     let popoverRef = ref (JS.Document.CreateElement "div")
 
+    let selectId = WeaveId.create "weave-select"
+
     let activeDescendantView =
       highlightedIndex.View
-      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "weave-select-item-%d" idx else "")
+      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "%s-item-%d" selectId idx else "")
 
     let handleKeyNav (ev: Dom.KeyboardEvent) =
       let items = filteredSnapshot.Value
@@ -638,7 +644,7 @@ type Select =
         Attr.Create "aria-haspopup" "listbox"
         Attr.DynamicCustom
           (fun el v -> el.SetAttribute("aria-expanded", v))
-          (openVar.View |> View.Map(fun o -> if o then "true" else "false"))
+          (openVar.View |> View.Map(sprintf "%b"))
         Attr.DynamicCustom (fun el v -> el.SetAttribute("aria-activedescendant", v)) activeDescendantView
         Attr.DynamicCustom
           (fun el v ->
@@ -698,7 +704,8 @@ type Select =
                   div [ cl Css.``weave-select__no-items`` ] [ noItemsContent ]
                 else
                   filtered
-                  |> List.mapi (fun i def -> Render.multiItem i def selectedValues highlightedIndex enabled)
+                  |> List.mapi (fun i def ->
+                    Render.multiItem selectId i def selectedValues highlightedIndex enabled)
                   |> Doc.Concat)
             ]
           ]

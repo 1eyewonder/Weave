@@ -45,6 +45,7 @@ type NumericField =
       ?enableMouseWheel: View<bool>,
       ?upIcon: Doc,
       ?downIcon: Doc,
+      ?inputAttrs: Attr list,
       ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
@@ -55,6 +56,7 @@ type NumericField =
     let enabled = defaultArg enabled (View.Const true)
     let readOnly = defaultArg readOnly (View.Const false)
     let shrinkLabel = defaultArg shrinkLabel (View.Const false)
+    let inputAttrs = defaultArg inputAttrs List.empty
     let minVal = defaultArg min Int32.MinValue
     let maxVal = defaultArg max Int32.MaxValue
     let step = defaultArg step (View.Const 1)
@@ -130,8 +132,7 @@ type NumericField =
 
     let clickState = View.Map2 (fun s e -> s, e) step editable
 
-    // Build the native input element.
-    let inputId = FieldId.fresh ()
+    let inputId = WeaveId.create "weave-field"
 
     let inputElement =
       Doc.InputType.Text
@@ -143,6 +144,8 @@ type NumericField =
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
+
+          yield! inputAttrs
 
           on.focus (fun _ _ -> isFocused.Value <- true)
 
@@ -265,6 +268,7 @@ type NumericField =
       ?enableMouseWheel: View<bool>,
       ?upIcon: Doc,
       ?downIcon: Doc,
+      ?inputAttrs: Attr list,
       ?typoAttrs: Attr list,
       ?attrs: Attr list
     ) =
@@ -275,6 +279,7 @@ type NumericField =
     let enabled = defaultArg enabled (View.Const true)
     let readOnly = defaultArg readOnly (View.Const false)
     let shrinkLabel = defaultArg shrinkLabel (View.Const false)
+    let inputAttrs = defaultArg inputAttrs List.empty
     let minVal = defaultArg min -infinity
     let maxVal = defaultArg max infinity
     let step = defaultArg step (View.Const 1.0)
@@ -345,7 +350,7 @@ type NumericField =
 
     let clickState = View.Map2 (fun s e -> s, e) step editable
 
-    let inputId = FieldId.fresh ()
+    let inputId = WeaveId.create "weave-field"
 
     let inputElement =
       Doc.InputType.Text
@@ -358,6 +363,8 @@ type NumericField =
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
+
+          yield! inputAttrs
 
           on.focus (fun _ _ -> isFocused.Value <- true)
 

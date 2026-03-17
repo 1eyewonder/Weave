@@ -105,8 +105,11 @@ type Dropdown =
 
     let attrs = defaultArg attrs []
 
-    let mutable dropdownRoot = ref (JS.Document.CreateElement "div")
+    let containerRef = ref (JS.Document.CreateElement "div")
     let buttonElRef = ref (JS.Document.CreateElement "span")
+
+    let keyboardWatcher =
+      MenuKeyboardNav.watch containerRef buttonElRef openVar "ArrowDown" "ArrowUp"
 
     let chevron (isOpen: View<bool>) =
       span [
@@ -134,6 +137,10 @@ type Dropdown =
           onClick = onClick,
           enabled = enabled,
           attrs = [
+            Attr.Create "aria-haspopup" "true"
+            openVar.View
+            |> View.Map(sprintf "%b")
+            |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
             yield! buttonAttrs
             on.afterRender (fun el -> buttonElRef.Value <- el)
             yield! onHover
@@ -141,7 +148,16 @@ type Dropdown =
         ))
 
     let renderItem item =
-      div [ cl Css.``weave-dropdown__item`` ] [ item ]
+      div [
+        cl Css.``weave-dropdown__item``
+        Attr.Create "role" "menuitem"
+        Attr.Create "tabindex" "-1"
+        on.afterRender (fun el ->
+          let children = el.QuerySelectorAll("button, a, [tabindex]")
+
+          for i in 0 .. children.Length - 1 do
+            As<Dom.Element>(children.Item(i)).SetAttribute("tabindex", "-1"))
+      ] [ item ]
 
     let menuView =
       openVar.View
@@ -150,7 +166,7 @@ type Dropdown =
           div
             [
               cls [ Css.``weave-dropdown__list`` ]
-
+              Attr.Create "role" "menu"
               Map.ofList [
                 AnchorOrigin.TopLeft, Css.``weave-dropdown__list--anchor-origin-top-left``
                 AnchorOrigin.TopCenter, Css.``weave-dropdown__list--anchor-origin-top-center``
@@ -177,7 +193,6 @@ type Dropdown =
               ]
               |> Attr.classSelection transformOrigin
 
-              on.afterRender (fun el -> dropdownRoot.Value <- el)
             ]
             (items |> Seq.map renderItem)
         else
@@ -185,11 +200,12 @@ type Dropdown =
 
     let outsideClickWatcher =
       openVar.View
-      |> DocumentEventListener.onMouseDown [ dropdownRoot; buttonElRef ] (fun () -> openVar.Value <- false)
+      |> DocumentEventListener.onMouseDown [ containerRef ] (fun () -> openVar.Value <- false)
 
     div [
       cl Css.``weave-dropdown``
       Attr.enabled enabled
+      on.afterRender (fun el -> containerRef.Value <- el)
       yield! attrs
 
       on.mouseLeaveView openOn (fun _ _ openOn ->
@@ -200,6 +216,7 @@ type Dropdown =
       closeOnOutsideClick
       |> Doc.BindView(fun closeOn -> if closeOn then outsideClickWatcher else Doc.Empty)
 
+      keyboardWatcher
       button
       Doc.EmbedView menuView
     ]

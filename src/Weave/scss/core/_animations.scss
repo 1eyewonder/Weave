@@ -202,9 +202,11 @@ $animation-kinds: (
   "slide-left-out":  (duration: standard, easing: $ease-accelerate),
   "slide-right-out": (duration: standard, easing: $ease-accelerate),
   // Emphasis — standard easing, longer duration
+  // bounce uses linear so the keyframe stops control the bounce shape entirely;
+  // a cubic-bezier easing would distort the carefully tuned oscillation timing.
   "pulse":  (duration: long, easing: $ease-standard),
   "shake":  (duration: long, easing: $ease-standard),
-  "bounce": (duration: long, easing: $ease-standard),
+  "bounce": (duration: long, easing: linear),
 );
 
 @each $name, $config in $animation-kinds {

@@ -12,6 +12,74 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module Pages =
 
+  let private animationPage () =
+    let isVisible = Var.Create false
+    let isActive = Var.Create false
+
+    div [] [
+      div [
+        Attr.Create "data-testid" "fade-in-static"
+        cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
+      ] [ text "Fade in" ]
+      div [
+        Attr.Create "data-testid" "bounce-static"
+        cl (AnimationEmphasis.toClass AnimationEmphasis.Bounce)
+      ] [ text "Bounce" ]
+      div [
+        Attr.Create "data-testid" "pulse-hover"
+        cls [
+          AnimationEmphasis.toClass AnimationEmphasis.Pulse
+          AnimationOn.toClass AnimationOn.Hover
+        ]
+      ] [ text "Pulse on hover" ]
+      div [
+        Attr.Create "data-testid" "suppress-container"
+        cl (AnimationKind.toClass AnimationKind.Suppress)
+      ] [
+        div [
+          Attr.Create "data-testid" "suppress-child"
+          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
+        ] [ text "Suppressed child" ]
+      ]
+      Button.Create(
+        text "Toggle Show",
+        (fun () -> isVisible.Value <- not isVisible.Value),
+        attrs = [ Attr.Create "data-testid" "show-toggle-btn" ]
+      )
+      Animate.showWith
+        AnimationPair.fadeInOut
+        isVisible.View
+        (fun () -> div [ Attr.Create "data-testid" "show-content" ] [ text "Animated show content" ])
+        [ Attr.Create "data-testid" "show-wrapper" ]
+        None
+      Button.Create(
+        text "Toggle Class",
+        (fun () -> isActive.Value <- not isActive.Value),
+        attrs = [ Attr.Create "data-testid" "toggle-btn" ]
+      )
+      div [
+        Attr.Create "data-testid" "toggle-target"
+        Animate.toggleClass AnimationPair.fadeInOut isActive.View
+      ] [ text "Toggle target" ]
+      div [] [
+        div [
+          Attr.Create "data-testid" "stagger-1"
+          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
+          Attr.Class(AnimationDelay.stagger 1)
+        ] [ text "Stagger 1" ]
+        div [
+          Attr.Create "data-testid" "stagger-2"
+          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
+          Attr.Class(AnimationDelay.stagger 2)
+        ] [ text "Stagger 2" ]
+        div [
+          Attr.Create "data-testid" "stagger-3"
+          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
+          Attr.Class(AnimationDelay.stagger 3)
+        ] [ text "Stagger 3" ]
+      ]
+    ]
+
   let private checkboxPage () =
     div [] [
       Checkbox.Create(Var.Create false, View.Const "Default Checkbox")
@@ -522,6 +590,7 @@ module Pages =
     | "field" -> fieldPage ()
     | "numericfield" -> numericFieldPage ()
     | "select" -> selectPage ()
+    | "animation" -> animationPage ()
     | "button" -> buttonPage ()
     | "dialog" -> dialogPage ()
     | "dialog-force" -> dialogForcePage ()

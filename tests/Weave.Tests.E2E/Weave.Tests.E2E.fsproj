@@ -8,6 +8,7 @@
     <Compile Include="TestServerFixture.fs" />
     <Compile Include="accessibility/TestBase.fs" />
     <Compile Include="accessibility/AlertTests.fs" />
+    <Compile Include="accessibility/AnimationTests.fs" />
     <Compile Include="accessibility/AppBarTests.fs" />
     <Compile Include="accessibility/ButtonGroupTests.fs" />
     <Compile Include="accessibility/ButtonMenuTests.fs" />

@@ -43,6 +43,7 @@ let srcCodeGlob =
 let testsCodeGlob =
   !!(rootDir </> "tests/**/*.fs") ++ (rootDir </> "tests/**/*.fsx")
   -- (rootDir </> "tests/**/obj/**/*.fs")
+  -- (rootDir </> "tests/Weave.Tests.E2E.Site/**")
 
 let gitOwner = "1eyewonder"
 

@@ -101,7 +101,7 @@ Progress from simple to complex:
 
 1. **Basic usage** — minimal `Create` call with no optional props
 2. **Variants** — each `Variant` DU case (Filled, Outlined, Text, etc.)
-3. **Colors** — `BrandColor` palette applied via `Color.toClass`
+3. **Colors** — `BrandColor` palette applied via `Color.primary`, `Color.secondary`, etc. (or `Color.toAttr color` for parameterized use)
 4. **Sizes** — if the component has a `Size` module
 5. **Reactive / stateful behavior** — `Var<'T>` toggles, dynamic labels, `View` bindings
 6. **Disabled state** — `enabled = View.Const false`
@@ -144,10 +144,8 @@ let private selectedExample () =
         onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
         selected = isSelected.View,  // see here
         attrs = [
-          cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-          ]
+          Chip.Variant.toClass Chip.Variant.Filled |> cl
+          Chip.Color.toClass BrandColor.Primary |> cl
         ]
       )
     ]
@@ -163,10 +161,8 @@ Chip.Create(
     onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
     selected = isSelected.View, // see here
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.toClass Chip.Variant.Filled |> cl
+        Chip.Color.toClass BrandColor.Primary |> cl
     ]
 )"""
 
@@ -190,7 +186,7 @@ let content =
       GridItem.Create(
         MyComponent.Create(
           text (sprintf "%A" color),
-          attrs = [ cls [ MyComponent.Color.toClass color ] ]
+          attrs = [ MyComponent.Color.toAttr color ]
         )
       )),
     spacing = Grid.GutterSpacing.create 2
@@ -242,7 +238,7 @@ Also register the file in `Weave.Docs.fsproj` **before** `ExamplesRouter.fs` in 
 The `component-designer` agent defines the F# API, which determines what you document:
 
 1. **Read the `Create` signature** — required parameters come first, then optionals. Your basic example should demonstrate only the required parameters; subsequent examples layer on one optional at a time.
-2. **Read the DU types** — each `Variant`, `Size`, or `Color` module needs its own example section showing how to apply `toClass` via `attrs`.
+2. **Read the style modules** — each `Variant`, `Size`, or `Color` module needs its own example section. Some components use plain `let` bindings returning `Attr` directly (e.g., `Button.Variant.filled`); others still use DU types with `toClass` functions (e.g., `Chip.Variant.toClass Chip.Variant.Filled |> cl`). Follow whichever pattern the component uses.
 3. **Check for reactive parameters** — any `Var<'T>` or `View<'T>` parameter needs a reactive demo showing the state changing. These are often the most valuable examples for users.
 4. **Check for composition** — if the component wraps or is wrapped by other components (e.g. `ChipSet` wraps `Chip`), show the composition pattern.
 

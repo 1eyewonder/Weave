@@ -226,14 +226,7 @@ div [
           Button.Create(
             text "Play",
             onClick = (fun () -> replayKey.Value <- replayKey.Value + 1),
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-
-                yield! Button.Width.toClass Button.Width.Full |> Option.toList
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
           )
         ]
 
@@ -366,9 +359,9 @@ div [
             text "Bounce on hover",
             onClick = ignore,
             attrs = [
+              Button.Variant.filled
+              Button.Color.primary
               cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
                 AnimationEmphasis.toClass AnimationEmphasis.Bounce
                 AnimationOn.toClass AnimationOn.Hover // see here
                 AnimationDuration.toClass AnimationDuration.Short
@@ -380,9 +373,9 @@ div [
             text "Shake on hover",
             onClick = ignore,
             attrs = [
+              Button.Variant.filled
+              Button.Color.error
               cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Error |> Button.Color.toClass
                 AnimationEmphasis.toClass AnimationEmphasis.Shake
                 AnimationOn.toClass AnimationOn.Hover
                 AnimationDuration.toClass AnimationDuration.Short
@@ -398,9 +391,9 @@ div [
             text "Bounce on focus",
             onClick = ignore,
             attrs = [
+              Button.Variant.filled
+              Button.Color.secondary
               cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Secondary |> Button.Color.toClass
                 AnimationEmphasis.toClass AnimationEmphasis.Bounce
                 AnimationOn.toClass AnimationOn.Focus // see here
                 AnimationDuration.toClass AnimationDuration.Short
@@ -412,9 +405,9 @@ div [
             text "Pulse on hover or focus",
             onClick = ignore,
             attrs = [
+              Button.Variant.filled
+              Button.Color.info
               cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Info |> Button.Color.toClass
                 AnimationEmphasis.toClass AnimationEmphasis.Pulse
                 AnimationOn.toClass AnimationOn.HoverFocus // see here
               ]
@@ -433,9 +426,9 @@ Button.Create(
     text "Bounce on hover",
     onClick = ignore,
     attrs = [
+        Button.Variant.filled
+        Button.Color.primary
         cls [
-            Button.Variant.Filled |> Button.Variant.toClass
-            BrandColor.Primary |> Button.Color.toClass
             AnimationEmphasis.toClass AnimationEmphasis.Bounce
             AnimationOn.toClass AnimationOn.Hover  // see here
             AnimationDuration.toClass AnimationDuration.Short
@@ -448,9 +441,9 @@ Button.Create(
     text "Pulse on hover or focus",
     onClick = ignore,
     attrs = [
+        Button.Variant.filled
+        Button.Color.info
         cls [
-            Button.Variant.Filled |> Button.Variant.toClass
-            BrandColor.Info |> Button.Color.toClass
             AnimationEmphasis.toClass AnimationEmphasis.Pulse
             AnimationOn.toClass AnimationOn.HoverFocus  // see here
         ]
@@ -469,9 +462,9 @@ Button.Create(
         text label,
         onClick = ignore,
         attrs = [
+          Button.Variant.filled
+          Button.Color.toAttr color
           cls [
-            Button.Variant.Filled |> Button.Variant.toClass
-            Button.Color.toClass color
             AnimationEmphasis.toClass emphasis
             AnimationDuration.toClass AnimationDuration.Medium
           ]
@@ -496,9 +489,9 @@ Button.Create(
     text "Pulse",
     onClick = ignore,
     attrs = [
+        Button.Variant.filled
+        Button.Color.primary
         cls [
-            Button.Variant.Filled |> Button.Variant.toClass
-            BrandColor.Primary |> Button.Color.toClass
             AnimationEmphasis.toClass AnimationEmphasis.Pulse
             AnimationDuration.toClass AnimationDuration.Medium
         ]
@@ -596,12 +589,7 @@ Chip.Create(
           Button.Create(
             text "Toggle",
             onClick = (fun () -> isActive.Value <- not isActive.Value),
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 
@@ -653,12 +641,7 @@ Button.Create(
           Button.Create(
             text "Toggle visibility",
             onClick = (fun () -> isVisible.Value <- not isVisible.Value),
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 
@@ -804,12 +787,7 @@ Animate.show
               (fun () ->
                 isVisible.Value <- false
                 JavaScript.JS.SetTimeout (fun () -> isVisible.Value <- true) 50 |> ignore),
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 
@@ -887,12 +865,7 @@ WeaveList.Create(
           Button.Create(
             text "Add alert",
             onClick = addAlert,
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 
@@ -986,12 +959,7 @@ alerts.View
           Button.Create(
             text "Add chip",
             onClick = addChip,
-            attrs = [
-              cls [
-                Button.Variant.Filled |> Button.Variant.toClass
-                BrandColor.Primary |> Button.Color.toClass
-              ]
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 

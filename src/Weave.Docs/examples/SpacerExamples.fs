@@ -28,19 +28,13 @@ module SpacerExamples =
         Button.Create(
           text "Left",
           onClick = (fun () -> ()),
-          attrs = [
-            Button.Variant.toClass Button.Variant.Filled |> cl
-            BrandColor.Primary |> Button.Color.toClass |> cl
-          ]
+          attrs = [ Button.Variant.filled; Button.Color.primary ]
         )
         Spacer.Create()
         Button.Create(
           text "Right",
           onClick = (fun () -> ()),
-          attrs = [
-            Button.Variant.toClass Button.Variant.Filled |> cl
-            BrandColor.Primary |> Button.Color.toClass |> cl
-          ]
+          attrs = [ Button.Variant.filled; Button.Color.primary ]
         )
       ]
 
@@ -63,10 +57,7 @@ module SpacerExamples =
       Button.Create(
         text label,
         onClick = (fun () -> ()),
-        attrs = [
-          Button.Variant.toClass Button.Variant.Filled |> cl
-          BrandColor.Primary |> Button.Color.toClass |> cl
-        ]
+        attrs = [ Button.Variant.filled; Button.Color.primary ]
       )
 
     let content =

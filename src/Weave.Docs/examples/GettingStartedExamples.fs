@@ -56,10 +56,8 @@ let page () =
         text "Click me",
         onClick = (fun () -> JavaScript.JS.Alert "Hello from Weave!"),
         attrs = [
-            cls [
-                Button.Variant.toClass Button.Variant.Filled
-                Button.Color.toClass BrandColor.Primary
-            ]
+            Button.Variant.filled
+            Button.Color.primary
         ]
     )"""
       ]

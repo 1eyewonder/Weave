@@ -506,10 +506,7 @@ ChipSet.Create(
                     ChipSet.ChipDef.create (text "WebSharper") "websharper"
                     |> ChipSet.ChipDef.withClosable
                   ]),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             )
           else
             ChipSet.Create(

@@ -219,10 +219,7 @@ Chip.Create(
             Button.Create(
               text "Reset",
               onClick = (fun () -> Var.Set items [ "React"; "Angular"; "Vue"; "Svelte"; "WebSharper" ]),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             )
           else
             div
@@ -286,10 +283,7 @@ items.View
             Button.Create(
               text "Reset",
               onClick = (fun () -> Var.Set items [ "Draft"; "Published"; "Archived" ]),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             )
           else
             div

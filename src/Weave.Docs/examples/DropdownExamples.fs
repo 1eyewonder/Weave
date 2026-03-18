@@ -28,12 +28,7 @@ module DropdownExamples =
                 Button.Create(
                   text "OK",
                   onClick = (fun () -> Var.Set messageVar None),
-                  attrs = [
-                    cls [
-                      Button.Color.toClass BrandColor.Primary
-                      Button.Variant.toClass Button.Variant.Filled
-                    ]
-                  ]
+                  attrs = [ Button.Color.primary; Button.Variant.filled ]
                 )
               ]
             ]
@@ -58,12 +53,7 @@ module DropdownExamples =
           buttonContents = text "Open Dropdown",
           items = items,
           attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ],
-          buttonAttrs = [
-            cls [
-              Button.Variant.toClass Button.Variant.Filled
-              Button.Color.toClass BrandColor.Primary
-            ]
-          ]
+          buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
         )
       ]
 
@@ -84,10 +74,8 @@ Dropdown.Create(
     buttonContents = text "Open Dropdown",
     items = items, // see here
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-        ]
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -181,12 +169,7 @@ Dropdown.Create(
                       transformOrigin = transformVar.View,
                       closeOnOutsideClick = View.Const false,
                       attrs = [ cls [ yield! Margin.toClasses Margin.Top.large ] ],
-                      buttonAttrs = [
-                        cls [
-                          Button.Variant.toClass Button.Variant.Filled
-                          Button.Color.toClass BrandColor.Primary
-                        ]
-                      ]
+                      buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
                     ),
                     xs = Grid.Width.create 12
                   )
@@ -228,10 +211,8 @@ Dropdown.Create(
     transformOrigin = transformVar.View, // see here
     closeOnOutsideClick = View.Const false,
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-        ]
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -274,11 +255,9 @@ Dropdown.Create(
         ],
         isOpen = nestedIsOpen,
         buttonAttrs = [
-          nestedIsOpen.View
-          |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Tertiary)
+          nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--tertiary"
 
-          nestedIsOpen.View
-          |> Attr.DynamicClassPred(Button.Variant.toClass Button.Variant.Outlined)
+          nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--outlined"
         ]
       )
 
@@ -298,12 +277,7 @@ Dropdown.Create(
               Dropdown.Create(
                 buttonContents = text "Dropdown w/o Styling",
                 items = items,
-                buttonAttrs = [
-                  cls [
-                    Button.Variant.toClass Button.Variant.Filled
-                    Button.Color.toClass BrandColor.Primary
-                  ]
-                ]
+                buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
               )
             )
 
@@ -311,12 +285,7 @@ Dropdown.Create(
               Dropdown.Create(
                 buttonContents = text "Dropdown w/ Styling",
                 items = styledItems,
-                buttonAttrs = [
-                  cls [
-                    Button.Variant.toClass Button.Variant.Filled
-                    Button.Color.toClass BrandColor.Secondary
-                  ]
-                ]
+                buttonAttrs = [ Button.Variant.filled; Button.Color.secondary ]
               )
             )
           ]
@@ -345,10 +314,10 @@ let nestedDropdown =
         isOpen = nestedIsOpen,
         buttonAttrs = [
             nestedIsOpen.View
-            |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Tertiary) // see here
+            |> Attr.DynamicClassPred Css.``weave-button--tertiary`` // see here
 
             nestedIsOpen.View
-            |> Attr.DynamicClassPred(Button.Variant.toClass Button.Variant.Outlined)
+            |> Attr.DynamicClassPred Css.``weave-button--outlined``
         ]
     )
 
@@ -356,10 +325,8 @@ Dropdown.Create(
     buttonContents = text "Dropdown w/ Styling",
     items = [ clickableItem 1; clickableItem 2; nestedDropdown ],
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Secondary
-        ]
+        Button.Variant.filled
+        Button.Color.secondary
     ]
 )
 """
@@ -377,13 +344,7 @@ Dropdown.Create(
         items = items,
         openOn = View.Const Dropdown.OpenOn.Click,
         attrs = [ Attr.Style "width" "100%" ],
-        buttonAttrs = [
-          cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-            Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          ]
-        ]
+        buttonAttrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
       )
 
     let hoverDropdown =
@@ -394,13 +355,7 @@ Dropdown.Create(
         items = items,
         openOn = View.Const Dropdown.OpenOn.Hover,
         attrs = [ Attr.Style "width" "100%" ],
-        buttonAttrs = [
-          cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Secondary
-            Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          ]
-        ]
+        buttonAttrs = [ Button.Variant.filled; Button.Color.secondary; Button.Width.full ]
       )
 
     let nestedClickableDropdown =
@@ -420,10 +375,7 @@ Dropdown.Create(
             )
           ],
           isOpen = nestedIsOpen,
-          buttonAttrs = [
-            nestedIsOpen.View
-            |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Primary)
-          ]
+          buttonAttrs = [ nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--primary" ]
         )
 
       Dropdown.Create(
@@ -431,13 +383,7 @@ Dropdown.Create(
         items = [ clickableItem alertVar 1; nestedDropdown ],
         openOn = View.Const Dropdown.OpenOn.Click,
         attrs = [ Attr.Style "width" "100%" ],
-        buttonAttrs = [
-          cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Tertiary
-            Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          ]
-        ]
+        buttonAttrs = [ Button.Variant.filled; Button.Color.tertiary; Button.Width.full ]
       )
 
     let nestedHoverDropdown =
@@ -458,10 +404,7 @@ Dropdown.Create(
           ],
           isOpen = nestedIsOpen,
           openOn = View.Const Dropdown.OpenOn.Hover,
-          buttonAttrs = [
-            nestedIsOpen.View
-            |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Primary)
-          ]
+          buttonAttrs = [ nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--primary" ]
         )
 
       Dropdown.Create(
@@ -469,13 +412,7 @@ Dropdown.Create(
         items = [ clickableItem alertVar 1; nestedDropdown ],
         openOn = View.Const Dropdown.OpenOn.Hover,
         attrs = [ Attr.Style "width" "100%" ],
-        buttonAttrs = [
-          cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-            Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          ]
-        ]
+        buttonAttrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
       )
 
     let description =
@@ -524,10 +461,8 @@ Dropdown.Create(
     items = items,
     openOn = View.Const Dropdown.OpenOn.Click, // see here
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-        ]
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -536,10 +471,8 @@ Dropdown.Create(
     items = items,
     openOn = View.Const Dropdown.OpenOn.Hover, // see here
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Secondary
-        ]
+        Button.Variant.filled
+        Button.Color.secondary
     ]
 )
 
@@ -549,7 +482,7 @@ NestedDropdown.Create(
     openOn = View.Const Dropdown.OpenOn.Hover, // see here
     buttonAttrs = [
         nestedIsOpen.View
-        |> Attr.DynamicClassPred(Button.Color.toClass BrandColor.Primary)
+        |> Attr.DynamicClassPred "weave-button--primary"
     ]
 )
 """
@@ -583,12 +516,7 @@ NestedDropdown.Create(
           buttonContents = text "Dropdown",
           items = items,
           attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ],
-          buttonAttrs = [
-            cls [
-              Button.Variant.toClass Button.Variant.Filled
-              Button.Color.toClass BrandColor.Primary
-            ]
-          ]
+          buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
         )
       ]
 
@@ -614,10 +542,8 @@ Dropdown.Create(
     buttonContents = text "Dropdown",
     items = items,
     buttonAttrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled
-            Button.Color.toClass BrandColor.Primary
-        ]
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -642,12 +568,7 @@ Dropdown.Create(
           Dropdown.Create(
             buttonContents = text "Open",
             items = items,
-            buttonAttrs = [
-              cls [
-                Button.Variant.toClass Button.Variant.Filled
-                Button.Color.toClass BrandColor.Primary
-              ]
-            ]
+            buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 

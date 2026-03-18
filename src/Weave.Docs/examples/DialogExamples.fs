@@ -13,12 +13,7 @@ module DialogExamples =
     Button.Create(
       text "Cancel",
       onClick = (fun () -> Var.Set dialog false),
-      attrs = [
-        cls [
-          Button.Color.toClass BrandColor.Error
-          Button.Variant.toClass Button.Variant.Filled
-        ]
-      ]
+      attrs = [ Button.Color.error; Button.Variant.filled ]
     )
 
   let confirm dialog =
@@ -26,11 +21,9 @@ module DialogExamples =
       text "Confirm",
       onClick = (fun () -> Var.Set dialog false),
       attrs = [
-        cls [
-          Button.Color.toClass BrandColor.Primary
-          Button.Variant.toClass Button.Variant.Filled
-          yield! Margin.toClasses Margin.Right.extraSmall
-        ]
+        Button.Color.primary
+        Button.Variant.filled
+        Margin.toClasses Margin.Right.extraSmall |> cls
       ]
     )
 
@@ -52,12 +45,7 @@ module DialogExamples =
         Button.Create(
           text "Open Dialog",
           onClick = (fun () -> Var.Set dialogVisible true),
-          attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Primary
-              Button.Variant.toClass Button.Variant.Filled
-            ]
-          ]
+          attrs = [ Button.Color.primary; Button.Variant.filled ]
         )
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
@@ -115,12 +103,7 @@ dialogVisible.View
         Button.Create(
           text "Open Optional Dialog",
           onClick = (fun () -> Var.Set dialogVisible true),
-          attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Secondary
-              Button.Variant.toClass Button.Variant.Filled
-            ]
-          ]
+          attrs = [ Button.Color.secondary; Button.Variant.filled ]
         )
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
@@ -166,12 +149,7 @@ Dialog.Create(
           Button.Create(
             text "Close",
             onClick = (fun () -> Var.Set dialog None),
-            attrs = [
-              cls [
-                Button.Color.toClass BrandColor.Primary
-                Button.Variant.toClass Button.Variant.Filled
-              ]
-            ]
+            attrs = [ Button.Color.primary; Button.Variant.filled ]
           )
         ]
       ]
@@ -188,12 +166,7 @@ Dialog.Create(
         Button.Create(
           text label,
           onClick = (fun () -> Var.Set dialogVisible (Some pos)),
-          attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Secondary
-              Button.Variant.toClass Button.Variant.Filled
-            ]
-          ]
+          attrs = [ Button.Color.secondary; Button.Variant.filled ]
         ))
 
     let description =

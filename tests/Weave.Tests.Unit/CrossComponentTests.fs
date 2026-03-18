@@ -6,7 +6,6 @@ open Weave.Tests.Unit.Generators
 open Weave
 
 let colorMappings: (string * (BrandColor -> string)) list = [
-  "Button", Button.Color.toClass
   "ButtonGroup", ButtonGroup.Color.toClass
   "Checkbox", Checkbox.Color.toClass
   "Chip", Chip.Color.toClass

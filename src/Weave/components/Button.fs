@@ -11,43 +11,35 @@ open Weave.Operators
 [<JavaScript>]
 module Button =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Filled
-    | Outlined
-    | Text
-
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Filled -> Css.``weave-button--filled``
-      | Variant.Outlined -> Css.``weave-button--outlined``
-      | Variant.Text -> Css.``weave-button--text``
-
-  [<RequireQualifiedAccess; Struct>]
-  type Width =
-    | Full
-    | Auto
+    let filled = cl Css.``weave-button--filled``
+    let outlined = cl Css.``weave-button--outlined``
+    let text = cl Css.``weave-button--text``
 
   module Width =
 
-    let toClass width =
-      match width with
-      | Width.Full -> Some Css.``weave-button--full-width``
-      | Width.Auto -> None
+    let full = cl Css.``weave-button--full-width``
 
   module Color =
 
-    let toClass color =
+    let primary = cl Css.``weave-button--primary``
+    let secondary = cl Css.``weave-button--secondary``
+    let tertiary = cl Css.``weave-button--tertiary``
+    let error = cl Css.``weave-button--error``
+    let warning = cl Css.``weave-button--warning``
+    let success = cl Css.``weave-button--success``
+    let info = cl Css.``weave-button--info``
+
+    let toAttr color =
       match color with
-      | BrandColor.Primary -> Css.``weave-button--primary``
-      | BrandColor.Secondary -> Css.``weave-button--secondary``
-      | BrandColor.Tertiary -> Css.``weave-button--tertiary``
-      | BrandColor.Error -> Css.``weave-button--error``
-      | BrandColor.Warning -> Css.``weave-button--warning``
-      | BrandColor.Success -> Css.``weave-button--success``
-      | BrandColor.Info -> Css.``weave-button--info``
+      | BrandColor.Primary -> primary
+      | BrandColor.Secondary -> secondary
+      | BrandColor.Tertiary -> tertiary
+      | BrandColor.Error -> error
+      | BrandColor.Warning -> warning
+      | BrandColor.Success -> success
+      | BrandColor.Info -> info
 
 open Button
 
@@ -69,8 +61,6 @@ type Button =
     button [
       attr.``type`` "button"
       cl Css.``weave-button``
-
-      Width.toClass Width.Auto |> Option.map cl |> Option.defaultValue Attr.Empty
 
       yield! attrs
 

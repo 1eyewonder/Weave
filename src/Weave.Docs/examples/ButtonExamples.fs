@@ -17,21 +17,27 @@ module ButtonExamples =
     let content =
       Grid.Create(
         [
-          let btn displayText variant =
-            GridItem.Create(
-              Button.Create(
-                text displayText,
-                onClick = (fun () -> ()),
-                attrs = [
-                  Button.Variant.toClass variant |> cl
-                  BrandColor.Primary |> Button.Color.toClass |> cl
-                ]
-              )
+          GridItem.Create(
+            Button.Create(
+              text "Filled",
+              onClick = (fun () -> ()),
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             )
-
-          btn "Filled" Button.Variant.Filled
-          btn "Outlined" Button.Variant.Outlined
-          btn "Text" Button.Variant.Text
+          )
+          GridItem.Create(
+            Button.Create(
+              text "Outlined",
+              onClick = (fun () -> ()),
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
+            )
+          )
+          GridItem.Create(
+            Button.Create(
+              text "Text",
+              onClick = (fun () -> ()),
+              attrs = [ Button.Variant.text; Button.Color.primary ]
+            )
+          )
         ],
         spacing = Grid.GutterSpacing.create 2
       )
@@ -46,10 +52,8 @@ Button.Create(
     text "Filled",
     onClick = doNothing,
     attrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Filled // see here
-            BrandColor.Primary |> Button.Color.toClass
-        ]
+        Button.Variant.filled // see here
+        Button.Color.primary
     ]
 )
 
@@ -57,10 +61,8 @@ Button.Create(
     text "Outlined",
     onClick = doNothing,
     attrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Outlined // see here
-            BrandColor.Primary |> Button.Color.toClass
-        ]
+        Button.Variant.outlined // see here
+        Button.Color.primary
     ]
 )
 
@@ -68,10 +70,8 @@ Button.Create(
     text "Text",
     onClick = doNothing,
     attrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Text // see here
-            BrandColor.Primary |> Button.Color.toClass
-        ]
+        Button.Variant.text // see here
+        Button.Color.primary
     ]
 )
     """
@@ -116,14 +116,9 @@ colors
         text colorName,
         onClick = onClick colorName,
         attrs = [
-            cls [
-                Button.Variant.toClass Button.Variant.Filled
-                Button.Color.toClass color // see here
-
-                match Button.Width.toClass Button.Width.Full with
-                | Some c -> c
-                | None -> Attr.Empty
-            ]
+            Button.Variant.filled
+            Button.Color.toAttr color // see here
+            Button.Width.full
         ]
     )
 )
@@ -139,11 +134,7 @@ colors
             Button.Create(
               text colorName,
               onClick = (fun () -> printfn "%s clicked" colorName),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass color |> cl
-                Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.toAttr color; Button.Width.full ]
             )
           )
         ])
@@ -166,30 +157,21 @@ colors
             Button.Create(
               text "Filled",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             )
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
             Button.Create(
               text "Outlined",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             )
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
             Button.Create(
               text "Text",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Text |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.text; Button.Color.primary ]
             )
           ]
         ]
@@ -213,8 +195,8 @@ Button.Create(
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Compact) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -223,8 +205,8 @@ Button.Create(
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Standard) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -233,8 +215,8 @@ Button.Create(
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Spacious) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -253,10 +235,7 @@ Button.Create(
               text "Enabled",
               onClick = (fun () -> printfn "Enabled clicked"),
               enabled = View.Const true,
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             )
           )
           GridItem.Create(
@@ -264,7 +243,7 @@ Button.Create(
               text "Disabled",
               onClick = (fun () -> printfn "This won't fire"),
               enabled = View.Const false,
-              attrs = [ Button.Variant.Filled |> Button.Variant.toClass |> cl ]
+              attrs = [ Button.Variant.filled ]
             )
           )
         ],
@@ -280,8 +259,8 @@ Button.Create(
     onClick = (fun () -> printfn "Enabled clicked"),
     enabled = View.Const true, // see here
     attrs = [
-        Button.Variant.Filled |> Button.Variant.toClass
-        Button.Color.toClass BrandColor.Primary
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -290,7 +269,7 @@ Button.Create(
     onClick = (fun () -> printfn "This won't fire"),
     enabled = View.Const false, // see here
     attrs = [
-        Button.Variant.Filled |> Button.Variant.toClass
+        Button.Variant.filled
     ]
 )
 """
@@ -305,13 +284,7 @@ Button.Create(
       Button.Create(
         text "Full Width Button",
         onClick = (fun () -> printfn "Full width clicked"),
-        attrs = [
-          Button.Color.toClass BrandColor.Primary |> cl
-          Button.Variant.Filled |> Button.Variant.toClass |> cl
-          match Button.Width.toClass Button.Width.Full with
-          | Some c -> c |> cl
-          | None -> Attr.Empty
-        ]
+        attrs = [ Button.Color.primary; Button.Variant.filled; Button.Width.full ]
       )
 
     let code =
@@ -323,9 +296,9 @@ Button.Create(
     text "Full Width Button",
     onClick = (fun () -> printfn "Full width clicked"),
     attrs = [
-        Button.Color.toClass BrandColor.Primary
-        Button.Variant.Filled |> Button.Variant.toClass
-        Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty // see here
+        Button.Color.primary
+        Button.Variant.filled
+        Button.Width.full // see here
     ]
 )
 """
@@ -346,9 +319,9 @@ Button.Create(
                 text displayText,
                 onClick = (fun () -> ()),
                 attrs = [
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
+                  Button.Variant.filled
                   BorderRadius.toClass radius |> cl
-                  BrandColor.Primary |> Button.Color.toClass |> cl
+                  Button.Color.primary
                 ]
               )
             )
@@ -374,11 +347,9 @@ let btn (radius: BorderRadius) =
         text displayText,
         onClick = (fun () -> ()),
         attrs = [
-            cls [
-                Button.Variant.toClass Button.Variant.Filled
-                BorderRadius.toClass radius // see here
-                BrandColor.Primary |> Button.Color.toClass
-            ]
+            Button.Variant.filled
+            BorderRadius.toClass radius |> cl // see here
+            Button.Color.primary
         ]
     )
 
@@ -400,24 +371,24 @@ btn BorderRadius.Circle
     let content =
       Grid.Create(
         [
-          let btn icon ariaLabel color =
+          let btn icon ariaLabel (color: Attr) =
             GridItem.Create(
               Button.CreateIcon(
                 Icon.Create(icon),
                 onClick = (fun () -> printfn "%s clicked" ariaLabel),
                 attrs = [
                   Attr.Create "aria-label" ariaLabel
-                  Button.Color.toClass color |> cl
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
+                  color
+                  Button.Variant.filled
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               )
             )
 
-          btn (Icon.UiActions UiActions.Delete) "delete" BrandColor.Error
-          btn (Icon.UiActions UiActions.Favorite) "favorite" BrandColor.Secondary
-          btn (Icon.UiActions UiActions.Home) "home" BrandColor.Primary
-          btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
+          btn (Icon.UiActions UiActions.Delete) "delete" Button.Color.error
+          btn (Icon.UiActions UiActions.Favorite) "favorite" Button.Color.secondary
+          btn (Icon.UiActions UiActions.Home) "home" Button.Color.primary
+          btn (Icon.UiActions UiActions.Search) "search" Button.Color.info
         ],
         spacing = Grid.GutterSpacing.create 2
       )
@@ -434,8 +405,8 @@ let btn icon ariaLabel color =
         onClick = (fun () -> printfn "%s clicked" ariaLabel),
         attrs = [
             Attr.Create "aria-label" ariaLabel // see here
-            Button.Color.toClass color |> cl
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
+            Button.Color.toAttr color
+            Button.Variant.filled
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
@@ -467,8 +438,8 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    BrandColor.Secondary |> Button.Color.toClass |> cl
+                    Button.Variant.filled
+                    Button.Color.secondary
                   ]
                 ),
                 xs = Grid.Width.create 4,
@@ -480,8 +451,8 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "delete"
-                    Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                    BrandColor.Error |> Button.Color.toClass |> cl
+                    Button.Variant.outlined
+                    Button.Color.error
                   ]
                 ),
                 xs = Grid.Width.create 4,
@@ -491,11 +462,7 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
                 Button.CreateIcon(
                   Icon.Create(Icon.UiActions UiActions.Search),
                   onClick = (fun () -> ()),
-                  attrs = [
-                    Attr.Create "aria-label" "search"
-                    Button.Variant.Text |> Button.Variant.toClass |> cl
-                    BrandColor.Primary |> Button.Color.toClass |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "search"; Button.Variant.text; Button.Color.primary ]
                 ),
                 xs = Grid.Width.create 4,
                 sm = Grid.Width.create 3
@@ -521,8 +488,8 @@ Button.CreateIcon(
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Compact) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -532,8 +499,8 @@ Button.CreateIcon(
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Standard) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 
@@ -543,8 +510,8 @@ Button.CreateIcon(
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Spacious) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -565,8 +532,8 @@ Button.CreateIcon(
               enabled = View.Const true,
               attrs = [
                 Attr.Create "aria-label" "favorite"
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Secondary |> cl
+                Button.Variant.filled
+                Button.Color.secondary
               ]
             )
           )
@@ -575,10 +542,7 @@ Button.CreateIcon(
               Icon.Create(Icon.UiActions UiActions.Favorite),
               onClick = (fun () -> printfn "This won't fire"),
               enabled = View.Const false,
-              attrs = [
-                Attr.Create "aria-label" "favorite"
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-              ]
+              attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled ]
             )
           )
         ],
@@ -597,8 +561,8 @@ Button.CreateIcon(
     enabled = View.Const true, // see here
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Secondary |> cl
+        Button.Variant.filled
+        Button.Color.secondary
     ]
 )
 
@@ -608,7 +572,7 @@ Button.CreateIcon(
     enabled = View.Const false, // see here
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
+        Button.Variant.filled
     ]
 )
 """

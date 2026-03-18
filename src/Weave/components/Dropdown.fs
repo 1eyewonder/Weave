@@ -229,11 +229,9 @@ type DropdownItem =
       onClick,
       ?enabled = enabled,
       attrs = [
-        cls [
-          Button.Variant.toClass Button.Variant.Text
-          Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          BorderRadius.toClass BorderRadius.All.none
-        ]
+        Button.Variant.text
+        Button.Width.full
+        BorderRadius.toClass BorderRadius.All.none |> cl
 
         yield! attrs |> Option.defaultValue []
       ]
@@ -256,11 +254,9 @@ type NestedDropdown =
       ?transformOrigin = transformOrigin,
       ?enabled = enabled,
       buttonAttrs = [
-        cls [
-          Button.Variant.toClass Button.Variant.Text
-          Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-          BorderRadius.toClass BorderRadius.All.none
-        ]
+        Button.Variant.text
+        Button.Width.full
+        BorderRadius.toClass BorderRadius.All.none |> cl
 
         yield! buttonAttrs |> Option.defaultValue []
       ],

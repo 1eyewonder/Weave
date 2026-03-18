@@ -232,47 +232,21 @@ module Pages =
 
   let private buttonPage () =
     div [] [
-      Button.Create(
-        text "Filled Button",
-        (fun () -> ()),
-        attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
-      )
-      Button.Create(
-        text "Outlined Button",
-        (fun () -> ()),
-        attrs = [ Button.Variant.toClass Button.Variant.Outlined |> cl ]
-      )
+      Button.Create(text "Filled Button", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.Create(text "Outlined Button", (fun () -> ()), attrs = [ Button.Variant.outlined ])
       Button.Create(
         text "Disabled Button",
         (fun () -> ()),
         enabled = View.Const false,
-        attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
+        attrs = [ Button.Variant.filled ]
       )
       Button.CreateIcon(
         Icon.Create(Icon.UiActions UiActions.Home),
         (fun () -> ()),
-        attrs = [
-          Attr.Create "aria-label" "home"
-          Button.Variant.toClass Button.Variant.Filled |> cl
-          Button.Color.toClass BrandColor.Primary |> cl
-        ]
+        attrs = [ Attr.Create "aria-label" "home"; Button.Variant.filled; Button.Color.primary ]
       )
-      Button.Create(
-        text "Primary",
-        (fun () -> ()),
-        attrs = [
-          Button.Variant.toClass Button.Variant.Filled |> cl
-          Button.Color.toClass BrandColor.Primary |> cl
-        ]
-      )
-      Button.Create(
-        text "Error",
-        (fun () -> ()),
-        attrs = [
-          Button.Variant.toClass Button.Variant.Filled |> cl
-          Button.Color.toClass BrandColor.Error |> cl
-        ]
-      )
+      Button.Create(text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled; Button.Color.primary ])
+      Button.Create(text "Error", (fun () -> ()), attrs = [ Button.Variant.filled; Button.Color.error ])
     ]
 
   let private dialogPage () =
@@ -287,11 +261,7 @@ module Pages =
             div [] [
               Body1.Div("Dialog content goes here.")
               div [] [
-                Button.Create(
-                  text "Action",
-                  (fun () -> ()),
-                  attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
-                )
+                Button.Create(text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
               ]
             ]
           ),
@@ -307,11 +277,7 @@ module Pages =
         div [] [
           Body1.Div("You must complete this action.")
           div [] [
-            Button.Create(
-              text "Confirm",
-              (fun () -> ()),
-              attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
-            )
+            Button.Create(text "Confirm", (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
         ]
       ),
@@ -325,10 +291,7 @@ module Pages =
       Button.Create(
         text "Open Dialog",
         (fun () -> isOpen.Value <- true),
-        attrs = [
-          Attr.Create "id" "open-dialog-btn"
-          Button.Variant.toClass Button.Variant.Filled |> cl
-        ]
+        attrs = [ Attr.Create "id" "open-dialog-btn"; Button.Variant.filled ]
       )
       isOpen.View
       |> Doc.BindView(fun visible ->
@@ -339,11 +302,7 @@ module Pages =
               div [] [
                 Body1.Div("Dialog opened by button.")
                 div [] [
-                  Button.Create(
-                    text "Action",
-                    (fun () -> ()),
-                    attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
-                  )
+                  Button.Create(text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
                 ]
               ]
             ),
@@ -552,32 +511,16 @@ module Pages =
   let private buttongroupPage () =
     ButtonGroup.Create(
       [
-        Button.Create(
-          text "Left",
-          (fun () -> ()),
-          attrs = [ Button.Variant.toClass Button.Variant.Outlined |> cl ]
-        )
-        Button.Create(
-          text "Center",
-          (fun () -> ()),
-          attrs = [ Button.Variant.toClass Button.Variant.Outlined |> cl ]
-        )
-        Button.Create(
-          text "Right",
-          (fun () -> ()),
-          attrs = [ Button.Variant.toClass Button.Variant.Outlined |> cl ]
-        )
+        Button.Create(text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        Button.Create(text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        Button.Create(text "Right", (fun () -> ()), attrs = [ Button.Variant.outlined ])
       ]
     )
 
   let private tooltipPage () =
     div [] [
       Tooltip.Create(
-        Button.Create(
-          text "Hover me",
-          (fun () -> ()),
-          attrs = [ Button.Variant.toClass Button.Variant.Filled |> cl ]
-        ),
+        Button.Create(text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
         text "Tooltip text"
       )
     ]

@@ -680,30 +680,21 @@ div [
             Button.Create(
               text "Filled",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             )
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
             Button.Create(
               text "Outlined",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             )
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
             Button.Create(
               text "Text",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Text |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.text; Button.Color.primary ]
             )
           ]
         ]
@@ -728,16 +719,16 @@ div [ cl (Density.toClass Density.Compact) ] [ // see here
         text "Filled",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            BrandColor.Primary |> Button.Color.toClass |> cl
+            Button.Variant.filled
+            Button.Color.primary
         ]
     )
     Button.Create(
         text "Outlined",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Outlined |> Button.Variant.toClass |> cl
-            BrandColor.Primary |> Button.Color.toClass |> cl
+            Button.Variant.outlined
+            Button.Color.primary
         ]
     )
 ]
@@ -748,8 +739,8 @@ Button.Create(
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Spacious) // see here
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        BrandColor.Primary |> Button.Color.toClass |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """

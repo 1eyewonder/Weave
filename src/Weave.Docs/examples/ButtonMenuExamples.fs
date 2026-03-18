@@ -32,8 +32,8 @@ module ButtonMenuExamples =
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [
                   Attr.Create "aria-label" "share"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Info |> cl
+                  Button.Variant.filled
+                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -46,8 +46,8 @@ module ButtonMenuExamples =
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Error |> cl
+                  Button.Variant.filled
+                  Button.Color.error
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -60,8 +60,8 @@ module ButtonMenuExamples =
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [
                   Attr.Create "aria-label" "copy"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Success |> cl
+                  Button.Variant.filled
+                  Button.Color.success
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -70,8 +70,8 @@ module ButtonMenuExamples =
             )
           ],
           triggerAttrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Primary |> cl
+            Button.Variant.filled
+            Button.Color.primary
             BorderRadius.toClass BorderRadius.Circle |> cl
           ]
         )
@@ -92,8 +92,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Info |> cl
+                    Button.Variant.filled
+                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -106,8 +106,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -120,8 +120,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [
                     Attr.Create "aria-label" "copy"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Success |> cl
+                    Button.Variant.filled
+                    Button.Color.success
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -130,8 +130,8 @@ ButtonMenu.CreateIcon(
         )
     ],
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
         BorderRadius.toClass BorderRadius.Circle |> cl
     ]
 )
@@ -170,8 +170,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Secondary |> cl
+                    Button.Variant.filled
+                    Button.Color.secondary
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -184,8 +184,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -194,8 +194,8 @@ ButtonMenu.CreateIcon(
               )
             ],
             triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Primary |> cl
+              Button.Variant.filled
+              Button.Color.primary
               BorderRadius.toClass BorderRadius.Circle |> cl
             ]
           )
@@ -220,8 +220,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Secondary |> cl
+                    Button.Variant.filled
+                    Button.Color.secondary
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -234,8 +234,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -244,8 +244,8 @@ ButtonMenu.CreateIcon(
               )
             ],
             triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Primary |> cl
+              Button.Variant.filled
+              Button.Color.primary
               BorderRadius.toClass BorderRadius.Circle |> cl
             ]
           )
@@ -264,8 +264,8 @@ ButtonMenu.CreateIcon(
     openIcon = Icon.Create(Icon.UiActions UiActions.Close), // see here
     items = [ ... ],
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
         BorderRadius.toClass BorderRadius.Circle |> cl
     ]
 )
@@ -275,8 +275,8 @@ ButtonMenu.CreateIcon(
     closedIcon = Icon.Create(Icon.UiActions UiActions.Add), // rotates when open
     items = [ ... ],
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
         BorderRadius.toClass BorderRadius.Circle |> cl
     ]
 )
@@ -313,8 +313,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "alarm"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Info |> cl
+                  Button.Variant.filled
+                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -327,8 +327,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "star"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Warning |> cl
+                  Button.Variant.filled
+                  Button.Color.warning
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -338,8 +338,8 @@ ButtonMenu.CreateIcon(
           ],
           direction = direction,
           triggerAttrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Primary |> cl
+            Button.Variant.filled
+            Button.Color.primary
             BorderRadius.toClass BorderRadius.Circle |> cl
           ]
         )
@@ -371,8 +371,8 @@ let items = [
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "alarm"
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Info |> cl
+            Button.Variant.filled
+            Button.Color.info
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
@@ -381,16 +381,16 @@ let items = [
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "star"
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Warning |> cl
+            Button.Variant.filled
+            Button.Color.warning
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
 ]
 
 let triggerAttrs = [
-    Button.Variant.Filled |> Button.Variant.toClass |> cl
-    Button.Color.toClass BrandColor.Primary |> cl
+    Button.Variant.filled
+    Button.Color.primary
     BorderRadius.toClass BorderRadius.Circle |> cl
 ]
 
@@ -446,10 +446,7 @@ ButtonMenu.CreateIcon(
             |> View.Map(fun o -> if o then text "Close Menu" else text "Open Menu")
             |> Doc.EmbedView,
             onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
-            attrs = [
-              Button.Variant.Outlined |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Secondary |> cl
-            ]
+            attrs = [ Button.Variant.outlined; Button.Color.secondary ]
           )
         ]
         ButtonMenu.CreateIcon(
@@ -462,8 +459,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "share"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Info |> cl
+                  Button.Variant.filled
+                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -476,8 +473,8 @@ ButtonMenu.CreateIcon(
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
-                  Button.Variant.Filled |> Button.Variant.toClass |> cl
-                  Button.Color.toClass BrandColor.Error |> cl
+                  Button.Variant.filled
+                  Button.Color.error
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -487,8 +484,8 @@ ButtonMenu.CreateIcon(
           ],
           isOpen = isMenuOpen,
           triggerAttrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Primary |> cl
+            Button.Variant.filled
+            Button.Color.primary
             BorderRadius.toClass BorderRadius.Circle |> cl
           ]
         )
@@ -510,8 +507,8 @@ Button.Create(
     |> Doc.EmbedView,
     onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
     attrs = [
-        Button.Variant.Outlined |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Secondary |> cl
+        Button.Variant.outlined
+        Button.Color.secondary
     ]
 )
 
@@ -521,8 +518,8 @@ ButtonMenu.CreateIcon(
     items = [ ... ],
     isOpen = isMenuOpen, // see here - shared state
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
         BorderRadius.toClass BorderRadius.Circle |> cl
     ]
 )
@@ -562,8 +559,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Info |> cl
+                    Button.Variant.filled
+                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -576,8 +573,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -586,8 +583,8 @@ ButtonMenu.CreateIcon(
               )
             ],
             triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Primary |> cl
+              Button.Variant.filled
+              Button.Color.primary
               BorderRadius.toClass BorderRadius.Circle |> cl
             ]
           )
@@ -610,8 +607,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Info |> cl
+                    Button.Variant.filled
+                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -624,8 +621,8 @@ ButtonMenu.CreateIcon(
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -633,10 +630,7 @@ ButtonMenu.CreateIcon(
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Primary |> cl
-            ]
+            triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
       ]
@@ -658,15 +652,15 @@ ButtonMenu.CreateIcon(
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Info |> cl
+                Button.Variant.filled
+                Button.Color.info
                 BorderRadius.toClass BorderRadius.Circle |> cl
             ]
         )
     ],
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
         BorderRadius.toClass BorderRadius.Circle |> cl
     ]
 )
@@ -681,15 +675,15 @@ ButtonMenu.Create(
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Info |> cl
+                Button.Variant.filled
+                Button.Color.info
                 BorderRadius.toClass BorderRadius.Circle |> cl
             ]
         )
     ],
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.filled
+        Button.Color.primary
     ]
 )
 """
@@ -726,8 +720,8 @@ ButtonMenu.Create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Info |> cl
+                    Button.Variant.filled
+                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -740,8 +734,8 @@ ButtonMenu.Create(
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -749,10 +743,7 @@ ButtonMenu.Create(
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.Text |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Primary |> cl
-            ]
+            triggerAttrs = [ Button.Variant.text; Button.Color.primary ]
           )
         ]
         div [
@@ -776,8 +767,8 @@ ButtonMenu.Create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Info |> cl
+                    Button.Variant.filled
+                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -790,8 +781,8 @@ ButtonMenu.Create(
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
-                    Button.Variant.Filled |> Button.Variant.toClass |> cl
-                    Button.Color.toClass BrandColor.Error |> cl
+                    Button.Variant.filled
+                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -799,10 +790,7 @@ ButtonMenu.Create(
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Tertiary |> cl
-            ]
+            triggerAttrs = [ Button.Variant.filled; Button.Color.tertiary ]
           )
         ]
       ]
@@ -819,8 +807,8 @@ let menuItems = [
         onClick = (fun () -> printfn "share clicked"),
         attrs = [
             Attr.Create "aria-label" "share"
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Info |> cl
+            Button.Variant.filled
+            Button.Color.info
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
@@ -829,8 +817,8 @@ let menuItems = [
         onClick = (fun () -> printfn "favorite clicked"),
         attrs = [
             Attr.Create "aria-label" "favorite"
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Error |> cl
+            Button.Variant.filled
+            Button.Color.error
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
@@ -841,8 +829,8 @@ ButtonMenu.Create(
     closedContent = text "Menu",
     items = menuItems,
     triggerAttrs = [
-        Button.Variant.Text |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Primary |> cl
+        Button.Variant.text
+        Button.Color.primary
     ]
 )
 
@@ -852,8 +840,8 @@ ButtonMenu.Create(
     openContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Close" ],
     items = menuItems,
     triggerAttrs = [
-        Button.Variant.Filled |> Button.Variant.toClass |> cl
-        Button.Color.toClass BrandColor.Tertiary |> cl
+        Button.Variant.filled
+        Button.Color.tertiary
     ]
 )
 """

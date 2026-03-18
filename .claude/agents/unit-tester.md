@@ -12,12 +12,12 @@ You are a unit testing expert specializing in F# and the Expecto testing framewo
 - One assertion per test case where possible; use `testTheory` for data-driven cases
 - Tests should be self-documenting — a failing test message should explain exactly what broke
 - Keep tests fast and side-effect free; unit tests never touch DOM, network, or filesystem
-- Prefer exhaustive coverage of DU cases — every variant, color, and size should map to a class
+- Prefer exhaustive coverage of pure mapping functions — test `toClass` and `toAttr` functions where they exist. Components using plain `let` bindings returning `Attr` directly (e.g., `Button.Variant.filled`) don't need unit tests — the type provider enforces correctness at compile time.
 
 ## Weave-Specific Knowledge
 
 ### What to test
-Unit tests in Weave exclusively cover pure `toClass` mapping functions on DU types. Every `Variant`, `Color`, `Size`, or similar module exposes a `toClass` function — test all cases:
+Unit tests in Weave cover pure mapping functions (`toClass`, `toAttr`) on component modules. Some components use DU types with `toClass` functions; others have migrated to plain `let` bindings returning `Attr` directly. Only test components that still have mapping functions — plain `let` bindings are compiler-verified by the type provider.
 
 ```fsharp
 module Weave.Tests.Unit.ButtonTests
@@ -27,29 +27,29 @@ open Weave
 
 [<Tests>]
 let buttonTests =
-  testList "Button" [
+  testList "Chip" [
     testTheory "each variant maps to the correct class"
-      [ Button.Variant.Filled,   "weave-button--filled"
-        Button.Variant.Outlined, "weave-button--outlined"
-        Button.Variant.Ghost,    "weave-button--ghost" ]
+      [ Chip.Variant.Filled,   "weave-chip--filled"
+        Chip.Variant.Outlined, "weave-chip--outlined"
+        Chip.Variant.Text,     "weave-chip--text" ]
     <| fun (variant, expected) ->
-      Expect.equal (Button.Variant.toClass variant) expected ""
+      Expect.equal (Chip.Variant.toClass variant) expected ""
 
     testTheory "each color maps to the correct class"
-      [ BrandColor.Primary,   "weave-button--primary"
-        BrandColor.Secondary, "weave-button--secondary"
-        BrandColor.Success,   "weave-button--success"
-        BrandColor.Warning,   "weave-button--warning"
-        BrandColor.Danger,    "weave-button--danger" ]
+      [ BrandColor.Primary,   "weave-chip--primary"
+        BrandColor.Secondary, "weave-chip--secondary"
+        BrandColor.Success,   "weave-chip--success"
+        BrandColor.Warning,   "weave-chip--warning"
+        BrandColor.Error,     "weave-chip--error" ]
     <| fun (color, expected) ->
-      Expect.equal (Button.Color.toClass color) expected ""
+      Expect.equal (Chip.Color.toClass color) expected ""
   ]
 ```
 
 ### Test file structure
 - Namespace: `Weave.Tests.Unit.{Name}Tests`
 - One `[<Tests>]` binding per component, named `{camelCaseName}Tests`
-- Group by module with nested `testList` when a component has multiple DU modules (Variant, Color, Size)
+- Group by module with nested `testList` when a component has multiple mapping functions (e.g., `Color.toAttr`, `Variant.toClass`)
 - Use `testTheory` for all data-driven tests; use `test` only for single-case checks
 
 ### Project registration
@@ -66,10 +66,9 @@ Classes follow BEM: `weave-{component}--{modifier}`. Verify the exact strings ma
 - Avoid vague labels like `"works"` or `"test1"`
 
 ### Coverage checklist for every component
-- [ ] All `Variant` DU cases (if the component has a Variant module)
-- [ ] All `Color` DU cases (if the component has a Color module)
-- [ ] All `Size` DU cases (if the component has a Size module)
-- [ ] Any other `toClass`-style mapping functions on the component
+- [ ] All `toClass` or `toAttr` mapping functions (if the component has any)
+- [ ] Components using plain `let` bindings (returning `Attr` directly) do NOT need unit tests — skip these
+- [ ] Any other pure mapping functions on the component
 
 ### Expecto helpers to use
 - `Expect.equal actual expected message` — primary assertion

@@ -76,7 +76,7 @@ open Weave.CssHelpers
 
 [<JavaScript>]
 module MyComponent =
-  // DU types and their modules (toClass, toAttr helpers)
+  // Style modules with let bindings returning Attr (Variant, Color, etc.)
   ...
 
 open MyComponent

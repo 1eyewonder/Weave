@@ -86,10 +86,8 @@ Button.Create(
     text "Hello World!",
     onClick = (fun () -> ()),
     attrs = [
-        cls [
-            Button.Variant.toClass Button.Variant.Outlined
-            Button.Color.toClass BrandColor.Primary
-        ]
+        Button.Variant.outlined
+        Button.Color.primary
     ]
 )
 ```

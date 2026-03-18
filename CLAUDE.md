@@ -74,7 +74,7 @@ src/
     examples/             # One example file per component
     ExamplesRouter.fs     # Client-side SPA routing
 tests/
-  Weave.Tests.Unit/       # Expecto unit tests (verify toClass mappings)
+  Weave.Tests.Unit/       # Expecto unit tests
   Weave.Tests.Rendering/  # Playwright layout tests + HTML fixtures
 build/
   Build.fs                # FAKE build targets
@@ -98,20 +98,17 @@ open Weave.CssHelpers
 [<JavaScript>]
 module MyComponent =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Variant = | Filled | Outlined
-
   module Variant =
-    let toClass variant =
-      match variant with
-      | Variant.Filled   -> Css.``weave-mycomponent--filled``
-      | Variant.Outlined -> Css.``weave-mycomponent--outlined``
+    let filled = cl Css.``weave-mycomponent--filled``
+    let outlined = cl Css.``weave-mycomponent--outlined``
 
-  // Color module uses global BrandColor DU (no RequireQualifiedAccess needed on Color)
   module Color =
-    let toClass color =
+    let primary = cl Css.``weave-mycomponent--primary``
+    // ... other colors ...
+
+    let toAttr color =
       match color with
-      | BrandColor.Primary -> Css.``weave-mycomponent--primary``
+      | BrandColor.Primary -> primary
       // ...
 
 open MyComponent
@@ -132,7 +129,7 @@ type MyComponent =
 **Key rules:**
 
 - `[<JavaScript>]` on every module and type (required for WebSharper transpilation)
-- **No styling parameters** (`variant`, `color`, `size`) on `Create` — callers pass them via `?attrs` using `toClass` helpers
+- **No styling parameters** (`variant`, `color`, `size`) on `Create` — callers pass them via `?attrs` using the component's style modules (e.g., `Button.Variant.filled`, `Button.Color.primary`)
 - `?attrs: Attr list` is always the last optional parameter; defaults to `[]`; `yield! attrs` comes last so callers can extend
 - **Reactive parameters:** use `Var<'T>` for two-way bindings, `View<'T>` for read-only reactive inputs; avoid plain values for anything that can change
 - **CSS helpers:** `cl` for a single class, `cls [...]` for multiple — never chain `cl` calls where `cls` applies
@@ -158,7 +155,7 @@ When asked to scaffold a new component, use the `/scaffold-component` skill — 
 4. Register F# file in `src/Weave/Weave.fsproj`
 5. `src/Weave.Docs/examples/{Name}Examples.fs` — interactive docs examples
 6. Register example in `src/Weave.Docs/Weave.Docs.fsproj` and `ExamplesRouter.fs` (4 places: `Page` DU, `pageToString`, `renderPage`, nav list)
-7. `tests/Weave.Tests.Unit/{Name}Tests.fs` — Expecto tests for `toClass` mappings
+7. `tests/Weave.Tests.Unit/{Name}Tests.fs` — Expecto tests for pure mapping functions (if any)
 8. `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` — Playwright layout tests
 9. `tests/Weave.Tests.Rendering/fixtures/{name}.html` — static HTML fixture using compiled CSS
 10. `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` — axe-core scan + keyboard/focus tests
@@ -167,7 +164,7 @@ When asked to scaffold a new component, use the `/scaffold-component` skill — 
 
 ## Testing Patterns
 
-**Unit tests** (Expecto) — test pure `toClass` mappings only, never DOM:
+**Unit tests** (Expecto) — test pure mapping functions like `toAttr`, never DOM. Components using plain `let` bindings (returning `Attr` directly from type-provided CSS classes) don't need unit tests -- the compiler enforces correctness.
 
 ```fsharp
 module Weave.Tests.Unit.{Name}Tests
@@ -177,10 +174,10 @@ open Weave
 [<Tests>]
 let {name}Tests =
   testList "{Name}" [
-    testTheory "each variant maps to the correct class" [
-      MyComponent.Variant.Filled, "weave-mycomponent--filled"
+    testTheory "each BrandColor maps to the correct attr" [
+      BrandColor.Primary, "weave-mycomponent--primary"
     ]
-    <| fun (variant, expected) -> Expect.equal (MyComponent.Variant.toClass variant) expected ""
+    <| fun (color, expected) -> Expect.equal (MyComponent.Color.toAttr color) (cl expected) ""
   ]
 ```
 

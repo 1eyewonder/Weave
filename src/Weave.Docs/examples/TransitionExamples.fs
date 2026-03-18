@@ -82,8 +82,8 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
         text "Slow hover",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            BrandColor.Primary |> Button.Color.toClass |> cl
+            Button.Variant.filled
+            Button.Color.primary
         ]
     )
 ]"""
@@ -109,10 +109,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
             Button.Create(
               text "Hover me",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             )
           ]
         ]
@@ -155,8 +152,8 @@ let speedColumn (speed: TransitionSpeed) =
             text "Hover me",
             onClick = (fun () -> ()),
             attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                BrandColor.Primary |> Button.Color.toClass |> cl
+                Button.Variant.filled
+                Button.Color.primary
             ]
         )
     ]

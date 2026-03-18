@@ -95,16 +95,7 @@ module DrawerExamples =
     ] [ child ]
 
   let private filledButton (label: string) (onClick: unit -> unit) =
-    Button.Create(
-      text label,
-      onClick = onClick,
-      attrs = [
-        cls [
-          Button.Color.toClass BrandColor.Primary
-          Button.Variant.toClass Button.Variant.Filled
-        ]
-      ]
-    )
+    Button.Create(text label, onClick = onClick, attrs = [ Button.Color.primary; Button.Variant.filled ])
 
   let private temporaryExample () =
     let description =
@@ -129,12 +120,7 @@ module DrawerExamples =
                     |> View.Map text
                     |> Doc.EmbedView,
                     onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-                    attrs = [
-                      cls [
-                        Button.Color.toClass BrandColor.Primary
-                        Button.Variant.toClass Button.Variant.Filled
-                      ]
-                    ]
+                    attrs = [ Button.Color.primary; Button.Variant.filled ]
                   )),
                 position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
@@ -187,12 +173,7 @@ DrawerContainer.Create(
         |> View.Map text
         |> Doc.EmbedView,
         onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-        attrs = [
-          cls [
-            Button.Color.toClass BrandColor.Primary
-            Button.Variant.toClass Button.Variant.Filled
-          ]
-        ]
+        attrs = [ Button.Color.primary; Button.Variant.filled ]
       )
 
     let preview =
@@ -306,12 +287,7 @@ DrawerContainer.Create(
           |> View.Map text
           |> Doc.EmbedView,
           onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-          attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Primary
-              Button.Variant.toClass Button.Variant.Filled
-            ]
-          ]
+          attrs = [ Button.Color.primary; Button.Variant.filled ]
         )
         Switch.Create(hoverEnabled, Body1.Div("Hover expand"))
       ]
@@ -444,12 +420,7 @@ DrawerContainer.Create(
         Button.Create(
           text (if opened then "Close Drawer" else "Open Drawer"),
           onClick = (fun () -> Var.Update isOpen not),
-          attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Primary
-              Button.Variant.toClass Button.Variant.Outlined
-            ]
-          ]
+          attrs = [ Button.Color.primary; Button.Variant.outlined ]
         ))
 
     let clipButton (mode: Drawer.ClipMode) (label: string) =
@@ -459,13 +430,11 @@ DrawerContainer.Create(
           text label,
           onClick = (fun () -> Var.Set clipMode mode),
           attrs = [
-            cls [
-              Button.Color.toClass BrandColor.Primary
-              if current = mode then
-                Button.Variant.toClass Button.Variant.Filled
-              else
-                Button.Variant.toClass Button.Variant.Outlined
-            ]
+            Button.Color.primary
+            if current = mode then
+              Button.Variant.filled
+            else
+              Button.Variant.outlined
           ]
         ))
 

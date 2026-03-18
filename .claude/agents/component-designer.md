@@ -25,17 +25,15 @@ namespace Weave
 
 [<JavaScript>]
 module MyComponent =
-  // DU types with [<RequireQualifiedAccess; Struct>]
-  // toClass mapping modules
-
-open MyComponent
+  // Style modules with plain let bindings returning Attr
+  // Color module includes toAttr for parameterized use
 
 [<JavaScript>]
 type MyComponent =
   static member Create(...) = ...
 ```
 
-The `module` holds DU types and pure mapping functions. The `type` holds `Create` (and variant factory methods like `CreateIcon`). The `open` between them brings DU cases into scope for the implementation.
+The `module` holds style sub-modules with `let` bindings and mapping functions. The `type` holds `Create` (and variant factory methods like `CreateIcon`).
 
 ### Parameter conventions
 - Required content/children come first as positional parameters
@@ -55,7 +53,7 @@ The `module` holds DU types and pure mapping functions. The `type` holds `Create
 - `cl` for a single class, `cls [...]` for multiple — never chain `cl` calls
 - `Attr.DynamicClassPred` gates a modifier class on a `View<bool>`
 - `Attr.classSelection` maps a `View<'T>` to one-of-many classes via a `Map<'T, string>`
-- Styling DUs (Variant, Size) are applied by callers through `attrs` using `toClass` helpers — never as explicit `Create` parameters
+- Styling modules (Variant, Size, Color) provide `let` bindings that return `Attr` directly (e.g., `Button.Variant.filled`). Callers apply them through `?attrs` — never as explicit `Create` parameters. For Color, a `toAttr` function is also provided for parameterized use with `BrandColor` values.
 - Color always uses the global `BrandColor` DU, not a component-local Color type
 
 ### Composition patterns
@@ -79,7 +77,7 @@ When reviewing an existing component's API:
 - [ ] Are reactive parameters using the correct type (`Var` vs `View`)?
 - [ ] Is `?attrs` the last parameter with `yield! attrs` last in the attribute list?
 - [ ] Do DU types have `[<RequireQualifiedAccess; Struct>]`?
-- [ ] Are `toClass` functions exhaustive over all DU cases?
+- [ ] Are `toAttr` functions exhaustive over all `BrandColor` cases?
 - [ ] Is the Color module using `BrandColor` (not a local DU)?
 - [ ] Could any explicit parameters be removed in favour of `attrs`-based styling?
 - [ ] Are there opportunities to compose with existing components instead of reimplementing?
@@ -90,7 +88,7 @@ When reviewing an existing component's API:
 
 You design the F# API and BEM class structure; the `sass-sculptor` agent implements the SCSS. Your responsibilities in this coordination:
 
-- **Define the BEM class names** that your `toClass` functions will reference: `.weave-{name}`, `.weave-{name}--{modifier}`, `.weave-{name}__{element}`
+- **Define the BEM class names** that your style modules will reference: `.weave-{name}`, `.weave-{name}--{modifier}`, `.weave-{name}__{element}`
 - **Specify which modifiers exist** based on your DU types (variants, sizes, colors)
 - **Document the expected visual behaviour** of each modifier and element so the SCSS implementation matches your intent
 - **Do not write SCSS yourself** — provide the class contract and let `sass-sculptor` handle the implementation
@@ -108,7 +106,7 @@ Be aware of the current component surface to avoid duplication and identify comp
 
 ## Deliverables
 
-- Complete `{Name}.fs` files with module, DU types, `toClass` mappings, and `Create` methods
+- Complete `{Name}.fs` files with module, style sub-modules (Variant, Color, etc.), and `Create` methods
 - BEM class contract document for handoff to `sass-sculptor` (class names, modifiers, elements, and their intended visual behaviour)
 - API design rationale explaining key decisions (parameter choices, composition strategy, DU structure)
 - Compilation order guidance for placement in `Weave.fsproj`
@@ -119,5 +117,5 @@ Be aware of the current component surface to avoid duplication and identify comp
 - **Stringly-typed APIs** — use DUs, not strings, for any finite set of options
 - **Reimplementing existing components** — if you need a button inside your component, use `Button.Create`, don't rebuild one
 - **Non-reactive parameters for dynamic state** — if a value could change, it must be `Var<'T>` or `View<'T>`
-- **Style parameters on `Create`** — variant, color, and size are always applied via `attrs` using `toClass` helpers
+- **Style parameters on `Create`** — variant, color, and size are always applied via `attrs` using the component's style modules
 - **Forgetting `[<JavaScript>]`** — every module and type needs this attribute or WebSharper won't transpile it

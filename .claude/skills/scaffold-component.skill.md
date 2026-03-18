@@ -11,15 +11,14 @@ When asked to create a new Weave component. The component name used throughout t
 
 ## 1. F# Component File — `src/Weave/components/{Name}.fs`
 
-Use this structure as an example, but not a silver bullet. Only include the DU sub-modules that are semantically meaningful for the component.
+Use this structure as an example, but not a silver bullet. Per-component styling types now use plain `let` bindings returning `Attr` directly — only include the style modules that are semantically meaningful for the component.
 
 **Rules:**
 
-- Styling props (variant, color, size, etc.) must not be individual optional parameters on `Create` — pass them via `?attrs: Attr list` using the component's `toClass` helpers. See the **Create Function Parameters** section of `weave-component-conventions.skill.md` for the full rule and examples.
-- DU types carrying variants/sizes/etc. should have `[<RequireQualifiedAccess; Struct>]` due to the fact their union cases likely share names with other components. This also prevents users from having to deal with name collisions and having to open modules in various orders to get the right cases in scope.
-- `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component.
-- All `toClass` functions live inside a companion sub-module of the same name (e.g. `module Variant`, `module Size`, `module Color`).
-- The `open {Name}` after the module exposes the DU cases into scope for the `type {Name}` static class below it.
+- Styling props (variant, color, size, etc.) must not be individual optional parameters on `Create` — pass them via `?attrs: Attr list` using the component's style modules (e.g., `MyComponent.Variant.filled`). See the **Create Function Parameters** section of `weave-component-conventions.skill.md` for the full rule and examples.
+- Per-component style modules (`Variant`, `Size`, etc.) contain plain `let` bindings that return `Attr` directly via the `cl` helper and type-provided CSS classes. DU types with `[<RequireQualifiedAccess; Struct>]` are no longer needed for these — the type provider enforces correctness at compile time.
+- `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component. The `Color` module exposes both direct `let` bindings (e.g. `Color.primary`) and a `toAttr` function that maps `BrandColor` to the corresponding `Attr`.
+- Per-component modules contain plain `let` bindings returning `Attr` directly (e.g. `module Variant` with `let filled = cl Css.weave-{name}--filled`). There is no `open {Name}` line needed since there are no DU types to bring into scope.
 - Optional parameters (`?enabled`, `?attrs`, `?size`, etc.) always have a `defaultArg` binding at the top of `Create`.
 - Reactive state uses `View<'T>` for read-only props and `Var<'T>` for two-way bindings (e.g. `isChecked: Var<bool>`).
 - Never use bare `attr.class`; always use `cl` (single class) or `cls [...]` (multiple) from `Weave.CssHelpers`. If you find yourself needing to use WebSharper's `Attr.Style "name" "value"`, consider whether you need to use a supported CSS helper or even create a new one in `Core.fs`.
@@ -40,52 +39,42 @@ open Weave.CssHelpers
 [<JavaScript>]
 module {Name} =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Filled
-    | Outlined
-
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Filled   -> Css.``weave-{name}--filled``
-      | Variant.Outlined -> Css.``weave-{name}--outlined``
-
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
+    let filled = cl Css.``weave-{name}--filled``
+    let outlined = cl Css.``weave-{name}--outlined``
 
   module Size =
 
-    let toClass size =
-      match size with
-      | Size.Small  -> Css.``weave-{name}--small``
-      | Size.Medium -> Css.``weave-{name}--medium``
-      | Size.Large  -> Css.``weave-{name}--large``
+    let small = cl Css.``weave-{name}--small``
+    let medium = cl Css.``weave-{name}--medium``
+    let large = cl Css.``weave-{name}--large``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary   -> Css.``weave-{name}--primary``
-      | BrandColor.Secondary -> Css.``weave-{name}--secondary``
-      | BrandColor.Tertiary  -> Css.``weave-{name}--tertiary``
-      | BrandColor.Error     -> Css.``weave-{name}--error``
-      | BrandColor.Warning   -> Css.``weave-{name}--warning``
-      | BrandColor.Success   -> Css.``weave-{name}--success``
-      | BrandColor.Info      -> Css.``weave-{name}--info``
+    let primary = cl Css.``weave-{name}--primary``
+    let secondary = cl Css.``weave-{name}--secondary``
+    let tertiary = cl Css.``weave-{name}--tertiary``
+    let error = cl Css.``weave-{name}--error``
+    let warning = cl Css.``weave-{name}--warning``
+    let success = cl Css.``weave-{name}--success``
+    let info = cl Css.``weave-{name}--info``
 
-open {Name}
+    let toAttr color =
+      match color with
+      | BrandColor.Primary -> primary
+      | BrandColor.Secondary -> secondary
+      | BrandColor.Tertiary -> tertiary
+      | BrandColor.Error -> error
+      | BrandColor.Warning -> warning
+      | BrandColor.Success -> success
+      | BrandColor.Info -> info
 
 [<JavaScript>]
 type {Name} =
 
   static member Create
     (
-      // required parameters come first, then optional ones prefixed with ?
       innerContents: Doc,
       ?enabled: View<bool>,
       ?attrs: Attr list
@@ -94,9 +83,6 @@ type {Name} =
     let enabled = defaultArg enabled (View.Const true)
     let attrs   = defaultArg attrs   List.empty
 
-    // Build your element here using WebSharper.UI.Html primitives.
-    // Always apply the root BEM class as the first class, then spread ?attrs last
-    // so callers can override or extend with Variant/Color/Size toClass results.
     div [
       cl Css.``weave-{name}``
       View.not enabled |> Attr.DynamicClassPred Css.``weave-{name}--disabled``
@@ -249,8 +235,8 @@ module {Name}Examples =
             {Name}.Create(
               text "Example",
               attrs = [
-                {Name}.Variant.toClass {Name}.Variant.Filled |> cl
-                BrandColor.Primary |> {Name}.Color.toClass |> cl
+                {Name}.Variant.filled
+                {Name}.Color.primary
               ]
             )
           )
@@ -262,8 +248,8 @@ module {Name}Examples =
       """{Name}.Create(
     text "Example",
     attrs = [
-        {Name}.Variant.toClass {Name}.Variant.Filled |> cl
-        BrandColor.Primary |> {Name}.Color.toClass |> cl
+        {Name}.Variant.filled
+        {Name}.Color.primary
     ]
 )"""
 
@@ -353,7 +339,7 @@ yield!
 
 ## 7. Unit Tests — `tests/Weave.Tests.Unit/{Name}Tests.fs`
 
-Unit tests validate that every `toClass` function maps each DU case to the correct BEM class string and that all cases produce distinct classes. Use **Expecto** with `testList`/`testTheory`/`testCase`.
+Unit tests validate pure mapping functions like `Color.toAttr`. Components using plain `let` bindings (returning `Attr` directly from type-provided CSS classes) don't need unit tests -- the compiler enforces correctness. Use **Expecto** with `testList`/`testTheory`/`testCase`.
 
 **Rules:**
 
@@ -369,37 +355,20 @@ module Weave.Tests.Unit.{Name}Tests
 
 open Expecto
 open Weave
-open Weave.CssHelpers
 
 [<Tests>]
 let {name}Tests =
   testList "{Name}" [
 
-    testList "Variant.toClass" [
-      testTheory "each variant maps to the correct class" [
-        {Name}.Variant.Filled,   "weave-{name}--filled"
-        {Name}.Variant.Outlined, "weave-{name}--outlined"
-      ]
-      <| fun (variant, expected) -> Expect.equal ({Name}.Variant.toClass variant) expected ""
-
-      testCase "all variants produce distinct classes"
+    testList "Color.toAttr" [
+      testCase "all brand colors produce distinct attrs"
       <| fun () ->
-        let classes =
-          [ {Name}.Variant.Filled; {Name}.Variant.Outlined ]
-          |> List.map {Name}.Variant.toClass
+        let attrs =
+          [ BrandColor.Primary; BrandColor.Secondary; BrandColor.Tertiary
+            BrandColor.Error; BrandColor.Warning; BrandColor.Success; BrandColor.Info ]
+          |> List.map {Name}.Color.toAttr
 
-        Expect.equal (List.distinct classes).Length classes.Length "each variant maps to a unique class"
-    ]
-
-    // Repeat the same pattern for Size.toClass, Color.toClass, etc.
-
-    // For toClass functions that return Option<string>:
-    testList "SomeProp.toClass" [
-      testCase "Default returns None (no modifier class)"
-      <| fun () -> Expect.isNone ({Name}.SomeProp.toClass {Name}.SomeProp.Default) ""
-      testCase "Other returns Some weave-{name}--other"
-      <| fun () ->
-        Expect.equal ({Name}.SomeProp.toClass {Name}.SomeProp.Other) (Some "weave-{name}--other") ""
+        Expect.equal (List.distinct attrs).Length attrs.Length "each color maps to a unique attr"
     ]
   ]
 ```
@@ -601,14 +570,14 @@ let private {name}Page () =
 
 Before marking the component as done, verify:
 
-- [ ] `src/Weave/components/{Name}.fs` created with correct namespace, opens, DU types, `toClass` functions, and `Create` static method
+- [ ] `src/Weave/components/{Name}.fs` created with correct namespace, opens, style modules with `let` bindings returning `Attr`, and `Create` static method
 - [ ] `src/Weave/scss/components/_{name}.scss` created with BEM classes, theme variables, `$palette-colors` loop, disabled/hover/focus states
 - [ ] `src/Weave/scss/main.scss` has `@import "components/{name}";` in alphabetical order
 - [ ] `src/Weave/Weave.fsproj` has `<Compile Include="components/{Name}.fs" />`
 - [ ] `src/Weave.Docs/examples/{Name}Examples.fs` created with at least one example section and a `render ()` function
 - [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `ExamplesRouter.fs`
 - [ ] `ExamplesRouter.fs` updated in all four locations: `Page` DU, `pageToString`, `renderPage`, nav list
-- [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created with `testTheory` coverage for every `toClass` function and distinct-class assertions
+- [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created with coverage for pure mapping functions (e.g., `Color.toAttr`)
 - [ ] `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj` has `<Compile Include="{Name}Tests.fs" />`
 - [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship
 - [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link

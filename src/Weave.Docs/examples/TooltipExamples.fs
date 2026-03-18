@@ -28,13 +28,7 @@ module TooltipExamples =
               Button.Create(
                 text displayText,
                 onClick = (fun () -> ()),
-                attrs = [
-                  cls [
-                    Button.Variant.Outlined |> Button.Variant.toClass
-                    Button.Color.toClass BrandColor.Primary
-                    Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-                  ]
-                ]
+                attrs = [ Button.Variant.outlined; Button.Color.primary; Button.Width.full ]
               ),
             tooltipContent = Body1.Div(sprintf "Tooltip on %A" direction),
             direction = direction
@@ -66,11 +60,9 @@ let tooltipBtn direction =
               text displayText,
               onClick = (fun () -> ()),
               attrs = [
-                  cls [
-                      Button.Variant.Outlined |> Button.Variant.toClass
-                      Button.Color.toClass BrandColor.Primary
-                      Button.Width.toClass Button.Width.Full |> Option.defaultValue ""
-                  ]
+                  Button.Variant.outlined
+                  Button.Color.primary
+                  Button.Width.full
               ]
           ),
         tooltipContent = Body1.Div(sprintf "Tooltip on %A" direction),
@@ -105,11 +97,7 @@ tooltipBtn Tooltip.Direction.Right
             Button.Create(
               text displayText,
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass color |> cl
-                Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.toAttr color; Button.Width.full ]
             ),
             Body1.Div(sprintf "%s tooltip" displayText),
             tooltipAttrs = [ Tooltip.Color.toClass color |> cl ],
@@ -137,9 +125,9 @@ let tooltipButton color =
             text displayText,
             onClick = (fun () -> ()),
             attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass color |> cl
-                Button.Width.toClass Button.Width.Full |> Option.mapOrDefault Attr.Empty cl
+                Button.Variant.filled
+                Button.Color.toAttr color
+                Button.Width.full
             ]
         ),
         Body1.Div(sprintf "%s tooltip" displayText),
@@ -181,10 +169,7 @@ tooltipButton BrandColor.Info
             Button.Create(
               text "Hover Me",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.primary ]
             ),
             Body1.Div("Appears on hover"),
             activationEvents = [ Tooltip.Activation.Hover ]
@@ -198,10 +183,7 @@ tooltipButton BrandColor.Info
             Button.Create(
               text "Click Me",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Outlined |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Secondary |> cl
-              ]
+              attrs = [ Button.Variant.outlined; Button.Color.secondary ]
             ),
             Body1.Div("Appears on click"),
             activationEvents = [ Tooltip.Activation.Click ]
@@ -221,8 +203,8 @@ Tooltip.Create(
         text "Hover Me",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Outlined |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Primary |> cl
+            Button.Variant.outlined
+            Button.Color.primary
         ]
     ),
     Body1.Div("Appears on hover"),
@@ -234,8 +216,8 @@ Tooltip.Create(
         text "Click Me",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Outlined |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Secondary |> cl
+            Button.Variant.outlined
+            Button.Color.secondary
         ]
     ),
     Body1.Div("Appears on click"),
@@ -262,10 +244,7 @@ Tooltip.Create(
             Button.Create(
               text "With Arrow",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Primary |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.primary ]
             ),
             Body1.Div("I have an arrow pointing"),
             showArrow = true
@@ -278,10 +257,7 @@ Tooltip.Create(
             Button.Create(
               text "Without Arrow",
               onClick = (fun () -> ()),
-              attrs = [
-                Button.Variant.Filled |> Button.Variant.toClass |> cl
-                Button.Color.toClass BrandColor.Secondary |> cl
-              ]
+              attrs = [ Button.Variant.filled; Button.Color.secondary ]
             ),
             Body1.Div("No arrow here"),
             showArrow = false
@@ -299,8 +275,8 @@ Tooltip.Create(
         text "With Arrow",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Primary |> cl
+            Button.Variant.filled
+            Button.Color.primary
         ]
     ),
     Body1.Div("I have an arrow pointing"),
@@ -312,8 +288,8 @@ Tooltip.Create(
         text "Without Arrow",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Secondary |> cl
+            Button.Variant.filled
+            Button.Color.secondary
         ]
     ),
     Body1.Div("No arrow here"),
@@ -337,10 +313,7 @@ Tooltip.Create(
           Button.Create(
             text "Rich Content Tooltip",
             onClick = (fun () -> ()),
-            attrs = [
-              Button.Variant.Filled |> Button.Variant.toClass |> cl
-              Button.Color.toClass BrandColor.Info |> cl
-            ]
+            attrs = [ Button.Variant.filled; Button.Color.info ]
           ),
           div [ Attr.Style "padding" "4px" ] [
             Body2.Div(
@@ -364,8 +337,8 @@ Tooltip.Create(
         text "Rich Content Tooltip",
         onClick = (fun () -> ()),
         attrs = [
-            Button.Variant.Filled |> Button.Variant.toClass |> cl
-            Button.Color.toClass BrandColor.Info |> cl
+            Button.Variant.filled
+            Button.Color.info
         ]
     ),
     div [ Attr.Style "padding" "4px" ] [ // see here - custom Doc content

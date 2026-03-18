@@ -230,26 +230,17 @@ ButtonGroup.Create(
                 Button.Create(
                   text "Reply",
                   onClick = (fun () -> printfn "Reply"),
-                  attrs = [
-                    Button.Variant.toClass Button.Variant.Filled |> cl
-                    Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
-                  ]
+                  attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
                 Button.Create(
                   text "Reply All",
                   onClick = (fun () -> printfn "Reply All"),
-                  attrs = [
-                    Button.Variant.toClass Button.Variant.Filled |> cl
-                    Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
-                  ]
+                  attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
                 Button.Create(
                   text "Forward",
                   onClick = (fun () -> printfn "Forward"),
-                  attrs = [
-                    Button.Variant.toClass Button.Variant.Filled |> cl
-                    Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
-                  ]
+                  attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
               ],
               direction = ButtonMenu.Direction.Bottom,
@@ -282,24 +273,24 @@ ButtonGroup.Create(
                     text "Reply",
                     onClick = (fun () -> printfn "Reply"),
                     attrs = [
-                        Button.Variant.toClass Button.Variant.Filled |> cl
-                        Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+                        Button.Variant.filled
+                        Button.Width.full
                     ]
                 )
                 Button.Create(
                     text "Reply All",
                     onClick = (fun () -> printfn "Reply All"),
                     attrs = [
-                        Button.Variant.toClass Button.Variant.Filled |> cl
-                        Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+                        Button.Variant.filled
+                        Button.Width.full
                     ]
                 )
                 Button.Create(
                     text "Forward",
                     onClick = (fun () -> printfn "Forward"),
                     attrs = [
-                        Button.Variant.toClass Button.Variant.Filled |> cl
-                        Button.Width.toClass Button.Width.Full |> Attr.bindOption cl
+                        Button.Variant.filled
+                        Button.Width.full
                     ]
                 )
             ],

@@ -63,6 +63,57 @@ Both `cl` and `cls` are defined in `Weave.CssHelpers`:
 - `cl = Attr.Class` — wraps a single string into a class `Attr`
 - `cls = List.map Attr.Class >> Attr.Concat` — wraps a list of strings into a combined class `Attr`
 
+## Style Modules
+
+Per-component style sub-modules (`Variant`, `Size`, `Color`, etc.) live inside the component's `module` and expose **plain `let` bindings that return `Attr` directly** via `cl`. There are no DU types for these — the TypedCssClasses type provider enforces correctness at compile time.
+
+```fsharp
+module Variant =
+  let filled  = cl Css.``weave-mycomponent--filled``
+  let outlined = cl Css.``weave-mycomponent--outlined``
+
+module Size =
+  let small  = cl Css.``weave-mycomponent--small``
+  let medium = cl Css.``weave-mycomponent--medium``
+  let large  = cl Css.``weave-mycomponent--large``
+```
+
+### Color module
+
+`Color` is conventional for any interactive or themeable component. It exposes:
+
+1. **Direct `let` bindings** for each brand color — for callers who know the color statically.
+2. **`toAttr : BrandColor -> Attr`** — for callers who hold a `BrandColor` value at runtime (e.g., driven by a `Var` or config). Whether to include `toAttr` is situational; add it when programmatic color selection is likely.
+
+```fsharp
+module Color =
+  let primary   = cl Css.``weave-mycomponent--primary``
+  let secondary = cl Css.``weave-mycomponent--secondary``
+  // ... other colors ...
+
+  let toAttr color =
+    match color with
+    | BrandColor.Primary   -> primary
+    | BrandColor.Secondary -> secondary
+    // ...
+```
+
+## Shorthand Constructors
+
+When a component has styling combinations callers will reach for constantly, add **shorthand static members** on the type. Each prepends the relevant attr(s) and delegates to `create`, keeping call sites concise:
+
+```fsharp
+static member primary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+  MyComponent.create(
+    innerContents,
+    onClick,
+    ?enabled = enabled,
+    attrs = MyComponent.Color.primary :: defaultArg attrs []
+  )
+```
+
+Shorthand members are optional — add them where the ergonomic gain is clear (typically the most common color variants), not exhaustively for every possible combination.
+
 ## Standard Boilerplate
 
 Every component file follows this structure:
@@ -78,14 +129,28 @@ open Weave.CssHelpers.Core
 
 [<JavaScript; RequireQualifiedAccess>]
 module MyComponent =
-  // Style modules with let bindings returning Attr (Variant, Color, etc.)
-  ...
+
+  module Variant =
+    let filled  = cl Css.``weave-mycomponent--filled``
+    let outlined = cl Css.``weave-mycomponent--outlined``
+
+  module Color =
+    let primary   = cl Css.``weave-mycomponent--primary``
+    let secondary = cl Css.``weave-mycomponent--secondary``
+    // ...
+
+    // Optional: include when callers may hold a BrandColor value at runtime
+    let toAttr color =
+      match color with
+      | BrandColor.Primary   -> primary
+      | BrandColor.Secondary -> secondary
+      // ...
 
 [<JavaScript; RequireQualifiedAccess>]
 type MyComponent =
 
-
-  // If there are any internal/private functions, should should instead use standard F# module functions here rather than static members on the type. This way we can utilize partial application and other functional patterns
+  // Internal helpers go here as plain module-level functions (not static members)
+  // so partial application and functional composition remain available.
 
   static member create(..., ?attrs: Attr list) =
     let attrs = defaultArg attrs []
@@ -94,14 +159,18 @@ type MyComponent =
       cl Css.``weave-my-component``
       yield! attrs
     ] [ ... ]
+
+  // Optional shorthand for the most common styling combinations:
+  static member primary(..., ?attrs: Attr list) =
+    MyComponent.create(..., attrs = MyComponent.Color.primary :: defaultArg attrs [])
 ```
 
 Key points:
 
-- `[<JavaScript>]` on every module and type
-- `[<RequireQualifiedAccess>]` on both module and type — no `open MyComponent` needed
+- `[<JavaScript; RequireQualifiedAccess>]` on both the module and the type — no `open MyComponent` needed at call sites
 - Static member functions use **camelCase** (e.g., `create`, `primary`), not PascalCase
-- `open Weave.CssHelpers` to bring `cl`, `cls`, `text`, `textView`, `div` etc. into scope
+- Style modules use plain `let` bindings returning `Attr` — no DU types, no `toClass` functions; the type provider guarantees correctness
+- `open Weave.CssHelpers` to bring `cl`, `cls`, and HTML aliases into scope
 - `?attrs: Attr list` is always the last optional parameter and defaults to `[]`
 - `yield! attrs` is placed after the component's own structural attrs so callers can override or extend
 - When structurally different HTML is needed (e.g., icon-only vs text), use a separate type (e.g., `IconButton`) rather than a variant factory on the same type

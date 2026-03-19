@@ -26,6 +26,7 @@ Use this structure as an example, but not a silver bullet. Per-component styling
 - `Attr.bindOption` unwraps an `Option<Attr>` (used when a `toClass` returns `Option`).
 - `Size` (Small/Medium/Large) is conventional for inputs and controls but not always necessary.
 - Make sure to check existing components for patterns and conventions that you can follow. Sometimes when creating new components, using existing components nested inside can help maintain visual consistency and reduce the amount of new CSS you need to write. For example, a `Card` component might use `Container` for its layout, and a `Chip` might use `Typography` for its text.
+- When a component has styling combinations callers will reach for constantly, add **shorthand static members** on the type (e.g. `{Name}.primary(...)`, `{Name}.secondary(...)`) that prepend the relevant attr(s) and delegate to `create`. This is optional — add them where the ergonomic gain is clear, not exhaustively for every combination.
 
 ```fsharp
 namespace Weave
@@ -90,6 +91,22 @@ type {Name} =
     ] [
       innerContents
     ]
+
+  // Optional shorthand members for the most common color/styling combinations.
+  // Each prepends the relevant attr and delegates to create.
+  static member primary(innerContents: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
+    {Name}.create(
+      innerContents,
+      ?enabled = enabled,
+      attrs = {Name}.Color.primary :: defaultArg attrs []
+    )
+
+  static member secondary(innerContents: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
+    {Name}.create(
+      innerContents,
+      ?enabled = enabled,
+      attrs = {Name}.Color.secondary :: defaultArg attrs []
+    )
 ```
 
 ---
@@ -345,10 +362,9 @@ Unit tests validate pure mapping functions like `Color.toAttr`. Components using
 
 - Module name is `Weave.Tests.Unit.{Name}Tests` (no `namespace`, just a top-level `module`).
 - The root binding must be decorated with `[<Tests>]` so Expecto discovers it automatically — no manual registration needed.
-- Write one `testList` per `toClass` (or other pure mapping) function.
-- For exhaustive DU cases: use `testTheory` with a list of `(input, expectedClass)` tuples, then a separate `testCase` that checks all cases produce distinct strings via `List.distinct`.
-- For `toClass` functions that return `Option<string>` (e.g. the default/no-modifier case returns `None`): use `Expect.isNone` and `Expect.equal ... (Some "...")` in individual `testCase` entries.
-- Never test `Create` or DOM rendering in unit tests — that belongs in the rendering tests.
+- Only write unit tests when a mapping function like `Color.toAttr` exists. Plain `let` style bindings (returning `Attr` directly) need no tests — the type provider enforces correctness at compile time.
+- Use `testTheory` with a list of `(BrandColor, expectedAttr)` tuples where the expected value is the corresponding module-level binding (e.g. `{Name}.Color.primary`).
+- Never test `create` or DOM rendering in unit tests — that belongs in the rendering tests.
 
 ```fsharp
 module Weave.Tests.Unit.{Name}Tests
@@ -361,14 +377,18 @@ let {name}Tests =
   testList "{Name}" [
 
     testList "Color.toAttr" [
-      testCase "all brand colors produce distinct attrs"
-      <| fun () ->
-        let attrs =
-          [ BrandColor.Primary; BrandColor.Secondary; BrandColor.Tertiary
-            BrandColor.Error; BrandColor.Warning; BrandColor.Success; BrandColor.Info ]
-          |> List.map {Name}.Color.toAttr
-
-        Expect.equal (List.distinct attrs).Length attrs.Length "each color maps to a unique attr"
+      testTheory "each BrandColor maps to the expected attr"
+        [
+          BrandColor.Primary,   {Name}.Color.primary
+          BrandColor.Secondary, {Name}.Color.secondary
+          BrandColor.Tertiary,  {Name}.Color.tertiary
+          BrandColor.Error,     {Name}.Color.error
+          BrandColor.Warning,   {Name}.Color.warning
+          BrandColor.Success,   {Name}.Color.success
+          BrandColor.Info,      {Name}.Color.info
+        ]
+      <| fun (color, expected) ->
+        Expect.equal ({Name}.Color.toAttr color) expected ""
     ]
   ]
 ```
@@ -577,7 +597,7 @@ Before marking the component as done, verify:
 - [ ] `src/Weave.Docs/examples/{Name}Examples.fs` created with at least one example section and a `render ()` function
 - [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `ExamplesRouter.fs`
 - [ ] `ExamplesRouter.fs` updated in all four locations: `Page` DU, `pageToString`, `renderPage`, nav list
-- [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created with coverage for pure mapping functions (e.g., `Color.toAttr`)
+- [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created **only if** a mapping function like `Color.toAttr` is present — plain `let` style bindings need no unit tests since the type provider guarantees correctness
 - [ ] `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj` has `<Compile Include="{Name}Tests.fs" />`
 - [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship
 - [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link

@@ -429,12 +429,12 @@ let applyVariant variantName mode =
     Helpers.codeSampleSection "Theme Variants" description Doc.Empty code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Theming"
-        Body1.Div(
+        Body1.div (
           "Manage light/dark mode and custom color palettes across your application.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -452,5 +452,5 @@ let applyVariant variantName mode =
         Helpers.divider ()
         themeVariantsSection ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

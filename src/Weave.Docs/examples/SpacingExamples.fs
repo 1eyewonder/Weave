@@ -32,7 +32,7 @@ module SpacingExamples =
       |> Option.defaultValue fallback)
 
   let private inlineCode (value: string) =
-    Caption.Span(value, attrs = [ Typography.Color.toClass BrandColor.Primary |> cl ])
+    Caption.span (value, attrs = [ Typography.Color.primary ])
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -48,44 +48,36 @@ module SpacingExamples =
   /// A box inside a dashed-border container that makes margin visible as the gap between them.
   let private marginDemoBox (label: string) (marginAttrs: Attr list) =
     div [
-      BorderRadius.toClass BorderRadius.All.small |> cl
+      BorderRadius.All.small
       SurfaceColor.toBackgroundColor SurfaceColor.Background
     ] [
       div [
-        BorderRadius.toClass BorderRadius.All.small |> cl
+        BorderRadius.All.small
         BrandColor.toBackgroundColor BrandColor.Primary
-
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          JustifyContent.toClass JustifyContent.Center
-        ]
-
+        Flex.Flex.allSizes
+        AlignItems.center
+        JustifyContent.center
         Attr.Style "min-height" "48px"
         yield! marginAttrs
-      ] [ Subtitle2.Div(label) ]
+      ] [ Subtitle2.div (label) ]
     ]
 
   /// A box with visible padding: outer surface shows the padding zone, inner primary box shows content.
   let private paddingDemoBox (label: string) (paddingAttrs: Attr list) =
     div [
       SurfaceColor.toBackgroundColor SurfaceColor.Background
-      BorderRadius.toClass BorderRadius.All.small |> cl
+      BorderRadius.All.small
       yield! paddingAttrs
     ] [
       div [
         BrandColor.toBackgroundColor BrandColor.Primary
-        BorderRadius.toClass BorderRadius.All.small |> cl
-        Padding.toClasses Padding.All.extraSmall |> cls
-
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          JustifyContent.toClass JustifyContent.Center
-        ]
-
+        BorderRadius.All.small
+        Padding.All.extraSmall
+        Flex.Flex.allSizes
+        AlignItems.center
+        JustifyContent.center
         Attr.Style "min-height" "48px"
-      ] [ Subtitle2.Div(label) ]
+      ] [ Subtitle2.div (label) ]
     ]
 
   let private howItWorksSection () =
@@ -95,9 +87,9 @@ module SpacingExamples =
 
     let content =
       div [] [
-        Subtitle2.Div("Sizes", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Subtitle2.div ("Sizes", attrs = [ Margin.Bottom.extraSmall ])
 
-        div [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "overflow-x" "auto" ] [
+        div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
           table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
             thead [] [
               tr [] [ tableHeaderCell "Size"; tableHeaderCell "Pixels"; tableHeaderCell "F# value" ]
@@ -137,9 +129,9 @@ module SpacingExamples =
           ]
         ]
 
-        Subtitle2.Div("Directions", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Subtitle2.div ("Directions", attrs = [ Margin.Bottom.extraSmall ])
 
-        div [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "overflow-x" "auto" ] [
+        div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
           table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
             thead [] [
               tr [] [
@@ -196,12 +188,12 @@ module SpacingExamples =
           ]
         ]
 
-        Body2.Div(
+        Body2.div (
           "Padding follows the same pattern — replace Margin with Padding.",
-          attrs = [ Attr.Style "opacity" "0.7"; Margin.toClasses Margin.Bottom.small |> cls ]
+          attrs = [ Attr.Style "opacity" "0.7"; Margin.Bottom.small ]
         )
 
-        Body2.Div(
+        Body2.div (
           "Each CSS class suffix is a number from 0 to 20, where each step equals 0.25rem (4px)",
           attrs = [ Attr.Style "opacity" "0.7" ]
         )
@@ -212,21 +204,19 @@ module SpacingExamples =
 
 
 // Margin: pick a direction and size
-div [ Margin.toClasses Margin.Bottom.small |> cls ] [ // see here
+div [ Margin.Bottom.small ] [ // see here
     text "8px below this element"
 ]
 
 // Padding: same pattern, applied inside the element
-div [ Padding.toClasses Padding.All.medium |> cls ] [ // see here
+div [ Padding.All.medium ] [ // see here
     text "12px on all sides"
 ]
 
 // Combine directions for fine-grained control
 div [
-    cls [
-        yield! Margin.toClasses Margin.Bottom.large
-        yield! Padding.toClasses Padding.Horizontal.small
-    ]
+    Margin.Bottom.large
+    Padding.Horizontal.small
 ] [
     text "16px margin below, 8px padding left and right"
 ]"""
@@ -239,71 +229,41 @@ div [
         "Margin adds space outside an element, pushing it away from its neighbors. The dashed border below shows the container boundary so the margin gap is visible."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              marginDemoBox "mb-8" [ Margin.toClasses Margin.Bottom.small |> cls ]
-              Body2.Div(
-                "Margin.Bottom.small",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
-              )
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              marginDemoBox "mb-8" [ Margin.Bottom.small ]
+              Body2.div ("Margin.Bottom.small", attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ])
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              marginDemoBox "ma-12" [ Margin.toClasses Margin.All.medium |> cls ]
-              Body2.Div(
-                "Margin.All.medium",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
-              )
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              marginDemoBox "ma-12" [ Margin.All.medium ]
+              Body2.div ("Margin.All.medium", attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ])
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              marginDemoBox "my-8" [ Margin.toClasses Margin.Vertical.small |> cls ]
-              Body2.Div(
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              marginDemoBox "my-8" [ Margin.Vertical.small ]
+              Body2.div (
                 "Margin.Vertical.small",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
+                attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ]
               )
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              marginDemoBox "mx-16" [ Margin.toClasses Margin.Horizontal.large |> cls ]
-              Body2.Div(
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              marginDemoBox "mx-16" [ Margin.Horizontal.large ]
+              Body2.div (
                 "Margin.Horizontal.large",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
+                attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ]
               )
             ],
             xs = Grid.Width.create 12,
@@ -318,27 +278,25 @@ div [
 
 
 // Bottom margin (most common: space between stacked elements)
-div [ Margin.toClasses Margin.Bottom.small |> cls ] [
+div [ Margin.Bottom.small ] [
     text "Bottom margin 8px"
 ]
 
 // All sides
-div [ Margin.toClasses Margin.All.medium |> cls ] [
+div [ Margin.All.medium ] [
     text "All sides 12px"
 ]
 
 // Multiple directions
 div [
-    cls [
-        yield! Margin.toClasses Margin.Top.small
-        yield! Margin.toClasses Margin.Bottom.small
-    ]
+    Margin.Top.small
+    Margin.Bottom.small
 ] [
     text "Top 8px, Bottom 8px"
 ]
 
 // Vertical shorthand (top + bottom)
-div [ Margin.toClasses Margin.Vertical.small |> cls ] [
+div [ Margin.Vertical.small ] [
     text "Top and bottom 8px"
 ]"""
 
@@ -350,71 +308,44 @@ div [ Margin.toClasses Margin.Vertical.small |> cls ] [
         "Padding adds space inside an element, between its border and its content. The examples below use a background color to make the padding region visible."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              paddingDemoBox "pa-8" [ Padding.toClasses Padding.All.small |> cls ]
-              Body2.Div(
-                "Padding.All.small",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
-              )
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              paddingDemoBox "pa-8" [ Padding.All.small ]
+              Body2.div ("Padding.All.small", attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ])
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              paddingDemoBox "px-12" [ Padding.toClasses Padding.Horizontal.medium |> cls ]
-              Body2.Div(
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              paddingDemoBox "px-12" [ Padding.Horizontal.medium ]
+              Body2.div (
                 "Padding.Horizontal.medium",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
+                attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ]
               )
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              paddingDemoBox "py-16" [ Padding.toClasses Padding.Vertical.large |> cls ]
-              Body2.Div(
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              paddingDemoBox "py-16" [ Padding.Vertical.large ]
+              Body2.div (
                 "Padding.Vertical.large",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
+                attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ]
               )
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
-            div [
-              cls [
-                Flex.Flex.allSizes
-                FlexDirection.Column.allSizes
-                AlignItems.toClass AlignItems.Center
-              ]
-            ] [
-              paddingDemoBox "pt-20" [ Padding.toClasses Padding.Top.extraLarge |> cls ]
-              Body2.Div(
+          GridItem.create (
+            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+              paddingDemoBox "pt-20" [ Padding.Top.extraLarge ]
+              Body2.div (
                 "Padding.Top.extraLarge",
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
+                attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ]
               )
             ],
             xs = Grid.Width.create 12,
@@ -429,26 +360,24 @@ div [ Margin.toClasses Margin.Vertical.small |> cls ] [
 
 
 // All sides
-div [ Padding.toClasses Padding.All.small |> cls ] [
+div [ Padding.All.small ] [
     text "Padded content (8px all sides)"
 ]
 
 // Horizontal only
-div [ Padding.toClasses Padding.Horizontal.medium |> cls ] [
+div [ Padding.Horizontal.medium ] [
     text "Horizontal padding (12px left and right)"
 ]
 
 // Vertical only
-div [ Padding.toClasses Padding.Vertical.large |> cls ] [
+div [ Padding.Vertical.large ] [
     text "Vertical padding (16px top and bottom)"
 ]
 
 // Combining padding directions
 div [
-    cls [
-        yield! Padding.toClasses Padding.Top.extraSmall
-        yield! Padding.toClasses Padding.Horizontal.large
-    ]
+    Padding.Top.extraSmall
+    Padding.Horizontal.large
 ] [
     text "Top 4px, Left and Right 16px"
 ]"""
@@ -462,12 +391,10 @@ div [
 
     let content =
       let reactiveCaption (labelView: View<string>) =
-        div [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ] [
-          textView labelView
-        ]
+        div [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [ textView labelView ]
 
       div [] [
-        div [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "overflow-x" "auto" ] [
+        div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
           table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
             thead [] [
               tr [] [
@@ -518,27 +445,18 @@ div [
           ]
         ]
 
-        Subtitle2.Div("Live demo", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Subtitle2.div ("Live demo", attrs = [ Margin.Bottom.extraSmall ])
 
-        Body2.Div(
+        Body2.div (
           "The boxes below change their spacing at different breakpoints. Resize the browser to see the labels and values update.",
-          attrs = [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "opacity" "0.7" ]
+          attrs = [ Margin.Bottom.small; Attr.Style "opacity" "0.7" ]
         )
 
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
-              div [
-                cls [
-                  Flex.Flex.allSizes
-                  FlexDirection.Column.allSizes
-                  AlignItems.toClass AlignItems.Center
-                ]
-              ] [
-                marginDemoBox "sm: ma-8" [
-                  Margin.toClasses Margin.All.none |> cls
-                  Margin.toClasses Margin.All.Small.small |> cls
-                ]
+            GridItem.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+                marginDemoBox "sm: ma-8" [ Margin.All.none; Margin.All.Small.small ]
                 reactiveCaption (
                   responsiveLabel
                     [ (Breakpoint.Small, "margin: 8px (Small active)") ]
@@ -548,18 +466,9 @@ div [
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6
             )
-            GridItem.Create(
-              div [
-                cls [
-                  Flex.Flex.allSizes
-                  FlexDirection.Column.allSizes
-                  AlignItems.toClass AlignItems.Center
-                ]
-              ] [
-                marginDemoBox "md: ma-16" [
-                  Margin.toClasses Margin.All.none |> cls
-                  Margin.toClasses Margin.All.Medium.large |> cls
-                ]
+            GridItem.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+                marginDemoBox "md: ma-16" [ Margin.All.none; Margin.All.Medium.large ]
                 reactiveCaption (
                   responsiveLabel
                     [ (Breakpoint.Medium, "margin: 16px (Medium active)") ]
@@ -569,18 +478,9 @@ div [
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6
             )
-            GridItem.Create(
-              div [
-                cls [
-                  Flex.Flex.allSizes
-                  FlexDirection.Column.allSizes
-                  AlignItems.toClass AlignItems.Center
-                ]
-              ] [
-                paddingDemoBox "lg: pa-20" [
-                  Padding.toClasses Padding.All.extraSmall |> cls
-                  Padding.toClasses Padding.All.Large.extraLarge |> cls
-                ]
+            GridItem.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+                paddingDemoBox "lg: pa-20" [ Padding.All.extraSmall; Padding.All.Large.extraLarge ]
                 reactiveCaption (
                   responsiveLabel
                     [ (Breakpoint.Large, "padding: 20px (Large active)") ]
@@ -590,19 +490,13 @@ div [
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6
             )
-            GridItem.Create(
-              div [
-                cls [
-                  Flex.Flex.allSizes
-                  FlexDirection.Column.allSizes
-                  AlignItems.toClass AlignItems.Center
-                ]
-              ] [
+            GridItem.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
                 marginDemoBox "multi-bp" [
-                  Margin.toClasses Margin.All.extraSmall |> cls
-                  Margin.toClasses Margin.All.Small.small |> cls
-                  Margin.toClasses Margin.All.Medium.medium |> cls
-                  Margin.toClasses Margin.All.Large.large |> cls
+                  Margin.All.extraSmall
+                  Margin.All.Small.small
+                  Margin.All.Medium.medium
+                  Margin.All.Large.large
                 ]
                 reactiveCaption (
                   responsiveLabel
@@ -627,38 +521,32 @@ div [
 
 
 // Responsive margin: applies small (8px) margin at the Small breakpoint (600px) and above
-div [ Margin.toClasses Margin.All.Small.small |> cls ] [
+div [ Margin.All.Small.small ] [
     text "No margin on mobile, 8px margin at >= 600px"
 ]
 
 // Combine a mobile default with a larger breakpoint override
 div [
-    cls [
-        yield! Margin.toClasses Margin.All.extraSmall        // 4px on all viewports
-        yield! Margin.toClasses Margin.All.Medium.large       // 16px at >= 960px
-    ]
+    Margin.All.extraSmall        // 4px on all viewports
+    Margin.All.Medium.large      // 16px at >= 960px
 ] [
     text "4px margin on mobile, 16px at medium screens and above"
 ]
 
 // Progressive scaling across multiple breakpoints
 div [
-    cls [
-        yield! Margin.toClasses Margin.All.extraSmall         // 4px  base
-        yield! Margin.toClasses Margin.All.Small.small         // 8px  >= 600px
-        yield! Margin.toClasses Margin.All.Medium.medium       // 12px >= 960px
-        yield! Margin.toClasses Margin.All.Large.large         // 16px >= 1280px
-    ]
+    Margin.All.extraSmall          // 4px  base
+    Margin.All.Small.small         // 8px  >= 600px
+    Margin.All.Medium.medium       // 12px >= 960px
+    Margin.All.Large.large         // 16px >= 1280px
 ] [
     text "Spacing grows with the viewport"
 ]
 
 // Works the same way for Padding
 div [
-    cls [
-        yield! Padding.toClasses Padding.Horizontal.small              // 8px always
-        yield! Padding.toClasses Padding.Horizontal.Large.extraLarge   // 20px >= 1280px
-    ]
+    Padding.Horizontal.small              // 8px always
+    Padding.Horizontal.Large.extraLarge   // 20px >= 1280px
 ] [
     text "Tight on mobile, roomy on desktop"
 ]"""
@@ -671,30 +559,36 @@ div [
         "Density controls the internal spacing of components on a three-step scale: Compact, Standard (the default), and Spacious. Apply it to a container element to affect all descendants, or pass it in a single component's attrs to override just that instance. Density is meant as a simple default option to help reduce boilerplate. You can achieve the same effect by applying the underlying CSS utility classes directly."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
           div [] [
             Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
-          div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+          div [ Margin.Top.extraSmall ] [
             Button.primary (text "Outlined", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ])
           ]
-          div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+          div [ Margin.Top.extraSmall ] [
             Button.primary (text "Text", onClick = (fun () -> ()), attrs = [ Button.Variant.text ])
           ]
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -702,7 +596,7 @@ div [
 
 
 // Container-level: all children inherit the density via CSS cascade
-div [ cl (Density.toClass Density.Compact) ] [ // see here
+div [ Density.compact ] [ // see here
     Button.primary(
         text "Filled",
         onClick = (fun () -> ()),
@@ -719,12 +613,12 @@ div [ cl (Density.toClass Density.Compact) ] [ // see here
     )
 ]
 
-// Per-instance: pass the density class in attrs to set it on one component
+// Per-instance: pass the density attr in attrs to set it on one component
 Button.primary(
     text "Spacious",
     onClick = (fun () -> ()),
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
+        Density.spacious // see here
         Button.Variant.filled
     ]
 )
@@ -733,12 +627,12 @@ Button.primary(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Spacing"
-        Body1.Div(
+        Body1.div (
           "Apply margin, padding, and density to any element using type-safe CSS utility classes.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -752,5 +646,5 @@ Button.primary(
         Helpers.divider ()
         densitySection ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

@@ -12,27 +12,23 @@ module AlertExamples =
 
   let private basicExample () =
     let description =
-      Helpers.bodyText "Use Alert.Create with a content doc to display a simple inline message."
+      Helpers.bodyText "Use Alert.create with a content doc to display a simple inline message."
 
     let content =
       div [
         SurfaceColor.toBackgroundColor SurfaceColor.Background
-        cls [
-          yield! Padding.toClasses Padding.All.small
-          BorderRadius.toClass BorderRadius.All.small
-        ]
-      ] [
-        Alert.Create(text "This is an alert.", attrs = [ Alert.Variant.toClass Alert.Variant.Standard |> cl ])
-      ]
+        Padding.All.small
+        BorderRadius.All.small
+      ] [ Alert.create (text "This is an alert.", attrs = [ Alert.Variant.standard ]) ]
 
     let code =
       """open Weave
 
 
-Alert.Create(
+Alert.create(
     text "This is an alert.",
     attrs = [
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
+        Alert.Variant.standard
     ]
 )"""
 
@@ -43,28 +39,18 @@ Alert.Create(
       Helpers.bodyText "Alerts come in three variants: Standard, Outlined, and Filled."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          let alert variant =
-            let label = sprintf "%A" variant
-
-            GridItem.Create(
-              Alert.Create(
-                text label,
-                attrs = [
-                  Alert.Variant.toClass variant |> cl
-                  Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-                  |> Option.map cl
-                  |> Option.defaultValue Attr.Empty
-                ]
-              ),
+          let alert label variant =
+            GridItem.create (
+              Alert.create (text label, attrs = [ variant; Alert.Color.info ]),
               xs = Grid.Width.create 12,
               md = Grid.Width.create 4
             )
 
-          alert Alert.Variant.Standard
-          alert Alert.Variant.Outlined
-          alert Alert.Variant.Filled
+          alert "Standard" Alert.Variant.standard
+          alert "Outlined" Alert.Variant.outlined
+          alert "Filled" Alert.Variant.filled
         ],
         spacing = Grid.GutterSpacing.create 2
       )
@@ -73,33 +59,27 @@ Alert.Create(
       """open Weave
 
 
-Alert.Create(
+Alert.create(
     text "Standard",
     attrs = [
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Alert.Variant.standard
+        Alert.Color.info
     ]
 )
 
-Alert.Create(
+Alert.create(
     text "Outlined",
     attrs = [
-        Alert.Variant.toClass Alert.Variant.Outlined |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Alert.Variant.outlined
+        Alert.Color.info
     ]
 )
 
-Alert.Create(
+Alert.create(
     text "Filled",
     attrs = [
-        Alert.Variant.toClass Alert.Variant.Filled |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Alert.Variant.filled
+        Alert.Color.info
     ]
 )"""
 
@@ -111,39 +91,27 @@ Alert.Create(
         "Alerts support all brand colors. The default color uses the surface palette with no tint."
 
     let colors = [
-      Alert.AlertColor.Default
-      Alert.AlertColor.BrandColor BrandColor.Primary
-      Alert.AlertColor.BrandColor BrandColor.Secondary
-      Alert.AlertColor.BrandColor BrandColor.Tertiary
-      Alert.AlertColor.BrandColor BrandColor.Error
-      Alert.AlertColor.BrandColor BrandColor.Warning
-      Alert.AlertColor.BrandColor BrandColor.Success
-      Alert.AlertColor.BrandColor BrandColor.Info
+      "Default", Attr.Empty
+      "Primary", Alert.Color.primary
+      "Secondary", Alert.Color.secondary
+      "Tertiary", Alert.Color.tertiary
+      "Error", Alert.Color.error
+      "Warning", Alert.Color.warning
+      "Success", Alert.Color.success
+      "Info", Alert.Color.info
     ]
 
     let content =
       div [
         SurfaceColor.toBackgroundColor SurfaceColor.Background
-        cls [
-          yield! Padding.toClasses Padding.All.small
-          BorderRadius.toClass BorderRadius.All.small
-        ]
+        Padding.All.small
+        BorderRadius.All.small
       ] [
-        Grid.Create(
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Alert.Create(
-                text label,
-                attrs = [
-                  Alert.Variant.toClass Alert.Variant.Standard |> cl
-                  Alert.AlertColor.toClass color
-                  |> Option.map cl
-                  |> Option.defaultValue Attr.Empty
-                ]
-              ),
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (
+              Alert.create (text label, attrs = [ Alert.Variant.standard; colorAttr ]),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               md = Grid.Width.create 3
@@ -157,24 +125,21 @@ Alert.Create(
 
 
 let colors = [
-    Alert.AlertColor.Default
-    Alert.AlertColor.BrandColor BrandColor.Primary
-    Alert.AlertColor.BrandColor BrandColor.Secondary
-    Alert.AlertColor.BrandColor BrandColor.Tertiary
-    Alert.AlertColor.BrandColor BrandColor.Error
-    Alert.AlertColor.BrandColor BrandColor.Warning
-    Alert.AlertColor.BrandColor BrandColor.Success
-    Alert.AlertColor.BrandColor BrandColor.Info
+    "Default",   Attr.Empty
+    "Primary",   Alert.Color.primary   // see here
+    "Secondary", Alert.Color.secondary
+    "Tertiary",  Alert.Color.tertiary
+    "Error",     Alert.Color.error
+    "Warning",   Alert.Color.warning
+    "Success",   Alert.Color.success
+    "Info",      Alert.Color.info
 ]
 
 colors
-|> List.map (fun color ->
-    Alert.Create(
-        text (sprintf "%A" color),
-        attrs = [
-            Alert.Variant.toClass Alert.Variant.Standard |> cl
-            Alert.AlertColor.toClass color |> Option.map cl |> Option.defaultValue Attr.Empty
-        ]
+|> List.map (fun (label, colorAttr) ->
+    Alert.create(
+        text label,
+        attrs = [ Alert.Variant.standard; colorAttr ]
     )
 )"""
 
@@ -185,60 +150,40 @@ colors
       Helpers.bodyText "Pass an icon to place a leading icon inside the alert."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Alert.Create(
+          GridItem.create (
+            Alert.create (
               text "Your changes have been saved.",
-              icon = Icon.Create(Icon.UiActions UiActions.CheckCircle),
-              attrs = [
-                Alert.Variant.toClass Alert.Variant.Standard |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Success)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
-              ]
+              icon = Icon.create (Icon.UiActions UiActions.CheckCircle),
+              attrs = [ Alert.Variant.standard; Alert.Color.success ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-          GridItem.Create(
-            Alert.Create(
+          GridItem.create (
+            Alert.create (
               text "This action cannot be undone.",
-              icon = Icon.Create(Icon.Action Action.Warning),
-              attrs = [
-                Alert.Variant.toClass Alert.Variant.Standard |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Warning)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
-              ]
+              icon = Icon.create (Icon.Action Action.Warning),
+              attrs = [ Alert.Variant.standard; Alert.Color.warning ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-          GridItem.Create(
-            Alert.Create(
+          GridItem.create (
+            Alert.create (
               text "Something went wrong. Please try again.",
-              icon = Icon.Create(Icon.Action Action.Error),
-              attrs = [
-                Alert.Variant.toClass Alert.Variant.Standard |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Error)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
-              ]
+              icon = Icon.create (Icon.Action Action.Error),
+              attrs = [ Alert.Variant.standard; Alert.Color.error ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-          GridItem.Create(
-            Alert.Create(
+          GridItem.create (
+            Alert.create (
               text "Your session will expire in 5 minutes.",
-              icon = Icon.Create(Icon.Action Action.Info),
-              attrs = [
-                Alert.Variant.toClass Alert.Variant.Standard |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
-              ]
+              icon = Icon.create (Icon.Action Action.Info),
+              attrs = [ Alert.Variant.standard; Alert.Color.info ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -253,14 +198,12 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 
-Alert.Create(
+Alert.create(
     text "Your changes have been saved.",
-    icon = Icon.Create(Icon.UiActions UiActions.CheckCircle),
+    icon = Icon.create(Icon.UiActions UiActions.CheckCircle),
     attrs = [
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Success)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Alert.Variant.standard
+        Alert.Color.success
     ]
 )"""
 
@@ -278,15 +221,10 @@ Alert.Create(
         visible.View
         |> Doc.BindView(fun show ->
           if show then
-            Alert.Create(
+            Alert.create (
               text "Click the close button to dismiss this alert.",
               onClose = (fun () -> Var.Set visible false),
-              attrs = [
-                Alert.Variant.toClass Alert.Variant.Outlined |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
-              ]
+              attrs = [ Alert.Variant.outlined; Alert.Color.info ]
             )
           else
             Button.info (
@@ -306,14 +244,12 @@ let visible = Var.Create true
 visible.View
 |> Doc.BindView (fun show ->
     if show then
-        Alert.Create(
+        Alert.create(
             text "Click the close button to dismiss this alert.",
             onClose = (fun () -> Var.Set visible false),
             attrs = [
-                Alert.Variant.toClass Alert.Variant.Outlined |> cl
-                Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-                |> Option.map cl
-                |> Option.defaultValue Attr.Empty
+                Alert.Variant.outlined
+                Alert.Color.info
             ]
         )
     else
@@ -328,66 +264,61 @@ visible.View
         "Density controls alert padding. Pass the density class in attrs to set it per-instance."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Alert.Create(
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Alert.create (
             text "This is an alert message.",
-            attrs = [
-              Alert.Variant.toClass Alert.Variant.Standard |> cl
-              Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-              |> Option.map cl
-              |> Option.defaultValue Attr.Empty
-            ]
+            attrs = [ Alert.Variant.standard; Alert.Color.info ]
           )
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
       """open Weave
 
 
-Alert.Create(
+Alert.create(
     text "Compact alert.",
     attrs = [
-        cl (Density.toClass Density.Compact) // see here
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Density.compact // see here
+        Alert.Variant.standard
+        Alert.Color.info
     ]
 )
 
-Alert.Create(
+Alert.create(
     text "Standard alert.",
     attrs = [
-        cl (Density.toClass Density.Standard) // see here
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Density.standard // see here
+        Alert.Variant.standard
+        Alert.Color.info
     ]
 )
 
-Alert.Create(
+Alert.create(
     text "Spacious alert.",
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
-        Alert.Variant.toClass Alert.Variant.Standard |> cl
-        Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-        |> Option.map cl
-        |> Option.defaultValue Attr.Empty
+        Density.spacious // see here
+        Alert.Variant.standard
+        Alert.Color.info
     ]
 )
 """
@@ -395,7 +326,7 @@ Alert.Create(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Alert"
         Helpers.bodyText "Displays an important message inline within the page content."
@@ -412,5 +343,5 @@ Alert.Create(
         Helpers.divider ()
         densityExamples ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

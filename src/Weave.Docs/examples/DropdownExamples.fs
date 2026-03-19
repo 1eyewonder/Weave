@@ -10,7 +10,7 @@ open Weave
 module DropdownExamples =
 
   let clickableItem (alertVar: Var<string option>) n =
-    DropdownItem.Create(
+    DropdownItem.create (
       text (sprintf "Item %d" n),
       onClick = (fun () -> Var.Set alertVar (Some(sprintf "Clicked item %d" n)))
     )
@@ -19,12 +19,12 @@ module DropdownExamples =
     messageVar.View
     |> Doc.BindView (function
       | Some message ->
-        Dialog.Create(
-          DialogTitle.Create(H6.Div("Alert")),
-          DialogContent.Create(
+        Dialog.create (
+          DialogTitle.create (H6.div ("Alert")),
+          DialogContent.create (
             div [] [
-              Body1.Div(message)
-              div [ Margin.toClasses Margin.Top.small |> cls ] [
+              Body1.div (message)
+              div [ Margin.Top.small ] [
                 Button.primary (
                   text "OK",
                   onClick = (fun () -> Var.Set messageVar None),
@@ -49,10 +49,10 @@ module DropdownExamples =
     let content =
       div [] [
         alertDialog alertVar
-        Dropdown.Create(
+        Dropdown.create (
           buttonContents = text "Open Dropdown",
           items = items,
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ],
+          attrs = [ Margin.Bottom.extraSmall ],
           buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
         )
       ]
@@ -64,13 +64,13 @@ module DropdownExamples =
 let items =
     [ 1..3 ]
     |> List.map (fun n ->
-        DropdownItem.Create(
+        DropdownItem.create(
             text (sprintf "Item %d" n),
             onClick = (fun () -> printfn "Clicked item %d" n)
         )
     )
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Open Dropdown",
     items = items, // see here
     buttonAttrs = [
@@ -113,18 +113,16 @@ Dropdown.Create(
       Dropdown.TransformOrigin.BottomRight
     ]
 
-    let radioGroup options selected toString color =
-      div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
+    let radioGroup options selected toString colorAttr =
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
         yield!
           options
           |> List.map (fun opt ->
-            Radio.Create(
+            Radio.create (
               selected,
               opt,
               displayText = View.Const(toString opt),
-              attrs = [
-                cls [ Radio.Color.toClass color; yield! Margin.toClasses Margin.Bottom.extraSmall ]
-              ]
+              attrs = [ colorAttr; Margin.Bottom.extraSmall ]
             ))
       ]
 
@@ -134,60 +132,59 @@ Dropdown.Create(
     let content =
       div [] [
         alertDialog alertVar
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
+            GridItem.create (
               div [] [
-                H6.Div("Anchor Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-                radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString BrandColor.Secondary
+                H6.div ("Anchor Origin", attrs = [ Margin.Bottom.extraSmall ])
+                radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString Radio.Color.secondary
               ],
               xs = Grid.Width.create 6
             )
 
-            GridItem.Create(
+            GridItem.create (
               div [] [
-                H6.Div("Transform Origin", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-                radioGroup transformOptions transformVar Dropdown.TransformOrigin.toString BrandColor.Tertiary
+                H6.div ("Transform Origin", attrs = [ Margin.Bottom.extraSmall ])
+                radioGroup
+                  transformOptions
+                  transformVar
+                  Dropdown.TransformOrigin.toString
+                  Radio.Color.tertiary
               ],
               xs = Grid.Width.create 6
             )
 
-            GridItem.Create(
-              Grid.Create(
+            GridItem.create (
+              Grid.create (
                 [
-                  GridItem.Create(
-                    Body1.Div(
+                  GridItem.create (
+                    Body1.div (
                       "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
                       attrs = [ Attr.Style "text-align" "center" ]
                     )
                   )
-                  GridItem.Create(
-                    Dropdown.Create(
+                  GridItem.create (
+                    Dropdown.create (
                       buttonContents = text "Placement",
                       items = items,
                       anchorOrigin = anchorVar.View,
                       transformOrigin = transformVar.View,
                       closeOnOutsideClick = View.Const false,
-                      attrs = [ cls [ yield! Margin.toClasses Margin.Top.large ] ],
+                      attrs = [ Margin.Top.large ],
                       buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
                     ),
                     xs = Grid.Width.create 12
                   )
                 ],
-                justify = JustifyContent.Center,
-                attrs = [
-                  cls [
-                    AlignItems.toClass AlignItems.Center
-                    AlignContent.toClass AlignContent.Center
-                  ]
-                ]
+                justify = JustifyContent.center,
+                attrs = [ AlignItems.center; AlignContent.center ]
               ),
               xs = Grid.Width.create 10,
-              attrs = [ cls [ yield! Margin.toClasses Margin.Top.small ] ]
+              attrs = [ Margin.Top.small ]
             )
 
           ],
-          justify = JustifyContent.SpaceAround
+          justify = JustifyContent.spaceAround
         )
       ]
 
@@ -198,13 +195,13 @@ Dropdown.Create(
 let items =
     [ 1..3 ]
     |> List.map (fun n ->
-        DropdownItem.Create(
+        DropdownItem.create(
             text (sprintf "Item %d" n),
             onClick = (fun () -> printfn "Clicked item %d" n)
         )
     )
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Placement",
     items = items,
     anchorOrigin = anchorVar.View, // see here
@@ -224,15 +221,15 @@ Dropdown.Create(
     let nestedIsOpen = Var.Create false
 
     let nestedDropdownUnstyled =
-      NestedDropdown.Create(
+      NestedDropdown.create (
         buttonContents = text "Open Nested",
         items = [
-          DropdownItem.Create(
+          DropdownItem.create (
             text "Nested Item 1",
             onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 1"))
           )
 
-          DropdownItem.Create(
+          DropdownItem.create (
             text "Nested Item 2",
             onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 2"))
           )
@@ -240,15 +237,15 @@ Dropdown.Create(
       )
 
     let nestedDropdownStyled =
-      NestedDropdown.Create(
+      NestedDropdown.create (
         buttonContents = text "Open Nested",
         items = [
-          DropdownItem.Create(
+          DropdownItem.create (
             text "Nested Item 1",
             onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 1"))
           )
 
-          DropdownItem.Create(
+          DropdownItem.create (
             text "Nested Item 2",
             onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 2"))
           )
@@ -271,18 +268,18 @@ Dropdown.Create(
     let content =
       div [] [
         alertDialog alertVar
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
-              Dropdown.Create(
+            GridItem.create (
+              Dropdown.create (
                 buttonContents = text "Dropdown w/o Styling",
                 items = items,
                 buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
               )
             )
 
-            GridItem.Create(
-              Dropdown.Create(
+            GridItem.create (
+              Dropdown.create (
                 buttonContents = text "Dropdown w/ Styling",
                 items = styledItems,
                 buttonAttrs = [ Button.Variant.filled; Button.Color.secondary ]
@@ -299,14 +296,14 @@ Dropdown.Create(
 let nestedIsOpen = Var.Create false
 
 let nestedDropdown =
-    NestedDropdown.Create( // see here
+    NestedDropdown.create( // see here
         buttonContents = text "Open Nested",
         items = [
-            DropdownItem.Create(
+            DropdownItem.create(
                 text "Nested Item 1",
                 onClick = (fun () -> printfn "Clicked Nested Item 1")
             )
-            DropdownItem.Create(
+            DropdownItem.create(
                 text "Nested Item 2",
                 onClick = (fun () -> printfn "Clicked Nested Item 2")
             )
@@ -321,7 +318,7 @@ let nestedDropdown =
         ]
     )
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Dropdown w/ Styling",
     items = [ clickableItem 1; clickableItem 2; nestedDropdown ],
     buttonAttrs = [
@@ -339,7 +336,7 @@ Dropdown.Create(
     let clickableDropdown =
       let items = [ 1..3 ] |> List.map (clickableItem alertVar)
 
-      Dropdown.Create(
+      Dropdown.create (
         buttonContents = text "Click to Open",
         items = items,
         openOn = View.Const Dropdown.OpenOn.Click,
@@ -350,7 +347,7 @@ Dropdown.Create(
     let hoverDropdown =
       let items = [ 1..3 ] |> List.map (clickableItem alertVar)
 
-      Dropdown.Create(
+      Dropdown.create (
         buttonContents = text "Hover to Open",
         items = items,
         openOn = View.Const Dropdown.OpenOn.Hover,
@@ -362,14 +359,14 @@ Dropdown.Create(
       let nestedIsOpen = Var.Create false
 
       let nestedDropdown =
-        NestedDropdown.Create(
+        NestedDropdown.create (
           buttonContents = text "Open Nested",
           items = [
-            DropdownItem.Create(
+            DropdownItem.create (
               text "Nested Item 1",
               onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 1"))
             )
-            DropdownItem.Create(
+            DropdownItem.create (
               text "Nested Item 2",
               onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 2"))
             )
@@ -378,7 +375,7 @@ Dropdown.Create(
           buttonAttrs = [ nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--primary" ]
         )
 
-      Dropdown.Create(
+      Dropdown.create (
         buttonContents = text "Click to Open Nested",
         items = [ clickableItem alertVar 1; nestedDropdown ],
         openOn = View.Const Dropdown.OpenOn.Click,
@@ -390,14 +387,14 @@ Dropdown.Create(
       let nestedIsOpen = Var.Create false
 
       let nestedDropdown =
-        NestedDropdown.Create(
+        NestedDropdown.create (
           buttonContents = text "Open Nested",
           items = [
-            DropdownItem.Create(
+            DropdownItem.create (
               text "Nested Item 1",
               onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 1"))
             )
-            DropdownItem.Create(
+            DropdownItem.create (
               text "Nested Item 2",
               onClick = (fun () -> Var.Set alertVar (Some "Clicked Nested Item 2"))
             )
@@ -407,7 +404,7 @@ Dropdown.Create(
           buttonAttrs = [ nestedIsOpen.View |> Attr.DynamicClassPred "weave-button--primary" ]
         )
 
-      Dropdown.Create(
+      Dropdown.create (
         buttonContents = text "Hover to Open Nested",
         items = [ clickableItem alertVar 1; nestedDropdown ],
         openOn = View.Const Dropdown.OpenOn.Hover,
@@ -422,27 +419,27 @@ Dropdown.Create(
     let content =
       div [] [
         alertDialog alertVar
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
+            GridItem.create (
               clickableDropdown,
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               md = Grid.Width.create 3
             )
-            GridItem.Create(
+            GridItem.create (
               hoverDropdown,
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               md = Grid.Width.create 3
             )
-            GridItem.Create(
+            GridItem.create (
               nestedClickableDropdown,
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               md = Grid.Width.create 3
             )
-            GridItem.Create(
+            GridItem.create (
               nestedHoverDropdown,
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
@@ -456,7 +453,7 @@ Dropdown.Create(
       """open Weave
 
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Click to Open",
     items = items,
     openOn = View.Const Dropdown.OpenOn.Click, // see here
@@ -466,7 +463,7 @@ Dropdown.Create(
     ]
 )
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Hover to Open",
     items = items,
     openOn = View.Const Dropdown.OpenOn.Hover, // see here
@@ -476,7 +473,7 @@ Dropdown.Create(
     ]
 )
 
-NestedDropdown.Create(
+NestedDropdown.create(
     buttonContents = text "Open Nested",
     items = nestedItems,
     openOn = View.Const Dropdown.OpenOn.Hover, // see here
@@ -493,13 +490,13 @@ NestedDropdown.Create(
     let alertVar = Var.Create None
 
     let items = [
-      DropdownItem.Create(
+      DropdownItem.create (
         text "Enabled Item",
         onClick = (fun () -> Var.Set alertVar (Some "Clicked enabled item")),
         enabled = View.Const true
       )
 
-      DropdownItem.Create(
+      DropdownItem.create (
         text "Disabled Item",
         onClick = (fun () -> Var.Set alertVar (Some "Clicked disabled item")),
         enabled = View.Const false
@@ -512,10 +509,10 @@ NestedDropdown.Create(
     let content =
       div [] [
         alertDialog alertVar
-        Dropdown.Create(
+        Dropdown.create (
           buttonContents = text "Dropdown",
           items = items,
-          attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ],
+          attrs = [ Margin.Bottom.extraSmall ],
           buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
         )
       ]
@@ -525,20 +522,20 @@ NestedDropdown.Create(
 
 
 let items = [
-    DropdownItem.Create(
+    DropdownItem.create(
         text "Enabled Item",
         onClick = (fun () -> printfn "Clicked enabled item"),
         enabled = View.Const true // see here
     )
 
-    DropdownItem.Create(
+    DropdownItem.create(
         text "Disabled Item",
         onClick = (fun () -> printfn "Clicked disabled item"),
         enabled = View.Const false // see here
     )
 ]
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Dropdown",
     items = items,
     buttonAttrs = [
@@ -556,30 +553,36 @@ Dropdown.Create(
         "Density controls the touch-target padding and minimum height of dropdown items on a three-step scale: Compact, Standard, and Spacious. Pass the density class on the dropdown's root element via attrs."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
+      let col (label: string) densityAttr =
         let items =
           [ 1..3 ]
-          |> List.map (fun n -> DropdownItem.Create(text (sprintf "Item %d" n), onClick = (fun () -> ())))
+          |> List.map (fun n -> DropdownItem.create (text (sprintf "Item %d" n), onClick = (fun () -> ())))
 
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Dropdown.Create(
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Dropdown.create (
             buttonContents = text "Open",
             items = items,
             buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
           )
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -587,28 +590,28 @@ Dropdown.Create(
 
 
 // Per-instance: pass the density class in attrs to set it on the dropdown root
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Compact",
     items = items,
-    attrs = [ cl (Density.toClass Density.Compact) ] // see here
+    attrs = [ Density.compact ] // see here
 )
 
-Dropdown.Create(
+Dropdown.create(
     buttonContents = text "Spacious",
     items = items,
-    attrs = [ cl (Density.toClass Density.Spacious) ] // see here
+    attrs = [ Density.spacious ] // see here
 )
 """
 
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Dropdown"
-        Body1.Div(
+        Body1.div (
           "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -624,5 +627,5 @@ Dropdown.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

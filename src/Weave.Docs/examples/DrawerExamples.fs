@@ -13,12 +13,7 @@ module DrawerExamples =
 
   let private navList () =
     let item (label: string) =
-      div [
-        cls [
-          yield! Padding.toClasses Padding.Horizontal.small
-          yield! Padding.toClasses Padding.Vertical.extraSmall
-        ]
-      ] [ Body1.Div(label) ]
+      div [ Padding.Horizontal.small; Padding.Vertical.extraSmall ] [ Body1.div (label) ]
 
     div [] [ item "Dashboard"; item "Profile"; item "Settings"; item "Reports" ]
 
@@ -29,12 +24,10 @@ module DrawerExamples =
   let private miniNavList isOpen =
     let item (isOpen: View<bool>) (icon: Icon) (label: string) =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.Horizontal.small
-          yield! Padding.toClasses Padding.Vertical.extraSmall
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Horizontal.small
+        Padding.Vertical.extraSmall
 
         isOpen
         |> View.Map(fun isOpen -> if isOpen then "left" else "center")
@@ -43,12 +36,12 @@ module DrawerExamples =
         Attr.Style "gap" "16px"
         Attr.Style "cursor" "pointer"
       ] [
-        Icon.Create(icon)
+        Icon.create (icon)
 
         isOpen
         |> Doc.BindView(fun isOpen ->
           if isOpen then
-            Body1.Span(label, attrs = [ Attr.Class "weave-drawer-mini-label" ])
+            Body1.span (label, attrs = [ Attr.Class "weave-drawer-mini-label" ])
           else
             Doc.Empty)
       ]
@@ -62,24 +55,16 @@ module DrawerExamples =
 
   let private toolbar (label: string) (toggleButton: Doc) =
     div [
-      cls [
-        Flex.Flex.allSizes
-        AlignItems.toClass AlignItems.Center
-        yield! Padding.toClasses Padding.Horizontal.medium
-        yield! Padding.toClasses Padding.Vertical.extraSmall
-      ]
+      Flex.Flex.allSizes
+      AlignItems.center
+      Padding.Horizontal.medium
+      Padding.Vertical.extraSmall
       Attr.Style "gap" "12px"
-    ] [ toggleButton; H6.Div(label) ]
+    ] [ toggleButton; H6.div (label) ]
 
   let private pageContent () =
-    div [
-      cls [
-        Flex.Flex.allSizes
-        FlexDirection.Column.allSizes
-        yield! Padding.toClasses Padding.All.small
-      ]
-    ] [
-      yield! [ 1..5 ] |> List.map (fun i -> Body2.Div(sprintf "Content paragraph %d" i))
+    div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Padding.All.small ] [
+      yield! [ 1..5 ] |> List.map (fun i -> Body2.div (sprintf "Content paragraph %d" i))
     ]
 
   /// Wraps a demo in a bounded, relatively-positioned box so that
@@ -91,7 +76,7 @@ module DrawerExamples =
       Attr.Style "overflow" "hidden"
       Attr.Style "isolation" "isolate"
       SurfaceColor.toBackgroundColor SurfaceColor.Background
-      BorderRadius.toClass BorderRadius.All.small |> cl
+      BorderRadius.All.small
     ] [ child ]
 
   let private filledButton (label: string) (onClick: unit -> unit) =
@@ -108,10 +93,10 @@ module DrawerExamples =
 
     let preview =
       demoBox (
-        DrawerContainer.Create(
+        DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.Create(
+              AppBar.create (
                 toolbar
                   "Temporary Drawer"
                   (Button.primary (
@@ -122,13 +107,12 @@ module DrawerExamples =
                     onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
                     attrs = [ Button.Variant.filled ]
                   )),
-                position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreateTemporary(
+            Drawer.create (
               navList (),
               isOpen.View,
               position = Drawer.Position.Left,
@@ -141,13 +125,13 @@ module DrawerExamples =
     let code =
       """let isOpen = Var.Create false
 
-DrawerContainer.Create(
+DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.Create(toolbar "My App" openButton, position = AppBar.Position.Static)
+        AppBar.create(toolbar "My App" openButton)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.CreateTemporary(
+        Drawer.create(
             navList,
             isOpen.View,
             position = Drawer.Position.Left,
@@ -178,33 +162,39 @@ DrawerContainer.Create(
 
     let preview =
       demoBox (
-        DrawerContainer.Create(
+        DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.Create(
+              AppBar.create (
                 toolbar "Persistent Drawer" toggleButton,
-                position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Secondary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreatePersistent(navList (), isOpen.View, position = Drawer.Position.Left, isFixed = false)
+            Drawer.create (
+              navList (),
+              isOpen.View,
+              variant = Drawer.Variant.Persistent,
+              position = Drawer.Position.Left,
+              isFixed = false
+            )
         )
       )
 
     let code =
       """let isOpen = Var.Create false
 
-DrawerContainer.Create(
+DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.Create(toolbar "My App" toggleButton, position = AppBar.Position.Static)
+        AppBar.create(toolbar "My App" toggleButton)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.CreatePersistent(
+        Drawer.create(
             navList,
             isOpen.View,
+            variant = Drawer.Variant.Persistent,
             position = Drawer.Position.Left
             // No overlayClose — persistent drawers have no backdrop
         )
@@ -226,20 +216,20 @@ DrawerContainer.Create(
 
     let preview =
       demoBox (
-        DrawerContainer.Create(
+        DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.Create(
+              AppBar.create (
                 toolbar "Responsive Drawer" toggleButton,
-                position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Tertiary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreateResponsive(
+            Drawer.create (
               navList (),
               isOpen.View,
+              variant = Drawer.Variant.Responsive,
               position = Drawer.Position.Left,
               breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
               overlayClose = (fun () -> Var.Set isOpen false),
@@ -251,15 +241,16 @@ DrawerContainer.Create(
     let code =
       """let isOpen = Var.Create false
 
-DrawerContainer.Create(
+DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.Create(...)
+        AppBar.create(...)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.CreateResponsive(
+        Drawer.create(
             navList,
             isOpen.View,
+            variant = Drawer.Variant.Responsive,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set isOpen false)
@@ -289,25 +280,25 @@ DrawerContainer.Create(
           onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
           attrs = [ Button.Variant.filled ]
         )
-        Switch.Create(hoverEnabled, Body1.Div("Hover expand"))
+        Switch.create (hoverEnabled, Body1.div ("Hover expand"))
       ]
 
     let preview =
       demoBox (
-        DrawerContainer.Create(
+        DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.Create(
+              AppBar.create (
                 toolbar "Mini Drawer" controls,
-                position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Info ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreateMini(
+            Drawer.create (
               miniNavList isOpen.View,
               isOpen.View,
+              variant = Drawer.Variant.Mini,
               position = Drawer.Position.Left,
               breakpoint = Drawer.DrawerBreakpoint.Always,
               expandOnHover = hoverEnabled.View,
@@ -328,15 +319,16 @@ DrawerContainer.Create(
       """let isOpen = Var.Create false
 let hoverEnabled = Var.Create false
 
-DrawerContainer.Create(
+DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.Create(...)
+        AppBar.create(...)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
-        Drawer.CreateMini(
+        Drawer.create(
             miniNavList (),
             isOpen.View,
+            variant = Drawer.Variant.Mini,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.Always,
             expandOnHover = hoverEnabled.View
@@ -356,32 +348,27 @@ DrawerContainer.Create(
 
     let preview =
       demoBox (
-        DrawerContainer.Create(
+        DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.Create(
+              AppBar.create (
                 toolbar
                   "Drawer with Header"
                   (filledButton "Toggle" (fun () -> Var.Set isOpen (not isOpen.Value))),
-                position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Error ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
-            Drawer.CreateTemporary(
+            Drawer.create (
               navList (),
               isOpen.View,
               position = Drawer.Position.Left,
               header =
-                DrawerHeader.Create(
-                  div [
-                    cls [
-                      Flex.Flex.allSizes
-                      AlignItems.toClass AlignItems.Center
-                      yield! Padding.toClasses Padding.Horizontal.small
-                    ]
-                  ] [ H6.Div("Navigation") ]
+                DrawerHeader.create (
+                  div [ Flex.Flex.allSizes; AlignItems.center; Padding.Horizontal.small ] [
+                    H6.div ("Navigation")
+                  ]
                 ),
               overlayClose = (fun () -> Var.Set isOpen false),
               isFixed = false
@@ -390,13 +377,13 @@ DrawerContainer.Create(
       )
 
     let code =
-      """Drawer.CreateTemporary(
+      """Drawer.create(
     navList,
     isOpen.View,
     position = Drawer.Position.Left,
     header =
-        DrawerHeader.Create(
-            div [] [ H6.Div("Navigation") ]
+        DrawerHeader.create(
+            div [] [ H6.div("Navigation") ]
         ),
     overlayClose = (fun () -> Var.Set isOpen false)
 )"""
@@ -441,7 +428,8 @@ DrawerContainer.Create(
       div [] [
         // Controls row: clip mode selector + open/close toggle
         div [
-          cls [ Flex.Flex.allSizes; yield! Margin.toClasses Margin.Bottom.extraSmall ]
+          Flex.Flex.allSizes
+          Margin.Bottom.extraSmall
           Attr.Style "gap" "8px"
           Attr.Style "flex-wrap" "wrap"
         ] [
@@ -465,17 +453,17 @@ DrawerContainer.Create(
             | Drawer.ClipMode.AppBar ->
               // 3-panel layout: AppBar spans full width; DrawerContainer fills the rest.
               Doc.Concat [
-                AppBar.Create(
+                AppBar.create (
                   toolbar "Clip Mode Demo" (div [] []),
-                  position = AppBar.Position.Static,
                   attrs = [ BrandColor.toBackgroundColor BrandColor.Warning ]
                 )
-                DrawerContainer.Create(
+                DrawerContainer.create (
                   mainContent = div [ cl "weave-main-content" ] [ pageContent () ],
                   leftDrawer =
-                    Drawer.CreatePersistent(
+                    Drawer.create (
                       navList (),
                       isOpen.View,
+                      variant = Drawer.Variant.Persistent,
                       position = Drawer.Position.Left,
                       isFixed = false
                     ),
@@ -485,20 +473,20 @@ DrawerContainer.Create(
             | Drawer.ClipMode.FullHeight
             | _ ->
               // AppBar is inside mainContent; drawer extends the full container height.
-              DrawerContainer.Create(
+              DrawerContainer.create (
                 mainContent =
                   Doc.Concat [
-                    AppBar.Create(
+                    AppBar.create (
                       toolbar "Clip Mode Demo" (div [] []),
-                      position = AppBar.Position.Static,
                       attrs = [ BrandColor.toBackgroundColor BrandColor.Warning ]
                     )
                     div [ cl "weave-main-content" ] [ pageContent () ]
                   ],
                 leftDrawer =
-                  Drawer.CreatePersistent(
+                  Drawer.create (
                     navList (),
                     isOpen.View,
+                    variant = Drawer.Variant.Persistent,
                     position = Drawer.Position.Left,
                     clipMode = Drawer.ClipMode.FullHeight,
                     isFixed = false
@@ -510,30 +498,31 @@ DrawerContainer.Create(
 
     let code =
       """// AppBar mode — AppBar spans full width above the DrawerContainer:
-AppBar.Create(toolbar ...)
-DrawerContainer.Create(
+AppBar.create(toolbar ...)
+DrawerContainer.create(
     mainContent = div [ cl "weave-main-content" ] [ pageContent ],
-    leftDrawer = Drawer.CreatePersistent(navList, isOpen.View)
+    leftDrawer = Drawer.create(navList, isOpen.View, variant = Drawer.Variant.Persistent)
 )
 
 // FullHeight mode (default) — AppBar is inside mainContent, drawer covers full height:
-DrawerContainer.Create(
-    mainContent = Doc.Concat [ AppBar.Create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
-    leftDrawer = Drawer.CreatePersistent(navList, isOpen.View,
+DrawerContainer.create(
+    mainContent = Doc.Concat [ AppBar.create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
+    leftDrawer = Drawer.create(navList, isOpen.View,
+                                         variant = Drawer.Variant.Persistent,
                                          clipMode = Drawer.ClipMode.FullHeight)
 )"""
 
     Helpers.codeSampleSection "Clip Mode" description preview code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Drawer"
-        Body1.Div(
+        Body1.div (
           "Drawers provide navigation panels that can slide in from any edge of \
            the screen. Wrap side drawers in a DrawerContainer so the AppBar and \
            main content area shift automatically.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
         Helpers.divider ()
         temporaryExample ()
@@ -548,5 +537,5 @@ DrawerContainer.Create(
         Helpers.divider ()
         clipModeExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

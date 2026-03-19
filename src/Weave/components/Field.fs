@@ -9,7 +9,7 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Field =
 
   [<RequireQualifiedAccess; Struct>]
@@ -20,59 +20,43 @@ module Field =
 
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Standard -> Css.``weave-field--standard``
-      | Variant.Filled -> Css.``weave-field--filled``
-      | Variant.Outlined -> Css.``weave-field--outlined``
+    let standard = cl Css.``weave-field--standard``
+    let filled = cl Css.``weave-field--filled``
+    let outlined = cl Css.``weave-field--outlined``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-field--primary``
-      | BrandColor.Secondary -> Css.``weave-field--secondary``
-      | BrandColor.Tertiary -> Css.``weave-field--tertiary``
-      | BrandColor.Error -> Css.``weave-field--error``
-      | BrandColor.Warning -> Css.``weave-field--warning``
-      | BrandColor.Success -> Css.``weave-field--success``
-      | BrandColor.Info -> Css.``weave-field--info``
-
-  [<RequireQualifiedAccess; Struct>]
-  type Width =
-    | Full
-    | Auto
+    let primary = cl Css.``weave-field--primary``
+    let secondary = cl Css.``weave-field--secondary``
+    let tertiary = cl Css.``weave-field--tertiary``
+    let error = cl Css.``weave-field--error``
+    let warning = cl Css.``weave-field--warning``
+    let success = cl Css.``weave-field--success``
+    let info = cl Css.``weave-field--info``
 
   module Width =
 
-    let toClass width =
-      match width with
-      | Width.Full -> Some Css.``weave-field--full-width``
-      | Width.Auto -> None
+    let full = cl Css.``weave-field--full-width``
 
   module HelpTextColor =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-field__help-text--primary``
-      | BrandColor.Secondary -> Css.``weave-field__help-text--secondary``
-      | BrandColor.Tertiary -> Css.``weave-field__help-text--tertiary``
-      | BrandColor.Error -> Css.``weave-field__help-text--error``
-      | BrandColor.Warning -> Css.``weave-field__help-text--warning``
-      | BrandColor.Success -> Css.``weave-field__help-text--success``
-      | BrandColor.Info -> Css.``weave-field__help-text--info``
+    let primary = cl Css.``weave-field__help-text--primary``
+    let secondary = cl Css.``weave-field__help-text--secondary``
+    let tertiary = cl Css.``weave-field__help-text--tertiary``
+    let error = cl Css.``weave-field__help-text--error``
+    let warning = cl Css.``weave-field__help-text--warning``
+    let success = cl Css.``weave-field__help-text--success``
+    let info = cl Css.``weave-field__help-text--info``
 
-open Field
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type FieldHelpText =
 
-  static member Create(content: Doc, ?attrs: Attr list) =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
     p [ Css.``weave-field__help-text`` |> cl; yield! attrs ] [ content ]
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Field =
 
   /// <summary>
@@ -80,12 +64,12 @@ type Field =
   /// (label, adornments, outline, help text, variant styling, focus/disabled states).
   /// Use this when you need a custom input element (e.g. numeric, date, etc.).
   /// </summary>
-  static member Create
+  static member create
     (
       inputElement: Doc,
       isFocused: View<bool>,
       shouldFloat: View<bool>,
-      ?variant: Variant,
+      ?variant: Field.Variant,
       ?labelText: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
@@ -97,14 +81,13 @@ type Field =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
+    let variant = defaultArg variant Field.Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let showHelpText = defaultArg showHelpText (View.Const false)
     let helpText = defaultArg helpText Doc.Empty
     let enabled = defaultArg enabled (View.Const true)
 
-    let typoAttrs =
-      defaultArg typoAttrs [ Typography.Typo.toClass Typography.Typo.Body2 |> cl ]
+    let typoAttrs = defaultArg typoAttrs [ cl Css.``weave-typography--body2`` ]
 
     let attrs = defaultArg attrs List.empty
 
@@ -138,7 +121,7 @@ type Field =
 
     let outlineDoc =
       match variant with
-      | Variant.Outlined ->
+      | Field.Variant.Outlined ->
         Doc.Element "fieldset" [ Css.``weave-field__outline`` |> cl ] [
           Doc.Element "legend" [
             Css.``weave-field__outline-legend`` |> cl
@@ -158,7 +141,10 @@ type Field =
 
     div [
       Css.``weave-field`` |> cl
-      Variant.toClass variant |> cl
+      match variant with
+      | Field.Variant.Standard -> Field.Variant.standard
+      | Field.Variant.Filled -> Field.Variant.filled
+      | Field.Variant.Outlined -> Field.Variant.outlined
       yield! typoAttrs
       if hasStartAdornment then
         Css.``weave-field--has-start-adornment`` |> cl
@@ -183,10 +169,10 @@ type Field =
   /// <summary>
   /// Convenience overload for text fields: creates the input element internally.
   /// </summary>
-  static member Create
+  static member create
     (
       value: Var<string>,
-      ?variant: Variant,
+      ?variant: Field.Variant,
       ?labelText: View<string>,
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
@@ -201,7 +187,7 @@ type Field =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
+    let variant = defaultArg variant Field.Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let placeholder = defaultArg placeholder (View.Const "")
     let enabled = defaultArg enabled (View.Const true)
@@ -250,7 +236,7 @@ type Field =
         ]
         value
 
-    Field.Create(
+    Field.create (
       inputElement,
       isFocused.View,
       shouldFloat,

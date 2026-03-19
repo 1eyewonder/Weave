@@ -20,25 +20,25 @@ module IconsExamples =
 
     let content =
       div [] [
-        H6.Div("Outlined Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Div(
+        H6.div ("Outlined Icons", attrs = [ Margin.Bottom.extraSmall ])
+        Body1.div (
           "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
-        H6.Div("Rounded Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Div(
+        H6.div ("Rounded Icons", attrs = [ Margin.Bottom.extraSmall ])
+        Body1.div (
           "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
-        H6.Div("Sharp Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Div(
+        H6.div ("Sharp Icons", attrs = [ Margin.Bottom.extraSmall ])
+        Body1.div (
           "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
-        H6.Div("More Styles", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        H6.div ("More Styles", attrs = [ Margin.Bottom.extraSmall ])
 
         let body =
           div [] [
@@ -46,11 +46,11 @@ module IconsExamples =
             a [
               attr.href "https://developers.google.com/fonts/docs/material_symbols"
               Attr.Style "text-decoration" "underline"
-              Typography.Color.toClass BrandColor.Primary |> cl
+              Typography.Color.primary
             ] [ text "Google's developer's guide" ]
           ]
 
-        Body1.Div(body, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.div (body, attrs = [ Margin.Bottom.extraSmall ])
       ]
 
     let code =
@@ -81,16 +81,11 @@ module IconsExamples =
     let filledRadios =
       filledOptions
       |> List.map (fun (value, label) ->
-        Radio.Create(
+        Radio.create (
           filled,
           value,
           displayText = View.Const label,
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let styleOptions = [ Style.Outlined; Style.Rounded; Style.Sharp ]
@@ -98,16 +93,11 @@ module IconsExamples =
     let styleRadios =
       styleOptions
       |> List.map (fun value ->
-        Radio.Create(
+        Radio.create (
           style,
           value,
           displayText = View.Const(sprintf "%A" value),
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let opticalSizeOptions = [
@@ -120,16 +110,11 @@ module IconsExamples =
     let opticalSizeRadios =
       opticalSizeOptions
       |> List.map (fun size ->
-        Radio.Create(
+        Radio.create (
           opticalSize,
           size,
           displayText = View.Const(sprintf "%A" size),
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let weightOptions = [
@@ -145,16 +130,11 @@ module IconsExamples =
     let weightRadios =
       weightOptions
       |> List.map (fun w ->
-        Radio.Create(
+        Radio.create (
           weight,
           w,
           displayText = View.Const(sprintf "%A" w),
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let gradeOptions = [
@@ -166,16 +146,11 @@ module IconsExamples =
     let gradeRadios =
       gradeOptions
       |> List.map (fun g ->
-        Radio.Create(
+        Radio.create (
           grade,
           g,
           displayText = View.Const(sprintf "%A" g),
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let colorOptions = [
@@ -192,29 +167,21 @@ module IconsExamples =
     let colorRadios =
       colorOptions
       |> List.map (fun (value, label) ->
-        Radio.Create(
+        Radio.create (
           color,
           value,
           displayText = View.Const label,
-          attrs = [
-            cls [
-              Radio.Color.toClass BrandColor.Primary
-              yield! Margin.toClasses Margin.Vertical.extraSmall
-            ]
-          ]
+          attrs = [ Radio.Color.primary; Margin.Vertical.extraSmall ]
         ))
 
     let createItem icon =
-      GridItem.Create(
+      GridItem.create (
         div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            JustifyContent.toClass JustifyContent.Center
-            AlignItems.toClass AlignItems.Center
-            yield! Margin.toClasses Margin.Bottom.extraSmall
-          ]
-
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          JustifyContent.center
+          AlignItems.center
+          Margin.Bottom.extraSmall
         ] [
           let style =
             (style.View, filled.View)
@@ -230,7 +197,7 @@ module IconsExamples =
 
           style
           |> Doc.BindView(fun style ->
-            Icon.Create(
+            Icon.create (
               icon,
               style = View.Const style,
               weight = weight.View,
@@ -241,13 +208,13 @@ module IconsExamples =
 
                 Map.ofList [
                   None, ""
-                  Some BrandColor.Primary, Typography.Color.toClass BrandColor.Primary
-                  Some BrandColor.Secondary, Typography.Color.toClass BrandColor.Secondary
-                  Some BrandColor.Tertiary, Typography.Color.toClass BrandColor.Tertiary
-                  Some BrandColor.Info, Typography.Color.toClass BrandColor.Info
-                  Some BrandColor.Success, Typography.Color.toClass BrandColor.Success
-                  Some BrandColor.Warning, Typography.Color.toClass BrandColor.Warning
-                  Some BrandColor.Error, Typography.Color.toClass BrandColor.Error
+                  Some BrandColor.Primary, "weave-typography--primary"
+                  Some BrandColor.Secondary, "weave-typography--secondary"
+                  Some BrandColor.Tertiary, "weave-typography--tertiary"
+                  Some BrandColor.Info, "weave-typography--info"
+                  Some BrandColor.Success, "weave-typography--success"
+                  Some BrandColor.Warning, "weave-typography--warning"
+                  Some BrandColor.Error, "weave-typography--error"
                 ]
                 |> Attr.classSelection color.View
               ]
@@ -273,7 +240,7 @@ module IconsExamples =
             | Icon.Travel tv -> sprintf "%A" tv
             | Icon.UiActions ua -> sprintf "%A" ua
 
-          Body2.Div(iconText, attrs = [ Attr.Style "text-align" "center" ])
+          Body2.div (iconText, attrs = [ Attr.Style "text-align" "center" ])
         ],
         xs = Grid.Width.create 6,
         sm = Grid.Width.create 4,
@@ -283,9 +250,9 @@ module IconsExamples =
 
     let examples =
       div [] [
-        H6.Div("Sample Icons", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        H6.div ("Sample Icons", attrs = [ Margin.Bottom.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [
             yield!
               [
@@ -423,65 +390,31 @@ module IconsExamples =
 
     let content =
       div [] [
-        H6.Div("Select Fill")
+        H6.div ("Select Fill")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! filledRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! filledRadios ]
 
-        H6.Div("Select Style")
+        H6.div ("Select Style")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! styleRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! styleRadios ]
 
-        H6.Div("Select Optical Size")
+        H6.div ("Select Optical Size")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! opticalSizeRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [
+          yield! opticalSizeRadios
+        ]
 
-        H6.Div("Select Weight")
+        H6.div ("Select Weight")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! weightRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! weightRadios ]
 
-        H6.Div("Select Grade")
+        H6.div ("Select Grade")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! gradeRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! gradeRadios ]
 
-        H6.Div("Select Color")
+        H6.div ("Select Color")
 
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexWrap.Wrap.allSizes
-            JustifyContent.toClass JustifyContent.FlexStart
-          ]
-        ] [ yield! colorRadios ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! colorRadios ]
 
         examples
       ]
@@ -493,90 +426,90 @@ open Weave.Icons.MaterialSymbols
 
 open WebSharper.UI
 
-Icon.Create(
+Icon.create(
     Icon.Action Action.Alarm,
     style = View.Const Style.Rounded, // see here
     weight = View.Const MaterialSymbols.IconWeight.``400``,
     opticalSize = View.Const MaterialSymbols.OpticalSize.``24``,
     grade = View.Const MaterialSymbols.IconGrade.``0``,
     attrs = [
-        Typography.Color.toClass BrandColor.Primary |> cl // see here
+        Typography.Color.primary // see here
     ]
 )
 
-Icon.Create(
+Icon.create(
     Icon.UiActions UiActions.Favorite,
     style = View.Const Style.OutlinedFilled,
     weight = View.Const MaterialSymbols.IconWeight.``700``,
     attrs = [
-        Typography.Color.toClass BrandColor.Error |> cl
+        Typography.Color.error
     ]
 )"""
 
     Helpers.codeSampleSection "Icons" Doc.Empty content code
 
-  // Grid.Create(
+  // Grid.create(
   //   [
-  //     H6.Div("Select Fill")
-  //     GridItem.Create(
-  //       Grid.Create(filledRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Fill")
+  //     GridItem.create(
+  //       Grid.create(filledRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.Div("Select Style")
-  //     GridItem.Create(
-  //       Grid.Create(styleRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Style")
+  //     GridItem.create(
+  //       Grid.create(styleRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.Div("Select Optical Size")
-  //     GridItem.Create(
-  //       Grid.Create(opticalSizeRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Optical Size")
+  //     GridItem.create(
+  //       Grid.create(opticalSizeRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.Div("Select Weight")
-  //     GridItem.Create(
-  //       Grid.Create(weightRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Weight")
+  //     GridItem.create(
+  //       Grid.create(weightRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.Div("Select Grade")
-  //     GridItem.Create(
-  //       Grid.Create(gradeRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Grade")
+  //     GridItem.create(
+  //       Grid.create(gradeRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.Div("Select Color")
-  //     GridItem.Create(
-  //       Grid.Create(colorRadios, justify = JustifyContent.FlexStart),
+  //     H6.div("Select Color")
+  //     GridItem.create(
+  //       Grid.create(colorRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     GridItem.Create(examples, xs = Grid.Width.create 12)
+  //     GridItem.create(examples, xs = Grid.Width.create 12)
   //   ],
   //   justify = JustifyContent.FlexStart
   // )
   //|> Helpers.section "Icons" Doc.Empty
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Icons"
-        Body1.Div(
+        Body1.div (
           "Weave has built in helpers for Material Symbols icons. The icons are structured within a DU which is organized into child DUs which align with the categories defined by Google.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
-        Body1.Div(
+        Body1.div (
           "Note, that the Icon DU does not guarantee static type safety when selecting icons since the end user is reponsible for including the correct Google Fonts link in their HTML head section. Make sure to include the appropriate link for the style of icons you wish to use.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -584,5 +517,5 @@ Icon.Create(
         Helpers.divider ()
         icons ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

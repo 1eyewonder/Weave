@@ -8,65 +8,43 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module ButtonGroup =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Filled
-    | Outlined
-    | Text
 
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Filled -> Css.``weave-button-group--filled``
-      | Variant.Outlined -> Css.``weave-button-group--outlined``
-      | Variant.Text -> Css.``weave-button-group--text``
-
-  [<RequireQualifiedAccess; Struct>]
-  type Orientation =
-    | Horizontal
-    | Vertical
+    let filled = cl Css.``weave-button-group--filled``
+    let outlined = cl Css.``weave-button-group--outlined``
+    let text = cl Css.``weave-button-group--text``
 
   module Orientation =
 
-    let toClass orientation =
-      match orientation with
-      | Orientation.Horizontal -> None
-      | Orientation.Vertical -> Some Css.``weave-button-group--vertical``
+    let vertical = cl Css.``weave-button-group--vertical``
 
   module Density =
 
-    let toClass density =
-      match density with
-      | Density.Compact -> Css.``weave-button-group--compact``
-      | Density.Standard -> Css.``weave-button-group--standard``
-      | Density.Spacious -> Css.``weave-button-group--spacious``
+    let compact = cl Css.``weave-button-group--compact``
+    let standard = cl Css.``weave-button-group--standard``
+    let spacious = cl Css.``weave-button-group--spacious``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-button-group--primary``
-      | BrandColor.Secondary -> Css.``weave-button-group--secondary``
-      | BrandColor.Tertiary -> Css.``weave-button-group--tertiary``
-      | BrandColor.Error -> Css.``weave-button-group--error``
-      | BrandColor.Warning -> Css.``weave-button-group--warning``
-      | BrandColor.Success -> Css.``weave-button-group--success``
-      | BrandColor.Info -> Css.``weave-button-group--info``
+    let primary = cl Css.``weave-button-group--primary``
+    let secondary = cl Css.``weave-button-group--secondary``
+    let tertiary = cl Css.``weave-button-group--tertiary``
+    let error = cl Css.``weave-button-group--error``
+    let warning = cl Css.``weave-button-group--warning``
+    let success = cl Css.``weave-button-group--success``
+    let info = cl Css.``weave-button-group--info``
 
-open ButtonGroup
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ButtonGroup =
 
   /// <summary>
   /// Creates a button group that visually groups child elements (buttons, icon buttons, button menus, dropdowns).
-  /// Pass variant, orientation, size, and color classes via attrs.
+  /// Pass variant, orientation, density, and color classes via attrs.
   /// </summary>
-  static member Create(items: Doc list, ?attrs: Attr list) =
+  static member create(items: Doc list, ?attrs: Attr list) =
 
     let attrs = defaultArg attrs []
 

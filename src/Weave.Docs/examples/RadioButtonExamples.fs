@@ -18,10 +18,11 @@ module RadioButtonExamples =
       let selected = Var.Create "Option 1"
       let options = [ "Option 1"; "Option 2"; "Option 3" ]
 
-      Grid.Create(
+      Grid.create (
         [
           options
-          |> List.map (fun opt -> GridItem.Create(Radio.Create(selected, opt, displayText = View.Const opt)))
+          |> List.map (fun opt ->
+            GridItem.create (Radio.create (selected, opt, displayText = View.Const opt)))
           |> Doc.Concat
         ]
       )
@@ -35,7 +36,7 @@ let options = [ "Option 1"; "Option 2"; "Option 3" ]
 
 options
 |> List.map (fun opt ->
-    Radio.Create(selected, opt, displayText = View.Const opt)
+    Radio.create(selected, opt, displayText = View.Const opt)
 )
 """
 
@@ -48,11 +49,11 @@ options
     let content =
       let selected = Var.Create "Disabled"
 
-      Grid.Create(
+      Grid.create (
         [
-          Radio.Create(selected, "A", displayText = View.Const "Try Me", enabled = View.Const false)
-          Radio.Create(selected, "B", displayText = View.Const "Or Me", enabled = View.Const false)
-          Radio.Create(selected, "C", displayText = View.Const "Or Me", enabled = View.Const false)
+          Radio.create (selected, "A", displayText = View.Const "Try Me", enabled = View.Const false)
+          Radio.create (selected, "B", displayText = View.Const "Or Me", enabled = View.Const false)
+          Radio.create (selected, "C", displayText = View.Const "Or Me", enabled = View.Const false)
         ]
       )
 
@@ -62,14 +63,14 @@ open WebSharper.UI
 
 let selected = Var.Create "Disabled"
 
-Radio.Create(
+Radio.create(
     selected,
     "A",
     displayText = View.Const "Try Me",
     enabled = View.Const false // see here
 )
 
-Radio.Create(
+Radio.create(
     selected,
     "B",
     displayText = View.Const "Or Me",
@@ -89,7 +90,7 @@ Radio.Create(
       let label =
         selected.View |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
-      Grid.Create([ Radio.Create(selected, true, displayText = label) ], justify = JustifyContent.Center)
+      Grid.create ([ Radio.create (selected, true, displayText = label) ], justify = JustifyContent.center)
 
     let code =
       """open Weave
@@ -101,7 +102,7 @@ let label =
     selected.View
     |> View.Map(fun v -> if v then "I am selected!" else "Select me!") // see here
 
-Radio.Create(selected, true, displayText = label)
+Radio.create(selected, true, displayText = label)
 """
 
     Helpers.codeSampleSection "Dynamic Label" description content code
@@ -110,20 +111,19 @@ Radio.Create(selected, true, displayText = label)
     let description = Helpers.bodyText "Radio buttons in different sizes."
 
     let content =
-      let selected = Var.Create Radio.Size.Medium
+      let selected = Var.Create "Medium"
 
-      let sizes = [ Radio.Size.Small; Radio.Size.Medium; Radio.Size.Large ]
+      let sizes = [
+        "Small", Radio.Size.small
+        "Medium", Radio.Size.medium
+        "Large", Radio.Size.large
+      ]
 
-      Grid.Create(
+      Grid.create (
         sizes
-        |> List.map (fun size ->
-          GridItem.Create(
-            Radio.Create(
-              selected,
-              size,
-              displayText = View.Const(sprintf "%A" size),
-              attrs = [ Radio.Size.toClass size |> cl ]
-            ),
+        |> List.map (fun (label, sizeAttr) ->
+          GridItem.create (
+            Radio.create (selected, label, displayText = View.Const label, attrs = [ sizeAttr ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -135,28 +135,11 @@ Radio.Create(selected, true, displayText = label)
 
 open WebSharper.UI
 
-let selected = Var.Create Radio.Size.Medium
+let selected = Var.Create "Medium"
 
-Radio.Create(
-    selected,
-    Radio.Size.Small,
-    displayText = View.Const "Small",
-    attrs = [ Radio.Size.toClass Radio.Size.Small |> cl ] // see here
-)
-
-Radio.Create(
-    selected,
-    Radio.Size.Medium,
-    displayText = View.Const "Medium",
-    attrs = [ Radio.Size.toClass Radio.Size.Medium |> cl ] // see here
-)
-
-Radio.Create(
-    selected,
-    Radio.Size.Large,
-    displayText = View.Const "Large",
-    attrs = [ Radio.Size.toClass Radio.Size.Large |> cl ] // see here
-)
+Radio.create(selected, "Small", displayText = View.Const "Small", attrs = [ Radio.Size.small ])
+Radio.create(selected, "Medium", displayText = View.Const "Medium", attrs = [ Radio.Size.medium ])
+Radio.create(selected, "Large", displayText = View.Const "Large", attrs = [ Radio.Size.large ])
 """
 
     Helpers.codeSampleSection "Sizes" description content code
@@ -168,24 +151,24 @@ Radio.Create(
       let selected = Var.Create BrandColor.Primary
 
       let colors = [
-        BrandColor.Primary
-        BrandColor.Secondary
-        BrandColor.Tertiary
-        BrandColor.Error
-        BrandColor.Warning
-        BrandColor.Success
-        BrandColor.Info
+        BrandColor.Primary, Radio.Color.primary
+        BrandColor.Secondary, Radio.Color.secondary
+        BrandColor.Tertiary, Radio.Color.tertiary
+        BrandColor.Error, Radio.Color.error
+        BrandColor.Warning, Radio.Color.warning
+        BrandColor.Success, Radio.Color.success
+        BrandColor.Info, Radio.Color.info
       ]
 
-      Grid.Create(
+      Grid.create (
         colors
-        |> List.map (fun color ->
-          GridItem.Create(
-            Radio.Create(
+        |> List.map (fun (color, colorAttr) ->
+          GridItem.create (
+            Radio.create (
               selected,
               color,
               displayText = (sprintf "%A" color |> View.Const),
-              attrs = [ Radio.Color.toClass color |> cl ]
+              attrs = [ colorAttr ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
@@ -201,22 +184,22 @@ open WebSharper.UI
 let selected = Var.Create BrandColor.Primary
 
 let colors = [
-    BrandColor.Primary
-    BrandColor.Secondary
-    BrandColor.Tertiary
-    BrandColor.Error
-    BrandColor.Warning
-    BrandColor.Success
-    BrandColor.Info
+    BrandColor.Primary, Radio.Color.primary
+    BrandColor.Secondary, Radio.Color.secondary
+    BrandColor.Tertiary, Radio.Color.tertiary
+    BrandColor.Error, Radio.Color.error
+    BrandColor.Warning, Radio.Color.warning
+    BrandColor.Success, Radio.Color.success
+    BrandColor.Info, Radio.Color.info
 ]
 
 colors
-|> List.map (fun color ->
-    Radio.Create(
+|> List.map (fun (color, colorAttr) ->
+    Radio.create(
         selected,
         color,
         displayText = (sprintf "%A" color |> View.Const),
-        attrs = [ Radio.Color.toClass color |> cl ] // see here
+        attrs = [ colorAttr ] // see here
     )
 )
 """
@@ -240,8 +223,8 @@ colors
       let radioButtons =
         radioOptions
         |> List.map (fun (value, label) ->
-          GridItem.Create(
-            Radio.Create(placement, value, displayText = View.Const label),
+          GridItem.create (
+            Radio.create (placement, value, displayText = View.Const label),
             xs = Grid.Width.create 6,
             md = Grid.Width.create 3
           ))
@@ -249,18 +232,15 @@ colors
       let demoSelected = Var.Create false
 
       let demoRadio =
-        Radio.Create(
+        Radio.create (
           demoSelected,
           true,
           displayText = (placement.View |> View.MapCached(sprintf "%A")),
           contentPlacement = placement.View,
-          attrs = [
-            Radio.Size.toClass Radio.Size.Large |> cl
-            Radio.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ Radio.Size.large; Radio.Color.primary ]
         )
 
-      Grid.Create(radioButtons @ [ GridItem.Create(demoRadio, xs = Grid.Width.create 12) ])
+      Grid.create (radioButtons @ [ GridItem.create (demoRadio, xs = Grid.Width.create 12) ])
 
     let code =
       """open Weave
@@ -269,14 +249,14 @@ open WebSharper.UI
 
 let placement = Var.Create Radio.ContentPlacement.Right
 
-Radio.Create(
+Radio.create(
     demoSelected,
     true,
     displayText = (placement.View |> View.MapCached(sprintf "%A")),
     contentPlacement = placement.View, // see here
     attrs = [
-        Radio.Size.toClass Radio.Size.Large |> cl
-        Radio.Color.toClass BrandColor.Primary |> cl
+        Radio.Size.large
+        Radio.Color.primary
     ]
 )
 """
@@ -291,33 +271,29 @@ Radio.Create(
     let content =
       let selected = Var.Create "A"
 
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Radio.Create(
-            selected,
-            "A",
-            displayText = View.Const "Option A",
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          )
-          Radio.Create(
-            selected,
-            "B",
-            displayText = View.Const "Option B",
-            attrs = [ Radio.Color.toClass BrandColor.Primary |> cl ]
-          )
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Radio.create (selected, "A", displayText = View.Const "Option A", attrs = [ Radio.Color.primary ])
+          Radio.create (selected, "B", displayText = View.Const "Option B", attrs = [ Radio.Color.primary ])
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -325,23 +301,23 @@ Radio.Create(
 
 
 // Per-instance: pass the density class in attrs to set it on one component
-Radio.Create(
+Radio.create(
     userSelection,
     value,
     displayText = View.Const "Compact",
     attrs = [
-        cl (Density.toClass Density.Compact) // see here
-        Radio.Color.toClass BrandColor.Primary |> cl
+        Density.compact // see here
+        Radio.Color.primary
     ]
 )
 
-Radio.Create(
+Radio.create(
     userSelection,
     value,
     displayText = View.Const "Spacious",
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
-        Radio.Color.toClass BrandColor.Primary |> cl
+        Density.spacious // see here
+        Radio.Color.primary
     ]
 )
 """
@@ -349,12 +325,12 @@ Radio.Create(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Radio Button"
-        Body1.Div(
+        Body1.div (
           "The Radio component allows users to select a single option from a set. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -372,5 +348,5 @@ Radio.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

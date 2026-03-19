@@ -7887,7 +7887,7 @@ module private IconHelpers =
 [<JavaScript>]
 type Icon =
 
-  static member Create
+  static member create
     (
       icon: MaterialSymbols.Icon,
       ?style: View<MaterialSymbols.Style>,

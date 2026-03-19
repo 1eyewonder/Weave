@@ -9,49 +9,35 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Chip =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Filled
-    | Text
-    | Outlined
 
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Filled -> Css.``weave-chip--filled``
-      | Variant.Text -> Css.``weave-chip--text``
-      | Variant.Outlined -> Css.``weave-chip--outlined``
+    let filled = cl Css.``weave-chip--filled``
+    let text = cl Css.``weave-chip--text``
+    let outlined = cl Css.``weave-chip--outlined``
 
   module Density =
 
-    let toClass density =
-      match density with
-      | Density.Compact -> Css.``weave-chip--compact``
-      | Density.Standard -> Css.``weave-chip--standard``
-      | Density.Spacious -> Css.``weave-chip--spacious``
+    let compact = cl Css.``weave-chip--compact``
+    let standard = cl Css.``weave-chip--standard``
+    let spacious = cl Css.``weave-chip--spacious``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-chip--primary``
-      | BrandColor.Secondary -> Css.``weave-chip--secondary``
-      | BrandColor.Tertiary -> Css.``weave-chip--tertiary``
-      | BrandColor.Error -> Css.``weave-chip--error``
-      | BrandColor.Warning -> Css.``weave-chip--warning``
-      | BrandColor.Success -> Css.``weave-chip--success``
-      | BrandColor.Info -> Css.``weave-chip--info``
+    let primary = cl Css.``weave-chip--primary``
+    let secondary = cl Css.``weave-chip--secondary``
+    let tertiary = cl Css.``weave-chip--tertiary``
+    let error = cl Css.``weave-chip--error``
+    let warning = cl Css.``weave-chip--warning``
+    let success = cl Css.``weave-chip--success``
+    let info = cl Css.``weave-chip--info``
 
-open Chip
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Chip =
 
-  static member Create
+  static member create
     (
       label: Doc,
       ?onClick: unit -> unit,

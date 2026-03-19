@@ -5,7 +5,6 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
-open Weave.Container
 
 [<JavaScript>]
 module ExpansionPanelExamples =
@@ -16,16 +15,20 @@ module ExpansionPanelExamples =
 
     let content =
       let headerContent n expanded =
-        ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div(sprintf "Expansion Panel %i" n), expanded)
+        ExpansionPanelHeader.create (
+          Body1.div (sprintf "Expansion Panel %i" n),
+          expanded,
+          icon = ExpansionPanelHeader.defaultIcon expanded
+        )
 
       let expansionContent n =
-        ExpansionPanelContent.Create(text (sprintf "Content %i" n))
+        ExpansionPanelContent.create (text (sprintf "Content %i" n))
 
-      ExpansionPanelContainer.Create(
+      ExpansionPanelContainer.create (
         [
           let oneExpanded = Var.Create false
 
-          ExpansionPanel.Create(
+          ExpansionPanel.create (
             headerContent 1 oneExpanded,
             expanded = oneExpanded,
             content = expansionContent 1
@@ -33,7 +36,7 @@ module ExpansionPanelExamples =
 
           let twoExpanded = Var.Create false
 
-          ExpansionPanel.Create(
+          ExpansionPanel.create (
             headerContent 2 twoExpanded,
             expanded = twoExpanded,
             content = expansionContent 2
@@ -47,15 +50,16 @@ open WebSharper.UI
 
 let expanded = Var.Create false // see here
 
-ExpansionPanelContainer.Create(
+ExpansionPanelContainer.create(
     [
-        ExpansionPanel.Create(
-            ExpansionPanelHeader.CreateWithDefaultIcons(
-                Body1.Div("Expansion Panel 1"),
-                expanded
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(
+                Body1.div("Expansion Panel 1"),
+                expanded,
+                icon = ExpansionPanelHeader.defaultIcon expanded
             ),
             expanded = expanded,
-            content = ExpansionPanelContent.Create(text "Content 1")
+            content = ExpansionPanelContent.create(text "Content 1")
         )
     ]
 )
@@ -68,41 +72,35 @@ ExpansionPanelContainer.Create(
       Helpers.bodyText "Expansion panel headers can be colored using different brand colors."
 
     let content =
-      let header expanded color =
-        ExpansionPanelHeader.CreateWithDefaultIcons(
-          Body1.Div(sprintf "%A" color),
+      let colors = [
+        "Primary", ExpansionPanel.Color.primary
+        "Secondary", ExpansionPanel.Color.secondary
+        "Tertiary", ExpansionPanel.Color.tertiary
+        "Error", ExpansionPanel.Color.error
+        "Warning", ExpansionPanel.Color.warning
+        "Success", ExpansionPanel.Color.success
+        "Info", ExpansionPanel.Color.info
+      ]
+
+      let header expanded (label: string) colorAttr =
+        ExpansionPanelHeader.create (
+          Body1.div (label),
           expanded,
-          attrs = [ cls [ ExpansionPanel.Color.toClass color ] ]
+          icon = ExpansionPanelHeader.defaultIcon expanded,
+          attrs = [ colorAttr ]
         )
 
-      let content (color: BrandColor) =
-        ExpansionPanelContent.Create(text (sprintf "%A" color))
+      let content label =
+        ExpansionPanelContent.create (text label)
 
-      let panel color expanded =
-        ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
+      let panel label colorAttr expanded =
+        ExpansionPanel.create (header expanded label colorAttr, expanded = expanded, content = content label)
 
-      ExpansionPanelContainer.Create(
+      ExpansionPanelContainer.create (
         [
-          let primaryExpanded = Var.Create false
-          panel BrandColor.Primary primaryExpanded
-
-          let secondaryExpanded = Var.Create false
-          panel BrandColor.Secondary secondaryExpanded
-
-          let tertiaryExpanded = Var.Create false
-          panel BrandColor.Tertiary tertiaryExpanded
-
-          let errorExpanded = Var.Create false
-          panel BrandColor.Error errorExpanded
-
-          let warningExpanded = Var.Create false
-          panel BrandColor.Warning warningExpanded
-
-          let successExpanded = Var.Create false
-          panel BrandColor.Success successExpanded
-
-          let infoExpanded = Var.Create false
-          panel BrandColor.Info infoExpanded
+          for (label, colorAttr) in colors do
+            let expanded = Var.Create false
+            panel label colorAttr expanded
         ]
       )
 
@@ -113,16 +111,17 @@ open WebSharper.UI
 
 let expanded = Var.Create false
 
-ExpansionPanelContainer.Create(
+ExpansionPanelContainer.create(
     [
-        ExpansionPanel.Create(
-            ExpansionPanelHeader.CreateWithDefaultIcons(
-                Body1.Div("Primary"),
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(
+                Body1.div("Primary"),
                 expanded,
-                attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ] // see here
+                icon = ExpansionPanelHeader.defaultIcon expanded,
+                attrs = [ ExpansionPanel.Color.primary ] // see here
             ),
             expanded = expanded,
-            content = ExpansionPanelContent.Create(text "Primary")
+            content = ExpansionPanelContent.create(text "Primary")
         )
     ]
 )
@@ -136,21 +135,22 @@ ExpansionPanelContainer.Create(
 
     let content =
       let headerContent expanded variant =
-        ExpansionPanelHeader.CreateWithDefaultIcons(
-          Body1.Div(sprintf "%A" variant),
+        ExpansionPanelHeader.create (
+          Body1.div (sprintf "%A" variant),
           expanded,
+          icon = ExpansionPanelHeader.defaultIcon expanded,
           highlightVariant = View.Const variant,
-          attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
+          attrs = [ ExpansionPanel.Color.primary ]
         )
 
       let panelContent displayText =
-        ExpansionPanelContent.Create(text displayText)
+        ExpansionPanelContent.create (text displayText)
 
-      ExpansionPanelContainer.Create(
+      ExpansionPanelContainer.create (
         [
           let oneExpanded = Var.Create false
 
-          ExpansionPanel.Create(
+          ExpansionPanel.create (
             headerContent oneExpanded ExpansionPanel.HeaderVariant.Filled,
             expanded = oneExpanded,
             content = panelContent "Filled"
@@ -158,7 +158,7 @@ ExpansionPanelContainer.Create(
 
           let twoExpanded = Var.Create false
 
-          ExpansionPanel.Create(
+          ExpansionPanel.create (
             headerContent twoExpanded ExpansionPanel.HeaderVariant.Highlight,
             expanded = twoExpanded,
             content = panelContent "Highlight"
@@ -166,7 +166,7 @@ ExpansionPanelContainer.Create(
 
           let threeExpanded = Var.Create false
 
-          ExpansionPanel.Create(
+          ExpansionPanel.create (
             headerContent threeExpanded ExpansionPanel.HeaderVariant.None,
             expanded = threeExpanded,
             content = panelContent "None"
@@ -181,17 +181,18 @@ open WebSharper.UI
 
 let expanded = Var.Create false
 
-ExpansionPanelContainer.Create(
+ExpansionPanelContainer.create(
     [
-        ExpansionPanel.Create(
-            ExpansionPanelHeader.CreateWithDefaultIcons(
-                Body1.Div("Filled"),
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(
+                Body1.div("Filled"),
                 expanded,
+                icon = ExpansionPanelHeader.defaultIcon expanded,
                 highlightVariant = View.Const ExpansionPanel.HeaderVariant.Filled, // see here
-                attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
+                attrs = [ ExpansionPanel.Color.primary ]
             ),
             expanded = expanded,
-            content = ExpansionPanelContent.Create(text "Filled")
+            content = ExpansionPanelContent.create(text "Filled")
         )
     ]
 )
@@ -202,32 +203,34 @@ ExpansionPanelContainer.Create(
   let private focusColor () =
     let description =
       Helpers.bodyText
-        "The focus outline color can be customized per-header using FocusColor.toClass. The default focus color is action-default."
+        "The focus outline color can be customized per-header using FocusColor.*. The default focus color is action-default."
 
     let content =
-      let header expanded color =
-        ExpansionPanelHeader.CreateWithDefaultIcons(
-          Body1.Div(sprintf "%A" color),
+      let colors = [
+        "Primary", ExpansionPanel.FocusColor.primary
+        "Secondary", ExpansionPanel.FocusColor.secondary
+        "Error", ExpansionPanel.FocusColor.error
+      ]
+
+      let header expanded (label: string) colorAttr =
+        ExpansionPanelHeader.create (
+          Body1.div (label),
           expanded,
-          attrs = [ cls [ ExpansionPanel.FocusColor.toClass color ] ]
+          icon = ExpansionPanelHeader.defaultIcon expanded,
+          attrs = [ colorAttr ]
         )
 
-      let content (color: BrandColor) =
-        ExpansionPanelContent.Create(text (sprintf "Tab into this panel to see the %A focus outline" color))
+      let content label =
+        ExpansionPanelContent.create (text (sprintf "Tab into this panel to see the %s focus outline" label))
 
-      let panel color expanded =
-        ExpansionPanel.Create(header expanded color, expanded = expanded, content = content color)
+      let panel label colorAttr expanded =
+        ExpansionPanel.create (header expanded label colorAttr, expanded = expanded, content = content label)
 
-      ExpansionPanelContainer.Create(
+      ExpansionPanelContainer.create (
         [
-          let primaryExpanded = Var.Create false
-          panel BrandColor.Primary primaryExpanded
-
-          let secondaryExpanded = Var.Create false
-          panel BrandColor.Secondary secondaryExpanded
-
-          let errorExpanded = Var.Create false
-          panel BrandColor.Error errorExpanded
+          for (label, colorAttr) in colors do
+            let expanded = Var.Create false
+            panel label colorAttr expanded
         ]
       )
 
@@ -238,16 +241,17 @@ open WebSharper.UI
 
 let expanded = Var.Create false
 
-ExpansionPanelContainer.Create(
+ExpansionPanelContainer.create(
     [
-        ExpansionPanel.Create(
-            ExpansionPanelHeader.CreateWithDefaultIcons(
-                Body1.Div("Primary"),
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(
+                Body1.div("Primary"),
                 expanded,
-                attrs = [ cls [ ExpansionPanel.FocusColor.toClass BrandColor.Primary ] ] // see here
+                icon = ExpansionPanelHeader.defaultIcon expanded,
+                attrs = [ ExpansionPanel.FocusColor.primary ] // see here
             ),
             expanded = expanded,
-            content = ExpansionPanelContent.Create(text "Primary focus outline")
+            content = ExpansionPanelContent.create(text "Primary focus outline")
         )
     ]
 )
@@ -261,31 +265,42 @@ ExpansionPanelContainer.Create(
         "Density controls expansion panel header padding. Pass the density class in attrs to set it per-instance on the container."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
+      let col (label: string) densityAttr =
         let expanded = Var.Create false
 
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          ExpansionPanelContainer.Create(
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          ExpansionPanelContainer.create (
             [
-              ExpansionPanel.Create(
-                ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div("Panel Header"), expanded),
+              ExpansionPanel.create (
+                ExpansionPanelHeader.create (
+                  Body1.div ("Panel Header"),
+                  expanded,
+                  icon = ExpansionPanelHeader.defaultIcon expanded
+                ),
                 expanded = expanded,
-                content = ExpansionPanelContent.Create(text "Panel content")
+                content = ExpansionPanelContent.create (text "Panel content")
               )
             ]
           )
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -294,27 +309,27 @@ ExpansionPanelContainer.Create(
 
 let expanded = Var.Create false
 
-ExpansionPanelContainer.Create(
+ExpansionPanelContainer.create(
     [
-        ExpansionPanel.Create(
-            ExpansionPanelHeader.CreateWithDefaultIcons(Body1.Div("Panel Header"), expanded),
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(Body1.div("Panel Header"), expanded, icon = ExpansionPanelHeader.defaultIcon expanded),
             expanded = expanded,
-            content = ExpansionPanelContent.Create(text "Panel content")
+            content = ExpansionPanelContent.create(text "Panel content")
         )
     ],
-    attrs = [ cl (Density.toClass Density.Compact) ] // see here
+    attrs = [ Density.compact ] // see here
 )
 """
 
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Expansion Panel"
-        Body1.Div(
+        Body1.div (
           "The ExpansionPanel component allows for collapsible sections of content, useful for organizing information in a compact manner.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -328,5 +343,5 @@ ExpansionPanelContainer.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

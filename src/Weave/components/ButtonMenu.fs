@@ -9,7 +9,7 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module ButtonMenu =
 
   [<RequireQualifiedAccess; Struct>]
@@ -21,14 +21,10 @@ module ButtonMenu =
 
   module Direction =
 
-    let toClass direction =
-      match direction with
-      | Direction.Top -> Css.``weave-button-menu--top``
-      | Direction.Bottom -> Css.``weave-button-menu--bottom``
-      | Direction.Left -> Css.``weave-button-menu--left``
-      | Direction.Right -> Css.``weave-button-menu--right``
-
-open ButtonMenu
+    let top = cl Css.``weave-button-menu--top``
+    let bottom = cl Css.``weave-button-menu--bottom``
+    let left = cl Css.``weave-button-menu--left``
+    let right = cl Css.``weave-button-menu--right``
 
 [<JavaScript>]
 module private ButtonMenuInternal =
@@ -49,10 +45,10 @@ module private ButtonMenuInternal =
 
     let nextKey, prevKey =
       match direction with
-      | Direction.Bottom -> "ArrowDown", "ArrowUp"
-      | Direction.Top -> "ArrowUp", "ArrowDown"
-      | Direction.Right -> "ArrowRight", "ArrowLeft"
-      | Direction.Left -> "ArrowLeft", "ArrowRight"
+      | ButtonMenu.Direction.Bottom -> "ArrowDown", "ArrowUp"
+      | ButtonMenu.Direction.Top -> "ArrowUp", "ArrowDown"
+      | ButtonMenu.Direction.Right -> "ArrowRight", "ArrowLeft"
+      | ButtonMenu.Direction.Left -> "ArrowLeft", "ArrowRight"
 
     let keyboardWatcher =
       MenuKeyboardNav.watch containerEl triggerEl isOpen nextKey prevKey
@@ -78,7 +74,11 @@ module private ButtonMenuInternal =
 
     div [
       cl Css.``weave-button-menu``
-      Direction.toClass direction |> cl
+      match direction with
+      | ButtonMenu.Direction.Top -> ButtonMenu.Direction.top
+      | ButtonMenu.Direction.Bottom -> ButtonMenu.Direction.bottom
+      | ButtonMenu.Direction.Left -> ButtonMenu.Direction.left
+      | ButtonMenu.Direction.Right -> ButtonMenu.Direction.right
       isOpen.View |> Attr.DynamicClassPred Css.``weave-button-menu--open``
 
       on.afterRender (fun el ->
@@ -104,15 +104,65 @@ module private ButtonMenuInternal =
       triggerButton
     ]
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ButtonMenu =
 
   /// <summary>
-  /// Creates a button menu with an icon button trigger.
-  /// Pass closedIcon for the default icon, and optionally openIcon for a different icon when open.
-  /// If openIcon is not provided, the closedIcon will rotate 45 degrees when opened.
+  /// Creates a button menu with a standard text button trigger.
+  /// Pass closedContent for the default button text, and optionally openContent for different text when open.
   /// </summary>
-  static member CreateIcon
+  static member create
+    (
+      closedContent: Doc,
+      items: Doc list,
+      ?openContent: Doc,
+      ?direction: ButtonMenu.Direction,
+      ?isOpen: Var<bool>,
+      ?openOnHover: View<bool>,
+      ?triggerAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+
+    let direction = defaultArg direction ButtonMenu.Direction.Top
+    let isOpen = defaultArg isOpen (Var.Create false)
+    let openOnHover = defaultArg openOnHover (View.Const false)
+    let triggerAttrs = defaultArg triggerAttrs []
+    let attrs = defaultArg attrs []
+
+    let triggerContent =
+      match openContent with
+      | Some oc ->
+        isOpen.View
+        |> View.Map(fun o -> if o then oc else closedContent)
+        |> Doc.EmbedView
+      | None -> closedContent
+
+    let triggerButton =
+      Button.create (
+        triggerContent,
+        onClick = (fun () -> isOpen.Value <- not isOpen.Value),
+        attrs = [
+          cl Css.``weave-button-menu__trigger``
+          Attr.Create "aria-haspopup" "true"
+          isOpen.View
+          |> View.Map(sprintf "%b")
+          |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
+          yield! triggerAttrs
+        ]
+      )
+
+    ButtonMenuInternal.renderMenu triggerButton items direction isOpen openOnHover attrs
+
+[<JavaScript; RequireQualifiedAccess>]
+type IconButtonMenu =
+
+  /// <summary>
+  /// Creates a button menu with an icon button trigger.
+  /// Pass <c>closedIcon</c> for the default icon, and optionally <c>openIcon</c> for
+  /// a different icon when open. If <c>openIcon</c> is not provided, the
+  /// <c>closedIcon</c> rotates 45 degrees when the menu opens.
+  /// </summary>
+  static member create
     (
       closedIcon: Doc,
       items: Doc list,
@@ -124,7 +174,7 @@ type ButtonMenu =
       ?attrs: Attr list
     ) =
 
-    let direction = defaultArg direction Direction.Top
+    let direction = defaultArg direction ButtonMenu.Direction.Top
     let isOpen = defaultArg isOpen (Var.Create false)
     let openOnHover = defaultArg openOnHover (View.Const false)
     let triggerAttrs = defaultArg triggerAttrs []
@@ -165,52 +215,6 @@ type ButtonMenu =
           | None -> isOpen.View |> Attr.DynamicClassPred Css.``weave-button-menu__trigger--rotated``
           | Some _ -> Attr.Empty
 
-          yield! triggerAttrs
-        ]
-      )
-
-    ButtonMenuInternal.renderMenu triggerButton items direction isOpen openOnHover attrs
-
-  /// <summary>
-  /// Creates a button menu with a standard text button trigger.
-  /// Pass closedContent for the default button text, and optionally openContent for different text when open.
-  /// </summary>
-  static member Create
-    (
-      closedContent: Doc,
-      items: Doc list,
-      ?openContent: Doc,
-      ?direction: ButtonMenu.Direction,
-      ?isOpen: Var<bool>,
-      ?openOnHover: View<bool>,
-      ?triggerAttrs: Attr list,
-      ?attrs: Attr list
-    ) =
-
-    let direction = defaultArg direction Direction.Top
-    let isOpen = defaultArg isOpen (Var.Create false)
-    let openOnHover = defaultArg openOnHover (View.Const false)
-    let triggerAttrs = defaultArg triggerAttrs []
-    let attrs = defaultArg attrs []
-
-    let triggerContent =
-      match openContent with
-      | Some oc ->
-        isOpen.View
-        |> View.Map(fun o -> if o then oc else closedContent)
-        |> Doc.EmbedView
-      | None -> closedContent
-
-    let triggerButton =
-      Button.create (
-        triggerContent,
-        onClick = (fun () -> isOpen.Value <- not isOpen.Value),
-        attrs = [
-          cl Css.``weave-button-menu__trigger``
-          Attr.Create "aria-haspopup" "true"
-          isOpen.View
-          |> View.Map(sprintf "%b")
-          |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
           yield! triggerAttrs
         ]
       )

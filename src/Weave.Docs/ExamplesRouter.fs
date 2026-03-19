@@ -1379,46 +1379,45 @@ module ExamplesRouter =
   let private renderPage (navigate: Page -> unit) page =
     match page with
     | Home ->
-      Container.Create(
+      Container.create (
         div [] [
           div [
-            cls [
-              Flex.Flex.allSizes
-              FlexDirection.Column.allSizes
-              AlignItems.toClass AlignItems.Center
-            ]
-            Margin.toClasses Margin.Bottom.large |> cls
-            Margin.toClasses Margin.Top.medium |> cls
+            Flex.Flex.allSizes
+            FlexDirection.Column.allSizes
+            AlignItems.center
+            Margin.Bottom.large
+            Margin.Top.medium
           ] [
             img [
               attr.src "assets/weave-logo.png"
               attr.alt "Weave Logo"
               Attr.Style "height" "120px"
               Attr.Style "object-fit" "contain"
-              Margin.toClasses Margin.Bottom.small |> cls
+              Margin.Bottom.small
             ] []
-            H2.Div("Weave", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-            Body1.Div(
+            H2.div ("Weave", attrs = [ Margin.Bottom.extraSmall ])
+            Body1.div (
               "Threading Logic. Fabricating UI.",
               attrs = [
                 Attr.Style "font-style" "italic"
                 Attr.Style "opacity" "0.7"
-                Margin.toClasses Margin.Bottom.medium |> cls
+                Margin.Bottom.medium
               ]
             )
           ]
 
           let categorySection (title: string) (items: (string * Page) list) =
-            div [ Margin.toClasses Margin.Bottom.medium |> cls ] [
-              H5.Div(title, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-              Grid.Create(
+            div [ Margin.Bottom.medium ] [
+              H5.div (title, attrs = [ Margin.Bottom.small ])
+              Grid.create (
                 items
                 |> List.map (fun (label, page) ->
-                  GridItem.Create(
+                  GridItem.create (
                     div [
-                      cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ]
+                      Flex.Flex.allSizes
+                      FlexDirection.Column.allSizes
                       SurfaceColor.toBackgroundColor SurfaceColor.Surface
-                      BorderRadius.toClass BorderRadius.All.medium |> cl
+                      BorderRadius.All.medium
                       Attr.Style "cursor" "pointer"
                       Attr.Style "height" "100%"
                       Attr.Style "overflow" "hidden"
@@ -1428,17 +1427,13 @@ module ExamplesRouter =
                     ] [
                       previewFor page
                       div [
-                        cls [
-                          Flex.Flex.allSizes
-                          JustifyContent.toClass JustifyContent.Center
-                          AlignItems.toClass AlignItems.Center
-                          yield! Padding.toClasses Padding.Horizontal.extraSmall
-                          yield! Padding.toClasses Padding.Vertical.extraSmall
-                        ]
+                        Flex.Flex.allSizes
+                        JustifyContent.center
+                        AlignItems.center
+                        Padding.Horizontal.extraSmall
+                        Padding.Vertical.extraSmall
                         Attr.Style "flex-grow" "1"
-                      ] [
-                        Body2.Div(label, attrs = [ Typography.Align.toClass Typography.Align.Center |> cl ])
-                      ]
+                      ] [ Body2.div (label, attrs = [ Typography.Align.center ]) ]
                     ],
                     xs = Grid.Width.create 6,
                     sm = Grid.Width.create 4,
@@ -1449,27 +1444,25 @@ module ExamplesRouter =
               )
             ]
 
-          div [ Margin.toClasses Margin.Bottom.medium |> cls ] [
+          div [ Margin.Bottom.medium ] [
             div [
               SurfaceColor.toBackgroundColor SurfaceColor.Surface
-              BorderRadius.toClass BorderRadius.All.medium |> cl
-              cls [
-                Flex.Flex.allSizes
-                AlignItems.toClass AlignItems.Center
-                yield! Padding.toClasses Padding.All.small
-              ]
+              BorderRadius.All.medium
+              Flex.Flex.allSizes
+              AlignItems.center
+              Padding.All.small
               Attr.Style "cursor" "pointer"
               Attr.Style "gap" "16px"
               Attr.Class "docs-component-card"
               on.click (fun _ _ -> navigate GettingStartedExamples)
             ] [
-              Icon.Create(
+              Icon.create (
                 Icon.Social Social.RocketLaunch,
                 attrs = [ Attr.Style "font-size" "28px"; Attr.Style "color" "var(--palette-primary)" ]
               )
               div [] [
-                H5.Div("Getting Started")
-                Body2.Div("Learn the basics: installation, setup, and core concepts.")
+                H5.div ("Getting Started")
+                Body2.div ("Learn the basics: installation, setup, and core concepts.")
               ]
             ]
           ]
@@ -1521,7 +1514,7 @@ module ExamplesRouter =
             "Theming", ThemingExamples
           ]
         ],
-        maxWidth = Container.MaxWidth.Large
+        attrs = [ Container.MaxWidth.large ]
       )
     | GettingStartedExamples -> GettingStartedExamples.render ()
     | AppBarExamples -> AppBarExamples.render ()
@@ -1673,7 +1666,7 @@ module ExamplesRouter =
         | Home -> Doc.Empty
         | _ ->
           div [ Attr.Class "docs-toc" ] [
-            Subtitle2.Div("Contents", attrs = [ Attr.Class "docs-toc__title" ])
+            Subtitle2.div ("Contents", attrs = [ Attr.Class "docs-toc__title" ])
 
             tocSections.View
             |> Doc.BindView(fun sections ->
@@ -1697,7 +1690,7 @@ module ExamplesRouter =
                         |> Option.defaultValue "#home"
 
                       replaceStateHash (pageHash + "/" + id))
-                  ] [ Body2.Div(title) ]
+                  ] [ Body2.div (title) ]
               ])
           ])
 
@@ -1759,39 +1752,35 @@ module ExamplesRouter =
 
     let navLeafItem (label: string) =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.Vertical.extraSmall
-          yield! Padding.toClasses Padding.Horizontal.medium
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Vertical.extraSmall
+        Padding.Horizontal.medium
         Attr.Style "cursor" "pointer"
         Attr.Style "border-radius" "6px"
         Attr.Style "margin" "1px 8px"
         Attr.Class "weave-nav-leaf"
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
         on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
-      ] [ Body2.Div(label) ]
+      ] [ Body2.div (label) ]
 
     let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) items =
       div [] [
         div [
-          cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Vertical.extraSmall
-            yield! Padding.toClasses Padding.Horizontal.small
-          ]
+          Flex.Flex.allSizes
+          AlignItems.center
+          Padding.Vertical.extraSmall
+          Padding.Horizontal.small
           Attr.Style "cursor" "pointer"
           Attr.Style "gap" "8px"
           Attr.Class "weave-nav-group-header"
           on.click (fun _ _ -> Var.Update isExpanded not)
         ] [
-          Icon.Create(categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
-          Overline.Div(label, attrs = [ Attr.Style "flex" "1"; Attr.Style "opacity" "0.7" ])
+          Icon.create (categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
+          Overline.div (label, attrs = [ Attr.Style "flex" "1"; Attr.Style "opacity" "0.7" ])
           isExpanded.View
           |> Doc.BindView(fun exp ->
-            Icon.Create(
+            Icon.create (
               (if exp then
                  Icon.Hardware Hardware.KeyboardArrowDown
                else
@@ -1804,14 +1793,12 @@ module ExamplesRouter =
       ]
 
     let navList =
-      div [ cls [ yield! Padding.toClasses Padding.Vertical.extraSmall ] ] [
+      div [ Padding.Vertical.extraSmall ] [
         div [
-          cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Vertical.extraSmall
-            yield! Padding.toClasses Padding.Horizontal.small
-          ]
+          Flex.Flex.allSizes
+          AlignItems.center
+          Padding.Vertical.extraSmall
+          Padding.Horizontal.small
           Attr.Style "cursor" "pointer"
           Attr.Style "border-radius" "6px"
           Attr.Style "margin" "1px 8px"
@@ -1822,17 +1809,15 @@ module ExamplesRouter =
             (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
           on.click (fun _ _ -> navigateTo Home)
         ] [
-          Icon.Create(Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
-          Body2.Div("Home")
+          Icon.create (Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
+          Body2.div ("Home")
         ]
 
         div [
-          cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Vertical.extraSmall
-            yield! Padding.toClasses Padding.Horizontal.small
-          ]
+          Flex.Flex.allSizes
+          AlignItems.center
+          Padding.Vertical.extraSmall
+          Padding.Horizontal.small
           Attr.Style "cursor" "pointer"
           Attr.Style "border-radius" "6px"
           Attr.Style "margin" "1px 8px"
@@ -1843,11 +1828,11 @@ module ExamplesRouter =
             (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
           on.click (fun _ _ -> navigateTo GettingStartedExamples)
         ] [
-          Icon.Create(Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
-          Body2.Div("Getting Started")
+          Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
+          Body2.div ("Getting Started")
         ]
 
-        Divider.Create(attrs = [ Margin.toClasses Margin.Vertical.extraSmall |> cls ])
+        Divider.create (attrs = [ Margin.Vertical.extraSmall ])
 
         navGroup (Icon.Android Android.Widgets) "Layout" layoutExpanded [
           navLeafItem "App Bar"
@@ -1902,27 +1887,26 @@ module ExamplesRouter =
 
     let appBarContent =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.Horizontal.small
-          yield! Padding.toClasses Padding.Vertical.extraSmall
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Horizontal.small
+        Padding.Vertical.extraSmall
       ] [
         IconButton.create (
-          Icon.Create(Icon.UiActions UiActions.Menu),
+          Icon.create (Icon.UiActions UiActions.Menu),
           onClick = (fun () -> Var.Set drawerOpen (not drawerOpen.Value)),
-          attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
+          attrs = [ Margin.Right.extraSmall ]
         )
 
         div [
-          cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+          Flex.Flex.allSizes
+          AlignItems.center
           Attr.Style "gap" "8px"
           Attr.Style "cursor" "pointer"
           on.click (fun _ _ -> navigateTo Home)
-        ] [ H6.Div("Weave") ]
+        ] [ H6.div ("Weave") ]
 
-        Spacer.Create()
+        Spacer.create ()
 
         a [
           attr.href "https://github.com/1eyewonder/Weave"
@@ -1930,15 +1914,15 @@ module ExamplesRouter =
           Attr.Style "color" "inherit"
           Attr.Style "display" "flex"
           Attr.Style "align-items" "center"
-          cls [ yield! Padding.toClasses Padding.Horizontal.extraSmall ]
+          Padding.Horizontal.extraSmall
         ] [ githubSvg ]
 
         IconButton.create (
           Theme.current.View
           |> Doc.BindView(fun mode ->
             match mode with
-            | Theming.Light -> Icon.Create(Icon.Android Android.DarkMode)
-            | Theming.Dark -> Icon.Create(Icon.Android Android.LightMode)),
+            | Theming.Light -> Icon.create (Icon.Android Android.DarkMode)
+            | Theming.Dark -> Icon.create (Icon.Android Android.LightMode)),
           onClick =
             (fun () ->
               let newMode = Theming.toggleMode ()
@@ -1949,18 +1933,15 @@ module ExamplesRouter =
     div [
       Attr.Style "height" "100vh"
       Attr.Style "overflow" "hidden"
-      cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ]
+      Flex.Flex.allSizes
+      FlexDirection.Column.allSizes
       SurfaceColor.toBackgroundColor SurfaceColor.Background
     ] [
       navEffects
 
-      AppBar.Create(
-        appBarContent,
-        position = AppBar.Position.Static,
-        attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
-      )
+      AppBar.create (appBarContent, attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ])
 
-      DrawerContainer.Create(
+      DrawerContainer.create (
         mainContent =
           div [
             cl "weave-main-content"
@@ -1989,10 +1970,8 @@ module ExamplesRouter =
               div [
                 Attr.Style "flex" "1"
                 Attr.Style "min-width" "0"
-                cls [
-                  yield! Padding.toClasses Padding.All.Medium.small
-                  yield! Padding.toClasses Padding.All.ExtraSmall.extraSmall
-                ]
+                Padding.All.Medium.small
+                Padding.All.ExtraSmall.extraSmall
               ] [
                 currentPageView
                 |> Doc.BindView(fun page ->
@@ -2003,9 +1982,10 @@ module ExamplesRouter =
             ]
           ],
         leftDrawer =
-          Drawer.CreateResponsive(
+          Drawer.create (
             navList,
             drawerOpen.View,
+            variant = Drawer.Variant.Responsive,
             position = Drawer.Position.Left,
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set drawerOpen false),

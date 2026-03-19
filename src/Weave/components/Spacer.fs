@@ -16,6 +16,6 @@ type Spacer =
   /// elements outward to the edges.
   /// </summary>
   /// <param name="attrs">Additional attributes applied to the root element.</param>
-  static member Create(?attrs: Attr list) =
+  static member create(?attrs: Attr list) =
     let attrs = defaultArg attrs List.empty
     div [ cl Css.``weave-spacer``; yield! attrs ] []

@@ -23,30 +23,30 @@ module SelectExamples =
 
     let content =
       div [] [
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
-              Select.Create(
+            GridItem.create (
+              Select.create (
                 items,
                 selected,
                 labelText = View.Const "Fruit",
                 placeholder = View.Const "Choose a fruit",
-                attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+                attrs = [ Select.Color.primary ]
               ),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6
             )
 
-            GridItem.Create(
+            GridItem.create (
               selected.View
               |> Doc.BindView(fun v ->
-                Body2.Div(
+                Body2.div (
                   sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"),
-                  attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ]
+                  attrs = [ Margin.Top.extraSmall ]
                 )),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
-              attrs = [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ]
+              attrs = [ Flex.Flex.allSizes; AlignItems.center ]
             )
           ]
         )
@@ -64,12 +64,12 @@ let items =
         Select.SelectItemDef.create (text fruit) fruit fruit)
     |> View.Const
 
-Select.Create(
+Select.create(
     items,
     selected,
     labelText = View.Const "Fruit",
     placeholder = View.Const "Choose a fruit",
-    attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+    attrs = [ Select.Color.primary ]
 )
 """
 
@@ -90,39 +90,39 @@ Select.Create(
         "Select supports all three Field variants: Standard (default), Filled, and Outlined. Pass the variant parameter to control the input chrome styling."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               standardVal,
               variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               filledVal,
               variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Select.Color.toClass BrandColor.Secondary |> cl ]
+              attrs = [ Select.Color.secondary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               outlinedVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Select.Color.toClass BrandColor.Tertiary |> cl ]
+              attrs = [ Select.Color.tertiary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 4
@@ -134,19 +134,19 @@ Select.Create(
       """open Weave
 
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Standard, // see here
     labelText = View.Const "Standard"
 )
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Filled, // see here
     labelText = View.Const "Filled"
 )
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Outlined, // see here
     labelText = View.Const "Outlined"
@@ -168,31 +168,31 @@ Select.Create(
         "When clearable is enabled, a clear button appears when a value is selected. Click the X to reset the selection to None."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               selected,
               variant = Field.Variant.Outlined,
               labelText = View.Const "City",
               clearable = View.Const true,
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             selected.View
             |> Doc.BindView(fun v ->
-              Body2.Div(
+              Body2.div (
                 sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"),
-                attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ]
+                attrs = [ Margin.Top.extraSmall ]
               )),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
-            attrs = [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ]
+            attrs = [ Flex.Flex.allSizes; AlignItems.center ]
           )
         ]
       )
@@ -203,7 +203,7 @@ Select.Create(
 
 let selected = Var.Create<string option> (Some "Tokyo")
 
-Select.Create(
+Select.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
@@ -249,17 +249,17 @@ Select.Create(
         "Enable search to filter the dropdown items by typing. The search input auto-focuses when the dropdown opens. Filtering is case-insensitive on the item's Text field."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               selected,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Country",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
@@ -271,7 +271,7 @@ Select.Create(
       """open Weave
 
 
-Select.Create(
+Select.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
@@ -297,23 +297,23 @@ Select.Create(
 
     let content =
       div [] [
-        Grid.Create(
+        Grid.create (
           [
-            GridItem.Create(
-              Select.CreateMulti(
+            GridItem.create (
+              MultiSelect.create (
                 items,
                 selected,
                 variant = Field.Variant.Outlined,
                 labelText = View.Const "Hobbies",
                 placeholder = View.Const "Select hobbies",
                 clearable = View.Const true,
-                attrs = [ Select.Color.toClass BrandColor.Secondary |> cl ]
+                attrs = [ Select.Color.secondary ]
               ),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6
             )
 
-            GridItem.Create(
+            GridItem.create (
               selected.View
               |> Doc.BindView(fun sel ->
                 let display =
@@ -322,13 +322,10 @@ Select.Create(
                   else
                     sel |> Set.toList |> String.concat ", "
 
-                Body2.Div(
-                  sprintf "Selected: %s" display,
-                  attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ]
-                )),
+                Body2.div (sprintf "Selected: %s" display, attrs = [ Margin.Top.extraSmall ])),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
-              attrs = [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ]
+              attrs = [ Flex.Flex.allSizes; AlignItems.center ]
             )
           ]
         )
@@ -346,7 +343,7 @@ let items =
         Select.SelectItemDef.create (text hobby) hobby hobby)
     |> View.Const
 
-Select.CreateMulti( // see here
+MultiSelect.create( // see here
     items,
     selected,
     variant = Field.Variant.Outlined,
@@ -371,10 +368,10 @@ Select.CreateMulti( // see here
         "Multi-select with a Select All row. When all items are selected the checkbox shows a checkmark; when some are selected it shows an indeterminate dash. Custom selection text can summarize the selection count."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.CreateMulti(
+          GridItem.create (
+            MultiSelect.create (
               items,
               selected,
               variant = Field.Variant.Outlined,
@@ -384,7 +381,7 @@ Select.CreateMulti( // see here
               searchable = true,
               clearable = View.Const true,
               selectionText = (fun sel -> sprintf "%d role(s) selected" (Set.count sel)),
-              attrs = [ Select.Color.toClass BrandColor.Tertiary |> cl ]
+              attrs = [ Select.Color.tertiary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
@@ -396,7 +393,7 @@ Select.CreateMulti( // see here
       """open Weave
 
 
-Select.CreateMulti(
+MultiSelect.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
@@ -417,17 +414,17 @@ Select.CreateMulti(
 
     let makeItem emoji name =
       Select.SelectItemDef.create
-        (span [
-          cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
-          Attr.Style "gap" "8px"
-        ] [ span [ Attr.Style "font-size" "1.4em" ] [ text emoji ]; text name ])
+        (span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
+          span [ Attr.Style "font-size" "1.4em" ] [ text emoji ]
+          text name
+        ])
         name
         name
       |> Select.SelectItemDef.withSelectedContent (
-        span [
-          cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
-          Attr.Style "gap" "6px"
-        ] [ span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]; text name ]
+        span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "6px" ] [
+          span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
+          text name
+        ]
       )
 
     let items =
@@ -447,17 +444,17 @@ Select.CreateMulti(
         "Items support custom rendering via the Content field. Use withSelectedContent to provide a different display when the item is selected in the field (e.g., a compact version with a flag)."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               selected,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Country",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
@@ -489,7 +486,7 @@ let items =
       makeItem "\U0001F1EB\U0001F1F7" "France" ]
     |> View.Const
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Country",
@@ -514,29 +511,29 @@ Select.Create(
         "Select can be disabled or set to read-only. Disabled prevents all interaction and dims the component. Read-only shows the value but prevents changes."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               disabledVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Disabled",
               enabled = View.Const false,
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               readonlyVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Read Only",
               readOnly = View.Const true,
-              attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+              attrs = [ Select.Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
@@ -549,14 +546,14 @@ Select.Create(
 
 
 // Disabled
-Select.Create(
+Select.create(
     items, selected,
     labelText = View.Const "Disabled",
     enabled = View.Const false // see here
 )
 
 // Read Only
-Select.Create(
+Select.create(
     items, selected,
     labelText = View.Const "Read Only",
     readOnly = View.Const true // see here
@@ -567,17 +564,17 @@ Select.Create(
 
   let private colorsExample () =
     let colors = [
-      "Primary", BrandColor.Primary
-      "Secondary", BrandColor.Secondary
-      "Tertiary", BrandColor.Tertiary
-      "Error", BrandColor.Error
-      "Warning", BrandColor.Warning
-      "Success", BrandColor.Success
-      "Info", BrandColor.Info
+      "Primary", Select.Color.primary
+      "Secondary", Select.Color.secondary
+      "Tertiary", Select.Color.tertiary
+      "Error", Select.Color.error
+      "Warning", Select.Color.warning
+      "Success", Select.Color.success
+      "Info", Select.Color.info
     ]
 
     let description =
-      Helpers.bodyText "Select supports all brand colors, passed via attrs using Select.Color.toClass."
+      Helpers.bodyText "Select supports all brand colors, passed via attrs using Select.Color.*."
 
     let content =
       let items =
@@ -585,18 +582,18 @@ Select.Create(
         |> List.map (fun o -> Select.SelectItemDef.create (text o) o o)
         |> View.Const
 
-      Grid.Create(
+      Grid.create (
         colors
-        |> List.map (fun (label, color) ->
+        |> List.map (fun (label, colorAttr) ->
           let v = Var.Create<string option>(Some "Option A")
 
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               v,
               variant = Field.Variant.Outlined,
               labelText = View.Const label,
-              attrs = [ Select.Color.toClass color |> cl ]
+              attrs = [ colorAttr ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
@@ -608,18 +605,18 @@ Select.Create(
       """open Weave
 
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Primary",
-    attrs = [ Select.Color.toClass BrandColor.Primary |> cl ] // see here
+    attrs = [ Select.Color.primary ] // see here
 )
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Error",
-    attrs = [ Select.Color.toClass BrandColor.Error |> cl ] // see here
+    attrs = [ Select.Color.error ] // see here
 )
 """
 
@@ -637,59 +634,53 @@ Select.Create(
 
     let description =
       Helpers.bodyText
-        "Select supports three width modes: Auto (default, inline sizing), Full (100% of container), and Fit Content (sizes to content). Pass width classes via attrs using Select.Width.toClass."
+        "Select supports three width modes: Auto (default, inline sizing), Full (100% of container), and Fit Content (sizes to content). Pass width classes via attrs using Select.Width.full or Select.Width.fitContent."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Body2.Div("Auto (default)", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+              Body2.div ("Auto (default)", attrs = [ Margin.Bottom.extraSmall ])
 
-              Select.Create(
+              Select.create (
                 items,
                 autoVal,
                 variant = Field.Variant.Outlined,
                 labelText = View.Const "Auto",
-                attrs = [ Select.Color.toClass BrandColor.Primary |> cl ]
+                attrs = [ Select.Color.primary ]
               )
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 4
           )
 
-          GridItem.Create(
+          GridItem.create (
             div [ Attr.Style "width" "100%" ] [
-              Body2.Div("Full Width", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+              Body2.div ("Full Width", attrs = [ Margin.Bottom.extraSmall ])
 
-              Select.Create(
+              Select.create (
                 items,
                 fullVal,
                 variant = Field.Variant.Outlined,
                 labelText = View.Const "Full",
-                attrs = [
-                  Select.Color.toClass BrandColor.Secondary |> cl
-                  yield! (Select.Width.toClass Select.Width.Full |> Option.map cl |> Option.toList)
-                ]
+                attrs = [ Select.Color.secondary; Select.Width.full ]
               )
             ],
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 4
           )
 
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Body2.Div("Fit Content", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+              Body2.div ("Fit Content", attrs = [ Margin.Bottom.extraSmall ])
 
-              Select.Create(
+              Select.create (
                 items,
                 fitVal,
                 variant = Field.Variant.Outlined,
                 labelText = View.Const "Fit Content",
-                attrs = [
-                  Select.Color.toClass BrandColor.Tertiary |> cl
-                  yield! (Select.Width.toClass Select.Width.FitContent |> Option.map cl |> Option.toList)
-                ]
+                attrs = [ Select.Color.tertiary; Select.Width.fitContent ]
               )
             ],
             xs = Grid.Width.create 12,
@@ -703,18 +694,18 @@ Select.Create(
 
 
 // Auto (default) — inline, sizes to min-width
-Select.Create(items, selected, ...)
+Select.create(items, selected, ...)
 
 // Full Width — 100% of container
-Select.Create(
+Select.create(
     items, selected,
-    attrs = [ Css.``weave-select--full-width`` |> cl ] // see here
+    attrs = [ Select.Width.full ] // see here
 )
 
 // Fit Content — sizes to content
-Select.Create(
+Select.create(
     items, selected,
-    attrs = [ Css.``weave-select--fit-content`` |> cl ] // see here
+    attrs = [ Select.Width.fitContent ] // see here
 )
 """
 
@@ -776,36 +767,35 @@ Select.Create(
         "Select is generic over the value type. Here we use a custom record type as the item value. The Text field is used for search filtering while Value holds the full domain object."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Select.Create(
+          GridItem.create (
+            Select.create (
               items,
               selected,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Language",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.toClass BrandColor.Info |> cl ]
+              attrs = [ Select.Color.info ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             selected.View
             |> Doc.BindView(fun v ->
               match v with
               | Some lang ->
-                Body2.Div(
+                Body2.div (
                   sprintf "Code: %s | Name: %s | Native: %s" lang.Code lang.Name lang.Native,
-                  attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ]
+                  attrs = [ Margin.Top.extraSmall ]
                 )
-              | None ->
-                Body2.Div("No language selected", attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ])),
+              | None -> Body2.div ("No language selected", attrs = [ Margin.Top.extraSmall ])),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
-            attrs = [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ]
+            attrs = [ Flex.Flex.allSizes; AlignItems.center ]
           )
         ]
       )
@@ -833,7 +823,7 @@ let items =
             lang)      // Value is the full record // see here
     |> View.Const
 
-Select.Create(
+Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Language",
@@ -845,12 +835,12 @@ Select.Create(
     Helpers.codeSampleSection "Generic Types" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Select"
-        Body1.Div(
+        Body1.div (
           "Select components allow users to choose from a list of options in a dropdown. Supports single and multi-select, search filtering, clear, select-all, custom item rendering, and all Field variants.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -876,5 +866,5 @@ Select.Create(
         Helpers.divider ()
         genericTypeExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

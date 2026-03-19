@@ -17,15 +17,32 @@ module Core =
   type WebSharperElement = Attr list -> Doc list -> Doc
 
   let div = Html.div
-  let cl = Attr.Class
-  let cls = List.map Attr.Class >> Attr.Concat
+
+  let cl name =
+    try
+      Attr.Class name
+    with _ ->
+      Unchecked.defaultof<Attr>
+
+  let cls names =
+    try
+      List.map Attr.Class names |> Attr.Concat
+    with _ ->
+      Unchecked.defaultof<Attr>
 
   let text = Html.text
   let textView = Html.textView
 
   module Theme =
 
-    let current = Var.Create(getMode ())
+    let current =
+      let mode =
+        try
+          getMode ()
+        with _ ->
+          ThemeMode.Light
+
+      Var.Create mode
 
   module Style =
 
@@ -143,12 +160,6 @@ module Core =
 
     let toBackgroundColor color = toStyle Style.backgroundColor color
     let toColor color = toStyle Style.color color
-
-  [<RequireQualifiedAccess; Struct>]
-  type Density =
-    | Compact
-    | Standard
-    | Spacious
 
   [<RequireQualifiedAccess; Struct>]
   type TransitionSpeed =

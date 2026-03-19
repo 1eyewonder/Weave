@@ -62,25 +62,24 @@ open Grid
 [<JavaScript>]
 type Grid =
 
-  static member Create
-    (items: Doc list, ?spacing: GutterSpacing, ?justify: JustifyContent, ?attrs: Attr list)
-    =
+  static member create(items: Doc list, ?spacing: GutterSpacing, ?justify: Attr, ?attrs: Attr list) =
     let spacing = defaultArg spacing (GutterSpacing.create 5)
     let attrs = defaultArg attrs List.empty
-    let justify = defaultArg justify JustifyContent.SpaceAround
+    let justify = defaultArg justify JustifyContent.spaceAround
 
-    let gridClasses = [
-      Css.``weave-grid``
-      GutterSpacing.toClass spacing
-      JustifyContent.toClass justify
-    ]
-
-    div [ yield! gridClasses |> List.map cl; yield! attrs ] items
+    div
+      [
+        cl Css.``weave-grid``
+        cl (GutterSpacing.toClass spacing)
+        justify
+        yield! attrs
+      ]
+      items
 
 [<JavaScript>]
 type GridItem =
 
-  static member Create
+  static member create
     (content: Doc, ?xs: Width, ?sm: Width, ?md: Width, ?lg: Width, ?xl: Width, ?attrs: Attr list)
     =
     let attrs = defaultArg attrs List.empty
@@ -99,5 +98,5 @@ type GridItem =
 [<JavaScript>]
 type FlexBreak =
 
-  static member Create() =
+  static member create() =
     div [ cl Css.``weave-flex-break``; Attr.Create "aria-hidden" "true" ] []

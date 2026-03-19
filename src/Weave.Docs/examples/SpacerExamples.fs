@@ -18,22 +18,20 @@ module SpacerExamples =
 
     let content =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.All.small
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.All.small
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
       ] [
         Button.primary (text "Left", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
-        Spacer.Create()
+        Spacer.create ()
         Button.primary (text "Right", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
       ]
 
     let code =
-      """div [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ] [
+      """div [ Flex.Flex.allSizes; AlignItems.center ] [
     Button.create(text "Left", onClick = (fun () -> ()))
-    Spacer.Create()
+    Spacer.create()
     Button.create(text "Right", onClick = (fun () -> ()))
 ]"""
 
@@ -50,27 +48,25 @@ module SpacerExamples =
 
     let content =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.All.small
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.All.small
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
-      ] [ btn "One"; Spacer.Create(); btn "Two"; Spacer.Create(); btn "Three" ]
+      ] [ btn "One"; Spacer.create (); btn "Two"; Spacer.create (); btn "Three" ]
 
     let code =
-      """div [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ] [
+      """div [ Flex.Flex.allSizes; AlignItems.center ] [
     Button.create(text "One", onClick = (fun () -> ()))
-    Spacer.Create()
+    Spacer.create()
     Button.create(text "Two", onClick = (fun () -> ()))
-    Spacer.Create()
+    Spacer.create()
     Button.create(text "Three", onClick = (fun () -> ()))
 ]"""
 
     Helpers.codeSampleSection "Multiple Spacers" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Spacer"
         Helpers.bodyText
@@ -82,5 +78,5 @@ module SpacerExamples =
         Helpers.divider ()
         multipleExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

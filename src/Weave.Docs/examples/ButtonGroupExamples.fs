@@ -15,69 +15,66 @@ module ButtonGroupExamples =
       Helpers.bodyText "Buttons can be grouped together in Filled, Outlined, and Text variants."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           let makeGroup variant =
-            GridItem.Create(
-              ButtonGroup.Create(
+            GridItem.create (
+              ButtonGroup.create (
                 [
                   Button.create (text "One", onClick = (fun () -> ()))
                   Button.create (text "Two", onClick = (fun () -> ()))
                   Button.create (text "Three", onClick = (fun () -> ()))
                 ],
-                attrs = [
-                  ButtonGroup.Variant.toClass variant |> cl
-                  ButtonGroup.Color.toClass BrandColor.Primary |> cl
-                ]
+                attrs = [ variant; ButtonGroup.Color.primary ]
               )
             )
 
-          makeGroup ButtonGroup.Variant.Filled
-          makeGroup ButtonGroup.Variant.Text
-          makeGroup ButtonGroup.Variant.Outlined
+          makeGroup ButtonGroup.Variant.filled
+          makeGroup ButtonGroup.Variant.text
+          makeGroup ButtonGroup.Variant.outlined
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.SpaceAround,
-        attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
+        justify = JustifyContent.spaceAround,
+        attrs = [ AlignItems.center ]
       )
 
     let code =
       """open Weave
 
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.filled
+        ButtonGroup.Color.primary
     ]
 )
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Text |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.text
+        ButtonGroup.Color.primary
     ]
 )
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.outlined
+        ButtonGroup.Color.primary
     ]
 )
     """
@@ -89,51 +86,43 @@ ButtonGroup.Create(
       Helpers.bodyText "With Vertical orientation the buttons are displayed vertically."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           let makeGroup variant =
-            GridItem.Create(
-              ButtonGroup.Create(
+            GridItem.create (
+              ButtonGroup.create (
                 [
                   Button.create (text "One", onClick = (fun () -> ()))
                   Button.create (text "Two", onClick = (fun () -> ()))
                   Button.create (text "Three", onClick = (fun () -> ()))
                 ],
-                attrs = [
-                  ButtonGroup.Variant.toClass variant |> cl
-                  ButtonGroup.Color.toClass BrandColor.Primary |> cl
-
-                  ButtonGroup.Orientation.toClass ButtonGroup.Orientation.Vertical
-                  |> Attr.bindOption cl
-                ]
+                attrs = [ variant; ButtonGroup.Color.primary; ButtonGroup.Orientation.vertical ]
               )
             )
 
-          makeGroup ButtonGroup.Variant.Filled
-          makeGroup ButtonGroup.Variant.Text
-          makeGroup ButtonGroup.Variant.Outlined
+          makeGroup ButtonGroup.Variant.filled
+          makeGroup ButtonGroup.Variant.text
+          makeGroup ButtonGroup.Variant.outlined
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.SpaceAround,
-        attrs = [ cls [ AlignItems.toClass AlignItems.Start ] ]
+        justify = JustifyContent.spaceAround,
+        attrs = [ AlignItems.start ]
       )
 
     let code =
       """open Weave
 
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass variant |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
-
-        ButtonGroup.Orientation.toClass ButtonGroup.Orientation.Vertical
-        |> Attr.bindOption cl
+        ButtonGroup.Variant.filled
+        ButtonGroup.Color.primary
+        ButtonGroup.Orientation.vertical
     ]
 )
     """
@@ -146,60 +135,56 @@ ButtonGroup.Create(
         "Button groups support all theme colors and three density levels: Compact, Standard, and Spacious."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          let makeGroup density color =
-            GridItem.Create(
-              ButtonGroup.Create(
+          let makeGroup densityAttr colorAttr =
+            GridItem.create (
+              ButtonGroup.create (
                 [
                   Button.create (text "One", onClick = (fun () -> ()))
                   Button.create (text "Two", onClick = (fun () -> ()))
                   Button.create (text "Three", onClick = (fun () -> ()))
                 ],
-                attrs = [
-                  ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-                  ButtonGroup.Density.toClass density |> cl
-                  ButtonGroup.Color.toClass color |> cl
-                ]
+                attrs = [ ButtonGroup.Variant.filled; densityAttr; colorAttr ]
               )
             )
 
-          makeGroup Density.Compact BrandColor.Primary
-          makeGroup Density.Standard BrandColor.Error
-          makeGroup Density.Spacious BrandColor.Success
+          makeGroup ButtonGroup.Density.compact ButtonGroup.Color.primary
+          makeGroup ButtonGroup.Density.standard ButtonGroup.Color.error
+          makeGroup ButtonGroup.Density.spacious ButtonGroup.Color.success
         ],
         spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.SpaceAround,
-        attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
+        justify = JustifyContent.spaceAround,
+        attrs = [ AlignItems.center ]
       )
 
     let code =
       """open Weave
 
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-        ButtonGroup.Density.toClass Density.Compact |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.filled
+        ButtonGroup.Density.compact
+        ButtonGroup.Color.primary
     ]
 )
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
         Button.create(text "Two", onClick = (fun () -> ()))
         Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
-        ButtonGroup.Density.toClass Density.Spacious |> cl
-        ButtonGroup.Color.toClass BrandColor.Success |> cl
+        ButtonGroup.Variant.filled
+        ButtonGroup.Density.spacious
+        ButtonGroup.Color.success
     ]
 )
     """
@@ -212,20 +197,14 @@ ButtonGroup.Create(
         "A ButtonMenu can be placed inside a button group to create a split button. The group wraps around both the action button and the dropdown trigger."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.Center
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
+      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
         let isOpen = Var.Create false
 
-        ButtonGroup.Create(
+        ButtonGroup.create (
           [
             Button.create (text "Reply", onClick = (fun () -> printfn "Reply clicked"))
-            ButtonMenu.CreateIcon(
-              closedIcon = Icon.Create(Icon.UiActions UiActions.ArrowDropDown),
+            IconButtonMenu.create (
+              closedIcon = Icon.create (Icon.UiActions UiActions.ArrowDropDown),
               items = [
                 Button.create (
                   text "Reply",
@@ -248,10 +227,7 @@ ButtonGroup.Create(
               triggerAttrs = []
             )
           ],
-          attrs = [
-            ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-            ButtonGroup.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
         )
       ]
 
@@ -263,11 +239,11 @@ open Weave.Icons.MaterialSymbols
 
 let isOpen = Var.Create false
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "Reply", onClick = (fun () -> printfn "Reply clicked"))
-        ButtonMenu.CreateIcon(
-            closedIcon = Icon.Create(Icon.UiActions UiActions.ArrowDropDown),
+        IconButtonMenu.create(
+            closedIcon = Icon.create(Icon.UiActions UiActions.ArrowDropDown),
             items = [
                 Button.create(
                     text "Reply",
@@ -300,8 +276,8 @@ ButtonGroup.Create(
         )
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.outlined
+        ButtonGroup.Color.primary
     ]
 )
     """
@@ -312,23 +288,14 @@ ButtonGroup.Create(
     let description = Helpers.bodyText "Icon buttons can also be grouped together."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.Center
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        ButtonGroup.Create(
+      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
+        ButtonGroup.create (
           [
-            IconButton.create (Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-            IconButton.create (Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-            IconButton.create (Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
+            IconButton.create (Icon.create (Icon.Text Text.FormatBold), onClick = (fun () -> ()))
+            IconButton.create (Icon.create (Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
+            IconButton.create (Icon.create (Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
           ],
-          attrs = [
-            ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-            ButtonGroup.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
         )
       ]
 
@@ -338,15 +305,15 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
-        IconButton.create(Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-        IconButton.create(Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-        IconButton.create(Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
+        IconButton.create(Icon.create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
+        IconButton.create(Icon.create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
+        IconButton.create(Icon.create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.outlined
+        ButtonGroup.Color.primary
     ]
 )
     """
@@ -359,31 +326,22 @@ ButtonGroup.Create(
         "A Dropdown can be placed inside a button group to create a split button with a dropdown menu."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.Center
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        ButtonGroup.Create(
+      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
+        ButtonGroup.create (
           [
             Button.create (text "Save", onClick = (fun () -> printfn "Save clicked"))
-            Dropdown.Create(
+            Dropdown.create (
               text "Save Options",
               [
-                DropdownItem.Create(text "Save as Draft", onClick = (fun () -> printfn "Draft"))
-                DropdownItem.Create(text "Save and Publish", onClick = (fun () -> printfn "Publish"))
-                DropdownItem.Create(text "Save and Close", onClick = (fun () -> printfn "Close"))
+                DropdownItem.create (text "Save as Draft", onClick = (fun () -> printfn "Draft"))
+                DropdownItem.create (text "Save and Publish", onClick = (fun () -> printfn "Publish"))
+                DropdownItem.create (text "Save and Close", onClick = (fun () -> printfn "Close"))
               ],
               anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
               transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft
             )
           ],
-          attrs = [
-            ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-            ButtonGroup.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
         )
       ]
 
@@ -391,23 +349,23 @@ ButtonGroup.Create(
       """open Weave
 
 
-ButtonGroup.Create(
+ButtonGroup.create(
     [
         Button.create(text "Save", onClick = (fun () -> printfn "Save clicked"))
-        Dropdown.Create(
+        Dropdown.create(
             text "Save Options",
             [
-                DropdownItem.Create(text "Save as Draft", onClick = (fun () -> printfn "Draft"))
-                DropdownItem.Create(text "Save and Publish", onClick = (fun () -> printfn "Publish"))
-                DropdownItem.Create(text "Save and Close", onClick = (fun () -> printfn "Close"))
+                DropdownItem.create(text "Save as Draft", onClick = (fun () -> printfn "Draft"))
+                DropdownItem.create(text "Save and Publish", onClick = (fun () -> printfn "Publish"))
+                DropdownItem.create(text "Save and Close", onClick = (fun () -> printfn "Close"))
             ],
             anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
             transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft
         )
     ],
     attrs = [
-        ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
-        ButtonGroup.Color.toClass BrandColor.Primary |> cl
+        ButtonGroup.Variant.outlined
+        ButtonGroup.Color.primary
     ]
 )
     """
@@ -415,12 +373,12 @@ ButtonGroup.Create(
     Helpers.codeSampleSection "Dropdown" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Button Group"
-        Body1.Div(
+        Body1.div (
           "ButtonGroup groups buttons, icon buttons, button menus, and dropdowns into a single visual unit with shared variant, color, and size styling.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -436,5 +394,5 @@ ButtonGroup.Create(
         Helpers.divider ()
         dropdownExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

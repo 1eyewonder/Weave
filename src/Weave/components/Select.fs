@@ -17,29 +17,18 @@ module Select =
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-select--primary``
-      | BrandColor.Secondary -> Css.``weave-select--secondary``
-      | BrandColor.Tertiary -> Css.``weave-select--tertiary``
-      | BrandColor.Error -> Css.``weave-select--error``
-      | BrandColor.Warning -> Css.``weave-select--warning``
-      | BrandColor.Success -> Css.``weave-select--success``
-      | BrandColor.Info -> Css.``weave-select--info``
-
-  [<RequireQualifiedAccess; Struct>]
-  type Width =
-    | Full
-    | FitContent
-    | Auto
+    let primary = cl Css.``weave-select--primary``
+    let secondary = cl Css.``weave-select--secondary``
+    let tertiary = cl Css.``weave-select--tertiary``
+    let error = cl Css.``weave-select--error``
+    let warning = cl Css.``weave-select--warning``
+    let success = cl Css.``weave-select--success``
+    let info = cl Css.``weave-select--info``
 
   module Width =
 
-    let toClass width =
-      match width with
-      | Width.Full -> Some Css.``weave-select--full-width``
-      | Width.FitContent -> Some Css.``weave-select--fit-content``
-      | Width.Auto -> None
+    let full = cl Css.``weave-select--full-width``
+    let fitContent = cl Css.``weave-select--fit-content``
 
   type SelectItemDef<'T when 'T: comparison> = {
     Content: Doc
@@ -249,7 +238,7 @@ open Select
 [<JavaScript>]
 type Select =
 
-  static member Create<'T when 'T: comparison>
+  static member create<'T when 'T: comparison>
     (
       items: View<SelectItemDef<'T> list>,
       selectedValue: Var<'T option>,
@@ -474,7 +463,7 @@ type Select =
         yield! attrs
       ] [
         Render.sizer items
-        Field.Create(
+        Field.create (
           inputElement,
           isFocused.View <||> openVar.View,
           shouldFloat,
@@ -490,7 +479,10 @@ type Select =
     ]
     |> Doc.Concat
 
-  static member CreateMulti<'T when 'T: comparison>
+[<JavaScript>]
+type MultiSelect =
+
+  static member create<'T when 'T: comparison>
     (
       items: View<SelectItemDef<'T> list>,
       selectedValues: Var<Set<'T>>,
@@ -738,7 +730,7 @@ type Select =
         yield! attrs
       ] [
         Render.sizer items
-        Field.Create(
+        Field.create (
           inputElement,
           isFocused.View <||> openVar.View,
           shouldFloat,

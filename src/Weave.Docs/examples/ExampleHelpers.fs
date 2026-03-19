@@ -13,10 +13,10 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module Helpers =
 
-  let bodyText (text: string) = Body1.Div(text)
+  let bodyText (text: string) = Body1.div (text)
 
   let divider () =
-    Divider.Create(attrs = [ Margin.toClasses Margin.Vertical.small |> cls ])
+    Divider.create (attrs = [ Margin.Vertical.small ])
 
   /// Generates a URL-friendly slug from a title string
   let private slugify (title: string) =
@@ -28,12 +28,13 @@ module Helpers =
 
     div [
       attr.id slug
-      Margin.toClasses Margin.Bottom.extraSmall |> cls
+      Margin.Bottom.extraSmall
       Attr.Class "section-header"
-      cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+      Flex.Flex.allSizes
+      AlignItems.center
       Attr.Style "gap" "8px"
     ] [
-      H4.Div(View.Const title)
+      H4.div (View.Const title)
       a [
         attr.href (sprintf "#%s" slug)
         Attr.Class "anchor-link"
@@ -51,12 +52,13 @@ module Helpers =
 
     div [
       attr.id slug
-      Margin.toClasses Margin.Bottom.extraSmall |> cls
+      Margin.Bottom.extraSmall
       Attr.Class "section-header"
-      cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ]
+      Flex.Flex.allSizes
+      AlignItems.center
       Attr.Style "gap" "12px"
     ] [
-      H1.Div(title)
+      H1.div (title)
       a [
         attr.href (sprintf "#%s" slug)
         Attr.Class "anchor-link"
@@ -69,26 +71,26 @@ module Helpers =
     ]
 
   let section title description content =
-    div [ Margin.toClasses Margin.Bottom.small |> cls ] [
+    div [ Margin.Bottom.small ] [
       sectionHeader title
 
-      div [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ] [ description ]
+      div [ Margin.Bottom.extraSmall ] [ description ]
 
       div [
-        Padding.toClasses Padding.All.small |> cls
+        Padding.All.small
         SurfaceColor.toBackgroundColor SurfaceColor.Surface
-        BorderRadius.toClass BorderRadius.All.small |> cl
+        BorderRadius.All.small
       ] [ content ]
     ]
 
   let textSection title (children: Doc list) =
-    div [ Margin.toClasses Margin.Bottom.small |> cls ] [
+    div [ Margin.Bottom.small ] [
       sectionHeader title
 
       div [
-        Padding.toClasses Padding.All.small |> cls
+        Padding.All.small
         SurfaceColor.toBackgroundColor SurfaceColor.Surface
-        BorderRadius.toClass BorderRadius.All.small |> cl
+        BorderRadius.All.small
       ] [ yield! children ]
     ]
 
@@ -96,21 +98,17 @@ module Helpers =
   let highlightCodeElement (el: Dom.Element) = X<unit>
 
   let codeSampleSection title description (content: Doc) (linesOfCode: string) =
-    div [ Margin.toClasses Margin.Bottom.small |> cls ] [
+    div [ Margin.Bottom.small ] [
       sectionHeader title
 
-      div [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ] [ description ]
+      div [ Margin.Bottom.extraSmall ] [ description ]
 
       div [
         SurfaceColor.toBackgroundColor SurfaceColor.Surface
-
-        cls [
-          Flex.Flex.allSizes
-          FlexDirection.Column.allSizes
-          yield! Padding.toClasses Padding.All.small
-          BorderRadius.toClass BorderRadius.All.small
-        ]
-
+        Flex.Flex.allSizes
+        FlexDirection.Column.allSizes
+        Padding.All.small
+        BorderRadius.All.small
       ] [
         content
 
@@ -119,23 +117,23 @@ module Helpers =
         let icon =
           codeIsExpanded.View
           |> Doc.BindView(fun expanded ->
-            let attrs = [ cls [ AlignItems.toClass AlignItems.Center ] ]
+            let attrs = [ AlignItems.center ]
 
             if expanded then
-              Icon.Create(Icon.UiActions UiActions.CollapseAll, attrs = attrs)
+              Icon.create (Icon.UiActions UiActions.CollapseAll, attrs = attrs)
             else
-              Icon.Create(Icon.UiActions UiActions.ExpandAll, attrs = attrs))
+              Icon.create (Icon.UiActions UiActions.ExpandAll, attrs = attrs))
 
         let headerText =
           codeIsExpanded.View
           |> View.MapCached(fun expanded -> if expanded then "Hide Code" else "Show Code")
 
         let header =
-          ExpansionPanelHeader.CreateWithCustomIcons(
-            content = Subtitle2.Div(headerText),
-            icon = icon,
+          ExpansionPanelHeader.create (
+            content = Subtitle2.div (headerText),
             expanded = codeIsExpanded,
-            attrs = [ cls [ ExpansionPanel.Color.toClass BrandColor.Primary ] ]
+            icon = icon,
+            attrs = [ ExpansionPanel.Color.primary ]
           )
 
         let codeContent =
@@ -147,15 +145,15 @@ module Helpers =
             ] [ text linesOfCode ]
           ]
 
-        ExpansionPanelContainer.Create(
+        ExpansionPanelContainer.create (
           [
-            ExpansionPanel.Create(
+            ExpansionPanel.create (
               header = header,
-              content = ExpansionPanelContent.Create(codeContent, gutters = View.Const false),
+              content = ExpansionPanelContent.create (codeContent, gutters = View.Const false),
               expanded = codeIsExpanded
             )
           ],
-          attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
+          attrs = [ Margin.Top.extraSmall ]
         )
       ]
     ]

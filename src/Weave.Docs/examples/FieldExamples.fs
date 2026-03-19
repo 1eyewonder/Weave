@@ -25,39 +25,39 @@ module FieldExamples =
         "Field supports three variants: Standard (bottom border), Filled (background + bottom border), and Outlined (full border)."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               stdVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               filledVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               outlinedVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
@@ -71,19 +71,19 @@ module FieldExamples =
 
 let value = Var.Create ""
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Standard, // see here
     labelText = View.Const "Standard"
 )
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Filled, // see here
     labelText = View.Const "Filled"
 )
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined, // see here
     labelText = View.Const "Outlined"
@@ -104,39 +104,39 @@ Field.Create(
       Helpers.bodyText "When the field has a value the label floats up and shrinks automatically."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               stdVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               filledVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               outlinedVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
@@ -151,7 +151,7 @@ Field.Create(
 // When the Var has a value, the label automatically floats
 let value = Var.Create "Some Content 💛 follows here"
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
@@ -182,41 +182,41 @@ Field.Create(
         "Icons or other content can be placed at the start, end, or both ends of the field. All three adornment placements are shown across every variant."
 
     let mkItem variant label (startAdornment: unit -> Doc option) (endAdornment: unit -> Doc option) value =
-      GridItem.Create(
-        Field.Create(
+      GridItem.create (
+        Field.create (
           value,
           showHelpText = View.Const false,
           variant = variant,
           labelText = View.Const label,
           ?startAdornment = startAdornment (),
           ?endAdornment = endAdornment (),
-          attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+          attrs = [ Field.Width.full ]
         ),
         xs = Grid.Width.create 12,
         md = Grid.Width.create 4
       )
 
     let searchIcon () =
-      Some(Icon.Create(Icon.UiActions UiActions.Search, attrs = [ BrandColor.toColor BrandColor.Primary ]))
+      Some(Icon.create (Icon.UiActions UiActions.Search, attrs = [ BrandColor.toColor BrandColor.Primary ]))
 
     let checkIcon () =
       Some(
-        Icon.Create(Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.toColor BrandColor.Success ])
+        Icon.create (Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.toColor BrandColor.Success ])
       )
 
     let infoIcon () =
-      Some(Icon.Create(Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]))
+      Some(Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]))
 
     let warningIcon () =
-      Some(Icon.Create(Icon.Action Action.Warning, attrs = [ BrandColor.toColor BrandColor.Warning ]))
+      Some(Icon.create (Icon.Action Action.Warning, attrs = [ BrandColor.toColor BrandColor.Warning ]))
 
     let noIcon () = None
 
     let content =
       div [] [
-        Body1.Div("Start Adornment", attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ])
+        Body1.div ("Start Adornment", attrs = [ Margin.Bottom.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [
             mkItem Field.Variant.Standard "Standard" searchIcon noIcon startStdVal
             mkItem Field.Variant.Filled "Filled" searchIcon noIcon startFilledVal
@@ -225,9 +225,9 @@ Field.Create(
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.Div("End Adornment", attrs = [ cls [ yield! Margin.toClasses Margin.Vertical.extraSmall ] ])
+        Body1.div ("End Adornment", attrs = [ Margin.Vertical.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [
             mkItem Field.Variant.Standard "Standard" noIcon checkIcon endStdVal
             mkItem Field.Variant.Filled "Filled" noIcon infoIcon endFilledVal
@@ -236,9 +236,9 @@ Field.Create(
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.Div("Both Adornments", attrs = [ cls [ yield! Margin.toClasses Margin.Vertical.extraSmall ] ])
+        Body1.div ("Both Adornments", attrs = [ Margin.Vertical.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [
             mkItem Field.Variant.Standard "Standard" searchIcon checkIcon bothStdVal
             mkItem Field.Variant.Filled "Filled" searchIcon infoIcon bothFilledVal
@@ -256,37 +256,37 @@ open Weave.Icons.MaterialSymbols
 let value = Var.Create ""
 
 // Start adornment only
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    startAdornment = Icon.Create( // see here
+    startAdornment = Icon.create( // see here
         Icon.UiActions UiActions.Search,
         attrs = [ BrandColor.toColor BrandColor.Primary ]
     )
 )
 
 // End adornment only
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    endAdornment = Icon.Create( // see here
+    endAdornment = Icon.create( // see here
         Icon.UiActions UiActions.CheckCircle,
         attrs = [ BrandColor.toColor BrandColor.Success ]
     )
 )
 
 // Both start and end adornments
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    startAdornment = Icon.Create( // see here
+    startAdornment = Icon.create( // see here
         Icon.UiActions UiActions.Search,
         attrs = [ BrandColor.toColor BrandColor.Primary ]
     ),
-    endAdornment = Icon.Create( // and here
+    endAdornment = Icon.create( // and here
         Icon.UiActions UiActions.CheckCircle,
         attrs = [ BrandColor.toColor BrandColor.Success ]
     )
@@ -306,14 +306,14 @@ Field.Create(
         "Use shrinkLabel to force the label into its floated position regardless of focus or value."
 
     let content =
-      Field.Create(
+      Field.create (
         value,
         showHelpText = View.Const false,
         variant = Field.Variant.Outlined,
         labelText = View.Const "ShrinkLabel Override",
         shrinkLabel = View.Const true,
-        endAdornment = Icon.Create(Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]),
-        attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+        endAdornment = Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]),
+        attrs = [ Field.Width.full ]
       )
 
     let code =
@@ -321,7 +321,7 @@ Field.Create(
 
 let value = Var.Create ""
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "ShrinkLabel Override",
@@ -342,13 +342,13 @@ Field.Create(
         "When an explicit placeholder is provided the label stays floated and the placeholder text is shown in the input area."
 
     let content =
-      Field.Create(
+      Field.create (
         value,
         showHelpText = View.Const false,
         variant = Field.Variant.Outlined,
         labelText = View.Const "With Placeholder",
         placeholder = View.Const "Type something here…",
-        attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+        attrs = [ Field.Width.full ]
       )
 
     let code =
@@ -356,7 +356,7 @@ Field.Create(
 
 let value = Var.Create ""
 
-Field.Create(
+Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "With Placeholder",
@@ -381,26 +381,20 @@ Field.Create(
       |> View.MapCached(fun show -> if show then "Must be at least 3 characters" else "")
 
     let helpText =
-      FieldHelpText.Create(
-        Doc.TextView helpTextContent,
-        attrs = [ Field.HelpTextColor.toClass BrandColor.Error |> cl ]
-      )
+      FieldHelpText.create (Doc.TextView helpTextContent, attrs = [ Field.HelpTextColor.error ])
 
     let description =
       Helpers.bodyText
         "Help text animates in and out based on a View<bool>. Here the help text appears when the value is non-empty but less than 3 characters."
 
     let content =
-      Field.Create(
+      Field.create (
         value,
         variant = Field.Variant.Outlined,
         labelText = View.Const "Name",
         showHelpText = showHelpText,
         helpText = helpText,
-        attrs = [
-          Field.Width.toClass Field.Width.Full |> Attr.bindOption cl
-          Attr.DynamicClassPred (Field.Color.toClass BrandColor.Error) showHelpText
-        ]
+        attrs = [ Field.Width.full; Attr.DynamicClassPred "weave-field--error" showHelpText ]
       )
 
     let code =
@@ -421,18 +415,18 @@ let helpTextContent =
         if show then "Must be at least 3 characters" else "")
 
 let helpText =
-    FieldHelpText.Create(
+    FieldHelpText.create(
         Doc.TextView helpTextContent,
-        attrs = [ Field.HelpTextColor.toClass BrandColor.Error |> cl ]
+        attrs = [ Field.HelpTextColor.error ]
     )
 
-Field.Create(
+Field.create(
     value,
     showHelpText = showHelpText, // see here — controls animated visibility
     labelText = View.Const "Name",
     helpText = helpText,
     attrs = [
-        Attr.DynamicClassPred (Field.Color.toClass BrandColor.Error) showHelpText
+        Attr.DynamicClassPred "weave-field--error" showHelpText
     ]
 )
 """
@@ -452,63 +446,48 @@ Field.Create(
         "Help text can be styled with any brand color to convey success, warning, error, or informational states. Apply color classes to both the field and FieldHelpText independently."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               successVal,
               showHelpText = View.Const true,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Username",
               helpText =
-                FieldHelpText.Create(
-                  text "Username is available",
-                  attrs = [ Field.HelpTextColor.toClass BrandColor.Success |> cl ]
-                ),
-              attrs = [
-                Field.Width.toClass Field.Width.Full |> Attr.bindOption cl
-                Field.Color.toClass BrandColor.Success |> cl
-              ]
+                FieldHelpText.create (text "Username is available", attrs = [ Field.HelpTextColor.success ]),
+              attrs = [ Field.Width.full; Field.Color.success ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               warningVal,
               showHelpText = View.Const true,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Password",
               helpText =
-                FieldHelpText.Create(
+                FieldHelpText.create (
                   text "Consider a stronger password",
-                  attrs = [ Field.HelpTextColor.toClass BrandColor.Warning |> cl ]
+                  attrs = [ Field.HelpTextColor.warning ]
                 ),
-              attrs = [
-                Field.Width.toClass Field.Width.Full |> Attr.bindOption cl
-                Field.Color.toClass BrandColor.Warning |> cl
-              ]
+              attrs = [ Field.Width.full; Field.Color.warning ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               errorVal,
               showHelpText = View.Const true,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Email",
               helpText =
-                FieldHelpText.Create(
-                  text "Invalid email address",
-                  attrs = [ Field.HelpTextColor.toClass BrandColor.Error |> cl ]
-                ),
-              attrs = [
-                Field.Width.toClass Field.Width.Full |> Attr.bindOption cl
-                Field.Color.toClass BrandColor.Error |> cl
-              ]
+                FieldHelpText.create (text "Invalid email address", attrs = [ Field.HelpTextColor.error ]),
+              attrs = [ Field.Width.full; Field.Color.error ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
@@ -524,42 +503,42 @@ Field.Create(
 let value = Var.Create "Looks good!"
 
 // Success help text
-Field.Create(
+Field.create(
     value,
     showHelpText = View.Const true,
     labelText = View.Const "Username",
     helpText =
-        FieldHelpText.Create(
+        FieldHelpText.create(
             text "Username is available",
-            attrs = [ Field.HelpTextColor.toClass BrandColor.Success |> cl ] // see here
+            attrs = [ Field.HelpTextColor.success ] // see here
         ),
-    attrs = [ Field.Color.toClass BrandColor.Success |> cl ]
+    attrs = [ Field.Color.success ]
 )
 
 // Warning help text
-Field.Create(
+Field.create(
     value,
     showHelpText = View.Const true,
     labelText = View.Const "Password",
     helpText =
-        FieldHelpText.Create(
+        FieldHelpText.create(
             text "Consider a stronger password",
-            attrs = [ Field.HelpTextColor.toClass BrandColor.Warning |> cl ]
+            attrs = [ Field.HelpTextColor.warning ]
         ),
-    attrs = [ Field.Color.toClass BrandColor.Warning |> cl ]
+    attrs = [ Field.Color.warning ]
 )
 
 // Error help text
-Field.Create(
+Field.create(
     value,
     showHelpText = View.Const true,
     labelText = View.Const "Email",
     helpText =
-        FieldHelpText.Create(
+        FieldHelpText.create(
             text "Invalid email address",
-            attrs = [ Field.HelpTextColor.toClass BrandColor.Error |> cl ]
+            attrs = [ Field.HelpTextColor.error ]
         ),
-    attrs = [ Field.Color.toClass BrandColor.Error |> cl ]
+    attrs = [ Field.Color.error ]
 )
 """
 
@@ -576,29 +555,29 @@ Field.Create(
       Helpers.bodyText "Fields can be disabled or set to read-only to prevent user input."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               disabledVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Disabled",
               enabled = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               readOnlyVal,
               showHelpText = View.Const false,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Read Only",
               readOnly = View.Const true,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -613,13 +592,13 @@ Field.Create(
 let disabledVal = Var.Create "Cannot edit"
 let readOnlyVal = Var.Create "Read-only value"
 
-Field.Create(
+Field.create(
     disabledVal,
     labelText = View.Const "Disabled",
     enabled = View.Const false // see here
 )
 
-Field.Create(
+Field.create(
     readOnlyVal,
     labelText = View.Const "Read Only",
     readOnly = View.Const true // see here
@@ -632,19 +611,16 @@ Field.Create(
   // Color variants
   // ---------------------------------------------------------------------------
   let private colorExample () =
-    let mkField color label =
+    let mkField colorAttr label =
       let v = Var.Create ""
 
-      GridItem.Create(
-        Field.Create(
+      GridItem.create (
+        Field.create (
           v,
           showHelpText = View.Const false,
           variant = Field.Variant.Outlined,
           labelText = View.Const label,
-          attrs = [
-            Field.Width.toClass Field.Width.Full |> Attr.bindOption cl
-            Field.Color.toClass color |> cl
-          ]
+          attrs = [ Field.Width.full; colorAttr ]
         ),
         xs = Grid.Width.create 12,
         sm = Grid.Width.create 6,
@@ -655,15 +631,15 @@ Field.Create(
       Helpers.bodyText "The accent color used when the field is focused can be customised with color classes."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          mkField BrandColor.Primary "Primary"
-          mkField BrandColor.Secondary "Secondary"
-          mkField BrandColor.Tertiary "Tertiary"
-          mkField BrandColor.Success "Success"
-          mkField BrandColor.Warning "Warning"
-          mkField BrandColor.Error "Error"
-          mkField BrandColor.Info "Info"
+          mkField Field.Color.primary "Primary"
+          mkField Field.Color.secondary "Secondary"
+          mkField Field.Color.tertiary "Tertiary"
+          mkField Field.Color.success "Success"
+          mkField Field.Color.warning "Warning"
+          mkField Field.Color.error "Error"
+          mkField Field.Color.info "Info"
         ]
       )
 
@@ -673,20 +649,13 @@ Field.Create(
 
 let value = Var.Create ""
 
-let mkField color label =
-    Field.Create(
-        value,
-        labelText = View.Const label,
-        attrs = [ Field.Color.toClass color |> cl ] // see here
-    )
-
-mkField BrandColor.Primary "Primary"
-mkField BrandColor.Secondary "Secondary"
-mkField BrandColor.Tertiary "Tertiary"
-mkField BrandColor.Success "Success"
-mkField BrandColor.Warning "Warning"
-mkField BrandColor.Error "Error"
-mkField BrandColor.Info "Info"
+Field.create(value, labelText = View.Const "Primary", attrs = [ Field.Color.primary ]) // see here
+Field.create(value, labelText = View.Const "Secondary", attrs = [ Field.Color.secondary ])
+Field.create(value, labelText = View.Const "Tertiary", attrs = [ Field.Color.tertiary ])
+Field.create(value, labelText = View.Const "Success", attrs = [ Field.Color.success ])
+Field.create(value, labelText = View.Const "Warning", attrs = [ Field.Color.warning ])
+Field.create(value, labelText = View.Const "Error", attrs = [ Field.Color.error ])
+Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
 """
 
     Helpers.codeSampleSection "Color Variants" description content code
@@ -706,51 +675,51 @@ mkField BrandColor.Info "Info"
         "Use the typoAttrs parameter to configure the field's font styling. Because the component uses em-based sizing, the entire field — label, input, and chrome — scales proportionally with the chosen typography class. You can also mix in color classes."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               captionVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Caption",
-              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Caption |> cl ],
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              typoAttrs = [ Typography.Variant.caption ],
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               body1Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Body1",
-              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Body1 |> cl ],
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              typoAttrs = [ Typography.Variant.body1 ],
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               subtitle1Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Subtitle1",
-              typoAttrs = [ Typography.Typo.toClass Typography.Typo.Subtitle1 |> cl ],
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              typoAttrs = [ Typography.Variant.subtitle1 ],
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Field.Create(
+          GridItem.create (
+            Field.create (
               h6Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "H6",
-              typoAttrs = [ Typography.Typo.toClass Typography.Typo.H6 |> cl ],
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              typoAttrs = [ Typography.Variant.h6 ],
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -766,17 +735,17 @@ mkField BrandColor.Info "Info"
 let value = Var.Create ""
 
 // Scale down with Caption typography
-Field.Create(
+Field.create(
     value,
     labelText = View.Const "Caption",
-    typoAttrs = [ Typography.Typo.toClass Typography.Typo.Caption |> cl ]
+    typoAttrs = [ Typography.Variant.caption ]
 )
 
 // Scale up with Subtitle1 typography
-Field.Create(
+Field.create(
     value,
     labelText = View.Const "Subtitle1",
-    typoAttrs = [ Typography.Typo.toClass Typography.Typo.Subtitle1 |> cl ]
+    typoAttrs = [ Typography.Variant.subtitle1 ]
 )
 """
 
@@ -786,12 +755,12 @@ Field.Create(
   // Render
   // ---------------------------------------------------------------------------
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Field"
-        Body1.Div(
+        Body1.div (
           "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
         Helpers.divider ()
         variantsExample ()
@@ -814,5 +783,5 @@ Field.Create(
         Helpers.divider ()
         typographyExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

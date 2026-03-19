@@ -18,26 +18,26 @@ module TabsExamples =
       Helpers.bodyText "The default configuration: a horizontal text tab strip with the first tab active."
 
     let content =
-      Tabs.Create(
+      Tabs.create (
         View.Const [
-          Body1.Div("Content One") |> TabDef.createText "Tab One"
-          Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-          Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+          Body1.div ("Content One") |> TabDef.createText "Tab One"
+          Body1.div ("Content Two") |> TabDef.createText "Tab Two"
+          Body1.div ("Content Three") |> TabDef.createText "Tab Three"
         ],
-        attrs = [ cl (Color.toClass BrandColor.Primary) ]
+        attrs = [ Color.primary ]
       )
 
     let code =
       """open Weave
 open Weave.Tabs
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+        Body1.div("Content One") |> TabDef.createText "Tab One"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Content Three") |> TabDef.createText "Tab Three"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Primary) ]
+    attrs = [ Color.primary ]
 )
 """
 
@@ -49,80 +49,80 @@ Tabs.Create(
         "Pass a color class via attrs to tint the active indicator and tab label. All brand colors are supported."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Primary color") |> TabDef.createText "Primary"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Primary color") |> TabDef.createText "Primary"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Primary) ]
+              attrs = [ Color.primary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Secondary color") |> TabDef.createText "Secondary"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Secondary color") |> TabDef.createText "Secondary"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+              attrs = [ Color.secondary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Tertiary color") |> TabDef.createText "Tertiary"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Tertiary color") |> TabDef.createText "Tertiary"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Tertiary) ]
+              attrs = [ Color.tertiary ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Success color") |> TabDef.createText "Success"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Success color") |> TabDef.createText "Success"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Success) ]
+              attrs = [ Color.success ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Warning color") |> TabDef.createText "Warning"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Warning color") |> TabDef.createText "Warning"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Warning) ]
+              attrs = [ Color.warning ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            Tabs.Create(
+          GridItem.create (
+            Tabs.create (
               View.Const [
-                Body1.Div("Error color") |> TabDef.createText "Error"
-                Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+                Body1.div ("Error color") |> TabDef.createText "Error"
+                Body1.div ("Content Two") |> TabDef.createText "Tab Two"
               ],
-              attrs = [ cl (Color.toClass BrandColor.Error) ]
+              attrs = [ Color.error ]
             ),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
@@ -135,52 +135,52 @@ Tabs.Create(
       """open Weave
 open Weave.Tabs
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Primary color") |> TabDef.createText "Primary"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Primary color") |> TabDef.createText "Primary"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Primary) ]
+    attrs = [ Color.primary ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Secondary color") |> TabDef.createText "Secondary"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Secondary color") |> TabDef.createText "Secondary"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+    attrs = [ Color.secondary ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Tertiary color") |> TabDef.createText "Tertiary"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Tertiary color") |> TabDef.createText "Tertiary"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Tertiary) ]
+    attrs = [ Color.tertiary ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Success color") |> TabDef.createText "Success"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Success color") |> TabDef.createText "Success"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Success) ]
+    attrs = [ Color.success ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Warning color") |> TabDef.createText "Warning"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Warning color") |> TabDef.createText "Warning"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Warning) ]
+    attrs = [ Color.warning ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Error color") |> TabDef.createText "Error"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Error color") |> TabDef.createText "Error"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
     ],
-    attrs = [ cl (Color.toClass BrandColor.Error) ]
+    attrs = [ Color.error ]
 )
 """
 
@@ -193,52 +193,43 @@ Tabs.Create(
 
     let tabs () =
       [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+        Body1.div ("Content One") |> TabDef.createText "Tab One"
+        Body1.div ("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div ("Content Three") |> TabDef.createText "Tab Three"
       ]
       |> View.Const
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              H4.Div("Text Tab", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Tabs.Create(
-                tabs (),
-                attrs = [ cls [ Variant.toClass Variant.Text; Color.toClass BrandColor.Primary ] ]
-              )
+              H4.div ("Text Tab", attrs = [ Margin.Bottom.extraSmall ])
+              Tabs.create (tabs (), attrs = [ Variant.text; Color.primary ])
             ],
             xs = Grid.Width.create 12,
             lg = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              H4.Div("Outlined Tab", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Tabs.Create(
-                tabs (),
-                attrs = [ cls [ Variant.toClass Variant.Outlined; Color.toClass BrandColor.Secondary ] ]
-              )
+              H4.div ("Outlined Tab", attrs = [ Margin.Bottom.extraSmall ])
+              Tabs.create (tabs (), attrs = [ Variant.outlined; Color.secondary ])
             ],
             xs = Grid.Width.create 12,
             lg = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              H4.Div("Filled Tab", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Tabs.Create(
-                tabs (),
-                attrs = [ cls [ Variant.toClass Variant.Filled; Color.toClass BrandColor.Tertiary ] ]
-              )
+              H4.div ("Filled Tab", attrs = [ Margin.Bottom.extraSmall ])
+              Tabs.create (tabs (), attrs = [ Variant.filled; Color.tertiary ])
             ],
             xs = Grid.Width.create 12,
             lg = Grid.Width.create 6
           )
         ],
-        justify = JustifyContent.SpaceAround
+        justify = JustifyContent.spaceAround
       )
 
     let code =
@@ -247,22 +238,22 @@ open Weave.Tabs
 
 let tabs =
     View.Const [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+        Body1.div("Content One") |> TabDef.createText "Tab One"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Content Three") |> TabDef.createText "Tab Three"
     ]
 
-Tabs.Create(tabs, attrs = [ cls [ Variant.toClass Variant.Text; Color.toClass BrandColor.Primary ] ])
+Tabs.create(tabs, attrs = [ Variant.text; Color.primary ])
 
-Tabs.Create(tabs, attrs = [ cls [ Variant.toClass Variant.Outlined; Color.toClass BrandColor.Secondary ] ])
+Tabs.create(tabs, attrs = [ Variant.outlined; Color.secondary ])
 
-Tabs.Create(tabs, attrs = [ cls [ Variant.toClass Variant.Filled; Color.toClass BrandColor.Tertiary ] ])
+Tabs.create(tabs, attrs = [ Variant.filled; Color.tertiary ])
 
 // Filled with a tinted header tray
-Tabs.Create(
+Tabs.create(
     tabs,
     attrs = [
-        cls [ Variant.toClass Variant.Filled; Color.toClass BrandColor.Tertiary ]
+        Variant.filled; Color.tertiary
         HeaderBackground.toAttr Color.Tertiary
     ]
 )
@@ -276,16 +267,16 @@ Tabs.Create(
         "Tabs can include icons alongside the label using createWithStartIcon or createWithEndIcon."
 
     let content =
-      Tabs.Create(
+      Tabs.create (
         View.Const [
-          Body1.Div("Home content")
-          |> TabDef.createWithStartIcon "Home" (Icon.Create(Icon.UiActions UiActions.Home))
-          Body1.Div("Settings content")
-          |> TabDef.createWithStartIcon "Settings" (Icon.Create(Icon.UiActions UiActions.Settings))
-          Body1.Div("Information content")
-          |> TabDef.createWithStartIcon "Info" (Icon.Create(Icon.Action Action.Info))
+          Body1.div ("Home content")
+          |> TabDef.createWithStartIcon "Home" (Icon.create (Icon.UiActions UiActions.Home))
+          Body1.div ("Settings content")
+          |> TabDef.createWithStartIcon "Settings" (Icon.create (Icon.UiActions UiActions.Settings))
+          Body1.div ("Information content")
+          |> TabDef.createWithStartIcon "Info" (Icon.create (Icon.Action Action.Info))
         ],
-        attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+        attrs = [ Color.secondary ]
       )
 
     let code =
@@ -294,16 +285,16 @@ open Weave.Tabs
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Home content")
-        |> TabDef.createWithStartIcon "Home" (Icon.Create(Icon.UiActions UiActions.Home))
-        Body1.Div("Settings content")
-        |> TabDef.createWithStartIcon "Settings" (Icon.Create(Icon.UiActions UiActions.Settings))
-        Body1.Div("Information content")
-        |> TabDef.createWithStartIcon "Info" (Icon.Create(Icon.Action Action.Info))
+        Body1.div("Home content")
+        |> TabDef.createWithStartIcon "Home" (Icon.create(Icon.UiActions UiActions.Home))
+        Body1.div("Settings content")
+        |> TabDef.createWithStartIcon "Settings" (Icon.create(Icon.UiActions UiActions.Settings))
+        Body1.div("Information content")
+        |> TabDef.createWithStartIcon "Info" (Icon.create(Icon.Action Action.Info))
     ],
-    attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+    attrs = [ Color.secondary ]
 )
 """
 
@@ -315,32 +306,32 @@ Tabs.Create(
         "Set a tab as non-interactive using TabDef.withDisabled. Disabled tabs are visually muted and cannot be clicked."
 
     let content =
-      Tabs.Create(
+      Tabs.create (
         View.Const [
-          Body1.Div("Content One") |> TabDef.createText "Tab One"
-          Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-          Body1.Div("Content Three") |> TabDef.createText "Tab Three"
-          Body1.Div("You should not see this")
+          Body1.div ("Content One") |> TabDef.createText "Tab One"
+          Body1.div ("Content Two") |> TabDef.createText "Tab Two"
+          Body1.div ("Content Three") |> TabDef.createText "Tab Three"
+          Body1.div ("You should not see this")
           |> TabDef.createText "Tab Disabled"
           |> TabDef.withDisabled (View.Const true)
         ],
-        attrs = [ cl (Color.toClass BrandColor.Tertiary) ]
+        attrs = [ Color.tertiary ]
       )
 
     let code =
       """open Weave
 open Weave.Tabs
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
-        Body1.Div("You should not see this")
+        Body1.div("Content One") |> TabDef.createText "Tab One"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Content Three") |> TabDef.createText "Tab Three"
+        Body1.div("You should not see this")
         |> TabDef.createText "Tab Disabled"
         |> TabDef.withDisabled (View.Const true)
     ],
-    attrs = [ cl (Color.toClass BrandColor.Tertiary) ]
+    attrs = [ Color.tertiary ]
 )
 """
 
@@ -362,34 +353,34 @@ Tabs.Create(
 
       div [
         Attr.Style "border" "1px solid var(--palette-divider)"
-        BorderRadius.toClass BorderRadius.All.small |> cl
+        BorderRadius.All.small
         Attr.Style "min-height" "160px"
         Attr.Style "display" "flex"
         Attr.Style "flex-direction" (if isVertical then "row" else "column")
         Attr.Style "width" "100%"
       ] [
-        Tabs.Create(
+        Tabs.create (
           View.Const [
-            Body1.Div(sprintf "%s content" label) |> TabDef.createText "Item One"
-            Body1.Div("Content Two") |> TabDef.createText "Item Two"
-            Body1.Div("Content Three") |> TabDef.createText "Item Three"
+            Body1.div (sprintf "%s content" label) |> TabDef.createText "Item One"
+            Body1.div ("Content Two") |> TabDef.createText "Item Two"
+            Body1.div ("Content Three") |> TabDef.createText "Item Three"
           ],
           position = pos,
-          attrs = [ cl (Color.toClass BrandColor.Primary) ]
+          attrs = [ Color.primary ]
         )
       ]
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(makeTabs Position.Top "Top", xs = Grid.Width.create 12, md = Grid.Width.create 6)
-          GridItem.Create(
+          GridItem.create (makeTabs Position.Top "Top", xs = Grid.Width.create 12, md = Grid.Width.create 6)
+          GridItem.create (
             makeTabs Position.Bottom "Bottom",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-          GridItem.Create(makeTabs Position.Left "Left", xs = Grid.Width.create 12, md = Grid.Width.create 6)
-          GridItem.Create(
+          GridItem.create (makeTabs Position.Left "Left", xs = Grid.Width.create 12, md = Grid.Width.create 6)
+          GridItem.create (
             makeTabs Position.Right "Right",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -402,24 +393,24 @@ Tabs.Create(
       """open Weave
 open Weave.Tabs
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Top content") |> TabDef.createText "Item One"
-        Body1.Div("Content Two") |> TabDef.createText "Item Two"
-        Body1.Div("Content Three") |> TabDef.createText "Item Three"
+        Body1.div("Top content") |> TabDef.createText "Item One"
+        Body1.div("Content Two") |> TabDef.createText "Item Two"
+        Body1.div("Content Three") |> TabDef.createText "Item Three"
     ],
     position = Tabs.Position.Top,
-    attrs = [ cl (Color.toClass BrandColor.Primary) ]
+    attrs = [ Color.primary ]
 )
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Left content") |> TabDef.createText "Item One"
-        Body1.Div("Content Two") |> TabDef.createText "Item Two"
-        Body1.Div("Content Three") |> TabDef.createText "Item Three"
+        Body1.div("Left content") |> TabDef.createText "Item One"
+        Body1.div("Content Two") |> TabDef.createText "Item Two"
+        Body1.div("Content Three") |> TabDef.createText "Item Three"
     ],
     position = Tabs.Position.Left,
-    attrs = [ cl (Color.toClass BrandColor.Primary) ]
+    attrs = [ Color.primary ]
 )
 """
 
@@ -431,24 +422,24 @@ Tabs.Create(
         "When tabs fit within the container, pass Alignment.Center to center the tab strip instead of aligning to the start."
 
     let content =
-      Tabs.Create(
+      Tabs.create (
         View.Const [
-          Body1.Div("Content One") |> TabDef.createText "One"
-          Body1.Div("Content Two") |> TabDef.createText "Two"
+          Body1.div ("Content One") |> TabDef.createText "One"
+          Body1.div ("Content Two") |> TabDef.createText "Two"
         ],
-        attrs = [ Alignment.toAttr Alignment.Center; cl (Color.toClass BrandColor.Secondary) ]
+        attrs = [ Alignment.center; Color.secondary ]
       )
 
     let code =
       """open Weave
 open Weave.Tabs
 
-Tabs.Create(
+Tabs.create(
     View.Const [
-        Body1.Div("Content One") |> TabDef.createText "One"
-        Body1.Div("Content Two") |> TabDef.createText "Two"
+        Body1.div("Content One") |> TabDef.createText "One"
+        Body1.div("Content Two") |> TabDef.createText "Two"
     ],
-    attrs = [ Alignment.toAttr Alignment.Center; cl (Color.toClass BrandColor.Secondary) ]
+    attrs = [ Alignment.center; Color.secondary ]
 )
 """
 
@@ -461,12 +452,12 @@ Tabs.Create(
 
     let content =
       div [ Attr.Style "max-width" "500px" ] [
-        Tabs.Create(
+        Tabs.create (
           View.Const [
             for i in 1..12 do
-              Body1.Div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
+              Body1.div (sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
           ],
-          attrs = [ cl (Color.toClass BrandColor.Primary) ]
+          attrs = [ Color.primary ]
         )
       ]
 
@@ -476,12 +467,12 @@ open Weave.Tabs
 
 // Constrain the container width so overflow triggers scroll buttons
 div [ Attr.Style "max-width" "500px" ] [
-    Tabs.Create(
+    Tabs.create(
         View.Const [
             for i in 1..12 do
-                Body1.Div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
+                Body1.div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
         ],
-        attrs = [ cl (Color.toClass BrandColor.Primary) ]
+        attrs = [ Color.primary ]
     )
 ]
 """
@@ -495,14 +486,14 @@ div [ Attr.Style "max-width" "500px" ] [
 
     let content =
       div [ Attr.Style "max-width" "500px" ] [
-        Tabs.Create(
+        Tabs.create (
           View.Const [
             for i in 1..12 do
-              Body1.Div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
+              Body1.div (sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
           ],
-          scrollBackIcon = Icon.Create(Icon.UiActions UiActions.ChevronLeft),
-          scrollForwardIcon = Icon.Create(Icon.UiActions UiActions.ChevronRight),
-          attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+          scrollBackIcon = Icon.create (Icon.UiActions UiActions.ChevronLeft),
+          scrollForwardIcon = Icon.create (Icon.UiActions UiActions.ChevronRight),
+          attrs = [ Color.secondary ]
         )
       ]
 
@@ -513,14 +504,14 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 div [ Attr.Style "max-width" "500px" ] [
-    Tabs.Create(
+    Tabs.create(
         View.Const [
             for i in 1..12 do
-                Body1.Div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
+                Body1.div(sprintf "Content %d" i) |> TabDef.createText (sprintf "Tab %d" i)
         ],
-        scrollBackIcon = Icon.Create(Icon.UiActions UiActions.ChevronLeft),
-        scrollForwardIcon = Icon.Create(Icon.UiActions UiActions.ChevronRight),
-        attrs = [ cl (Color.toClass BrandColor.Secondary) ]
+        scrollBackIcon = Icon.create(Icon.UiActions UiActions.ChevronLeft),
+        scrollForwardIcon = Icon.create(Icon.UiActions UiActions.ChevronRight),
+        attrs = [ Color.secondary ]
     )
 ]
 """
@@ -533,36 +524,40 @@ div [ Attr.Style "max-width" "500px" ] [
 
     let tabs () =
       View.Const [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div ("Content One") |> TabDef.createText "Tab One"
+        Body1.div ("Content Two") |> TabDef.createText "Tab Two"
       ]
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ Density.toClass density |> cl ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Tabs.Create(
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Tabs.create (
             tabs (),
             attrs = [
-              cls [
-                Color.toClass BrandColor.Primary
-                BorderRadius.toClass BorderRadius.All.small
-              ]
+              Color.primary
+              BorderRadius.All.small
               Attr.Style "border" "1px solid var(--palette-divider)"
             ]
           )
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -572,32 +567,32 @@ open Weave.Tabs
 
 let tabs =
     View.Const [
-        Body1.Div("Content One") |> TabDef.createText "Tab One"
-        Body1.Div("Content Two") |> TabDef.createText "Tab Two"
-        Body1.Div("Content Three") |> TabDef.createText "Tab Three"
+        Body1.div("Content One") |> TabDef.createText "Tab One"
+        Body1.div("Content Two") |> TabDef.createText "Tab Two"
+        Body1.div("Content Three") |> TabDef.createText "Tab Three"
     ]
 
-Tabs.Create(
+Tabs.create(
     tabs,
     attrs = [
-        cl (Density.toClass Density.Compact) // see here
-        cl (Color.toClass BrandColor.Primary)
-    ]
-)
-
-Tabs.Create(
-    tabs,
-    attrs = [
-        cl (Density.toClass Density.Standard) // see here
-        cl (Color.toClass BrandColor.Primary)
+        Density.compact // see here
+        Color.primary
     ]
 )
 
-Tabs.Create(
+Tabs.create(
     tabs,
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
-        cl (Color.toClass BrandColor.Primary)
+        Density.standard // see here
+        Color.primary
+    ]
+)
+
+Tabs.create(
+    tabs,
+    attrs = [
+        Density.spacious // see here
+        Color.primary
     ]
 )
 """
@@ -605,13 +600,13 @@ Tabs.Create(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
-      div [ cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] ] [
+    Container.create (
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
         Helpers.pageTitle "Tabs"
 
-        Body1.Div(
+        Body1.div (
           "Tabs organize content across different screens and views.",
-          attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
+          attrs = [ Margin.Bottom.small ]
         )
 
         basicExample ()
@@ -634,5 +629,5 @@ Tabs.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

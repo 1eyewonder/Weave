@@ -26,14 +26,12 @@ module Tabs =
 
   module Position =
 
-    let toClass position =
-      match position with
-      | Position.Top -> Css.``weave-tabs--top``
-      | Position.Bottom -> Css.``weave-tabs--bottom``
-      | Position.Left -> Css.``weave-tabs--left``
-      | Position.Right -> Css.``weave-tabs--right``
-      | Position.Start -> Css.``weave-tabs--start``
-      | Position.End -> Css.``weave-tabs--end``
+    let top = cl Css.``weave-tabs--top``
+    let bottom = cl Css.``weave-tabs--bottom``
+    let left = cl Css.``weave-tabs--left``
+    let right = cl Css.``weave-tabs--right``
+    let start = cl Css.``weave-tabs--start``
+    let end_ = cl Css.``weave-tabs--end``
 
     let isHorizontal position =
       match position with
@@ -47,40 +45,21 @@ module Tabs =
   /// <summary>
   /// Whether to center tabs when they fit within the container.
   /// </summary>
-  [<RequireQualifiedAccess; Struct>]
-  type Alignment =
-    | Start
-    | Center
-
   module Alignment =
 
-    let toClass alignment =
-      match alignment with
-      | Alignment.Start -> None
-      | Alignment.Center -> Some Css.``weave-tabs--centered``
-
-    let toAttr alignment =
-      toClass alignment |> Attr.bindOption Attr.Class
+    let center = cl Css.``weave-tabs--centered``
 
   /// <summary>
   /// Visual style of the tab header strip.
   /// </summary>
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Text
-    | Outlined
-    | Filled
-
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Text -> Css.``weave-tabs--text``
-      | Variant.Outlined -> Css.``weave-tabs--outlined``
-      | Variant.Filled -> Css.``weave-tabs--filled``
+    let text = cl Css.``weave-tabs--text``
+    let outlined = cl Css.``weave-tabs--outlined``
+    let filled = cl Css.``weave-tabs--filled``
 
   /// <summary>
-  /// Sets the background color of the tab header strip
+  /// Sets the background color of the tab header strip.
   /// </summary>
   module HeaderBackground =
 
@@ -91,15 +70,14 @@ module Tabs =
       Attr.Style "--tabs-header-background" value
 
   module Color =
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-tabs--primary``
-      | BrandColor.Secondary -> Css.``weave-tabs--secondary``
-      | BrandColor.Tertiary -> Css.``weave-tabs--tertiary``
-      | BrandColor.Error -> Css.``weave-tabs--error``
-      | BrandColor.Warning -> Css.``weave-tabs--warning``
-      | BrandColor.Success -> Css.``weave-tabs--success``
-      | BrandColor.Info -> Css.``weave-tabs--info``
+
+    let primary = cl Css.``weave-tabs--primary``
+    let secondary = cl Css.``weave-tabs--secondary``
+    let tertiary = cl Css.``weave-tabs--tertiary``
+    let error = cl Css.``weave-tabs--error``
+    let warning = cl Css.``weave-tabs--warning``
+    let success = cl Css.``weave-tabs--success``
+    let info = cl Css.``weave-tabs--info``
 
   /// <summary>
   /// Represents one tab entry's configuration.
@@ -159,7 +137,7 @@ type TabPanel =
   /// <summary>
   /// Renders a single tab panel that is visible only when its index matches the active tab.
   /// </summary>
-  static member Create(content: Doc, index: int, activeIndex: View<int>, ?groupId: int, ?attrs: Attr list) =
+  static member create(content: Doc, index: int, activeIndex: View<int>, ?groupId: int, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
     let idAttrs =
@@ -328,7 +306,7 @@ module private TabsInternal =
 [<JavaScript>]
 type Tabs =
 
-  static member Create
+  static member create
     (
       tabs: View<TabDef list>,
       ?activeIndex: Var<int>,
@@ -516,12 +494,22 @@ type Tabs =
       div [ cl Css.``weave-tabs__panels`` ] [
         tabs
         |> Doc.BindView(
-          List.mapi (fun i t -> TabPanel.Create(t.Panel, i, activeIndex.View, groupId = groupId))
+          List.mapi (fun i t -> TabPanel.create (t.Panel, i, activeIndex.View, groupId = groupId))
           >> Doc.Concat
         )
       ]
 
-    div [ cls [ Css.``weave-tabs``; Position.toClass position ]; yield! attrs ] [
+    div [
+      cl Css.``weave-tabs``
+      match position with
+      | Position.Top -> Position.top
+      | Position.Bottom -> Position.bottom
+      | Position.Left -> Position.left
+      | Position.Right -> Position.right
+      | Position.Start -> Position.start
+      | Position.End -> Position.end_
+      yield! attrs
+    ] [
       div [ cl Css.``weave-tabs__header-wrapper`` ] [ scrollBackBtn; header; scrollFwdBtn ]
       panels
     ]

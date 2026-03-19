@@ -6,7 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
-    <Compile Include="Generators.fs" />
     <Compile Include="AlertTests.fs" />
     <Compile Include="ButtonTests.fs" />
     <Compile Include="ButtonGroupTests.fs" />
@@ -29,7 +28,6 @@
     <Compile Include="ListTests.fs" />
     <Compile Include="TooltipTests.fs" />
     <Compile Include="DrawerTests.fs" />
-    <Compile Include="SpacingTests.fs" />
     <Compile Include="TransitionSpeedTests.fs" />
     <Compile Include="AnimationTests.fs" />
     <Compile Include="OpacityTests.fs" />

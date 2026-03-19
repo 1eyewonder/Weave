@@ -8,34 +8,24 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Checkbox =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
 
   module Size =
 
-    let toClass size =
-      match size with
-      | Size.Small -> Css.``weave-checkbox--small``
-      | Size.Medium -> Css.``weave-checkbox--medium``
-      | Size.Large -> Css.``weave-checkbox--large``
+    let small = cl Css.``weave-checkbox--small``
+    let medium = cl Css.``weave-checkbox--medium``
+    let large = cl Css.``weave-checkbox--large``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-checkbox--primary``
-      | BrandColor.Secondary -> Css.``weave-checkbox--secondary``
-      | BrandColor.Tertiary -> Css.``weave-checkbox--tertiary``
-      | BrandColor.Error -> Css.``weave-checkbox--error``
-      | BrandColor.Warning -> Css.``weave-checkbox--warning``
-      | BrandColor.Success -> Css.``weave-checkbox--success``
-      | BrandColor.Info -> Css.``weave-checkbox--info``
+    let primary = cl Css.``weave-checkbox--primary``
+    let secondary = cl Css.``weave-checkbox--secondary``
+    let tertiary = cl Css.``weave-checkbox--tertiary``
+    let error = cl Css.``weave-checkbox--error``
+    let warning = cl Css.``weave-checkbox--warning``
+    let success = cl Css.``weave-checkbox--success``
+    let info = cl Css.``weave-checkbox--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -44,40 +34,36 @@ module Checkbox =
     | Left
     | Right
 
-open Checkbox
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Checkbox =
 
-  static member Create
+  static member create
     (
       isChecked: Var<bool>,
       ?displayText: View<string>,
       ?enabled: View<bool>,
-      ?contentPlacement: View<ContentPlacement>,
+      ?contentPlacement: View<Checkbox.ContentPlacement>,
       ?attrs: Attr list
     ) =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
 
     let contentPlacement =
-      defaultArg contentPlacement (View.Const ContentPlacement.Right)
+      defaultArg contentPlacement (View.Const Checkbox.ContentPlacement.Right)
 
     label [
-      cls [
-        Css.``weave-checkbox``
-        Flex.Inline.allSizes
-        FlexWrap.NoWrap.allSizes
-        AlignItems.toClass AlignItems.Center
-      ]
+      cl Css.``weave-checkbox``
+      Flex.Inline.allSizes
+      FlexWrap.NoWrap.allSizes
+      AlignItems.center
 
       Disabled.disabledClass Css.``weave-checkbox--disabled`` enabled
 
       Map.ofList [
-        ContentPlacement.Right, FlexDirection.Row.allSizes
-        ContentPlacement.Left, FlexDirection.RowReverse.allSizes
-        ContentPlacement.Top, FlexDirection.ColumnReverse.allSizes
-        ContentPlacement.Bottom, FlexDirection.Column.allSizes
+        Checkbox.ContentPlacement.Right, Css.``flex-row``
+        Checkbox.ContentPlacement.Left, Css.``flex-row-reverse``
+        Checkbox.ContentPlacement.Top, Css.``flex-column-reverse``
+        Checkbox.ContentPlacement.Bottom, Css.``flex-column``
       ]
       |> Attr.classSelection contentPlacement
 
@@ -99,7 +85,7 @@ type Checkbox =
       span [ cls [ Css.``weave-checkbox__span`` ] ] []
       match displayText with
       | Some v ->
-        Body1.Div(
+        Body1.div (
           v,
           View.Const false,
           attrs = [

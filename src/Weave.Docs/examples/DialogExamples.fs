@@ -20,7 +20,7 @@ module DialogExamples =
     Button.primary (
       text "Confirm",
       onClick = (fun () -> Var.Set dialog false),
-      attrs = [ Button.Variant.filled; Margin.toClasses Margin.Right.extraSmall |> cls ]
+      attrs = [ Button.Variant.filled; Margin.Right.extraSmall ]
     )
 
   let private basicDialogExample () =
@@ -28,8 +28,8 @@ module DialogExamples =
 
     let dialogContent dialog =
       div [] [
-        Body1.Div("This is a basic dialog with title and content.")
-        div [ Margin.toClasses Margin.Top.small |> cls ] [ confirm dialog; cancel dialog ]
+        Body1.div ("This is a basic dialog with title and content.")
+        div [ Margin.Top.small ] [ confirm dialog; cancel dialog ]
       ]
 
     let description =
@@ -46,9 +46,9 @@ module DialogExamples =
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
           if isOpen then
-            Dialog.Create(
-              DialogTitle.Create(H6.Div("Dialog Title")),
-              DialogContent.Create(dialogContent dialogVisible)
+            Dialog.create (
+              DialogTitle.create (H6.div ("Dialog Title")),
+              DialogContent.create (dialogContent dialogVisible)
             )
           else
             Doc.Empty)
@@ -63,11 +63,11 @@ let dialogVisible = Var.Create false // see here
 dialogVisible.View
 |> Doc.BindView(fun isOpen ->
     if isOpen then
-        Dialog.Create(
-            DialogTitle.Create(H6.Div("Dialog Title")),
-            DialogContent.Create(
+        Dialog.create(
+            DialogTitle.create(H6.div("Dialog Title")),
+            DialogContent.create(
                 div [] [
-                    Body1.Div("This is a basic dialog with title and content.")
+                    Body1.div("This is a basic dialog with title and content.")
                     Button.create(
                         text "Close",
                         onClick = (fun () -> Var.Set dialogVisible false)
@@ -86,8 +86,8 @@ dialogVisible.View
 
     let dialogContent dialog =
       div [] [
-        Body1.Div("This dialog can be dismissed by clicking outside.")
-        div [ Margin.toClasses Margin.Top.small |> cls ] [ confirm dialog; cancel dialog ]
+        Body1.div ("This dialog can be dismissed by clicking outside.")
+        div [ Margin.Top.small ] [ confirm dialog; cancel dialog ]
       ]
 
     let description =
@@ -104,9 +104,9 @@ dialogVisible.View
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
           if isOpen then
-            Dialog.Create(
-              DialogTitle.Create(H6.Div("Optional Dialog")),
-              DialogContent.Create(dialogContent dialogVisible),
+            Dialog.create (
+              DialogTitle.create (H6.div ("Optional Dialog")),
+              DialogContent.create (dialogContent dialogVisible),
               dialogInteraction =
                 View.Const(Dialog.Interaction.Optional(fun () -> Var.Set dialogVisible false))
             )
@@ -121,10 +121,10 @@ open WebSharper.UI
 
 let dialogVisible = Var.Create false
 
-Dialog.Create(
-    DialogTitle.Create(H6.Div("Optional Dialog")),
-    DialogContent.Create(
-        div [] [ Body1.Div("Click outside to dismiss.") ]
+Dialog.create(
+    DialogTitle.create(H6.div("Optional Dialog")),
+    DialogContent.create(
+        div [] [ Body1.div("Click outside to dismiss.") ]
     ),
     dialogInteraction = // see here
         View.Const(
@@ -140,8 +140,8 @@ Dialog.Create(
 
     let dialogContent dialog =
       div [] [
-        Body1.Div("This dialog demonstrates different positions.")
-        div [ Margin.toClasses Margin.Top.small |> cls ] [
+        Body1.div ("This dialog demonstrates different positions.")
+        div [ Margin.Top.small ] [
           Button.primary (
             text "Close",
             onClick = (fun () -> Var.Set dialog None),
@@ -169,18 +169,18 @@ Dialog.Create(
       Helpers.bodyText "Pass a DialogPosition value to control where the dialog appears on screen."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           dialogVisible.View
           |> Doc.BindView (function
             | Some pos ->
-              Dialog.Create(
-                DialogTitle.Create(H6.Div(sprintf "%A Dialog" pos)),
-                DialogContent.Create(dialogContent dialogVisible),
+              Dialog.create (
+                DialogTitle.create (H6.div (sprintf "%A Dialog" pos)),
+                DialogContent.create (dialogContent dialogVisible),
                 dialogPosition = View.Const pos
               )
             | None -> Doc.Empty)
-          yield! positionButtons |> List.map (fun btn -> GridItem.Create(btn))
+          yield! positionButtons |> List.map (fun btn -> GridItem.create (btn))
         ]
       )
 
@@ -189,18 +189,18 @@ Dialog.Create(
 open Weave.Dialog
 open WebSharper.UI
 
-Dialog.Create(
-    DialogTitle.Create(H6.Div("Top Center Dialog")),
-    DialogContent.Create(
-        div [] [ Body1.Div("Anchored to the top center.") ]
+Dialog.create(
+    DialogTitle.create(H6.div("Top Center Dialog")),
+    DialogContent.create(
+        div [] [ Body1.div("Anchored to the top center.") ]
     ),
     dialogPosition = View.Const DialogPosition.TopCenter // see here
 )
 
-Dialog.Create(
-    DialogTitle.Create(H6.Div("Bottom Center Dialog")),
-    DialogContent.Create(
-        div [] [ Body1.Div("Anchored to the bottom center.") ]
+Dialog.create(
+    DialogTitle.create(H6.div("Bottom Center Dialog")),
+    DialogContent.create(
+        div [] [ Body1.div("Anchored to the bottom center.") ]
     ),
     dialogPosition = View.Const DialogPosition.BottomCenter // see here
 )
@@ -209,12 +209,12 @@ Dialog.Create(
     Helpers.codeSampleSection "Dialog Positions" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Dialog"
-        Body1.Div(
+        Body1.div (
           "Dialogs are used to display important information or request user input in a modal window.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
         Helpers.divider ()
         basicDialogExample ()
@@ -223,5 +223,5 @@ Dialog.Create(
         Helpers.divider ()
         positionDialogExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

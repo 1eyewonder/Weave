@@ -15,15 +15,15 @@ module DividerExamples =
 
     let content =
       div [] [
-        Body1.Div("Content above the divider", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Divider.Create()
-        Body1.Div("Content below the divider", attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls ])
+        Body1.div ("Content above the divider", attrs = [ Margin.Bottom.extraSmall ])
+        Divider.create ()
+        Body1.div ("Content below the divider", attrs = [ Margin.Top.extraSmall ])
       ]
 
     let code =
       """open Weave
 
-Divider.Create()
+Divider.create()
 """
 
     Helpers.codeSampleSection "Basic" description content code
@@ -36,30 +36,30 @@ Divider.Create()
     let content =
       div [] [
         let row (label: string) variant =
-          div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-            Caption.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-            Divider.Create(attrs = [ Divider.Variant.toClass variant |> cl ])
+          div [ Margin.Bottom.small ] [
+            Caption.div (label, attrs = [ Margin.Bottom.extraSmall ])
+            Divider.create (attrs = [ variant ])
           ]
 
-        row "FullWidth" Divider.Variant.FullWidth
-        row "Inset" Divider.Variant.Inset
-        row "Middle" Divider.Variant.Middle
+        row "FullWidth" Divider.Variant.fullWidth
+        row "Inset" Divider.Variant.inset
+        row "Middle" Divider.Variant.middle
       ]
 
     let code =
       """open Weave
 
 
-Divider.Create(
-    attrs = [ Divider.Variant.toClass Divider.Variant.FullWidth |> cl ] // see here
+Divider.create(
+    attrs = [ Divider.Variant.fullWidth ] // see here
 )
 
-Divider.Create(
-    attrs = [ Divider.Variant.toClass Divider.Variant.Inset |> cl ] // see here
+Divider.create(
+    attrs = [ Divider.Variant.inset ] // see here
 )
 
-Divider.Create(
-    attrs = [ Divider.Variant.toClass Divider.Variant.Middle |> cl ] // see here
+Divider.create(
+    attrs = [ Divider.Variant.middle ] // see here
 )
 """
 
@@ -72,25 +72,17 @@ Divider.Create(
 
     let content =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          JustifyContent.toClass JustifyContent.Center
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        JustifyContent.center
         Attr.Style "height" "80px"
         Attr.Style "gap" "16px"
       ] [
-        Body1.Div("Left")
-        Divider.Create(
-          orientation = Divider.Orientation.Vertical,
-          attrs = [ Attr.Style "align-self" "stretch" ]
-        )
-        Body1.Div("Center")
-        Divider.Create(
-          orientation = Divider.Orientation.Vertical,
-          attrs = [ Attr.Style "align-self" "stretch" ]
-        )
-        Body1.Div("Right")
+        Body1.div ("Left")
+        Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+        Body1.div ("Center")
+        Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+        Body1.div ("Right")
       ]
 
     let code =
@@ -100,34 +92,28 @@ Divider.Create(
 div [
     cls [
         Flex.Flex.allSizes
-        AlignItems.toClass AlignItems.Center
+        AlignItems.center
     ]
     Attr.Style "height" "80px"
     Attr.Style "gap" "16px"
 ] [
-    Body1.Div("Left")
-    Divider.Create(
-        orientation = Divider.Orientation.Vertical, // see here
-        attrs = [ Attr.Style "align-self" "stretch" ]
-    )
-    Body1.Div("Center")
-    Divider.Create(
-        orientation = Divider.Orientation.Vertical, // see here
-        attrs = [ Attr.Style "align-self" "stretch" ]
-    )
-    Body1.Div("Right")
+    Body1.div("Left")
+    Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+    Body1.div("Center")
+    Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+    Body1.div("Right")
 ]
 """
 
     Helpers.codeSampleSection "Orientation" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Divider"
-        Body1.Div(
+        Body1.div (
           "Dividers are thin lines that group content in lists and layouts.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -137,5 +123,5 @@ div [
         Helpers.divider ()
         orientationExamples ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

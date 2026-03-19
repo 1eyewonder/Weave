@@ -8,46 +8,23 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Divider =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Orientation =
-    | Horizontal
-    | Vertical
 
   module Orientation =
 
-    let toClasses orientation =
-      match orientation with
-      | Orientation.Horizontal -> []
-      | Orientation.Vertical -> [ Css.``weave-divider--vertical`` ]
-
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | FullWidth
-    | Inset
-    | Middle
+    /// <summary>Renders the divider as a vertical bar.</summary>
+    let vertical = cl Css.``weave-divider--vertical``
 
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.FullWidth -> Css.``weave-divider--fullwidth``
-      | Variant.Inset -> Css.``weave-divider--inset``
-      | Variant.Middle -> Css.``weave-divider--middle``
+    let fullWidth = cl Css.``weave-divider--fullwidth``
+    let inset = cl Css.``weave-divider--inset``
+    let middle = cl Css.``weave-divider--middle``
 
-open Divider
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Divider =
 
-  static member Create(?orientation: Orientation, ?attrs: Attr list) =
+  static member create(?attrs: Attr list) =
     let attrs = defaultArg attrs []
-    let orientation = defaultArg orientation Orientation.Horizontal
-
-    div [
-      cl Css.``weave-divider``
-      Orientation.toClasses orientation |> cls
-      yield! attrs
-    ] []
+    div [ cl Css.``weave-divider``; yield! attrs ] []

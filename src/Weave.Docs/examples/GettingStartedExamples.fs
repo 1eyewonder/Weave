@@ -26,22 +26,22 @@ module GettingStartedExamples =
 
   let private installation () =
     Helpers.textSection "Installation" [
-      Body1.Div(
+      Body1.div (
         "Weave is not yet published to NuGet. To use it, add a project reference to your WebSharper project."
       )
 
-      div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+      div [ Margin.Top.extraSmall ] [
         codeBlock "xml" """<ProjectReference Include="../path/to/Weave/Weave.fsproj" />"""
       ]
     ]
 
   let private basicSetup () =
     Helpers.textSection "Basic Setup" [
-      Body1.Div(
+      Body1.div (
         "Open the Weave namespaces and render a component. Here is a minimal example that displays a button."
       )
 
-      div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
+      div [ Margin.Top.extraSmall ] [
         codeBlock
           "fsharp"
           """open WebSharper
@@ -63,7 +63,7 @@ let page () =
     ]
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Getting Started"
 
@@ -76,5 +76,5 @@ let page () =
         Helpers.divider ()
         basicSetup ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

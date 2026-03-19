@@ -18,10 +18,10 @@ module LinkExamples =
     let content =
       div [] [
         div [] [
-          Body1.Div(
+          Body1.div (
             seq {
               yield text "Visit our "
-              yield Link.Create(Body1.Span("documentation"), href = "https://1eyewonder.github.io/Weave/")
+              yield Link.create (Body1.span ("documentation"), href = "https://1eyewonder.github.io/Weave/")
               yield text " for more details."
             }
             |> Doc.Concat
@@ -29,10 +29,10 @@ module LinkExamples =
         ]
 
         div [] [
-          Body1.Div(
+          Body1.div (
             seq {
               yield text "Visit our "
-              yield Link.Create(H6.Span("documentation"), href = "https://1eyewonder.github.io/Weave/")
+              yield Link.create (H6.span ("documentation"), href = "https://1eyewonder.github.io/Weave/")
               yield text " for more details."
             }
             |> Doc.Concat
@@ -44,12 +44,12 @@ module LinkExamples =
       """open Weave
 open WebSharper.UI.Html
 
-Body1.Div(
+Body1.div(
     seq {
         yield text "Visit our "
         yield
-            Link.Create(
-                Body1.Span("documentation"),   // brings its own font style
+            Link.create(
+                Body1.span("documentation"),   // brings its own font style
                 href = "https://1eyewonder.github.io/Weave/"
             )
         yield text " for more details."
@@ -57,12 +57,12 @@ Body1.Div(
     |> Doc.Concat
 )
 
-Body1.Div(
+Body1.div(
     seq {
         yield text "Visit our "
         yield
-            Link.Create(
-                H6.Span("documentation"),   // brings its own font style
+            Link.create(
+                H6.span("documentation"),   // brings its own font style
                 href = "https://1eyewonder.github.io/Weave/"
             )
         yield text " for more details."
@@ -79,32 +79,32 @@ Body1.Div(
         "Control when the underline is shown: OnHover (default), Always, or None. The underline is applied only to the text — icon adornments are never underlined."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Link.Create(
-                H3.Div("OnHover (default)"),
+              Link.create (
+                H3.div ("OnHover (default)"),
                 href = "https://1eyewonder.github.io/Weave/",
-                attrs = [ Link.Underline.toClass Link.Underline.OnHover |> cl ]
+                attrs = [ Link.Underline.onHover ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Link.Create(
-                H3.Div("Always"),
+              Link.create (
+                H3.div ("Always"),
                 href = "https://1eyewonder.github.io/Weave/",
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Link.Create(
-                H3.Div("None"),
+              Link.create (
+                H3.div ("None"),
                 href = "https://1eyewonder.github.io/Weave/",
-                attrs = [ Link.Underline.toClass Link.Underline.None |> cl ]
+                attrs = [ Link.Underline.none ]
               )
             ]
           )
@@ -116,52 +116,49 @@ Body1.Div(
       """open Weave
 
 
-Link.Create(
-  H3.Div("OnHover (default)"),
+Link.create(
+  H3.div("OnHover (default)"),
   href = "https://1eyewonder.github.io/Weave/",
-  attrs = [ Link.Underline.toClass Link.Underline.OnHover |> cl ]
+  attrs = [ Link.Underline.onHover ]
 )
 
-Link.Create(
-  H3.Div("Always"),
+Link.create(
+  H3.div("Always"),
   href = "https://1eyewonder.github.io/Weave/",
-  attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+  attrs = [ Link.Underline.always ]
 )
 
-Link.Create(
-  H3.Div("None"),
+Link.create(
+  H3.div("None"),
   href = "https://1eyewonder.github.io/Weave/",
-  attrs = [ Link.Underline.toClass Link.Underline.None |> cl ]
+  attrs = [ Link.Underline.none ]
 )"""
 
     Helpers.codeSampleSection "Underline" description content code
 
   let private colorExamples () =
     let colors = [
-      BrandColor.Primary
-      BrandColor.Secondary
-      BrandColor.Tertiary
-      BrandColor.Error
-      BrandColor.Warning
-      BrandColor.Success
-      BrandColor.Info
+      "Primary", Link.Color.primary
+      "Secondary", Link.Color.secondary
+      "Tertiary", Link.Color.tertiary
+      "Error", Link.Color.error
+      "Warning", Link.Color.warning
+      "Success", Link.Color.success
+      "Info", Link.Color.info
     ]
 
     let description =
-      Helpers.bodyText "Links can use any BrandColor from the theme palette."
+      Helpers.bodyText "Links can use any brand color from the theme palette."
 
     let content =
-      Grid.Create(
+      Grid.create (
         colors
-        |> List.map (fun color ->
-          GridItem.Create(
-            Link.Create(
-              text (sprintf "%A" color),
+        |> List.map (fun (label, colorAttr) ->
+          GridItem.create (
+            Link.create (
+              text label,
               href = "https://1eyewonder.github.io/Weave/",
-              attrs = [
-                Link.Color.toClass color |> cl
-                Link.Underline.toClass Link.Underline.Always |> cl
-              ]
+              attrs = [ colorAttr; Link.Underline.always ]
             )
           )),
         spacing = Grid.GutterSpacing.create 2
@@ -171,15 +168,19 @@ Link.Create(
       """open Weave
 
 
-let colors = [ BrandColor.Primary; BrandColor.Secondary; (* ... *) ]
+let colors = [
+    "Primary", Link.Color.primary
+    "Secondary", Link.Color.secondary
+    // ...
+]
 
-colors |> List.map (fun color ->
-    Link.Create(
-        text (sprintf "%A" color),
+colors |> List.map (fun (label, colorAttr) ->
+    Link.create(
+        text label,
         href = "#",
         attrs = [
-            Link.Color.toClass color |> cl         // see here
-            Link.Underline.toClass Link.Underline.Always |> cl
+            colorAttr // see here
+            Link.Underline.always
         ]
     )
 )"""
@@ -192,39 +193,39 @@ colors |> List.map (fun color ->
         "Links can have a start icon, an end icon, or both. Icons are never underlined regardless of the underline setting."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Caption.Div("Start icon")
-              Link.Create(
+              Caption.div ("Start icon")
+              Link.create (
                 text "Open in new tab",
                 href = "https://1eyewonder.github.io/Weave/",
-                startIcon = Icon.Create(Icon.UiActions UiActions.OpenInNew),
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                startIcon = Icon.create (Icon.UiActions UiActions.OpenInNew),
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Caption.Div("End icon")
-              Link.Create(
+              Caption.div ("End icon")
+              Link.create (
                 text "Download",
                 href = "https://1eyewonder.github.io/Weave/",
-                endIcon = Icon.Create(Icon.UiActions UiActions.Download),
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                endIcon = Icon.create (Icon.UiActions UiActions.Download),
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Caption.Div("Both icons")
-              Link.Create(
+              Caption.div ("Both icons")
+              Link.create (
                 text "Send email",
                 href = "https://1eyewonder.github.io/Weave/",
-                startIcon = Icon.Create(Icon.Communicate Communicate.Mail),
-                endIcon = Icon.Create(Icon.UiActions UiActions.ArrowForward),
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                startIcon = Icon.create (Icon.Communicate Communicate.Mail),
+                endIcon = Icon.create (Icon.UiActions UiActions.ArrowForward),
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
@@ -239,48 +240,48 @@ open Weave.Icons.MaterialSymbols
 
 
 // Start icon only
-Link.Create(
+Link.create(
     text "Open in new tab",
     href = "#",
-    startIcon = Icon.Create(Icon.UiActions UiActions.OpenInNew), // see here
-    attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+    startIcon = Icon.create(Icon.UiActions UiActions.OpenInNew), // see here
+    attrs = [ Link.Underline.always ]
 )
 
 // End icon only
-Link.Create(
+Link.create(
     text "Download",
     href = "#",
-    endIcon = Icon.Create(Icon.UiActions UiActions.Download), // see here
-    attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+    endIcon = Icon.create(Icon.UiActions UiActions.Download), // see here
+    attrs = [ Link.Underline.always ]
 )"""
 
     Helpers.codeSampleSection "Icon Adornments" description content code
 
   let private iconOnlyExample () =
     let description =
-      Helpers.bodyText "Use Link.CreateIcon when the link should contain only an icon with no text label."
+      Helpers.bodyText "Use IconLink.create when the link should contain only an icon with no text label."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Link.CreateIcon(
-              Icon.Create(Icon.UiActions UiActions.Home),
+          GridItem.create (
+            IconLink.create (
+              Icon.create (Icon.UiActions UiActions.Home),
               href = "https://1eyewonder.github.io/Weave/"
             )
           )
-          GridItem.Create(
-            Link.CreateIcon(
-              Icon.Create(Icon.UiActions UiActions.Settings),
+          GridItem.create (
+            IconLink.create (
+              Icon.create (Icon.UiActions UiActions.Settings),
               href = "https://1eyewonder.github.io/Weave/",
-              attrs = [ Link.Color.toClass BrandColor.Secondary |> cl ]
+              attrs = [ Link.Color.secondary ]
             )
           )
-          GridItem.Create(
-            Link.CreateIcon(
-              Icon.Create(Icon.UiActions UiActions.Delete),
+          GridItem.create (
+            IconLink.create (
+              Icon.create (Icon.UiActions UiActions.Delete),
               href = "https://1eyewonder.github.io/Weave/",
-              attrs = [ Link.Color.toClass BrandColor.Error |> cl ]
+              attrs = [ Link.Color.error ]
             )
           )
         ],
@@ -294,16 +295,16 @@ open Weave.Icons.MaterialSymbols
 
 
 // Icon-only link (no text)
-Link.CreateIcon(
-    Icon.Create(Icon.UiActions UiActions.Home),
+IconLink.create(
+    Icon.create(Icon.UiActions UiActions.Home),
     href = "#"
 )
 
 // With color
-Link.CreateIcon(
-    Icon.Create(Icon.UiActions UiActions.Delete),
+IconLink.create(
+    Icon.create(Icon.UiActions UiActions.Delete),
     href = "#",
-    attrs = [ Link.Color.toClass BrandColor.Error |> cl ]
+    attrs = [ Link.Color.error ]
 )"""
 
     Helpers.codeSampleSection "Icon-Only" description content code
@@ -313,27 +314,27 @@ Link.CreateIcon(
       Helpers.bodyText "A disabled link prevents navigation and suppresses the onClick callback."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Caption.Div("Enabled")
-              Link.Create(
+              Caption.div ("Enabled")
+              Link.create (
                 text "Active link",
                 href = "https://1eyewonder.github.io/Weave/",
                 enabled = View.Const true,
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Caption.Div("Disabled")
-              Link.Create(
+              Caption.div ("Disabled")
+              Link.create (
                 text "Disabled link",
                 href = "https://1eyewonder.github.io/Weave/",
                 enabled = View.Const false,
-                attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+                attrs = [ Link.Underline.always ]
               )
             ]
           )
@@ -347,25 +348,25 @@ Link.CreateIcon(
 open WebSharper.UI
 
 // Enabled (default)
-Link.Create(
+Link.create(
     text "Active link",
     href = "#",
     enabled = View.Const true,
-    attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+    attrs = [ Link.Underline.always ]
 )
 
 // Disabled — no navigation, onClick not fired
-Link.Create(
+Link.create(
     text "Disabled link",
     href = "#",
     enabled = View.Const false, // see here
-    attrs = [ Link.Underline.toClass Link.Underline.Always |> cl ]
+    attrs = [ Link.Underline.always ]
 )"""
 
     Helpers.codeSampleSection "Disabled" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Link"
         Helpers.bodyText
@@ -383,5 +384,5 @@ Link.Create(
         Helpers.divider ()
         disabledExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

@@ -8,32 +8,24 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Switch =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
-
   module Size =
-    let toClass size =
-      match size with
-      | Size.Small -> Css.``weave-switch__base--small``
-      | Size.Medium -> Css.``weave-switch__base--medium``
-      | Size.Large -> Css.``weave-switch__base--large``
+
+    let small = cl Css.``weave-switch__base--small``
+    let medium = cl Css.``weave-switch__base--medium``
+    let large = cl Css.``weave-switch__base--large``
 
   module Color =
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-switch--primary``
-      | BrandColor.Secondary -> Css.``weave-switch--secondary``
-      | BrandColor.Tertiary -> Css.``weave-switch--tertiary``
-      | BrandColor.Error -> Css.``weave-switch--error``
-      | BrandColor.Warning -> Css.``weave-switch--warning``
-      | BrandColor.Success -> Css.``weave-switch--success``
-      | BrandColor.Info -> Css.``weave-switch--info``
+
+    let primary = cl Css.``weave-switch--primary``
+    let secondary = cl Css.``weave-switch--secondary``
+    let tertiary = cl Css.``weave-switch--tertiary``
+    let error = cl Css.``weave-switch--error``
+    let warning = cl Css.``weave-switch--warning``
+    let success = cl Css.``weave-switch--success``
+    let info = cl Css.``weave-switch--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -42,33 +34,29 @@ module Switch =
     | Left
     | Right
 
-open Switch
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Switch =
 
-  static member private Render
+  static member private render
     (
       isChecked: Var<bool>,
       content: Doc,
       enabled: View<bool>,
-      contentPlacement: View<ContentPlacement>,
+      contentPlacement: View<Switch.ContentPlacement>,
       attrs: Attr list
     ) =
     label [
-      cls [
-        Css.``weave-switch``
-        Flex.Inline.allSizes
-        AlignItems.toClass AlignItems.Center
-      ]
+      cl Css.``weave-switch``
+      Flex.Inline.allSizes
+      AlignItems.center
 
       Disabled.disabledClass Css.``weave-switch--disabled`` enabled
 
       Map.ofList [
-        ContentPlacement.Right, FlexDirection.Row.allSizes
-        ContentPlacement.Left, FlexDirection.RowReverse.allSizes
-        ContentPlacement.Top, FlexDirection.ColumnReverse.allSizes
-        ContentPlacement.Bottom, FlexDirection.Column.allSizes
+        Switch.ContentPlacement.Right, Css.``flex-row``
+        Switch.ContentPlacement.Left, Css.``flex-row-reverse``
+        Switch.ContentPlacement.Top, Css.``flex-column-reverse``
+        Switch.ContentPlacement.Bottom, Css.``flex-column``
       ]
       |> Attr.classSelection contentPlacement
 
@@ -93,22 +81,22 @@ type Switch =
       div [ View.not enabled |> Attr.toggleColor Palette.textDisabled ] [ content ]
     ]
 
-  static member Create
+  static member create
     (
       isChecked: Var<bool>,
       ?content: Doc,
       ?enabled: View<bool>,
-      ?contentPlacement: View<ContentPlacement>,
+      ?contentPlacement: View<Switch.ContentPlacement>,
       ?attrs: Attr list
     ) =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
 
     let contentPlacement =
-      defaultArg contentPlacement (View.Const ContentPlacement.Right)
+      defaultArg contentPlacement (View.Const Switch.ContentPlacement.Right)
 
     let content =
       content
       |> Option.mapOrDefault Doc.Empty (fun d -> div [ cls [ Css.``weave-switch__label`` ] ] [ d ])
 
-    Switch.Render(isChecked, content, enabled, contentPlacement, attrs)
+    Switch.render (isChecked, content, enabled, contentPlacement, attrs)

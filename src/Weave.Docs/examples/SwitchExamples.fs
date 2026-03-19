@@ -21,7 +21,7 @@ module SwitchExamples =
         basicIsChecked.View
         |> View.MapCached(sprintf "Basic is Checked: %b")
         |> View.printfn
-        Switch.Create(basicIsChecked, Body1.Div("Default Switch"))
+        Switch.create (basicIsChecked, Body1.div ("Default Switch"))
       ]
 
     let code =
@@ -30,7 +30,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create false // see here
 
-Switch.Create(isChecked, View.Const "Default Switch")
+Switch.create(isChecked, View.Const "Default Switch")
 """
 
     Helpers.codeSampleSection "Basic Switch" description content code
@@ -41,7 +41,7 @@ Switch.Create(isChecked, View.Const "Default Switch")
 
     let content =
       let isChecked = Var.Create true
-      Switch.Create(isChecked, Body1.Div("Disabled Switch"), enabled = View.Const false)
+      Switch.create (isChecked, Body1.div ("Disabled Switch"), enabled = View.Const false)
 
     let code =
       """open Weave
@@ -49,7 +49,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create true
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Disabled Switch",
     enabled = View.Const false // see here
@@ -68,9 +68,9 @@ Switch.Create(
       let label =
         isChecked.View
         |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
-        |> Doc.BindView(fun text -> Body1.Div(text))
+        |> Doc.BindView(fun text -> Body1.div (text))
 
-      Switch.Create(isChecked, label)
+      Switch.create (isChecked, label)
 
     let code =
       """open Weave
@@ -82,7 +82,7 @@ let label =
     isChecked.View
     |> View.Map(fun v -> if v then "I am on!" else "Turn me on!") // see here
 
-Switch.Create(isChecked, label)
+Switch.create(isChecked, label)
 """
 
     Helpers.codeSampleSection "Dynamic Label" description content code
@@ -93,16 +93,16 @@ Switch.Create(isChecked, label)
 
     let content =
       let sizes = [
-        Switch.Size.Small, "Small", Var.Create false
-        Switch.Size.Medium, "Medium", Var.Create true
-        Switch.Size.Large, "Large", Var.Create false
+        Switch.Size.small, "Small", Var.Create false
+        Switch.Size.medium, "Medium", Var.Create true
+        Switch.Size.large, "Large", Var.Create false
       ]
 
-      Grid.Create(
+      Grid.create (
         sizes
         |> List.map (fun (size, label, v) ->
-          GridItem.Create(
-            Switch.Create(v, Body1.Div(label), attrs = [ Switch.Size.toClass size |> cl ]),
+          GridItem.create (
+            Switch.create (v, Body1.div (label), attrs = [ size ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -116,22 +116,22 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Small",
-    attrs = [ Switch.Size.toClass Switch.Size.Small |> cl ] // see here
+    attrs = [ Switch.Size.small ] // see here
 )
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Medium",
-    attrs = [ Switch.Size.toClass Switch.Size.Medium |> cl ] // see here
+    attrs = [ Switch.Size.medium ] // see here
 )
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Large",
-    attrs = [ Switch.Size.toClass Switch.Size.Large |> cl ] // see here
+    attrs = [ Switch.Size.large ] // see here
 )
 """
 
@@ -144,21 +144,21 @@ Switch.Create(
     let content =
       let switches =
         [
-          BrandColor.Primary, "Primary"
-          BrandColor.Secondary, "Secondary"
-          BrandColor.Tertiary, "Tertiary"
-          BrandColor.Error, "Error"
-          BrandColor.Warning, "Warning"
-          BrandColor.Success, "Success"
-          BrandColor.Info, "Info"
+          Switch.Color.primary, "Primary"
+          Switch.Color.secondary, "Secondary"
+          Switch.Color.tertiary, "Tertiary"
+          Switch.Color.error, "Error"
+          Switch.Color.warning, "Warning"
+          Switch.Color.success, "Success"
+          Switch.Color.info, "Info"
         ]
-        |> List.map (fun (color, label) -> Var.Create false, color, label)
+        |> List.map (fun (colorAttr, label) -> Var.Create false, colorAttr, label)
 
-      Grid.Create(
+      Grid.create (
         switches
-        |> List.map (fun (v, color, label) ->
-          GridItem.Create(
-            Switch.Create(v, Body1.Div(label), attrs = [ Switch.Color.toClass color |> cl ]),
+        |> List.map (fun (v, colorAttr, label) ->
+          GridItem.create (
+            Switch.create (v, Body1.div (label), attrs = [ colorAttr ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -172,16 +172,16 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Primary",
-    attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ] // see here
+    attrs = [ Switch.Color.primary ] // see here
 )
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Error",
-    attrs = [ Switch.Color.toClass BrandColor.Error |> cl ] // see here
+    attrs = [ Switch.Color.error ] // see here
 )
 """
 
@@ -205,8 +205,8 @@ Switch.Create(
       let radioButtons =
         radioOptions
         |> List.map (fun (value, label) ->
-          GridItem.Create(
-            Radio.Create(placement, value, displayText = View.Const label),
+          GridItem.create (
+            Radio.create (placement, value, displayText = View.Const label),
             xs = Grid.Width.create 6,
             md = Grid.Width.create 3
           ))
@@ -214,19 +214,16 @@ Switch.Create(
       let demoChecked = Var.Create false
 
       let demoSwitch =
-        Switch.Create(
+        Switch.create (
           demoChecked,
           placement.View
           |> View.MapCached(sprintf "%A")
-          |> Doc.BindView(fun text -> Body1.Div(text)),
+          |> Doc.BindView(fun text -> Body1.div (text)),
           contentPlacement = placement.View,
-          attrs = [
-            Switch.Size.toClass Switch.Size.Large |> cl
-            Switch.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ Switch.Size.large; Switch.Color.primary ]
         )
 
-      Grid.Create(radioButtons @ [ GridItem.Create(demoSwitch, xs = Grid.Width.create 12) ])
+      Grid.create (radioButtons @ [ GridItem.create (demoSwitch, xs = Grid.Width.create 12) ])
 
     let code =
       """open Weave
@@ -235,13 +232,13 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Left",
     contentPlacement = View.Const Switch.ContentPlacement.Left // see here
 )
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Top",
     contentPlacement = View.Const Switch.ContentPlacement.Top // see here
@@ -256,31 +253,29 @@ Switch.Create(
         "Density controls the touch-target padding on a three-step scale: Compact, Standard, and Spacious. Pass the density class in attrs to override a single instance."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Switch.Create(
-            Var.Create false,
-            Body1.Div("Off"),
-            attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ]
-          )
-          Switch.Create(
-            Var.Create true,
-            Body1.Div("On"),
-            attrs = [ Switch.Color.toClass BrandColor.Primary |> cl ]
-          )
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Switch.create (Var.Create false, Body1.div ("Off"), attrs = [ Switch.Color.primary ])
+          Switch.create (Var.Create true, Body1.div ("On"), attrs = [ Switch.Color.primary ])
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -288,21 +283,21 @@ Switch.Create(
 
 
 // Per-instance: pass the density class in attrs to set it on one component
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Compact",
     attrs = [
-        cl (Density.toClass Density.Compact) // see here
-        Switch.Color.toClass BrandColor.Primary |> cl
+        Density.compact // see here
+        Switch.Color.primary
     ]
 )
 
-Switch.Create(
+Switch.create(
     isChecked,
     View.Const "Spacious",
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
-        Switch.Color.toClass BrandColor.Primary |> cl
+        Density.spacious // see here
+        Switch.Color.primary
     ]
 )
 """
@@ -310,12 +305,12 @@ Switch.Create(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Switch"
-        Body1.Div(
+        Body1.div (
           "The Switch component allows users to toggle between two states. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -333,5 +328,5 @@ Switch.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

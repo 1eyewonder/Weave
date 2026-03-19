@@ -145,11 +145,9 @@ module Drawer =
 
   module Density =
 
-    let toClass density =
-      match density with
-      | Density.Compact -> Css.``weave-drawer__header--compact``
-      | Density.Standard -> Css.``weave-drawer__header--standard``
-      | Density.Spacious -> Css.``weave-drawer__header--spacious``
+    let compact = cl Css.``weave-drawer__header--compact``
+    let standard = cl Css.``weave-drawer__header--standard``
+    let spacious = cl Css.``weave-drawer__header--spacious``
 
   /// <summary>
   /// An immutable specification for a single drawer pane. Construct one via
@@ -187,7 +185,7 @@ type DrawerHeader =
   /// </summary>
   /// <param name="content">The content to render inside the header.</param>
   /// <param name="attrs">Additional attributes applied to the root element.</param>
-  static member Create(content: Doc, ?attrs: Attr list) =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
     div [ cl Css.``weave-drawer__header``; yield! attrs ] [ content ]
@@ -196,167 +194,34 @@ type DrawerHeader =
 type Drawer =
 
   /// <summary>
-  /// Constructs a <c>Drawer.Config</c> for a Temporary drawer — overlays the
-  /// content with an optional backdrop and does not shift the AppBar or main
-  /// content. Pass the config to <c>DrawerContainer.Create</c>.
+  /// Constructs a <c>Drawer.Config</c> for the given variant. Pass the result
+  /// to <c>DrawerContainer.create</c> or render it directly with
+  /// <c>Drawer.Render</c>.
   /// </summary>
   /// <param name="content">The content to render inside the drawer.</param>
   /// <param name="isOpen">A view that controls whether the drawer is open.</param>
-  /// <param name="position">The edge the drawer slides from. Defaults to <c>Left</c>.</param>
-  /// <param name="overlayClose">
-  /// Optional callback invoked when the user clicks the overlay backdrop.
+  /// <param name="variant">
+  /// Controls how the drawer displays and interacts with the layout.
+  /// Defaults to <c>Temporary</c>.
   /// </param>
-  /// <param name="isFixed">
-  /// When true the drawer is positioned relative to the viewport. Defaults to true.
-  /// </param>
-  /// <param name="width">Optional custom width in pixels, overriding the CSS custom property.</param>
-  /// <param name="header">
-  /// Optional header Doc rendered above the drawer content.
-  /// Use <c>DrawerHeader.Create</c> to build one.
-  /// </param>
-  /// <param name="attrs">Additional attributes applied to the drawer root element.</param>
-  static member CreateTemporary
-    (
-      content: Doc,
-      isOpen: View<bool>,
-      ?position: Drawer.Position,
-      ?overlayClose: unit -> unit,
-      ?isFixed: bool,
-      ?width: int,
-      ?header: Doc,
-      ?attrs: Attr list
-    ) : Drawer.Config =
-    {
-      Content = content
-      Open = isOpen
-      Variant = Variant.Temporary
-      Position = defaultArg position Position.Left
-      ClipMode = ClipMode.FullHeight
-      Breakpoint = DrawerBreakpoint.At Breakpoint.Medium
-      OverlayClose = overlayClose
-      IsFixed = defaultArg isFixed true
-      Width = width
-      Header = header
-      ExpandOnHover = View.Const false
-      Attrs = defaultArg attrs []
-    }
-
-  /// <summary>
-  /// Constructs a <c>Drawer.Config</c> for a Persistent drawer — always visible
-  /// at its configured width and shifts the AppBar and main content to the side.
-  /// Pass the config to <c>DrawerContainer.Create</c>.
-  /// </summary>
-  /// <param name="content">The content to render inside the drawer.</param>
-  /// <param name="isOpen">A view that controls whether the drawer is open.</param>
   /// <param name="position">The edge the drawer slides from. Defaults to <c>Left</c>.</param>
   /// <param name="clipMode">
-  /// How the drawer interacts with the AppBar vertically. Use
-  /// <c>ClipMode.AppBar</c> when the AppBar lives <em>inside</em> the
-  /// DrawerContainer so the drawer starts below it rather than overlapping it.
-  /// Use <c>ClipMode.FullHeight</c> (default) when the AppBar is outside the
-  /// DrawerContainer.
+  /// How the drawer interacts with the AppBar vertically. Relevant for
+  /// <c>Persistent</c>. Use <c>ClipMode.AppBar</c> when the AppBar lives
+  /// <em>inside</em> the DrawerContainer so the drawer starts below it.
+  /// Defaults to <c>FullHeight</c>.
   /// </param>
-  /// <param name="isFixed">
-  /// When true the drawer is positioned relative to the viewport. Defaults to true.
-  /// </param>
-  /// <param name="width">Optional custom width in pixels, overriding the CSS custom property.</param>
-  /// <param name="header">
-  /// Optional header Doc rendered above the drawer content.
-  /// Use <c>DrawerHeader.Create</c> to build one.
-  /// </param>
-  /// <param name="attrs">Additional attributes applied to the drawer root element.</param>
-  static member CreatePersistent
-    (
-      content: Doc,
-      isOpen: View<bool>,
-      ?position: Drawer.Position,
-      ?clipMode: Drawer.ClipMode,
-      ?isFixed: bool,
-      ?width: int,
-      ?header: Doc,
-      ?attrs: Attr list
-    ) : Drawer.Config =
-    {
-      Content = content
-      Open = isOpen
-      Variant = Variant.Persistent
-      Position = defaultArg position Position.Left
-      ClipMode = defaultArg clipMode ClipMode.FullHeight
-      Breakpoint = DrawerBreakpoint.At Breakpoint.Medium
-      OverlayClose = Option.None
-      IsFixed = defaultArg isFixed true
-      Width = width
-      Header = header
-      ExpandOnHover = View.Const false
-      Attrs = defaultArg attrs []
-    }
-
-  /// <summary>
-  /// Constructs a <c>Drawer.Config</c> for a Responsive drawer — behaves like
-  /// Persistent above its breakpoint and like Temporary below it.
-  /// Pass the config to <c>DrawerContainer.Create</c>.
-  /// </summary>
-  /// <param name="content">The content to render inside the drawer.</param>
-  /// <param name="isOpen">A view that controls whether the drawer is open.</param>
-  /// <param name="position">The edge the drawer slides from. Defaults to <c>Left</c>.</param>
   /// <param name="breakpoint">
-  /// The breakpoint at which the drawer switches between Persistent and Temporary
-  /// behaviour. Defaults to <c>MD</c>.
+  /// Breakpoint at which <c>Responsive</c> and <c>Mini</c> drawers switch
+  /// between their two states. Defaults to <c>MD</c>.
   /// </param>
   /// <param name="overlayClose">
-  /// Optional callback invoked when the user clicks the overlay backdrop (shown
-  /// below the breakpoint when the drawer is open).
-  /// </param>
-  /// <param name="isFixed">
-  /// When true the drawer is positioned relative to the viewport. Defaults to true.
-  /// </param>
-  /// <param name="width">Optional custom width in pixels, overriding the CSS custom property.</param>
-  /// <param name="header">
-  /// Optional header Doc rendered above the drawer content.
-  /// Use <c>DrawerHeader.Create</c> to build one.
-  /// </param>
-  /// <param name="attrs">Additional attributes applied to the drawer root element.</param>
-  static member CreateResponsive
-    (
-      content: Doc,
-      isOpen: View<bool>,
-      ?position: Drawer.Position,
-      ?breakpoint: Drawer.DrawerBreakpoint,
-      ?overlayClose: unit -> unit,
-      ?isFixed: bool,
-      ?width: int,
-      ?header: Doc,
-      ?attrs: Attr list
-    ) : Drawer.Config =
-    {
-      Content = content
-      Open = isOpen
-      Variant = Variant.Responsive
-      Position = defaultArg position Position.Left
-      ClipMode = ClipMode.FullHeight
-      Breakpoint = defaultArg breakpoint (DrawerBreakpoint.At Breakpoint.Medium)
-      OverlayClose = overlayClose
-      IsFixed = defaultArg isFixed true
-      Width = width
-      Header = header
-      ExpandOnHover = View.Const false
-      Attrs = defaultArg attrs []
-    }
-
-  /// <summary>
-  /// Constructs a <c>Drawer.Config</c> for a Mini drawer — collapses to a narrow
-  /// icon strip when closed and expands to full width when open.
-  /// Pass the config to <c>DrawerContainer.Create</c>.
-  /// </summary>
-  /// <param name="content">The content to render inside the drawer.</param>
-  /// <param name="isOpen">A view that controls whether the drawer is open.</param>
-  /// <param name="position">The edge the drawer slides from. Defaults to <c>Left</c>.</param>
-  /// <param name="breakpoint">
-  /// The breakpoint above which the mini strip is always shown. Defaults to <c>MD</c>.
+  /// Optional callback invoked when the user clicks the overlay backdrop.
+  /// Relevant for <c>Temporary</c> and <c>Responsive</c>.
   /// </param>
   /// <param name="expandOnHover">
-  /// When true the drawer expands to full width on pointer hover without
-  /// shifting the layout (overlay behaviour). Defaults to false.
+  /// When true the <c>Mini</c> drawer expands to full width on pointer hover
+  /// without shifting the layout. Defaults to false.
   /// </param>
   /// <param name="isFixed">
   /// When true the drawer is positioned relative to the viewport. Defaults to true.
@@ -364,15 +229,18 @@ type Drawer =
   /// <param name="width">Optional custom width in pixels, overriding the CSS custom property.</param>
   /// <param name="header">
   /// Optional header Doc rendered above the drawer content.
-  /// Use <c>DrawerHeader.Create</c> to build one.
+  /// Use <c>DrawerHeader.create</c> to build one.
   /// </param>
   /// <param name="attrs">Additional attributes applied to the drawer root element.</param>
-  static member CreateMini
+  static member create
     (
       content: Doc,
       isOpen: View<bool>,
+      ?variant: Drawer.Variant,
       ?position: Drawer.Position,
+      ?clipMode: Drawer.ClipMode,
       ?breakpoint: Drawer.DrawerBreakpoint,
+      ?overlayClose: unit -> unit,
       ?expandOnHover: View<bool>,
       ?isFixed: bool,
       ?width: int,
@@ -382,11 +250,11 @@ type Drawer =
     {
       Content = content
       Open = isOpen
-      Variant = Variant.Mini
+      Variant = defaultArg variant Variant.Temporary
       Position = defaultArg position Position.Left
-      ClipMode = ClipMode.FullHeight
+      ClipMode = defaultArg clipMode ClipMode.FullHeight
       Breakpoint = defaultArg breakpoint (DrawerBreakpoint.At Breakpoint.Medium)
-      OverlayClose = Option.None
+      OverlayClose = overlayClose
       IsFixed = defaultArg isFixed true
       Width = width
       Header = header
@@ -520,7 +388,7 @@ type DrawerContainer =
   /// Optional right-side drawer config produced by <c>Drawer.Create</c>.
   /// </param>
   /// <param name="attrs">Additional attributes applied to the container element.</param>
-  static member Create
+  static member create
     (mainContent: Doc, ?leftDrawer: Drawer.Config, ?rightDrawer: Drawer.Config, ?attrs: Attr list)
     : Doc =
 

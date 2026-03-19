@@ -31,16 +31,9 @@ module ChipSetExamples =
           | None -> "No selection")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Outlined
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.primary ]),
           selectedValue = selected,
           selectionMode = ChipSet.SelectionMode.Single
         )
@@ -61,13 +54,11 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.outlined
+            Chip.Color.primary
     ])
 
-ChipSet.Create(
+ChipSet.create(
     styledChips, // see here
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Single
@@ -99,16 +90,9 @@ ChipSet.Create(
             s |> Set.toList |> String.concat ", " |> sprintf "Selected: %s")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Outlined
-                Chip.Color.toClass BrandColor.Secondary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.secondary ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi
         )
@@ -131,13 +115,11 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined
-            Chip.Color.toClass BrandColor.Secondary
-        ]
+            Chip.Variant.outlined
+            Chip.Color.secondary
     ])
 
-ChipSet.Create(
+ChipSet.create(
     styledChips, // see here
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi
@@ -167,16 +149,9 @@ ChipSet.Create(
           | None -> "No selection")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
           selectedValue = selected,
           selectionMode = ChipSet.SelectionMode.Toggle
         )
@@ -197,13 +172,11 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.filled
+            Chip.Color.primary
     ])
 
-ChipSet.Create(
+ChipSet.create(
     styledChips,
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Toggle // see here
@@ -234,16 +207,9 @@ ChipSet.Create(
             s |> Set.toList |> String.concat ", " |> sprintf "Selected: %s")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi
         )
@@ -265,13 +231,11 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.filled
+            Chip.Color.primary
     ])
 
-ChipSet.Create(
+ChipSet.create(
     styledChips,
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi
@@ -295,21 +259,14 @@ ChipSet.Create(
     ]
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Filled", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              ChipSet.Create(
+              Subtitle2.div ("Filled", attrs = [ Margin.Bottom.extraSmall ])
+              ChipSet.create (
                 chips ()
-                |> List.map (
-                  ChipSet.ChipDef.withAttrs [
-                    cls [
-                      Chip.Variant.toClass Chip.Variant.Filled
-                      Chip.Color.toClass BrandColor.Primary
-                    ]
-                  ]
-                ),
+                |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
                 selectedValue = filledSel,
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
@@ -317,19 +274,12 @@ ChipSet.Create(
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Outlined", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              ChipSet.Create(
+              Subtitle2.div ("Outlined", attrs = [ Margin.Bottom.extraSmall ])
+              ChipSet.create (
                 chips ()
-                |> List.map (
-                  ChipSet.ChipDef.withAttrs [
-                    cls [
-                      Chip.Variant.toClass Chip.Variant.Outlined
-                      Chip.Color.toClass BrandColor.Secondary
-                    ]
-                  ]
-                ),
+                |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.secondary ]),
                 selectedValue = outlinedSel,
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
@@ -337,19 +287,12 @@ ChipSet.Create(
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Text", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              ChipSet.Create(
+              Subtitle2.div ("Text", attrs = [ Margin.Bottom.extraSmall ])
+              ChipSet.create (
                 chips ()
-                |> List.map (
-                  ChipSet.ChipDef.withAttrs [
-                    cls [
-                      Chip.Variant.toClass Chip.Variant.Text
-                      Chip.Color.toClass BrandColor.Tertiary
-                    ]
-                  ]
-                ),
+                |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.text; Chip.Color.tertiary ]),
                 selectedValue = textSel,
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
@@ -359,7 +302,7 @@ ChipSet.Create(
           )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -377,13 +320,11 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled // see here
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.filled // see here
+        Chip.Color.primary
     ])
 
-ChipSet.Create(
+ChipSet.create(
     styledChips,
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Toggle
@@ -399,9 +340,9 @@ ChipSet.Create(
 
     let chips = [
       ChipSet.ChipDef.create (text "Saved") "saved"
-      |> ChipSet.ChipDef.withContent (Icon.Create(Icon.UiActions UiActions.CheckCircle))
+      |> ChipSet.ChipDef.withContent (Icon.create (Icon.UiActions UiActions.CheckCircle))
       ChipSet.ChipDef.create (text "Warning") "warning"
-      |> ChipSet.ChipDef.withContent (Icon.Create(Icon.Action Action.Warning))
+      |> ChipSet.ChipDef.withContent (Icon.create (Icon.Action Action.Warning))
       ChipSet.ChipDef.create (text "Alice") "alice"
       |> ChipSet.ChipDef.withContent (img [ attr.src "https://i.pravatar.cc/40?u=bob"; attr.alt "Alice" ] [])
     ]
@@ -416,17 +357,9 @@ ChipSet.Create(
             s |> Set.toList |> String.concat ", " |> sprintf "Selected: %s")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Primary
-                Density.toClass Density.Compact
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary; Density.compact ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi
         )
@@ -440,10 +373,10 @@ open WebSharper.UI.Html
 
 let chips = [
     ChipSet.ChipDef.create (text "Saved") "saved"
-    |> ChipSet.ChipDef.withContent (Icon.Create(Icon.UiActions UiActions.CheckCircle)) // see here
+    |> ChipSet.ChipDef.withContent (Icon.create(Icon.UiActions UiActions.CheckCircle)) // see here
 
     ChipSet.ChipDef.create (text "Warning") "warning"
-    |> ChipSet.ChipDef.withContent (Icon.Create(Icon.Action Action.Warning))
+    |> ChipSet.ChipDef.withContent (Icon.create(Icon.Action Action.Warning))
 
     ChipSet.ChipDef.create (text "Alice") "alice"
     |> ChipSet.ChipDef.withContent ( // see here
@@ -458,13 +391,11 @@ let chips = [
     )
 ]
 
-ChipSet.Create(
+ChipSet.create(
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.filled
+            Chip.Color.primary
     ]),
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi
@@ -475,7 +406,7 @@ ChipSet.Create(
   let private closableExample () =
     let description =
       Helpers.bodyText
-        "Pass an onClose callback to ChipSet.Create and mark chips as closable with ChipSet.ChipDef.withClosable."
+        "Pass an onClose callback to ChipSet.create and mark chips as closable with ChipSet.ChipDef.withClosable."
 
     let items =
       Var.Create [
@@ -509,16 +440,9 @@ ChipSet.Create(
               attrs = [ Button.Variant.outlined ]
             )
           else
-            ChipSet.Create(
+            ChipSet.create (
               currentItems
-              |> List.map (
-                ChipSet.ChipDef.withAttrs [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Outlined
-                    Chip.Color.toClass BrandColor.Primary
-                  ]
-                ]
-              ),
+              |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.primary ]),
               onClose =
                 (fun value -> items.Value |> List.filter (fun c -> c.Value <> value) |> Var.Set items)
             ))
@@ -534,13 +458,11 @@ let items = Var.Create [
     ChipSet.ChipDef.create (text "Vue") "vue" |> ChipSet.ChipDef.withClosable
 ]
 
-ChipSet.Create(
+ChipSet.create(
     items.Value
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.outlined
+            Chip.Color.primary
     ]),
     onClose = fun value -> // see here
         items.Value
@@ -576,16 +498,9 @@ ChipSet.Create(
             s |> Set.toList |> String.concat ", " |> sprintf "Selected: %s")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi
         )
@@ -606,13 +521,11 @@ let chips = [
     |> ChipSet.ChipDef.withDisabled (View.Const true)
 ]
 
-ChipSet.Create(
+ChipSet.create(
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.filled
+            Chip.Color.primary
     ]),
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi
@@ -623,7 +536,7 @@ ChipSet.Create(
   let private globalDisabledExample () =
     let description =
       Helpers.bodyText
-        "Pass an enabled parameter to ChipSet.Create to disable the entire set reactively. Toggle the switch to see the effect."
+        "Pass an enabled parameter to ChipSet.create to disable the entire set reactively. Toggle the switch to see the effect."
 
     let enabled = Var.Create true
     let selected = Var.Create<Set<string>> Set.empty
@@ -636,24 +549,14 @@ ChipSet.Create(
 
     let content =
       div [] [
-        div [
-          cls [ Flex.toClass None Flex.Flex; AlignItems.toClass AlignItems.Center ]
-          Margin.toClasses Margin.Bottom.extraSmall |> cls
-        ] [
-          Switch.Create(enabled, attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ])
-          Body2.Div(enabled.View |> View.MapCached(fun e -> if e then "Enabled" else "Disabled"))
+        div [ Flex.Flex.allSizes; AlignItems.center; Margin.Bottom.extraSmall ] [
+          Switch.create (enabled, attrs = [ Margin.Right.extraSmall ])
+          Body2.div (enabled.View |> View.MapCached(fun e -> if e then "Enabled" else "Disabled"))
         ]
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi,
           enabled = enabled.View
@@ -673,13 +576,11 @@ let chips = [
     ChipSet.ChipDef.create (text "Option C") "c"
 ]
 
-ChipSet.Create(
+ChipSet.create(
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.filled
+            Chip.Color.primary
     ]),
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi,
@@ -711,19 +612,12 @@ ChipSet.Create(
             s |> Set.toList |> String.concat ", " |> sprintf "Selected: %s")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Filled
-                Chip.Color.toClass BrandColor.Error
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.error ]),
           selectedValues = selected,
           selectionMode = ChipSet.SelectionMode.Multi,
-          selectedIcon = (fun () -> Icon.Create(Icon.UiActions UiActions.Favorite))
+          selectedIcon = (fun () -> Icon.create (Icon.UiActions UiActions.Favorite))
         )
       ]
 
@@ -740,17 +634,15 @@ let chips = [
     ChipSet.ChipDef.create (text "Pinned") "pinned"
 ]
 
-ChipSet.Create(
+ChipSet.create(
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Error
-        ]
+            Chip.Variant.filled
+            Chip.Color.error
     ]),
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi,
-    selectedIcon = Some (fun () -> Icon.Create(Icon.UiActions UiActions.Favorite)) // see here
+    selectedIcon = (fun () -> Icon.create(Icon.UiActions UiActions.Favorite))
 )"""
 
     Helpers.codeSampleSection "Custom Selected Icon" description content code
@@ -776,16 +668,9 @@ ChipSet.Create(
           | None -> "No selection")
         |> View.printfn
 
-        ChipSet.Create(
+        ChipSet.create (
           chips
-          |> List.map (
-            ChipSet.ChipDef.withAttrs [
-              cls [
-                Chip.Variant.toClass Chip.Variant.Outlined
-                Chip.Color.toClass BrandColor.Primary
-              ]
-            ]
-          ),
+          |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.primary ]),
           selectedValue = selected,
           selectionMode = ChipSet.SelectionMode.Toggle,
           showSelectedIcon = false
@@ -804,13 +689,11 @@ let chips = [
     ChipSet.ChipDef.create (text "Large") "large"
 ]
 
-ChipSet.Create(
+ChipSet.create(
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined
-            Chip.Color.toClass BrandColor.Primary
-        ]
+            Chip.Variant.outlined
+            Chip.Color.primary
     ]),
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Toggle,
@@ -820,7 +703,7 @@ ChipSet.Create(
     Helpers.codeSampleSection "No Selected Icon" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Chip Set"
         Helpers.bodyText
@@ -848,5 +731,5 @@ ChipSet.Create(
         Helpers.divider ()
         noSelectedIconExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

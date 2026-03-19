@@ -20,7 +20,7 @@ module CheckboxExamples =
         |> View.MapCached(sprintf "Basic is Checked: %b")
         |> View.printfn
 
-        Checkbox.Create(basicIsChecked, View.Const "Default Checkbox")
+        Checkbox.create (basicIsChecked, View.Const "Default Checkbox")
       ]
 
     let code =
@@ -29,7 +29,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.Create(isChecked, View.Const "Default Checkbox") // see here
+Checkbox.create(isChecked, View.Const "Default Checkbox") // see here
 """
 
     Helpers.codeSampleSection "Basic Checkbox" description content code
@@ -40,7 +40,7 @@ Checkbox.Create(isChecked, View.Const "Default Checkbox") // see here
 
     let content =
       let isChecked = Var.Create true
-      Checkbox.Create(isChecked, View.Const "Disabled Checkbox", enabled = View.Const false)
+      Checkbox.create (isChecked, View.Const "Disabled Checkbox", enabled = View.Const false)
 
     let code =
       """open Weave
@@ -48,7 +48,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create true
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Disabled Checkbox",
     enabled = View.Const false // see here
@@ -67,7 +67,7 @@ Checkbox.Create(
       let label =
         isChecked.View |> View.Map(fun v -> if v then "I am checked!" else "Check me!")
 
-      Checkbox.Create(isChecked, label)
+      Checkbox.create (isChecked, label)
 
     let code =
       """open Weave
@@ -79,7 +79,7 @@ let label =
     isChecked.View
     |> View.Map(fun v -> if v then "I am checked!" else "Check me!") // see here
 
-Checkbox.Create(isChecked, label)
+Checkbox.create(isChecked, label)
 """
 
     Helpers.codeSampleSection "Dynamic Label" description content code
@@ -89,16 +89,16 @@ Checkbox.Create(isChecked, label)
 
     let content =
       let sizes = [
-        Checkbox.Size.Small, "Small", Var.Create false
-        Checkbox.Size.Medium, "Medium", Var.Create true
-        Checkbox.Size.Large, "Large", Var.Create false
+        Checkbox.Size.small, "Small", Var.Create false
+        Checkbox.Size.medium, "Medium", Var.Create true
+        Checkbox.Size.large, "Large", Var.Create false
       ]
 
-      Grid.Create(
+      Grid.create (
         sizes
         |> List.map (fun (size, label, v) ->
-          GridItem.Create(
-            Checkbox.Create(v, View.Const label, attrs = [ Checkbox.Size.toClass size |> cl ]),
+          GridItem.create (
+            Checkbox.create (v, View.Const label, attrs = [ size ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -112,22 +112,22 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Small",
-    attrs = [ Checkbox.Size.toClass Checkbox.Size.Small |> cl ] // see here
+    attrs = [ Checkbox.Size.small ] // see here
 )
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Medium",
-    attrs = [ Checkbox.Size.toClass Checkbox.Size.Medium |> cl ]
+    attrs = [ Checkbox.Size.medium ]
 )
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Large",
-    attrs = [ Checkbox.Size.toClass Checkbox.Size.Large |> cl ]
+    attrs = [ Checkbox.Size.large ]
 )
 """
 
@@ -139,21 +139,21 @@ Checkbox.Create(
     let content =
       let checkboxes =
         [
-          BrandColor.Primary, "Primary"
-          BrandColor.Secondary, "Secondary"
-          BrandColor.Tertiary, "Tertiary"
-          BrandColor.Error, "Error"
-          BrandColor.Warning, "Warning"
-          BrandColor.Success, "Success"
-          BrandColor.Info, "Info"
+          Checkbox.Color.primary, "Primary"
+          Checkbox.Color.secondary, "Secondary"
+          Checkbox.Color.tertiary, "Tertiary"
+          Checkbox.Color.error, "Error"
+          Checkbox.Color.warning, "Warning"
+          Checkbox.Color.success, "Success"
+          Checkbox.Color.info, "Info"
         ]
-        |> List.map (fun (color, label) -> Var.Create false, color, label)
+        |> List.map (fun (colorAttr, label) -> Var.Create false, colorAttr, label)
 
-      Grid.Create(
+      Grid.create (
         checkboxes
-        |> List.map (fun (v, color, label) ->
-          GridItem.Create(
-            Checkbox.Create(v, View.Const label, attrs = [ Checkbox.Color.toClass color |> cl ]),
+        |> List.map (fun (v, colorAttr, label) ->
+          GridItem.create (
+            Checkbox.create (v, View.Const label, attrs = [ colorAttr ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -167,16 +167,16 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Primary",
-    attrs = [ Checkbox.Color.toClass BrandColor.Primary |> cl ] // see here
+    attrs = [ Checkbox.Color.primary ] // see here
 )
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Error",
-    attrs = [ Checkbox.Color.toClass BrandColor.Error |> cl ]
+    attrs = [ Checkbox.Color.error ]
 )
 """
 
@@ -199,8 +199,8 @@ Checkbox.Create(
       let radioButtons =
         radioOptions
         |> List.map (fun (value, label) ->
-          GridItem.Create(
-            Radio.Create(placement, value, displayText = View.Const label),
+          GridItem.create (
+            Radio.create (placement, value, displayText = View.Const label),
             xs = Grid.Width.create 6,
             md = Grid.Width.create 3
           ))
@@ -208,17 +208,14 @@ Checkbox.Create(
       let demoChecked = Var.Create false
 
       let demoCheckBox =
-        Checkbox.Create(
+        Checkbox.create (
           demoChecked,
           placement.View |> View.MapCached(sprintf "%A"),
           contentPlacement = placement.View,
-          attrs = [
-            Checkbox.Size.toClass Checkbox.Size.Large |> cl
-            Checkbox.Color.toClass BrandColor.Primary |> cl
-          ]
+          attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
         )
 
-      Grid.Create(radioButtons @ [ GridItem.Create(demoCheckBox, xs = Grid.Width.create 12) ])
+      Grid.create (radioButtons @ [ GridItem.create (demoCheckBox, xs = Grid.Width.create 12) ])
 
     let code =
       """open Weave
@@ -227,23 +224,23 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Left",
     contentPlacement = View.Const Checkbox.ContentPlacement.Left, // see here
     attrs = [
-        Checkbox.Size.toClass Checkbox.Size.Large |> cl
-        Checkbox.Color.toClass BrandColor.Primary |> cl
+        Checkbox.Size.large
+        Checkbox.Color.primary
     ]
 )
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Top",
     contentPlacement = View.Const Checkbox.ContentPlacement.Top, // see here
     attrs = [
-        Checkbox.Size.toClass Checkbox.Size.Large |> cl
-        Checkbox.Color.toClass BrandColor.Primary |> cl
+        Checkbox.Size.large
+        Checkbox.Color.primary
     ]
 )
 """
@@ -256,31 +253,29 @@ Checkbox.Create(
         "Density controls the touch-target padding on a three-step scale: Compact, Standard, and Spacious. Pass the density class in attrs to override a single instance."
 
     let content =
-      let col density =
-        let label = sprintf "%A" density
-
-        div [ cl (Density.toClass density) ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-          Checkbox.Create(
-            Var.Create false,
-            View.Const "Unchecked",
-            attrs = [ Checkbox.Color.toClass BrandColor.Primary |> cl ]
-          )
-          Checkbox.Create(
-            Var.Create true,
-            View.Const "Checked",
-            attrs = [ Checkbox.Color.toClass BrandColor.Primary |> cl ]
-          )
+      let col (label: string) densityAttr =
+        div [ densityAttr ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          Checkbox.create (Var.Create false, View.Const "Unchecked", attrs = [ Checkbox.Color.primary ])
+          Checkbox.create (Var.Create true, View.Const "Checked", attrs = [ Checkbox.Color.primary ])
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(col Density.Compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Standard, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
-          GridItem.Create(col Density.Spacious, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Standard" Density.standard,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
+          GridItem.create (
+            col "Spacious" Density.spacious,
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 4
+          )
         ],
         spacing = Grid.GutterSpacing.create 2,
-        attrs = [ AlignItems.toClass AlignItems.Start |> cl ]
+        attrs = [ AlignItems.start ]
       )
 
     let code =
@@ -288,21 +283,21 @@ Checkbox.Create(
 
 
 // Per-instance: pass the density class in attrs to set it on one component
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Compact",
     attrs = [
-        cl (Density.toClass Density.Compact) // see here
-        Checkbox.Color.toClass BrandColor.Primary |> cl
+        Density.compact // see here
+        Checkbox.Color.primary
     ]
 )
 
-Checkbox.Create(
+Checkbox.create(
     isChecked,
     View.Const "Spacious",
     attrs = [
-        cl (Density.toClass Density.Spacious) // see here
-        Checkbox.Color.toClass BrandColor.Primary |> cl
+        Density.spacious // see here
+        Checkbox.Color.primary
     ]
 )
 """
@@ -310,12 +305,12 @@ Checkbox.Create(
     Helpers.codeSampleSection "Density" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Checkbox"
-        Body1.Div(
+        Body1.div (
           "The Checkbox component allows users to select one or more options from a set. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -333,5 +328,5 @@ Checkbox.Create(
         Helpers.divider ()
         densityExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

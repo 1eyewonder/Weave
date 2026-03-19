@@ -11,17 +11,14 @@ open Weave
 module GridExamples =
 
   let private demoBox (label: View<string>) color =
-    Container.Create(
-      content = Typography.ButtonText.Div(label),
+    Container.create (
+      content = Typography.ButtonText.div (label),
       attrs = [
         BrandColor.toBackgroundColor color
-
-        cls [
-          BorderRadius.toClass BorderRadius.All.small
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.Center
-          AlignItems.toClass AlignItems.Center
-        ]
+        BorderRadius.All.small
+        Flex.Flex.allSizes
+        JustifyContent.center
+        AlignItems.center
       ]
     )
 
@@ -30,28 +27,28 @@ module GridExamples =
       Helpers.bodyText "A simple grid with items stacked vertically on all screen sizes."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 12)
-          GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 12)
-          GridItem.Create(demoBox (View.Const "Item 3") BrandColor.Tertiary, xs = Grid.Width.create 12)
+          GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 12)
+          GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 12)
+          GridItem.create (demoBox (View.Const "Item 3") BrandColor.Tertiary, xs = Grid.Width.create 12)
         ]
       )
 
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(
+        GridItem.create(
             myContent,
             xs = Grid.Width.create 12 // see here
         )
-        GridItem.Create(
+        GridItem.create(
             myContent,
             xs = Grid.Width.create 12
         )
-        GridItem.Create(
+        GridItem.create(
             myContent,
             xs = Grid.Width.create 12
         )
@@ -64,24 +61,24 @@ Grid.Create(
     let description = Helpers.bodyText "Grid items with equal widths (3/12 = 25% each)."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           yield!
             [ 0..3 ]
             |> List.map (fun _ ->
-              GridItem.Create(demoBox (View.Const "1/4") BrandColor.Primary, xs = Grid.Width.create 3))
+              GridItem.create (demoBox (View.Const "1/4") BrandColor.Primary, xs = Grid.Width.create 3))
         ]
       )
 
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(myContent, xs = Grid.Width.create 3) // see here
-        GridItem.Create(myContent, xs = Grid.Width.create 3)
-        GridItem.Create(myContent, xs = Grid.Width.create 3)
-        GridItem.Create(myContent, xs = Grid.Width.create 3)
+        GridItem.create(myContent, xs = Grid.Width.create 3) // see here
+        GridItem.create(myContent, xs = Grid.Width.create 3)
+        GridItem.create(myContent, xs = Grid.Width.create 3)
+        GridItem.create(myContent, xs = Grid.Width.create 3)
     ]
 )"""
 
@@ -93,10 +90,10 @@ Grid.Create(
         "Grid items that change width at different breakpoints. Resize your browser to see the effect."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           let item text color =
-            GridItem.Create(
+            GridItem.create (
               demoBox text color,
               sm = Grid.Width.create 12,
               md = Grid.Width.create 6,
@@ -122,7 +119,7 @@ Grid.Create(
     let code =
       """open Weave
 
-GridItem.Create(
+GridItem.create(
     myContent,
     sm = Grid.Width.create 12, // full width on small screens
     md = Grid.Width.create 6,  // half width on medium
@@ -139,25 +136,25 @@ GridItem.Create(
     let content =
       div [] [
         let item color =
-          GridItem.Create(demoBox (View.Const "Item") color, xs = Grid.Width.create 4)
+          GridItem.create (demoBox (View.Const "Item") color, xs = Grid.Width.create 4)
 
-        Body1.Div("Spacing: 0", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.div ("Spacing: 0", attrs = [ Margin.Bottom.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
           spacing = Grid.GutterSpacing.create 0
         )
 
-        Body1.Div("Spacing: 10", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.div ("Spacing: 10", attrs = [ Margin.Bottom.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.Div("Spacing: 20", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        Body1.div ("Spacing: 20", attrs = [ Margin.Bottom.extraSmall ])
 
-        Grid.Create(
+        Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
           spacing = Grid.GutterSpacing.create 20
         )
@@ -166,11 +163,11 @@ GridItem.Create(
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(item1, xs = Grid.Width.create 4)
-        GridItem.Create(item2, xs = Grid.Width.create 4)
-        GridItem.Create(item3, xs = Grid.Width.create 4)
+        GridItem.create(item1, xs = Grid.Width.create 4)
+        GridItem.create(item2, xs = Grid.Width.create 4)
+        GridItem.create(item3, xs = Grid.Width.create 4)
     ],
     spacing = Grid.GutterSpacing.create 10 // see here
 )"""
@@ -183,108 +180,78 @@ Grid.Create(
 
     let content =
       div [] [
-        Body1.Div("Justify: Start", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Grid.Create(
+        Body1.div ("Justify: Start", attrs = [ Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.FlexStart
+          justify = JustifyContent.flexStart
         )
 
-        Body1.Div(
-          "Justify: Center",
-          attrs = [
-            Margin.toClasses Margin.Top.medium |> cls
-            Margin.toClasses Margin.Bottom.extraSmall |> cls
-          ]
-        )
-        Grid.Create(
+        Body1.div ("Justify: Center", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.Center
+          justify = JustifyContent.center
         )
 
-        Body1.Div(
-          "Justify: End",
-          attrs = [
-            Margin.toClasses Margin.Top.medium |> cls
-            Margin.toClasses Margin.Bottom.extraSmall |> cls
-          ]
-        )
-        Grid.Create(
+        Body1.div ("Justify: End", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.FlexEnd
+          justify = JustifyContent.flexEnd
         )
 
-        Body1.Div(
-          "Justify: Space Between",
-          attrs = [
-            Margin.toClasses Margin.Top.medium |> cls
-            Margin.toClasses Margin.Bottom.extraSmall |> cls
-          ]
-        )
-        Grid.Create(
+        Body1.div ("Justify: Space Between", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.SpaceBetween
+          justify = JustifyContent.spaceBetween
         )
 
-        Body1.Div(
-          "Justify: Space Around",
-          attrs = [
-            Margin.toClasses Margin.Top.medium |> cls
-            Margin.toClasses Margin.Bottom.extraSmall |> cls
-          ]
-        )
-        Grid.Create(
+        Body1.div ("Justify: Space Around", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.SpaceAround
+          justify = JustifyContent.spaceAround
         )
 
-        Body1.Div(
-          "Justify: Space Evenly",
-          attrs = [
-            Margin.toClasses Margin.Top.medium |> cls
-            Margin.toClasses Margin.Bottom.extraSmall |> cls
-          ]
-        )
-        Grid.Create(
+        Body1.div ("Justify: Space Evenly", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        Grid.create (
           [
-            GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
-            GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
+            GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.SpaceEvenly
+          justify = JustifyContent.spaceEvenly
         )
       ]
 
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(item1, xs = Grid.Width.create 3)
-        GridItem.Create(item2, xs = Grid.Width.create 3)
+        GridItem.create(item1, xs = Grid.Width.create 3)
+        GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.Center // see here
+    justify = JustifyContent.center // see here
 )
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(item1, xs = Grid.Width.create 3)
-        GridItem.Create(item2, xs = Grid.Width.create 3)
+        GridItem.create(item1, xs = Grid.Width.create 3)
+        GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.SpaceBetween // see here
+    justify = JustifyContent.spaceBetween // see here
 )"""
 
     Helpers.codeSampleSection "Justify Content" description content code
@@ -294,30 +261,30 @@ Grid.Create(
       Helpers.bodyText "Use FlexBreak to force items onto a new row without changing their width."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 4)
+          GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 4)
 
-          FlexBreak.Create()
+          FlexBreak.create ()
 
-          GridItem.Create(demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 4)
-          GridItem.Create(demoBox (View.Const "Item 3") BrandColor.Tertiary, xs = Grid.Width.create 4)
-          GridItem.Create(demoBox (View.Const "Item 4") BrandColor.Primary, xs = Grid.Width.create 4)
+          GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 4)
+          GridItem.create (demoBox (View.Const "Item 3") BrandColor.Tertiary, xs = Grid.Width.create 4)
+          GridItem.create (demoBox (View.Const "Item 4") BrandColor.Primary, xs = Grid.Width.create 4)
         ]
       )
 
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(item1, xs = Grid.Width.create 4)
+        GridItem.create(item1, xs = Grid.Width.create 4)
 
-        FlexBreak.Create() // see here
+        FlexBreak.create() // see here
 
-        GridItem.Create(item2, xs = Grid.Width.create 4)
-        GridItem.Create(item3, xs = Grid.Width.create 4)
-        GridItem.Create(item4, xs = Grid.Width.create 4)
+        GridItem.create(item2, xs = Grid.Width.create 4)
+        GridItem.create(item3, xs = Grid.Width.create 4)
+        GridItem.create(item4, xs = Grid.Width.create 4)
     ]
 )"""
 
@@ -328,29 +295,26 @@ Grid.Create(
       Helpers.bodyText "Grids can be nested inside grid items for complex layouts."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Container.Create(
+          GridItem.create (
+            Container.create (
               [
-                Body1.Div(
+                Body1.div (
                   "Outer Grid - Left Column",
-                  attrs = [
-                    Margin.toClasses Margin.Bottom.extraSmall |> cls
-                    Attr.Style "color" "var(--palette-text-primary)"
-                  ]
+                  attrs = [ Margin.Bottom.extraSmall; Attr.Style "color" "var(--palette-text-primary)" ]
                 )
-                Grid.Create(
+                Grid.create (
                   [
-                    GridItem.Create(
+                    GridItem.create (
                       demoBox (View.Const "Nested 1") BrandColor.Primary,
                       xs = Grid.Width.create 6
                     )
-                    GridItem.Create(
+                    GridItem.create (
                       demoBox (View.Const "Nested 2") BrandColor.Secondary,
                       xs = Grid.Width.create 6
                     )
-                    GridItem.Create(
+                    GridItem.create (
                       demoBox (View.Const "Nested 3") BrandColor.Tertiary,
                       xs = Grid.Width.create 12
                     )
@@ -363,15 +327,12 @@ Grid.Create(
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            Container.Create(
+          GridItem.create (
+            Container.create (
               [
-                Body1.Div(
+                Body1.div (
                   "Outer Grid - Right Column",
-                  attrs = [
-                    Margin.toClasses Margin.Bottom.extraSmall |> cls
-                    Attr.Style "color" "var(--palette-text-primary)"
-                  ]
+                  attrs = [ Margin.Bottom.extraSmall; Attr.Style "color" "var(--palette-text-primary)" ]
                 )
                 demoBox (View.Const "Full Height Item") BrandColor.Primary
               ]
@@ -386,20 +347,20 @@ Grid.Create(
     let code =
       """open Weave
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(
-            Grid.Create( // see here
+        GridItem.create(
+            Grid.create( // see here
                 [
-                    GridItem.Create(nested1, xs = Grid.Width.create 6)
-                    GridItem.Create(nested2, xs = Grid.Width.create 6)
-                    GridItem.Create(nested3, xs = Grid.Width.create 12)
+                    GridItem.create(nested1, xs = Grid.Width.create 6)
+                    GridItem.create(nested2, xs = Grid.Width.create 6)
+                    GridItem.create(nested3, xs = Grid.Width.create 12)
                 ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
         )
-        GridItem.Create(
+        GridItem.create(
             sidebarContent,
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -415,50 +376,50 @@ Grid.Create(
 
     let card title description =
       div [
-        Padding.toClasses Padding.All.medium |> cls
+        Padding.All.medium
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
         Attr.Style "border" "1px solid var(--palette-divider)"
-        BorderRadius.toClass BorderRadius.All.medium |> cl
+        BorderRadius.All.medium
         Attr.Style "height" "100%"
       ] [
-        H5.Div(View.Const title, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Body1.Div(View.Const description)
+        H5.div (View.Const title, attrs = [ Margin.Bottom.extraSmall ])
+        Body1.div (View.Const description)
       ]
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             card "Feature 1" "Description of the first feature with some example text.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             card "Feature 2" "Description of the second feature with more information.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             card "Feature 3" "Description of the third feature explaining functionality.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             card "Feature 4" "Description of the fourth feature with details.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             card "Feature 5" "Description of the fifth feature and its benefits.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
           )
-          GridItem.Create(
+          GridItem.create (
             card "Feature 6" "Description of the sixth feature with advantages.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
@@ -475,23 +436,23 @@ open WebSharper.UI.Html
 
 let card title description =
     div [
-        Padding.toClasses Padding.All.medium |> cls
+        Padding.All.medium
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
-        BorderRadius.toClass BorderRadius.All.medium |> cl
+        BorderRadius.All.medium
     ] [
-        H5.Div(View.Const title)
-        Body1.Div(View.Const description)
+        H5.div(View.Const title)
+        Body1.div(View.Const description)
     ]
 
-Grid.Create(
+Grid.create(
     [
-        GridItem.Create(
+        GridItem.create(
             card "Feature 1" "First feature description.",
             xs = Grid.Width.create 12, // see here
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
         )
-        GridItem.Create(
+        GridItem.create(
             card "Feature 2" "Second feature description.",
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
@@ -503,12 +464,12 @@ Grid.Create(
     Helpers.codeSampleSection "Card Layout" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Grid"
-        Body1.Div(
+        Body1.div (
           "The Grid component uses a 12-column system to create flexible, responsive layouts. Items can span different numbers of columns at different breakpoints.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -528,5 +489,5 @@ Grid.Create(
         Helpers.divider ()
         cardLayoutExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

@@ -50,7 +50,7 @@ open ChipSet
 [<JavaScript>]
 type ChipSet =
 
-  static member Create
+  static member create
     (
       chips: ChipDef list,
       ?selectedValue: Var<string option>,
@@ -117,7 +117,7 @@ type ChipSet =
         | None, Some c -> Some c
         | None, None -> None
 
-      Chip.Create(
+      Chip.create (
         label = def.Label,
         ?onClick = handleClick,
         ?onClose = handleClose,

@@ -17,29 +17,17 @@ module Pages =
     let isActive = Var.Create false
 
     div [] [
-      div [
-        Attr.Create "data-testid" "fade-in-static"
-        cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
-      ] [ text "Fade in" ]
-      div [
-        Attr.Create "data-testid" "bounce-static"
-        cl (AnimationEmphasis.toClass AnimationEmphasis.Bounce)
-      ] [ text "Bounce" ]
+      div [ Attr.Create "data-testid" "fade-in-static"; AnimationEntrance.fadeIn ] [ text "Fade in" ]
+      div [ Attr.Create "data-testid" "bounce-static"; AnimationEmphasis.bounce ] [ text "Bounce" ]
       div [
         Attr.Create "data-testid" "pulse-hover"
-        cls [
-          AnimationEmphasis.toClass AnimationEmphasis.Pulse
-          AnimationOn.toClass AnimationOn.Hover
-        ]
+        AnimationEmphasis.pulse
+        AnimationOn.hover
       ] [ text "Pulse on hover" ]
-      div [
-        Attr.Create "data-testid" "suppress-container"
-        cl (AnimationKind.toClass AnimationKind.Suppress)
-      ] [
-        div [
-          Attr.Create "data-testid" "suppress-child"
-          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
-        ] [ text "Suppressed child" ]
+      div [ Attr.Create "data-testid" "suppress-container"; AnimationKind.suppress ] [
+        div [ Attr.Create "data-testid" "suppress-child"; AnimationEntrance.fadeIn ] [
+          text "Suppressed child"
+        ]
       ]
       Button.create (
         text "Toggle Show",
@@ -64,130 +52,116 @@ module Pages =
       div [] [
         div [
           Attr.Create "data-testid" "stagger-1"
-          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
-          Attr.Class(AnimationDelay.stagger 1)
+          AnimationEntrance.fadeIn
+          AnimationDelay.stagger 1
         ] [ text "Stagger 1" ]
         div [
           Attr.Create "data-testid" "stagger-2"
-          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
-          Attr.Class(AnimationDelay.stagger 2)
+          AnimationEntrance.fadeIn
+          AnimationDelay.stagger 2
         ] [ text "Stagger 2" ]
         div [
           Attr.Create "data-testid" "stagger-3"
-          cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
-          Attr.Class(AnimationDelay.stagger 3)
+          AnimationEntrance.fadeIn
+          AnimationDelay.stagger 3
         ] [ text "Stagger 3" ]
       ]
     ]
 
   let private checkboxPage () =
     div [] [
-      Checkbox.Create(Var.Create false, View.Const "Default Checkbox")
-      Checkbox.Create(Var.Create true, View.Const "Checked Checkbox")
-      Checkbox.Create(Var.Create false, View.Const "Disabled Checkbox", enabled = View.Const false)
-      Checkbox.Create(
-        Var.Create false,
-        View.Const "Small",
-        attrs = [ Checkbox.Size.toClass Checkbox.Size.Small |> cl ]
-      )
-      Checkbox.Create(
-        Var.Create false,
-        View.Const "Large",
-        attrs = [ Checkbox.Size.toClass Checkbox.Size.Large |> cl ]
-      )
+      Checkbox.create (Var.Create false, View.Const "Default Checkbox")
+      Checkbox.create (Var.Create true, View.Const "Checked Checkbox")
+      Checkbox.create (Var.Create false, View.Const "Disabled Checkbox", enabled = View.Const false)
+      Checkbox.create (Var.Create false, View.Const "Small", attrs = [ Checkbox.Size.small ])
+      Checkbox.create (Var.Create false, View.Const "Large", attrs = [ Checkbox.Size.large ])
     ]
 
   let private radioPage () =
     let selected = Var.Create "A"
 
     div [] [
-      Radio.Create(selected, "A", displayText = View.Const "Option A")
-      Radio.Create(selected, "B", displayText = View.Const "Option B")
-      Radio.Create(selected, "C", displayText = View.Const "Disabled Option", enabled = View.Const false)
+      Radio.create (selected, "A", displayText = View.Const "Option A")
+      Radio.create (selected, "B", displayText = View.Const "Option B")
+      Radio.create (selected, "C", displayText = View.Const "Disabled Option", enabled = View.Const false)
     ]
 
   let private switchPage () =
     div [] [
-      Switch.Create(Var.Create false, content = text "Off Switch")
-      Switch.Create(Var.Create true, content = text "On Switch")
-      Switch.Create(Var.Create false, content = text "Disabled Switch", enabled = View.Const false)
+      Switch.create (Var.Create false, content = text "Off Switch")
+      Switch.create (Var.Create true, content = text "On Switch")
+      Switch.create (Var.Create false, content = text "Disabled Switch", enabled = View.Const false)
     ]
 
   let private fieldPage () =
     div [] [
-      Field.Create(Var.Create "", variant = Field.Variant.Standard, labelText = View.Const "Standard Field")
-      Field.Create(
+      Field.create (Var.Create "", variant = Field.Variant.Standard, labelText = View.Const "Standard Field")
+      Field.create (
         Var.Create "some value",
         variant = Field.Variant.Outlined,
         labelText = View.Const "Outlined Field"
       )
-      Field.Create(
+      Field.create (
         Var.Create "",
         variant = Field.Variant.Standard,
         labelText = View.Const "Disabled Field",
         enabled = View.Const false
       )
-      Field.Create(
+      Field.create (
         Var.Create "",
         variant = Field.Variant.Standard,
         labelText = View.Const "With Help",
         showHelpText = View.Const true,
         helpText = text "Help text content"
       )
-      Field.Create(
+      Field.create (
         Var.Create "not-an-email",
         variant = Field.Variant.Outlined,
         labelText = View.Const "Email",
         showHelpText = View.Const true,
         helpText =
-          FieldHelpText.Create(
+          FieldHelpText.create (
             text "Invalid email address",
-            attrs = [
-              Attr.Create "id" "email-error"
-              Field.HelpTextColor.toClass BrandColor.Error |> cl
-            ]
+            attrs = [ Attr.Create "id" "email-error"; Field.HelpTextColor.error ]
           ),
         inputAttrs = [
           Attr.ariaInvalid (View.Const true)
           Attr.Create "aria-describedby" "email-error"
         ],
-        attrs = [ Field.Color.toClass BrandColor.Error |> cl ]
+        attrs = [ Field.Color.error ]
       )
     ]
 
   let private numericFieldPage () =
     div [] [
-      NumericField.Create(
+      NumericField.create (
         Var.Create 5,
         variant = Field.Variant.Standard,
         labelText = View.Const "Standard Numeric",
         showSpinButtons = View.Const true
       )
-      NumericField.Create(
+      NumericField.create (
         Var.Create 10,
         variant = Field.Variant.Outlined,
         labelText = View.Const "Outlined Numeric",
         showSpinButtons = View.Const true
       )
-      NumericField.Create(
+      NumericField.create (
         Var.Create 150,
         variant = Field.Variant.Outlined,
         labelText = View.Const "Max 100",
         max = 100,
         showHelpText = View.Const true,
         helpText =
-          FieldHelpText.Create(
+          FieldHelpText.create (
             text "Value exceeds maximum",
-            attrs = [
-              Attr.Create "id" "numeric-error"
-              Field.HelpTextColor.toClass BrandColor.Error |> cl
-            ]
+            attrs = [ Attr.Create "id" "numeric-error"; Field.HelpTextColor.error ]
           ),
         inputAttrs = [
           Attr.ariaInvalid (View.Const true)
           Attr.Create "aria-describedby" "numeric-error"
         ],
-        attrs = [ Field.Color.toClass BrandColor.Error |> cl ]
+        attrs = [ Field.Color.error ]
       )
     ]
 
@@ -203,31 +177,35 @@ module Pages =
       |> View.Const
 
     div [] [
-      Select.Create(
+      Select.create (
         items,
         Var.Create<string option> None,
         labelText = View.Const "Single Select",
         placeholder = View.Const "Choose a fruit"
       )
-      Select.Create(
+      Select.create (
         items,
         Var.Create<string option>(Some "Apple"),
         labelText = View.Const "With Value",
         clearable = View.Const true
       )
-      Select.Create(
+      Select.create (
         items,
         Var.Create<string option> None,
         labelText = View.Const "Disabled Select",
         enabled = View.Const false
       )
-      Select.Create(
+      Select.create (
         items,
         Var.Create<string option> None,
         labelText = View.Const "Searchable",
         searchable = true
       )
-      Select.CreateMulti(multiItems, Var.Create(set [ "Red"; "Blue" ]), labelText = View.Const "Multi Select")
+      MultiSelect.create (
+        multiItems,
+        Var.Create(set [ "Red"; "Blue" ]),
+        labelText = View.Const "Multi Select"
+      )
     ]
 
   let private buttonPage () =
@@ -241,7 +219,7 @@ module Pages =
         attrs = [ Button.Variant.filled ]
       )
       IconButton.primary (
-        Icon.Create(Icon.UiActions UiActions.Home),
+        Icon.create (Icon.UiActions UiActions.Home),
         (fun () -> ()),
         attrs = [ Attr.Create "aria-label" "home"; Button.Variant.filled ]
       )
@@ -255,11 +233,11 @@ module Pages =
     isOpen.View
     |> Doc.BindView(fun visible ->
       if visible then
-        Dialog.Create(
-          DialogTitle.Create(text "Dialog Title"),
-          DialogContent.Create(
+        Dialog.create (
+          DialogTitle.create (text "Dialog Title"),
+          DialogContent.create (
             div [] [
-              Body1.Div("Dialog content goes here.")
+              Body1.div ("Dialog content goes here.")
               div [] [
                 Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
               ]
@@ -271,11 +249,11 @@ module Pages =
         Doc.Empty)
 
   let private dialogForcePage () =
-    Dialog.Create(
-      DialogTitle.Create(text "Force Dialog Title"),
-      DialogContent.Create(
+    Dialog.create (
+      DialogTitle.create (text "Force Dialog Title"),
+      DialogContent.create (
         div [] [
-          Body1.Div("You must complete this action.")
+          Body1.div ("You must complete this action.")
           div [] [
             Button.create (text "Confirm", (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
@@ -296,11 +274,11 @@ module Pages =
       isOpen.View
       |> Doc.BindView(fun visible ->
         if visible then
-          Dialog.Create(
-            DialogTitle.Create(text "Triggered Dialog"),
-            DialogContent.Create(
+          Dialog.create (
+            DialogTitle.create (text "Triggered Dialog"),
+            DialogContent.create (
               div [] [
-                Body1.Div("Dialog opened by button.")
+                Body1.div ("Dialog opened by button.")
                 div [] [
                   Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
                 ]
@@ -333,16 +311,16 @@ module Pages =
       ]
       |> View.Const
 
-    Tabs.Create(tabs)
+    Tabs.create (tabs)
 
   let private dropdownPage () =
     div [] [
-      Dropdown.Create(
+      Dropdown.create (
         text "Open Menu",
         [
-          DropdownItem.Create(text "Item 1", fun () -> ())
-          DropdownItem.Create(text "Item 2", fun () -> ())
-          DropdownItem.Create(text "Disabled Item", (fun () -> ()), enabled = View.Const false)
+          DropdownItem.create (text "Item 1", fun () -> ())
+          DropdownItem.create (text "Item 2", fun () -> ())
+          DropdownItem.create (text "Disabled Item", (fun () -> ()), enabled = View.Const false)
         ]
       )
       Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
@@ -353,25 +331,34 @@ module Pages =
     let expanded2 = Var.Create false
     let expanded3 = Var.Create false
 
-    ExpansionPanelContainer.Create(
+    ExpansionPanelContainer.create (
       [
-        ExpansionPanel.Create(
-          ExpansionPanelHeader.CreateWithDefaultIcons(text "Expanded Panel", expanded1),
-          ExpansionPanelContent.Create(Body1.Div("Expanded content")),
+        ExpansionPanel.create (
+          ExpansionPanelHeader.create (
+            text "Expanded Panel",
+            expanded1,
+            icon = ExpansionPanelHeader.defaultIcon expanded1
+          ),
+          ExpansionPanelContent.create (Body1.div ("Expanded content")),
           expanded = expanded1
         )
-        ExpansionPanel.Create(
-          ExpansionPanelHeader.CreateWithDefaultIcons(text "Collapsed Panel", expanded2),
-          ExpansionPanelContent.Create(Body1.Div("Collapsed content")),
+        ExpansionPanel.create (
+          ExpansionPanelHeader.create (
+            text "Collapsed Panel",
+            expanded2,
+            icon = ExpansionPanelHeader.defaultIcon expanded2
+          ),
+          ExpansionPanelContent.create (Body1.div ("Collapsed content")),
           expanded = expanded2
         )
-        ExpansionPanel.Create(
-          ExpansionPanelHeader.CreateWithDefaultIcons(
+        ExpansionPanel.create (
+          ExpansionPanelHeader.create (
             text "Focus Color Panel",
             expanded3,
-            attrs = [ ExpansionPanel.FocusColor.toClass BrandColor.Error |> cl ]
+            icon = ExpansionPanelHeader.defaultIcon expanded3,
+            attrs = [ ExpansionPanel.FocusColor.error ]
           ),
-          ExpansionPanelContent.Create(Body1.Div("Focus color content")),
+          ExpansionPanelContent.create (Body1.div ("Focus color content")),
           expanded = expanded3
         )
       ]
@@ -379,94 +366,63 @@ module Pages =
 
   let private alertPage () =
     div [] [
-      Alert.Create(
-        text "Success alert message",
-        attrs = [
-          Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Success)
-          |> Attr.bindOption cl
-        ]
-      )
-      Alert.Create(
-        text "Error alert message",
-        attrs = [
-          Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Error)
-          |> Attr.bindOption cl
-        ]
-      )
-      Alert.Create(
-        text "Warning alert message",
-        attrs = [
-          Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Warning)
-          |> Attr.bindOption cl
-        ]
-      )
-      Alert.Create(
-        text "Info alert message",
-        attrs = [
-          Alert.AlertColor.toClass (Alert.AlertColor.BrandColor BrandColor.Info)
-          |> Attr.bindOption cl
-        ]
-      )
+      Alert.create (text "Success alert message", attrs = [ Alert.Color.success ])
+      Alert.create (text "Error alert message", attrs = [ Alert.Color.error ])
+      Alert.create (text "Warning alert message", attrs = [ Alert.Color.warning ])
+      Alert.create (text "Info alert message", attrs = [ Alert.Color.info ])
     ]
 
   let private appbarPage () =
     div [] [
-      AppBar.Create(
-        div [] [ text "App Bar Title" ],
-        position = AppBar.Position.Static,
-        attrs = [ Attr.Create "aria-label" "Static app bar" ]
-      )
+      AppBar.create (div [] [ text "App Bar Title" ], attrs = [ Attr.Create "aria-label" "Static app bar" ])
     ]
 
   let private drawerPage () =
     let isOpen = Var.Create true
 
-    DrawerContainer.Create(
-      mainContent = div [] [ Body1.Div("Main content area") ],
+    DrawerContainer.create (
+      mainContent = div [] [ Body1.div ("Main content area") ],
       leftDrawer =
-        Drawer.CreatePersistent(
+        Drawer.create (
           div [] [
-            WeaveList.Create(
+            WeaveList.create (
               [
-                ListItem.Create(text "Nav Item 1")
-                ListItem.Create(text "Nav Item 2")
-                ListItem.Create(text "Nav Item 3")
+                ListItem.create (text "Nav Item 1")
+                ListItem.create (text "Nav Item 2")
+                ListItem.create (text "Nav Item 3")
               ]
             )
           ],
           isOpen.View,
+          variant = Drawer.Variant.Persistent,
           attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
         )
     )
 
   let private linkPage () =
     div [] [
-      Link.Create(text "Default Link", href = "#")
-      Link.Create(text "Disabled Link", href = "#", enabled = View.Const false)
-      Link.Create(text "Always Underline", href = "#", underline = Link.Underline.Always)
+      Link.create (text "Default Link", href = "#")
+      Link.create (text "Disabled Link", href = "#", enabled = View.Const false)
+      Link.create (text "Always Underline", href = "#", attrs = [ Link.Underline.always ])
     ]
 
   let private listPage () =
-    WeaveList.Create(
+    WeaveList.create (
       [
-        ListItem.Create(text "Item 1", value = "1")
-        ListItem.Create(text "Item 2", value = "2")
-        ListItem.Create(text "Disabled Item", value = "3", disabled = View.Const true)
+        ListItem.create (text "Item 1", value = "1")
+        ListItem.create (text "Item 2", value = "2")
+        ListItem.create (text "Disabled Item", value = "3", disabled = View.Const true)
       ]
     )
 
   let private chipPage () =
     div [] [
-      Chip.Create(text "Default Chip", attrs = [ Chip.Variant.toClass Chip.Variant.Filled |> cl ])
-      Chip.Create(
-        text "Deletable Chip",
-        onClose = (fun () -> ()),
-        attrs = [ Chip.Variant.toClass Chip.Variant.Outlined |> cl ]
-      )
+      Chip.create (text "Default Chip", attrs = [ Chip.Variant.filled ])
+      Chip.create (text "Deletable Chip", onClose = (fun () -> ()), attrs = [ Chip.Variant.outlined ])
     ]
 
   let private chipsetPage () =
-    ChipSet.Create(
+    ChipSet.create (
       [
         {
           ChipSet.ChipDef.Label = text "Chip A"
@@ -489,18 +445,18 @@ module Pages =
 
   let private buttonmenuPage () =
     div [] [
-      ButtonMenu.Create(
+      ButtonMenu.create (
         text "Menu",
         [
-          DropdownItem.Create(text "Action 1", fun () -> ())
-          DropdownItem.Create(text "Action 2", fun () -> ())
+          DropdownItem.create (text "Action 1", fun () -> ())
+          DropdownItem.create (text "Action 2", fun () -> ())
         ]
       )
-      ButtonMenu.Create(
+      ButtonMenu.create (
         text "Horizontal Menu",
         [
-          DropdownItem.Create(text "Left 1", fun () -> ())
-          DropdownItem.Create(text "Left 2", fun () -> ())
+          DropdownItem.create (text "Left 1", fun () -> ())
+          DropdownItem.create (text "Left 2", fun () -> ())
         ],
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
@@ -509,7 +465,7 @@ module Pages =
     ]
 
   let private buttongroupPage () =
-    ButtonGroup.Create(
+    ButtonGroup.create (
       [
         Button.create (text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
         Button.create (text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
@@ -519,7 +475,7 @@ module Pages =
 
   let private tooltipPage () =
     div [] [
-      Tooltip.Create(
+      Tooltip.create (
         Button.create (text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
         text "Tooltip text"
       )

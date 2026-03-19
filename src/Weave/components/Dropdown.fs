@@ -80,7 +80,7 @@ open Dropdown
 
 [<JavaScript>]
 type Dropdown =
-  static member Create
+  static member create
     (
       buttonContents: Doc,
       items: Doc seq,
@@ -223,7 +223,7 @@ type Dropdown =
 
 [<JavaScript>]
 type DropdownItem =
-  static member Create(innerContents, onClick, ?enabled, ?attrs) =
+  static member create(innerContents, onClick, ?enabled, ?attrs) =
     Button.create (
       innerContents,
       onClick,
@@ -231,7 +231,7 @@ type DropdownItem =
       attrs = [
         Button.Variant.text
         Button.Width.full
-        BorderRadius.toClass BorderRadius.All.none |> cl
+        BorderRadius.All.none
 
         yield! attrs |> Option.defaultValue []
       ]
@@ -239,13 +239,13 @@ type DropdownItem =
 
 [<JavaScript>]
 type NestedDropdown =
-  static member Create
+  static member create
     (buttonContents, items, ?isOpen, ?openOn, ?anchorOrigin, ?transformOrigin, ?enabled, ?buttonAttrs, ?attrs)
     =
     let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.TopRight)
     let openOn = defaultArg openOn (View.Const OpenOn.Click)
 
-    Dropdown.Create(
+    Dropdown.create (
       buttonContents,
       items,
       ?isOpen = isOpen,
@@ -256,7 +256,7 @@ type NestedDropdown =
       buttonAttrs = [
         Button.Variant.text
         Button.Width.full
-        BorderRadius.toClass BorderRadius.All.none |> cl
+        BorderRadius.All.none
 
         yield! buttonAttrs |> Option.defaultValue []
       ],

@@ -7,47 +7,29 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Alert =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Variant =
-    | Standard
-    | Outlined
-    | Filled
 
   module Variant =
 
-    let toClass variant =
-      match variant with
-      | Variant.Standard -> Css.``weave-alert--standard``
-      | Variant.Outlined -> Css.``weave-alert--outlined``
-      | Variant.Filled -> Css.``weave-alert--filled``
+    let standard = cl Css.``weave-alert--standard``
+    let outlined = cl Css.``weave-alert--outlined``
+    let filled = cl Css.``weave-alert--filled``
 
-  [<RequireQualifiedAccess; Struct>]
-  type AlertColor =
-    | Default
-    | BrandColor of color: BrandColor
+  module Color =
 
-  module AlertColor =
+    let primary = cl Css.``weave-alert--primary``
+    let secondary = cl Css.``weave-alert--secondary``
+    let tertiary = cl Css.``weave-alert--tertiary``
+    let error = cl Css.``weave-alert--error``
+    let warning = cl Css.``weave-alert--warning``
+    let success = cl Css.``weave-alert--success``
+    let info = cl Css.``weave-alert--info``
 
-    let toClass color =
-      match color with
-      | AlertColor.Default -> None
-      | AlertColor.BrandColor bc ->
-        match bc with
-        | BrandColor.Primary -> Some Css.``weave-alert--primary``
-        | BrandColor.Secondary -> Some Css.``weave-alert--secondary``
-        | BrandColor.Tertiary -> Some Css.``weave-alert--tertiary``
-        | BrandColor.Error -> Some Css.``weave-alert--error``
-        | BrandColor.Warning -> Some Css.``weave-alert--warning``
-        | BrandColor.Success -> Some Css.``weave-alert--success``
-        | BrandColor.Info -> Some Css.``weave-alert--info``
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Alert =
 
-  static member Create(content: Doc, ?icon: Doc, ?onClose: unit -> unit, ?closeIcon: Doc, ?attrs: Attr list) =
+  static member create(content: Doc, ?icon: Doc, ?onClose: unit -> unit, ?closeIcon: Doc, ?attrs: Attr list) =
 
     let attrs = defaultArg attrs List.empty
 
@@ -59,7 +41,7 @@ type Alert =
     let closeDoc =
       match onClose with
       | Some callback ->
-        let closeIconDoc = defaultArg closeIcon (H6.Span("\u00D7"))
+        let closeIconDoc = defaultArg closeIcon (H6.span ("\u00D7"))
 
         IconButton.create (
           closeIconDoc,

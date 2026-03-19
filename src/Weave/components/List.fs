@@ -31,15 +31,13 @@ module WeaveList =
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-list-item--primary``
-      | BrandColor.Secondary -> Css.``weave-list-item--secondary``
-      | BrandColor.Tertiary -> Css.``weave-list-item--tertiary``
-      | BrandColor.Error -> Css.``weave-list-item--error``
-      | BrandColor.Warning -> Css.``weave-list-item--warning``
-      | BrandColor.Success -> Css.``weave-list-item--success``
-      | BrandColor.Info -> Css.``weave-list-item--info``
+    let primary = cl Css.``weave-list-item--primary``
+    let secondary = cl Css.``weave-list-item--secondary``
+    let tertiary = cl Css.``weave-list-item--tertiary``
+    let error = cl Css.``weave-list-item--error``
+    let warning = cl Css.``weave-list-item--warning``
+    let success = cl Css.``weave-list-item--success``
+    let info = cl Css.``weave-list-item--info``
 
   /// <summary>
   /// Configuration record for a list item. Constructed via ListItem.Create.
@@ -81,7 +79,7 @@ type WeaveList =
   /// <param name="readOnly">When true, items display their state but do not respond to clicks.</param>
   /// <param name="bordered">When true, draws a border around the list. Defaults to true.</param>
   /// <param name="attrs">Additional HTML attributes.</param>
-  static member Create
+  static member create
     (
       children: ListChild list,
       ?selectedValue: Var<string option>,
@@ -261,7 +259,7 @@ type ListItem =
   /// <param name="expanded">Reactive variable controlling nested list expansion. Created automatically if omitted.</param>
   /// <param name="disabled">When true, the item is non-interactive and visually dimmed.</param>
   /// <param name="attrs">Additional HTML attributes applied to the item row.</param>
-  static member Create
+  static member create
     (
       content: Doc,
       ?value: string,
@@ -293,7 +291,7 @@ type ListSubheader =
   /// <param name="content">The subheader content.</param>
   /// <param name="inset">When true, aligns the subheader with items that have icons (adds left padding).</param>
   /// <param name="attrs">Additional HTML attributes.</param>
-  static member Create(content: Doc, ?inset: bool, ?attrs: Attr list) : ListChild =
+  static member create(content: Doc, ?inset: bool, ?attrs: Attr list) : ListChild =
     let attrs = defaultArg attrs []
     let inset = defaultArg inset false
 

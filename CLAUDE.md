@@ -50,6 +50,18 @@ dotnet test tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj
 dotnet test tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj
 ```
 
+**Run E2E accessibility tests:**
+
+```bash
+dotnet test tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj
+```
+
+**Build the E2E site** (must be verified separately — the E2E test project compiles independently of the site it hosts):
+
+```bash
+dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj
+```
+
 **Check/apply code formatting** (Fantomas):
 
 ```bash
@@ -76,9 +88,20 @@ src/
 tests/
   Weave.Tests.Unit/       # Expecto unit tests
   Weave.Tests.Rendering/  # Playwright layout tests + HTML fixtures
+  Weave.Tests.E2E/        # Playwright E2E + axe-core accessibility tests
+    accessibility/        # One test file per component
+    TestServerFixture.fs  # Shared xUnit fixture that hosts the E2E site
+  Weave.Tests.E2E.Site/   # WebSharper SPA served to E2E tests — compiled separately!
+    Pages.fs              # One page function per component (uses same camelCase Weave API)
 build/
   Build.fs                # FAKE build targets
 ```
+
+> **Important:** `Weave.Tests.E2E.Site` is **not** a dependency of `Weave.Tests.E2E` at compile time — the test runner launches it as a subprocess at runtime. This means `dotnet build tests/Weave.Tests.E2E/...` will succeed even when `Pages.fs` has errors. **Always build the site project explicitly** after any API changes:
+>
+> ```bash
+> dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj
+> ```
 
 **Compilation order matters** in F# — files in `.fsproj` must be ordered so dependencies come first. New components go after `Core.fs` and any components they compose.
 
@@ -159,8 +182,10 @@ When asked to scaffold a new component, use the `/scaffold-component` skill — 
 8. `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` — Playwright layout tests
 9. `tests/Weave.Tests.Rendering/fixtures/{name}.html` — static HTML fixture using compiled CSS
 10. `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` — axe-core scan + keyboard/focus tests
-11. Register E2E page in `tests/Weave.Tests.E2E.Site/Pages.fs`
-12. Run `dotnet fantomas .` to format
+11. Register E2E page in `tests/Weave.Tests.E2E.Site/Pages.fs` (camelCase Weave API, `Var.Create` stays PascalCase as it is WebSharper's)
+12. Verify: `dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj` (0 errors) — this project is **not** auto-verified by building the test project
+13. Verify: `dotnet build src/Weave.Docs/Weave.Docs.fsproj` (0 errors)
+14. Run `dotnet fantomas .` to format
 
 ## Testing Patterns
 

@@ -18,29 +18,24 @@ module AppBarExamples =
          to override them. The default position is Position.Fixed."
 
     let preview =
-      AppBar.Create(
+      AppBar.create (
         div [
-          cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Horizontal.medium
-            yield! Padding.toClasses Padding.Vertical.small
-          ]
-        ] [ H6.Div("My Application") ],
-        position = AppBar.Position.Static,
+          Flex.Flex.allSizes
+          AlignItems.center
+          Padding.Horizontal.medium
+          Padding.Vertical.small
+        ] [ H6.div ("My Application") ],
         attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
       )
 
     let code =
-      """AppBar.Create(
+      """AppBar.create(
     div [
-        cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Horizontal.medium
-            yield! Padding.toClasses Padding.Vertical.small
-        ]
-    ] [ H6.Div("My Application") ],
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Horizontal.medium
+        Padding.Vertical.small
+    ] [ H6.div("My Application") ],
     attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
 )
 // Default position is Position.Fixed — sticks to the top of the viewport."""
@@ -56,25 +51,22 @@ module AppBarExamples =
 
     let toolbarInner (title: string) =
       div [
-        cls [
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          yield! Padding.toClasses Padding.Horizontal.medium
-          yield! Padding.toClasses Padding.Vertical.small
-        ]
-      ] [ H6.Div(title) ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Horizontal.medium
+        Padding.Vertical.small
+      ] [ H6.div (title) ]
 
     let filler () =
-      div [ Padding.toClasses Padding.All.small |> cls ] [
-        yield! [ 1..10 ] |> List.map (fun i -> Body2.Div(sprintf "Content line %d" i))
+      div [ Padding.All.small ] [
+        yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
       ]
 
     // Static: bar scrolls away with content inside a contained scroll box
     let staticPreview =
       div [ Attr.Style "height" "180px"; Attr.Style "overflow-y" "auto" ] [
-        AppBar.Create(
+        AppBar.create (
           toolbarInner "Position.Static",
-          position = AppBar.Position.Static,
           attrs = [ BrandColor.toBackgroundColor BrandColor.Info ]
         )
         filler ()
@@ -83,10 +75,9 @@ module AppBarExamples =
     // Sticky: bar sticks to the top of the scroll container
     let stickyPreview =
       div [ Attr.Style "height" "180px"; Attr.Style "overflow-y" "auto" ] [
-        AppBar.Create(
+        AppBar.create (
           toolbarInner "Position.Sticky",
-          position = AppBar.Position.Sticky,
-          attrs = [ BrandColor.toBackgroundColor BrandColor.Success ]
+          attrs = [ AppBar.Position.sticky; BrandColor.toBackgroundColor BrandColor.Success ]
         )
         filler ()
       ]
@@ -94,54 +85,46 @@ module AppBarExamples =
     // Fixed: bar pinned to top, content scrolls below
     let fixedPreview =
       div [
-        cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ]
+        Flex.Flex.allSizes
+        FlexDirection.Column.allSizes
         Attr.Style "height" "180px"
       ] [
-        AppBar.Create(
+        AppBar.create (
           toolbarInner "Position.Fixed",
-          position = AppBar.Position.Static,
           attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
         )
-        div [
-          Attr.Style "overflow-y" "auto"
-          Attr.Style "flex" "1"
-          Padding.toClasses Padding.All.small |> cls
-        ] [
-          yield! [ 1..10 ] |> List.map (fun i -> Body2.Div(sprintf "Content line %d" i))
+        div [ Attr.Style "overflow-y" "auto"; Attr.Style "flex" "1"; Padding.All.small ] [
+          yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
         ]
       ]
 
     // Bottom: content scrolls above, bar pinned to bottom
     let bottomPreview =
       div [
-        cls [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ]
+        Flex.Flex.allSizes
+        FlexDirection.Column.allSizes
         Attr.Style "height" "180px"
       ] [
-        div [
-          Attr.Style "overflow-y" "auto"
-          Attr.Style "flex" "1"
-          Padding.toClasses Padding.All.small |> cls
-        ] [
-          yield! [ 1..10 ] |> List.map (fun i -> Body2.Div(sprintf "Content line %d" i))
+        div [ Attr.Style "overflow-y" "auto"; Attr.Style "flex" "1"; Padding.All.small ] [
+          yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
         ]
-        AppBar.Create(
+        AppBar.create (
           toolbarInner "Position.Bottom",
-          position = AppBar.Position.Static,
           attrs = [ BrandColor.toBackgroundColor BrandColor.Secondary ]
         )
       ]
 
     let mkCard (title: string) (desc: string) (preview: Doc) =
-      div [ Margin.toClasses Margin.Bottom.small |> cls; Attr.Style "width" "100%" ] [
-        H6.Div(title, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        div [ Margin.toClasses Margin.Bottom.extraSmall |> cls ] [ Helpers.bodyText desc ]
+      div [ Margin.Bottom.small; Attr.Style "width" "100%" ] [
+        H6.div (title, attrs = [ Margin.Bottom.extraSmall ])
+        div [ Margin.Bottom.extraSmall ] [ Helpers.bodyText desc ]
         preview
       ]
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             mkCard
               "Static"
               "Stays in document flow and scrolls away with content. Scroll the preview."
@@ -149,7 +132,7 @@ module AppBarExamples =
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
+          GridItem.create (
             mkCard
               "Sticky"
               "Scrolls with the page until it reaches the top, then sticks. Scroll the preview."
@@ -157,12 +140,12 @@ module AppBarExamples =
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
+          GridItem.create (
             mkCard "Fixed" "Always pinned to the top of the viewport (simulated)." fixedPreview,
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-          GridItem.Create(
+          GridItem.create (
             mkCard "Bottom" "Always pinned to the bottom of the viewport (simulated)." bottomPreview,
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
@@ -173,16 +156,16 @@ module AppBarExamples =
 
     let code =
       """// Static — scrolls away with content
-AppBar.Create(content, position = AppBar.Position.Static)
+AppBar.create(content)
 
 // Sticky — sticks to the top once the page scrolls past it
-AppBar.Create(content, position = AppBar.Position.Sticky)
+AppBar.create(content, position = AppBar.Position.sticky)
 
 // Fixed (default) — always pinned to the top of the viewport
-AppBar.Create(content)
+AppBar.create(content)
 
 // Bottom — always pinned to the bottom of the viewport
-AppBar.Create(content, position = AppBar.Position.Bottom)"""
+AppBar.create(content, position = AppBar.Position.fixedBottom)"""
 
     Helpers.codeSampleSection "Position" description content code
 
@@ -193,48 +176,43 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
          action icons to the right edge while keeping branding anchored left."
 
     let preview =
-      AppBar.Create(
+      AppBar.create (
         div [
-          cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Horizontal.small
-            yield! Padding.toClasses Padding.Vertical.extraSmall
-          ]
+          Flex.Flex.allSizes
+          AlignItems.center
+          Padding.Horizontal.small
+          Padding.Vertical.extraSmall
         ] [
           IconButton.create (
-            Icon.Create(Icon.UiActions UiActions.Menu),
+            Icon.create (Icon.UiActions UiActions.Menu),
             onClick = (fun () -> ()),
-            attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
+            attrs = [ Margin.Right.extraSmall ]
           )
-          H6.Div("My Application")
-          Spacer.Create()
-          IconButton.create (Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
-          IconButton.create (Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
+          H6.div ("My Application")
+          Spacer.create ()
+          IconButton.create (Icon.create (Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
+          IconButton.create (Icon.create (Icon.Social Social.Person), onClick = (fun () -> ()))
         ],
-        position = AppBar.Position.Static,
         attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
       )
 
     let code =
-      """AppBar.Create(
+      """AppBar.create(
     div [
-        cls [
-            Flex.Flex.allSizes
-            AlignItems.toClass AlignItems.Center
-            yield! Padding.toClasses Padding.Horizontal.small
-            yield! Padding.toClasses Padding.Vertical.extraSmall
-        ]
+        Flex.Flex.allSizes
+        AlignItems.center
+        Padding.Horizontal.small
+        Padding.Vertical.extraSmall
     ] [
         IconButton.create(
-          Icon.Create(Icon.UiActions UiActions.Menu),
+          Icon.create(Icon.UiActions UiActions.Menu),
           onClick = (fun () -> ()),
-          attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
+          attrs = [ Margin.Right.extraSmall ]
         )
-        H6.Div("My Application")
-        Spacer.Create()
-        IconButton.create(Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
-        IconButton.create(Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
+        H6.div("My Application")
+        Spacer.create()
+        IconButton.create(Icon.create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
+        IconButton.create(Icon.create(Icon.Social Social.Person), onClick = (fun () -> ()))
     ],
     attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
 )"""
@@ -242,7 +220,7 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
     Helpers.codeSampleSection "Content Composition" description preview code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "App Bar"
         Helpers.bodyText
@@ -255,5 +233,5 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
         Helpers.divider ()
         contentExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

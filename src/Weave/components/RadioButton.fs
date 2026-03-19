@@ -8,32 +8,24 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Radio =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | Small
-    | Medium
-    | Large
-
   module Size =
-    let toClass size =
-      match size with
-      | Size.Small -> Css.``weave-radio--small``
-      | Size.Medium -> Css.``weave-radio--medium``
-      | Size.Large -> Css.``weave-radio--large``
+
+    let small = cl Css.``weave-radio--small``
+    let medium = cl Css.``weave-radio--medium``
+    let large = cl Css.``weave-radio--large``
 
   module Color =
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-radio--primary``
-      | BrandColor.Secondary -> Css.``weave-radio--secondary``
-      | BrandColor.Tertiary -> Css.``weave-radio--tertiary``
-      | BrandColor.Error -> Css.``weave-radio--error``
-      | BrandColor.Warning -> Css.``weave-radio--warning``
-      | BrandColor.Success -> Css.``weave-radio--success``
-      | BrandColor.Info -> Css.``weave-radio--info``
+
+    let primary = cl Css.``weave-radio--primary``
+    let secondary = cl Css.``weave-radio--secondary``
+    let tertiary = cl Css.``weave-radio--tertiary``
+    let error = cl Css.``weave-radio--error``
+    let warning = cl Css.``weave-radio--warning``
+    let success = cl Css.``weave-radio--success``
+    let info = cl Css.``weave-radio--info``
 
   [<RequireQualifiedAccess; Struct>]
   type ContentPlacement =
@@ -42,39 +34,39 @@ module Radio =
     | Left
     | Right
 
-open Radio
 open WebSharper.UI.Server
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Radio =
 
-  static member Create<'T when 'T: equality>
+  static member create<'T when 'T: equality>
     (
       userSelection: Var<'T>,
       value: 'T,
       ?displayText: View<string>,
       ?enabled: View<bool>,
-      ?contentPlacement: View<ContentPlacement>,
+      ?contentPlacement: View<Radio.ContentPlacement>,
       ?attrs: Attr list
     ) =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
 
     let contentPlacement =
-      defaultArg contentPlacement (View.Const ContentPlacement.Right)
+      defaultArg contentPlacement (View.Const Radio.ContentPlacement.Right)
 
     let isSelected = Var.Create false
 
     label [
-      cls [ Css.``weave-radio``; Flex.Inline.allSizes ]
+      cl Css.``weave-radio``
+      Flex.Inline.allSizes
 
       Disabled.disabledClass Css.``weave-radio--disabled`` enabled
 
       Map.ofList [
-        ContentPlacement.Right, FlexDirection.Row.allSizes
-        ContentPlacement.Left, FlexDirection.RowReverse.allSizes
-        ContentPlacement.Top, FlexDirection.ColumnReverse.allSizes
-        ContentPlacement.Bottom, FlexDirection.Column.allSizes
+        Radio.ContentPlacement.Right, Css.``flex-row``
+        Radio.ContentPlacement.Left, Css.``flex-row-reverse``
+        Radio.ContentPlacement.Top, Css.``flex-column-reverse``
+        Radio.ContentPlacement.Bottom, Css.``flex-column``
       ]
       |> Attr.classSelection contentPlacement
 
@@ -99,10 +91,11 @@ type Radio =
       span [ cls [ Css.``weave-radio__span`` ] ] []
       match displayText with
       | Some v ->
-        Body1.Span(
+        Body1.span (
           v,
           attrs = [
-            cls [ Css.``weave-radio__label``; JustifyContent.toClass JustifyContent.Center ]
+            cl Css.``weave-radio__label``
+            JustifyContent.center
             View.not enabled |> Attr.toggleColor Palette.textDisabled
           ]
         )

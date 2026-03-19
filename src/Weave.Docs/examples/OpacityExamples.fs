@@ -12,7 +12,7 @@ open Weave.Icons.MaterialSymbols
 module OpacityExamples =
 
   let private inlineCode (value: string) =
-    Caption.Span(value, attrs = [ Typography.Color.toClass BrandColor.Primary |> cl ])
+    Caption.span (value, attrs = [ Typography.Color.primary ])
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -86,10 +86,8 @@ let full   = Opacity.create 100 |> Opacity.toClass  // weave-opacity-100
 
 // Combine with other attrs
 div [
-    cls [
-        Opacity.create 75 |> Opacity.toClass
-        Padding.toClasses Padding.All.small |> List.head
-    ]
+    Opacity.create 75 |> Opacity.toClass |> cl
+    Padding.All.small
 ] [
     text "75% opacity with padding"
 ]"""
@@ -102,35 +100,22 @@ div [
         "The full opacity scale applied to a colored surface. Each box shows its opacity percentage."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           for level in [ 0; 10; 20; 30; 40; 50; 60; 70; 80; 90; 100 ] do
-            GridItem.Create(
-              div [
-                cls [
-                  Flex.Flex.allSizes
-                  FlexDirection.Column.allSizes
-                  AlignItems.toClass AlignItems.Center
-                ]
-              ] [
+            GridItem.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
                 div [
                   BrandColor.toBackgroundColor BrandColor.Primary
-                  BorderRadius.toClass BorderRadius.All.small |> cl
+                  BorderRadius.All.small
                   Opacity.create level |> Opacity.toClass |> cl
-
-                  cls [
-                    Flex.Flex.allSizes
-                    AlignItems.toClass AlignItems.Center
-                    JustifyContent.toClass JustifyContent.Center
-                  ]
-
+                  Flex.Flex.allSizes
+                  AlignItems.center
+                  JustifyContent.center
                   Attr.Style "min-height" "64px"
                   Attr.Style "width" "100%"
-                ] [ Subtitle2.Div(sprintf "%d%%" level) ]
-                Body2.Div(
-                  sprintf "%d" level,
-                  attrs = [ Margin.toClasses Margin.Top.extraSmall |> cls; Attr.Style "opacity" "0.6" ]
-                )
+                ] [ Subtitle2.div (sprintf "%d%%" level) ]
+                Body2.div (sprintf "%d" level, attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ])
               ],
               xs = Grid.Width.create 6,
               sm = Grid.Width.create 4,
@@ -228,12 +213,12 @@ div [ Attr.Style "--weave-opacity-disabled" "0.5" ] [
     Helpers.codeSampleSection "Design tokens" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Opacity"
-        Body1.Div(
+        Body1.div (
           "Control element transparency with a stepped utility scale and semantic design tokens.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -243,5 +228,5 @@ div [ Attr.Style "--weave-opacity-disabled" "0.5" ] [
         Helpers.divider ()
         designTokensSection ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

@@ -16,61 +16,43 @@ module ButtonMenuExamples =
         "A ButtonMenu fans out a list of icon buttons when its trigger is clicked. Pass closedIcon for the default state. If no openIcon is provided, the icon rotates 45 degrees when opened."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.Center
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        ButtonMenu.CreateIcon(
-          closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
+        IconButtonMenu.create (
+          closedIcon = Icon.create (Icon.UiActions UiActions.Add),
           items = [
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.info (
-                Icon.Create(Icon.Social Social.Share),
+                Icon.create (Icon.Social Social.Share),
                 onClick = (fun () -> printfn "share clicked"),
-                attrs = [
-                  Attr.Create "aria-label" "share"
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
+                attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.Span("Share"),
+              tooltipContent = Body1.span ("Share"),
               direction = Tooltip.Direction.Right
             )
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.error (
-                Icon.Create(Icon.UiActions UiActions.Favorite),
+                Icon.create (Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
                   Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
+                  BorderRadius.circle
                 ]
               ),
-              tooltipContent = Body1.Span("Favorite"),
+              tooltipContent = Body1.span ("Favorite"),
               direction = Tooltip.Direction.Right
             )
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.success (
-                Icon.Create(Icon.Text Text.ContentCopy),
+                Icon.create (Icon.Text Text.ContentCopy),
                 onClick = (fun () -> printfn "copy clicked"),
-                attrs = [
-                  Attr.Create "aria-label" "copy"
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
+                attrs = [ Attr.Create "aria-label" "copy"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.Span("Copy"),
+              tooltipContent = Body1.span ("Copy"),
               direction = Tooltip.Direction.Right
             )
           ],
-          triggerAttrs = [
-            Button.Variant.filled
-            Button.Color.primary
-            BorderRadius.toClass BorderRadius.Circle |> cl
-          ]
+          triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
         )
       ]
 
@@ -80,53 +62,53 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = [
-        Tooltip.Create(
+        Tooltip.create(
             IconButton.info(
-                Icon.Create(Icon.Social Social.Share),
+                Icon.create(Icon.Social Social.Share),
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.Span("Share"),
+            tooltipContent = Body1.span("Share"),
             direction = Tooltip.Direction.Right
         )
-        Tooltip.Create(
+        Tooltip.create(
             IconButton.error(
-                Icon.Create(Icon.UiActions UiActions.Favorite),
+                Icon.create(Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.Span("Favorite"),
+            tooltipContent = Body1.span("Favorite"),
             direction = Tooltip.Direction.Right
         )
-        Tooltip.Create(
+        Tooltip.create(
             IconButton.success(
-                Icon.Create(Icon.Text Text.ContentCopy),
+                Icon.create(Icon.Text Text.ContentCopy),
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [
                     Attr.Create "aria-label" "copy"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.Span("Copy"),
+            tooltipContent = Body1.span("Copy"),
             direction = Tooltip.Direction.Right
         )
     ],
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary
-        BorderRadius.toClass BorderRadius.Circle |> cl
+        BorderRadius.circle
     ]
 )
 """
@@ -139,105 +121,68 @@ ButtonMenu.CreateIcon(
         "When an openIcon is provided, the trigger swaps between the closed and open icons. Without openIcon, the closed icon rotates 45 degrees instead."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.SpaceEvenly
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(content = "With openIcon", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-          ButtonMenu.CreateIcon(
-            closedIcon = Icon.Create(Icon.Communicate Communicate.Send),
-            openIcon = Icon.Create(Icon.UiActions UiActions.Close),
+      div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "With openIcon", attrs = [ Margin.Bottom.small ])
+          IconButtonMenu.create (
+            closedIcon = Icon.create (Icon.Communicate Communicate.Send),
+            openIcon = Icon.create (Icon.UiActions UiActions.Close),
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.secondary (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> ()),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.filled
-              Button.Color.primary
-              BorderRadius.toClass BorderRadius.Circle |> cl
-            ]
+            triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
           )
         ]
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(
-            content = "Without openIcon (rotates)",
-            attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
-          )
-          ButtonMenu.CreateIcon(
-            closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "Without openIcon (rotates)", attrs = [ Margin.Bottom.small ])
+          IconButtonMenu.create (
+            closedIcon = Icon.create (Icon.UiActions UiActions.Add),
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.secondary (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> ()),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.filled
-              Button.Color.primary
-              BorderRadius.toClass BorderRadius.Circle |> cl
-            ]
+            triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
           )
         ]
       ]
@@ -249,25 +194,25 @@ open Weave.Icons.MaterialSymbols
 
 
 // With openIcon: swaps between send and close icons
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.Communicate Communicate.Send),
-    openIcon = Icon.Create(Icon.UiActions UiActions.Close), // see here
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.Communicate Communicate.Send),
+    openIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
     items = [ ... ],
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary
-        BorderRadius.toClass BorderRadius.Circle |> cl
+        BorderRadius.circle
     ]
 )
 
 // Without openIcon: the Add icon rotates 45 degrees (becomes an X)
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add), // rotates when open
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add), // rotates when open
     items = [ ... ],
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary
-        BorderRadius.toClass BorderRadius.Circle |> cl
+        BorderRadius.circle
     ]
 )
 """
@@ -286,61 +231,37 @@ ButtonMenu.CreateIcon(
         | ButtonMenu.Direction.Left -> Tooltip.Direction.Top
         | ButtonMenu.Direction.Right -> Tooltip.Direction.Top
 
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexDirection.Column.allSizes
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        Caption.Div(label, attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-        ButtonMenu.CreateIcon(
-          closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+        Caption.div (label, attrs = [ Margin.Bottom.small ])
+        IconButtonMenu.create (
+          closedIcon = Icon.create (Icon.UiActions UiActions.Add),
           items = [
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.info (
-                Icon.Create(Icon.Action Action.Alarm),
+                Icon.create (Icon.Action Action.Alarm),
                 onClick = (fun () -> ()),
-                attrs = [
-                  Attr.Create "aria-label" "alarm"
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
+                attrs = [ Attr.Create "aria-label" "alarm"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.Span("Alarm"),
+              tooltipContent = Body1.span ("Alarm"),
               direction = tooltipDir
             )
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.warning (
-                Icon.Create(Icon.UiActions UiActions.Star),
+                Icon.create (Icon.UiActions UiActions.Star),
                 onClick = (fun () -> ()),
-                attrs = [
-                  Attr.Create "aria-label" "star"
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
+                attrs = [ Attr.Create "aria-label" "star"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.Span("Star"),
+              tooltipContent = Body1.span ("Star"),
               direction = tooltipDir
             )
           ],
           direction = direction,
-          triggerAttrs = [
-            Button.Variant.filled
-            Button.Color.primary
-            BorderRadius.toClass BorderRadius.Circle |> cl
-          ]
+          triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
         )
       ]
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.SpaceEvenly
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
+      div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
         makeMenu "Top" ButtonMenu.Direction.Top
         makeMenu "Bottom" ButtonMenu.Direction.Bottom
         makeMenu "Left" ButtonMenu.Direction.Left
@@ -355,21 +276,21 @@ open Weave.Icons.MaterialSymbols
 
 let items = [
     IconButton.info(
-        Icon.Create(Icon.Action Action.Alarm),
+        Icon.create(Icon.Action Action.Alarm),
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "alarm"
             Button.Variant.filled
-            BorderRadius.toClass BorderRadius.Circle |> cl
+            BorderRadius.circle
         ]
     )
     IconButton.warning(
-        Icon.Create(Icon.UiActions UiActions.Star),
+        Icon.create(Icon.UiActions UiActions.Star),
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "star"
             Button.Variant.filled
-            BorderRadius.toClass BorderRadius.Circle |> cl
+            BorderRadius.circle
         ]
     )
 ]
@@ -377,32 +298,32 @@ let items = [
 let triggerAttrs = [
     Button.Variant.filled
     Button.Color.primary
-    BorderRadius.toClass BorderRadius.Circle |> cl
+    BorderRadius.circle
 ]
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
     direction = ButtonMenu.Direction.Top, // see here
     triggerAttrs = triggerAttrs
 )
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
     direction = ButtonMenu.Direction.Bottom, // see here
     triggerAttrs = triggerAttrs
 )
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
     direction = ButtonMenu.Direction.Left, // see here
     triggerAttrs = triggerAttrs
 )
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
     direction = ButtonMenu.Direction.Right, // see here
     triggerAttrs = triggerAttrs
@@ -419,13 +340,7 @@ ButtonMenu.CreateIcon(
     let isMenuOpen = Var.Create false
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          FlexDirection.Column.allSizes
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
         div [ Attr.Style "margin-bottom" "16px" ] [
           Button.secondary (
             isMenuOpen.View
@@ -435,43 +350,35 @@ ButtonMenu.CreateIcon(
             attrs = [ Button.Variant.outlined ]
           )
         ]
-        ButtonMenu.CreateIcon(
-          closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
-          openIcon = Icon.Create(Icon.UiActions UiActions.Close),
+        IconButtonMenu.create (
+          closedIcon = Icon.create (Icon.UiActions UiActions.Add),
+          openIcon = Icon.create (Icon.UiActions UiActions.Close),
           items = [
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.info (
-                Icon.Create(Icon.Social Social.Share),
+                Icon.create (Icon.Social Social.Share),
                 onClick = (fun () -> ()),
-                attrs = [
-                  Attr.Create "aria-label" "share"
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
+                attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.Span("Share"),
+              tooltipContent = Body1.span ("Share"),
               direction = Tooltip.Direction.Right
             )
-            Tooltip.Create(
+            Tooltip.create (
               IconButton.error (
-                Icon.Create(Icon.UiActions UiActions.Favorite),
+                Icon.create (Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
                   Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
+                  BorderRadius.circle
                 ]
               ),
-              tooltipContent = Body1.Span("Favorite"),
+              tooltipContent = Body1.span ("Favorite"),
               direction = Tooltip.Direction.Right
             )
           ],
           isOpen = isMenuOpen,
-          triggerAttrs = [
-            Button.Variant.filled
-            Button.Color.primary
-            BorderRadius.toClass BorderRadius.Circle |> cl
-          ]
+          triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
         )
       ]
 
@@ -495,15 +402,15 @@ Button.secondary(
     ]
 )
 
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
-    openIcon = Icon.Create(Icon.UiActions UiActions.Close),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
+    openIcon = Icon.create(Icon.UiActions UiActions.Close),
     items = [ ... ],
     isOpen = isMenuOpen, // see here - shared state
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary
-        BorderRadius.toClass BorderRadius.Circle |> cl
+        BorderRadius.circle
     ]
 )
 """
@@ -516,96 +423,66 @@ ButtonMenu.CreateIcon(
         "Set openOnHover to true so the menu opens when the user hovers over the trigger. Clicking the trigger still toggles the menu as usual."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.SpaceEvenly
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(content = "Icon button", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-          ButtonMenu.CreateIcon(
-            closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
-            openIcon = Icon.Create(Icon.UiActions UiActions.Close),
+      div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "Icon button", attrs = [ Margin.Bottom.small ])
+          IconButtonMenu.create (
+            closedIcon = Icon.create (Icon.UiActions UiActions.Add),
+            openIcon = Icon.create (Icon.UiActions UiActions.Close),
             openOnHover = View.Const true,
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.info (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
-            triggerAttrs = [
-              Button.Variant.filled
-              Button.Color.primary
-              BorderRadius.toClass BorderRadius.Circle |> cl
-            ]
+            triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
           )
         ]
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(content = "Text button", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-          ButtonMenu.Create(
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "Text button", attrs = [ Margin.Bottom.small ])
+          ButtonMenu.create (
             closedContent = text "Menu",
             openOnHover = View.Const true,
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.info (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -621,40 +498,40 @@ open Weave.Icons.MaterialSymbols
 
 
 // Icon button with hover
-ButtonMenu.CreateIcon(
-    closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
-    openIcon = Icon.Create(Icon.UiActions UiActions.Close),
+IconButtonMenu.create(
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
+    openIcon = Icon.create(Icon.UiActions UiActions.Close),
     openOnHover = View.Const true,
     items = [
         IconButton.info(
-            Icon.Create(Icon.Social Social.Share),
+            Icon.create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
                 Button.Variant.filled
-                BorderRadius.toClass BorderRadius.Circle |> cl
+                BorderRadius.circle
             ]
         )
     ],
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary
-        BorderRadius.toClass BorderRadius.Circle |> cl
+        BorderRadius.circle
     ]
 )
 
 // Text button with hover
-ButtonMenu.Create(
+ButtonMenu.create(
     closedContent = text "Menu",
     openOnHover = View.Const true,
     items = [
         IconButton.info(
-            Icon.Create(Icon.Social Social.Share),
+            Icon.create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
                 Button.Variant.filled
-                BorderRadius.toClass BorderRadius.Circle |> cl
+                BorderRadius.circle
             ]
         )
     ],
@@ -670,96 +547,67 @@ ButtonMenu.Create(
   let private textButtonExample () =
     let description =
       Helpers.bodyText
-        "ButtonMenu.Create uses a standard text button as the trigger instead of an icon button. This is useful for labeled menus. It supports optional openContent to change the label when open. Since the button's inner content is fully composable, you can include icons alongside text by composing them in closedContent/openContent."
+        "ButtonMenu.create uses a standard text button as the trigger instead of an icon button. This is useful for labeled menus. It supports optional openContent to change the label when open. Since the button's inner content is fully composable, you can include icons alongside text by composing them in closedContent/openContent."
 
     let content =
-      div [
-        cls [
-          Flex.Flex.allSizes
-          JustifyContent.toClass JustifyContent.SpaceEvenly
-          AlignItems.toClass AlignItems.Center
-        ]
-      ] [
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(content = "Text only", attrs = [ Margin.toClasses Margin.Bottom.small |> cls ])
-          ButtonMenu.Create(
+      div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "Text only", attrs = [ Margin.Bottom.small ])
+          ButtonMenu.create (
             closedContent = text "Menu",
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.info (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
             triggerAttrs = [ Button.Variant.text; Button.Color.primary ]
           )
         ]
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Caption.Div(
-            content = "With icon and openContent",
-            attrs = [ Margin.toClasses Margin.Bottom.small |> cls ]
-          )
-          ButtonMenu.Create(
-            closedContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Actions" ],
-            openContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Close" ],
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Caption.div (content = "With icon and openContent", attrs = [ Margin.Bottom.small ])
+          ButtonMenu.create (
+            closedContent = Doc.Concat [ Icon.create (Icon.UiActions UiActions.Add); text "Actions" ],
+            openContent = Doc.Concat [ Icon.create (Icon.UiActions UiActions.Add); text "Close" ],
             items = [
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.info (
-                  Icon.Create(Icon.Social Social.Share),
+                  Icon.create (Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
-                  attrs = [
-                    Attr.Create "aria-label" "share"
-                    Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
-                  ]
+                  attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.Span("Share"),
+                tooltipContent = Body1.span ("Share"),
                 direction = Tooltip.Direction.Right
               )
-              Tooltip.Create(
+              Tooltip.create (
                 IconButton.error (
-                  Icon.Create(Icon.UiActions UiActions.Favorite),
+                  Icon.create (Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    BorderRadius.toClass BorderRadius.Circle |> cl
+                    BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.Span("Favorite"),
+                tooltipContent = Body1.span ("Favorite"),
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -776,27 +624,27 @@ open Weave.Icons.MaterialSymbols
 
 let menuItems = [
     IconButton.info(
-        Icon.Create(Icon.Social Social.Share),
+        Icon.create(Icon.Social Social.Share),
         onClick = (fun () -> printfn "share clicked"),
         attrs = [
             Attr.Create "aria-label" "share"
             Button.Variant.filled
-            BorderRadius.toClass BorderRadius.Circle |> cl
+            BorderRadius.circle
         ]
     )
     IconButton.error(
-        Icon.Create(Icon.UiActions UiActions.Favorite),
+        Icon.create(Icon.UiActions UiActions.Favorite),
         onClick = (fun () -> printfn "favorite clicked"),
         attrs = [
             Attr.Create "aria-label" "favorite"
             Button.Variant.filled
-            BorderRadius.toClass BorderRadius.Circle |> cl
+            BorderRadius.circle
         ]
     )
 ]
 
 // Text-only trigger
-ButtonMenu.Create(
+ButtonMenu.create(
     closedContent = text "Menu",
     items = menuItems,
     triggerAttrs = [
@@ -806,9 +654,9 @@ ButtonMenu.Create(
 )
 
 // With icon and openContent: compose icon + text in closedContent
-ButtonMenu.Create(
-    closedContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Actions" ],
-    openContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Close" ],
+ButtonMenu.create(
+    closedContent = Doc.Concat [ Icon.create(Icon.UiActions UiActions.Add); text "Actions" ],
+    openContent = Doc.Concat [ Icon.create(Icon.UiActions UiActions.Add); text "Close" ],
     items = menuItems,
     triggerAttrs = [
         Button.Variant.filled
@@ -820,12 +668,12 @@ ButtonMenu.Create(
     Helpers.codeSampleSection "Text Button Trigger" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Button Menu"
-        Body1.Div(
-          "A floating action button menu that fans out a list of items when clicked. Supports icon button triggers (CreateIcon) and standard text button triggers (Create), four fan-out directions, and icon swap or rotation animations.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+        Body1.div (
+          "A floating action button menu that fans out a list of items when clicked. Supports icon button triggers (IconButtonMenu) and standard text button triggers (ButtonMenu), four fan-out directions, and icon swap or rotation animations.",
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -841,5 +689,5 @@ ButtonMenu.Create(
         Helpers.divider ()
         textButtonExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

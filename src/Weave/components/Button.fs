@@ -29,16 +29,6 @@ module Button =
     let success = cl Css.``weave-button--success``
     let info = cl Css.``weave-button--info``
 
-    let toAttr color =
-      match color with
-      | BrandColor.Primary -> primary
-      | BrandColor.Secondary -> secondary
-      | BrandColor.Tertiary -> tertiary
-      | BrandColor.Error -> error
-      | BrandColor.Warning -> warning
-      | BrandColor.Success -> success
-      | BrandColor.Info -> info
-
 [<JavaScript; RequireQualifiedAccess>]
 type Button =
 
@@ -53,10 +43,10 @@ type Button =
     let attrs = defaultArg attrs List.empty
 
     let content =
-      Typography.ButtonText.Div(
+      Typography.ButtonText.div (
         innerContents,
         textWrap = View.Const false,
-        attrs = [ cls [ Css.``weave-button__label``; Flex.Inline.allSizes ] ]
+        attrs = [ cl Css.``weave-button__label``; Flex.Inline.allSizes ]
       )
 
     button [

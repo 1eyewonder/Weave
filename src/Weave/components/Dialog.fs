@@ -65,21 +65,21 @@ open DialogInternal
 [<JavaScript>]
 type DialogTitle =
 
-  static member Create(content: Doc, ?attrs: Attr list) =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     div [ cls [ Css.``weave-dialog__title`` ]; yield! attrs ] [ content ]
 
 [<JavaScript>]
 type DialogContent =
 
-  static member Create(content: Doc, ?attrs: Attr list) =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     div [ cls [ Css.``weave-dialog__content`` ]; yield! attrs ] [ content ]
 
 [<JavaScript>]
 type Dialog =
 
-  static member Create
+  static member create
     (
       title: Doc,
       content: Doc,

@@ -9,7 +9,7 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module ExpansionPanel =
 
   [<RequireQualifiedAccess; Struct>]
@@ -19,47 +19,49 @@ module ExpansionPanel =
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-expansion-panel__header--primary``
-      | BrandColor.Secondary -> Css.``weave-expansion-panel__header--secondary``
-      | BrandColor.Tertiary -> Css.``weave-expansion-panel__header--tertiary``
-      | BrandColor.Error -> Css.``weave-expansion-panel__header--error``
-      | BrandColor.Warning -> Css.``weave-expansion-panel__header--warning``
-      | BrandColor.Success -> Css.``weave-expansion-panel__header--success``
-      | BrandColor.Info -> Css.``weave-expansion-panel__header--info``
+    let primary = cl Css.``weave-expansion-panel__header--primary``
+    let secondary = cl Css.``weave-expansion-panel__header--secondary``
+    let tertiary = cl Css.``weave-expansion-panel__header--tertiary``
+    let error = cl Css.``weave-expansion-panel__header--error``
+    let warning = cl Css.``weave-expansion-panel__header--warning``
+    let success = cl Css.``weave-expansion-panel__header--success``
+    let info = cl Css.``weave-expansion-panel__header--info``
 
   module FocusColor =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-expansion-panel__header--focus-primary``
-      | BrandColor.Secondary -> Css.``weave-expansion-panel__header--focus-secondary``
-      | BrandColor.Tertiary -> Css.``weave-expansion-panel__header--focus-tertiary``
-      | BrandColor.Error -> Css.``weave-expansion-panel__header--focus-error``
-      | BrandColor.Warning -> Css.``weave-expansion-panel__header--focus-warning``
-      | BrandColor.Success -> Css.``weave-expansion-panel__header--focus-success``
-      | BrandColor.Info -> Css.``weave-expansion-panel__header--focus-info``
+    let primary = cl Css.``weave-expansion-panel__header--focus-primary``
+    let secondary = cl Css.``weave-expansion-panel__header--focus-secondary``
+    let tertiary = cl Css.``weave-expansion-panel__header--focus-tertiary``
+    let error = cl Css.``weave-expansion-panel__header--focus-error``
+    let warning = cl Css.``weave-expansion-panel__header--focus-warning``
+    let success = cl Css.``weave-expansion-panel__header--focus-success``
+    let info = cl Css.``weave-expansion-panel__header--focus-info``
 
+  // HeaderVariant is kept as a DU because it is used with Attr.classSelection for reactive switching.
   [<RequireQualifiedAccess; Struct>]
   type HeaderVariant =
     | Filled
     | Highlight
     | None
 
-open ExpansionPanel
+  module HeaderVariant =
 
-[<JavaScript>]
+    /// <summary>Filled header background modifier.</summary>
+    let filled = cl Css.``weave-expansion-panel__header--filled``
+    /// <summary>Highlight header background modifier.</summary>
+    let highlight = cl Css.``weave-expansion-panel__header--highlight``
+
+[<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanelContainer =
 
-  static member Create(panels: Doc list, ?attrs: Attr list) =
+  static member create(panels: Doc list, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     div [ cls [ Css.``weave-expansion-panels`` ]; yield! attrs ] panels
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanelIcon =
 
-  static member Create(unexpandedIcon: Doc, expandedIcon: Doc, expanded: Var<bool>, ?attrs: Attr list) =
+  static member create(unexpandedIcon: Doc, expandedIcon: Doc, expanded: Var<bool>, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
 
     div [ cls [ Css.``weave-expansion-panel__icon`` ]; yield! attrs ] [
@@ -67,19 +69,28 @@ type ExpansionPanelIcon =
       |> Doc.BindView(fun isExpanded -> if isExpanded then expandedIcon else unexpandedIcon)
     ]
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanelHeader =
 
-  static member private Create
+  /// <summary>Creates the default expansion toggle icon (+ when collapsed, − when expanded).</summary>
+  static member defaultIcon(expanded: Var<bool>) =
+    ExpansionPanelIcon.create (
+      H6.div ("+", attrs = [ Attr.Style "text-align" "center" ]),
+      H6.div ("-", attrs = [ Attr.Style "text-align" "center" ]),
+      expanded = expanded
+    )
+
+  static member create
     (
       content: Doc,
       expanded: Var<bool>,
       ?enabled: View<bool>,
       ?icon: Doc,
-      ?highlightVariant: View<HeaderVariant>,
+      ?highlightVariant: View<ExpansionPanel.HeaderVariant>,
       ?attrs: Attr list
     ) =
-    let variant = defaultArg highlightVariant (View.Const HeaderVariant.Highlight)
+    let variant =
+      defaultArg highlightVariant (View.Const ExpansionPanel.HeaderVariant.Highlight)
 
     let enabled = defaultArg enabled (View.Const true)
     let attrs = defaultArg attrs []
@@ -93,13 +104,11 @@ type ExpansionPanelHeader =
 
     div
       [
-        cls [
-          Css.``weave-expansion-panel__header``
-          Flex.Flex.allSizes
-          AlignItems.toClass AlignItems.Center
-          AlignContent.toClass AlignContent.SpaceBetween
-          JustifyContent.toClass JustifyContent.SpaceBetween
-        ]
+        cl Css.``weave-expansion-panel__header``
+        Flex.Flex.allSizes
+        AlignItems.center
+        AlignContent.spaceBetween
+        JustifyContent.spaceBetween
         Attr.Style "width" "100%"
         Attr.Create "tabindex" "0"
         Attr.Create "role" "button"
@@ -123,8 +132,8 @@ type ExpansionPanelHeader =
               Var.Set expanded (not expanded.Value))
 
         Map.ofList [
-          HeaderVariant.Filled, Css.``weave-expansion-panel__header--filled``
-          HeaderVariant.Highlight, Css.``weave-expansion-panel__header--highlight``
+          ExpansionPanel.HeaderVariant.Filled, Css.``weave-expansion-panel__header--filled``
+          ExpansionPanel.HeaderVariant.Highlight, Css.``weave-expansion-panel__header--highlight``
         ]
         |> Attr.classSelection variant
 
@@ -132,66 +141,10 @@ type ExpansionPanelHeader =
       ]
       children
 
-  static member CreateWithDefaultIcons
-    (
-      content: Doc,
-      expanded: Var<bool>,
-      ?highlightVariant: View<HeaderVariant>,
-      ?enabled: View<bool>,
-      ?attrs: Attr list
-    ) =
-    ExpansionPanelHeader.Create(
-      content = content,
-      expanded = expanded,
-      icon =
-        ExpansionPanelIcon.Create(
-          H6.Div("+", attrs = [ Attr.Style "text-align" "center" ]),
-          H6.Div("-", attrs = [ Attr.Style "text-align" "center" ]),
-          expanded = expanded
-        ),
-      ?highlightVariant = highlightVariant,
-      ?enabled = enabled,
-      ?attrs = attrs
-    )
-
-  static member CreateWithNoIcons
-    (
-      content: Doc,
-      expanded: Var<bool>,
-      ?highlightVariant: View<HeaderVariant>,
-      ?enabled: View<bool>,
-      ?attrs: Attr list
-    ) =
-    ExpansionPanelHeader.Create(
-      content = content,
-      expanded = expanded,
-      ?highlightVariant = highlightVariant,
-      ?enabled = enabled,
-      ?attrs = attrs
-    )
-
-  static member CreateWithCustomIcons
-    (
-      content: Doc,
-      icon: Doc,
-      expanded: Var<bool>,
-      ?highlightVariant: View<HeaderVariant>,
-      ?enabled: View<bool>,
-      ?attrs: Attr list
-    ) =
-    ExpansionPanelHeader.Create(
-      content = content,
-      expanded = expanded,
-      icon = icon,
-      ?highlightVariant = highlightVariant,
-      ?enabled = enabled,
-      ?attrs = attrs
-    )
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanelContent =
 
-  static member Create(content: Doc, ?gutters: View<bool>, ?attrs: Attr list) =
+  static member create(content: Doc, ?gutters: View<bool>, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     let gutters = defaultArg gutters (View.Const true)
 
@@ -202,10 +155,10 @@ type ExpansionPanelContent =
       yield! attrs
     ] [ content ]
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanel =
 
-  static member Create
+  static member create
     (header: Doc, content: Doc, ?expanded: Var<bool>, ?enabled: View<bool>, ?attrs: Attr list)
     =
     let expanded = defaultArg expanded (Var.Create false)

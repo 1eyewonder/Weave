@@ -25,36 +25,36 @@ module NumericFieldExamples =
         "NumericField supports the same three variants as Field: Standard, Filled, and Outlined. Spin buttons are shown by default as a right adornment."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               stdVal,
               variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               filledVal,
               variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               outlinedVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 4
@@ -68,19 +68,19 @@ module NumericFieldExamples =
 
 let value = Var.Create 0
 
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Standard,
     labelText = View.Const "Standard"
 )
 
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Filled,
     labelText = View.Const "Filled"
 )
 
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
@@ -101,26 +101,26 @@ NumericField.Create(
         "NumericField has separate overloads for int and float. The int overload uses whole-number stepping while the float overload accepts decimal input."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               intVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Integer",
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             NumericField.Create(
               floatVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Float",
               step = View.Const 0.1,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -135,7 +135,7 @@ NumericField.Create(
 // Integer field — step defaults to 1
 let intVal = Var.Create 42
 
-NumericField.Create(
+NumericField.create(
     intVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Integer"
@@ -144,7 +144,7 @@ NumericField.Create(
 // Float field — step is 0.1
 let floatVal = Var.Create 3.14
 
-NumericField.Create(
+NumericField.create(
     floatVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Float",
@@ -165,32 +165,28 @@ NumericField.Create(
         "Use min, max, and step to constrain the allowed range and increment size. Values are clamped on blur and when using spin buttons, arrow keys, or the mouse wheel."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              NumericField.Create(
+              NumericField.create (
                 value,
                 variant = Field.Variant.Outlined,
                 labelText = View.Const "Quantity (1–10, step 1)",
                 min = 1,
                 max = 10,
                 step = View.Const 1,
-                attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+                attrs = [ Field.Width.full ]
               )
 
               value.View
-              |> Doc.BindView(fun v ->
-                Body2.Div(
-                  $"Current value: %i{v}",
-                  attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
-                ))
+              |> Doc.BindView(fun v -> Body2.div ($"Current value: %i{v}", attrs = [ Margin.Top.extraSmall ]))
             ],
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
+          GridItem.create (
             (let floatVal = Var.Create 0.5
 
              div [] [
@@ -201,15 +197,12 @@ NumericField.Create(
                  min = 0.0,
                  max = 1.0,
                  step = View.Const 0.1,
-                 attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+                 attrs = [ Field.Width.full ]
                )
 
                floatVal.View
                |> Doc.BindView(fun v ->
-                 Body2.Div(
-                   $"Current value: %f{v}",
-                   attrs = [ cls [ yield! Margin.toClasses Margin.Top.extraSmall ] ]
-                 ))
+                 Body2.div ($"Current value: %f{v}", attrs = [ Margin.Top.extraSmall ]))
              ]),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -224,7 +217,7 @@ NumericField.Create(
 // Integer with min/max
 let quantity = Var.Create 5
 
-NumericField.Create(
+NumericField.create(
     quantity,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Quantity (1-10, step 1)",
@@ -236,7 +229,7 @@ NumericField.Create(
 // Float with min/max
 let opacity = Var.Create 0.5
 
-NumericField.Create(
+NumericField.create(
     opacity,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Opacity (0.0-1.0, step 0.1)",
@@ -262,24 +255,24 @@ NumericField.Create(
         "When focused, use Arrow Up / Arrow Down keys or the mouse wheel to increment and decrement. Both interactions are enabled by default but can be individually toggled off via enableArrowKeys and enableMouseWheel."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               enabledVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Both enabled (default)",
               min = 0,
               max = 100,
               step = View.Const 5,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               noArrowsVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Arrow keys disabled",
@@ -287,14 +280,14 @@ NumericField.Create(
               max = 100,
               step = View.Const 5,
               enableArrowKeys = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               noWheelVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Mouse wheel disabled",
@@ -302,14 +295,14 @@ NumericField.Create(
               max = 100,
               step = View.Const 5,
               enableMouseWheel = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               neitherVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Both disabled",
@@ -318,7 +311,7 @@ NumericField.Create(
               step = View.Const 5,
               enableArrowKeys = View.Const false,
               enableMouseWheel = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -333,7 +326,7 @@ NumericField.Create(
 let value = Var.Create 50
 
 // Both enabled (default)
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Both enabled (default)",
@@ -343,7 +336,7 @@ NumericField.Create(
 )
 
 // Disable arrow key stepping
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Arrow keys disabled",
@@ -351,7 +344,7 @@ NumericField.Create(
 )
 
 // Disable mouse wheel stepping
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Mouse wheel disabled",
@@ -359,7 +352,7 @@ NumericField.Create(
 )
 
 // Disable both
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Both disabled",
@@ -382,27 +375,27 @@ NumericField.Create(
         "Spin buttons are visible by default. Set showSpinButtons to false to hide them. Arrow key and mouse wheel interaction still works."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               withSpin,
               variant = Field.Variant.Outlined,
               labelText = View.Const "With spin buttons",
               showSpinButtons = View.Const true,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               withoutSpin,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Without spin buttons",
               showSpinButtons = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -417,7 +410,7 @@ NumericField.Create(
 let value = Var.Create 10
 
 // Default — spin buttons visible
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "With spin buttons",
@@ -425,7 +418,7 @@ NumericField.Create(
 )
 
 // Hidden spin buttons
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Without spin buttons",
@@ -446,15 +439,15 @@ NumericField.Create(
         "Override the default ▲/▼ icons via upIcon and downIcon. Any Doc can be used — here we use Material Symbols."
 
     let content =
-      NumericField.Create(
+      NumericField.create (
         value,
         variant = Field.Variant.Outlined,
         labelText = View.Const "Custom icons",
         upIcon =
-          Icon.Create(Icon.Hardware Hardware.KeyboardArrowUp, attrs = [ Attr.Style "font-size" "1rem" ]),
+          Icon.create (Icon.Hardware Hardware.KeyboardArrowUp, attrs = [ Attr.Style "font-size" "1rem" ]),
         downIcon =
-          Icon.Create(Icon.Hardware Hardware.KeyboardArrowDown, attrs = [ Attr.Style "font-size" "1rem" ]),
-        attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+          Icon.create (Icon.Hardware Hardware.KeyboardArrowDown, attrs = [ Attr.Style "font-size" "1rem" ]),
+        attrs = [ Field.Width.full ]
       )
 
     let code =
@@ -464,15 +457,15 @@ open Weave.Icons.MaterialSymbols
 
 let value = Var.Create 0
 
-NumericField.Create(
+NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Custom icons",
-    upIcon = Icon.Create(    // see here
+    upIcon = Icon.create(    // see here
         Icon.Hardware Hardware.KeyboardArrowUp,
         attrs = [ Attr.Style "font-size" "1rem" ]
     ),
-    downIcon = Icon.Create(  // and here
+    downIcon = Icon.create(  // and here
         Icon.Hardware Hardware.KeyboardArrowDown,
         attrs = [ Attr.Style "font-size" "1rem" ]
     )
@@ -493,27 +486,27 @@ NumericField.Create(
         "Disabled fields are non-interactive and visually dimmed. Read-only fields display the value but prevent edits; spin buttons and keyboard/wheel interactions are suppressed."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               disabledVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Disabled",
               enabled = View.Const false,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
 
-          GridItem.Create(
-            NumericField.Create(
+          GridItem.create (
+            NumericField.create (
               readOnlyVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Read Only",
               readOnly = View.Const true,
-              attrs = [ Field.Width.toClass Field.Width.Full |> Attr.bindOption cl ]
+              attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -528,14 +521,14 @@ NumericField.Create(
 let disabledVal = Var.Create 42
 let readOnlyVal = Var.Create 99
 
-NumericField.Create(
+NumericField.create(
     disabledVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
     enabled = View.Const false // see here
 )
 
-NumericField.Create(
+NumericField.create(
     readOnlyVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
@@ -549,12 +542,12 @@ NumericField.Create(
   // Render
   // ---------------------------------------------------------------------------
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Numeric Field"
-        Body1.Div(
+        Body1.div (
           "NumericField wraps Field to provide a typed numeric input with spin buttons, keyboard arrow keys, mouse wheel support, and optional min/max/step constraints. Separate overloads exist for int and float values.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
         Helpers.divider ()
         variantsExample ()
@@ -571,5 +564,5 @@ NumericField.Create(
         Helpers.divider ()
         disabledExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

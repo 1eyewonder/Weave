@@ -245,11 +245,11 @@ module {Name}Examples =
       Helpers.bodyText "Short description of what this example demonstrates."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
           // Render each variant/case inside a GridItem
-          GridItem.Create(
-            {Name}.create(
+          GridItem.create (
+            {Name}.create (
               text "Example",
               attrs = [
                 {Name}.Variant.filled
@@ -273,26 +273,30 @@ module {Name}Examples =
     Helpers.codeSampleSection "Variants" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
-        H1.Div("{Name}", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Helpers.bodyText "Brief one-line description of when to use this component."
+        Helpers.pageTitle "{Name}"
+        Body1.div (
+          "Brief one-line description of when to use this component.",
+          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+        )
         Helpers.divider ()
         variantExamples ()
         // Add Helpers.divider () between each example section
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )
 ```
 
 **Rules:**
 
 - All example functions are `private`. Only `render ()` is public.
-- Always wrap the top-level output in `Container.Create(..., maxWidth = Container.MaxWidth.Large)`.
+- Always wrap the top-level output in `Container.create(..., attrs = [ Container.MaxWidth.large ])` — `maxWidth` is **not** a named parameter; pass `Container.MaxWidth.*` via `?attrs`.
 - Separate example sections with `Helpers.divider ()`.
 - Use `Helpers.codeSampleSection` (renders a collapsible code block) for all prop demonstrations.
 - Use `Helpers.section` (no code block) only for purely visual/layout demonstrations.
 - The first section should demonstrate the most basic usage with no optional props.
+- All Weave static member calls use **camelCase** (`Grid.create`, `GridItem.create`, `Button.create`, etc.) — never PascalCase `Create`.
 
 ---
 
@@ -563,17 +567,29 @@ type {Name}Tests(server: TestServerFixture) =
 
 ### 9a. Register the E2E test page in `tests/Weave.Tests.E2E.Site/Pages.fs`
 
-Add a page function and register it in `renderPage`:
+`Pages.fs` is a **separate project** (`Weave.Tests.E2E.Site`) that the E2E test runner hosts as a live WebSharper SPA. It must stay in sync with the core library API — **always build it explicitly** after making any changes here:
+
+```bash
+dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj
+```
+
+Add a page function and register it in `renderPage`. Use the same camelCase API as everywhere else — **never PascalCase `Create`** in this file:
 
 ```fsharp
 let private {name}Page () =
   div [] [
-    {Name}.create(...)
+    {Name}.create (...)
   ]
 
 // In renderPage:
 | "{name}" -> {name}Page ()
 ```
+
+**Common API pitfalls in Pages.fs** (these caused 47 build errors when missed after an API migration):
+- `Var.Create` / `Var.Create<T>` stays PascalCase — it is from WebSharper, not Weave
+- Styling attrs go via `?attrs`, never as named parameters (e.g. `position`, `underline`, `maxWidth` are removed; use `attrs = [ AppBar.Position.sticky ]`, `attrs = [ Link.Underline.always ]`, etc.)
+- `Body1.div`, `Body2.div`, `H6.div` etc. are camelCase in Weave's Typography module
+- `Color.toAttr BrandColor.X` replaces the old `AlertColor.toClass (AlertColor.BrandColor X) |> Attr.bindOption cl` pattern
 
 ### 9b. Register in `tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj`
 
@@ -603,6 +619,8 @@ Before marking the component as done, verify:
 - [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link
 - [ ] `tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj` has `<Compile Include="{Name}LayoutTests.fs" />`
 - [ ] `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` created with axe-core scan and keyboard/focus tests using typed Playwright assertions
-- [ ] `tests/Weave.Tests.E2E.Site/Pages.fs` has page function and `renderPage` entry for the component
+- [ ] `tests/Weave.Tests.E2E.Site/Pages.fs` has page function and `renderPage` entry for the component (camelCase API only — no PascalCase `Create`)
 - [ ] `tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj` has `<Compile Include="accessibility/{Name}Tests.fs" />`
+- [ ] `dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj` passes with 0 errors (this project is compiled separately — CI won't catch it otherwise)
+- [ ] `dotnet build src/Weave.Docs/Weave.Docs.fsproj` passes with 0 errors
 - [ ] Run `dotnet fantomas .` in the root of the repo to format all files

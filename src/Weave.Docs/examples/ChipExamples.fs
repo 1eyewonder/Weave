@@ -15,42 +15,33 @@ module ChipExamples =
       Helpers.bodyText "Filled chips use a solid background and work well for emphasis."
 
     let colors = [
-      BrandColor.Primary
-      BrandColor.Secondary
-      BrandColor.Tertiary
-      BrandColor.Error
-      BrandColor.Warning
-      BrandColor.Success
-      BrandColor.Info
+      "Primary", Chip.Color.primary
+      "Secondary", Chip.Color.secondary
+      "Tertiary", Chip.Color.tertiary
+      "Error", Chip.Color.error
+      "Warning", Chip.Color.warning
+      "Success", Chip.Color.success
+      "Info", Chip.Color.info
     ]
 
     let content =
       div [] [
-        Subtitle2.Div("Enabled", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
-                text label,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Filled; Chip.Color.toClass color ] ]
-              )
-            )),
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.filled; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.Div("Disabled", attrs = [ Margin.toClasses Margin.Vertical.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (
+              Chip.create (
                 text label,
                 enabled = View.Const false,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Filled; Chip.Color.toClass color ] ]
+                attrs = [ Chip.Variant.filled; colorAttr ]
               )
             )),
           spacing = Grid.GutterSpacing.create 2
@@ -61,19 +52,22 @@ module ChipExamples =
       """open Weave
 
 let colors = [
-    BrandColor.Primary; BrandColor.Secondary; BrandColor.Tertiary
-    BrandColor.Error; BrandColor.Warning; BrandColor.Success; BrandColor.Info
+    "Primary", Chip.Color.primary
+    "Secondary", Chip.Color.secondary
+    "Tertiary", Chip.Color.tertiary
+    "Error", Chip.Color.error
+    "Warning", Chip.Color.warning
+    "Success", Chip.Color.success
+    "Info", Chip.Color.info
 ]
 
 colors
-|> List.map (fun color ->
-    Chip.Create(
-        text (sprintf "%A" color),
+|> List.map (fun (label, colorAttr) ->
+    Chip.create(
+        text label,
         attrs = [
-            cls [
-                Chip.Variant.toClass Chip.Variant.Filled // see here
-                Chip.Color.toClass color
-            ]
+            Chip.Variant.filled // see here
+            colorAttr
         ]
     )
 )"""
@@ -85,43 +79,30 @@ colors
       Helpers.bodyText "Text chips have a transparent background and suit low-emphasis contexts."
 
     let colors = [
-      BrandColor.Primary
-      BrandColor.Secondary
-      BrandColor.Tertiary
-      BrandColor.Error
-      BrandColor.Warning
-      BrandColor.Success
-      BrandColor.Info
+      "Primary", Chip.Color.primary
+      "Secondary", Chip.Color.secondary
+      "Tertiary", Chip.Color.tertiary
+      "Error", Chip.Color.error
+      "Warning", Chip.Color.warning
+      "Success", Chip.Color.success
+      "Info", Chip.Color.info
     ]
 
     let content =
       div [] [
-        Subtitle2.Div("Enabled", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
-                text label,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Text; Chip.Color.toClass color ] ]
-              )
-            )),
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.text; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.Div("Disabled", attrs = [ Margin.toClasses Margin.Vertical.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
-                text label,
-                enabled = View.Const false,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Text; Chip.Color.toClass color ] ]
-              )
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (
+              Chip.create (text label, enabled = View.Const false, attrs = [ Chip.Variant.text; colorAttr ])
             )),
           spacing = Grid.GutterSpacing.create 2
         )
@@ -130,13 +111,11 @@ colors
     let code =
       """open Weave
 
-Chip.Create(
+Chip.create(
     text "Primary",
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Text // see here
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.text // see here
+        Chip.Color.primary
     ]
 )"""
 
@@ -147,42 +126,33 @@ Chip.Create(
       Helpers.bodyText "Outlined chips use a border and transparent background for a lightweight look."
 
     let colors = [
-      BrandColor.Primary
-      BrandColor.Secondary
-      BrandColor.Tertiary
-      BrandColor.Error
-      BrandColor.Warning
-      BrandColor.Success
-      BrandColor.Info
+      "Primary", Chip.Color.primary
+      "Secondary", Chip.Color.secondary
+      "Tertiary", Chip.Color.tertiary
+      "Error", Chip.Color.error
+      "Warning", Chip.Color.warning
+      "Success", Chip.Color.success
+      "Info", Chip.Color.info
     ]
 
     let content =
       div [] [
-        Subtitle2.Div("Enabled", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
-                text label,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Outlined; Chip.Color.toClass color ] ]
-              )
-            )),
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.outlined; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.Div("Disabled", attrs = [ Margin.toClasses Margin.Vertical.extraSmall |> cls ])
-        Grid.Create(
+        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        Grid.create (
           colors
-          |> List.map (fun color ->
-            let label = sprintf "%A" color
-
-            GridItem.Create(
-              Chip.Create(
+          |> List.map (fun (label, colorAttr) ->
+            GridItem.create (
+              Chip.create (
                 text label,
                 enabled = View.Const false,
-                attrs = [ cls [ Chip.Variant.toClass Chip.Variant.Outlined; Chip.Color.toClass color ] ]
+                attrs = [ Chip.Variant.outlined; colorAttr ]
               )
             )),
           spacing = Grid.GutterSpacing.create 2
@@ -192,13 +162,11 @@ Chip.Create(
     let code =
       """open Weave
 
-Chip.Create(
+Chip.create(
     text "Primary",
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined // see here
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.outlined // see here
+        Chip.Color.primary
     ]
 )"""
 
@@ -226,16 +194,14 @@ Chip.Create(
               []
               (currentItems
                |> List.map (fun item ->
-                 Chip.Create(
+                 Chip.create (
                    text item,
                    onClose = (fun () -> items.Value |> List.filter (fun i -> i <> item) |> Var.Set items),
                    attrs = [
-                     cls [
-                       Chip.Variant.toClass Chip.Variant.Outlined
-                       Chip.Color.toClass BrandColor.Primary
-                     ]
-                     Margin.toClasses Margin.Right.extraSmall |> cls
-                     Margin.toClasses Margin.Bottom.extraSmall |> cls
+                     Chip.Variant.outlined
+                     Chip.Color.primary
+                     Margin.Right.extraSmall
+                     Margin.Bottom.extraSmall
                    ]
                  ))))
       ]
@@ -250,17 +216,15 @@ items.View
 |> Doc.BindView (fun currentItems ->
     currentItems
     |> List.map (fun item ->
-        Chip.Create(
+        Chip.create(
             text item,
             onClose = (fun () ->
                 items.Value
                 |> List.filter (fun i -> i <> item)
                 |> Var.Set items), // see here
             attrs = [
-                cls [
-                    Chip.Variant.toClass Chip.Variant.Outlined
-                    Chip.Color.toClass BrandColor.Primary
-                ]
+                Chip.Variant.outlined
+                    Chip.Color.primary
             ]
         )
     )
@@ -290,17 +254,15 @@ items.View
               []
               (currentItems
                |> List.map (fun item ->
-                 Chip.Create(
+                 Chip.create (
                    text item,
                    onClose = (fun () -> items.Value |> List.filter (fun i -> i <> item) |> Var.Set items),
-                   closeIcon = Icon.Create(Icon.UiActions UiActions.Close),
+                   closeIcon = Icon.create (Icon.UiActions UiActions.Close),
                    attrs = [
-                     cls [
-                       Chip.Variant.toClass Chip.Variant.Filled
-                       Chip.Color.toClass BrandColor.Secondary
-                     ]
-                     Margin.toClasses Margin.Right.extraSmall |> cls
-                     Margin.toClasses Margin.Bottom.extraSmall |> cls
+                     Chip.Variant.filled
+                     Chip.Color.secondary
+                     Margin.Right.extraSmall
+                     Margin.Bottom.extraSmall
                    ]
                  ))))
       ]
@@ -309,15 +271,13 @@ items.View
       """open Weave
 open Weave.Icons.MaterialSymbols
 
-Chip.Create(
+Chip.create(
     text "Draft",
     onClose = (fun () -> (* remove chip *)),
-    closeIcon = Icon.Create(Icon.UiActions UiActions.Close), // see here
+    closeIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Secondary
-        ]
+        Chip.Variant.filled
+            Chip.Color.secondary
     ]
 )"""
 
@@ -332,20 +292,15 @@ Chip.Create(
 
     let content =
       div [] [
-        Body2.Div(
+        Body2.div (
           count.View |> View.MapCached(sprintf "Clicked %d times"),
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
-        Chip.Create(
+        Chip.create (
           text "Click me",
           onClick = (fun () -> Var.Set count (count.Value + 1)),
-          attrs = [
-            cls [
-              Chip.Variant.toClass Chip.Variant.Filled
-              Chip.Color.toClass BrandColor.Primary
-            ]
-          ]
+          attrs = [ Chip.Variant.filled; Chip.Color.primary ]
         )
       ]
 
@@ -355,14 +310,12 @@ open WebSharper.UI
 
 let count = Var.Create 0
 
-Chip.Create(
+Chip.create(
     text "Click me",
     onClick = (fun () -> Var.Set count (count.Value + 1)), // see here
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.filled
+            Chip.Color.primary
     ]
 )"""
 
@@ -373,54 +326,34 @@ Chip.Create(
       Helpers.bodyText "Pass content to display a leading element inside the chip, such as an icon or avatar."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "Saved",
-              content = Icon.Create(Icon.UiActions UiActions.CheckCircle),
-              attrs = [
-                cls [
-                  Chip.Variant.toClass Chip.Variant.Filled
-                  Chip.Color.toClass BrandColor.Success
-                ]
-              ]
+              content = Icon.create (Icon.UiActions UiActions.CheckCircle),
+              attrs = [ Chip.Variant.filled; Chip.Color.success ]
             )
           )
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "Warning",
-              content = Icon.Create(Icon.Action Action.Warning),
-              attrs = [
-                cls [
-                  Chip.Variant.toClass Chip.Variant.Outlined
-                  Chip.Color.toClass BrandColor.Warning
-                ]
-              ]
+              content = Icon.create (Icon.Action Action.Warning),
+              attrs = [ Chip.Variant.outlined; Chip.Color.warning ]
             )
           )
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "Error",
-              content = Icon.Create(Icon.Action Action.Error),
-              attrs = [
-                cls [
-                  Chip.Variant.toClass Chip.Variant.Filled
-                  Chip.Color.toClass BrandColor.Error
-                ]
-              ]
+              content = Icon.create (Icon.Action Action.Error),
+              attrs = [ Chip.Variant.filled; Chip.Color.error ]
             )
           )
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "Info",
-              content = Icon.Create(Icon.Action Action.Info),
-              attrs = [
-                cls [
-                  Chip.Variant.toClass Chip.Variant.Outlined
-                  Chip.Color.toClass BrandColor.Info
-                ]
-              ]
+              content = Icon.create (Icon.Action Action.Info),
+              attrs = [ Chip.Variant.outlined; Chip.Color.info ]
             )
           )
         ],
@@ -431,14 +364,12 @@ Chip.Create(
       """open Weave
 open Weave.Icons.MaterialSymbols
 
-Chip.Create(
+Chip.create(
     text "Saved",
-    content = Icon.Create(Icon.UiActions UiActions.CheckCircle), // see here
+    content = Icon.create(Icon.UiActions UiActions.CheckCircle), // see here
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Success
-        ]
+        Chip.Variant.filled
+            Chip.Color.success
     ]
 )"""
 
@@ -450,51 +381,44 @@ Chip.Create(
         "Density controls chip height and padding. Pass the density class in attrs to set it per-instance, or apply it to a parent container to affect all children."
 
     let content =
-      let densityAttrs density = [
-        Chip.Density.toClass density
-        Chip.Variant.toClass Chip.Variant.Filled
-        Chip.Color.toClass BrandColor.Primary
-      ]
+      let col (label: string) chipDensityAttr =
+        let attrs = [ chipDensityAttr; Chip.Variant.filled; Chip.Color.primary ]
 
-      let col density =
-        let label = sprintf "%A" density
-
-        GridItem.Create(
+        GridItem.create (
           div [] [
-            Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-            div [ cls [ Flex.toClass None Flex.Flex; AlignItems.toClass AlignItems.Center ] ] [
-              Chip.Create(
-                text "Basic",
-                attrs = [ cls (densityAttrs density); Margin.toClasses Margin.Right.extraSmall |> cls ]
-              )
-              Chip.Create(
+            Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+            div [ Flex.Flex.allSizes; AlignItems.center ] [
+              Chip.create (text "Basic", attrs = attrs @ [ Margin.Right.extraSmall ])
+              Chip.create (
                 text "With Icon",
-                content = Icon.Create(Icon.UiActions UiActions.CheckCircle),
-                attrs = [ cls (densityAttrs density); Margin.toClasses Margin.Right.extraSmall |> cls ]
+                content = Icon.create (Icon.UiActions UiActions.CheckCircle),
+                attrs = attrs @ [ Margin.Right.extraSmall ]
               )
-              Chip.Create(text "Closable", onClose = (fun () -> ()), attrs = [ cls (densityAttrs density) ])
+              Chip.create (text "Closable", onClose = (fun () -> ()), attrs = attrs)
             ]
           ],
           xs = Grid.Width.create 12,
           sm = Grid.Width.create 4
         )
 
-      Grid.Create(
-        [ col Density.Compact; col Density.Standard; col Density.Spacious ],
+      Grid.create (
+        [
+          col "Compact" Chip.Density.compact
+          col "Standard" Chip.Density.standard
+          col "Spacious" Chip.Density.spacious
+        ],
         spacing = Grid.GutterSpacing.create 2
       )
 
     let code =
       """open Weave
 
-Chip.Create(
+Chip.create(
     text "Compact",
     attrs = [
-        cls [
-            Chip.Density.toClass Density.Compact // see here
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Density.compact // see here
+        Chip.Variant.filled
+        Chip.Color.primary
     ]
 )"""
 
@@ -506,29 +430,22 @@ Chip.Create(
         "Pass an href to render the chip as an anchor element. The chip navigates to the given URL on click."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "WebSharper",
               href = "https://websharper.com",
-              content = Icon.Create(Icon.UiActions UiActions.OpenInNew),
-              attrs = [
-                cls [
-                  Chip.Variant.toClass Chip.Variant.Outlined
-                  Chip.Color.toClass BrandColor.Primary
-                ]
-              ]
+              content = Icon.create (Icon.UiActions UiActions.OpenInNew),
+              attrs = [ Chip.Variant.outlined; Chip.Color.primary ]
             )
           )
-          GridItem.Create(
-            Chip.Create(
+          GridItem.create (
+            Chip.create (
               text "GitHub",
               href = "https://github.com/1eyewonder/Weave",
-              content = Icon.Create(Icon.UiActions UiActions.OpenInNew),
-              attrs = [
-                cls [ Chip.Variant.toClass Chip.Variant.Filled; Chip.Color.toClass BrandColor.Info ]
-              ]
+              content = Icon.create (Icon.UiActions UiActions.OpenInNew),
+              attrs = [ Chip.Variant.filled; Chip.Color.info ]
             )
           )
         ],
@@ -539,15 +456,13 @@ Chip.Create(
       """open Weave
 open Weave.Icons.MaterialSymbols
 
-Chip.Create(
+Chip.create(
     text "WebSharper",
     href = "https://websharper.com", // see here
-    content = Icon.Create(Icon.UiActions UiActions.OpenInNew),
+    content = Icon.create(Icon.UiActions UiActions.OpenInNew),
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Outlined
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.outlined
+            Chip.Color.primary
     ]
 )"""
 
@@ -564,16 +479,11 @@ Chip.Create(
       div [] [
         isSelected.View |> View.MapCached(sprintf "Selected: %b") |> View.printfn
 
-        Chip.Create(
+        Chip.create (
           text "Toggle me",
           onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
           selected = isSelected.View,
-          attrs = [
-            cls [
-              Chip.Variant.toClass Chip.Variant.Filled
-              Chip.Color.toClass BrandColor.Primary
-            ]
-          ]
+          attrs = [ Chip.Variant.filled; Chip.Color.primary ]
         )
       ]
 
@@ -583,15 +493,13 @@ open WebSharper.UI
 
 let isSelected = Var.Create false
 
-Chip.Create(
+Chip.create(
     text "Toggle me",
     onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
     selected = isSelected.View, // see here
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Primary
-        ]
+        Chip.Variant.filled
+            Chip.Color.primary
     ]
 )"""
 
@@ -603,79 +511,47 @@ Chip.Create(
         "By default, chips use a pill shape (fully rounded). Override the border radius via attrs using the BorderRadius utility to achieve different shapes."
 
     let content =
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Pill (default)", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Chip.Create(
-                text "Default",
-                attrs = [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Filled
-                    Chip.Color.toClass BrandColor.Primary
-                  ]
-                ]
-              )
+              Subtitle2.div ("Pill (default)", attrs = [ Margin.Bottom.extraSmall ])
+              Chip.create (text "Default", attrs = [ Chip.Variant.filled; Chip.Color.primary ])
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Large", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Chip.Create(
+              Subtitle2.div ("Large", attrs = [ Margin.Bottom.extraSmall ])
+              Chip.create (
                 text "Large",
-                attrs = [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Filled
-                    Chip.Color.toClass BrandColor.Secondary
-                    BorderRadius.toClass BorderRadius.All.large
-                  ]
-                ]
+                attrs = [ Chip.Variant.filled; Chip.Color.secondary; BorderRadius.All.large ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Medium", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Chip.Create(
+              Subtitle2.div ("Medium", attrs = [ Margin.Bottom.extraSmall ])
+              Chip.create (
                 text "Medium",
-                attrs = [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Filled
-                    Chip.Color.toClass BrandColor.Tertiary
-                    BorderRadius.toClass BorderRadius.All.medium
-                  ]
-                ]
+                attrs = [ Chip.Variant.filled; Chip.Color.tertiary; BorderRadius.All.medium ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("Small", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Chip.Create(
+              Subtitle2.div ("Small", attrs = [ Margin.Bottom.extraSmall ])
+              Chip.create (
                 text "Small",
-                attrs = [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Filled
-                    Chip.Color.toClass BrandColor.Success
-                    BorderRadius.toClass BorderRadius.All.small
-                  ]
-                ]
+                attrs = [ Chip.Variant.filled; Chip.Color.success; BorderRadius.All.small ]
               )
             ]
           )
-          GridItem.Create(
+          GridItem.create (
             div [] [
-              Subtitle2.Div("None", attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
-              Chip.Create(
+              Subtitle2.div ("None", attrs = [ Margin.Bottom.extraSmall ])
+              Chip.create (
                 text "None",
-                attrs = [
-                  cls [
-                    Chip.Variant.toClass Chip.Variant.Filled
-                    Chip.Color.toClass BrandColor.Error
-                    BorderRadius.toClass BorderRadius.All.none
-                  ]
-                ]
+                attrs = [ Chip.Variant.filled; Chip.Color.error; BorderRadius.All.none ]
               )
             ]
           )
@@ -688,14 +564,12 @@ Chip.Create(
 open Weave.CssHelpers
 
 // Override the default pill shape with BorderRadius utility classes
-Chip.Create(
+Chip.create(
     text "Medium",
     attrs = [
-        cls [
-            Chip.Variant.toClass Chip.Variant.Filled
-            Chip.Color.toClass BrandColor.Tertiary
-            BorderRadius.toClass BorderRadius.All.medium // see here
-        ]
+        Chip.Variant.filled
+        Chip.Color.tertiary
+        BorderRadius.All.medium // see here
     ]
 )
 
@@ -704,7 +578,7 @@ Chip.Create(
     Helpers.codeSampleSection "Border Radius" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Chip"
         Helpers.bodyText "Chips represent compact elements such as tags, filters, or choices."
@@ -731,5 +605,5 @@ Chip.Create(
         Helpers.divider ()
         borderRadiusExample ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

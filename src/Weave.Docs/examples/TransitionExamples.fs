@@ -12,7 +12,7 @@ open Weave.Icons.MaterialSymbols
 module TransitionExamples =
 
   let private inlineCode (value: string) =
-    Caption.Span(value, attrs = [ Typography.Color.toClass BrandColor.Primary |> cl ])
+    Caption.span (value, attrs = [ Typography.Color.primary ])
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -96,37 +96,31 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
 
     let content =
       let speedColumn (label: string) (speed: TransitionSpeed) =
-        div [
-          cls [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.toClass AlignItems.Center
-          ]
-        ] [
-          Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
+        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
+          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
           div [ cl (TransitionSpeed.toClass speed) ] [
             Button.primary (text "Hover me", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
         ]
 
-      Grid.Create(
+      Grid.create (
         [
-          GridItem.Create(
+          GridItem.create (
             speedColumn "None" TransitionSpeed.None,
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 3
           )
-          GridItem.Create(
+          GridItem.create (
             speedColumn "Fast" TransitionSpeed.Fast,
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 3
           )
-          GridItem.Create(
+          GridItem.create (
             speedColumn "Standard" TransitionSpeed.Standard,
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 3
           )
-          GridItem.Create(
+          GridItem.create (
             speedColumn "Slow" TransitionSpeed.Slow,
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 3
@@ -252,7 +246,7 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
 
     let content =
       div [] [
-        Body2.Div(
+        Body2.div (
           "To test reduced motion in Chrome DevTools: open the Rendering panel, then set \"Emulate CSS media feature prefers-reduced-motion\" to \"reduce\". All Weave transitions will become instant.",
           attrs = [ Attr.Style "opacity" "0.7" ]
         )
@@ -279,12 +273,12 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
     Helpers.codeSampleSection "Reduced motion" description content code
 
   let render () =
-    Container.Create(
+    Container.create (
       div [] [
         Helpers.pageTitle "Transitions"
-        Body1.Div(
+        Body1.div (
           "Control animation speed across components with transition speed classes and duration tokens.",
-          attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ]
+          attrs = [ Margin.Bottom.extraSmall ]
         )
 
         Helpers.divider ()
@@ -296,5 +290,5 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
         Helpers.divider ()
         reducedMotionSection ()
       ],
-      maxWidth = Container.MaxWidth.Large
+      attrs = [ Container.MaxWidth.large ]
     )

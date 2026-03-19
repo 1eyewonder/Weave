@@ -25,7 +25,7 @@ type NumericField =
   /// <summary>
   /// Creates a numeric field for integer values.
   /// </summary>
-  static member Create
+  static member create
     (
       value: Var<int>,
       ?variant: Variant,
@@ -223,7 +223,7 @@ type NumericField =
       editableSync
       arrowKeysSync
       mouseWheelSync
-      Field.Create(
+      Field.create (
         inputElement,
         isFocused.View,
         shouldFloat,
@@ -441,7 +441,7 @@ type NumericField =
       editableSync
       arrowKeysSync
       mouseWheelSync
-      Field.Create(
+      Field.create (
         inputElement,
         isFocused.View,
         shouldFloat,

@@ -8,49 +8,37 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Link =
-
-  [<RequireQualifiedAccess; Struct>]
-  type Underline =
-    | OnHover
-    | Always
-    | None
 
   module Underline =
 
-    let toClass underline =
-      match underline with
-      | Underline.OnHover -> Css.``weave-link--underline-hover``
-      | Underline.Always -> Css.``weave-link--underline-always``
-      | Underline.None -> Css.``weave-link--underline-none``
+    let onHover = cl Css.``weave-link--underline-hover``
+    let always = cl Css.``weave-link--underline-always``
+    let none = cl Css.``weave-link--underline-none``
 
   module Color =
 
-    let toClass color =
-      match color with
-      | BrandColor.Primary -> Css.``weave-link--primary``
-      | BrandColor.Secondary -> Css.``weave-link--secondary``
-      | BrandColor.Tertiary -> Css.``weave-link--tertiary``
-      | BrandColor.Error -> Css.``weave-link--error``
-      | BrandColor.Warning -> Css.``weave-link--warning``
-      | BrandColor.Success -> Css.``weave-link--success``
-      | BrandColor.Info -> Css.``weave-link--info``
+    let primary = cl Css.``weave-link--primary``
+    let secondary = cl Css.``weave-link--secondary``
+    let tertiary = cl Css.``weave-link--tertiary``
+    let error = cl Css.``weave-link--error``
+    let warning = cl Css.``weave-link--warning``
+    let success = cl Css.``weave-link--success``
+    let info = cl Css.``weave-link--info``
 
-open Link
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Link =
 
   /// <summary>
   /// Creates a link with optional text label and start/end icon adornments.
   /// The underline decoration is applied only to the text portion, never to icons.
+  /// Pass <c>Link.Underline.*</c> via <c>?attrs</c> to control decoration.
   /// </summary>
-  static member Create
+  static member create
     (
       innerContents: Doc,
       ?href: string,
-      ?underline: Underline,
       ?enabled: View<bool>,
       ?onClick: unit -> unit,
       ?startIcon: Doc,
@@ -59,7 +47,6 @@ type Link =
     ) =
 
     let href = defaultArg href "#"
-    let underline = defaultArg underline Underline.OnHover
     let enabled = defaultArg enabled (View.Const true)
     let onClick = defaultArg onClick (fun () -> ())
     let attrs = defaultArg attrs List.empty
@@ -77,7 +64,7 @@ type Link =
     let textLabel = Html.span [ cl Css.``weave-link__text`` ] [ innerContents ]
 
     a [
-      cls [ Css.``weave-link``; Underline.toClass underline ]
+      cl Css.``weave-link``
 
       attr.href href
 
@@ -90,10 +77,13 @@ type Link =
       yield! attrs
     ] [ startIconDoc; textLabel; endIconDoc ]
 
+[<JavaScript; RequireQualifiedAccess>]
+type IconLink =
+
   /// <summary>
   /// Creates a link containing only an icon — no text label and no underline.
   /// </summary>
-  static member CreateIcon
+  static member create
     (icon: Doc, ?href: string, ?enabled: View<bool>, ?onClick: unit -> unit, ?attrs: Attr list)
     =
 

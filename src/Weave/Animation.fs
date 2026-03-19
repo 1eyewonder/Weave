@@ -19,7 +19,15 @@ module Animation =
 
   module AnimationEntrance =
 
-    let toClass entrance =
+    let fadeIn = cl Css.``weave-animation--fade-in``
+    let scaleIn = cl Css.``weave-animation--scale-in``
+    let scaleYIn = cl Css.``weave-animation--scale-y-in``
+    let slideUpIn = cl Css.``weave-animation--slide-up-in``
+    let slideDownIn = cl Css.``weave-animation--slide-down-in``
+    let slideLeftIn = cl Css.``weave-animation--slide-left-in``
+    let slideRightIn = cl Css.``weave-animation--slide-right-in``
+
+    let internal toClass entrance =
       match entrance with
       | AnimationEntrance.FadeIn -> Css.``weave-animation--fade-in``
       | AnimationEntrance.ScaleIn -> Css.``weave-animation--scale-in``
@@ -42,7 +50,15 @@ module Animation =
 
   module AnimationExit =
 
-    let toClass exit =
+    let fadeOut = cl Css.``weave-animation--fade-out``
+    let scaleOut = cl Css.``weave-animation--scale-out``
+    let scaleYOut = cl Css.``weave-animation--scale-y-out``
+    let slideUpOut = cl Css.``weave-animation--slide-up-out``
+    let slideDownOut = cl Css.``weave-animation--slide-down-out``
+    let slideLeftOut = cl Css.``weave-animation--slide-left-out``
+    let slideRightOut = cl Css.``weave-animation--slide-right-out``
+
+    let internal toClass exit =
       match exit with
       | AnimationExit.FadeOut -> Css.``weave-animation--fade-out``
       | AnimationExit.ScaleOut -> Css.``weave-animation--scale-out``
@@ -53,93 +69,45 @@ module Animation =
       | AnimationExit.SlideRightOut -> Css.``weave-animation--slide-right-out``
 
   /// Emphasis animations — drawing attention to elements.
-  [<RequireQualifiedAccess; Struct>]
-  type AnimationEmphasis =
-    | Pulse
-    | Shake
-    | Bounce
-
   module AnimationEmphasis =
 
-    let toClass emphasis =
-      match emphasis with
-      | AnimationEmphasis.Pulse -> Css.``weave-animation--pulse``
-      | AnimationEmphasis.Shake -> Css.``weave-animation--shake``
-      | AnimationEmphasis.Bounce -> Css.``weave-animation--bounce``
+    let pulse = cl Css.``weave-animation--pulse``
+    let shake = cl Css.``weave-animation--shake``
+    let bounce = cl Css.``weave-animation--bounce``
 
-  /// Top-level union for applying any single animation via attrs.
-  [<RequireQualifiedAccess>]
-  type AnimationKind =
-    | Entrance of AnimationEntrance
-    | Exit of AnimationExit
-    | Emphasis of AnimationEmphasis
-    /// Applies weave-animation--none, which disables all animations AND transitions
-    /// on the element and its entire subtree (via * selector with !important).
-    /// Use this to hard-suppress motion in a component subtree — not as a "no animation" sentinel.
-    /// To conditionally apply no animation, simply omit the kind class instead.
-    | Suppress
-
+  /// Applies weave-animation--none, disabling all animations AND transitions
+  /// on the element and its entire subtree (via * selector with !important).
+  /// Use this to hard-suppress motion in a component subtree — not as a "no animation" sentinel.
+  /// To conditionally apply no animation, simply omit the animation class instead.
   module AnimationKind =
 
-    let toClass kind =
-      match kind with
-      | AnimationKind.Entrance entrance -> AnimationEntrance.toClass entrance
-      | AnimationKind.Exit exit -> AnimationExit.toClass exit
-      | AnimationKind.Emphasis emphasis -> AnimationEmphasis.toClass emphasis
-      | AnimationKind.Suppress -> Css.``weave-animation--none``
+    let suppress = cl Css.``weave-animation--none``
 
   /// Overrides the animation duration set by the kind class.
-  [<RequireQualifiedAccess; Struct>]
-  type AnimationDuration =
-    | Shortest
-    | Shorter
-    | Short
-    | Standard
-    | Medium
-    | Long
-    | Longer
-    | Longest
-
   module AnimationDuration =
 
-    let toClass duration =
-      match duration with
-      | AnimationDuration.Shortest -> Css.``weave-animation-duration--shortest``
-      | AnimationDuration.Shorter -> Css.``weave-animation-duration--shorter``
-      | AnimationDuration.Short -> Css.``weave-animation-duration--short``
-      | AnimationDuration.Standard -> Css.``weave-animation-duration--standard``
-      | AnimationDuration.Medium -> Css.``weave-animation-duration--medium``
-      | AnimationDuration.Long -> Css.``weave-animation-duration--long``
-      | AnimationDuration.Longer -> Css.``weave-animation-duration--longer``
-      | AnimationDuration.Longest -> Css.``weave-animation-duration--longest``
+    let shortest = cl Css.``weave-animation-duration--shortest``
+    let shorter = cl Css.``weave-animation-duration--shorter``
+    let short = cl Css.``weave-animation-duration--short``
+    let standard = cl Css.``weave-animation-duration--standard``
+    let medium = cl Css.``weave-animation-duration--medium``
+    let long = cl Css.``weave-animation-duration--long``
+    let longer = cl Css.``weave-animation-duration--longer``
+    let longest = cl Css.``weave-animation-duration--longest``
 
   /// Overrides the animation timing function set by the kind class.
-  [<RequireQualifiedAccess; Struct>]
-  type AnimationEasing =
-    | Standard
-    | Decelerate
-    | Accelerate
-    | Bounce
-
   module AnimationEasing =
 
-    let toClass easing =
-      match easing with
-      | AnimationEasing.Standard -> Css.``weave-animation-easing--standard``
-      | AnimationEasing.Decelerate -> Css.``weave-animation-easing--decelerate``
-      | AnimationEasing.Accelerate -> Css.``weave-animation-easing--accelerate``
-      | AnimationEasing.Bounce -> Css.``weave-animation-easing--bounce``
+    let standard = cl Css.``weave-animation-easing--standard``
+    let decelerate = cl Css.``weave-animation-easing--decelerate``
+    let accelerate = cl Css.``weave-animation-easing--accelerate``
+    let bounce = cl Css.``weave-animation-easing--bounce``
 
   /// Controls animation iteration count (CSS-only, seamless looping).
   /// For periodic replay with pauses between plays, use Animate.replayEvery instead.
-  [<RequireQualifiedAccess; Struct>]
-  type AnimationIteration = | Infinite
-
   module AnimationIteration =
 
-    let toClass iteration =
-      match iteration with
-      | AnimationIteration.Infinite -> Css.``weave-animation-iteration--infinite``
+    let infinite = cl Css.``weave-animation-iteration--infinite``
 
   /// Stagger delay helpers for sequenced list animations.
   /// The SCSS generates .weave-animation-delay--1 through --10.
@@ -148,7 +116,7 @@ module Animation =
     /// Returns the CSS class for a stagger delay step.
     /// Steps are clamped to the valid range 1-10.
     let stagger (step: int) =
-      sprintf "weave-animation-delay--%d" (max 1 (min 10 step))
+      cl (sprintf "weave-animation-delay--%d" (max 1 (min 10 step)))
 
   /// Defers animation playback to a pseudo-state trigger (hover, focus, or both).
   /// Compose with any animation kind class — the trigger overrides
@@ -162,19 +130,12 @@ module Animation =
   /// Animate.replayOnClick and Animate.replayEvery in Utilities.fs.
   /// Do not combine AnimationOn with Animate replay helpers on the same element —
   /// the CSS trigger's animation-name: none will override the JS replay.
-  [<RequireQualifiedAccess; Struct>]
-  type AnimationOn =
-    | Hover
-    | Focus
-    | HoverFocus
-
+  /// Defers animation playback to a CSS pseudo-state trigger (hover, focus, or both).
   module AnimationOn =
 
-    let toClass trigger =
-      match trigger with
-      | AnimationOn.Hover -> Css.``weave-animation-on--hover``
-      | AnimationOn.Focus -> Css.``weave-animation-on--focus``
-      | AnimationOn.HoverFocus -> Css.``weave-animation-on--hover-focus``
+    let hover = cl Css.``weave-animation-on--hover``
+    let focus = cl Css.``weave-animation-on--focus``
+    let hoverFocus = cl Css.``weave-animation-on--hover-focus``
 
   type AnimationPair = {
     Enter: AnimationEntrance

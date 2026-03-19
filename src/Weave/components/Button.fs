@@ -42,6 +42,11 @@ module Button =
 [<JavaScript; RequireQualifiedAccess>]
 type Button =
 
+  /// <summary>Creates a button with the given content and click handler.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes (variant, color, width, etc.) merged onto the root element.</param>
   static member create(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
 
     let enabled = defaultArg enabled (View.Const true)
@@ -65,6 +70,11 @@ type Button =
       on.clickTapKeyViewGuarded enabled onClick
     ] [ content ]
 
+  /// <summary>Creates a primary-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.primary</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member primary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -73,6 +83,11 @@ type Button =
       attrs = Button.Color.primary :: defaultArg attrs []
     )
 
+  /// <summary>Creates a secondary-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.secondary</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member secondary
     (innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list)
     =
@@ -83,6 +98,11 @@ type Button =
       attrs = Button.Color.secondary :: defaultArg attrs []
     )
 
+  /// <summary>Creates a tertiary-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.tertiary</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member tertiary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -91,6 +111,11 @@ type Button =
       attrs = Button.Color.tertiary :: defaultArg attrs []
     )
 
+  /// <summary>Creates an error-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.error</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member error(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -99,6 +124,11 @@ type Button =
       attrs = Button.Color.error :: defaultArg attrs []
     )
 
+  /// <summary>Creates a warning-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.warning</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member warning(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -107,6 +137,11 @@ type Button =
       attrs = Button.Color.warning :: defaultArg attrs []
     )
 
+  /// <summary>Creates a success-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.success</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member success(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -115,6 +150,11 @@ type Button =
       attrs = Button.Color.success :: defaultArg attrs []
     )
 
+  /// <summary>Creates an info-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.info</c>.</summary>
+  /// <param name="innerContents">The Doc to render inside the button label.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member info(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     Button.create (
       innerContents,
@@ -126,6 +166,11 @@ type Button =
 [<JavaScript; RequireQualifiedAccess>]
 type IconButton =
 
+  /// <summary>Creates an icon-only button with the given icon and click handler.</summary>
+  /// <param name="icon">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes (variant, color, etc.) merged onto the root element.</param>
   static member create(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
 
     let enabled = defaultArg enabled (View.Const true)
@@ -142,6 +187,11 @@ type IconButton =
       on.clickTapKeyViewGuarded enabled onClick
     ] [ icon ]
 
+  /// <summary>Creates a primary-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.primary</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member primary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,
@@ -150,6 +200,11 @@ type IconButton =
       attrs = Button.Color.primary :: defaultArg attrs []
     )
 
+  /// <summary>Creates a secondary-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.secondary</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member secondary
     (innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list)
     =
@@ -160,6 +215,11 @@ type IconButton =
       attrs = Button.Color.secondary :: defaultArg attrs []
     )
 
+  /// <summary>Creates a tertiary-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.tertiary</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member tertiary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,
@@ -168,6 +228,11 @@ type IconButton =
       attrs = Button.Color.tertiary :: defaultArg attrs []
     )
 
+  /// <summary>Creates an error-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.error</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member error(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,
@@ -176,6 +241,11 @@ type IconButton =
       attrs = Button.Color.error :: defaultArg attrs []
     )
 
+  /// <summary>Creates a warning-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.warning</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member warning(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,
@@ -184,6 +254,11 @@ type IconButton =
       attrs = Button.Color.warning :: defaultArg attrs []
     )
 
+  /// <summary>Creates a success-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.success</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member success(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,
@@ -192,6 +267,11 @@ type IconButton =
       attrs = Button.Color.success :: defaultArg attrs []
     )
 
+  /// <summary>Creates an info-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.info</c>.</summary>
+  /// <param name="innerContents">The Doc to render as the button's icon content.</param>
+  /// <param name="onClick">Callback invoked when the button is clicked, tapped, or activated via keyboard.</param>
+  /// <param name="enabled">Reactive view controlling the enabled/disabled state. Defaults to <c>true</c>.</param>
+  /// <param name="attrs">Additional attributes merged onto the root element.</param>
   static member info(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
     IconButton.create (
       innerContents,

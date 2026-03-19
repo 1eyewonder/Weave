@@ -1909,7 +1909,7 @@ module ExamplesRouter =
           yield! Padding.toClasses Padding.Vertical.extraSmall
         ]
       ] [
-        Button.CreateIcon(
+        IconButton.create (
           Icon.Create(Icon.UiActions UiActions.Menu),
           onClick = (fun () -> Var.Set drawerOpen (not drawerOpen.Value)),
           attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
@@ -1933,7 +1933,7 @@ module ExamplesRouter =
           cls [ yield! Padding.toClasses Padding.Horizontal.extraSmall ]
         ] [ githubSvg ]
 
-        Button.CreateIcon(
+        IconButton.create (
           Theme.current.View
           |> Doc.BindView(fun mode ->
             match mode with

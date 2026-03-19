@@ -95,7 +95,7 @@ module DrawerExamples =
     ] [ child ]
 
   let private filledButton (label: string) (onClick: unit -> unit) =
-    Button.Create(text label, onClick = onClick, attrs = [ Button.Color.primary; Button.Variant.filled ])
+    Button.primary (text label, onClick = onClick, attrs = [ Button.Variant.filled ])
 
   let private temporaryExample () =
     let description =
@@ -114,13 +114,13 @@ module DrawerExamples =
               AppBar.Create(
                 toolbar
                   "Temporary Drawer"
-                  (Button.Create(
+                  (Button.primary (
                     isOpen.View
                     |> View.Map(fun o -> if o then "Close" else "Open")
                     |> View.Map text
                     |> Doc.EmbedView,
                     onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-                    attrs = [ Button.Color.primary; Button.Variant.filled ]
+                    attrs = [ Button.Variant.filled ]
                   )),
                 position = AppBar.Position.Static,
                 attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
@@ -167,13 +167,13 @@ DrawerContainer.Create(
     let isOpen = Var.Create false
 
     let toggleButton =
-      Button.Create(
+      Button.primary (
         isOpen.View
         |> View.Map(fun o -> if o then "Close" else "Open")
         |> View.Map text
         |> Doc.EmbedView,
         onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-        attrs = [ Button.Color.primary; Button.Variant.filled ]
+        attrs = [ Button.Variant.filled ]
       )
 
     let preview =
@@ -281,13 +281,13 @@ DrawerContainer.Create(
 
     let controls =
       Doc.Concat [
-        Button.Create(
+        Button.primary (
           isOpen.View
           |> View.Map(fun o -> if o then "Collapse" else "Expand")
           |> View.Map text
           |> Doc.EmbedView,
           onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
-          attrs = [ Button.Color.primary; Button.Variant.filled ]
+          attrs = [ Button.Variant.filled ]
         )
         Switch.Create(hoverEnabled, Body1.Div("Hover expand"))
       ]
@@ -417,20 +417,19 @@ DrawerContainer.Create(
     let toggleButton =
       isOpen.View
       |> Doc.BindView(fun opened ->
-        Button.Create(
+        Button.primary (
           text (if opened then "Close Drawer" else "Open Drawer"),
           onClick = (fun () -> Var.Update isOpen not),
-          attrs = [ Button.Color.primary; Button.Variant.outlined ]
+          attrs = [ Button.Variant.outlined ]
         ))
 
     let clipButton (mode: Drawer.ClipMode) (label: string) =
       clipMode.View
       |> Doc.BindView(fun current ->
-        Button.Create(
+        Button.primary (
           text label,
           onClick = (fun () -> Var.Set clipMode mode),
           attrs = [
-            Button.Color.primary
             if current = mode then
               Button.Variant.filled
             else

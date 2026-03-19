@@ -132,7 +132,7 @@ type Dropdown =
           | OpenOn.Click -> []
           | OpenOn.Hover -> [ on.mouseEnter (fun _ _ -> Var.Set openVar true) ]
 
-        Button.Create(
+        Button.create (
           contents,
           onClick = onClick,
           enabled = enabled,
@@ -224,7 +224,7 @@ type Dropdown =
 [<JavaScript>]
 type DropdownItem =
   static member Create(innerContents, onClick, ?enabled, ?attrs) =
-    Button.Create(
+    Button.create (
       innerContents,
       onClick,
       ?enabled = enabled,

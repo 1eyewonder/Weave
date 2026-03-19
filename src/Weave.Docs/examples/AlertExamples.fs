@@ -289,10 +289,10 @@ Alert.Create(
               ]
             )
           else
-            Button.Create(
+            Button.info (
               text "Reset",
               onClick = (fun () -> Var.Set visible true),
-              attrs = [ Button.Variant.outlined; Button.Color.info ]
+              attrs = [ Button.Variant.outlined ]
             ))
       ]
 

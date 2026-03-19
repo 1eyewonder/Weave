@@ -216,10 +216,10 @@ Chip.Create(
         items.View
         |> Doc.BindView(fun currentItems ->
           if List.isEmpty currentItems then
-            Button.Create(
+            Button.primary (
               text "Reset",
               onClick = (fun () -> Var.Set items [ "React"; "Angular"; "Vue"; "Svelte"; "WebSharper" ]),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
+              attrs = [ Button.Variant.outlined ]
             )
           else
             div
@@ -280,10 +280,10 @@ items.View
         items.View
         |> Doc.BindView(fun currentItems ->
           if List.isEmpty currentItems then
-            Button.Create(
+            Button.primary (
               text "Reset",
               onClick = (fun () -> Var.Set items [ "Draft"; "Published"; "Archived" ]),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
+              attrs = [ Button.Variant.outlined ]
             )
           else
             div

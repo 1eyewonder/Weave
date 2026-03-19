@@ -2,13 +2,11 @@ namespace Weave
 
 open WebSharper
 open WebSharper.UI
-open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave.CssHelpers
 open Weave.CssHelpers.Core
-open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module Button =
 
   module Variant =
@@ -41,12 +39,10 @@ module Button =
       | BrandColor.Success -> success
       | BrandColor.Info -> info
 
-open Button
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type Button =
 
-  static member Create(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+  static member create(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
 
     let enabled = defaultArg enabled (View.Const true)
     let attrs = defaultArg attrs List.empty
@@ -69,7 +65,68 @@ type Button =
       on.clickTapKeyViewGuarded enabled onClick
     ] [ content ]
 
-  static member CreateIcon(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+  static member primary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.primary :: defaultArg attrs []
+    )
+
+  static member secondary
+    (innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list)
+    =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.secondary :: defaultArg attrs []
+    )
+
+  static member tertiary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.tertiary :: defaultArg attrs []
+    )
+
+  static member error(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.error :: defaultArg attrs []
+    )
+
+  static member warning(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.warning :: defaultArg attrs []
+    )
+
+  static member success(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.success :: defaultArg attrs []
+    )
+
+  static member info(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    Button.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.info :: defaultArg attrs []
+    )
+
+[<JavaScript; RequireQualifiedAccess>]
+type IconButton =
+
+  static member create(icon: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
 
     let enabled = defaultArg enabled (View.Const true)
     let attrs = defaultArg attrs List.empty
@@ -84,3 +141,61 @@ type Button =
       Disabled.nativeAttr enabled
       on.clickTapKeyViewGuarded enabled onClick
     ] [ icon ]
+
+  static member primary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.primary :: defaultArg attrs []
+    )
+
+  static member secondary
+    (innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list)
+    =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.secondary :: defaultArg attrs []
+    )
+
+  static member tertiary(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.tertiary :: defaultArg attrs []
+    )
+
+  static member error(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.error :: defaultArg attrs []
+    )
+
+  static member warning(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.warning :: defaultArg attrs []
+    )
+
+  static member success(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.success :: defaultArg attrs []
+    )
+
+  static member info(innerContents: Doc, onClick: unit -> unit, ?enabled: View<bool>, ?attrs: Attr list) =
+    IconButton.create (
+      innerContents,
+      onClick,
+      ?enabled = enabled,
+      attrs = Button.Color.info :: defaultArg attrs []
+    )

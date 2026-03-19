@@ -21,9 +21,9 @@ module ButtonGroupExamples =
             GridItem.Create(
               ButtonGroup.Create(
                 [
-                  Button.Create(text "One", onClick = (fun () -> ()))
-                  Button.Create(text "Two", onClick = (fun () -> ()))
-                  Button.Create(text "Three", onClick = (fun () -> ()))
+                  Button.create (text "One", onClick = (fun () -> ()))
+                  Button.create (text "Two", onClick = (fun () -> ()))
+                  Button.create (text "Three", onClick = (fun () -> ()))
                 ],
                 attrs = [
                   ButtonGroup.Variant.toClass variant |> cl
@@ -47,9 +47,9 @@ module ButtonGroupExamples =
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
@@ -59,9 +59,9 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Text |> cl
@@ -71,9 +71,9 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
@@ -95,9 +95,9 @@ ButtonGroup.Create(
             GridItem.Create(
               ButtonGroup.Create(
                 [
-                  Button.Create(text "One", onClick = (fun () -> ()))
-                  Button.Create(text "Two", onClick = (fun () -> ()))
-                  Button.Create(text "Three", onClick = (fun () -> ()))
+                  Button.create (text "One", onClick = (fun () -> ()))
+                  Button.create (text "Two", onClick = (fun () -> ()))
+                  Button.create (text "Three", onClick = (fun () -> ()))
                 ],
                 attrs = [
                   ButtonGroup.Variant.toClass variant |> cl
@@ -124,9 +124,9 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass variant |> cl
@@ -152,9 +152,9 @@ ButtonGroup.Create(
             GridItem.Create(
               ButtonGroup.Create(
                 [
-                  Button.Create(text "One", onClick = (fun () -> ()))
-                  Button.Create(text "Two", onClick = (fun () -> ()))
-                  Button.Create(text "Three", onClick = (fun () -> ()))
+                  Button.create (text "One", onClick = (fun () -> ()))
+                  Button.create (text "Two", onClick = (fun () -> ()))
+                  Button.create (text "Three", onClick = (fun () -> ()))
                 ],
                 attrs = [
                   ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
@@ -179,9 +179,9 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
@@ -192,9 +192,9 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "One", onClick = (fun () -> ()))
-        Button.Create(text "Two", onClick = (fun () -> ()))
-        Button.Create(text "Three", onClick = (fun () -> ()))
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Filled |> cl
@@ -223,21 +223,21 @@ ButtonGroup.Create(
 
         ButtonGroup.Create(
           [
-            Button.Create(text "Reply", onClick = (fun () -> printfn "Reply clicked"))
+            Button.create (text "Reply", onClick = (fun () -> printfn "Reply clicked"))
             ButtonMenu.CreateIcon(
               closedIcon = Icon.Create(Icon.UiActions UiActions.ArrowDropDown),
               items = [
-                Button.Create(
+                Button.create (
                   text "Reply",
                   onClick = (fun () -> printfn "Reply"),
                   attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
-                Button.Create(
+                Button.create (
                   text "Reply All",
                   onClick = (fun () -> printfn "Reply All"),
                   attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
-                Button.Create(
+                Button.create (
                   text "Forward",
                   onClick = (fun () -> printfn "Forward"),
                   attrs = [ Button.Variant.filled; Button.Width.full ]
@@ -265,11 +265,11 @@ let isOpen = Var.Create false
 
 ButtonGroup.Create(
     [
-        Button.Create(text "Reply", onClick = (fun () -> printfn "Reply clicked"))
+        Button.create(text "Reply", onClick = (fun () -> printfn "Reply clicked"))
         ButtonMenu.CreateIcon(
             closedIcon = Icon.Create(Icon.UiActions UiActions.ArrowDropDown),
             items = [
-                Button.Create(
+                Button.create(
                     text "Reply",
                     onClick = (fun () -> printfn "Reply"),
                     attrs = [
@@ -277,7 +277,7 @@ ButtonGroup.Create(
                         Button.Width.full
                     ]
                 )
-                Button.Create(
+                Button.create(
                     text "Reply All",
                     onClick = (fun () -> printfn "Reply All"),
                     attrs = [
@@ -285,7 +285,7 @@ ButtonGroup.Create(
                         Button.Width.full
                     ]
                 )
-                Button.Create(
+                Button.create(
                     text "Forward",
                     onClick = (fun () -> printfn "Forward"),
                     attrs = [
@@ -321,9 +321,9 @@ ButtonGroup.Create(
       ] [
         ButtonGroup.Create(
           [
-            Button.CreateIcon(Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-            Button.CreateIcon(Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-            Button.CreateIcon(Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
+            IconButton.create (Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
+            IconButton.create (Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
+            IconButton.create (Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
           ],
           attrs = [
             ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
@@ -340,9 +340,9 @@ open Weave.Icons.MaterialSymbols
 
 ButtonGroup.Create(
     [
-        Button.CreateIcon(Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-        Button.CreateIcon(Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-        Button.CreateIcon(Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
+        IconButton.create(Icon.Create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
+        IconButton.create(Icon.Create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
+        IconButton.create(Icon.Create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
     ],
     attrs = [
         ButtonGroup.Variant.toClass ButtonGroup.Variant.Outlined |> cl
@@ -368,7 +368,7 @@ ButtonGroup.Create(
       ] [
         ButtonGroup.Create(
           [
-            Button.Create(text "Save", onClick = (fun () -> printfn "Save clicked"))
+            Button.create (text "Save", onClick = (fun () -> printfn "Save clicked"))
             Dropdown.Create(
               text "Save Options",
               [
@@ -393,7 +393,7 @@ ButtonGroup.Create(
 
 ButtonGroup.Create(
     [
-        Button.Create(text "Save", onClick = (fun () -> printfn "Save clicked"))
+        Button.create(text "Save", onClick = (fun () -> printfn "Save clicked"))
         Dropdown.Create(
             text "Save Options",
             [

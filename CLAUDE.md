@@ -91,11 +91,11 @@ namespace Weave
 
 open WebSharper
 open WebSharper.UI
-open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module MyComponent =
 
   module Variant =
@@ -111,12 +111,10 @@ module MyComponent =
       | BrandColor.Primary -> primary
       // ...
 
-open MyComponent
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type MyComponent =
 
-  static member Create(innerContents: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
+  static member create(innerContents: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
     let enabled = defaultArg enabled (View.Const true)
     let attrs   = defaultArg attrs   []
     div [
@@ -129,12 +127,14 @@ type MyComponent =
 **Key rules:**
 
 - `[<JavaScript>]` on every module and type (required for WebSharper transpilation)
-- **No styling parameters** (`variant`, `color`, `size`) on `Create` — callers pass them via `?attrs` using the component's style modules (e.g., `Button.Variant.filled`, `Button.Color.primary`)
+- **Static member functions use camelCase** (e.g., `Button.create`, `IconButton.create`), not PascalCase
+- **No styling parameters** (`variant`, `color`, `size`) on `create` — callers pass them via `?attrs` using the component's style modules (e.g., `Button.Variant.filled`, `Button.Color.primary`)
 - `?attrs: Attr list` is always the last optional parameter; defaults to `[]`; `yield! attrs` comes last so callers can extend
 - **Reactive parameters:** use `Var<'T>` for two-way bindings, `View<'T>` for read-only reactive inputs; avoid plain values for anything that can change
 - **CSS helpers:** `cl` for a single class, `cls [...]` for multiple — never chain `cl` calls where `cls` applies
 - DU types for variants/sizes use `[<RequireQualifiedAccess; Struct>]` to prevent name collisions; `Color` modules use global `BrandColor` DU
 - `Attr.DynamicClassPred` gates a modifier class on a `View<bool>`
+- When a component has structurally different HTML output (e.g., icon-only vs text button), use a separate type (e.g., `IconButton`) rather than a variant factory on the same type
 
 ## SCSS Conventions
 

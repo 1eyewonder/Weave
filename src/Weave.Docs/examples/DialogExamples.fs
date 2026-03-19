@@ -10,21 +10,17 @@ open Weave
 module DialogExamples =
 
   let cancel dialog =
-    Button.Create(
+    Button.error (
       text "Cancel",
       onClick = (fun () -> Var.Set dialog false),
-      attrs = [ Button.Color.error; Button.Variant.filled ]
+      attrs = [ Button.Variant.filled ]
     )
 
   let confirm dialog =
-    Button.Create(
+    Button.primary (
       text "Confirm",
       onClick = (fun () -> Var.Set dialog false),
-      attrs = [
-        Button.Color.primary
-        Button.Variant.filled
-        Margin.toClasses Margin.Right.extraSmall |> cls
-      ]
+      attrs = [ Button.Variant.filled; Margin.toClasses Margin.Right.extraSmall |> cls ]
     )
 
   let private basicDialogExample () =
@@ -42,10 +38,10 @@ module DialogExamples =
 
     let content =
       div [] [
-        Button.Create(
+        Button.primary (
           text "Open Dialog",
           onClick = (fun () -> Var.Set dialogVisible true),
-          attrs = [ Button.Color.primary; Button.Variant.filled ]
+          attrs = [ Button.Variant.filled ]
         )
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
@@ -72,7 +68,7 @@ dialogVisible.View
             DialogContent.Create(
                 div [] [
                     Body1.Div("This is a basic dialog with title and content.")
-                    Button.Create(
+                    Button.create(
                         text "Close",
                         onClick = (fun () -> Var.Set dialogVisible false)
                     )
@@ -100,10 +96,10 @@ dialogVisible.View
 
     let content =
       div [] [
-        Button.Create(
+        Button.secondary (
           text "Open Optional Dialog",
           onClick = (fun () -> Var.Set dialogVisible true),
-          attrs = [ Button.Color.secondary; Button.Variant.filled ]
+          attrs = [ Button.Variant.filled ]
         )
         dialogVisible.View
         |> Doc.BindView(fun isOpen ->
@@ -146,10 +142,10 @@ Dialog.Create(
       div [] [
         Body1.Div("This dialog demonstrates different positions.")
         div [ Margin.toClasses Margin.Top.small |> cls ] [
-          Button.Create(
+          Button.primary (
             text "Close",
             onClick = (fun () -> Var.Set dialog None),
-            attrs = [ Button.Color.primary; Button.Variant.filled ]
+            attrs = [ Button.Variant.filled ]
           )
         ]
       ]
@@ -163,10 +159,10 @@ Dialog.Create(
         Dialog.DialogPosition.CenterLeft, "Center Left"
       ]
       |> List.map (fun (pos, label) ->
-        Button.Create(
+        Button.secondary (
           text label,
           onClick = (fun () -> Var.Set dialogVisible (Some pos)),
-          attrs = [ Button.Color.secondary; Button.Variant.filled ]
+          attrs = [ Button.Variant.filled ]
         ))
 
     let description =

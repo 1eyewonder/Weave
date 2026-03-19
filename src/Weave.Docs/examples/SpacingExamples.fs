@@ -677,25 +677,13 @@ div [
         div [ cl (Density.toClass density) ] [
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
           div [] [
-            Button.Create(
-              text "Filled",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
-            )
+            Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
-            Button.Create(
-              text "Outlined",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
-            )
+            Button.primary (text "Outlined", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ])
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
-            Button.Create(
-              text "Text",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.text; Button.Color.primary ]
-            )
+            Button.primary (text "Text", onClick = (fun () -> ()), attrs = [ Button.Variant.text ])
           ]
         ]
 
@@ -715,32 +703,29 @@ div [
 
 // Container-level: all children inherit the density via CSS cascade
 div [ cl (Density.toClass Density.Compact) ] [ // see here
-    Button.Create(
+    Button.primary(
         text "Filled",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
-            Button.Color.primary
         ]
     )
-    Button.Create(
+    Button.primary(
         text "Outlined",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.outlined
-            Button.Color.primary
         ]
     )
 ]
 
 // Per-instance: pass the density class in attrs to set it on one component
-Button.Create(
+Button.primary(
     text "Spacious",
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Spacious) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 """

@@ -150,7 +150,7 @@ type ButtonMenu =
       | None -> closedIcon
 
     let triggerButton =
-      Button.CreateIcon(
+      IconButton.create (
         triggerIcon,
         onClick = (fun () -> isOpen.Value <- not isOpen.Value),
         attrs = [
@@ -202,7 +202,7 @@ type ButtonMenu =
       | None -> closedContent
 
     let triggerButton =
-      Button.Create(
+      Button.create (
         triggerContent,
         onClick = (fun () -> isOpen.Value <- not isOpen.Value),
         attrs = [

@@ -18,25 +18,13 @@ module ButtonExamples =
       Grid.Create(
         [
           GridItem.Create(
-            Button.Create(
-              text "Filled",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
-            )
+            Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           )
           GridItem.Create(
-            Button.Create(
-              text "Outlined",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
-            )
+            Button.primary (text "Outlined", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ])
           )
           GridItem.Create(
-            Button.Create(
-              text "Text",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.text; Button.Color.primary ]
-            )
+            Button.primary (text "Text", onClick = (fun () -> ()), attrs = [ Button.Variant.text ])
           )
         ],
         spacing = Grid.GutterSpacing.create 2
@@ -48,30 +36,27 @@ module ButtonExamples =
 
 let doNothing () = ()
 
-Button.Create(
+Button.primary(
     text "Filled",
     onClick = doNothing,
     attrs = [
         Button.Variant.filled // see here
-        Button.Color.primary
     ]
 )
 
-Button.Create(
+Button.primary(
     text "Outlined",
     onClick = doNothing,
     attrs = [
         Button.Variant.outlined // see here
-        Button.Color.primary
     ]
 )
 
-Button.Create(
+Button.primary(
     text "Text",
     onClick = doNothing,
     attrs = [
         Button.Variant.text // see here
-        Button.Color.primary
     ]
 )
     """
@@ -112,7 +97,7 @@ colors
 |> List.map (fun color ->
     let colorName = sprintf "%A" color
 
-    Button.Create(
+    Button.create(
         text colorName,
         onClick = onClick colorName,
         attrs = [
@@ -131,7 +116,7 @@ colors
           let colorName = sprintf "%A" color
 
           GridItem.Create(
-            Button.Create(
+            Button.create (
               text colorName,
               onClick = (fun () -> printfn "%s clicked" colorName),
               attrs = [ Button.Variant.filled; Button.Color.toAttr color; Button.Width.full ]
@@ -154,25 +139,13 @@ colors
         div [ cl (Density.toClass density) ] [
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
           div [] [
-            Button.Create(
-              text "Filled",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
-            )
+            Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
-            Button.Create(
-              text "Outlined",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
-            )
+            Button.primary (text "Outlined", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ])
           ]
           div [ Margin.toClasses Margin.Top.extraSmall |> cls ] [
-            Button.Create(
-              text "Text",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.text; Button.Color.primary ]
-            )
+            Button.primary (text "Text", onClick = (fun () -> ()), attrs = [ Button.Variant.text ])
           ]
         ]
 
@@ -190,33 +163,30 @@ colors
       """open Weave
 
 
-Button.Create(
+Button.primary(
     text "Compact",
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Compact) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 
-Button.Create(
+Button.primary(
     text "Standard",
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Standard) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 
-Button.Create(
+Button.primary(
     text "Spacious",
     onClick = (fun () -> ()),
     attrs = [
         cl (Density.toClass Density.Spacious) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 """
@@ -231,15 +201,15 @@ Button.Create(
       Grid.Create(
         [
           GridItem.Create(
-            Button.Create(
+            Button.primary (
               text "Enabled",
               onClick = (fun () -> printfn "Enabled clicked"),
               enabled = View.Const true,
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
+              attrs = [ Button.Variant.filled ]
             )
           )
           GridItem.Create(
-            Button.Create(
+            Button.create (
               text "Disabled",
               onClick = (fun () -> printfn "This won't fire"),
               enabled = View.Const false,
@@ -254,17 +224,16 @@ Button.Create(
       """open Weave
 
 
-Button.Create(
+Button.primary(
     text "Enabled",
     onClick = (fun () -> printfn "Enabled clicked"),
     enabled = View.Const true, // see here
     attrs = [
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 
-Button.Create(
+Button.create(
     text "Disabled",
     onClick = (fun () -> printfn "This won't fire"),
     enabled = View.Const false, // see here
@@ -281,10 +250,10 @@ Button.Create(
       Helpers.bodyText "Buttons can span the full width of their container"
 
     let content =
-      Button.Create(
+      Button.primary (
         text "Full Width Button",
         onClick = (fun () -> printfn "Full width clicked"),
-        attrs = [ Button.Color.primary; Button.Variant.filled; Button.Width.full ]
+        attrs = [ Button.Variant.filled; Button.Width.full ]
       )
 
     let code =
@@ -292,11 +261,10 @@ Button.Create(
 
 open WebSharper.UI
 
-Button.Create(
+Button.primary(
     text "Full Width Button",
     onClick = (fun () -> printfn "Full width clicked"),
     attrs = [
-        Button.Color.primary
         Button.Variant.filled
         Button.Width.full // see here
     ]
@@ -315,14 +283,10 @@ Button.Create(
             let displayText = sprintf "%A" radius
 
             GridItem.Create(
-              Button.Create(
+              Button.primary (
                 text displayText,
                 onClick = (fun () -> ()),
-                attrs = [
-                  Button.Variant.filled
-                  BorderRadius.toClass radius |> cl
-                  Button.Color.primary
-                ]
+                attrs = [ Button.Variant.filled; BorderRadius.toClass radius |> cl ]
               )
             )
 
@@ -343,13 +307,12 @@ Button.Create(
 let btn (radius: BorderRadius) =
     let displayText = sprintf "%A" radius
 
-    Button.Create(
+    Button.primary(
         text displayText,
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
             BorderRadius.toClass radius |> cl // see here
-            Button.Color.primary
         ]
     )
 
@@ -366,29 +329,55 @@ btn BorderRadius.Circle
   let private iconButtonExamples () =
     let description =
       Helpers.bodyText
-        "Icon buttons render a single icon without a text label. Use Button.CreateIcon to create them. They reuse the same variant, color, and size classes as regular buttons."
+        "Icon buttons render a single icon without a text label. Use IconButton.create to create them. They reuse the same variant, color, and size classes as regular buttons."
 
     let content =
       Grid.Create(
         [
-          let btn icon ariaLabel (color: Attr) =
-            GridItem.Create(
-              Button.CreateIcon(
-                Icon.Create(icon),
-                onClick = (fun () -> printfn "%s clicked" ariaLabel),
-                attrs = [
-                  Attr.Create "aria-label" ariaLabel
-                  color
-                  Button.Variant.filled
-                  BorderRadius.toClass BorderRadius.Circle |> cl
-                ]
-              )
+          GridItem.Create(
+            IconButton.error (
+              Icon.Create(Icon.UiActions UiActions.Delete),
+              onClick = (fun () -> printfn "delete clicked"),
+              attrs = [
+                Attr.Create "aria-label" "delete"
+                Button.Variant.filled
+                BorderRadius.toClass BorderRadius.Circle |> cl
+              ]
             )
-
-          btn (Icon.UiActions UiActions.Delete) "delete" Button.Color.error
-          btn (Icon.UiActions UiActions.Favorite) "favorite" Button.Color.secondary
-          btn (Icon.UiActions UiActions.Home) "home" Button.Color.primary
-          btn (Icon.UiActions UiActions.Search) "search" Button.Color.info
+          )
+          GridItem.Create(
+            IconButton.secondary (
+              Icon.Create(Icon.UiActions UiActions.Favorite),
+              onClick = (fun () -> printfn "favorite clicked"),
+              attrs = [
+                Attr.Create "aria-label" "favorite"
+                Button.Variant.filled
+                BorderRadius.toClass BorderRadius.Circle |> cl
+              ]
+            )
+          )
+          GridItem.Create(
+            IconButton.primary (
+              Icon.Create(Icon.UiActions UiActions.Home),
+              onClick = (fun () -> printfn "home clicked"),
+              attrs = [
+                Attr.Create "aria-label" "home"
+                Button.Variant.filled
+                BorderRadius.toClass BorderRadius.Circle |> cl
+              ]
+            )
+          )
+          GridItem.Create(
+            IconButton.info (
+              Icon.Create(Icon.UiActions UiActions.Search),
+              onClick = (fun () -> printfn "search clicked"),
+              attrs = [
+                Attr.Create "aria-label" "search"
+                Button.Variant.filled
+                BorderRadius.toClass BorderRadius.Circle |> cl
+              ]
+            )
+          )
         ],
         spacing = Grid.GutterSpacing.create 2
       )
@@ -400,7 +389,7 @@ open Weave.Icons.MaterialSymbols
 
 
 let btn icon ariaLabel color =
-    Button.CreateIcon(
+    IconButton.create(
         Icon.Create(icon),
         onClick = (fun () -> printfn "%s clicked" ariaLabel),
         attrs = [
@@ -433,36 +422,28 @@ btn (Icon.UiActions UiActions.Search) "search" BrandColor.Info
             [
               GridItem.Create(Subtitle2.Div(label), xs = Grid.Width.create 12, sm = Grid.Width.create 3)
               GridItem.Create(
-                Button.CreateIcon(
+                IconButton.secondary (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> ()),
-                  attrs = [
-                    Attr.Create "aria-label" "favorite"
-                    Button.Variant.filled
-                    Button.Color.secondary
-                  ]
+                  attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled ]
                 ),
                 xs = Grid.Width.create 4,
                 sm = Grid.Width.create 3
               )
               GridItem.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Delete),
                   onClick = (fun () -> ()),
-                  attrs = [
-                    Attr.Create "aria-label" "delete"
-                    Button.Variant.outlined
-                    Button.Color.error
-                  ]
+                  attrs = [ Attr.Create "aria-label" "delete"; Button.Variant.outlined ]
                 ),
                 xs = Grid.Width.create 4,
                 sm = Grid.Width.create 3
               )
               GridItem.Create(
-                Button.CreateIcon(
+                IconButton.primary (
                   Icon.Create(Icon.UiActions UiActions.Search),
                   onClick = (fun () -> ()),
-                  attrs = [ Attr.Create "aria-label" "search"; Button.Variant.text; Button.Color.primary ]
+                  attrs = [ Attr.Create "aria-label" "search"; Button.Variant.text ]
                 ),
                 xs = Grid.Width.create 4,
                 sm = Grid.Width.create 3
@@ -482,36 +463,33 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 
-Button.CreateIcon(
+IconButton.primary(
     Icon.Create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Compact) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 
-Button.CreateIcon(
+IconButton.primary(
     Icon.Create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Standard) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 
-Button.CreateIcon(
+IconButton.primary(
     Icon.Create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
         cl (Density.toClass Density.Spacious) // see here
         Button.Variant.filled
-        Button.Color.primary
     ]
 )
 """
@@ -526,19 +504,15 @@ Button.CreateIcon(
       Grid.Create(
         [
           GridItem.Create(
-            Button.CreateIcon(
+            IconButton.secondary (
               Icon.Create(Icon.UiActions UiActions.Favorite),
               onClick = (fun () -> printfn "favorite clicked"),
               enabled = View.Const true,
-              attrs = [
-                Attr.Create "aria-label" "favorite"
-                Button.Variant.filled
-                Button.Color.secondary
-              ]
+              attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled ]
             )
           )
           GridItem.Create(
-            Button.CreateIcon(
+            IconButton.create (
               Icon.Create(Icon.UiActions UiActions.Favorite),
               onClick = (fun () -> printfn "This won't fire"),
               enabled = View.Const false,
@@ -555,18 +529,17 @@ open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
 
-Button.CreateIcon(
+IconButton.secondary(
     Icon.Create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> printfn "favorite clicked"),
     enabled = View.Const true, // see here
     attrs = [
         Attr.Create "aria-label" "favorite"
         Button.Variant.filled
-        Button.Color.secondary
     ]
 )
 
-Button.CreateIcon(
+IconButton.create(
     Icon.Create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> printfn "This won't fire"),
     enabled = View.Const false, // see here

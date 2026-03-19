@@ -25,10 +25,10 @@ module TooltipExamples =
         content =
           Tooltip.Create(
             innerContent =
-              Button.Create(
+              Button.primary (
                 text displayText,
                 onClick = (fun () -> ()),
-                attrs = [ Button.Variant.outlined; Button.Color.primary; Button.Width.full ]
+                attrs = [ Button.Variant.outlined; Button.Width.full ]
               ),
             tooltipContent = Body1.Div(sprintf "Tooltip on %A" direction),
             direction = direction
@@ -56,12 +56,11 @@ let tooltipBtn direction =
 
     Tooltip.Create(
         innerContent =
-          Button.Create(
+          Button.primary(
               text displayText,
               onClick = (fun () -> ()),
               attrs = [
                   Button.Variant.outlined
-                  Button.Color.primary
                   Button.Width.full
               ]
           ),
@@ -94,7 +93,7 @@ tooltipBtn Tooltip.Direction.Right
           let displayText = sprintf "%A" color
 
           Tooltip.Create(
-            Button.Create(
+            Button.create (
               text displayText,
               onClick = (fun () -> ()),
               attrs = [ Button.Variant.filled; Button.Color.toAttr color; Button.Width.full ]
@@ -121,7 +120,7 @@ let tooltipButton color =
     let displayText = sprintf "%A" color
 
     Tooltip.Create(
-        Button.Create(
+        Button.create(
             text displayText,
             onClick = (fun () -> ()),
             attrs = [
@@ -166,11 +165,7 @@ tooltipButton BrandColor.Info
 
         [
           Tooltip.Create(
-            Button.Create(
-              text "Hover Me",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
-            ),
+            Button.primary (text "Hover Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
             Body1.Div("Appears on hover"),
             activationEvents = [ Tooltip.Activation.Hover ]
           )
@@ -180,11 +175,7 @@ tooltipButton BrandColor.Info
 
         [
           Tooltip.Create(
-            Button.Create(
-              text "Click Me",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.outlined; Button.Color.secondary ]
-            ),
+            Button.secondary (text "Click Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
             Body1.Div("Appears on click"),
             activationEvents = [ Tooltip.Activation.Click ]
           )
@@ -199,12 +190,11 @@ tooltipButton BrandColor.Info
 
 
 Tooltip.Create(
-    Button.Create(
+    Button.primary(
         text "Hover Me",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.outlined
-            Button.Color.primary
         ]
     ),
     Body1.Div("Appears on hover"),
@@ -212,12 +202,11 @@ Tooltip.Create(
 )
 
 Tooltip.Create(
-    Button.Create(
+    Button.secondary(
         text "Click Me",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.outlined
-            Button.Color.secondary
         ]
     ),
     Body1.Div("Appears on click"),
@@ -241,11 +230,7 @@ Tooltip.Create(
       ] [
         div [ Attr.Style "text-align" "center" ] [
           Tooltip.Create(
-            Button.Create(
-              text "With Arrow",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
-            ),
+            Button.primary (text "With Arrow", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ]),
             Body1.Div("I have an arrow pointing"),
             showArrow = true
           )
@@ -254,10 +239,10 @@ Tooltip.Create(
 
         div [ Attr.Style "text-align" "center" ] [
           Tooltip.Create(
-            Button.Create(
+            Button.secondary (
               text "Without Arrow",
               onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.secondary ]
+              attrs = [ Button.Variant.filled ]
             ),
             Body1.Div("No arrow here"),
             showArrow = false
@@ -271,12 +256,11 @@ Tooltip.Create(
 
 
 Tooltip.Create(
-    Button.Create(
+    Button.primary(
         text "With Arrow",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
-            Button.Color.primary
         ]
     ),
     Body1.Div("I have an arrow pointing"),
@@ -284,12 +268,11 @@ Tooltip.Create(
 )
 
 Tooltip.Create(
-    Button.Create(
+    Button.secondary(
         text "Without Arrow",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
-            Button.Color.secondary
         ]
     ),
     Body1.Div("No arrow here"),
@@ -310,10 +293,10 @@ Tooltip.Create(
         Attr.Style "padding" "32px"
       ] [
         Tooltip.Create(
-          Button.Create(
+          Button.info (
             text "Rich Content Tooltip",
             onClick = (fun () -> ()),
-            attrs = [ Button.Variant.filled; Button.Color.info ]
+            attrs = [ Button.Variant.filled ]
           ),
           div [ Attr.Style "padding" "4px" ] [
             Body2.Div(
@@ -333,12 +316,11 @@ Tooltip.Create(
 
 
 Tooltip.Create(
-    Button.Create(
+    Button.info(
         text "Rich Content Tooltip",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
-            Button.Color.info
         ]
     ),
     div [ Attr.Style "padding" "4px" ] [ // see here - custom Doc content

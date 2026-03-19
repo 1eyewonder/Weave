@@ -15,11 +15,11 @@ Use this structure as an example, but not a silver bullet. Per-component styling
 
 **Rules:**
 
-- Styling props (variant, color, size, etc.) must not be individual optional parameters on `Create` — pass them via `?attrs: Attr list` using the component's style modules (e.g., `MyComponent.Variant.filled`). See the **Create Function Parameters** section of `weave-component-conventions.skill.md` for the full rule and examples.
+- Styling props (variant, color, size, etc.) must not be individual optional parameters on `create` — pass them via `?attrs: Attr list` using the component's style modules (e.g., `MyComponent.Variant.filled`). See the **create Function Parameters** section of `weave-component-conventions.skill.md` for the full rule and examples.
 - Per-component style modules (`Variant`, `Size`, etc.) contain plain `let` bindings that return `Attr` directly via the `cl` helper and type-provided CSS classes. DU types with `[<RequireQualifiedAccess; Struct>]` are no longer needed for these — the type provider enforces correctness at compile time.
 - `Color` using `BrandColor` is conventional for any interactive or themeable component since `BrandColor` is a global type while the `Color` module is unique to the component. The `Color` module exposes both direct `let` bindings (e.g. `Color.primary`) and a `toAttr` function that maps `BrandColor` to the corresponding `Attr`.
-- Per-component modules contain plain `let` bindings returning `Attr` directly (e.g. `module Variant` with `let filled = cl Css.weave-{name}--filled`). There is no `open {Name}` line needed since there are no DU types to bring into scope.
-- Optional parameters (`?enabled`, `?attrs`, `?size`, etc.) always have a `defaultArg` binding at the top of `Create`.
+- Per-component modules contain plain `let` bindings returning `Attr` directly (e.g. `module Variant` with `let filled = cl Css.weave-{name}--filled`). Both the module and type use `[<RequireQualifiedAccess>]` — there is no `open {Name}` line needed.
+- Optional parameters (`?enabled`, `?attrs`, `?size`, etc.) always have a `defaultArg` binding at the top of `create`.
 - Reactive state uses `View<'T>` for read-only props and `Var<'T>` for two-way bindings (e.g. `isChecked: Var<bool>`).
 - Never use bare `attr.class`; always use `cl` (single class) or `cls [...]` (multiple) from `Weave.CssHelpers`. If you find yourself needing to use WebSharper's `Attr.Style "name" "value"`, consider whether you need to use a supported CSS helper or even create a new one in `Core.fs`.
 - `Attr.DynamicClassPred` gates a modifier class on a `View<bool>`.
@@ -32,11 +32,11 @@ namespace Weave
 
 open WebSharper
 open WebSharper.UI
-open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module {Name} =
 
   module Variant =
@@ -70,10 +70,10 @@ module {Name} =
       | BrandColor.Success -> success
       | BrandColor.Info -> info
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type {Name} =
 
-  static member Create
+  static member create
     (
       innerContents: Doc,
       ?enabled: View<bool>,
@@ -232,7 +232,7 @@ module {Name}Examples =
         [
           // Render each variant/case inside a GridItem
           GridItem.Create(
-            {Name}.Create(
+            {Name}.create(
               text "Example",
               attrs = [
                 {Name}.Variant.filled
@@ -245,7 +245,7 @@ module {Name}Examples =
       )
 
     let code =
-      """{Name}.Create(
+      """{Name}.create(
     text "Example",
     attrs = [
         {Name}.Variant.filled
@@ -548,7 +548,7 @@ Add a page function and register it in `renderPage`:
 ```fsharp
 let private {name}Page () =
   div [] [
-    {Name}.Create(...)
+    {Name}.create(...)
   ]
 
 // In renderPage:
@@ -570,7 +570,7 @@ let private {name}Page () =
 
 Before marking the component as done, verify:
 
-- [ ] `src/Weave/components/{Name}.fs` created with correct namespace, opens, style modules with `let` bindings returning `Attr`, and `Create` static method
+- [ ] `src/Weave/components/{Name}.fs` created with correct namespace, opens, style modules with `let` bindings returning `Attr`, and `create` static method (camelCase)
 - [ ] `src/Weave/scss/components/_{name}.scss` created with BEM classes, theme variables, `$palette-colors` loop, disabled/hover/focus states
 - [ ] `src/Weave/scss/main.scss` has `@import "components/{name}";` in alphabetical order
 - [ ] `src/Weave/Weave.fsproj` has `<Compile Include="components/{Name}.fs" />`

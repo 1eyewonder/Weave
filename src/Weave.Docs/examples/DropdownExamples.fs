@@ -25,10 +25,10 @@ module DropdownExamples =
             div [] [
               Body1.Div(message)
               div [ Margin.toClasses Margin.Top.small |> cls ] [
-                Button.Create(
+                Button.primary (
                   text "OK",
                   onClick = (fun () -> Var.Set messageVar None),
-                  attrs = [ Button.Color.primary; Button.Variant.filled ]
+                  attrs = [ Button.Variant.filled ]
                 )
               ]
             ]

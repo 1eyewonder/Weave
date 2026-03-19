@@ -493,7 +493,7 @@ ChipSet.Create(
         items.View
         |> Doc.BindView(fun currentItems ->
           if List.isEmpty currentItems then
-            Button.Create(
+            Button.primary (
               text "Reset",
               onClick =
                 (fun () ->
@@ -506,7 +506,7 @@ ChipSet.Create(
                     ChipSet.ChipDef.create (text "WebSharper") "websharper"
                     |> ChipSet.ChipDef.withClosable
                   ]),
-              attrs = [ Button.Variant.outlined; Button.Color.primary ]
+              attrs = [ Button.Variant.outlined ]
             )
           else
             ChipSet.Create(

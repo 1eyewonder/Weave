@@ -202,15 +202,15 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
             yield! Padding.toClasses Padding.Vertical.extraSmall
           ]
         ] [
-          Button.CreateIcon(
+          IconButton.create (
             Icon.Create(Icon.UiActions UiActions.Menu),
             onClick = (fun () -> ()),
             attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
           )
           H6.Div("My Application")
           Spacer.Create()
-          Button.CreateIcon(Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
-          Button.CreateIcon(Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
+          IconButton.create (Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
+          IconButton.create (Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
         ],
         position = AppBar.Position.Static,
         attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
@@ -226,15 +226,15 @@ AppBar.Create(content, position = AppBar.Position.Bottom)"""
             yield! Padding.toClasses Padding.Vertical.extraSmall
         ]
     ] [
-        Button.CreateIcon(
+        IconButton.create(
           Icon.Create(Icon.UiActions UiActions.Menu),
           onClick = (fun () -> ()),
           attrs = [ Margin.toClasses Margin.Right.extraSmall |> cls ]
         )
         H6.Div("My Application")
         Spacer.Create()
-        Button.CreateIcon(Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
-        Button.CreateIcon(Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
+        IconButton.create(Icon.Create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
+        IconButton.create(Icon.Create(Icon.Social Social.Person), onClick = (fun () -> ()))
     ],
     attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
 )"""

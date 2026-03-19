@@ -25,24 +25,16 @@ module SpacerExamples =
         ]
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
       ] [
-        Button.Create(
-          text "Left",
-          onClick = (fun () -> ()),
-          attrs = [ Button.Variant.filled; Button.Color.primary ]
-        )
+        Button.primary (text "Left", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
         Spacer.Create()
-        Button.Create(
-          text "Right",
-          onClick = (fun () -> ()),
-          attrs = [ Button.Variant.filled; Button.Color.primary ]
-        )
+        Button.primary (text "Right", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
       ]
 
     let code =
       """div [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ] [
-    Button.Create(text "Left", onClick = (fun () -> ()))
+    Button.create(text "Left", onClick = (fun () -> ()))
     Spacer.Create()
-    Button.Create(text "Right", onClick = (fun () -> ()))
+    Button.create(text "Right", onClick = (fun () -> ()))
 ]"""
 
     Helpers.codeSampleSection "Basic" description content code
@@ -54,11 +46,7 @@ module SpacerExamples =
          distributing items evenly across the container."
 
     let btn label =
-      Button.Create(
-        text label,
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled; Button.Color.primary ]
-      )
+      Button.primary (text label, onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
 
     let content =
       div [
@@ -72,11 +60,11 @@ module SpacerExamples =
 
     let code =
       """div [ cls [ Flex.Flex.allSizes; AlignItems.toClass AlignItems.Center ] ] [
-    Button.Create(text "One", onClick = (fun () -> ()))
+    Button.create(text "One", onClick = (fun () -> ()))
     Spacer.Create()
-    Button.Create(text "Two", onClick = (fun () -> ()))
+    Button.create(text "Two", onClick = (fun () -> ()))
     Spacer.Create()
-    Button.Create(text "Three", onClick = (fun () -> ()))
+    Button.create(text "Three", onClick = (fun () -> ()))
 ]"""
 
     Helpers.codeSampleSection "Multiple Spacers" description content code

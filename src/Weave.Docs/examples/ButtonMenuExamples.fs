@@ -27,13 +27,12 @@ module ButtonMenuExamples =
           closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
           items = [
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.info (
                 Icon.Create(Icon.Social Social.Share),
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [
                   Attr.Create "aria-label" "share"
                   Button.Variant.filled
-                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -41,13 +40,12 @@ module ButtonMenuExamples =
               direction = Tooltip.Direction.Right
             )
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.error (
                 Icon.Create(Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
                   Button.Variant.filled
-                  Button.Color.error
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -55,13 +53,12 @@ module ButtonMenuExamples =
               direction = Tooltip.Direction.Right
             )
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.success (
                 Icon.Create(Icon.Text Text.ContentCopy),
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [
                   Attr.Create "aria-label" "copy"
                   Button.Variant.filled
-                  Button.Color.success
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -87,13 +84,12 @@ ButtonMenu.CreateIcon(
     closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
     items = [
         Tooltip.Create(
-            Button.CreateIcon(
+            IconButton.info(
                 Icon.Create(Icon.Social Social.Share),
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -101,13 +97,12 @@ ButtonMenu.CreateIcon(
             direction = Tooltip.Direction.Right
         )
         Tooltip.Create(
-            Button.CreateIcon(
+            IconButton.error(
                 Icon.Create(Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> printfn "favorite clicked"),
                 attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -115,13 +110,12 @@ ButtonMenu.CreateIcon(
             direction = Tooltip.Direction.Right
         )
         Tooltip.Create(
-            Button.CreateIcon(
+            IconButton.success(
                 Icon.Create(Icon.Text Text.ContentCopy),
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [
                     Attr.Create "aria-label" "copy"
                     Button.Variant.filled
-                    Button.Color.success
                     BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
             ),
@@ -165,13 +159,12 @@ ButtonMenu.CreateIcon(
             openIcon = Icon.Create(Icon.UiActions UiActions.Close),
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.secondary (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.secondary
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -179,13 +172,12 @@ ButtonMenu.CreateIcon(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -215,13 +207,12 @@ ButtonMenu.CreateIcon(
             closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.secondary (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.secondary
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -229,13 +220,12 @@ ButtonMenu.CreateIcon(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> ()),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -308,13 +298,12 @@ ButtonMenu.CreateIcon(
           closedIcon = Icon.Create(Icon.UiActions UiActions.Add),
           items = [
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.info (
                 Icon.Create(Icon.Action Action.Alarm),
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "alarm"
                   Button.Variant.filled
-                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -322,13 +311,12 @@ ButtonMenu.CreateIcon(
               direction = tooltipDir
             )
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.warning (
                 Icon.Create(Icon.UiActions UiActions.Star),
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "star"
                   Button.Variant.filled
-                  Button.Color.warning
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -366,23 +354,21 @@ open Weave.Icons.MaterialSymbols
 
 
 let items = [
-    Button.CreateIcon(
+    IconButton.info(
         Icon.Create(Icon.Action Action.Alarm),
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "alarm"
             Button.Variant.filled
-            Button.Color.info
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
-    Button.CreateIcon(
+    IconButton.warning(
         Icon.Create(Icon.UiActions UiActions.Star),
         onClick = (fun () -> ()),
         attrs = [
             Attr.Create "aria-label" "star"
             Button.Variant.filled
-            Button.Color.warning
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
@@ -441,12 +427,12 @@ ButtonMenu.CreateIcon(
         ]
       ] [
         div [ Attr.Style "margin-bottom" "16px" ] [
-          Button.Create(
+          Button.secondary (
             isMenuOpen.View
             |> View.Map(fun o -> if o then text "Close Menu" else text "Open Menu")
             |> Doc.EmbedView,
             onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
-            attrs = [ Button.Variant.outlined; Button.Color.secondary ]
+            attrs = [ Button.Variant.outlined ]
           )
         ]
         ButtonMenu.CreateIcon(
@@ -454,13 +440,12 @@ ButtonMenu.CreateIcon(
           openIcon = Icon.Create(Icon.UiActions UiActions.Close),
           items = [
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.info (
                 Icon.Create(Icon.Social Social.Share),
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "share"
                   Button.Variant.filled
-                  Button.Color.info
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -468,13 +453,12 @@ ButtonMenu.CreateIcon(
               direction = Tooltip.Direction.Right
             )
             Tooltip.Create(
-              Button.CreateIcon(
+              IconButton.error (
                 Icon.Create(Icon.UiActions UiActions.Favorite),
                 onClick = (fun () -> ()),
                 attrs = [
                   Attr.Create "aria-label" "favorite"
                   Button.Variant.filled
-                  Button.Color.error
                   BorderRadius.toClass BorderRadius.Circle |> cl
                 ]
               ),
@@ -501,14 +485,13 @@ open WebSharper.UI
 let isMenuOpen = Var.Create false
 
 // External button to toggle the menu
-Button.Create(
+Button.secondary(
     isMenuOpen.View
     |> View.Map (fun o -> if o then text "Close Menu" else text "Open Menu")
     |> Doc.EmbedView,
     onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
     attrs = [
         Button.Variant.outlined
-        Button.Color.secondary
     ]
 )
 
@@ -554,13 +537,12 @@ ButtonMenu.CreateIcon(
             openOnHover = View.Const true,
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.info (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -568,13 +550,12 @@ ButtonMenu.CreateIcon(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -602,13 +583,12 @@ ButtonMenu.CreateIcon(
             openOnHover = View.Const true,
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.info (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -616,13 +596,12 @@ ButtonMenu.CreateIcon(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -647,13 +626,12 @@ ButtonMenu.CreateIcon(
     openIcon = Icon.Create(Icon.UiActions UiActions.Close),
     openOnHover = View.Const true,
     items = [
-        Button.CreateIcon(
+        IconButton.info(
             Icon.Create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
                 Button.Variant.filled
-                Button.Color.info
                 BorderRadius.toClass BorderRadius.Circle |> cl
             ]
         )
@@ -670,13 +648,12 @@ ButtonMenu.Create(
     closedContent = text "Menu",
     openOnHover = View.Const true,
     items = [
-        Button.CreateIcon(
+        IconButton.info(
             Icon.Create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
             attrs = [
                 Attr.Create "aria-label" "share"
                 Button.Variant.filled
-                Button.Color.info
                 BorderRadius.toClass BorderRadius.Circle |> cl
             ]
         )
@@ -715,13 +692,12 @@ ButtonMenu.Create(
             closedContent = text "Menu",
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.info (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -729,13 +705,12 @@ ButtonMenu.Create(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -762,13 +737,12 @@ ButtonMenu.Create(
             openContent = Doc.Concat [ Icon.Create(Icon.UiActions UiActions.Add); text "Close" ],
             items = [
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.info (
                   Icon.Create(Icon.Social Social.Share),
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [
                     Attr.Create "aria-label" "share"
                     Button.Variant.filled
-                    Button.Color.info
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -776,13 +750,12 @@ ButtonMenu.Create(
                 direction = Tooltip.Direction.Right
               )
               Tooltip.Create(
-                Button.CreateIcon(
+                IconButton.error (
                   Icon.Create(Icon.UiActions UiActions.Favorite),
                   onClick = (fun () -> printfn "favorite clicked"),
                   attrs = [
                     Attr.Create "aria-label" "favorite"
                     Button.Variant.filled
-                    Button.Color.error
                     BorderRadius.toClass BorderRadius.Circle |> cl
                   ]
                 ),
@@ -802,23 +775,21 @@ open Weave.Icons.MaterialSymbols
 
 
 let menuItems = [
-    Button.CreateIcon(
+    IconButton.info(
         Icon.Create(Icon.Social Social.Share),
         onClick = (fun () -> printfn "share clicked"),
         attrs = [
             Attr.Create "aria-label" "share"
             Button.Variant.filled
-            Button.Color.info
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )
-    Button.CreateIcon(
+    IconButton.error(
         Icon.Create(Icon.UiActions UiActions.Favorite),
         onClick = (fun () -> printfn "favorite clicked"),
         attrs = [
             Attr.Create "aria-label" "favorite"
             Button.Variant.filled
-            Button.Color.error
             BorderRadius.toClass BorderRadius.Circle |> cl
         ]
     )

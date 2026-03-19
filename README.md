@@ -55,7 +55,7 @@ F# encourages partial application and functional composition. However, UI compon
 To avoid excessive function overloads and deeply nested parameter patterns, Weave components are currently implemented using classes with optional parameters.
 
 ```fsharp
-Button.Create(
+Button.create(
     text "Hello World!",
     onClick = (fun () -> ())
 )
@@ -82,7 +82,7 @@ Styling in Weave is designed to be:
 Rather than relying solely on raw strings for CSS classes, Weave provides discriminated unions and helpers that map directly to supported styling variants.
 
 ```fsharp
-Button.Create(
+Button.create(
     text "Hello World!",
     onClick = (fun () -> ()),
     attrs = [

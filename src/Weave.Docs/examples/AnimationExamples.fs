@@ -223,10 +223,10 @@ div [
         )
 
         div [ Margin.toClasses Margin.Vertical.small |> cls ] [
-          Button.Create(
+          Button.primary (
             text "Play",
             onClick = (fun () -> replayKey.Value <- replayKey.Value + 1),
-            attrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
+            attrs = [ Button.Variant.filled; Button.Width.full ]
           )
         ]
 
@@ -355,12 +355,11 @@ div [
           Attr.Style "gap" "12px"
           Margin.toClasses Margin.Bottom.small |> cls
         ] [
-          Button.Create(
+          Button.primary (
             text "Bounce on hover",
             onClick = ignore,
             attrs = [
               Button.Variant.filled
-              Button.Color.primary
               cls [
                 AnimationEmphasis.toClass AnimationEmphasis.Bounce
                 AnimationOn.toClass AnimationOn.Hover // see here
@@ -369,12 +368,11 @@ div [
             ]
           )
 
-          Button.Create(
+          Button.error (
             text "Shake on hover",
             onClick = ignore,
             attrs = [
               Button.Variant.filled
-              Button.Color.error
               cls [
                 AnimationEmphasis.toClass AnimationEmphasis.Shake
                 AnimationOn.toClass AnimationOn.Hover
@@ -387,12 +385,11 @@ div [
         Subtitle2.Div(View.Const "Focus triggers (use Tab to navigate)")
 
         div [ cls [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ]; Attr.Style "gap" "12px" ] [
-          Button.Create(
+          Button.secondary (
             text "Bounce on focus",
             onClick = ignore,
             attrs = [
               Button.Variant.filled
-              Button.Color.secondary
               cls [
                 AnimationEmphasis.toClass AnimationEmphasis.Bounce
                 AnimationOn.toClass AnimationOn.Focus // see here
@@ -401,12 +398,11 @@ div [
             ]
           )
 
-          Button.Create(
+          Button.info (
             text "Pulse on hover or focus",
             onClick = ignore,
             attrs = [
               Button.Variant.filled
-              Button.Color.info
               cls [
                 AnimationEmphasis.toClass AnimationEmphasis.Pulse
                 AnimationOn.toClass AnimationOn.HoverFocus // see here
@@ -422,12 +418,11 @@ open Weave.CssHelpers.Animation
 
 
 // Bounce on hover — pure CSS, no JS needed
-Button.Create(
+Button.primary(
     text "Bounce on hover",
     onClick = ignore,
     attrs = [
         Button.Variant.filled
-        Button.Color.primary
         cls [
             AnimationEmphasis.toClass AnimationEmphasis.Bounce
             AnimationOn.toClass AnimationOn.Hover  // see here
@@ -437,12 +432,11 @@ Button.Create(
 )
 
 // Respond to both hover and focus
-Button.Create(
+Button.info(
     text "Pulse on hover or focus",
     onClick = ignore,
     attrs = [
         Button.Variant.filled
-        Button.Color.info
         cls [
             AnimationEmphasis.toClass AnimationEmphasis.Pulse
             AnimationOn.toClass AnimationOn.HoverFocus  // see here
@@ -458,7 +452,7 @@ Button.Create(
         "Animate.replayOnClick replays the animation on each click via a JS event listener. The initial mount animation is automatically suppressed — the element appears static until the first click. Unlike AnimationOn, this is an Attr you add alongside your animation classes."
 
     let emphasisButton label color emphasis =
-      Button.Create(
+      Button.create (
         text label,
         onClick = ignore,
         attrs = [
@@ -485,12 +479,11 @@ open Weave.CssHelpers.Animation
 
 
 // Pulse on click — initial mount animation is suppressed automatically
-Button.Create(
+Button.primary(
     text "Pulse",
     onClick = ignore,
     attrs = [
         Button.Variant.filled
-        Button.Color.primary
         cls [
             AnimationEmphasis.toClass AnimationEmphasis.Pulse
             AnimationDuration.toClass AnimationDuration.Medium
@@ -586,10 +579,10 @@ Chip.Create(
     let content =
       div [] [
         div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-          Button.Create(
+          Button.primary (
             text "Toggle",
             onClick = (fun () -> isActive.Value <- not isActive.Value),
-            attrs = [ Button.Variant.filled; Button.Color.primary ]
+            attrs = [ Button.Variant.filled ]
           )
         ]
 
@@ -621,7 +614,7 @@ div [
     text "I animate between enter/exit states"
 ]
 
-Button.Create(
+Button.create(
     text "Toggle",
     onClick = (fun () -> isActive.Value <- not isActive.Value)
 )"""
@@ -638,10 +631,10 @@ Button.Create(
     let content =
       div [] [
         div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-          Button.Create(
+          Button.primary (
             text "Toggle visibility",
             onClick = (fun () -> isVisible.Value <- not isVisible.Value),
-            attrs = [ Button.Variant.filled; Button.Color.primary ]
+            attrs = [ Button.Variant.filled ]
           )
         ]
 
@@ -679,7 +672,7 @@ Animate.show
             ]
         ))
 
-Button.Create(
+Button.create(
     text "Toggle",
     onClick = (fun () -> isVisible.Value <- not isVisible.Value)
 )"""
@@ -781,13 +774,13 @@ Animate.show
     let content =
       div [] [
         div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-          Button.Create(
+          Button.primary (
             text "Replay stagger",
             onClick =
               (fun () ->
                 isVisible.Value <- false
                 JavaScript.JS.SetTimeout (fun () -> isVisible.Value <- true) 50 |> ignore),
-            attrs = [ Button.Variant.filled; Button.Color.primary ]
+            attrs = [ Button.Variant.filled ]
           )
         ]
 
@@ -862,11 +855,7 @@ WeaveList.Create(
     let content =
       div [] [
         div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-          Button.Create(
-            text "Add alert",
-            onClick = addAlert,
-            attrs = [ Button.Variant.filled; Button.Color.primary ]
-          )
+          Button.primary (text "Add alert", onClick = addAlert, attrs = [ Button.Variant.filled ])
         ]
 
         div [
@@ -956,11 +945,7 @@ alerts.View
     let content =
       div [] [
         div [ Margin.toClasses Margin.Bottom.small |> cls ] [
-          Button.Create(
-            text "Add chip",
-            onClick = addChip,
-            attrs = [ Button.Variant.filled; Button.Color.primary ]
-          )
+          Button.primary (text "Add chip", onClick = addChip, attrs = [ Button.Variant.filled ])
         ]
 
         div [ cls [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ]; Attr.Style "gap" "8px" ] [

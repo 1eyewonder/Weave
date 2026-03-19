@@ -41,7 +41,7 @@ module Pages =
           cl (AnimationEntrance.toClass AnimationEntrance.FadeIn)
         ] [ text "Suppressed child" ]
       ]
-      Button.Create(
+      Button.create (
         text "Toggle Show",
         (fun () -> isVisible.Value <- not isVisible.Value),
         attrs = [ Attr.Create "data-testid" "show-toggle-btn" ]
@@ -52,7 +52,7 @@ module Pages =
         (fun () -> div [ Attr.Create "data-testid" "show-content" ] [ text "Animated show content" ])
         [ Attr.Create "data-testid" "show-wrapper" ]
         None
-      Button.Create(
+      Button.create (
         text "Toggle Class",
         (fun () -> isActive.Value <- not isActive.Value),
         attrs = [ Attr.Create "data-testid" "toggle-btn" ]
@@ -232,21 +232,21 @@ module Pages =
 
   let private buttonPage () =
     div [] [
-      Button.Create(text "Filled Button", (fun () -> ()), attrs = [ Button.Variant.filled ])
-      Button.Create(text "Outlined Button", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-      Button.Create(
+      Button.create (text "Filled Button", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.create (text "Outlined Button", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+      Button.create (
         text "Disabled Button",
         (fun () -> ()),
         enabled = View.Const false,
         attrs = [ Button.Variant.filled ]
       )
-      Button.CreateIcon(
+      IconButton.primary (
         Icon.Create(Icon.UiActions UiActions.Home),
         (fun () -> ()),
-        attrs = [ Attr.Create "aria-label" "home"; Button.Variant.filled; Button.Color.primary ]
+        attrs = [ Attr.Create "aria-label" "home"; Button.Variant.filled ]
       )
-      Button.Create(text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled; Button.Color.primary ])
-      Button.Create(text "Error", (fun () -> ()), attrs = [ Button.Variant.filled; Button.Color.error ])
+      Button.primary (text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.error (text "Error", (fun () -> ()), attrs = [ Button.Variant.filled ])
     ]
 
   let private dialogPage () =
@@ -261,7 +261,7 @@ module Pages =
             div [] [
               Body1.Div("Dialog content goes here.")
               div [] [
-                Button.Create(text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
+                Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
               ]
             ]
           ),
@@ -277,7 +277,7 @@ module Pages =
         div [] [
           Body1.Div("You must complete this action.")
           div [] [
-            Button.Create(text "Confirm", (fun () -> ()), attrs = [ Button.Variant.filled ])
+            Button.create (text "Confirm", (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
         ]
       ),
@@ -288,7 +288,7 @@ module Pages =
     let isOpen = Var.Create false
 
     div [] [
-      Button.Create(
+      Button.create (
         text "Open Dialog",
         (fun () -> isOpen.Value <- true),
         attrs = [ Attr.Create "id" "open-dialog-btn"; Button.Variant.filled ]
@@ -302,7 +302,7 @@ module Pages =
               div [] [
                 Body1.Div("Dialog opened by button.")
                 div [] [
-                  Button.Create(text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
+                  Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
                 ]
               ]
             ),
@@ -345,7 +345,7 @@ module Pages =
           DropdownItem.Create(text "Disabled Item", (fun () -> ()), enabled = View.Const false)
         ]
       )
-      Button.Create(text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
+      Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
   let private expansionPanelPage () =
@@ -505,22 +505,22 @@ module Pages =
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
       )
-      Button.Create(text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
+      Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
   let private buttongroupPage () =
     ButtonGroup.Create(
       [
-        Button.Create(text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-        Button.Create(text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-        Button.Create(text "Right", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        Button.create (text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        Button.create (text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        Button.create (text "Right", (fun () -> ()), attrs = [ Button.Variant.outlined ])
       ]
     )
 
   let private tooltipPage () =
     div [] [
       Tooltip.Create(
-        Button.Create(text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        Button.create (text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
         text "Tooltip text"
       )
     ]

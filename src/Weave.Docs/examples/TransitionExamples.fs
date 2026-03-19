@@ -78,12 +78,11 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.None) ] [
 // The speed class overrides CSS custom properties,
 // so all children inherit the new durations
 div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
-    Button.Create(
+    Button.primary(
         text "Slow hover",
         onClick = (fun () -> ()),
         attrs = [
             Button.Variant.filled
-            Button.Color.primary
         ]
     )
 ]"""
@@ -106,11 +105,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
         ] [
           Subtitle2.Div(label, attrs = [ Margin.toClasses Margin.Bottom.extraSmall |> cls ])
           div [ cl (TransitionSpeed.toClass speed) ] [
-            Button.Create(
-              text "Hover me",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; Button.Color.primary ]
-            )
+            Button.primary (text "Hover me", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
         ]
 
@@ -148,12 +143,11 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
 // The button inherits the transition duration override.
 let speedColumn (speed: TransitionSpeed) =
     div [ cl (TransitionSpeed.toClass speed) ] [
-        Button.Create(
+        Button.primary(
             text "Hover me",
             onClick = (fun () -> ()),
             attrs = [
                 Button.Variant.filled
-                Button.Color.primary
             ]
         )
     ]

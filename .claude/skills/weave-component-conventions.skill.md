@@ -6,20 +6,22 @@ When creating or modifying F# components in this Weave project, follow these con
 
 Comments should be used when necessary to clarify non-obvious implementation details, but should not be used to explain what the code is doing at a high level. The code itself should be as self-explanatory as possible through clear naming and structure. We should not be using comments to create "sections" within the code.
 
-## Create Function Parameters
+## create Function Parameters
+
+**Static member functions use camelCase** (e.g., `create`, `primary`, `secondary`), not PascalCase.
 
 **Minimize explicit styling parameters.** Do not add parameters for things like `variant`, `color`, `size`, `width`, `alignment`, or other visual/styling concerns. These should be passed by the caller via the `attrs` parameter instead.
 
 **Good** — styling comes through attrs:
 
 ```fsharp
-static member Create(value: Var<bool>, ?enabled: View<bool>, ?attrs: Attr list) =
+static member create(value: Var<bool>, ?enabled: View<bool>, ?attrs: Attr list) =
 ```
 
 **Bad** — explicit styling params pollute the signature:
 
 ```fsharp
-static member Create(value: Var<bool>, ?size: Size, ?color: BrandColor, ?enabled: View<bool>, ?attrs: Attr list) =
+static member create(value: Var<bool>, ?size: Size, ?color: BrandColor, ?enabled: View<bool>, ?attrs: Attr list) =
 ```
 
 The exception is structural/behavioral parameters which don't get placed into a single `attr` list but rather other internal components. If we start seeing a use to place multiple attrs into an inner component, we can consider adding a second `?innerAttrs` parameter (but better named) for that purpose.
@@ -70,24 +72,22 @@ namespace Weave
 
 open WebSharper
 open WebSharper.UI
-open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave.CssHelpers
+open Weave.CssHelpers.Core
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module MyComponent =
   // Style modules with let bindings returning Attr (Variant, Color, etc.)
   ...
 
-open MyComponent
-
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 type MyComponent =
 
 
   // If there are any internal/private functions, should should instead use standard F# module functions here rather than static members on the type. This way we can utilize partial application and other functional patterns
 
-  static member Create(..., ?attrs: Attr list) =
+  static member create(..., ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     ...
     div [
@@ -99,6 +99,9 @@ type MyComponent =
 Key points:
 
 - `[<JavaScript>]` on every module and type
+- `[<RequireQualifiedAccess>]` on both module and type — no `open MyComponent` needed
+- Static member functions use **camelCase** (e.g., `create`, `primary`), not PascalCase
 - `open Weave.CssHelpers` to bring `cl`, `cls`, `text`, `textView`, `div` etc. into scope
 - `?attrs: Attr list` is always the last optional parameter and defaults to `[]`
 - `yield! attrs` is placed after the component's own structural attrs so callers can override or extend
+- When structurally different HTML is needed (e.g., icon-only vs text), use a separate type (e.g., `IconButton`) rather than a variant factory on the same type

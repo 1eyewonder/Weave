@@ -61,7 +61,7 @@ type Alert =
       | Some callback ->
         let closeIconDoc = defaultArg closeIcon (H6.Span("\u00D7"))
 
-        Button.CreateIcon(
+        IconButton.create (
           closeIconDoc,
           onClick = callback,
           attrs = [ Attr.Create "aria-label" "close alert"; cl Css.``weave-alert__close`` ]

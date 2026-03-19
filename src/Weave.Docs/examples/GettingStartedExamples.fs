@@ -52,12 +52,11 @@ open Weave
 
 [<JavaScript>]
 let page () =
-    Button.Create(
+    Button.primary(
         text "Click me",
         onClick = (fun () -> JavaScript.JS.Alert "Hello from Weave!"),
         attrs = [
             Button.Variant.filled
-            Button.Color.primary
         ]
     )"""
       ]

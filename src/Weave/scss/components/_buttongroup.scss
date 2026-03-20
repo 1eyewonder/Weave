@@ -80,15 +80,23 @@
     }
   }
 
-  // Let button menus & dropdowns stretch to fill the group item height
+  // Let button menus & dropdowns stretch to fill the group item height.
+  // align-self: stretch overrides .weave-dropdown's own align-self: center.
   > .weave-button-menu,
   > .weave-dropdown {
     height: 100%;
+    align-self: stretch;
 
     > .weave-button {
       box-shadow: none;
       border-radius: var(--default-button-borderradius);
       height: 100%;
+      align-self: stretch;
+      // aspect-ratio: 1 on icon buttons is calculated AFTER the flex sizing
+      // pass, so the button's width would exceed the group item's allocated
+      // slot and overflow. Reset to auto so width stays at natural content
+      // size (icon + padding) regardless of the stretched height.
+      aspect-ratio: auto;
 
       &:hover,
       &:focus-visible,
@@ -195,6 +203,50 @@
     border-bottom-width: 2px;
     border-bottom-style: solid;
     border-bottom-color: var(--palette-text-primary);
+  }
+
+  // Inset outer corner radii by the border-width so inner button hover
+  // backgrounds align with the inner edge of the group border.
+  // Horizontal groups: left corners on first child, right corners on last child.
+  &:not(.weave-button-group--vertical) {
+    > .weave-button-group__item:first-child {
+      > .weave-button,
+      > .weave-button-menu > .weave-button,
+      > .weave-dropdown > .weave-button {
+        border-top-left-radius: calc(var(--default-button-borderradius) - 2px);
+        border-bottom-left-radius: calc(var(--default-button-borderradius) - 2px);
+      }
+    }
+
+    > .weave-button-group__item:last-child {
+      > .weave-button,
+      > .weave-button-menu > .weave-button,
+      > .weave-dropdown > .weave-button {
+        border-top-right-radius: calc(var(--default-button-borderradius) - 2px);
+        border-bottom-right-radius: calc(var(--default-button-borderradius) - 2px);
+      }
+    }
+  }
+
+  // Vertical groups: top corners on first child, bottom corners on last child.
+  &.weave-button-group--vertical {
+    > .weave-button-group__item:first-child {
+      > .weave-button,
+      > .weave-button-menu > .weave-button,
+      > .weave-dropdown > .weave-button {
+        border-top-left-radius: calc(var(--default-button-borderradius) - 2px);
+        border-top-right-radius: calc(var(--default-button-borderradius) - 2px);
+      }
+    }
+
+    > .weave-button-group__item:last-child {
+      > .weave-button,
+      > .weave-button-menu > .weave-button,
+      > .weave-dropdown > .weave-button {
+        border-bottom-left-radius: calc(var(--default-button-borderradius) - 2px);
+        border-bottom-right-radius: calc(var(--default-button-borderradius) - 2px);
+      }
+    }
   }
 
   @each $color in $palette-colors {
@@ -305,33 +357,11 @@
   }
 }
 
-.weave-button-group--compact {
-  .weave-button-group__item > .weave-button,
-  .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
-    min-height: 30px;
-    padding: 6px 12px;
-    font-size: calc(var(--typography-button-size) - 0.25rem);
-  }
-}
-
-.weave-button-group--standard {
-  .weave-button-group__item > .weave-button,
-  .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
-    min-height: 40px;
-    padding: 10px 16px;
-    font-size: var(--typography-button-size);
-  }
-}
-
-.weave-button-group--spacious {
-  .weave-button-group__item > .weave-button,
-  .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
-    min-height: 50px;
-    padding: 14px 20px;
-    font-size: calc(var(--typography-button-size) + 0.25rem);
+// Density — sets --weave-density on the group root so child buttons inherit
+// correct density-spacing() values for padding and min-height automatically.
+@each $name, $step in $density-steps {
+  .weave-button-group--#{$name} {
+    --weave-density: #{$step};
   }
 }
 

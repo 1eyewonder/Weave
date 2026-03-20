@@ -113,7 +113,7 @@ $checkmark-height: 12px;
   top: 50%;
   width: var(--checkmark-width, 6px);
   height: var(--checkmark-height, 12px);
-  border: solid white;
+  border: solid var(--palette-background);
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -60%) rotate(45deg);
 }
@@ -121,21 +121,21 @@ $checkmark-height: 12px;
 .weave-checkbox__label {
   font-size: 1em;
 
-  .weave-checkbox.flex-row & {
+  .weave-checkbox.weave-flex-row & {
     margin-left: 0.5em;
   }
 
-  .weave-checkbox.flex-row-reverse & {
+  .weave-checkbox.weave-flex-row-reverse & {
     margin-left: 0;
     margin-right: 0.5em;
   }
 
-  .weave-checkbox.flex-column & {
+  .weave-checkbox.weave-flex-column & {
     margin-left: 0;
     margin-bottom: 0.5em;
   }
 
-  .weave-checkbox.flex-column-reverse & {
+  .weave-checkbox.weave-flex-column-reverse & {
     margin-left: 0;
     margin-top: 0.5em;
   }

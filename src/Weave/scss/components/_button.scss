@@ -97,7 +97,7 @@
 .weave-button--outlined {
   color: var(--palette-text-primary);
   border: 3px solid
-    rgba(var(--palette-text-primary), var(--palette-border-opacity));
+    rgba(var(--palette-text-primary-rgb), var(--palette-border-opacity));
 
   &.weave-button--inherit {
     color: inherit;

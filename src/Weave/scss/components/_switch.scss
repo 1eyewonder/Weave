@@ -11,19 +11,19 @@
   // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
   padding: density-spacing(4, 4);
 
-  &.flex-row {
+  &.weave-flex-row {
     flex-direction: row;
     align-items: center;
   }
-  &.flex-row-reverse {
+  &.weave-flex-row-reverse {
     flex-direction: row-reverse;
     align-items: center;
   }
-  &.flex-column {
+  &.weave-flex-column {
     flex-direction: column;
     align-items: flex-start;
   }
-  &.flex-column-reverse {
+  &.weave-flex-column-reverse {
     flex-direction: column-reverse;
     align-items: flex-end;
     justify-content: center;
@@ -38,21 +38,21 @@
     align-items: center;
     text-align: center;
 
-    .weave-switch.flex-row & {
+    .weave-switch.weave-flex-row & {
       margin-left: 0.5em;
     }
 
-    .weave-switch.flex-row-reverse & {
+    .weave-switch.weave-flex-row-reverse & {
       margin-left: 0;
       margin-right: 0.5em;
     }
 
-    .weave-switch.flex-column & {
+    .weave-switch.weave-flex-column & {
       margin-left: 0;
       margin-bottom: 0.5em;
     }
 
-    .weave-switch.flex-column-reverse & {
+    .weave-switch.weave-flex-column-reverse & {
       margin-left: 0;
       margin-top: 0.5em;
     }
@@ -95,19 +95,19 @@
   flex-shrink: 0;
   vertical-align: middle;
 
-  .weave-switch.flex-row & {
+  .weave-switch.weave-flex-row & {
     margin-right: 0.5em;
   }
 
-  .weave-switch.flex-row-reverse & {
+  .weave-switch.weave-flex-row-reverse & {
     margin-left: 0.5em;
   }
 
-  .weave-switch.flex-column & {
+  .weave-switch.weave-flex-column & {
     margin-bottom: 0.3em;
   }
 
-  .weave-switch.flex-column-reverse & {
+  .weave-switch.weave-flex-column-reverse & {
     margin-top: 0.3em;
   }
 }
@@ -264,53 +264,6 @@
   vertical-align: middle;
 }
 
-.weave-switch__base {
-  padding: 9px;
-  top: 0;
-  left: 0;
-  color: var(--palette-background-paper, #fafafa);
-  z-index: 1;
-  position: absolute;
-  transition: left var(--weave-duration-short) $ease-standard 0ms,
-    transform var(--weave-duration-short) $ease-standard 0ms,
-    background-color var(--weave-duration-medium) $ease-standard 0ms,
-    box-shadow var(--weave-duration-medium) $ease-standard 0ms;
-
-  &.checked {
-    transform: translateX(20px);
-
-    & + .weave-switch-track {
-      opacity: var(--weave-opacity-secondary);
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: var(--palette-action-default-hover);
-    }
-  }
-
-  &.weave-switch--disabled {
-    color: var(--palette-gray-default) !important;
-
-    & + .weave-switch-track {
-      opacity: var(--weave-alpha-border) !important;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        cursor: default;
-        background-color: transparent !important;
-      }
-    }
-
-    &:focus-visible,
-    &:active {
-      cursor: default;
-      background-color: transparent !important;
-    }
-  }
-}
 
 .weave-switch__button {
   display: flex;
@@ -380,7 +333,7 @@
   }
 }
 
-.weave-switch__span---large {
+.weave-switch__span--large {
   &.weave-switch__span {
     padding: 17px;
     width: 72px;

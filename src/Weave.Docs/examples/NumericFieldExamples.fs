@@ -65,27 +65,29 @@ module NumericFieldExamples =
 
     let code =
       """open Weave
+open WebSharper.UI
 
-let value = Var.Create 0
+let stdVal = Var.Create 0
+let filledVal = Var.Create 0
+let outlinedVal = Var.Create 0
 
 NumericField.create(
-    value,
+    stdVal,
     variant = Field.Variant.Standard,
     labelText = View.Const "Standard"
 )
 
 NumericField.create(
-    value,
+    filledVal,
     variant = Field.Variant.Filled,
     labelText = View.Const "Filled"
 )
 
 NumericField.create(
-    value,
+    outlinedVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Variants" description content code
 
@@ -131,6 +133,7 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
 // Integer field — step defaults to 1
 let intVal = Var.Create 42
@@ -141,16 +144,15 @@ NumericField.create(
     labelText = View.Const "Integer"
 )
 
-// Float field — step is 0.1
+// Float field — use NumericField.Create (capital C) for float values
 let floatVal = Var.Create 3.14
 
-NumericField.create(
+NumericField.Create(  // see here
     floatVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Float",
     step = View.Const 0.1
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Int vs Float" description content code
 
@@ -214,6 +216,7 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
 // Integer with min/max
 let quantity = Var.Create 5
@@ -227,18 +230,17 @@ NumericField.create(
     step = View.Const 1
 )
 
-// Float with min/max
+// Float with min/max — use NumericField.Create (capital C) for float
 let opacity = Var.Create 0.5
 
-NumericField.create(
+NumericField.Create(
     opacity,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Opacity (0.0-1.0, step 0.1)",
     min = 0.0,
     max = 1.0,
     step = View.Const 0.1
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Min, Max & Step" description content code
 
@@ -323,6 +325,7 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
 let value = Var.Create 50
 
@@ -341,7 +344,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Arrow keys disabled",
-    enableArrowKeys = View.Const false
+    enableArrowKeys = View.Const false  // see here
 )
 
 // Disable mouse wheel stepping
@@ -349,7 +352,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Mouse wheel disabled",
-    enableMouseWheel = View.Const false
+    enableMouseWheel = View.Const false  // see here
 )
 
 // Disable both
@@ -359,8 +362,7 @@ NumericField.create(
     labelText = View.Const "Both disabled",
     enableArrowKeys = View.Const false,
     enableMouseWheel = View.Const false
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Keyboard & Mouse Wheel" description content code
 
@@ -407,12 +409,14 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
-let value = Var.Create 10
+let withSpin = Var.Create 10
+let withoutSpin = Var.Create 10
 
 // Default — spin buttons visible
 NumericField.create(
-    value,
+    withSpin,
     variant = Field.Variant.Outlined,
     labelText = View.Const "With spin buttons",
     showSpinButtons = View.Const true
@@ -420,12 +424,11 @@ NumericField.create(
 
 // Hidden spin buttons
 NumericField.create(
-    value,
+    withoutSpin,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Without spin buttons",
-    showSpinButtons = View.Const false
-)
-"""
+    showSpinButtons = View.Const false  // see here
+)"""
 
     Helpers.codeSampleSection "Show / Hide Spin Buttons" description content code
 
@@ -453,6 +456,7 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
@@ -462,16 +466,15 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Custom icons",
-    upIcon = Icon.create(
+    upIcon = Icon.create(  // see here
         Icon.Hardware Hardware.KeyboardArrowUp,
         attrs = [ Attr.Style "font-size" "1rem" ]
     ),
-    downIcon = Icon.create(  // and here
+    downIcon = Icon.create(
         Icon.Hardware Hardware.KeyboardArrowDown,
         attrs = [ Attr.Style "font-size" "1rem" ]
     )
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Custom Spin Icons" description content code
 
@@ -518,24 +521,26 @@ NumericField.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
 let disabledVal = Var.Create 42
 let readOnlyVal = Var.Create 99
 
+// Disabled — non-interactive and visually dimmed
 NumericField.create(
     disabledVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
-    enabled = View.Const false
+    enabled = View.Const false  // see here
 )
 
+// Read Only — displays value but prevents edits
 NumericField.create(
     readOnlyVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true
-)
-"""
+    readOnly = View.Const true  // see here
+)"""
 
     Helpers.codeSampleSection "Disabled & Read Only" description content code
 

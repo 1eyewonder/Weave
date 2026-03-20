@@ -12,7 +12,8 @@ module RadioButtonExamples =
 
   let private basicRadioExample () =
     let description =
-      Helpers.bodyText "A simple radio group with three options. Only one can be selected."
+      Helpers.bodyText
+        "Create a radio group by passing the same Var to multiple Radio.create calls. Only one option can be selected at a time."
 
     let content =
       let selected = Var.Create "Option 1"
@@ -32,19 +33,17 @@ module RadioButtonExamples =
 open WebSharper.UI
 
 let selected = Var.Create "Option 1"
-let options = [ "Option 1"; "Option 2"; "Option 3" ]
 
-options
-|> List.map (fun opt ->
-    Radio.create(selected, opt, displayText = View.Const opt)
-)
-"""
+Radio.create(selected, "Option 1", displayText = View.Const "Option 1")
+Radio.create(selected, "Option 2", displayText = View.Const "Option 2")
+Radio.create(selected, "Option 3", displayText = View.Const "Option 3")"""
 
     Helpers.codeSampleSection "Basic Radio" description content code
 
   let private disabledRadioExample () =
     let description =
-      Helpers.bodyText "A radio button that is disabled and cannot be toggled."
+      Helpers.bodyText
+        "Set enabled to View.Const false to prevent user interaction and visually dim the radio button."
 
     let content =
       let selected = Var.Create "Disabled"
@@ -74,9 +73,8 @@ Radio.create(
     selected,
     "B",
     displayText = View.Const "Or Me",
-    enabled = View.Const false
-)
-"""
+    enabled = View.Const false  // see here
+)"""
 
     Helpers.codeSampleSection "Disabled Radio" description content code
 
@@ -102,13 +100,14 @@ let label =
     selected.View
     |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
-Radio.create(selected, true, displayText = label)
-"""
+Radio.create(selected, true, displayText = label)"""
 
     Helpers.codeSampleSection "Dynamic Label" description content code
 
   let private radioSizesExample () =
-    let description = Helpers.bodyText "Radio buttons in different sizes."
+    let description =
+      Helpers.bodyText
+        "Control the radio indicator size with Radio.Size.small, Radio.Size.medium, or Radio.Size.large passed via attrs."
 
     let content =
       let selected = Var.Create "Medium"
@@ -132,20 +131,20 @@ Radio.create(selected, true, displayText = label)
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let selected = Var.Create "Medium"
 
 Radio.create(selected, "Small", displayText = View.Const "Small", attrs = [ Radio.Size.small ])
 Radio.create(selected, "Medium", displayText = View.Const "Medium", attrs = [ Radio.Size.medium ])
-Radio.create(selected, "Large", displayText = View.Const "Large", attrs = [ Radio.Size.large ])
-"""
+Radio.create(selected, "Large", displayText = View.Const "Large", attrs = [ Radio.Size.large ])"""
 
     Helpers.codeSampleSection "Sizes" description content code
 
   let private radioColorsExample () =
-    let description = Helpers.bodyText "Radio buttons with different color themes."
+    let description =
+      Helpers.bodyText
+        "Apply a brand color via attrs using Radio.Color.* to theme the radio indicator and ripple."
 
     let content =
       let selected = Var.Create BrandColor.Primary
@@ -178,37 +177,24 @@ Radio.create(selected, "Large", displayText = View.Const "Large", attrs = [ Radi
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let selected = Var.Create BrandColor.Primary
 
-let colors = [
-    BrandColor.Primary, Radio.Color.primary
-    BrandColor.Secondary, Radio.Color.secondary
-    BrandColor.Tertiary, Radio.Color.tertiary
-    BrandColor.Error, Radio.Color.error
-    BrandColor.Warning, Radio.Color.warning
-    BrandColor.Success, Radio.Color.success
-    BrandColor.Info, Radio.Color.info
-]
-
-colors
-|> List.map (fun (color, colorAttr) ->
-    Radio.create(
-        selected,
-        color,
-        displayText = (sprintf "%A" color |> View.Const),
-        attrs = [ colorAttr ]
-    )
-)
-"""
+Radio.create(selected, BrandColor.Primary, displayText = View.Const "Primary", attrs = [ Radio.Color.primary ])
+Radio.create(selected, BrandColor.Secondary, displayText = View.Const "Secondary", attrs = [ Radio.Color.secondary ])
+Radio.create(selected, BrandColor.Tertiary, displayText = View.Const "Tertiary", attrs = [ Radio.Color.tertiary ])
+Radio.create(selected, BrandColor.Error, displayText = View.Const "Error", attrs = [ Radio.Color.error ])
+Radio.create(selected, BrandColor.Warning, displayText = View.Const "Warning", attrs = [ Radio.Color.warning ])
+Radio.create(selected, BrandColor.Success, displayText = View.Const "Success", attrs = [ Radio.Color.success ])
+Radio.create(selected, BrandColor.Info, displayText = View.Const "Info", attrs = [ Radio.Color.info ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 
   let private contentPlacementExample () =
     let description =
-      Helpers.bodyText "Change the label position using the ContentPlacement option."
+      Helpers.bodyText
+        "Position the label relative to the radio indicator using contentPlacement: Right (default), Left, Top, or Bottom."
 
     let content =
       let placement = Var.Create Radio.ContentPlacement.Right
@@ -244,29 +230,44 @@ colors
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
-let placement = Var.Create Radio.ContentPlacement.Right
+let selected = Var.Create false
 
+// Label to the right of the radio (default)
 Radio.create(
-    demoSelected,
-    true,
-    displayText = (placement.View |> View.MapCached(sprintf "%A")),
-    contentPlacement = placement.View,
-    attrs = [
-        Radio.Size.large
-        Radio.Color.primary
-    ]
+    selected, true,
+    displayText = View.Const "Right",
+    contentPlacement = View.Const Radio.ContentPlacement.Right
 )
-"""
+
+// Label to the left
+Radio.create(
+    selected, true,
+    displayText = View.Const "Left",
+    contentPlacement = View.Const Radio.ContentPlacement.Left
+)
+
+// Label above
+Radio.create(
+    selected, true,
+    displayText = View.Const "Top",
+    contentPlacement = View.Const Radio.ContentPlacement.Top
+)
+
+// Label below
+Radio.create(
+    selected, true,
+    displayText = View.Const "Bottom",
+    contentPlacement = View.Const Radio.ContentPlacement.Bottom
+)"""
 
     Helpers.codeSampleSection "Content Placement" description content code
 
   let private densityExample () =
     let description =
       Helpers.bodyText
-        "Density controls the touch-target padding on a three-step scale: Compact, Standard, and Spacious. Pass the density class in attrs to override a single instance."
+        "Density controls the touch-target padding on a three-step scale: Compact, Standard, and Spacious. Wrap radio buttons in a container with the density attribute to apply it."
 
     let content =
       let selected = Var.Create "A"
@@ -298,29 +299,27 @@ Radio.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create "A"
 
-// Per-instance: pass the density class in attrs to set it on one component
-Radio.create(
-    userSelection,
-    value,
-    displayText = View.Const "Compact",
-    attrs = [
-        Density.compact
-        Radio.Color.primary
-    ]
-)
+// Compact
+div [ Density.compact ] [
+    Radio.create(selected, "A", displayText = View.Const "Option A", attrs = [ Radio.Color.primary ])
+    Radio.create(selected, "B", displayText = View.Const "Option B", attrs = [ Radio.Color.primary ])
+]
 
-Radio.create(
-    userSelection,
-    value,
-    displayText = View.Const "Spacious",
-    attrs = [
-        Density.spacious
-        Radio.Color.primary
-    ]
-)
-"""
+// Standard
+div [ Density.standard ] [
+    Radio.create(selected, "A", displayText = View.Const "Option A", attrs = [ Radio.Color.primary ])
+    Radio.create(selected, "B", displayText = View.Const "Option B", attrs = [ Radio.Color.primary ])
+]
+
+// Spacious
+div [ Density.spacious ] [
+    Radio.create(selected, "A", displayText = View.Const "Option A", attrs = [ Radio.Color.primary ])
+    Radio.create(selected, "B", displayText = View.Const "Option B", attrs = [ Radio.Color.primary ])
+]"""
 
     Helpers.codeSampleSection "Density" description content code
 

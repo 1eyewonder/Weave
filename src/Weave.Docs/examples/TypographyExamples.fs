@@ -13,7 +13,8 @@ module TypographyExamples =
 
   let private variantExamples () =
     let description =
-      Helpers.bodyText "All available typography styles with their respective sizing and weights"
+      Helpers.bodyText
+        "Weave provides 13 typography variants covering headings, subtitles, body text, and utility styles."
 
     let content =
       div [] [
@@ -164,7 +165,7 @@ div [ Typography.body1; Typography.Weight.bold ] [ text "Bold Body1 (weight 700)
 
   let private alignmentExamples () =
     let description =
-      Helpers.bodyText "Demonstration of text alignment options available in typography components"
+      Helpers.bodyText "Align text within its container using Typography.Align helpers."
 
     let content =
       div [] [
@@ -191,7 +192,8 @@ div [ Typography.body1; Typography.Align.right ] [ text "Right" ]
 
   let private textWrapExamples () =
     let description =
-      Helpers.bodyText "Examples of typography with and without text wrapping enabled"
+      Helpers.bodyText
+        "Prevent text from wrapping with Typography.noWrap, which truncates overflow with an ellipsis."
 
     let content =
       div [] [
@@ -245,7 +247,7 @@ div [ Typography.body1; Typography.noWrap ] [
 
   let private colorExamples () =
     let description =
-      Helpers.bodyText "Typography components can utilize theme colors via CSS utility classes"
+      Helpers.bodyText "Apply a brand color to any text element using the Typography.Color module."
 
     let content =
       let colors = [
@@ -272,30 +274,20 @@ div [ Typography.body1; Typography.noWrap ] [
     let code =
       """open Weave
 
-
-let colors = [
-    "Primary", Typography.Color.primary
-    "Secondary", Typography.Color.secondary
-    "Tertiary", Typography.Color.tertiary
-    "Success", Typography.Color.success
-    "Error", Typography.Color.error
-    "Warning", Typography.Color.warning
-    "Info", Typography.Color.info
-]
-
-colors
-|> List.map (fun (label, colorAttr) ->
-    div [ Typography.h5; colorAttr ] [
-        text (sprintf "%s Color" label)
-    ]
-)
-"""
+div [ Typography.h5; Typography.Color.primary ] [ text "Primary Color" ]
+div [ Typography.h5; Typography.Color.secondary ] [ text "Secondary Color" ]
+div [ Typography.h5; Typography.Color.tertiary ] [ text "Tertiary Color" ]
+div [ Typography.h5; Typography.Color.error ] [ text "Error Color" ]
+div [ Typography.h5; Typography.Color.warning ] [ text "Warning Color" ]
+div [ Typography.h5; Typography.Color.success ] [ text "Success Color" ]
+div [ Typography.h5; Typography.Color.info ] [ text "Info Color" ]"""
 
     Helpers.codeSampleSection "Colors" description content code
 
   let private hierarchyExamples () =
     let description =
-      Helpers.bodyText "Combining different typography styles to create visual hierarchy"
+      Helpers.bodyText
+        "Combine heading, subtitle, body, and caption variants to establish a clear reading hierarchy."
 
     let content =
       div [] [

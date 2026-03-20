@@ -60,25 +60,18 @@ module DropdownExamples =
     let code =
       """open Weave
 
-
-let items =
-    [ 1..3 ]
-    |> List.map (fun n ->
-        DropdownItem.create(
-            text (sprintf "Item %d" n),
-            onClick = (fun () -> printfn "Clicked item %d" n)
-        )
-    )
-
 Dropdown.create(
     buttonContents = text "Open Dropdown",
-    items = items,
+    items = [
+        DropdownItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+        DropdownItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+        DropdownItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+    ],
     buttonAttrs = [
         Button.Variant.filled
         Button.Color.primary
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Basic Usage" description content code
 
@@ -190,29 +183,22 @@ Dropdown.create(
 
     let code =
       """open Weave
-
-
-let items =
-    [ 1..3 ]
-    |> List.map (fun n ->
-        DropdownItem.create(
-            text (sprintf "Item %d" n),
-            onClick = (fun () -> printfn "Clicked item %d" n)
-        )
-    )
+open WebSharper.UI
 
 Dropdown.create(
     buttonContents = text "Placement",
-    items = items,
-    anchorOrigin = anchorVar.View,
-    transformOrigin = transformVar.View,
-    closeOnOutsideClick = View.Const false,
+    items = [
+        DropdownItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+        DropdownItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+        DropdownItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+    ],
+    anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
+    transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft,
     buttonAttrs = [
         Button.Variant.filled
         Button.Color.primary
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Placement" description content code
 

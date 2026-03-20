@@ -24,7 +24,6 @@ module AlertExamples =
     let code =
       """open Weave
 
-
 Alert.create(
     text "This is an alert.",
     attrs = [
@@ -57,7 +56,6 @@ Alert.create(
 
     let code =
       """open Weave
-
 
 Alert.create(
     text "Standard",
@@ -123,25 +121,14 @@ Alert.create(
     let code =
       """open Weave
 
-
-let colors = [
-    "Default",   Attr.Empty
-    "Primary",   Alert.Color.primary
-    "Secondary", Alert.Color.secondary
-    "Tertiary",  Alert.Color.tertiary
-    "Error",     Alert.Color.error
-    "Warning",   Alert.Color.warning
-    "Success",   Alert.Color.success
-    "Info",      Alert.Color.info
-]
-
-colors
-|> List.map (fun (label, colorAttr) ->
-    Alert.create(
-        text label,
-        attrs = [ Alert.Variant.standard; colorAttr ]
-    )
-)"""
+Alert.create(text "Default alert.", attrs = [ Alert.Variant.standard ])
+Alert.create(text "Primary alert.", attrs = [ Alert.Variant.standard; Alert.Color.primary ])
+Alert.create(text "Secondary alert.", attrs = [ Alert.Variant.standard; Alert.Color.secondary ])
+Alert.create(text "Tertiary alert.", attrs = [ Alert.Variant.standard; Alert.Color.tertiary ])
+Alert.create(text "Error alert.", attrs = [ Alert.Variant.standard; Alert.Color.error ])
+Alert.create(text "Warning alert.", attrs = [ Alert.Variant.standard; Alert.Color.warning ])
+Alert.create(text "Success alert.", attrs = [ Alert.Variant.standard; Alert.Color.success ])
+Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.info ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 
@@ -194,9 +181,7 @@ colors
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 Alert.create(
     text "Your changes have been saved.",
@@ -236,7 +221,6 @@ Alert.create(
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let visible = Var.Create true
@@ -294,7 +278,6 @@ visible.View
     let code =
       """open Weave
 
-
 Alert.create(
     text "Compact alert.",
     attrs = [
@@ -320,8 +303,7 @@ Alert.create(
         Alert.Variant.standard
         Alert.Color.info
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Density" description content code
 

@@ -41,7 +41,6 @@ module ButtonGroupExamples =
     let code =
       """open Weave
 
-
 ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
@@ -76,8 +75,7 @@ ButtonGroup.create(
         ButtonGroup.Variant.outlined
         ButtonGroup.Color.primary
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Basic Button Group" description content code
 
@@ -112,7 +110,6 @@ ButtonGroup.create(
     let code =
       """open Weave
 
-
 ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
@@ -122,10 +119,9 @@ ButtonGroup.create(
     attrs = [
         ButtonGroup.Variant.filled
         ButtonGroup.Color.primary
-        ButtonGroup.Orientation.vertical
+        ButtonGroup.Orientation.vertical // see here
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Vertical Orientation" description content code
 
@@ -161,7 +157,6 @@ ButtonGroup.create(
     let code =
       """open Weave
 
-
 ButtonGroup.create(
     [
         Button.create(text "One", onClick = (fun () -> ()))
@@ -183,11 +178,23 @@ ButtonGroup.create(
     ],
     attrs = [
         ButtonGroup.Variant.filled
+        ButtonGroup.Density.standard
+        ButtonGroup.Color.error
+    ]
+)
+
+ButtonGroup.create(
+    [
+        Button.create(text "One", onClick = (fun () -> ()))
+        Button.create(text "Two", onClick = (fun () -> ()))
+        Button.create(text "Three", onClick = (fun () -> ()))
+    ],
+    attrs = [
+        ButtonGroup.Variant.filled
         ButtonGroup.Density.spacious
         ButtonGroup.Color.success
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Density and Colors" description content code
 
@@ -233,9 +240,8 @@ ButtonGroup.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
+open WebSharper.UI
 
 let isOpen = Var.Create false
 
@@ -248,26 +254,17 @@ ButtonGroup.create(
                 Button.create(
                     text "Reply",
                     onClick = (fun () -> printfn "Reply"),
-                    attrs = [
-                        Button.Variant.filled
-                        Button.Width.full
-                    ]
+                    attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
                 Button.create(
                     text "Reply All",
                     onClick = (fun () -> printfn "Reply All"),
-                    attrs = [
-                        Button.Variant.filled
-                        Button.Width.full
-                    ]
+                    attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
                 Button.create(
                     text "Forward",
                     onClick = (fun () -> printfn "Forward"),
-                    attrs = [
-                        Button.Variant.filled
-                        Button.Width.full
-                    ]
+                    attrs = [ Button.Variant.filled; Button.Width.full ]
                 )
             ],
             direction = ButtonMenu.Direction.Bottom,
@@ -279,8 +276,7 @@ ButtonGroup.create(
         ButtonGroup.Variant.outlined
         ButtonGroup.Color.primary
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Split Button" description content code
 
@@ -301,9 +297,7 @@ ButtonGroup.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 ButtonGroup.create(
     [
@@ -315,8 +309,7 @@ ButtonGroup.create(
         ButtonGroup.Variant.outlined
         ButtonGroup.Color.primary
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Icon Buttons" description content code
 
@@ -347,7 +340,7 @@ ButtonGroup.create(
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 ButtonGroup.create(
     [
@@ -367,8 +360,7 @@ ButtonGroup.create(
         ButtonGroup.Variant.outlined
         ButtonGroup.Color.primary
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Dropdown" description content code
 

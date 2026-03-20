@@ -16,7 +16,7 @@ module TooltipExamples =
 
   let private directionExamples () =
     let description =
-      Helpers.bodyText "Tooltips can be positioned in four directions relative to the target element"
+      Helpers.bodyText "Tooltips can be positioned in four directions relative to the target element."
 
     let tooltipBtn direction =
       let displayText = sprintf "%A" direction
@@ -50,35 +50,55 @@ module TooltipExamples =
     let code =
       """open Weave
 
+Tooltip.create(
+    innerContent =
+        Button.primary(
+            text "Left",
+            onClick = (fun () -> ()),
+            attrs = [ Button.Variant.outlined ]
+        ),
+    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Left" ],
+    direction = Tooltip.Direction.Left
+)
 
-let tooltipBtn direction =
-    let displayText = sprintf "%A" direction
+Tooltip.create(
+    innerContent =
+        Button.primary(
+            text "Top",
+            onClick = (fun () -> ()),
+            attrs = [ Button.Variant.outlined ]
+        ),
+    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Top" ],
+    direction = Tooltip.Direction.Top
+)
 
-    Tooltip.create(
-        innerContent =
-          Button.primary(
-              text displayText,
-              onClick = (fun () -> ()),
-              attrs = [
-                  Button.Variant.outlined
-                  Button.Width.full
-              ]
-          ),
-        tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
-        direction = direction
-    )
+Tooltip.create(
+    innerContent =
+        Button.primary(
+            text "Bottom",
+            onClick = (fun () -> ()),
+            attrs = [ Button.Variant.outlined ]
+        ),
+    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Bottom" ],
+    direction = Tooltip.Direction.Bottom
+)
 
-tooltipBtn Tooltip.Direction.Left
-tooltipBtn Tooltip.Direction.Top
-tooltipBtn Tooltip.Direction.Bottom
-tooltipBtn Tooltip.Direction.Right
-    """
+Tooltip.create(
+    innerContent =
+        Button.primary(
+            text "Right",
+            onClick = (fun () -> ()),
+            attrs = [ Button.Variant.outlined ]
+        ),
+    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Right" ],
+    direction = Tooltip.Direction.Right
+)"""
 
     Helpers.codeSampleSection "Directions" description content code
 
   let private colorExamples () =
     let description =
-      Helpers.bodyText "Tooltips support all theme colors to match your design system"
+      Helpers.bodyText "Apply a brand color to the tooltip background using the Tooltip.Color module."
 
     let content =
       div [
@@ -113,38 +133,82 @@ tooltipBtn Tooltip.Direction.Right
     let code =
       """open Weave
 
+Tooltip.create(
+    Button.primary(
+        text "Primary",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Primary tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.primary ]
+)
 
-let colors = [
-    "Primary", Button.Color.primary, Tooltip.Color.primary
-    "Secondary", Button.Color.secondary, Tooltip.Color.secondary
-    "Tertiary", Button.Color.tertiary, Tooltip.Color.tertiary
-    "Success", Button.Color.success, Tooltip.Color.success
-    "Error", Button.Color.error, Tooltip.Color.error
-    "Warning", Button.Color.warning, Tooltip.Color.warning
-    "Info", Button.Color.info, Tooltip.Color.info
-]
+Tooltip.create(
+    Button.secondary(
+        text "Secondary",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Secondary tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.secondary ]
+)
 
-for (displayText, btnColor, tipColor) in colors do
-    Tooltip.create(
-        Button.create(
-            text displayText,
-            onClick = (fun () -> ()),
-            attrs = [
-                Button.Variant.filled
-                btnColor
-                Button.Width.full
-            ]
-        ),
-        div [ Typography.body1 ] [ text (sprintf "%s tooltip" displayText) ],
-        tooltipAttrs = [ tipColor ]
-    )
-    """
+Tooltip.create(
+    Button.tertiary(
+        text "Tertiary",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Tertiary tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.tertiary ]
+)
+
+Tooltip.create(
+    Button.error(
+        text "Error",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Error tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.error ]
+)
+
+Tooltip.create(
+    Button.warning(
+        text "Warning",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Warning tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.warning ]
+)
+
+Tooltip.create(
+    Button.success(
+        text "Success",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Success tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.success ]
+)
+
+Tooltip.create(
+    Button.info(
+        text "Info",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    ),
+    div [ Typography.body1 ] [ text "Info tooltip" ],
+    tooltipAttrs = [ Tooltip.Color.info ]
+)"""
 
     Helpers.codeSampleSection "Colors" description content code
 
   let private activationExamples () =
     let description =
-      Helpers.bodyText "Tooltips can be triggered by different user interactions"
+      Helpers.bodyText
+        "Control how the tooltip appears using the activationEvents parameter: Hover (default), Click, or Focus."
 
     let content =
       [
@@ -208,7 +272,7 @@ Tooltip.create(
 
   let private arrowExamples () =
     let description =
-      Helpers.bodyText "Tooltips can optionally display an arrow pointing to the target"
+      Helpers.bodyText "Toggle the tooltip arrow with the showArrow parameter (true by default)."
 
     let content =
       div [
@@ -244,37 +308,34 @@ Tooltip.create(
     let code =
       """open Weave
 
-
+// Arrow is shown by default (showArrow = true)
 Tooltip.create(
     Button.primary(
         text "With Arrow",
         onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.filled
-        ]
+        attrs = [ Button.Variant.filled ]
     ),
     div [ Typography.body1 ] [ text "I have an arrow pointing" ],
-    showArrow = true (default)
+    showArrow = true
 )
 
+// Hide the arrow
 Tooltip.create(
     Button.secondary(
         text "Without Arrow",
         onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.filled
-        ]
+        attrs = [ Button.Variant.filled ]
     ),
     div [ Typography.body1 ] [ text "No arrow here" ],
     showArrow = false
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Arrow Visibility" description content code
 
   let private customContentExample () =
     let description =
-      Helpers.bodyText "Tooltips can display rich content using Doc instead of plain text"
+      Helpers.bodyText
+        "Pass any Doc as tooltipContent for rich layouts with headings, icons, or multiple lines."
 
     let content =
       div [
@@ -300,31 +361,29 @@ Tooltip.create(
     let code =
       """open Weave
 
-
 Tooltip.create(
     Button.info(
         text "Rich Content Tooltip",
         onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.filled
-        ]
+        attrs = [ Button.Variant.filled ]
     ),
-    div [ Attr.Style "padding" "4px" ] [ - custom Doc content
-        div [ Typography.body2
-              Attr.Style "font-weight" "bold"
-              Margin.Bottom.extraSmall ] [
-            text "Custom Tooltip"
+    div [ Attr.Style "padding" "4px" ] [
+        div [
+            Typography.body2
+            Attr.Style "font-weight" "bold"
+            Margin.Bottom.extraSmall
+        ] [ text "Custom Tooltip" ]
+        div [ Typography.caption ] [
+            text "You can use Doc elements for rich content"
         ]
-        div [ Typography.caption ] [ text "You can use Doc elements for rich content" ]
     ]
-)
-    """
+)"""
 
     Helpers.codeSampleSection "Custom Content" description content code
 
   let private textTooltipExample () =
     let description =
-      Helpers.bodyText "Tooltips can be applied to inline text elements, not just buttons"
+      Helpers.bodyText "Wrap any inline element in a tooltip, not just buttons."
 
     let content =
       div [] [
@@ -358,8 +417,6 @@ Tooltip.create(
     let code =
       """open Weave
 
-open WebSharper.UI
-
 span [ Typography.body1 ] [ text "Hover over " ]
 
 Tooltip.create(
@@ -390,7 +447,7 @@ span [ Typography.body1 ] [ text " for more information." ]"""
 
   let private iconTooltipExample () =
     let description =
-      Helpers.bodyText "Tooltips work great with icon buttons and badges"
+      Helpers.bodyText "Wrap icons in a tooltip to provide context on hover."
 
     let content =
       div [ Flex.Flex.allSizes; FlexDirection.Row.allSizes; JustifyContent.center ] [
@@ -436,8 +493,8 @@ span [ Typography.body1 ] [ text " for more information." ]"""
 
     let code =
       """open Weave
-
-open WebSharper.UI
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
 
 Tooltip.create(
     Icon.create(

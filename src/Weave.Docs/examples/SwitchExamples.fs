@@ -30,8 +30,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Switch.create(isChecked, View.Const "Default Switch")
-"""
+Switch.create(isChecked, div [ Typography.body1 ] [ text "Default Switch" ])"""
 
     Helpers.codeSampleSection "Basic Switch" description content code
 
@@ -56,10 +55,9 @@ let isChecked = Var.Create true
 
 Switch.create(
     isChecked,
-    View.Const "Disabled Switch",
+    div [ Typography.body1 ] [ text "Disabled Switch" ],
     enabled = View.Const false
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Disabled Switch" description content code
 
@@ -86,9 +84,9 @@ let isChecked = Var.Create false
 let label =
     isChecked.View
     |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
+    |> Doc.BindView(fun t -> div [ Typography.body1 ] [ text t ])
 
-Switch.create(isChecked, label)
-"""
+Switch.create(isChecked, label)"""
 
     Helpers.codeSampleSection "Dynamic Label" description content code
 
@@ -116,35 +114,33 @@ Switch.create(isChecked, label)
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let isChecked = Var.Create false
 
 Switch.create(
     isChecked,
-    View.Const "Small",
+    div [ Typography.body1 ] [ text "Small" ],
     attrs = [ Switch.Size.small ]
 )
 
 Switch.create(
     isChecked,
-    View.Const "Medium",
+    div [ Typography.body1 ] [ text "Medium" ],
     attrs = [ Switch.Size.medium ]
 )
 
 Switch.create(
     isChecked,
-    View.Const "Large",
+    div [ Typography.body1 ] [ text "Large" ],
     attrs = [ Switch.Size.large ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Sizes" description content code
 
   let private switchColorsExample () =
     let description =
-      Helpers.bodyText "Switches support all theme colors via the Switch.Color module."
+      Helpers.bodyText "Apply a brand color to the switch track and thumb using the Switch.Color module."
 
     let content =
       let switches =
@@ -172,23 +168,51 @@ Switch.create(
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let isChecked = Var.Create false
 
 Switch.create(
     isChecked,
-    View.Const "Primary",
+    div [ Typography.body1 ] [ text "Primary" ],
     attrs = [ Switch.Color.primary ]
 )
 
 Switch.create(
     isChecked,
-    View.Const "Error",
+    div [ Typography.body1 ] [ text "Secondary" ],
+    attrs = [ Switch.Color.secondary ]
+)
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Tertiary" ],
+    attrs = [ Switch.Color.tertiary ]
+)
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Error" ],
     attrs = [ Switch.Color.error ]
 )
-"""
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Warning" ],
+    attrs = [ Switch.Color.warning ]
+)
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Success" ],
+    attrs = [ Switch.Color.success ]
+)
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Info" ],
+    attrs = [ Switch.Color.info ]
+)"""
 
     Helpers.codeSampleSection "Colors" description content code
 
@@ -232,23 +256,33 @@ Switch.create(
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let isChecked = Var.Create false
 
 Switch.create(
     isChecked,
-    View.Const "Left",
+    div [ Typography.body1 ] [ text "Left" ],
     contentPlacement = View.Const Switch.ContentPlacement.Left
 )
 
 Switch.create(
     isChecked,
-    View.Const "Top",
+    div [ Typography.body1 ] [ text "Right" ],
+    contentPlacement = View.Const Switch.ContentPlacement.Right
+)
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Top" ],
     contentPlacement = View.Const Switch.ContentPlacement.Top
 )
-"""
+
+Switch.create(
+    isChecked,
+    div [ Typography.body1 ] [ text "Bottom" ],
+    contentPlacement = View.Const Switch.ContentPlacement.Bottom
+)"""
 
     Helpers.codeSampleSection "Content Placement" description content code
 
@@ -293,27 +327,36 @@ Switch.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let isChecked = Var.Create false
 
-// Per-instance: pass the density class in attrs to set it on one component
-Switch.create(
-    isChecked,
-    View.Const "Compact",
-    attrs = [
-        Density.compact
-        Switch.Color.primary
-    ]
-)
+// Compact density
+div [ Density.compact ] [
+    Switch.create(
+        isChecked,
+        div [ Typography.body1 ] [ text "Compact" ],
+        attrs = [ Switch.Color.primary ]
+    )
+]
 
-Switch.create(
-    isChecked,
-    View.Const "Spacious",
-    attrs = [
-        Density.spacious
-        Switch.Color.primary
-    ]
-)
-"""
+// Standard density (the default)
+div [ Density.standard ] [
+    Switch.create(
+        isChecked,
+        div [ Typography.body1 ] [ text "Standard" ],
+        attrs = [ Switch.Color.primary ]
+    )
+]
+
+// Spacious density
+div [ Density.spacious ] [
+    Switch.create(
+        isChecked,
+        div [ Typography.body1 ] [ text "Spacious" ],
+        attrs = [ Switch.Color.primary ]
+    )
+]"""
 
     Helpers.codeSampleSection "Density" description content code
 

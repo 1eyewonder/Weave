@@ -29,10 +29,12 @@ module SpacerExamples =
       ]
 
     let code =
-      """div [ Flex.Flex.allSizes; AlignItems.center ] [
-    Button.create(text "Left", onClick = (fun () -> ()))
-    Spacer.create()
-    Button.create(text "Right", onClick = (fun () -> ()))
+      """open Weave
+
+div [ Flex.Flex.allSizes; AlignItems.center ] [
+    Button.primary(text "Left", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+    Spacer.create()  // see here
+    Button.primary(text "Right", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
 ]"""
 
     Helpers.codeSampleSection "Basic" description content code
@@ -55,12 +57,14 @@ module SpacerExamples =
       ] [ btn "One"; Spacer.create (); btn "Two"; Spacer.create (); btn "Three" ]
 
     let code =
-      """div [ Flex.Flex.allSizes; AlignItems.center ] [
-    Button.create(text "One", onClick = (fun () -> ()))
-    Spacer.create()
-    Button.create(text "Two", onClick = (fun () -> ()))
-    Spacer.create()
-    Button.create(text "Three", onClick = (fun () -> ()))
+      """open Weave
+
+div [ Flex.Flex.allSizes; AlignItems.center ] [
+    Button.primary(text "One", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+    Spacer.create()  // see here
+    Button.primary(text "Two", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+    Spacer.create()  // see here
+    Button.primary(text "Three", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
 ]"""
 
     Helpers.codeSampleSection "Multiple Spacers" description content code

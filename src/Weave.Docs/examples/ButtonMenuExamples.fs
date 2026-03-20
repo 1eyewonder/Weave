@@ -58,9 +58,7 @@ module ButtonMenuExamples =
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
@@ -110,8 +108,7 @@ IconButtonMenu.create(
         Button.Color.primary
         BorderRadius.circle
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Basic Usage" description content code
 
@@ -189,33 +186,35 @@ IconButtonMenu.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
+let items = [
+    IconButton.secondary(
+        Icon.create(Icon.Social Social.Share),
+        onClick = (fun () -> ()),
+        attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
+    )
+    IconButton.error(
+        Icon.create(Icon.UiActions UiActions.Favorite),
+        onClick = (fun () -> ()),
+        attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled; BorderRadius.circle ]
+    )
+]
 
 // With openIcon: swaps between send and close icons
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.Communicate Communicate.Send),
-    openIcon = Icon.create(Icon.UiActions UiActions.Close),
-    items = [ ... ],
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-        BorderRadius.circle
-    ]
+    openIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
+    items = items,
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
 )
 
 // Without openIcon: the Add icon rotates 45 degrees (becomes an X)
 IconButtonMenu.create(
-    closedIcon = Icon.create(Icon.UiActions UiActions.Add), // rotates when open
-    items = [ ... ],
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-        BorderRadius.circle
-    ]
-)
-"""
+    closedIcon = Icon.create(Icon.UiActions UiActions.Add),
+    items = items,
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
+)"""
 
     Helpers.codeSampleSection "Icon Swap vs Rotation" description content code
 
@@ -270,41 +269,27 @@ IconButtonMenu.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 let items = [
     IconButton.info(
         Icon.create(Icon.Action Action.Alarm),
         onClick = (fun () -> ()),
-        attrs = [
-            Attr.Create "aria-label" "alarm"
-            Button.Variant.filled
-            BorderRadius.circle
-        ]
+        attrs = [ Attr.Create "aria-label" "alarm"; Button.Variant.filled; BorderRadius.circle ]
     )
     IconButton.warning(
         Icon.create(Icon.UiActions UiActions.Star),
         onClick = (fun () -> ()),
-        attrs = [
-            Attr.Create "aria-label" "star"
-            Button.Variant.filled
-            BorderRadius.circle
-        ]
+        attrs = [ Attr.Create "aria-label" "star"; Button.Variant.filled; BorderRadius.circle ]
     )
 ]
 
-let triggerAttrs = [
-    Button.Variant.filled
-    Button.Color.primary
-    BorderRadius.circle
-]
+let triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
-    direction = ButtonMenu.Direction.Top,
+    direction = ButtonMenu.Direction.Top, // see here
     triggerAttrs = triggerAttrs
 )
 
@@ -327,8 +312,7 @@ IconButtonMenu.create(
     items = items,
     direction = ButtonMenu.Direction.Right,
     triggerAttrs = triggerAttrs
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Directions" description content code
 
@@ -384,9 +368,7 @@ IconButtonMenu.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 open WebSharper.UI
 
 let isMenuOpen = Var.Create false
@@ -397,23 +379,27 @@ Button.secondary(
     |> View.Map (fun o -> if o then text "Close Menu" else text "Open Menu")
     |> Doc.EmbedView,
     onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
-    attrs = [
-        Button.Variant.outlined
-    ]
+    attrs = [ Button.Variant.outlined ]
 )
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     openIcon = Icon.create(Icon.UiActions UiActions.Close),
-    items = [ ... ],
-    isOpen = isMenuOpen, - shared state
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-        BorderRadius.circle
-    ]
-)
-"""
+    items = [
+        IconButton.info(
+            Icon.create(Icon.Social Social.Share),
+            onClick = (fun () -> ()),
+            attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
+        )
+        IconButton.error(
+            Icon.create(Icon.UiActions UiActions.Favorite),
+            onClick = (fun () -> ()),
+            attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled; BorderRadius.circle ]
+        )
+    ],
+    isOpen = isMenuOpen, // see here -- shared Var controls open state
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
+)"""
 
     Helpers.codeSampleSection "External State Control" description content code
 
@@ -493,54 +479,37 @@ IconButtonMenu.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
+open WebSharper.UI
 
 // Icon button with hover
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     openIcon = Icon.create(Icon.UiActions UiActions.Close),
-    openOnHover = View.Const true,
+    openOnHover = View.Const true, // see here
     items = [
         IconButton.info(
             Icon.create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
-            attrs = [
-                Attr.Create "aria-label" "share"
-                Button.Variant.filled
-                BorderRadius.circle
-            ]
+            attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
         )
     ],
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-        BorderRadius.circle
-    ]
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
 )
 
 // Text button with hover
 ButtonMenu.create(
     closedContent = text "Menu",
-    openOnHover = View.Const true,
+    openOnHover = View.Const true, // see here
     items = [
         IconButton.info(
             Icon.create(Icon.Social Social.Share),
             onClick = (fun () -> printfn "share clicked"),
-            attrs = [
-                Attr.Create "aria-label" "share"
-                Button.Variant.filled
-                BorderRadius.circle
-            ]
+            attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
         )
     ],
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-    ]
-)
-"""
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
+)"""
 
     Helpers.codeSampleSection "Open on Hover" description content code
 
@@ -618,28 +587,18 @@ ButtonMenu.create(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 let menuItems = [
     IconButton.info(
         Icon.create(Icon.Social Social.Share),
         onClick = (fun () -> printfn "share clicked"),
-        attrs = [
-            Attr.Create "aria-label" "share"
-            Button.Variant.filled
-            BorderRadius.circle
-        ]
+        attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
     )
     IconButton.error(
         Icon.create(Icon.UiActions UiActions.Favorite),
         onClick = (fun () -> printfn "favorite clicked"),
-        attrs = [
-            Attr.Create "aria-label" "favorite"
-            Button.Variant.filled
-            BorderRadius.circle
-        ]
+        attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled; BorderRadius.circle ]
     )
 ]
 
@@ -647,10 +606,7 @@ let menuItems = [
 ButtonMenu.create(
     closedContent = text "Menu",
     items = menuItems,
-    triggerAttrs = [
-        Button.Variant.text
-        Button.Color.primary
-    ]
+    triggerAttrs = [ Button.Variant.text; Button.Color.primary ]
 )
 
 // With icon and openContent: compose icon + text in closedContent
@@ -658,12 +614,8 @@ ButtonMenu.create(
     closedContent = Doc.Concat [ Icon.create(Icon.UiActions UiActions.Add); text "Actions" ],
     openContent = Doc.Concat [ Icon.create(Icon.UiActions UiActions.Add); text "Close" ],
     items = menuItems,
-    triggerAttrs = [
-        Button.Variant.filled
-        Button.Color.tertiary
-    ]
-)
-"""
+    triggerAttrs = [ Button.Variant.filled; Button.Color.tertiary ]
+)"""
 
     Helpers.codeSampleSection "Text Button Trigger" description content code
 

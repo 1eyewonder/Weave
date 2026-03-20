@@ -132,25 +132,41 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
     let code =
       """open Weave
 
+// None: instant (0ms transitions)
+div [ cl (TransitionSpeed.toClass TransitionSpeed.None) ] [
+    Button.primary(
+        text "Hover me",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    )
+]
 
-// Wrap a component in a div with a speed class.
-// The button inherits the transition duration override.
-let speedColumn (speed: TransitionSpeed) =
-    div [ cl (TransitionSpeed.toClass speed) ] [
-        Button.primary(
-            text "Hover me",
-            onClick = (fun () -> ()),
-            attrs = [
-                Button.Variant.filled
-            ]
-        )
-    ]
+// Fast: half the default duration
+div [ cl (TransitionSpeed.toClass TransitionSpeed.Fast) ] [
+    Button.primary(
+        text "Hover me",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    )
+]
 
-// None = instant, Fast = half, Standard = default, Slow = double
-speedColumn TransitionSpeed.None
-speedColumn TransitionSpeed.Fast
-speedColumn TransitionSpeed.Standard
-speedColumn TransitionSpeed.Slow"""
+// Standard: the default duration
+div [ cl (TransitionSpeed.toClass TransitionSpeed.Standard) ] [
+    Button.primary(
+        text "Hover me",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    )
+]
+
+// Slow: double the default duration
+div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
+    Button.primary(
+        text "Hover me",
+        onClick = (fun () -> ()),
+        attrs = [ Button.Variant.filled ]
+    )
+]"""
 
     Helpers.codeSampleSection "Live comparison" description content code
 

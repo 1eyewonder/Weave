@@ -53,7 +53,7 @@ module SelectExamples =
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 let selected = Var.Create<string option> None
 
@@ -69,8 +69,7 @@ Select.create(
     labelText = View.Const "Fruit",
     placeholder = View.Const "Choose a fruit",
     attrs = [ Select.Color.primary ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Basic Usage" description content code
 
@@ -131,11 +130,19 @@ Select.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<string option> None
+
+let items =
+    [ "Red"; "Green"; "Blue"; "Yellow"; "Purple" ]
+    |> List.map (fun color ->
+        Select.SelectItemDef.create (text color) color color)
+    |> View.Const
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Standard,
+    variant = Field.Variant.Standard,  // see here
     labelText = View.Const "Standard"
 )
 
@@ -149,8 +156,7 @@ Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Variants" description content code
 
@@ -197,18 +203,23 @@ Select.create(
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 let selected = Var.Create<string option> (Some "Tokyo")
+
+let items =
+    [ "Tokyo"; "London"; "New York"; "Paris"; "Sydney"; "Berlin" ]
+    |> List.map (fun city ->
+        Select.SelectItemDef.create (text city) city city)
+    |> View.Const
 
 Select.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "City",
-    clearable = View.Const true
-)
-"""
+    clearable = View.Const true  // see here
+)"""
 
     Helpers.codeSampleSection "Clearable" description content code
 
@@ -267,17 +278,24 @@ Select.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<string option> None
+
+let items =
+    [ "Argentina"; "Australia"; "Brazil"; "Canada"; "France"; "Germany"; "Japan" ]
+    |> List.map (fun c ->
+        Select.SelectItemDef.create (text c) c c)
+    |> View.Const
 
 Select.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Country",
-    searchable = true,
+    searchable = true,  // see here
     clearable = View.Const true
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Searchable" description content code
 
@@ -331,7 +349,7 @@ Select.create(
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 let selected = Var.Create<Set<string>> Set.empty
 
@@ -348,8 +366,7 @@ MultiSelect.create(
     labelText = View.Const "Hobbies",
     placeholder = View.Const "Select hobbies",
     clearable = View.Const true
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Multi-Select" description content code
 
@@ -389,21 +406,28 @@ MultiSelect.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<Set<string>> Set.empty
+
+let items =
+    [ "Admin"; "Editor"; "Viewer"; "Moderator"; "Contributor" ]
+    |> List.map (fun role ->
+        Select.SelectItemDef.create (text role) role role)
+    |> View.Const
 
 MultiSelect.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Roles",
-    showSelectAll = true,
+    showSelectAll = true,  // see here
     selectAllText = "All Roles",
     searchable = true,
     clearable = View.Const true,
     selectionText = (fun sel ->
         sprintf "%d role(s) selected" (Set.count sel))
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Select All" description content code
 
@@ -462,7 +486,9 @@ MultiSelect.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<string option> None
 
 let makeItem emoji name =
     Select.SelectItemDef.create
@@ -472,7 +498,7 @@ let makeItem emoji name =
         ])
         name
         name
-    |> Select.SelectItemDef.withSelectedContent (
+    |> Select.SelectItemDef.withSelectedContent (  // see here
         span [ Attr.Style "gap" "6px" ] [
             span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
             text name
@@ -490,8 +516,7 @@ Select.create(
     labelText = View.Const "Country",
     searchable = true,
     clearable = View.Const true
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Custom Item Rendering" description content code
 
@@ -541,22 +566,33 @@ Select.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let items =
+    [ "Locked"; "Open"; "Pending" ]
+    |> List.map (fun s ->
+        Select.SelectItemDef.create (text s) s s)
+    |> View.Const
 
-// Disabled
+// Disabled — prevents all interaction and dims the component
+let disabledVal = Var.Create<string option> (Some "Locked")
+
 Select.create(
-    items, selected,
+    items, disabledVal,
+    variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
-    enabled = View.Const false
+    enabled = View.Const false  // see here
 )
 
-// Read Only
+// Read Only — shows value but prevents changes
+let readOnlyVal = Var.Create<string option> (Some "Locked")
+
 Select.create(
-    items, selected,
+    items, readOnlyVal,
+    variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true
-)
-"""
+    readOnly = View.Const true  // see here
+)"""
 
     Helpers.codeSampleSection "Disabled and Read Only" description content code
 
@@ -601,22 +637,23 @@ Select.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<string option> (Some "Option A")
 
-Select.create(
-    items, selected,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Primary",
-    attrs = [ Select.Color.primary ]
-)
+let items =
+    [ "Option A"; "Option B"; "Option C" ]
+    |> List.map (fun o ->
+        Select.SelectItemDef.create (text o) o o)
+    |> View.Const
 
-Select.create(
-    items, selected,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Error",
-    attrs = [ Select.Color.error ]
-)
-"""
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Primary", attrs = [ Select.Color.primary ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Secondary", attrs = [ Select.Color.secondary ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Tertiary", attrs = [ Select.Color.tertiary ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Error", attrs = [ Select.Color.error ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Warning", attrs = [ Select.Color.warning ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Success", attrs = [ Select.Color.success ])
+Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Info", attrs = [ Select.Color.info ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 
@@ -689,23 +726,38 @@ Select.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let selected = Var.Create<string option> None
+
+let items =
+    [ "Short"; "Medium Text"; "A Longer Option Here" ]
+    |> List.map (fun o ->
+        Select.SelectItemDef.create (text o) o o)
+    |> View.Const
 
 // Auto (default) — inline, sizes to min-width
-Select.create(items, selected, ...)
+Select.create(
+    items, selected,
+    variant = Field.Variant.Outlined,
+    labelText = View.Const "Auto"
+)
 
 // Full Width — 100% of container
 Select.create(
     items, selected,
-    attrs = [ Select.Width.full ]
+    variant = Field.Variant.Outlined,
+    labelText = View.Const "Full",
+    attrs = [ Select.Width.full ]  // see here
 )
 
 // Fit Content — sizes to content
 Select.create(
     items, selected,
-    attrs = [ Select.Width.fitContent ]
-)
-"""
+    variant = Field.Variant.Outlined,
+    labelText = View.Const "Fit Content",
+    attrs = [ Select.Width.fitContent ]  // see here
+)"""
 
     Helpers.codeSampleSection "Width Modes" description content code
 
@@ -799,7 +851,7 @@ Select.create(
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 type Language = { Code: string; Name: string; Native: string }
 
@@ -826,8 +878,7 @@ Select.create(
     labelText = View.Const "Language",
     searchable = true,
     clearable = View.Const true
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Generic Types" description content code
 

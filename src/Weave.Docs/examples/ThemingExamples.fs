@@ -258,6 +258,7 @@ module ThemingExamples =
 
     let code =
       """open Weave.Theming
+open WebSharper.UI
 
 let currentMode = Var.Create Light
 

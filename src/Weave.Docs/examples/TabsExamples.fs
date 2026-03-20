@@ -131,6 +131,19 @@ Tabs.create(
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
           )
+
+          GridItem.create (
+            Tabs.create (
+              View.Const [
+                div [ Typography.body1 ] [ text "Info color" ] |> TabDef.createText "Info"
+                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+              ],
+              attrs = [ Color.info ]
+            ),
+            xs = Grid.Width.create 12,
+            sm = Grid.Width.create 6,
+            md = Grid.Width.create 4
+          )
         ]
       )
 
@@ -164,10 +177,10 @@ Tabs.create(
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Success color" ] |> TabDef.createText "Success"
+        div [ Typography.body1 ] [ text "Error color" ] |> TabDef.createText "Error"
         div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
     ],
-    attrs = [ Color.success ]
+    attrs = [ Color.error ]
 )
 
 Tabs.create(
@@ -180,12 +193,19 @@ Tabs.create(
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Error color" ] |> TabDef.createText "Error"
+        div [ Typography.body1 ] [ text "Success color" ] |> TabDef.createText "Success"
         div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
     ],
-    attrs = [ Color.error ]
+    attrs = [ Color.success ]
 )
-"""
+
+Tabs.create(
+    View.Const [
+        div [ Typography.body1 ] [ text "Info color" ] |> TabDef.createText "Info"
+        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+    ],
+    attrs = [ Color.info ]
+)"""
 
     Helpers.codeSampleSection "Color Variants" description content code
 
@@ -400,26 +420,24 @@ Tabs.create(
       """open Weave
 open Weave.Tabs
 
-Tabs.create(
+let tabs =
     View.Const [
-        div [ Typography.body1 ] [ text "Top content" ] |> TabDef.createText "Item One"
+        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Item One"
         div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Item Two"
         div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Item Three"
-    ],
-    position = Tabs.Position.Top,
-    attrs = [ Color.primary ]
-)
+    ]
 
-Tabs.create(
-    View.Const [
-        div [ Typography.body1 ] [ text "Left content" ] |> TabDef.createText "Item One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Item Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Item Three"
-    ],
-    position = Tabs.Position.Left,
-    attrs = [ Color.primary ]
-)
-"""
+// Tab strip on top (default)
+Tabs.create(tabs, position = Position.Top, attrs = [ Color.primary ])
+
+// Tab strip on the bottom
+Tabs.create(tabs, position = Position.Bottom, attrs = [ Color.primary ])
+
+// Tab strip on the left (vertical)
+Tabs.create(tabs, position = Position.Left, attrs = [ Color.primary ])
+
+// Tab strip on the right (vertical)
+Tabs.create(tabs, position = Position.Right, attrs = [ Color.primary ])"""
 
     Helpers.codeSampleSection "Tab Positions" description content code
 
@@ -617,6 +635,7 @@ Tabs.create(
           text "Tabs organize content across different screens and views."
         ]
 
+        Helpers.divider ()
         basicExample ()
         Helpers.divider ()
         colorExample ()

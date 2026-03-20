@@ -51,26 +51,13 @@ module ChipExamples =
     let code =
       """open Weave
 
-let colors = [
-    "Primary", Chip.Color.primary
-    "Secondary", Chip.Color.secondary
-    "Tertiary", Chip.Color.tertiary
-    "Error", Chip.Color.error
-    "Warning", Chip.Color.warning
-    "Success", Chip.Color.success
-    "Info", Chip.Color.info
-]
-
-colors
-|> List.map (fun (label, colorAttr) ->
-    Chip.create(
-        text label,
-        attrs = [
-            Chip.Variant.filled
-            colorAttr
-        ]
-    )
-)"""
+Chip.create(text "Primary", attrs = [ Chip.Variant.filled; Chip.Color.primary ])
+Chip.create(text "Secondary", attrs = [ Chip.Variant.filled; Chip.Color.secondary ])
+Chip.create(text "Tertiary", attrs = [ Chip.Variant.filled; Chip.Color.tertiary ])
+Chip.create(text "Error", attrs = [ Chip.Variant.filled; Chip.Color.error ])
+Chip.create(text "Warning", attrs = [ Chip.Variant.filled; Chip.Color.warning ])
+Chip.create(text "Success", attrs = [ Chip.Variant.filled; Chip.Color.success ])
+Chip.create(text "Info", attrs = [ Chip.Variant.filled; Chip.Color.info ])"""
 
     Helpers.codeSampleSection "Filled Chips" description content code
 
@@ -111,13 +98,13 @@ colors
     let code =
       """open Weave
 
-Chip.create(
-    text "Primary",
-    attrs = [
-        Chip.Variant.text
-        Chip.Color.primary
-    ]
-)"""
+Chip.create(text "Primary", attrs = [ Chip.Variant.text; Chip.Color.primary ])
+Chip.create(text "Secondary", attrs = [ Chip.Variant.text; Chip.Color.secondary ])
+Chip.create(text "Tertiary", attrs = [ Chip.Variant.text; Chip.Color.tertiary ])
+Chip.create(text "Error", attrs = [ Chip.Variant.text; Chip.Color.error ])
+Chip.create(text "Warning", attrs = [ Chip.Variant.text; Chip.Color.warning ])
+Chip.create(text "Success", attrs = [ Chip.Variant.text; Chip.Color.success ])
+Chip.create(text "Info", attrs = [ Chip.Variant.text; Chip.Color.info ])"""
 
     Helpers.codeSampleSection "Text Chips" description content code
 
@@ -162,13 +149,13 @@ Chip.create(
     let code =
       """open Weave
 
-Chip.create(
-    text "Primary",
-    attrs = [
-        Chip.Variant.outlined
-        Chip.Color.primary
-    ]
-)"""
+Chip.create(text "Primary", attrs = [ Chip.Variant.outlined; Chip.Color.primary ])
+Chip.create(text "Secondary", attrs = [ Chip.Variant.outlined; Chip.Color.secondary ])
+Chip.create(text "Tertiary", attrs = [ Chip.Variant.outlined; Chip.Color.tertiary ])
+Chip.create(text "Error", attrs = [ Chip.Variant.outlined; Chip.Color.error ])
+Chip.create(text "Warning", attrs = [ Chip.Variant.outlined; Chip.Color.warning ])
+Chip.create(text "Success", attrs = [ Chip.Variant.outlined; Chip.Color.success ])
+Chip.create(text "Info", attrs = [ Chip.Variant.outlined; Chip.Color.info ])"""
 
     Helpers.codeSampleSection "Outlined Chips" description content code
 
@@ -218,13 +205,13 @@ items.View
     |> List.map (fun item ->
         Chip.create(
             text item,
-            onClose = (fun () ->
+            onClose = (fun () -> // see here
                 items.Value
                 |> List.filter (fun i -> i <> item)
                 |> Var.Set items),
             attrs = [
                 Chip.Variant.outlined
-                    Chip.Color.primary
+                Chip.Color.primary
             ]
         )
     )
@@ -273,11 +260,11 @@ open Weave.Icons.MaterialSymbols
 
 Chip.create(
     text "Draft",
-    onClose = (fun () -> (* remove chip *)),
-    closeIcon = Icon.create(Icon.UiActions UiActions.Close),
+    onClose = (fun () -> printfn "Chip closed"),
+    closeIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
     attrs = [
         Chip.Variant.filled
-            Chip.Color.secondary
+        Chip.Color.secondary
     ]
 )"""
 
@@ -311,10 +298,10 @@ let count = Var.Create 0
 
 Chip.create(
     text "Click me",
-    onClick = (fun () -> Var.Set count (count.Value + 1)),
+    onClick = (fun () -> Var.Set count (count.Value + 1)), // see here
     attrs = [
         Chip.Variant.filled
-            Chip.Color.primary
+        Chip.Color.primary
     ]
 )"""
 
@@ -365,10 +352,10 @@ open Weave.Icons.MaterialSymbols
 
 Chip.create(
     text "Saved",
-    content = Icon.create(Icon.UiActions UiActions.CheckCircle),
+    content = Icon.create(Icon.UiActions UiActions.CheckCircle), // see here
     attrs = [
         Chip.Variant.filled
-            Chip.Color.success
+        Chip.Color.success
     ]
 )"""
 
@@ -415,7 +402,25 @@ Chip.create(
 Chip.create(
     text "Compact",
     attrs = [
-        Chip.Density.compact
+        Chip.Density.compact // see here
+        Chip.Variant.filled
+        Chip.Color.primary
+    ]
+)
+
+Chip.create(
+    text "Standard",
+    attrs = [
+        Chip.Density.standard
+        Chip.Variant.filled
+        Chip.Color.primary
+    ]
+)
+
+Chip.create(
+    text "Spacious",
+    attrs = [
+        Chip.Density.spacious
         Chip.Variant.filled
         Chip.Color.primary
     ]
@@ -457,11 +462,11 @@ open Weave.Icons.MaterialSymbols
 
 Chip.create(
     text "WebSharper",
-    href = "https://websharper.com",
+    href = "https://websharper.com", // see here
     content = Icon.create(Icon.UiActions UiActions.OpenInNew),
     attrs = [
         Chip.Variant.outlined
-            Chip.Color.primary
+        Chip.Color.primary
     ]
 )"""
 
@@ -495,10 +500,10 @@ let isSelected = Var.Create false
 Chip.create(
     text "Toggle me",
     onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
-    selected = isSelected.View,
+    selected = isSelected.View, // see here
     attrs = [
         Chip.Variant.filled
-            Chip.Color.primary
+        Chip.Color.primary
     ]
 )"""
 
@@ -560,19 +565,15 @@ Chip.create(
 
     let code =
       """open Weave
-open Weave.CssHelpers
 
-// Override the default pill shape with BorderRadius utility classes
-Chip.create(
-    text "Medium",
-    attrs = [
-        Chip.Variant.filled
-        Chip.Color.tertiary
-        BorderRadius.All.medium
-    ]
-)
+// Default is pill shape (fully rounded)
+Chip.create(text "Default", attrs = [ Chip.Variant.filled; Chip.Color.primary ])
 
-// Other options: BorderRadius.All.large, .small, .none"""
+// Override with BorderRadius utility classes
+Chip.create(text "Large", attrs = [ Chip.Variant.filled; Chip.Color.secondary; BorderRadius.All.large ])
+Chip.create(text "Medium", attrs = [ Chip.Variant.filled; Chip.Color.tertiary; BorderRadius.All.medium ])
+Chip.create(text "Small", attrs = [ Chip.Variant.filled; Chip.Color.success; BorderRadius.All.small ])
+Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; BorderRadius.All.none ])"""
 
     Helpers.codeSampleSection "Border Radius" description content code
 

@@ -85,7 +85,9 @@ Checkbox.create(isChecked, label)
     Helpers.codeSampleSection "Dynamic Label" description content code
 
   let private checkboxSizesExample () =
-    let description = Helpers.bodyText "Checkboxes in different sizes."
+    let description =
+      Helpers.bodyText
+        "Control the checkbox size using the Size module. Available sizes are small, medium, and large."
 
     let content =
       let sizes = [
@@ -107,34 +109,36 @@ Checkbox.create(isChecked, label)
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
-let isChecked = Var.Create false
+let smallChecked = Var.Create false
+let mediumChecked = Var.Create false
+let largeChecked = Var.Create false
 
 Checkbox.create(
-    isChecked,
+    smallChecked,
     View.Const "Small",
-    attrs = [ Checkbox.Size.small ]
+    attrs = [ Checkbox.Size.small ] // see here
 )
 
 Checkbox.create(
-    isChecked,
+    mediumChecked,
     View.Const "Medium",
     attrs = [ Checkbox.Size.medium ]
 )
 
 Checkbox.create(
-    isChecked,
+    largeChecked,
     View.Const "Large",
     attrs = [ Checkbox.Size.large ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Sizes" description content code
 
   let private checkboxColorsExample () =
-    let description = Helpers.bodyText "Checkboxes with different color themes."
+    let description =
+      Helpers.bodyText
+        "Apply brand colors to checkboxes using the Color module. Colors affect the checked state indicator."
 
     let content =
       let checkboxes =
@@ -162,23 +166,17 @@ Checkbox.create(
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.create(
-    isChecked,
-    View.Const "Primary",
-    attrs = [ Checkbox.Color.primary ]
-)
-
-Checkbox.create(
-    isChecked,
-    View.Const "Error",
-    attrs = [ Checkbox.Color.error ]
-)
-"""
+Checkbox.create(isChecked, View.Const "Primary", attrs = [ Checkbox.Color.primary ])
+Checkbox.create(isChecked, View.Const "Secondary", attrs = [ Checkbox.Color.secondary ])
+Checkbox.create(isChecked, View.Const "Tertiary", attrs = [ Checkbox.Color.tertiary ])
+Checkbox.create(isChecked, View.Const "Error", attrs = [ Checkbox.Color.error ])
+Checkbox.create(isChecked, View.Const "Warning", attrs = [ Checkbox.Color.warning ])
+Checkbox.create(isChecked, View.Const "Success", attrs = [ Checkbox.Color.success ])
+Checkbox.create(isChecked, View.Const "Info", attrs = [ Checkbox.Color.info ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 
@@ -219,7 +217,6 @@ Checkbox.create(
 
     let code =
       """open Weave
-
 open WebSharper.UI
 
 let isChecked = Var.Create false
@@ -227,23 +224,30 @@ let isChecked = Var.Create false
 Checkbox.create(
     isChecked,
     View.Const "Left",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Left,
-    attrs = [
-        Checkbox.Size.large
-        Checkbox.Color.primary
-    ]
+    contentPlacement = View.Const Checkbox.ContentPlacement.Left, // see here
+    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+)
+
+Checkbox.create(
+    isChecked,
+    View.Const "Right",
+    contentPlacement = View.Const Checkbox.ContentPlacement.Right,
+    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
 )
 
 Checkbox.create(
     isChecked,
     View.Const "Top",
     contentPlacement = View.Const Checkbox.ContentPlacement.Top,
-    attrs = [
-        Checkbox.Size.large
-        Checkbox.Color.primary
-    ]
+    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
 )
-"""
+
+Checkbox.create(
+    isChecked,
+    View.Const "Bottom",
+    contentPlacement = View.Const Checkbox.ContentPlacement.Bottom,
+    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+)"""
 
     Helpers.codeSampleSection "Content Placement" description content code
 
@@ -280,14 +284,24 @@ Checkbox.create(
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let isChecked = Var.Create false
 
-// Per-instance: pass the density class in attrs to set it on one component
 Checkbox.create(
     isChecked,
     View.Const "Compact",
     attrs = [
-        Density.compact
+        Density.compact // see here
+        Checkbox.Color.primary
+    ]
+)
+
+Checkbox.create(
+    isChecked,
+    View.Const "Standard",
+    attrs = [
+        Density.standard
         Checkbox.Color.primary
     ]
 )
@@ -299,8 +313,7 @@ Checkbox.create(
         Density.spacious
         Checkbox.Color.primary
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Density" description content code
 

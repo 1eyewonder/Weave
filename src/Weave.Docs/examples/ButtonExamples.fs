@@ -33,33 +33,23 @@ module ButtonExamples =
     let code =
       """open Weave
 
-
-let doNothing () = ()
-
 Button.primary(
     text "Filled",
-    onClick = doNothing,
-    attrs = [
-        Button.Variant.filled
-    ]
+    onClick = (fun () -> ()),
+    attrs = [ Button.Variant.filled ]
 )
 
 Button.primary(
     text "Outlined",
-    onClick = doNothing,
-    attrs = [
-        Button.Variant.outlined
-    ]
+    onClick = (fun () -> ()),
+    attrs = [ Button.Variant.outlined ]
 )
 
 Button.primary(
     text "Text",
-    onClick = doNothing,
-    attrs = [
-        Button.Variant.text
-    ]
-)
-    """
+    onClick = (fun () -> ()),
+    attrs = [ Button.Variant.text ]
+)"""
 
     Helpers.codeSampleSection "Variants" description content code
 
@@ -74,38 +64,21 @@ Button.primary(
       "Info", Button.Color.info
     ]
 
-    let description = Helpers.bodyText "Buttons support all theme colors"
+    let description =
+      Helpers.bodyText
+        "Apply brand colors using shorthand constructors like Button.primary, Button.error, etc. These apply the color automatically — no need to pass Button.Color.x in attrs."
 
     let code =
       """open Weave
 
-
-let onClick name = printfn "%s clicked" name
-
-let colors = [
-    "Primary", Button.Color.primary
-    "Secondary", Button.Color.secondary
-    "Tertiary", Button.Color.tertiary
-    "Error", Button.Color.error
-    "Warning", Button.Color.warning
-    "Success", Button.Color.success
-    "Info", Button.Color.info
-]
-
-colors
-|> List.map (fun (colorName, colorAttr) ->
-
-    Button.create(
-        text colorName,
-        onClick = onClick colorName,
-        attrs = [
-            Button.Variant.filled
-            colorAttr
-            Button.Width.full
-        ]
-    )
-)
-"""
+// Each color has a shorthand constructor: Button.primary, Button.secondary, etc.
+Button.primary(text "Primary", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.secondary(text "Secondary", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.tertiary(text "Tertiary", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.error(text "Error", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.warning(text "Warning", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.success(text "Success", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
+Button.info(text "Info", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])"""
 
     let content =
       Grid.create (
@@ -164,7 +137,6 @@ colors
     let code =
       """open Weave
 
-
 Button.primary(
     text "Compact",
     onClick = (fun () -> ()),
@@ -190,8 +162,7 @@ Button.primary(
         Density.spacious
         Button.Variant.filled
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Density" description content code
 
@@ -224,26 +195,21 @@ Button.primary(
 
     let code =
       """open Weave
-
+open WebSharper.UI
 
 Button.primary(
     text "Enabled",
     onClick = (fun () -> printfn "Enabled clicked"),
     enabled = View.Const true,
-    attrs = [
-        Button.Variant.filled
-    ]
+    attrs = [ Button.Variant.filled ]
 )
 
 Button.create(
     text "Disabled",
     onClick = (fun () -> printfn "This won't fire"),
-    enabled = View.Const false,
-    attrs = [
-        Button.Variant.filled
-    ]
-)
-"""
+    enabled = View.Const false, // see here
+    attrs = [ Button.Variant.filled ]
+)"""
 
     Helpers.codeSampleSection "Disabled State" description content code
 
@@ -261,17 +227,14 @@ Button.create(
     let code =
       """open Weave
 
-open WebSharper.UI
-
 Button.primary(
     text "Full Width Button",
     onClick = (fun () -> printfn "Full width clicked"),
     attrs = [
         Button.Variant.filled
-        Button.Width.full
+        Button.Width.full // see here
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Full Width" description content code
 
@@ -303,14 +266,12 @@ Button.primary(
     let code =
       """open Weave
 
-
-Button.primary(text "None",   onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.none   ])
-Button.primary(text "Small",  onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.small  ])
+Button.primary(text "None", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.none ])
+Button.primary(text "Small", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.small ])
 Button.primary(text "Medium", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.medium ])
-Button.primary(text "Large",  onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.large  ])
-Button.primary(text "Pill",   onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.pill       ])
-Button.primary(text "Circle", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.circle     ])
-"""
+Button.primary(text "Large", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.large ])
+Button.primary(text "Pill", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.pill ])
+Button.primary(text "Circle", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.circle ])"""
 
     Helpers.codeSampleSection "Border Radius" description content code
 
@@ -368,9 +329,7 @@ Button.primary(text "Circle", onClick = (fun () -> ()), attrs = [ Button.Variant
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 IconButton.error(
     Icon.create(Icon.UiActions UiActions.Delete),
@@ -410,8 +369,7 @@ IconButton.info(
         Button.Variant.filled
         BorderRadius.circle
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Icon Buttons" description content code
 
@@ -472,16 +430,14 @@ IconButton.info(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
 
 IconButton.primary(
     Icon.create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Density.compact
+        Density.compact // see here
         Button.Variant.filled
     ]
 )
@@ -504,8 +460,7 @@ IconButton.primary(
         Density.spacious
         Button.Variant.filled
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Icon Button Density" description content code
 
@@ -538,9 +493,8 @@ IconButton.primary(
 
     let code =
       """open Weave
-open Weave.Icons
 open Weave.Icons.MaterialSymbols
-
+open WebSharper.UI
 
 IconButton.secondary(
     Icon.create(Icon.UiActions UiActions.Favorite),
@@ -555,13 +509,12 @@ IconButton.secondary(
 IconButton.create(
     Icon.create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> printfn "This won't fire"),
-    enabled = View.Const false,
+    enabled = View.Const false, // see here
     attrs = [
         Attr.Create "aria-label" "favorite"
         Button.Variant.filled
     ]
-)
-"""
+)"""
 
     Helpers.codeSampleSection "Disabled Icon Buttons" description content code
 

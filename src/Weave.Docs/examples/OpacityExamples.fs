@@ -73,7 +73,6 @@ module OpacityExamples =
     let code =
       """open Weave
 
-
 // Create an opacity value and apply it as a CSS class
 div [ Opacity.create 50 |> Opacity.toClass |> cl ] [
     text "This element is 50% transparent"
@@ -129,7 +128,6 @@ div [
 
     let code =
       """open Weave
-
 
 // Apply opacity to any element via the class
 div [
@@ -198,7 +196,6 @@ for level in [ 0; 25; 50; 75; 100 ] do
 
     let code =
       """open WebSharper.UI.Html
-
 
 // Use a design token directly in an inline style
 div [ Attr.Style "opacity" "var(--weave-opacity-disabled)" ] [

@@ -79,9 +79,9 @@ Divider.create(
         Attr.Style "gap" "16px"
       ] [
         div [ Typography.body1 ] [ text "Left" ]
-        Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+        Divider.create (attrs = [ Divider.Orientation.vertical ])
         div [ Typography.body1 ] [ text "Center" ]
-        Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+        Divider.create (attrs = [ Divider.Orientation.vertical ])
         div [ Typography.body1 ] [ text "Right" ]
       ]
 
@@ -98,9 +98,9 @@ div [
     Attr.Style "gap" "16px"
 ] [
     div [ Typography.body1 ] [ text "Left" ]
-    Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+    Divider.create(attrs = [ Divider.Orientation.vertical ])
     div [ Typography.body1 ] [ text "Center" ]
-    Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
+    Divider.create(attrs = [ Divider.Orientation.vertical ])
     div [ Typography.body1 ] [ text "Right" ]
 ]
 """

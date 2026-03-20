@@ -179,23 +179,13 @@ Link.create(
     let code =
       """open Weave
 
-
-let colors = [
-    "Primary", Link.Color.primary
-    "Secondary", Link.Color.secondary
-    // ...
-]
-
-colors |> List.map (fun (label, colorAttr) ->
-    Link.create(
-        text label,
-        href = "#",
-        attrs = [
-            colorAttr
-            Link.Underline.always
-        ]
-    )
-)"""
+Link.create(text "Primary", href = "#", attrs = [ Link.Color.primary; Link.Underline.always ])
+Link.create(text "Secondary", href = "#", attrs = [ Link.Color.secondary; Link.Underline.always ])
+Link.create(text "Tertiary", href = "#", attrs = [ Link.Color.tertiary; Link.Underline.always ])
+Link.create(text "Error", href = "#", attrs = [ Link.Color.error; Link.Underline.always ])
+Link.create(text "Warning", href = "#", attrs = [ Link.Color.warning; Link.Underline.always ])
+Link.create(text "Success", href = "#", attrs = [ Link.Color.success; Link.Underline.always ])
+Link.create(text "Info", href = "#", attrs = [ Link.Color.info; Link.Underline.always ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 

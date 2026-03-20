@@ -73,19 +73,19 @@ let value = Var.Create ""
 
 Field.create(
     value,
-    variant = Field.Variant.Standard, // see here
+    variant = Field.Variant.Standard,
     labelText = View.Const "Standard"
 )
 
 Field.create(
     value,
-    variant = Field.Variant.Filled, // see here
+    variant = Field.Variant.Filled,
     labelText = View.Const "Filled"
 )
 
 Field.create(
     value,
-    variant = Field.Variant.Outlined, // see here
+    variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
 )
 """
@@ -260,7 +260,7 @@ Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    startAdornment = Icon.create( // see here
+    startAdornment = Icon.create(
         Icon.UiActions UiActions.Search,
         attrs = [ BrandColor.toColor BrandColor.Primary ]
     )
@@ -271,7 +271,7 @@ Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    endAdornment = Icon.create( // see here
+    endAdornment = Icon.create(
         Icon.UiActions UiActions.CheckCircle,
         attrs = [ BrandColor.toColor BrandColor.Success ]
     )
@@ -282,7 +282,7 @@ Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined",
-    startAdornment = Icon.create( // see here
+    startAdornment = Icon.create(
         Icon.UiActions UiActions.Search,
         attrs = [ BrandColor.toColor BrandColor.Primary ]
     ),
@@ -325,7 +325,7 @@ Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "ShrinkLabel Override",
-    shrinkLabel = View.Const true // see here
+    shrinkLabel = View.Const true
 )
 """
 
@@ -360,7 +360,7 @@ Field.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "With Placeholder",
-    placeholder = View.Const "Type something here…" // see here
+    placeholder = View.Const "Type something here…"
 )
 """
 
@@ -422,7 +422,7 @@ let helpText =
 
 Field.create(
     value,
-    showHelpText = showHelpText, // see here — controls animated visibility
+    showHelpText = showHelpText,
     labelText = View.Const "Name",
     helpText = helpText,
     attrs = [
@@ -510,7 +510,7 @@ Field.create(
     helpText =
         FieldHelpText.create(
             text "Username is available",
-            attrs = [ Field.HelpTextColor.success ] // see here
+            attrs = [ Field.HelpTextColor.success ]
         ),
     attrs = [ Field.Color.success ]
 )
@@ -595,13 +595,13 @@ let readOnlyVal = Var.Create "Read-only value"
 Field.create(
     disabledVal,
     labelText = View.Const "Disabled",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 
 Field.create(
     readOnlyVal,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true // see here
+    readOnly = View.Const true
 )
 """
 
@@ -649,7 +649,7 @@ Field.create(
 
 let value = Var.Create ""
 
-Field.create(value, labelText = View.Const "Primary", attrs = [ Field.Color.primary ]) // see here
+Field.create(value, labelText = View.Const "Primary", attrs = [ Field.Color.primary ])
 Field.create(value, labelText = View.Const "Secondary", attrs = [ Field.Color.secondary ])
 Field.create(value, labelText = View.Const "Tertiary", attrs = [ Field.Color.tertiary ])
 Field.create(value, labelText = View.Const "Success", attrs = [ Field.Color.success ])

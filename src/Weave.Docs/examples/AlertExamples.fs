@@ -126,7 +126,7 @@ Alert.create(
 
 let colors = [
     "Default",   Attr.Empty
-    "Primary",   Alert.Color.primary   // see here
+    "Primary",   Alert.Color.primary
     "Secondary", Alert.Color.secondary
     "Tertiary",  Alert.Color.tertiary
     "Error",     Alert.Color.error
@@ -298,7 +298,7 @@ visible.View
 Alert.create(
     text "Compact alert.",
     attrs = [
-        Density.compact // see here
+        Density.compact
         Alert.Variant.standard
         Alert.Color.info
     ]
@@ -307,7 +307,7 @@ Alert.create(
 Alert.create(
     text "Standard alert.",
     attrs = [
-        Density.standard // see here
+        Density.standard
         Alert.Variant.standard
         Alert.Color.info
     ]
@@ -316,7 +316,7 @@ Alert.create(
 Alert.create(
     text "Spacious alert.",
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Alert.Variant.standard
         Alert.Color.info
     ]

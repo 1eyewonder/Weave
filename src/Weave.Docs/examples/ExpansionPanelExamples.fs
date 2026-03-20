@@ -48,7 +48,7 @@ module ExpansionPanelExamples =
       """open Weave
 open WebSharper.UI
 
-let expanded = Var.Create false // see here
+let expanded = Var.Create false
 
 ExpansionPanelContainer.create(
     [
@@ -118,7 +118,7 @@ ExpansionPanelContainer.create(
                 div [ Typography.body1 ] [ text "Primary" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
-                attrs = [ ExpansionPanel.Color.primary ] // see here
+                attrs = [ ExpansionPanel.Color.primary ]
             ),
             expanded = expanded,
             content = ExpansionPanelContent.create(text "Primary")
@@ -188,7 +188,7 @@ ExpansionPanelContainer.create(
                 div [ Typography.body1 ] [ text "Filled" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
-                highlightVariant = View.Const ExpansionPanel.HeaderVariant.Filled, // see here
+                highlightVariant = View.Const ExpansionPanel.HeaderVariant.Filled,
                 attrs = [ ExpansionPanel.Color.primary ]
             ),
             expanded = expanded,
@@ -248,7 +248,7 @@ ExpansionPanelContainer.create(
                 div [ Typography.body1 ] [ text "Primary" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
-                attrs = [ ExpansionPanel.FocusColor.primary ] // see here
+                attrs = [ ExpansionPanel.FocusColor.primary ]
             ),
             expanded = expanded,
             content = ExpansionPanelContent.create(text "Primary focus outline")
@@ -317,7 +317,7 @@ ExpansionPanelContainer.create(
             content = ExpansionPanelContent.create(text "Panel content")
         )
     ],
-    attrs = [ Density.compact ] // see here
+    attrs = [ Density.compact ]
 )
 """
 

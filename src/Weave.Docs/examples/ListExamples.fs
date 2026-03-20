@@ -502,7 +502,7 @@ WeaveList.create(
     ListItem.create(iconLabel sendIcon "Item 2")
     ListItem.create(iconLabel draftsIcon "Item 3")
   ],
-  attrs = [ Density.compact ] // see here
+  attrs = [ Density.compact ]
 )
 """
 

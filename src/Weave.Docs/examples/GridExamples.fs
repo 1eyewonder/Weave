@@ -42,7 +42,7 @@ Grid.create(
     [
         GridItem.create(
             myContent,
-            xs = Grid.Width.create 12 // see here
+            xs = Grid.Width.create 12
         )
         GridItem.create(
             myContent,
@@ -75,7 +75,7 @@ Grid.create(
 
 Grid.create(
     [
-        GridItem.create(myContent, xs = Grid.Width.create 3) // see here
+        GridItem.create(myContent, xs = Grid.Width.create 3)
         GridItem.create(myContent, xs = Grid.Width.create 3)
         GridItem.create(myContent, xs = Grid.Width.create 3)
         GridItem.create(myContent, xs = Grid.Width.create 3)
@@ -169,7 +169,7 @@ Grid.create(
         GridItem.create(item2, xs = Grid.Width.create 4)
         GridItem.create(item3, xs = Grid.Width.create 4)
     ],
-    spacing = Grid.GutterSpacing.create 10 // see here
+    spacing = Grid.GutterSpacing.create 10
 )"""
 
     Helpers.codeSampleSection "Spacing" description content code
@@ -245,7 +245,7 @@ Grid.create(
         GridItem.create(item1, xs = Grid.Width.create 3)
         GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.center // see here
+    justify = JustifyContent.center
 )
 
 Grid.create(
@@ -253,7 +253,7 @@ Grid.create(
         GridItem.create(item1, xs = Grid.Width.create 3)
         GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.spaceBetween // see here
+    justify = JustifyContent.spaceBetween
 )"""
 
     Helpers.codeSampleSection "Justify Content" description content code
@@ -282,7 +282,7 @@ Grid.create(
     [
         GridItem.create(item1, xs = Grid.Width.create 4)
 
-        FlexBreak.create() // see here
+        FlexBreak.create()
 
         GridItem.create(item2, xs = Grid.Width.create 4)
         GridItem.create(item3, xs = Grid.Width.create 4)
@@ -354,7 +354,7 @@ Grid.create(
 Grid.create(
     [
         GridItem.create(
-            Grid.create( // see here
+            Grid.create(
                 [
                     GridItem.create(nested1, xs = Grid.Width.create 6)
                     GridItem.create(nested2, xs = Grid.Width.create 6)
@@ -452,7 +452,7 @@ Grid.create(
     [
         GridItem.create(
             card "Feature 1" "First feature description.",
-            xs = Grid.Width.create 12, // see here
+            xs = Grid.Width.create 12,
             md = Grid.Width.create 6,
             lg = Grid.Width.create 4
         )

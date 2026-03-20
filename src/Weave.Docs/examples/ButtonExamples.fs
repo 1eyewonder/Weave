@@ -40,7 +40,7 @@ Button.primary(
     text "Filled",
     onClick = doNothing,
     attrs = [
-        Button.Variant.filled // see here
+        Button.Variant.filled
     ]
 )
 
@@ -48,7 +48,7 @@ Button.primary(
     text "Outlined",
     onClick = doNothing,
     attrs = [
-        Button.Variant.outlined // see here
+        Button.Variant.outlined
     ]
 )
 
@@ -56,7 +56,7 @@ Button.primary(
     text "Text",
     onClick = doNothing,
     attrs = [
-        Button.Variant.text // see here
+        Button.Variant.text
     ]
 )
     """
@@ -100,7 +100,7 @@ colors
         onClick = onClick colorName,
         attrs = [
             Button.Variant.filled
-            colorAttr // see here
+            colorAttr
             Button.Width.full
         ]
     )
@@ -169,7 +169,7 @@ Button.primary(
     text "Compact",
     onClick = (fun () -> ()),
     attrs = [
-        Density.compact // see here
+        Density.compact
         Button.Variant.filled
     ]
 )
@@ -178,7 +178,7 @@ Button.primary(
     text "Standard",
     onClick = (fun () -> ()),
     attrs = [
-        Density.standard // see here
+        Density.standard
         Button.Variant.filled
     ]
 )
@@ -187,7 +187,7 @@ Button.primary(
     text "Spacious",
     onClick = (fun () -> ()),
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Button.Variant.filled
     ]
 )
@@ -229,7 +229,7 @@ Button.primary(
 Button.primary(
     text "Enabled",
     onClick = (fun () -> printfn "Enabled clicked"),
-    enabled = View.Const true, // see here
+    enabled = View.Const true,
     attrs = [
         Button.Variant.filled
     ]
@@ -238,7 +238,7 @@ Button.primary(
 Button.create(
     text "Disabled",
     onClick = (fun () -> printfn "This won't fire"),
-    enabled = View.Const false, // see here
+    enabled = View.Const false,
     attrs = [
         Button.Variant.filled
     ]
@@ -268,7 +268,7 @@ Button.primary(
     onClick = (fun () -> printfn "Full width clicked"),
     attrs = [
         Button.Variant.filled
-        Button.Width.full // see here
+        Button.Width.full
     ]
 )
 """
@@ -304,7 +304,7 @@ Button.primary(
       """open Weave
 
 
-Button.primary(text "None",   onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.none   ]) // see here
+Button.primary(text "None",   onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.none   ])
 Button.primary(text "Small",  onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.small  ])
 Button.primary(text "Medium", onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.medium ])
 Button.primary(text "Large",  onClick = (fun () -> ()), attrs = [ Button.Variant.filled; BorderRadius.All.large  ])
@@ -376,7 +376,7 @@ IconButton.error(
     Icon.create(Icon.UiActions UiActions.Delete),
     onClick = (fun () -> printfn "delete clicked"),
     attrs = [
-        Attr.Create "aria-label" "delete" // see here
+        Attr.Create "aria-label" "delete"
         Button.Variant.filled
         BorderRadius.circle
     ]
@@ -481,7 +481,7 @@ IconButton.primary(
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Density.compact // see here
+        Density.compact
         Button.Variant.filled
     ]
 )
@@ -491,7 +491,7 @@ IconButton.primary(
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Density.standard // see here
+        Density.standard
         Button.Variant.filled
     ]
 )
@@ -501,7 +501,7 @@ IconButton.primary(
     onClick = (fun () -> ()),
     attrs = [
         Attr.Create "aria-label" "favorite"
-        Density.spacious // see here
+        Density.spacious
         Button.Variant.filled
     ]
 )
@@ -545,7 +545,7 @@ open Weave.Icons.MaterialSymbols
 IconButton.secondary(
     Icon.create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> printfn "favorite clicked"),
-    enabled = View.Const true, // see here
+    enabled = View.Const true,
     attrs = [
         Attr.Create "aria-label" "favorite"
         Button.Variant.filled
@@ -555,7 +555,7 @@ IconButton.secondary(
 IconButton.create(
     Icon.create(Icon.UiActions UiActions.Favorite),
     onClick = (fun () -> printfn "This won't fire"),
-    enabled = View.Const false, // see here
+    enabled = View.Const false,
     attrs = [
         Attr.Create "aria-label" "favorite"
         Button.Variant.filled

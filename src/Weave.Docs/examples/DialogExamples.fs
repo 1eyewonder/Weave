@@ -58,7 +58,7 @@ module DialogExamples =
       """open Weave
 open WebSharper.UI
 
-let dialogVisible = Var.Create false // see here
+let dialogVisible = Var.Create false
 
 dialogVisible.View
 |> Doc.BindView(fun isOpen ->
@@ -126,7 +126,7 @@ Dialog.create(
     DialogContent.create(
         div [] [ div [ Typography.body1 ] [ text "Click outside to dismiss." ] ]
     ),
-    dialogInteraction = // see here
+    dialogInteraction =
         View.Const(
             Interaction.Optional(fun () -> Var.Set dialogVisible false)
         )
@@ -194,7 +194,7 @@ Dialog.create(
     DialogContent.create(
         div [] [ div [ Typography.body1 ] [ text "Anchored to the top center." ] ]
     ),
-    dialogPosition = View.Const DialogPosition.TopCenter // see here
+    dialogPosition = View.Const DialogPosition.TopCenter
 )
 
 Dialog.create(
@@ -202,7 +202,7 @@ Dialog.create(
     DialogContent.create(
         div [] [ div [ Typography.body1 ] [ text "Anchored to the bottom center." ] ]
     ),
-    dialogPosition = View.Const DialogPosition.BottomCenter // see here
+    dialogPosition = View.Const DialogPosition.BottomCenter
 )
 """
 

@@ -28,7 +28,7 @@ module SwitchExamples =
       """open Weave
 open WebSharper.UI
 
-let isChecked = Var.Create false // see here
+let isChecked = Var.Create false
 
 Switch.create(isChecked, View.Const "Default Switch")
 """
@@ -57,7 +57,7 @@ let isChecked = Var.Create true
 Switch.create(
     isChecked,
     View.Const "Disabled Switch",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 """
 
@@ -85,7 +85,7 @@ let isChecked = Var.Create false
 
 let label =
     isChecked.View
-    |> View.Map(fun v -> if v then "I am on!" else "Turn me on!") // see here
+    |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
 
 Switch.create(isChecked, label)
 """
@@ -124,19 +124,19 @@ let isChecked = Var.Create false
 Switch.create(
     isChecked,
     View.Const "Small",
-    attrs = [ Switch.Size.small ] // see here
+    attrs = [ Switch.Size.small ]
 )
 
 Switch.create(
     isChecked,
     View.Const "Medium",
-    attrs = [ Switch.Size.medium ] // see here
+    attrs = [ Switch.Size.medium ]
 )
 
 Switch.create(
     isChecked,
     View.Const "Large",
-    attrs = [ Switch.Size.large ] // see here
+    attrs = [ Switch.Size.large ]
 )
 """
 
@@ -180,13 +180,13 @@ let isChecked = Var.Create false
 Switch.create(
     isChecked,
     View.Const "Primary",
-    attrs = [ Switch.Color.primary ] // see here
+    attrs = [ Switch.Color.primary ]
 )
 
 Switch.create(
     isChecked,
     View.Const "Error",
-    attrs = [ Switch.Color.error ] // see here
+    attrs = [ Switch.Color.error ]
 )
 """
 
@@ -240,13 +240,13 @@ let isChecked = Var.Create false
 Switch.create(
     isChecked,
     View.Const "Left",
-    contentPlacement = View.Const Switch.ContentPlacement.Left // see here
+    contentPlacement = View.Const Switch.ContentPlacement.Left
 )
 
 Switch.create(
     isChecked,
     View.Const "Top",
-    contentPlacement = View.Const Switch.ContentPlacement.Top // see here
+    contentPlacement = View.Const Switch.ContentPlacement.Top
 )
 """
 
@@ -300,7 +300,7 @@ Switch.create(
     isChecked,
     View.Const "Compact",
     attrs = [
-        Density.compact // see here
+        Density.compact
         Switch.Color.primary
     ]
 )
@@ -309,7 +309,7 @@ Switch.create(
     isChecked,
     View.Const "Spacious",
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Switch.Color.primary
     ]
 )

@@ -66,7 +66,7 @@ colors
     Chip.create(
         text label,
         attrs = [
-            Chip.Variant.filled // see here
+            Chip.Variant.filled
             colorAttr
         ]
     )
@@ -114,7 +114,7 @@ colors
 Chip.create(
     text "Primary",
     attrs = [
-        Chip.Variant.text // see here
+        Chip.Variant.text
         Chip.Color.primary
     ]
 )"""
@@ -165,7 +165,7 @@ Chip.create(
 Chip.create(
     text "Primary",
     attrs = [
-        Chip.Variant.outlined // see here
+        Chip.Variant.outlined
         Chip.Color.primary
     ]
 )"""
@@ -221,7 +221,7 @@ items.View
             onClose = (fun () ->
                 items.Value
                 |> List.filter (fun i -> i <> item)
-                |> Var.Set items), // see here
+                |> Var.Set items),
             attrs = [
                 Chip.Variant.outlined
                     Chip.Color.primary
@@ -274,7 +274,7 @@ open Weave.Icons.MaterialSymbols
 Chip.create(
     text "Draft",
     onClose = (fun () -> (* remove chip *)),
-    closeIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
+    closeIcon = Icon.create(Icon.UiActions UiActions.Close),
     attrs = [
         Chip.Variant.filled
             Chip.Color.secondary
@@ -311,7 +311,7 @@ let count = Var.Create 0
 
 Chip.create(
     text "Click me",
-    onClick = (fun () -> Var.Set count (count.Value + 1)), // see here
+    onClick = (fun () -> Var.Set count (count.Value + 1)),
     attrs = [
         Chip.Variant.filled
             Chip.Color.primary
@@ -365,7 +365,7 @@ open Weave.Icons.MaterialSymbols
 
 Chip.create(
     text "Saved",
-    content = Icon.create(Icon.UiActions UiActions.CheckCircle), // see here
+    content = Icon.create(Icon.UiActions UiActions.CheckCircle),
     attrs = [
         Chip.Variant.filled
             Chip.Color.success
@@ -415,7 +415,7 @@ Chip.create(
 Chip.create(
     text "Compact",
     attrs = [
-        Chip.Density.compact // see here
+        Chip.Density.compact
         Chip.Variant.filled
         Chip.Color.primary
     ]
@@ -457,7 +457,7 @@ open Weave.Icons.MaterialSymbols
 
 Chip.create(
     text "WebSharper",
-    href = "https://websharper.com", // see here
+    href = "https://websharper.com",
     content = Icon.create(Icon.UiActions UiActions.OpenInNew),
     attrs = [
         Chip.Variant.outlined
@@ -495,7 +495,7 @@ let isSelected = Var.Create false
 Chip.create(
     text "Toggle me",
     onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
-    selected = isSelected.View, // see here
+    selected = isSelected.View,
     attrs = [
         Chip.Variant.filled
             Chip.Color.primary
@@ -568,7 +568,7 @@ Chip.create(
     attrs = [
         Chip.Variant.filled
         Chip.Color.tertiary
-        BorderRadius.All.medium // see here
+        BorderRadius.All.medium
     ]
 )
 

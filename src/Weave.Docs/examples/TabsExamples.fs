@@ -584,7 +584,7 @@ let tabs =
 Tabs.create(
     tabs,
     attrs = [
-        Density.compact // see here
+        Density.compact
         Color.primary
     ]
 )
@@ -592,7 +592,7 @@ Tabs.create(
 Tabs.create(
     tabs,
     attrs = [
-        Density.standard // see here
+        Density.standard
         Color.primary
     ]
 )
@@ -600,7 +600,7 @@ Tabs.create(
 Tabs.create(
     tabs,
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Color.primary
     ]
 )

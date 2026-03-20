@@ -51,15 +51,15 @@ Divider.create()
 
 
 Divider.create(
-    attrs = [ Divider.Variant.fullWidth ] // see here
+    attrs = [ Divider.Variant.fullWidth ]
 )
 
 Divider.create(
-    attrs = [ Divider.Variant.inset ] // see here
+    attrs = [ Divider.Variant.inset ]
 )
 
 Divider.create(
-    attrs = [ Divider.Variant.middle ] // see here
+    attrs = [ Divider.Variant.middle ]
 )
 """
 

@@ -90,7 +90,7 @@ div [
     AnimationEmphasis.bounce
     AnimationDuration.short
     AnimationEasing.bounce
-    AnimationOn.hover  // see here — CSS-only trigger
+    AnimationOn.hover  — CSS-only trigger
 ] [
     text "Bounces on hover"
 ]
@@ -318,7 +318,7 @@ open Weave.CssHelpers.Animation
 
 
 // Animation plays once when the element mounts — no trigger needed
-div [ AnimationEntrance.fadeIn ] [  // see here
+div [ AnimationEntrance.fadeIn ] [
     text "I fade in when rendered"
 ]"""
 
@@ -345,7 +345,7 @@ div [ AnimationEntrance.fadeIn ] [  // see here
             attrs = [
               Button.Variant.filled
               AnimationEmphasis.bounce
-              AnimationOn.hover // see here
+              AnimationOn.hover
               AnimationDuration.short
             ]
           )
@@ -371,7 +371,7 @@ div [ AnimationEntrance.fadeIn ] [  // see here
             attrs = [
               Button.Variant.filled
               AnimationEmphasis.bounce
-              AnimationOn.focus // see here
+              AnimationOn.focus
               AnimationDuration.short
             ]
           )
@@ -379,11 +379,7 @@ div [ AnimationEntrance.fadeIn ] [  // see here
           Button.info (
             text "Pulse on hover or focus",
             onClick = ignore,
-            attrs = [
-              Button.Variant.filled
-              AnimationEmphasis.pulse
-              AnimationOn.hoverFocus // see here
-            ]
+            attrs = [ Button.Variant.filled; AnimationEmphasis.pulse; AnimationOn.hoverFocus ]
           )
         ]
       ]
@@ -400,7 +396,7 @@ Button.primary(
     attrs = [
         Button.Variant.filled
         AnimationEmphasis.bounce
-        AnimationOn.hover  // see here
+        AnimationOn.hover
         AnimationDuration.short
     ]
 )
@@ -412,7 +408,7 @@ Button.info(
     attrs = [
         Button.Variant.filled
         AnimationEmphasis.pulse
-        AnimationOn.hoverFocus  // see here
+        AnimationOn.hoverFocus
     ]
 )"""
 
@@ -432,7 +428,7 @@ Button.info(
           colorAttr
           emphasisAttr
           AnimationDuration.medium
-          Animate.replayOnClick // see here
+          Animate.replayOnClick
         ]
       )
 
@@ -456,7 +452,7 @@ Button.primary(
         Button.Variant.filled
         AnimationEmphasis.pulse
         AnimationDuration.medium
-        Animate.replayOnClick  // see here
+        Animate.replayOnClick
     ]
 )"""
 
@@ -481,7 +477,7 @@ Button.primary(
             Chip.Color.primary
             AnimationEmphasis.pulse
             AnimationDuration.medium
-            Animate.replayEvery 3000 // see here
+            Animate.replayEvery 3000
           ]
         )
 
@@ -521,7 +517,7 @@ Chip.create(
         Chip.Color.primary
         AnimationEmphasis.pulse
         AnimationDuration.medium
-        Animate.replayEvery 3000  // see here
+        Animate.replayEvery 3000
     ]
 )"""
 
@@ -547,7 +543,7 @@ Chip.create(
         div [
           BrandColor.toBackgroundColor BrandColor.Secondary
           BorderRadius.All.medium
-          Animate.toggleClass AnimationPair.fadeInOut isActive.View // see here
+          Animate.toggleClass AnimationPair.fadeInOut isActive.View
           Flex.Flex.allSizes
           AlignItems.center
           JustifyContent.center
@@ -565,7 +561,7 @@ let isActive = Var.Create false
 
 // Element stays in DOM — classes toggle reactively
 div [
-    Animate.toggleClass AnimationPair.fadeInOut isActive.View  // see here
+    Animate.toggleClass AnimationPair.fadeInOut isActive.View
 ] [
     text "I animate between enter/exit states"
 ]
@@ -595,7 +591,7 @@ Button.create(
         ]
 
         div [ Attr.Style "min-height" "80px" ] [
-          Animate.show AnimationPair.slideUpInOut isVisible.View // see here
+          Animate.show AnimationPair.slideUpInOut isVisible.View
           <| fun () ->
             Alert.create (
               text "This alert mounts and unmounts with animation!",
@@ -613,7 +609,7 @@ let isVisible = Var.Create false
 
 // Content is added to DOM on enter, removed after exit animation completes
 Animate.show
-    AnimationPair.slideUpInOut  // see here
+    AnimationPair.slideUpInOut
     isVisible.View
     (fun () ->
         Alert.create(
@@ -746,7 +742,7 @@ Animate.show
                 attrs = [
                   AnimationEntrance.slideRightIn
                   AnimationDuration.standard
-                  AnimationDelay.stagger (i + 1) // see here
+                  AnimationDelay.stagger (i + 1)
                 ]
               )),
             attrs = [ WeaveList.Color.primary ]
@@ -770,7 +766,7 @@ WeaveList.create(
                 AnimationEntrance.slideRightIn
                 AnimationDuration.standard
                 // Stagger: delay--1, delay--2, delay--3 ... (clamped to 1-10)
-                AnimationDelay.stagger (i + 1)  // see here
+                AnimationDelay.stagger (i + 1)
             ]
         )),
     attrs = [ WeaveList.Color.primary ]
@@ -867,7 +863,7 @@ alerts.View
                     text msg,
                     onClose = (fun () -> isVisible.Value <- false),
                     attrs = [
-                        colorAttr // see here
+                        colorAttr
                         Alert.Variant.filled
                     ]
                 ))
@@ -929,7 +925,7 @@ let isVisible = Var.Create true
 // showWith puts duration/easing on the wrapper and calls removeChip
 // after the exit animation completes — no hardcoded timeout needed.
 Animate.showWith
-    AnimationPair.scaleInOut  // see here
+    AnimationPair.scaleInOut
     isVisible.View
     (fun () ->
         Chip.create(

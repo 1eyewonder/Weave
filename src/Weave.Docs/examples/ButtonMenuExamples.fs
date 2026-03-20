@@ -196,7 +196,7 @@ open Weave.Icons.MaterialSymbols
 // With openIcon: swaps between send and close icons
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.Communicate Communicate.Send),
-    openIcon = Icon.create(Icon.UiActions UiActions.Close), // see here
+    openIcon = Icon.create(Icon.UiActions UiActions.Close),
     items = [ ... ],
     triggerAttrs = [
         Button.Variant.filled
@@ -304,28 +304,28 @@ let triggerAttrs = [
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
-    direction = ButtonMenu.Direction.Top, // see here
+    direction = ButtonMenu.Direction.Top,
     triggerAttrs = triggerAttrs
 )
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
-    direction = ButtonMenu.Direction.Bottom, // see here
+    direction = ButtonMenu.Direction.Bottom,
     triggerAttrs = triggerAttrs
 )
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
-    direction = ButtonMenu.Direction.Left, // see here
+    direction = ButtonMenu.Direction.Left,
     triggerAttrs = triggerAttrs
 )
 
 IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     items = items,
-    direction = ButtonMenu.Direction.Right, // see here
+    direction = ButtonMenu.Direction.Right,
     triggerAttrs = triggerAttrs
 )
 """
@@ -406,7 +406,7 @@ IconButtonMenu.create(
     closedIcon = Icon.create(Icon.UiActions UiActions.Add),
     openIcon = Icon.create(Icon.UiActions UiActions.Close),
     items = [ ... ],
-    isOpen = isMenuOpen, // see here - shared state
+    isOpen = isMenuOpen, - shared state
     triggerAttrs = [
         Button.Variant.filled
         Button.Color.primary

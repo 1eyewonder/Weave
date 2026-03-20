@@ -191,7 +191,7 @@ colors |> List.map (fun (label, colorAttr) ->
         text label,
         href = "#",
         attrs = [
-            colorAttr // see here
+            colorAttr
             Link.Underline.always
         ]
     )
@@ -255,7 +255,7 @@ open Weave.Icons.MaterialSymbols
 Link.create(
     text "Open in new tab",
     href = "#",
-    startIcon = Icon.create(Icon.UiActions UiActions.OpenInNew), // see here
+    startIcon = Icon.create(Icon.UiActions UiActions.OpenInNew),
     attrs = [ Link.Underline.always ]
 )
 
@@ -263,7 +263,7 @@ Link.create(
 Link.create(
     text "Download",
     href = "#",
-    endIcon = Icon.create(Icon.UiActions UiActions.Download), // see here
+    endIcon = Icon.create(Icon.UiActions UiActions.Download),
     attrs = [ Link.Underline.always ]
 )"""
 
@@ -371,7 +371,7 @@ Link.create(
 Link.create(
     text "Disabled link",
     href = "#",
-    enabled = View.Const false, // see here
+    enabled = View.Const false,
     attrs = [ Link.Underline.always ]
 )"""
 

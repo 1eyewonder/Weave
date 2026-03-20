@@ -72,7 +72,7 @@ let items =
 
 Dropdown.create(
     buttonContents = text "Open Dropdown",
-    items = items, // see here
+    items = items,
     buttonAttrs = [
         Button.Variant.filled
         Button.Color.primary
@@ -204,8 +204,8 @@ let items =
 Dropdown.create(
     buttonContents = text "Placement",
     items = items,
-    anchorOrigin = anchorVar.View, // see here
-    transformOrigin = transformVar.View, // see here
+    anchorOrigin = anchorVar.View,
+    transformOrigin = transformVar.View,
     closeOnOutsideClick = View.Const false,
     buttonAttrs = [
         Button.Variant.filled
@@ -296,7 +296,7 @@ Dropdown.create(
 let nestedIsOpen = Var.Create false
 
 let nestedDropdown =
-    NestedDropdown.create( // see here
+    NestedDropdown.create(
         buttonContents = text "Open Nested",
         items = [
             DropdownItem.create(
@@ -311,7 +311,7 @@ let nestedDropdown =
         isOpen = nestedIsOpen,
         buttonAttrs = [
             nestedIsOpen.View
-            |> Attr.DynamicClassPred Css.``weave-button--tertiary`` // see here
+            |> Attr.DynamicClassPred Css.``weave-button--tertiary``
 
             nestedIsOpen.View
             |> Attr.DynamicClassPred Css.``weave-button--outlined``
@@ -456,7 +456,7 @@ Dropdown.create(
 Dropdown.create(
     buttonContents = text "Click to Open",
     items = items,
-    openOn = View.Const Dropdown.OpenOn.Click, // see here
+    openOn = View.Const Dropdown.OpenOn.Click,
     buttonAttrs = [
         Button.Variant.filled
         Button.Color.primary
@@ -466,7 +466,7 @@ Dropdown.create(
 Dropdown.create(
     buttonContents = text "Hover to Open",
     items = items,
-    openOn = View.Const Dropdown.OpenOn.Hover, // see here
+    openOn = View.Const Dropdown.OpenOn.Hover,
     buttonAttrs = [
         Button.Variant.filled
         Button.Color.secondary
@@ -476,7 +476,7 @@ Dropdown.create(
 NestedDropdown.create(
     buttonContents = text "Open Nested",
     items = nestedItems,
-    openOn = View.Const Dropdown.OpenOn.Hover, // see here
+    openOn = View.Const Dropdown.OpenOn.Hover,
     buttonAttrs = [
         nestedIsOpen.View
         |> Attr.DynamicClassPred "weave-button--primary"
@@ -525,13 +525,13 @@ let items = [
     DropdownItem.create(
         text "Enabled Item",
         onClick = (fun () -> printfn "Clicked enabled item"),
-        enabled = View.Const true // see here
+        enabled = View.Const true
     )
 
     DropdownItem.create(
         text "Disabled Item",
         onClick = (fun () -> printfn "Clicked disabled item"),
-        enabled = View.Const false // see here
+        enabled = View.Const false
     )
 ]
 
@@ -593,13 +593,13 @@ Dropdown.create(
 Dropdown.create(
     buttonContents = text "Compact",
     items = items,
-    attrs = [ Density.compact ] // see here
+    attrs = [ Density.compact ]
 )
 
 Dropdown.create(
     buttonContents = text "Spacious",
     items = items,
-    attrs = [ Density.spacious ] // see here
+    attrs = [ Density.spacious ]
 )
 """
 

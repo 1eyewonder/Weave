@@ -142,7 +142,7 @@ let private selectedExample () =
       Chip.Create(
         text "Toggle me",
         onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
-        selected = isSelected.View,  // see here
+        selected = isSelected.View, 
         attrs = [
           Chip.Variant.toClass Chip.Variant.Filled |> cl
           Chip.Color.toClass BrandColor.Primary |> cl
@@ -159,7 +159,7 @@ let isSelected = Var.Create false
 Chip.Create(
     text "Toggle me",
     onClick = (fun () -> Var.Set isSelected (not isSelected.Value)),
-    selected = isSelected.View, // see here
+    selected = isSelected.View,
     attrs = [
         Chip.Variant.toClass Chip.Variant.Filled |> cl
         Chip.Color.toClass BrandColor.Primary |> cl

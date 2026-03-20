@@ -101,7 +101,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
         Container.create (
           "gutters (no fixedWidth)" |> centeredText |> filler,
           attrs = [
-            Container.gutters // see here
+            Container.gutters
             Margin.Bottom.small
             JustifyContent.center
             SurfaceColor.toBackgroundColor SurfaceColor.Background
@@ -118,8 +118,8 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
         Container.create (
           "fixedWidth + gutters" |> centeredText |> filler,
           attrs = [
-            Container.fixedWidth // see here
-            Container.gutters // see here
+            Container.fixedWidth
+            Container.gutters
             Margin.Bottom.small
             JustifyContent.center
             SurfaceColor.toBackgroundColor SurfaceColor.Background
@@ -128,7 +128,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
         Container.create (
           "fixedWidth (no gutters)" |> centeredText |> filler,
           attrs = [
-            Container.fixedWidth // see here
+            Container.fixedWidth
             JustifyContent.center
             SurfaceColor.toBackgroundColor SurfaceColor.Background
           ]
@@ -139,13 +139,13 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
       """open Weave
 
 // Add gutters only — pass Container.gutters through attrs
-Container.create(content, attrs = [ Container.gutters ]) // see here
+Container.create(content, attrs = [ Container.gutters ])
 
 // Add fixed-width snapping only
-Container.create(content, attrs = [ Container.fixedWidth ]) // see here
+Container.create(content, attrs = [ Container.fixedWidth ])
 
 // Both modifiers together
-Container.create(content, attrs = [ Container.fixedWidth; Container.gutters ]) // see here
+Container.create(content, attrs = [ Container.fixedWidth; Container.gutters ])
 
 // Neither (plain fluid container — no attrs needed)
 Container.create(content)

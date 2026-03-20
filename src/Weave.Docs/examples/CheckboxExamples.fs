@@ -29,7 +29,7 @@ open WebSharper.UI
 
 let isChecked = Var.Create false
 
-Checkbox.create(isChecked, View.Const "Default Checkbox") // see here
+Checkbox.create(isChecked, View.Const "Default Checkbox")
 """
 
     Helpers.codeSampleSection "Basic Checkbox" description content code
@@ -51,7 +51,7 @@ let isChecked = Var.Create true
 Checkbox.create(
     isChecked,
     View.Const "Disabled Checkbox",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 """
 
@@ -77,7 +77,7 @@ let isChecked = Var.Create false
 
 let label =
     isChecked.View
-    |> View.Map(fun v -> if v then "I am checked!" else "Check me!") // see here
+    |> View.Map(fun v -> if v then "I am checked!" else "Check me!")
 
 Checkbox.create(isChecked, label)
 """
@@ -115,7 +115,7 @@ let isChecked = Var.Create false
 Checkbox.create(
     isChecked,
     View.Const "Small",
-    attrs = [ Checkbox.Size.small ] // see here
+    attrs = [ Checkbox.Size.small ]
 )
 
 Checkbox.create(
@@ -170,7 +170,7 @@ let isChecked = Var.Create false
 Checkbox.create(
     isChecked,
     View.Const "Primary",
-    attrs = [ Checkbox.Color.primary ] // see here
+    attrs = [ Checkbox.Color.primary ]
 )
 
 Checkbox.create(
@@ -227,7 +227,7 @@ let isChecked = Var.Create false
 Checkbox.create(
     isChecked,
     View.Const "Left",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Left, // see here
+    contentPlacement = View.Const Checkbox.ContentPlacement.Left,
     attrs = [
         Checkbox.Size.large
         Checkbox.Color.primary
@@ -237,7 +237,7 @@ Checkbox.create(
 Checkbox.create(
     isChecked,
     View.Const "Top",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Top, // see here
+    contentPlacement = View.Const Checkbox.ContentPlacement.Top,
     attrs = [
         Checkbox.Size.large
         Checkbox.Color.primary
@@ -287,7 +287,7 @@ Checkbox.create(
     isChecked,
     View.Const "Compact",
     attrs = [
-        Density.compact // see here
+        Density.compact
         Checkbox.Color.primary
     ]
 )
@@ -296,7 +296,7 @@ Checkbox.create(
     isChecked,
     View.Const "Spacious",
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Checkbox.Color.primary
     ]
 )

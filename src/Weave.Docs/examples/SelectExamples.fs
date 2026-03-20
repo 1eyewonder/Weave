@@ -135,19 +135,19 @@ Select.create(
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Standard, // see here
+    variant = Field.Variant.Standard,
     labelText = View.Const "Standard"
 )
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Filled, // see here
+    variant = Field.Variant.Filled,
     labelText = View.Const "Filled"
 )
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined, // see here
+    variant = Field.Variant.Outlined,
     labelText = View.Const "Outlined"
 )
 """
@@ -206,7 +206,7 @@ Select.create(
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "City",
-    clearable = View.Const true // see here
+    clearable = View.Const true
 )
 """
 
@@ -274,7 +274,7 @@ Select.create(
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Country",
-    searchable = true, // see here
+    searchable = true,
     clearable = View.Const true
 )
 """
@@ -341,7 +341,7 @@ let items =
         Select.SelectItemDef.create (text hobby) hobby hobby)
     |> View.Const
 
-MultiSelect.create( // see here
+MultiSelect.create(
     items,
     selected,
     variant = Field.Variant.Outlined,
@@ -396,11 +396,11 @@ MultiSelect.create(
     selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Roles",
-    showSelectAll = true, // see here
-    selectAllText = "All Roles", // see here
+    showSelectAll = true,
+    selectAllText = "All Roles",
     searchable = true,
     clearable = View.Const true,
-    selectionText = (fun sel -> // see here
+    selectionText = (fun sel ->
         sprintf "%d role(s) selected" (Set.count sel))
 )
 """
@@ -472,7 +472,7 @@ let makeItem emoji name =
         ])
         name
         name
-    |> Select.SelectItemDef.withSelectedContent ( // see here
+    |> Select.SelectItemDef.withSelectedContent (
         span [ Attr.Style "gap" "6px" ] [
             span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
             text name
@@ -547,14 +547,14 @@ Select.create(
 Select.create(
     items, selected,
     labelText = View.Const "Disabled",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 
 // Read Only
 Select.create(
     items, selected,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true // see here
+    readOnly = View.Const true
 )
 """
 
@@ -607,14 +607,14 @@ Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Primary",
-    attrs = [ Select.Color.primary ] // see here
+    attrs = [ Select.Color.primary ]
 )
 
 Select.create(
     items, selected,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Error",
-    attrs = [ Select.Color.error ] // see here
+    attrs = [ Select.Color.error ]
 )
 """
 
@@ -697,13 +697,13 @@ Select.create(items, selected, ...)
 // Full Width — 100% of container
 Select.create(
     items, selected,
-    attrs = [ Select.Width.full ] // see here
+    attrs = [ Select.Width.full ]
 )
 
 // Fit Content — sizes to content
 Select.create(
     items, selected,
-    attrs = [ Select.Width.fitContent ] // see here
+    attrs = [ Select.Width.fitContent ]
 )
 """
 
@@ -817,7 +817,7 @@ let items =
         Select.SelectItemDef.create
             (text (sprintf "%s (%s)" lang.Name lang.Native))
             lang.Name  // Text for search filtering
-            lang)      // Value is the full record // see here
+            lang)      // Value is the full record
     |> View.Const
 
 Select.create(

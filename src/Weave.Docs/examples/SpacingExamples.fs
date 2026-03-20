@@ -202,12 +202,12 @@ module SpacingExamples =
 
 
 // Margin: pick a direction and size
-div [ Margin.Bottom.small ] [ // see here
+div [ Margin.Bottom.small ] [
     text "8px below this element"
 ]
 
 // Padding: same pattern, applied inside the element
-div [ Padding.All.medium ] [ // see here
+div [ Padding.All.medium ] [
     text "12px on all sides"
 ]
 
@@ -595,7 +595,7 @@ div [
 
 
 // Container-level: all children inherit the density via CSS cascade
-div [ Density.compact ] [ // see here
+div [ Density.compact ] [
     Button.primary(
         text "Filled",
         onClick = (fun () -> ()),
@@ -617,7 +617,7 @@ Button.primary(
     text "Spacious",
     onClick = (fun () -> ()),
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Button.Variant.filled
     ]
 )

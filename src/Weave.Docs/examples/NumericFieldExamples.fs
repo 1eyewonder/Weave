@@ -341,7 +341,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Arrow keys disabled",
-    enableArrowKeys = View.Const false // see here
+    enableArrowKeys = View.Const false
 )
 
 // Disable mouse wheel stepping
@@ -349,7 +349,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Mouse wheel disabled",
-    enableMouseWheel = View.Const false // see here
+    enableMouseWheel = View.Const false
 )
 
 // Disable both
@@ -423,7 +423,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Without spin buttons",
-    showSpinButtons = View.Const false // see here
+    showSpinButtons = View.Const false
 )
 """
 
@@ -462,7 +462,7 @@ NumericField.create(
     value,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Custom icons",
-    upIcon = Icon.create(    // see here
+    upIcon = Icon.create(
         Icon.Hardware Hardware.KeyboardArrowUp,
         attrs = [ Attr.Style "font-size" "1rem" ]
     ),
@@ -526,14 +526,14 @@ NumericField.create(
     disabledVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 
 NumericField.create(
     readOnlyVal,
     variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true // see here
+    readOnly = View.Const true
 )
 """
 

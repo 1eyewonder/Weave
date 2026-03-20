@@ -59,7 +59,7 @@ let styledChips =
     ])
 
 ChipSet.create(
-    styledChips, // see here
+    styledChips,
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Single
 )"""
@@ -120,7 +120,7 @@ let styledChips =
     ])
 
 ChipSet.create(
-    styledChips, // see here
+    styledChips,
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi
 )"""
@@ -179,7 +179,7 @@ let styledChips =
 ChipSet.create(
     styledChips,
     selectedValue = selected,
-    selectionMode = ChipSet.SelectionMode.Toggle // see here
+    selectionMode = ChipSet.SelectionMode.Toggle
 )"""
 
     Helpers.codeSampleSection "Toggle Selection" description content code
@@ -219,7 +219,7 @@ ChipSet.create(
       """open Weave
 open WebSharper.UI
 
-let selected = Var.Create<Set<string>> (Set.ofList ["fsharp"; "rust"]) // see here
+let selected = Var.Create<Set<string>> (Set.ofList ["fsharp"; "rust"])
 
 let chips = [
     ChipSet.ChipDef.create (text "TypeScript") "typescript"
@@ -320,7 +320,7 @@ let chips = [
 let styledChips =
     chips
     |> List.map (ChipSet.ChipDef.withAttrs [
-        Chip.Variant.filled // see here
+        Chip.Variant.filled
         Chip.Color.primary
     ])
 
@@ -373,13 +373,13 @@ open WebSharper.UI.Html
 
 let chips = [
     ChipSet.ChipDef.create (text "Saved") "saved"
-    |> ChipSet.ChipDef.withContent (Icon.create(Icon.UiActions UiActions.CheckCircle)) // see here
+    |> ChipSet.ChipDef.withContent (Icon.create(Icon.UiActions UiActions.CheckCircle))
 
     ChipSet.ChipDef.create (text "Warning") "warning"
     |> ChipSet.ChipDef.withContent (Icon.create(Icon.Action Action.Warning))
 
     ChipSet.ChipDef.create (text "Alice") "alice"
-    |> ChipSet.ChipDef.withContent ( // see here
+    |> ChipSet.ChipDef.withContent (
         img [
             attr.src "https://i.pravatar.cc/40?u=alice"
             attr.alt "Alice"
@@ -464,7 +464,7 @@ ChipSet.create(
             Chip.Variant.outlined
             Chip.Color.primary
     ]),
-    onClose = fun value -> // see here
+    onClose = fun value ->
         items.Value
         |> List.filter (fun c -> c.Value <> value)
         |> Var.Set items
@@ -515,7 +515,7 @@ let selected = Var.Create<Set<string>> Set.empty
 let chips = [
     ChipSet.ChipDef.create (text "Available") "available"
     ChipSet.ChipDef.create (text "Sold Out") "soldout"
-    |> ChipSet.ChipDef.withDisabled (View.Const true) // see here
+    |> ChipSet.ChipDef.withDisabled (View.Const true)
     ChipSet.ChipDef.create (text "Preorder") "preorder"
     ChipSet.ChipDef.create (text "Discontinued") "discontinued"
     |> ChipSet.ChipDef.withDisabled (View.Const true)
@@ -586,7 +586,7 @@ ChipSet.create(
     ]),
     selectedValues = selected,
     selectionMode = ChipSet.SelectionMode.Multi,
-    enabled = enabled.View // see here
+    enabled = enabled.View
 )"""
 
     Helpers.codeSampleSection "Global Disabled" description content code
@@ -699,7 +699,7 @@ ChipSet.create(
     ]),
     selectedValue = selected,
     selectionMode = ChipSet.SelectionMode.Toggle,
-    showSelectedIcon = false // see here
+    showSelectedIcon = false
 )"""
 
     Helpers.codeSampleSection "No Selected Icon" description content code

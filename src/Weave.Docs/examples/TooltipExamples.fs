@@ -65,7 +65,7 @@ let tooltipBtn direction =
               ]
           ),
         tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
-        direction = direction // see here
+        direction = direction
     )
 
 tooltipBtn Tooltip.Direction.Left
@@ -131,12 +131,12 @@ for (displayText, btnColor, tipColor) in colors do
             onClick = (fun () -> ()),
             attrs = [
                 Button.Variant.filled
-                btnColor // see here
+                btnColor
                 Button.Width.full
             ]
         ),
         div [ Typography.body1 ] [ text (sprintf "%s tooltip" displayText) ],
-        tooltipAttrs = [ tipColor ] // see here
+        tooltipAttrs = [ tipColor ]
     )
     """
 
@@ -188,7 +188,7 @@ Tooltip.create(
         ]
     ),
     div [ Typography.body1 ] [ text "Appears on hover" ],
-    activationEvents = [ Tooltip.Activation.Hover ] // see here
+    activationEvents = [ Tooltip.Activation.Hover ]
 )
 
 Tooltip.create(
@@ -200,7 +200,7 @@ Tooltip.create(
         ]
     ),
     div [ Typography.body1 ] [ text "Appears on click" ],
-    activationEvents = [ Tooltip.Activation.Click ] // see here
+    activationEvents = [ Tooltip.Activation.Click ]
 )
     """
 
@@ -254,7 +254,7 @@ Tooltip.create(
         ]
     ),
     div [ Typography.body1 ] [ text "I have an arrow pointing" ],
-    showArrow = true // see here (default)
+    showArrow = true (default)
 )
 
 Tooltip.create(
@@ -266,7 +266,7 @@ Tooltip.create(
         ]
     ),
     div [ Typography.body1 ] [ text "No arrow here" ],
-    showArrow = false // see here
+    showArrow = false
 )
     """
 
@@ -309,7 +309,7 @@ Tooltip.create(
             Button.Variant.filled
         ]
     ),
-    div [ Attr.Style "padding" "4px" ] [ // see here - custom Doc content
+    div [ Attr.Style "padding" "4px" ] [ - custom Doc content
         div [ Typography.body2
               Attr.Style "font-weight" "bold"
               Margin.Bottom.extraSmall ] [
@@ -362,7 +362,6 @@ open WebSharper.UI
 
 span [ Typography.body1 ] [ text "Hover over " ]
 
-// see here
 Tooltip.create(
     span [
         Typography.body1
@@ -374,7 +373,6 @@ Tooltip.create(
 
 span [ Typography.body1 ] [ text " to see a tooltip. You can also hover over " ]
 
-// see here
 Tooltip.create(
     span [
         Typography.body1

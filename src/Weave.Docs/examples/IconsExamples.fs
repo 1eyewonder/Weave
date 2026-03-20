@@ -428,12 +428,12 @@ open WebSharper.UI
 
 Icon.create(
     Icon.Action Action.Alarm,
-    style = View.Const Style.Rounded, // see here
+    style = View.Const Style.Rounded,
     weight = View.Const MaterialSymbols.IconWeight.``400``,
     opticalSize = View.Const MaterialSymbols.OpticalSize.``24``,
     grade = View.Const MaterialSymbols.IconGrade.``0``,
     attrs = [
-        Typography.Color.primary // see here
+        Typography.Color.primary
     ]
 )
 

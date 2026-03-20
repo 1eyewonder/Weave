@@ -31,7 +31,7 @@ module RadioButtonExamples =
       """open Weave
 open WebSharper.UI
 
-let selected = Var.Create "Option 1" // see here
+let selected = Var.Create "Option 1"
 let options = [ "Option 1"; "Option 2"; "Option 3" ]
 
 options
@@ -67,14 +67,14 @@ Radio.create(
     selected,
     "A",
     displayText = View.Const "Try Me",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 
 Radio.create(
     selected,
     "B",
     displayText = View.Const "Or Me",
-    enabled = View.Const false // see here
+    enabled = View.Const false
 )
 """
 
@@ -100,7 +100,7 @@ let selected = Var.Create false
 
 let label =
     selected.View
-    |> View.Map(fun v -> if v then "I am selected!" else "Select me!") // see here
+    |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
 Radio.create(selected, true, displayText = label)
 """
@@ -199,7 +199,7 @@ colors
         selected,
         color,
         displayText = (sprintf "%A" color |> View.Const),
-        attrs = [ colorAttr ] // see here
+        attrs = [ colorAttr ]
     )
 )
 """
@@ -253,7 +253,7 @@ Radio.create(
     demoSelected,
     true,
     displayText = (placement.View |> View.MapCached(sprintf "%A")),
-    contentPlacement = placement.View, // see here
+    contentPlacement = placement.View,
     attrs = [
         Radio.Size.large
         Radio.Color.primary
@@ -306,7 +306,7 @@ Radio.create(
     value,
     displayText = View.Const "Compact",
     attrs = [
-        Density.compact // see here
+        Density.compact
         Radio.Color.primary
     ]
 )
@@ -316,7 +316,7 @@ Radio.create(
     value,
     displayText = View.Const "Spacious",
     attrs = [
-        Density.spacious // see here
+        Density.spacious
         Radio.Color.primary
     ]
 )

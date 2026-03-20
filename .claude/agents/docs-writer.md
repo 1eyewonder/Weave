@@ -241,6 +241,7 @@ The `component-designer` agent defines the F# API, which determines what you doc
 2. **Read the style modules** — each `Variant`, `Size`, or `Color` module needs its own example section. Some components use plain `let` bindings returning `Attr` directly (e.g., `Button.Variant.filled`); others still use DU types with `toClass` functions (e.g., `Chip.Variant.toClass Chip.Variant.Filled |> cl`). Follow whichever pattern the component uses.
 3. **Check for reactive parameters** — any `Var<'T>` or `View<'T>` parameter needs a reactive demo showing the state changing. These are often the most valuable examples for users.
 4. **Check for composition** — if the component wraps or is wrapped by other components (e.g. `ChipSet` wraps `Chip`), show the composition pattern.
+5. **Check for `*Item` types** — container components that take lists of configurable items (e.g., `ChipSet`, `Tabs`, `Select`) use companion `*Item` types with `static member create` and optional parameters. Document these using the tupled syntax with named optional params — never show pipeline/builder patterns (`|> withAttrs`, `|> withDisabled`). Example: `ChipItem.create (text "Tag", "tag-1", closable = true, attrs = [ Chip.Variant.filled ])`. When the `*Item` type has multiple `create*` variants (e.g., `TabItem.create`, `TabItem.createIconOnly`, `TabItem.createCustom`), demonstrate each in its own example section.
 
 When the component designer creates or modifies a component, update the example page to match. If a parameter is removed or renamed, the example page must be updated too.
 

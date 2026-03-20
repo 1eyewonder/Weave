@@ -19,6 +19,25 @@ You are a unit testing expert specializing in F# and the Expecto testing framewo
 ### What to test
 Unit tests in Weave cover pure mapping functions (`toClass`, `toAttr`) on component modules. Some components use DU types with `toClass` functions; others have migrated to plain `let` bindings returning `Attr` directly. Only test components that still have mapping functions — plain `let` bindings are compiler-verified by the type provider.
 
+### Testing `*Item.create` constructors
+Container components that take configurable item lists (e.g., `ChipSet`, `Tabs`, `Select`) use companion `*Item` types with `static member create` and optional F# parameters. These constructors produce internal `*Def` records. Test them by verifying default field values and that each optional parameter correctly sets the corresponding record field:
+
+```fsharp
+testCase "creates item with default values"
+<| fun () ->
+    let def = ChipItem.create (Doc.Empty, "v")
+    Expect.isFalse def.Closable "Closable should default to false"
+    Expect.isNone def.Content "Content should default to None"
+    Expect.isEmpty def.Attrs "Attrs should default to empty list"
+
+testCase "optional content parameter sets Content to Some"
+<| fun () ->
+    let def = ChipItem.create (Doc.Empty, "v", content = Doc.Empty)
+    Expect.isSome def.Content "Content should be Some when provided"
+```
+
+Never test these with pipeline/builder patterns (e.g., `|> withAttrs`, `|> withClosable`) — those have been removed from the library. All configuration goes through optional parameters on `*Item.create`.
+
 ```fsharp
 module Weave.Tests.Unit.ButtonTests
 

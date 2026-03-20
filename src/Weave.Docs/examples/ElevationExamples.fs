@@ -239,8 +239,7 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
 
     let levelItems =
       allElevations
-      |> List.map (fun (label, _) ->
-        Select.SelectItemDef.create (text (sprintf "Level %s" label)) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text (sprintf "Level %s" label), label, label))
       |> View.Const
 
     let content =

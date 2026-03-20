@@ -107,57 +107,14 @@ build/
 
 ## Component Conventions
 
-Every component follows this pattern:
-
-```fsharp
-namespace Weave
-
-open WebSharper
-open WebSharper.UI
-open WebSharper.UI.Html
-open Weave.CssHelpers
-open Weave.CssHelpers.Core
-
-[<JavaScript; RequireQualifiedAccess>]
-module MyComponent =
-
-  module Variant =
-    let filled = cl Css.``weave-mycomponent--filled``
-    let outlined = cl Css.``weave-mycomponent--outlined``
-
-  module Color =
-    let primary = cl Css.``weave-mycomponent--primary``
-    // ... other colors ...
-
-    let toAttr color =
-      match color with
-      | BrandColor.Primary -> primary
-      // ...
-
-[<JavaScript; RequireQualifiedAccess>]
-type MyComponent =
-
-  static member create(innerContents: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
-    let enabled = defaultArg enabled (View.Const true)
-    let attrs   = defaultArg attrs   []
-    div [
-      cl Css.``weave-mycomponent``
-      View.not enabled |> Attr.DynamicClassPred Css.``weave-mycomponent--disabled``
-      yield! attrs
-    ] [ innerContents ]
-```
-
-**Key rules:**
+See `weave-component-conventions.skill.md` for full patterns and code templates. The essentials:
 
 - `[<JavaScript>]` on every module and type (required for WebSharper transpilation)
 - **Static member functions use camelCase** (e.g., `Button.create`, `IconButton.create`), not PascalCase
-- **No styling parameters** (`variant`, `color`, `size`) on `create` — callers pass them via `?attrs` using the component's style modules (e.g., `Button.Variant.filled`, `Button.Color.primary`)
-- `?attrs: Attr list` is always the last optional parameter; defaults to `[]`; `yield! attrs` comes last so callers can extend
-- **Reactive parameters:** use `Var<'T>` for two-way bindings, `View<'T>` for read-only reactive inputs; avoid plain values for anything that can change
-- **CSS helpers:** `cl` for a single class, `cls [...]` for multiple — never chain `cl` calls where `cls` applies
-- DU types for variants/sizes use `[<RequireQualifiedAccess; Struct>]` to prevent name collisions; `Color` modules use global `BrandColor` DU
-- `Attr.DynamicClassPred` gates a modifier class on a `View<bool>`
-- When a component has structurally different HTML output (e.g., icon-only vs text button), use a separate type (e.g., `IconButton`) rather than a variant factory on the same type
+- **No styling parameters** on `create` — callers pass them via `?attrs` using the component's style modules
+- `?attrs: Attr list` is always the last optional parameter; defaults to `[]`; `yield! attrs` comes last
+- **Reactive parameters:** `Var<'T>` for two-way bindings, `View<'T>` for read-only; avoid plain values for anything that can change
+- **Collection items use `*Item` types** with `static member create` and optional parameters — never pipeline/builder `with*` modules
 
 ## SCSS Conventions
 
@@ -170,57 +127,15 @@ type MyComponent =
 
 ## Adding a New Component
 
-When asked to scaffold a new component, use the `/scaffold-component` skill — it provides the full step-by-step checklist. The high-level steps are:
-
-1. `src/Weave/components/{Name}.fs` — component module + type
-2. `src/Weave/scss/components/_{name}.scss` — BEM styles
-3. Register SCSS import in `src/Weave/scss/main.scss`
-4. Register F# file in `src/Weave/Weave.fsproj`
-5. `src/Weave.Docs/examples/{Name}Examples.fs` — interactive docs examples
-6. Register example in `src/Weave.Docs/Weave.Docs.fsproj` and `ExamplesRouter.fs` (4 places: `Page` DU, `pageToString`, `renderPage`, nav list)
-7. `tests/Weave.Tests.Unit/{Name}Tests.fs` — Expecto tests for pure mapping functions (if any)
-8. `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` — Playwright layout tests
-9. `tests/Weave.Tests.Rendering/fixtures/{name}.html` — static HTML fixture using compiled CSS
-10. `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` — axe-core scan + keyboard/focus tests
-11. Register E2E page in `tests/Weave.Tests.E2E.Site/Pages.fs` (camelCase Weave API, `Var.Create` stays PascalCase as it is WebSharper's)
-12. Verify: `dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj` (0 errors) — this project is **not** auto-verified by building the test project
-13. Verify: `dotnet build src/Weave.Docs/Weave.Docs.fsproj` (0 errors)
-14. Run `dotnet fantomas .` to format
+Use the `/scaffold-component` skill — it provides the full step-by-step checklist covering the F# component, SCSS, docs example, router registration, unit tests, rendering tests, E2E accessibility tests, and verification builds.
 
 ## Testing Patterns
 
-**Unit tests** (Expecto) — test pure mapping functions like `toAttr`, never DOM. Components using plain `let` bindings (returning `Attr` directly from type-provided CSS classes) don't need unit tests -- the compiler enforces correctness.
+Detailed patterns and code templates live in the agent/skill definitions. Quick reference:
 
-```fsharp
-module Weave.Tests.Unit.{Name}Tests
-open Expecto
-open Weave
-
-[<Tests>]
-let {name}Tests =
-  testList "{Name}" [
-    testTheory "each BrandColor maps to the correct attr" [
-      BrandColor.Primary, "weave-mycomponent--primary"
-    ]
-    <| fun (color, expected) -> Expect.equal (MyComponent.Color.toAttr color) (cl expected) ""
-  ]
-```
-
-**Rendering tests** (Playwright/xUnit) — load a static HTML fixture, assert on layout:
-
-- Inherit `PageTest()`, call `this.LoadFixture()` at the start of every `[<Fact>]`
-- Use `BoundingBoxAsync()` for positional assertions; allow ±1px tolerance
-- Use `Page.EvaluateAsync<string>` for computed styles on hidden elements
-- Fixtures link to `../../../src/Weave/styles.css` and use BEM classes directly
-
-**E2E accessibility tests** (Playwright/xUnit + axe-core) — test against live WebSharper-rendered pages:
-
-- Inherit `E2ETestBase(server)` (provides `NavigateTo`, `RunAxeScan`, `Expect`)
-- Every component needs at least `this.RunAxeScan("{name}")` for automated a11y scanning
-- **Prefer typed Playwright assertions over `EvaluateAsync` JS strings:** use `this.Expect(locator).ToBeFocusedAsync()`, `.ToBeCheckedAsync()`, `.ToHaveAttributeAsync()`, `.ToHaveClassAsync(Regex(...))`, `.ToHaveCountAsync()`, `.ToBeVisibleAsync()`, `.ToBeHiddenAsync()`
-- Playwright assertions auto-retry, so they replace `WaitForFunctionAsync` + `EvaluateAsync` in most cases
-- Only use `EvaluateAsync` when no typed API exists (e.g. DOM containment, injecting event listeners)
-- Mark unimplemented keyboard features with `[<Fact(Skip = "Known gap: ...")>]`
+- **Unit tests** (Expecto) — test pure mapping functions like `toAttr`, never DOM. Components using plain `let` bindings don't need unit tests — the compiler enforces correctness. See `unit-tester` agent.
+- **Rendering tests** (Playwright/xUnit) — load a static HTML fixture, assert on layout with `BoundingBoxAsync()`. See `/scaffold-component` skill §8.
+- **E2E accessibility tests** (Playwright/xUnit + axe-core) — every component needs at least `this.RunAxeScan("{name}")`. Prefer typed Playwright assertions over `EvaluateAsync` JS strings. See `playwright-pro` agent and `/scaffold-component` skill §9.
 
 ## Key Utilities
 

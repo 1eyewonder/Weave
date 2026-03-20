@@ -39,26 +39,6 @@ module Select =
     Attrs: Attr list
   }
 
-  module SelectItemDef =
-
-    let create (content: Doc) (text: string) (value: 'T) : SelectItemDef<'T> = {
-      Content = content
-      Value = value
-      Text = text
-      SelectedContent = None
-      Disabled = View.Const false
-      Attrs = []
-    }
-
-    let withSelectedContent (content: Doc) (def: SelectItemDef<'T>) = {
-      def with
-          SelectedContent = Some content
-    }
-
-    let withDisabled (disabled: View<bool>) (def: SelectItemDef<'T>) = { def with Disabled = disabled }
-
-    let withAttrs (attrs: Attr list) (def: SelectItemDef<'T>) = { def with Attrs = attrs }
-
   module Render =
 
     let chevron () =
@@ -234,6 +214,21 @@ module Select =
         ])
 
 open Select
+
+[<JavaScript>]
+type SelectItem =
+
+  static member create<'T when 'T: comparison>
+    (content: Doc, text: string, value: 'T, ?selectedContent: Doc, ?disabled: View<bool>, ?attrs: Attr list)
+    : Select.SelectItemDef<'T> =
+    {
+      Content = content
+      Value = value
+      Text = text
+      SelectedContent = selectedContent
+      Disabled = defaultArg disabled (View.Const false)
+      Attrs = defaultArg attrs []
+    }
 
 [<JavaScript>]
 type Select =

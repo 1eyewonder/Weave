@@ -20,10 +20,9 @@ module TabsExamples =
     let content =
       Tabs.create (
         View.Const [
-          div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-          div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-          div [ Typography.body1 ] [ text "Content Three" ]
-          |> TabDef.createText "Tab Three"
+          TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+          TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+          TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
         ],
         attrs = [ Color.primary ]
       )
@@ -34,9 +33,9 @@ open Weave.Tabs
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Tab Three"
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
     ],
     attrs = [ Color.primary ]
 )
@@ -55,8 +54,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Primary color" ] |> TabDef.createText "Primary"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Primary", div [ Typography.body1 ] [ text "Primary color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.primary ]
             ),
@@ -68,9 +67,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Secondary color" ]
-                |> TabDef.createText "Secondary"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Secondary", div [ Typography.body1 ] [ text "Secondary color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.secondary ]
             ),
@@ -82,9 +80,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Tertiary color" ]
-                |> TabDef.createText "Tertiary"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Tertiary", div [ Typography.body1 ] [ text "Tertiary color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.tertiary ]
             ),
@@ -96,8 +93,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Success color" ] |> TabDef.createText "Success"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Success", div [ Typography.body1 ] [ text "Success color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.success ]
             ),
@@ -109,8 +106,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Warning color" ] |> TabDef.createText "Warning"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Warning", div [ Typography.body1 ] [ text "Warning color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.warning ]
             ),
@@ -122,8 +119,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Error color" ] |> TabDef.createText "Error"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Error", div [ Typography.body1 ] [ text "Error color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.error ]
             ),
@@ -135,8 +132,8 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                div [ Typography.body1 ] [ text "Info color" ] |> TabDef.createText "Info"
-                div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+                TabItem.create ("Info", div [ Typography.body1 ] [ text "Info color" ])
+                TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
               attrs = [ Color.info ]
             ),
@@ -153,56 +150,56 @@ open Weave.Tabs
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Primary color" ] |> TabDef.createText "Primary"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Primary", div [ Typography.body1 ] [ text "Primary color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.primary ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Secondary color" ] |> TabDef.createText "Secondary"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Secondary", div [ Typography.body1 ] [ text "Secondary color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.secondary ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Tertiary color" ] |> TabDef.createText "Tertiary"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Tertiary", div [ Typography.body1 ] [ text "Tertiary color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.tertiary ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Error color" ] |> TabDef.createText "Error"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Error", div [ Typography.body1 ] [ text "Error color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.error ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Warning color" ] |> TabDef.createText "Warning"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Warning", div [ Typography.body1 ] [ text "Warning color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.warning ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Success color" ] |> TabDef.createText "Success"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Success", div [ Typography.body1 ] [ text "Success color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.success ]
 )
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Info color" ] |> TabDef.createText "Info"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Info", div [ Typography.body1 ] [ text "Info color" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Color.info ]
 )"""
@@ -216,10 +213,9 @@ Tabs.create(
 
     let tabs () =
       [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-        div [ Typography.body1 ] [ text "Content Three" ]
-        |> TabDef.createText "Tab Three"
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
       ]
       |> View.Const
 
@@ -262,9 +258,9 @@ open Weave.Tabs
 
 let tabs =
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Tab Three"
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
     ]
 
 Tabs.create(tabs, attrs = [ Variant.text; Color.primary ])
@@ -287,18 +283,26 @@ Tabs.create(
 
   let private iconExample () =
     let description =
-      Helpers.bodyText
-        "Tabs can include icons alongside the label using createWithStartIcon or createWithEndIcon."
+      Helpers.bodyText "Tabs can include icons alongside the label using the startIcon parameter."
 
     let content =
       Tabs.create (
         View.Const [
-          div [ Typography.body1 ] [ text "Home content" ]
-          |> TabDef.createWithStartIcon "Home" (Icon.create (Icon.UiActions UiActions.Home))
-          div [ Typography.body1 ] [ text "Settings content" ]
-          |> TabDef.createWithStartIcon "Settings" (Icon.create (Icon.UiActions UiActions.Settings))
-          div [ Typography.body1 ] [ text "Information content" ]
-          |> TabDef.createWithStartIcon "Info" (Icon.create (Icon.Action Action.Info))
+          TabItem.create (
+            "Home",
+            div [ Typography.body1 ] [ text "Home content" ],
+            startIcon = Icon.create (Icon.UiActions UiActions.Home)
+          )
+          TabItem.create (
+            "Settings",
+            div [ Typography.body1 ] [ text "Settings content" ],
+            startIcon = Icon.create (Icon.UiActions UiActions.Settings)
+          )
+          TabItem.create (
+            "Info",
+            div [ Typography.body1 ] [ text "Information content" ],
+            startIcon = Icon.create (Icon.Action Action.Info)
+          )
         ],
         attrs = [ Color.secondary ]
       )
@@ -311,12 +315,21 @@ open Weave.Icons.MaterialSymbols
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Home content" ]
-        |> TabDef.createWithStartIcon "Home" (Icon.create(Icon.UiActions UiActions.Home))
-        div [ Typography.body1 ] [ text "Settings content" ]
-        |> TabDef.createWithStartIcon "Settings" (Icon.create(Icon.UiActions UiActions.Settings))
-        div [ Typography.body1 ] [ text "Information content" ]
-        |> TabDef.createWithStartIcon "Info" (Icon.create(Icon.Action Action.Info))
+        TabItem.create (
+            "Home",
+            div [ Typography.body1 ] [ text "Home content" ],
+            startIcon = Icon.create(Icon.UiActions UiActions.Home)
+        )
+        TabItem.create (
+            "Settings",
+            div [ Typography.body1 ] [ text "Settings content" ],
+            startIcon = Icon.create(Icon.UiActions UiActions.Settings)
+        )
+        TabItem.create (
+            "Info",
+            div [ Typography.body1 ] [ text "Information content" ],
+            startIcon = Icon.create(Icon.Action Action.Info)
+        )
     ],
     attrs = [ Color.secondary ]
 )
@@ -327,18 +340,19 @@ Tabs.create(
   let private disabledExample () =
     let description =
       Helpers.bodyText
-        "Set a tab as non-interactive using TabDef.withDisabled. Disabled tabs are visually muted and cannot be clicked."
+        "Set a tab as non-interactive using the disabled parameter. Disabled tabs are visually muted and cannot be clicked."
 
     let content =
       Tabs.create (
         View.Const [
-          div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-          div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-          div [ Typography.body1 ] [ text "Content Three" ]
-          |> TabDef.createText "Tab Three"
-          div [ Typography.body1 ] [ text "You should not see this" ]
-          |> TabDef.createText "Tab Disabled"
-          |> TabDef.withDisabled (View.Const true)
+          TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+          TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+          TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
+          TabItem.create (
+            "Tab Disabled",
+            div [ Typography.body1 ] [ text "You should not see this" ],
+            disabled = View.Const true
+          )
         ],
         attrs = [ Color.tertiary ]
       )
@@ -349,12 +363,14 @@ open Weave.Tabs
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Tab Three"
-        div [ Typography.body1 ] [ text "You should not see this" ]
-        |> TabDef.createText "Tab Disabled"
-        |> TabDef.withDisabled (View.Const true)
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
+        TabItem.create (
+            "Tab Disabled",
+            div [ Typography.body1 ] [ text "You should not see this" ],
+            disabled = View.Const true
+        )
     ],
     attrs = [ Color.tertiary ]
 )
@@ -386,11 +402,9 @@ Tabs.create(
       ] [
         Tabs.create (
           View.Const [
-            div [ Typography.body1 ] [ text (sprintf "%s content" label) ]
-            |> TabDef.createText "Item One"
-            div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Item Two"
-            div [ Typography.body1 ] [ text "Content Three" ]
-            |> TabDef.createText "Item Three"
+            TabItem.create ("Item One", div [ Typography.body1 ] [ text (sprintf "%s content" label) ])
+            TabItem.create ("Item Two", div [ Typography.body1 ] [ text "Content Two" ])
+            TabItem.create ("Item Three", div [ Typography.body1 ] [ text "Content Three" ])
           ],
           position = pos,
           attrs = [ Color.primary ]
@@ -422,9 +436,9 @@ open Weave.Tabs
 
 let tabs =
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Item One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Item Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Item Three"
+        TabItem.create ("Item One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Item Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Item Three", div [ Typography.body1 ] [ text "Content Three" ])
     ]
 
 // Tab strip on top (default)
@@ -449,8 +463,8 @@ Tabs.create(tabs, position = Position.Right, attrs = [ Color.primary ])"""
     let content =
       Tabs.create (
         View.Const [
-          div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "One"
-          div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Two"
+          TabItem.create ("One", div [ Typography.body1 ] [ text "Content One" ])
+          TabItem.create ("Two", div [ Typography.body1 ] [ text "Content Two" ])
         ],
         attrs = [ Alignment.center; Color.secondary ]
       )
@@ -461,8 +475,8 @@ open Weave.Tabs
 
 Tabs.create(
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Two"
+        TabItem.create ("One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Two", div [ Typography.body1 ] [ text "Content Two" ])
     ],
     attrs = [ Alignment.center; Color.secondary ]
 )
@@ -480,8 +494,7 @@ Tabs.create(
         Tabs.create (
           View.Const [
             for i in 1..12 do
-              div [ Typography.body1 ] [ text (sprintf "Content %d" i) ]
-              |> TabDef.createText (sprintf "Tab %d" i)
+              TabItem.create (sprintf "Tab %d" i, div [ Typography.body1 ] [ text (sprintf "Content %d" i) ])
           ],
           attrs = [ Color.primary ]
         )
@@ -496,7 +509,7 @@ div [ Attr.Style "max-width" "500px" ] [
     Tabs.create(
         View.Const [
             for i in 1..12 do
-                div [ Typography.body1 ] [ text (sprintf "Content %d" i) ] |> TabDef.createText (sprintf "Tab %d" i)
+                TabItem.create (sprintf "Tab %d" i, div [ Typography.body1 ] [ text (sprintf "Content %d" i) ])
         ],
         attrs = [ Color.primary ]
     )
@@ -515,8 +528,7 @@ div [ Attr.Style "max-width" "500px" ] [
         Tabs.create (
           View.Const [
             for i in 1..12 do
-              div [ Typography.body1 ] [ text (sprintf "Content %d" i) ]
-              |> TabDef.createText (sprintf "Tab %d" i)
+              TabItem.create (sprintf "Tab %d" i, div [ Typography.body1 ] [ text (sprintf "Content %d" i) ])
           ],
           scrollBackIcon = Icon.create (Icon.UiActions UiActions.ChevronLeft),
           scrollForwardIcon = Icon.create (Icon.UiActions UiActions.ChevronRight),
@@ -534,7 +546,7 @@ div [ Attr.Style "max-width" "500px" ] [
     Tabs.create(
         View.Const [
             for i in 1..12 do
-                div [ Typography.body1 ] [ text (sprintf "Content %d" i) ] |> TabDef.createText (sprintf "Tab %d" i)
+                TabItem.create (sprintf "Tab %d" i, div [ Typography.body1 ] [ text (sprintf "Content %d" i) ])
         ],
         scrollBackIcon = Icon.create(Icon.UiActions UiActions.ChevronLeft),
         scrollForwardIcon = Icon.create(Icon.UiActions UiActions.ChevronRight),
@@ -551,8 +563,8 @@ div [ Attr.Style "max-width" "500px" ] [
 
     let tabs () =
       View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
       ]
 
     let content =
@@ -594,9 +606,9 @@ open Weave.Tabs
 
 let tabs =
     View.Const [
-        div [ Typography.body1 ] [ text "Content One" ] |> TabDef.createText "Tab One"
-        div [ Typography.body1 ] [ text "Content Two" ] |> TabDef.createText "Tab Two"
-        div [ Typography.body1 ] [ text "Content Three" ] |> TabDef.createText "Tab Three"
+        TabItem.create ("Tab One", div [ Typography.body1 ] [ text "Content One" ])
+        TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
+        TabItem.create ("Tab Three", div [ Typography.body1 ] [ text "Content Three" ])
     ]
 
 Tabs.create(

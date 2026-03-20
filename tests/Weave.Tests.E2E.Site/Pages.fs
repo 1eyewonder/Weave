@@ -168,12 +168,12 @@ module Pages =
   let private selectPage () =
     let items =
       [ "Apple"; "Banana"; "Cherry" ]
-      |> List.map (fun fruit -> Select.SelectItemDef.create (text fruit) fruit fruit)
+      |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
       |> View.Const
 
     let multiItems =
       [ "Red"; "Green"; "Blue" ]
-      |> List.map (fun c -> Select.SelectItemDef.create (text c) c c)
+      |> List.map (fun c -> SelectItem.create (text c, c, c))
       |> View.Const
 
     div [] [
@@ -293,21 +293,13 @@ module Pages =
   let private tabsPage () =
     let tabs =
       [
-        {
-          Tabs.TabDef.Header = text "Tab 1"
-          Tabs.TabDef.Disabled = View.Const false
-          Tabs.TabDef.Panel = div [] [ text "Panel 1 content" ]
-        }
-        {
-          Tabs.TabDef.Header = text "Tab 2"
-          Tabs.TabDef.Disabled = View.Const false
-          Tabs.TabDef.Panel = div [] [ text "Panel 2 content" ]
-        }
-        {
-          Tabs.TabDef.Header = text "Disabled Tab"
-          Tabs.TabDef.Disabled = View.Const true
-          Tabs.TabDef.Panel = div [] [ text "Disabled panel" ]
-        }
+        TabItem.createCustom (text "Tab 1", div [] [ text "Panel 1 content" ])
+        TabItem.createCustom (text "Tab 2", div [] [ text "Panel 2 content" ])
+        TabItem.createCustom (
+          text "Disabled Tab",
+          div [] [ text "Disabled panel" ],
+          disabled = View.Const true
+        )
       ]
       |> View.Const
 
@@ -424,22 +416,8 @@ module Pages =
   let private chipsetPage () =
     ChipSet.create (
       [
-        {
-          ChipSet.ChipDef.Label = text "Chip A"
-          ChipSet.ChipDef.Value = "a"
-          ChipSet.ChipDef.Content = None
-          ChipSet.ChipDef.Closable = false
-          ChipSet.ChipDef.Disabled = View.Const false
-          ChipSet.ChipDef.Attrs = []
-        }
-        {
-          ChipSet.ChipDef.Label = text "Chip B"
-          ChipSet.ChipDef.Value = "b"
-          ChipSet.ChipDef.Content = None
-          ChipSet.ChipDef.Closable = true
-          ChipSet.ChipDef.Disabled = View.Const false
-          ChipSet.ChipDef.Attrs = []
-        }
+        ChipItem.create (text "Chip A", "a")
+        ChipItem.create (text "Chip B", "b", closable = true)
       ]
     )
 

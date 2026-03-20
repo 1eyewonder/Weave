@@ -14,7 +14,7 @@ module SelectExamples =
 
     let items =
       [ "Apple"; "Banana"; "Cherry"; "Date"; "Elderberry" ]
-      |> List.map (fun fruit -> Select.SelectItemDef.create (text fruit) fruit fruit)
+      |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
       |> View.Const
 
     let description =
@@ -60,7 +60,7 @@ let selected = Var.Create<string option> None
 let items =
     [ "Apple"; "Banana"; "Cherry"; "Date"; "Elderberry" ]
     |> List.map (fun fruit ->
-        Select.SelectItemDef.create (text fruit) fruit fruit)
+        SelectItem.create (text fruit, fruit, fruit))
     |> View.Const
 
 Select.create(
@@ -80,7 +80,7 @@ Select.create(
 
     let items =
       [ "Red"; "Green"; "Blue"; "Yellow"; "Purple" ]
-      |> List.map (fun color -> Select.SelectItemDef.create (text color) color color)
+      |> List.map (fun color -> SelectItem.create (text color, color, color))
       |> View.Const
 
     let description =
@@ -137,7 +137,7 @@ let selected = Var.Create<string option> None
 let items =
     [ "Red"; "Green"; "Blue"; "Yellow"; "Purple" ]
     |> List.map (fun color ->
-        Select.SelectItemDef.create (text color) color color)
+        SelectItem.create (text color, color, color))
     |> View.Const
 
 Select.create(
@@ -165,7 +165,7 @@ Select.create(
 
     let items =
       [ "Tokyo"; "London"; "New York"; "Paris"; "Sydney"; "Berlin" ]
-      |> List.map (fun city -> Select.SelectItemDef.create (text city) city city)
+      |> List.map (fun city -> SelectItem.create (text city, city, city))
       |> View.Const
 
     let description =
@@ -210,7 +210,7 @@ let selected = Var.Create<string option> (Some "Tokyo")
 let items =
     [ "Tokyo"; "London"; "New York"; "Paris"; "Sydney"; "Berlin" ]
     |> List.map (fun city ->
-        Select.SelectItemDef.create (text city) city city)
+        SelectItem.create (text city, city, city))
     |> View.Const
 
 Select.create(
@@ -249,9 +249,7 @@ Select.create(
     ]
 
     let items =
-      countries
-      |> List.map (fun c -> Select.SelectItemDef.create (text c) c c)
-      |> View.Const
+      countries |> List.map (fun c -> SelectItem.create (text c, c, c)) |> View.Const
 
     let description =
       Helpers.bodyText
@@ -285,7 +283,7 @@ let selected = Var.Create<string option> None
 let items =
     [ "Argentina"; "Australia"; "Brazil"; "Canada"; "France"; "Germany"; "Japan" ]
     |> List.map (fun c ->
-        Select.SelectItemDef.create (text c) c c)
+        SelectItem.create (text c, c, c))
     |> View.Const
 
 Select.create(
@@ -304,7 +302,7 @@ Select.create(
 
     let items =
       [ "Reading"; "Gaming"; "Cooking"; "Hiking"; "Photography"; "Music"; "Travel" ]
-      |> List.map (fun hobby -> Select.SelectItemDef.create (text hobby) hobby hobby)
+      |> List.map (fun hobby -> SelectItem.create (text hobby, hobby, hobby))
       |> View.Const
 
     let description =
@@ -356,7 +354,7 @@ let selected = Var.Create<Set<string>> Set.empty
 let items =
     [ "Reading"; "Gaming"; "Cooking"; "Hiking"; "Photography" ]
     |> List.map (fun hobby ->
-        Select.SelectItemDef.create (text hobby) hobby hobby)
+        SelectItem.create (text hobby, hobby, hobby))
     |> View.Const
 
 MultiSelect.create(
@@ -375,7 +373,7 @@ MultiSelect.create(
 
     let items =
       [ "Admin"; "Editor"; "Viewer"; "Moderator"; "Contributor" ]
-      |> List.map (fun role -> Select.SelectItemDef.create (text role) role role)
+      |> List.map (fun role -> SelectItem.create (text role, role, role))
       |> View.Const
 
     let description =
@@ -413,7 +411,7 @@ let selected = Var.Create<Set<string>> Set.empty
 let items =
     [ "Admin"; "Editor"; "Viewer"; "Moderator"; "Contributor" ]
     |> List.map (fun role ->
-        Select.SelectItemDef.create (text role) role role)
+        SelectItem.create (text role, role, role))
     |> View.Const
 
 MultiSelect.create(
@@ -435,18 +433,18 @@ MultiSelect.create(
     let selected = Var.Create<string option> None
 
     let makeItem emoji name =
-      Select.SelectItemDef.create
-        (span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
+      SelectItem.create (
+        span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
           span [ Attr.Style "font-size" "1.4em" ] [ text emoji ]
           text name
-        ])
-        name
-        name
-      |> Select.SelectItemDef.withSelectedContent (
-        span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "6px" ] [
-          span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
-          text name
-        ]
+        ],
+        name,
+        name,
+        selectedContent =
+          span [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "6px" ] [
+            span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
+            text name
+          ]
       )
 
     let items =
@@ -463,7 +461,7 @@ MultiSelect.create(
 
     let description =
       Helpers.bodyText
-        "Items support custom rendering via the Content field. Use withSelectedContent to provide a different display when the item is selected in the field (e.g., a compact version with a flag)."
+        "Items support custom rendering via the Content field. Use the selectedContent parameter to provide a different display when the item is selected in the field (e.g., a compact version with a flag)."
 
     let content =
       Grid.create (
@@ -491,18 +489,19 @@ open WebSharper.UI
 let selected = Var.Create<string option> None
 
 let makeItem emoji name =
-    Select.SelectItemDef.create
-        (span [ Attr.Style "gap" "8px" ] [
+    SelectItem.create (
+        span [ Attr.Style "gap" "8px" ] [
             span [ Attr.Style "font-size" "1.4em" ] [ text emoji ]
             text name
-        ])
-        name
-        name
-    |> Select.SelectItemDef.withSelectedContent (  // see here
-        span [ Attr.Style "gap" "6px" ] [
-            span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
-            text name
-        ])
+        ],
+        name,
+        name,
+        selectedContent =  // see here
+            span [ Attr.Style "gap" "6px" ] [
+                span [ Attr.Style "font-size" "1.2em" ] [ text emoji ]
+                text name
+            ]
+    )
 
 let items =
     [ makeItem "\U0001F1FA\U0001F1F8" "United States"
@@ -526,7 +525,7 @@ Select.create(
 
     let items =
       [ "Locked"; "Open"; "Pending" ]
-      |> List.map (fun s -> Select.SelectItemDef.create (text s) s s)
+      |> List.map (fun s -> SelectItem.create (text s, s, s))
       |> View.Const
 
     let description =
@@ -571,7 +570,7 @@ open WebSharper.UI
 let items =
     [ "Locked"; "Open"; "Pending" ]
     |> List.map (fun s ->
-        Select.SelectItemDef.create (text s) s s)
+        SelectItem.create (text s, s, s))
     |> View.Const
 
 // Disabled — prevents all interaction and dims the component
@@ -613,7 +612,7 @@ Select.create(
     let content =
       let items =
         [ "Option A"; "Option B"; "Option C" ]
-        |> List.map (fun o -> Select.SelectItemDef.create (text o) o o)
+        |> List.map (fun o -> SelectItem.create (text o, o, o))
         |> View.Const
 
       Grid.create (
@@ -644,7 +643,7 @@ let selected = Var.Create<string option> (Some "Option A")
 let items =
     [ "Option A"; "Option B"; "Option C" ]
     |> List.map (fun o ->
-        Select.SelectItemDef.create (text o) o o)
+        SelectItem.create (text o, o, o))
     |> View.Const
 
 Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Primary", attrs = [ Select.Color.primary ])
@@ -664,7 +663,7 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
 
     let items =
       [ "Short"; "Medium Text"; "A Longer Option Here" ]
-      |> List.map (fun o -> Select.SelectItemDef.create (text o) o o)
+      |> List.map (fun o -> SelectItem.create (text o, o, o))
       |> View.Const
 
     let description =
@@ -733,7 +732,7 @@ let selected = Var.Create<string option> None
 let items =
     [ "Short"; "Medium Text"; "A Longer Option Here" ]
     |> List.map (fun o ->
-        Select.SelectItemDef.create (text o) o o)
+        SelectItem.create (text o, o, o))
     |> View.Const
 
 // Auto (default) — inline, sizes to min-width
@@ -806,10 +805,7 @@ Select.create(
     let items =
       languages
       |> List.map (fun lang ->
-        Select.SelectItemDef.create
-          (span [] [ text (sprintf "%s (%s)" lang.Name lang.Native) ])
-          lang.Name
-          lang)
+        SelectItem.create (span [] [ text (sprintf "%s (%s)" lang.Name lang.Native) ], lang.Name, lang))
       |> View.Const
 
     let description =
@@ -866,10 +862,10 @@ let languages = [
 let items =
     languages
     |> List.map (fun lang ->
-        Select.SelectItemDef.create
-            (text (sprintf "%s (%s)" lang.Name lang.Native))
-            lang.Name  // Text for search filtering
-            lang)      // Value is the full record
+        SelectItem.create (
+            text (sprintf "%s (%s)" lang.Name lang.Native),
+            lang.Name,  // Text for search filtering
+            lang))      // Value is the full record
     |> View.Const
 
 Select.create(

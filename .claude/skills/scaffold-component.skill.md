@@ -27,6 +27,7 @@ Use this structure as an example, but not a silver bullet. Per-component styling
 - `Size` (Small/Medium/Large) is conventional for inputs and controls but not always necessary.
 - Make sure to check existing components for patterns and conventions that you can follow. Sometimes when creating new components, using existing components nested inside can help maintain visual consistency and reduce the amount of new CSS you need to write. For example, a `Card` component might use `Container` for its layout, and a `Chip` might use `Typography` for its text.
 - When a component has styling combinations callers will reach for constantly, add **shorthand static members** on the type (e.g. `{Name}.primary(...)`, `{Name}.secondary(...)`) that prepend the relevant attr(s) and delegate to `create`. This is optional — add them where the ergonomic gain is clear, not exhaustively for every combination.
+- **If the component is a container that takes a list of configurable items** (like `ChipSet`, `Tabs`, `Select`), use the **`*Item` pattern**: define an internal `*Def` record inside the module, then a public `*Item` type outside the module with `static member create` using optional params. **Never use pipeline/builder modules** with `with*` functions. See the "Collection Item Pattern" section in `weave-component-conventions.skill.md` for the full pattern. When items have structurally different variants, add multiple `create*` static members on the `*Item` type (e.g., `TabItem.create`, `TabItem.createIconOnly`, `TabItem.createCustom`).
 
 ```fsharp
 namespace Weave

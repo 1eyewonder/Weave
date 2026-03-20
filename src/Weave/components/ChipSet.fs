@@ -26,26 +26,22 @@ module ChipSet =
     Attrs: Attr list
   }
 
-  module ChipDef =
+open ChipSet
 
-    let create label value = {
+[<JavaScript>]
+type ChipItem =
+
+  static member create
+    (label: Doc, value: string, ?content: Doc, ?closable: bool, ?disabled: View<bool>, ?attrs: Attr list)
+    : ChipSet.ChipDef =
+    {
       Label = label
       Value = value
-      Content = None
-      Closable = false
-      Disabled = View.Const false
-      Attrs = []
+      Content = content
+      Closable = defaultArg closable false
+      Disabled = defaultArg disabled (View.Const false)
+      Attrs = defaultArg attrs []
     }
-
-    let withContent content def = { def with Content = Some content }
-
-    let withClosable def = { def with Closable = true }
-
-    let withDisabled disabled def = { def with Disabled = disabled }
-
-    let withAttrs attrs def = { def with Attrs = attrs }
-
-open ChipSet
 
 [<JavaScript>]
 type ChipSet =

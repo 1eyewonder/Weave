@@ -248,22 +248,22 @@ div [
 
     let widthItems =
       allWidths
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let styleItems =
       allStyles
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let colorItems =
       allColors
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let radiusItems =
       allRadii
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let content =

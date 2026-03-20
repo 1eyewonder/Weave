@@ -137,9 +137,7 @@ div [
     let selectedGap = Var.Create<string option>(Some "3 (12px)")
 
     let makeItems label items =
-      items
-      |> List.map (fun (l, _) -> Select.SelectItemDef.create (text l) l l)
-      |> View.Const
+      items |> List.map (fun (l, _) -> SelectItem.create (text l, l, l)) |> View.Const
 
     let content =
       div [] [

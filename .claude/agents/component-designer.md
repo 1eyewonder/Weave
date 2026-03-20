@@ -56,6 +56,35 @@ The `module` holds style sub-modules with `let` bindings and mapping functions. 
 - Styling modules (Variant, Size, Color) provide `let` bindings that return `Attr` directly (e.g., `Button.Variant.filled`). Callers apply them through `?attrs` — never as explicit `Create` parameters. For Color, a `toAttr` function is also provided for parameterized use with `BrandColor` values.
 - Color always uses the global `BrandColor` DU, not a component-local Color type
 
+### Collection item pattern (`*Item` types)
+When a container component takes a list of configurable items (e.g., `ChipSet` takes chips, `Tabs` takes tabs, `Select` takes options), follow the `*Item` pattern:
+
+1. **Internal record** — define a `*Def` record inside the container's module holding all per-item configuration fields (e.g., `ChipSet.ChipDef`, `Tabs.TabDef`, `Select.SelectItemDef<'T>`)
+2. **Public `*Item` type** — define a `[<JavaScript>]` type outside the module (after `open {ContainerModule}`) with `static member create` using optional F# parameters. It returns the internal `*Def` record. Place it before the container's `type`.
+3. **No pipeline modules** — never create `module *Def` with `with*` functions. All configuration goes through optional parameters on `*Item.create`.
+4. **Multiple `create*` variants** — when items have structurally different HTML (e.g., text tab vs icon-only tab vs custom-header tab), add multiple static members on the same `*Item` type: `create`, `createIconOnly`, `createCustom`.
+
+```fsharp
+// Internal record inside the container module
+[<JavaScript>]
+module ChipSet =
+  type ChipDef = { Label: Doc; Value: string; Content: Doc option; Closable: bool; Disabled: View<bool>; Attrs: Attr list }
+
+open ChipSet
+
+// Public construction type — placed AFTER open, BEFORE the container type
+[<JavaScript>]
+type ChipItem =
+  static member create(label: Doc, value: string, ?content: Doc, ?closable: bool, ?disabled: View<bool>, ?attrs: Attr list) : ChipSet.ChipDef =
+    { Label = label; Value = value; Content = content; Closable = defaultArg closable false; Disabled = defaultArg disabled (View.Const false); Attrs = defaultArg attrs [] }
+
+[<JavaScript>]
+type ChipSet =
+  static member create(chips: ChipDef list, ...) = ...
+```
+
+Canonical examples: `ListItem.create`, `ChipItem.create`, `TabItem.create`, `SelectItem.create`.
+
 ### Composition patterns
 Components compose by accepting `Doc` or `Doc list` for children. When a component wraps another (e.g., `ButtonMenu` wraps `Button`, `NestedDropdown` wraps `Dropdown`), use internal modules (`module private`) for shared rendering logic. When composing, forward `attrs` so the outer component remains extensible.
 
@@ -83,6 +112,7 @@ When reviewing an existing component's API:
 - [ ] Are there opportunities to compose with existing components instead of reimplementing?
 - [ ] Is the naming consistent with the rest of the library?
 - [ ] Are `[<JavaScript>]` attributes on every module and type?
+- [ ] If this is a container component taking a list of configurable items, does it use the `*Item` pattern (not pipeline/builder `with*` functions)?
 
 ## Coordination with sass-sculptor
 
@@ -99,10 +129,10 @@ You design the F# API and BEM class structure; the `sass-sculptor` agent impleme
 Be aware of the current component surface to avoid duplication and identify composition opportunities:
 
 **Layout:** Container, Grid, Spacer, Divider
-**Navigation:** AppBar, Tabs, Link
-**Input:** Button, ButtonGroup, ButtonMenu, Checkbox, RadioButton, Switch, Field, NumericField, Dropdown
+**Navigation:** AppBar, Tabs (with TabItem), Link
+**Input:** Button, ButtonGroup, ButtonMenu, Checkbox, RadioButton, Switch, Field, NumericField, Dropdown, Select (with SelectItem), MultiSelect
 **Feedback:** Alert, Dialog, Tooltip, Drawer
-**Display:** Typography, ExpansionPanel, Icons, List
+**Display:** Typography, Chip, ChipSet (with ChipItem), ExpansionPanel, Icons, List (with ListItem)
 
 ## Deliverables
 
@@ -119,3 +149,4 @@ Be aware of the current component surface to avoid duplication and identify comp
 - **Non-reactive parameters for dynamic state** — if a value could change, it must be `Var<'T>` or `View<'T>`
 - **Style parameters on `create`** — variant, color, and size are always applied via `attrs` using the component's style modules
 - **Forgetting `[<JavaScript>]`** — every module and type needs this attribute or WebSharper won't transpile it
+- **Pipeline/builder construction for collection items** — never use `module *Def` with `with*` functions (e.g., `ChipDef.withAttrs`, `TabDef.withDisabled`). Always use a `*Item` type with `static member create` and optional parameters instead

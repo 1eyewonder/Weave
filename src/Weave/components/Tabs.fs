@@ -97,39 +97,47 @@ module Tabs =
     Panel: Doc
   }
 
-  module TabDef =
+open Tabs
 
-    let createCustom header panel = {
+[<JavaScript>]
+type TabItem =
+
+  /// Creates a text-labeled tab with optional start/end icons.
+  static member create
+    (label: string, panel: Doc, ?startIcon: Doc, ?endIcon: Doc, ?disabled: View<bool>)
+    : Tabs.TabDef =
+    let header =
+      Doc.Concat [
+        match startIcon with
+        | Some icon -> div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
+        | None -> ()
+
+        span [ cl Css.``weave-tabs__tab-label`` ] [ text label ]
+
+        match endIcon with
+        | Some icon -> div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
+        | None -> ()
+      ]
+
+    {
       Header = header
-      Disabled = View.Const false
+      Disabled = defaultArg disabled (View.Const false)
       Panel = panel
     }
 
-    let createText label panel =
-      createCustom (span [ cl Css.``weave-tabs__tab-label`` ] [ text label ]) panel
+  /// Creates an icon-only tab (no text label).
+  static member createIconOnly(icon: Doc, panel: Doc, ?disabled: View<bool>) : Tabs.TabDef = {
+    Header = div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
+    Disabled = defaultArg disabled (View.Const false)
+    Panel = panel
+  }
 
-    let createWithStartIcon label (icon: Doc) panel =
-      createCustom
-        (Doc.Concat [
-          div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
-          span [ cl Css.``weave-tabs__tab-label`` ] [ text label ]
-        ])
-        panel
-
-    let createWithEndIcon label (icon: Doc) panel =
-      createCustom
-        (Doc.Concat [
-          span [ cl Css.``weave-tabs__tab-label`` ] [ text label ]
-          div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
-        ])
-        panel
-
-    let createIconOnly (icon: Doc) panel =
-      createCustom (div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]) panel
-
-    let withDisabled disabled def = { def with Disabled = disabled }
-
-open Tabs
+  /// Creates a tab with a fully custom header Doc.
+  static member createCustom(header: Doc, panel: Doc, ?disabled: View<bool>) : Tabs.TabDef = {
+    Header = header
+    Disabled = defaultArg disabled (View.Const false)
+    Panel = panel
+  }
 
 [<JavaScript>]
 type TabPanel =

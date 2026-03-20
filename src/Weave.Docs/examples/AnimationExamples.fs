@@ -160,17 +160,17 @@ div [
 
     let animationItems =
       allAnimations
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let durationItems =
       allDurations
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let easingItems =
       allEasings
-      |> List.map (fun (label, _) -> Select.SelectItemDef.create (text label) label label)
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
     let content =

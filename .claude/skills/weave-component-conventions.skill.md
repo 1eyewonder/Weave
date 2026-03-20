@@ -174,3 +174,45 @@ Key points:
 - `?attrs: Attr list` is always the last optional parameter and defaults to `[]`
 - `yield! attrs` is placed after the component's own structural attrs so callers can override or extend
 - When structurally different HTML is needed (e.g., icon-only vs text), use a separate type (e.g., `IconButton`) rather than a variant factory on the same type
+
+## Collection Item Pattern (`*Item` Types)
+
+When a container component takes a list of configurable items (e.g., `ChipSet`, `Tabs`, `Select`, `WeaveList`), follow this pattern:
+
+1. **Internal `*Def` record** inside the container's module — holds all per-item configuration fields
+2. **Public `*Item` type** outside the module (after `open {Module}`, before the container type) — provides `static member create` with optional parameters, returns the `*Def` record
+3. **No pipeline/builder modules** — never use `module *Def` with `with*` functions (e.g., `withAttrs`, `withDisabled`, `withContent`). All item configuration goes through optional parameters on `*Item.create`
+
+When an item type has multiple structurally different variants (e.g., text tabs vs icon-only tabs vs custom-header tabs), use multiple `create*` static members on the same `*Item` type rather than separate types.
+
+```fsharp
+// Internal record
+[<JavaScript>]
+module ChipSet =
+  type ChipDef = {
+    Label: Doc; Value: string; Content: Doc option
+    Closable: bool; Disabled: View<bool>; Attrs: Attr list
+  }
+
+open ChipSet
+
+// Public item constructor
+[<JavaScript>]
+type ChipItem =
+  static member create
+    (label: Doc, value: string, ?content: Doc, ?closable: bool, ?disabled: View<bool>, ?attrs: Attr list)
+    : ChipSet.ChipDef =
+    {
+      Label = label; Value = value; Content = content
+      Closable = defaultArg closable false
+      Disabled = defaultArg disabled (View.Const false)
+      Attrs = defaultArg attrs []
+    }
+
+// Container still takes the internal record type
+[<JavaScript>]
+type ChipSet =
+  static member create(chips: ChipDef list, ...) = ...
+```
+
+Canonical examples: `ListItem.create`, `ChipItem.create`, `TabItem.create` (with `createIconOnly`, `createCustom`), `SelectItem.create`

@@ -10,7 +10,7 @@
 
   .weave-expansion-panel {
     border-radius: var(--default-borderradius);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, var(--weave-alpha-subtle));
+    box-shadow: var(--weave-shadow-card);
     overflow: hidden;
     transition: box-shadow var(--weave-duration-standard) $ease-standard;
   }
@@ -50,11 +50,6 @@
 
     .weave-expansion-panel__content-wrapper {
       grid-template-rows: 1fr;
-    }
-
-    .weave-expansion-panel__content {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
     }
 
     .weave-expansion-panel__header--filled {

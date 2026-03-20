@@ -163,18 +163,12 @@
   color: var(--palette-text-primary);
   --ripple-color: var(--palette-text-primary);
   --ripple-opacity: var(--ripple-opacity-secondary) !important;
-  box-shadow:
-    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--weave-shadow-raised);
   background-color: var(--palette-action-default-hover);
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      box-shadow:
-        0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-        0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--weave-shadow-raised-hover);
       background-color: var(--palette-action-disabled-background);
     }
   }
@@ -182,18 +176,12 @@
   &:focus-visible {
     outline: 2px solid var(--palette-primary);
     outline-offset: 2px;
-    box-shadow:
-      0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-      0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--weave-shadow-raised-hover);
     background-color: var(--palette-action-disabled-background);
   }
 
   &:active {
-    box-shadow:
-      0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-      0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-      0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--weave-shadow-raised-active);
     background-color: var(--palette-action-disabled-background);
   }
 

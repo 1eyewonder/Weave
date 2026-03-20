@@ -377,11 +377,11 @@
   transition: background-color var(--weave-duration-short) $ease-standard;
 
   &:hover {
-    background-color: rgba(0, 0, 0, var(--weave-alpha-subtle));
+    background-color: var(--palette-action-default-hover);
   }
 
   &:active {
-    background-color: rgba(0, 0, 0, var(--weave-alpha-selected));
+    background-color: var(--palette-action-default-active);
   }
 
   // Divider between the two buttons.

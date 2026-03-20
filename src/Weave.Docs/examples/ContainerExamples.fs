@@ -10,12 +10,12 @@ open Weave
 module ContainerExamples =
 
   let options = [
-    Container.MaxWidth.extraSmall
-    Container.MaxWidth.small
-    Container.MaxWidth.medium
-    Container.MaxWidth.large
-    Container.MaxWidth.extraLarge
-    Container.MaxWidth.extraExtraLarge
+    "ExtraSmall", Container.MaxWidth.extraSmall
+    "Small", Container.MaxWidth.small
+    "Medium", Container.MaxWidth.medium
+    "Large", Container.MaxWidth.large
+    "ExtraLarge", Container.MaxWidth.extraLarge
+    "ExtraExtraLarge", Container.MaxWidth.extraExtraLarge
   ]
 
   let centeredText (displayText: string) =
@@ -29,11 +29,11 @@ module ContainerExamples =
       div [] [
         yield!
           options
-          |> List.mapi (fun i mw ->
+          |> List.mapi (fun i (name, attr) ->
             Container.create (
-              sprintf "MaxWidth = %A" mw |> centeredText,
+              sprintf "MaxWidth = %s" name |> centeredText,
               attrs = [
-                mw
+                attr
                 Attr.Style "min-height" "1vh"
                 Margin.Bottom.small
                 AlignItems.center
@@ -70,21 +70,21 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
     let description =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
         Body1.div (
-          "The Container component supports two key layout parameters:",
+          "The Container component supports two optional layout modifiers passed via attrs:",
           attrs = [ Margin.Bottom.small ]
         )
 
-        Subtitle2.div ("Fixed Width")
+        Subtitle2.div ("Container.fixedWidth")
 
         Body1.div (
-          "With the Fixed property set to true the container will \"snap\" to the closest breakpoint.",
+          "Causes the container to snap to the nearest breakpoint width rather than growing fluidly.",
           attrs = [ Margin.Bottom.small ]
         )
 
-        Subtitle2.div ("Gutters")
+        Subtitle2.div ("Container.gutters")
 
         Body1.div (
-          "If true, horizontal padding (gutters) are applied inside the container.",
+          "Adds horizontal padding inside the container so content does not touch the edges.",
           attrs = [ Margin.Bottom.small ]
         )
       ]
@@ -102,9 +102,16 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
     let content =
       div [] [
         Container.create (
-          "fixedWidth = false, gutters = true (default)" |> centeredText |> filler,
-          fixedWidth = false,
-          gutters = true,
+          "gutters (no fixedWidth)" |> centeredText |> filler,
+          attrs = [
+            Container.gutters // see here
+            Margin.Bottom.small
+            JustifyContent.center
+            SurfaceColor.toBackgroundColor SurfaceColor.Background
+          ]
+        )
+        Container.create (
+          "neither gutters nor fixedWidth" |> centeredText |> filler,
           attrs = [
             Margin.Bottom.small
             JustifyContent.center
@@ -112,30 +119,19 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
           ]
         )
         Container.create (
-          "fixedWidth = false, gutters = false" |> centeredText |> filler,
-          fixedWidth = false,
-          gutters = false,
+          "fixedWidth + gutters" |> centeredText |> filler,
           attrs = [
+            Container.fixedWidth // see here
+            Container.gutters // see here
             Margin.Bottom.small
             JustifyContent.center
             SurfaceColor.toBackgroundColor SurfaceColor.Background
           ]
         )
         Container.create (
-          "fixedWidth = true, gutters = true" |> centeredText |> filler,
-          fixedWidth = true,
-          gutters = true,
+          "fixedWidth (no gutters)" |> centeredText |> filler,
           attrs = [
-            Margin.Bottom.small
-            JustifyContent.center
-            SurfaceColor.toBackgroundColor SurfaceColor.Background
-          ]
-        )
-        Container.create (
-          "fixedWidth = true, gutters = false" |> centeredText |> filler,
-          fixedWidth = true,
-          gutters = false,
-          attrs = [
+            Container.fixedWidth // see here
             JustifyContent.center
             SurfaceColor.toBackgroundColor SurfaceColor.Background
           ]
@@ -145,29 +141,17 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
     let code =
       """open Weave
 
-Container.create(
-    content,
-    fixedWidth = false, // see here
-    gutters = true // see here
-)
+// Add gutters only — pass Container.gutters through attrs
+Container.create(content, attrs = [ Container.gutters ]) // see here
 
-Container.create(
-    content,
-    fixedWidth = false,
-    gutters = false // see here
-)
+// Add fixed-width snapping only
+Container.create(content, attrs = [ Container.fixedWidth ]) // see here
 
-Container.create(
-    content,
-    fixedWidth = true, // see here
-    gutters = true
-)
+// Both modifiers together
+Container.create(content, attrs = [ Container.fixedWidth; Container.gutters ]) // see here
 
-Container.create(
-    content,
-    fixedWidth = true, // see here
-    gutters = false // see here
-)
+// Neither (plain fluid container — no attrs needed)
+Container.create(content)
 """
 
     Helpers.codeSampleSection "Fixed Width & Gutters" description content code

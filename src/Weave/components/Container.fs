@@ -19,21 +19,17 @@ module Container =
     let extraLarge = cl Css.``weave-container--maxwidth-xl``
     let extraExtraLarge = cl Css.``weave-container--maxwidth-xxl``
 
+  let fixedWidth = cl Css.``weave-container--fixed``
+  let gutters = cl Css.``weave-container--gutters``
+
 [<JavaScript; RequireQualifiedAccess>]
 type Container =
 
-  static member create(content: Doc, ?fixedWidth: bool, ?gutters: bool, ?attrs: Attr list) =
-
-    let fixedWidth = defaultArg fixedWidth false
-    let gutters = defaultArg gutters true
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs List.empty
 
     div [
       cl Css.``weave-container``
       cl Css.``weave-container--fill-height``
-      if fixedWidth then
-        cl Css.``weave-container--fixed``
-      if gutters then
-        cl Css.``weave-container--gutters``
       yield! attrs
     ] [ content ]

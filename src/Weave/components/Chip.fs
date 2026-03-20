@@ -64,7 +64,7 @@ type Chip =
     let closeDoc =
       match onClose with
       | Some callback ->
-        let closeIconDoc = defaultArg closeIcon (span [] [ text "\u00D7" ])
+        let closeIconDoc = defaultArg closeIcon (span [ Typography.h4 ] [ text "\u00D7" ])
 
         span [
           cl Css.``weave-chip__close``

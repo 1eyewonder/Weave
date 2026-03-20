@@ -36,6 +36,7 @@
     <Compile Include="examples/OpacityExamples.fs" />
     <Compile Include="examples/TransitionExamples.fs" />
     <Compile Include="examples/AnimationExamples.fs" />
+    <Compile Include="examples/BorderExamples.fs" />
     <Compile Include="examples/SelectExamples.fs" />
     <Compile Include="examples/GettingStartedExamples.fs" />
     <Compile Include="ExamplesRouter.fs" />

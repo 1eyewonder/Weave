@@ -48,6 +48,7 @@ module ExamplesRouter =
     | OpacityExamples
     | TransitionExamples
     | AnimationExamples
+    | BorderExamples
     | ThemingExamples
 
   let private pageToString page =
@@ -85,6 +86,7 @@ module ExamplesRouter =
     | OpacityExamples -> "Opacity"
     | TransitionExamples -> "Transitions"
     | AnimationExamples -> "Animations"
+    | BorderExamples -> "Borders"
     | ThemingExamples -> "Theming"
 
   let private stringToPage s =
@@ -122,6 +124,7 @@ module ExamplesRouter =
     | "Opacity" -> Some OpacityExamples
     | "Transitions" -> Some TransitionExamples
     | "Animations" -> Some AnimationExamples
+    | "Borders" -> Some BorderExamples
     | "Theming" -> Some ThemingExamples
     | _ -> None
 
@@ -160,6 +163,7 @@ module ExamplesRouter =
     | OpacityExamples -> "#opacity"
     | TransitionExamples -> "#transitions"
     | AnimationExamples -> "#animations"
+    | BorderExamples -> "#borders"
     | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
@@ -198,6 +202,7 @@ module ExamplesRouter =
     | "#opacity" -> Some OpacityExamples
     | "#transitions" -> Some TransitionExamples
     | "#animations" -> Some AnimationExamples
+    | "#borders" -> Some BorderExamples
     | "#theming" -> Some ThemingExamples
     | _ -> None
 
@@ -1356,6 +1361,41 @@ module ExamplesRouter =
           Attr.Style "height" "12px"
         ] []
       ]
+    | BorderExamples ->
+      cp [
+        div [
+          cl "cp-box"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "54%"
+          Attr.Style "height" "30px"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "54%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-radius" "10px"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "54%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-style" "dashed"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "54%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-style" "dotted"
+          Attr.Style "border-radius" "50%"
+        ] []
+      ]
     | ThemingExamples ->
       cp [
         div [
@@ -1498,6 +1538,7 @@ module ExamplesRouter =
           categorySection "Styling" [
             "Spacing", SpacingExamples
             "Opacity", OpacityExamples
+            "Borders", BorderExamples
             "Transitions", TransitionExamples
             "Animations", AnimationExamples
             "Theming", ThemingExamples
@@ -1537,6 +1578,7 @@ module ExamplesRouter =
     | OpacityExamples -> OpacityExamples.render ()
     | TransitionExamples -> TransitionExamples.render ()
     | AnimationExamples -> AnimationExamples.render ()
+    | BorderExamples -> BorderExamples.render ()
     | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
@@ -1852,6 +1894,7 @@ module ExamplesRouter =
         navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
           navLeafItem "Spacing"
           navLeafItem "Opacity"
+          navLeafItem "Borders"
           navLeafItem "Transitions"
           navLeafItem "Animations"
           navLeafItem "Theming"

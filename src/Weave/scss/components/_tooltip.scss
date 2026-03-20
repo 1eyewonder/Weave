@@ -1,4 +1,5 @@
 @use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
 
 .weave-tooltip-root {
   position: relative;
@@ -16,12 +17,12 @@
 
 .weave-tooltip {
   position: absolute;
-  padding: 4px 8px;
+  padding: density-spacing(4, 4) density-spacing(8, 4);
   text-align: center;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  font-size: 12px;
+  font-size: var(--typography-caption-size);
   line-height: 1.4em;
   border-radius: var(--default-borderradius);
   z-index: var(--weave-zindex-tooltip);

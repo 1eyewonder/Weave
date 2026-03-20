@@ -62,6 +62,7 @@
     color: var(--palette-action-disabled) !important;
     cursor: default;
     pointer-events: none;
+    box-shadow: none;
   }
 }
 
@@ -96,7 +97,7 @@
 
 .weave-button--outlined {
   color: var(--palette-text-primary);
-  border: 3px solid
+  border: 2px solid
     rgba(var(--palette-text-primary-rgb), var(--palette-border-opacity));
 
   &.weave-button--inherit {

@@ -203,8 +203,8 @@
 
   .weave-field__control {
     background-color: var(--input-filled-background, rgba(255, 255, 255, 0.09));
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-top-left-radius: var(--default-borderradius);
+    border-top-right-radius: var(--default-borderradius);
     border-bottom: 1px solid var(--input-border-color, currentColor);
   }
 }
@@ -227,7 +227,7 @@
   --field-adorn-end-ml: 0em;
 
   .weave-field__control {
-    border-radius: 4px;
+    border-radius: var(--default-borderradius);
   }
 
   // Extra outlined-specific float styling
@@ -352,12 +352,12 @@
 
 // Variant-specific corner rounding so buttons match the field outline.
 .weave-field--outlined .weave-field__spin-buttons {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-right-radius: calc(var(--default-borderradius) - 1px);
+  border-bottom-right-radius: calc(var(--default-borderradius) - 1px);
 }
 
 .weave-field--filled .weave-field__spin-buttons {
-  border-top-right-radius: 3px;
+  border-top-right-radius: calc(var(--default-borderradius) - 1px);
 }
 
 .weave-field__spin-btn {

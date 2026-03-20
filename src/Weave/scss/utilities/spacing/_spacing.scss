@@ -9,49 +9,49 @@
     @for $i from 0 through 20 {
       $value: $i * $spacing-base;
 
-      .#{$abbrev}t-#{$breakpoint}#{$i},
-      .#{$abbrev}y-#{$breakpoint}#{$i} {
-        #{$prop}-top: $value !important;
+      .weave-#{$abbrev}t-#{$breakpoint}#{$i},
+      .weave-#{$abbrev}y-#{$breakpoint}#{$i} {
+        #{$prop}-top: $value;
       }
 
-      .#{$abbrev}r-#{$breakpoint}#{$i},
-      .#{$abbrev}x-#{$breakpoint}#{$i} {
-        #{$prop}-right: $value !important;
+      .weave-#{$abbrev}r-#{$breakpoint}#{$i},
+      .weave-#{$abbrev}x-#{$breakpoint}#{$i} {
+        #{$prop}-right: $value;
       }
 
-      .#{$abbrev}l-#{$breakpoint}#{$i},
-      .#{$abbrev}x-#{$breakpoint}#{$i} {
-        #{$prop}-left: $value !important;
+      .weave-#{$abbrev}l-#{$breakpoint}#{$i},
+      .weave-#{$abbrev}x-#{$breakpoint}#{$i} {
+        #{$prop}-left: $value;
       }
 
-      .#{$abbrev}b-#{$breakpoint}#{$i},
-      .#{$abbrev}y-#{$breakpoint}#{$i} {
-        #{$prop}-bottom: $value !important;
+      .weave-#{$abbrev}b-#{$breakpoint}#{$i},
+      .weave-#{$abbrev}y-#{$breakpoint}#{$i} {
+        #{$prop}-bottom: $value;
       }
 
-      .#{$abbrev}s-#{$breakpoint}#{$i} {
-        #{$prop}-inline-start: $value !important;
+      .weave-#{$abbrev}s-#{$breakpoint}#{$i} {
+        #{$prop}-inline-start: $value;
       }
-      .#{$abbrev}e-#{$breakpoint}#{$i} {
-        #{$prop}-inline-end: $value !important;
+      .weave-#{$abbrev}e-#{$breakpoint}#{$i} {
+        #{$prop}-inline-end: $value;
       }
-      .#{$abbrev}a-#{$breakpoint}#{$i} {
-        #{$prop}: $value !important;
+      .weave-#{$abbrev}a-#{$breakpoint}#{$i} {
+        #{$prop}: $value;
       }
     }
 
     // Auto values: only valid for margin
     @if $prop == margin {
-      .#{$abbrev}a-#{$breakpoint}auto {
-        margin: auto !important;
+      .weave-#{$abbrev}a-#{$breakpoint}auto {
+        margin: auto;
       }
-      .#{$abbrev}x-#{$breakpoint}auto {
-        margin-left: auto !important;
-        margin-right: auto !important;
+      .weave-#{$abbrev}x-#{$breakpoint}auto {
+        margin-left: auto;
+        margin-right: auto;
       }
-      .#{$abbrev}y-#{$breakpoint}auto {
-        margin-top: auto !important;
-        margin-bottom: auto !important;
+      .weave-#{$abbrev}y-#{$breakpoint}auto {
+        margin-top: auto;
+        margin-bottom: auto;
       }
     }
   }
@@ -60,34 +60,34 @@
   @for $i from 0 through 20 {
     $neg: -$i * $spacing-base;
 
-    .mt-#{$breakpoint}n#{$i},
-    .my-#{$breakpoint}n#{$i} {
-      margin-top: $neg !important;
+    .weave-mt-#{$breakpoint}n#{$i},
+    .weave-my-#{$breakpoint}n#{$i} {
+      margin-top: $neg;
     }
 
-    .mr-#{$breakpoint}n#{$i},
-    .mx-#{$breakpoint}n#{$i} {
-      margin-right: $neg !important;
+    .weave-mr-#{$breakpoint}n#{$i},
+    .weave-mx-#{$breakpoint}n#{$i} {
+      margin-right: $neg;
     }
 
-    .ml-#{$breakpoint}n#{$i},
-    .mx-#{$breakpoint}n#{$i} {
-      margin-left: $neg !important;
+    .weave-ml-#{$breakpoint}n#{$i},
+    .weave-mx-#{$breakpoint}n#{$i} {
+      margin-left: $neg;
     }
 
-    .mb-#{$breakpoint}n#{$i},
-    .my-#{$breakpoint}n#{$i} {
-      margin-bottom: $neg !important;
+    .weave-mb-#{$breakpoint}n#{$i},
+    .weave-my-#{$breakpoint}n#{$i} {
+      margin-bottom: $neg;
     }
 
-    .ms-#{$breakpoint}n#{$i} {
-      margin-inline-start: $neg !important;
+    .weave-ms-#{$breakpoint}n#{$i} {
+      margin-inline-start: $neg;
     }
-    .me-#{$breakpoint}n#{$i} {
-      margin-inline-end: $neg !important;
+    .weave-me-#{$breakpoint}n#{$i} {
+      margin-inline-end: $neg;
     }
-    .ma-#{$breakpoint}n#{$i} {
-      margin: $neg !important;
+    .weave-ma-#{$breakpoint}n#{$i} {
+      margin: $neg;
     }
   }
 }

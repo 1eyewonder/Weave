@@ -4,15 +4,15 @@ $value: 0;
 @mixin gap($breakpoint) {
 
   @while $count < 21 {
-    .gap-#{$breakpoint}#{$count} {
+    .weave-gap-#{$breakpoint}#{$count} {
       gap: #{$value}px;
     }
 
-    .gap-x-#{$breakpoint}#{$count} {
+    .weave-gap-x-#{$breakpoint}#{$count} {
       column-gap: #{$value}px;
     }
 
-    .gap-y-#{$breakpoint}#{$count} {
+    .weave-gap-y-#{$breakpoint}#{$count} {
       row-gap: #{$value}px;
     }
 
@@ -21,4 +21,4 @@ $value: 0;
   }
 }
 
-@include gap("");
+  @include gap("");

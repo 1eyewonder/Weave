@@ -1,5 +1,5 @@
 @for $i from 0 through 20 {
   .weave-opacity-#{$i * 5} {
-    opacity: #{$i * 0.05} !important;
+    opacity: #{$i * 0.05};
   }
 }

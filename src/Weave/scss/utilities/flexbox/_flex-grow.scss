@@ -1,39 +1,39 @@
 @mixin flex-grow ($breakpoint) {
   // element does not grow
-  .flex-#{$breakpoint}grow-0 {
-    flex-grow: 0 !important;
+  .weave-flex-#{$breakpoint}grow-0 {
+    flex-grow: 0;
   }
 
   // element grows to fill available space
-  .flex-#{$breakpoint}grow-1 {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-1 {
+    flex-grow: 1;
   }
 
   // only first child grows
-  .flex-#{$breakpoint}grow-start > *:first-child {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-start > *:first-child {
+    flex-grow: 1;
   }
 
   // only last child grows
-  .flex-#{$breakpoint}grow-end > *:last-child {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-end > *:last-child {
+    flex-grow: 1;
   }
 
     // first and last child grow
-  .flex-#{$breakpoint}grow-start-and-end > :first-child,
-  .flex-#{$breakpoint}grow-start-and-end > :last-child {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-start-and-end > :first-child,
+  .weave-flex-#{$breakpoint}grow-start-and-end > :last-child {
+    flex-grow: 1;
   }
 
   // all but first and last child grow
-  .flex-#{$breakpoint}grow-middle > *:not(:first-child):not(:last-child) {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-middle > *:not(:first-child):not(:last-child) {
+    flex-grow: 1;
   }
 
   // all children grow
-  .flex-#{$breakpoint}grow-all > * {
-    flex-grow: 1 !important;
+  .weave-flex-#{$breakpoint}grow-all > * {
+    flex-grow: 1;
   }
 }
 
-@include flex-grow("");
+  @include flex-grow("");

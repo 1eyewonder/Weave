@@ -1,23 +1,23 @@
 @mixin align-self ($breakpoint) {
-  .align-self-#{$breakpoint}auto {
-    align-self: auto !important;
+  .weave-align-self-#{$breakpoint}auto {
+    align-self: auto;
   }
 
-  .align-self-#{$breakpoint}start {
-    align-self: flex-start !important;
+  .weave-align-self-#{$breakpoint}start {
+    align-self: flex-start;
   }
 
-  .align-self-#{$breakpoint}end {
-    align-self: flex-end !important;
+  .weave-align-self-#{$breakpoint}end {
+    align-self: flex-end;
   }
 
-  .align-self-#{$breakpoint}center {
-    align-self: center !important;
+  .weave-align-self-#{$breakpoint}center {
+    align-self: center;
   }
 
-  .align-self-#{$breakpoint}stretch {
-    align-self: stretch !important;
+  .weave-align-self-#{$breakpoint}stretch {
+    align-self: stretch;
   }
 }
 
-@include align-self("");
+  @include align-self("");

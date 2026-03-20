@@ -1,44 +1,44 @@
 @use '../../abstracts/variables' as *;
 
 @mixin display-mixin ($breakpoint) {
-  .d-#{$breakpoint}none {
-    display: none !important;
+  .weave-d-#{$breakpoint}none {
+    display: none;
   }
 
-  .d-#{$breakpoint}inline {
-    display: inline !important;
+  .weave-d-#{$breakpoint}inline {
+    display: inline;
   }
 
-  .d-#{$breakpoint}inline-block {
-    display: inline-block !important;
+  .weave-d-#{$breakpoint}inline-block {
+    display: inline-block;
   }
 
-  .d-#{$breakpoint}block {
-    display: block !important;
+  .weave-d-#{$breakpoint}block {
+    display: block;
   }
 
-  .d-#{$breakpoint}table {
-    display: table !important;
+  .weave-d-#{$breakpoint}table {
+    display: table;
   }
 
-  .d-#{$breakpoint}table-row {
-    display: table-row !important;
+  .weave-d-#{$breakpoint}table-row {
+    display: table-row;
   }
 
-  .d-#{$breakpoint}table-cell {
-    display: table-cell !important;
+  .weave-d-#{$breakpoint}table-cell {
+    display: table-cell;
   }
 
-  .d-#{$breakpoint}flex {
-    display: flex !important;
+  .weave-d-#{$breakpoint}flex {
+    display: flex;
   }
 
-  .d-#{$breakpoint}inline-flex {
-    display: inline-flex !important;
+  .weave-d-#{$breakpoint}inline-flex {
+    display: inline-flex;
   }
 
-  .d-#{$breakpoint}contents {
-    display: contents !important;
+  .weave-d-#{$breakpoint}contents {
+    display: contents;
   }
 }
 

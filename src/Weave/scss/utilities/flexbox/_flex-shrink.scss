@@ -1,11 +1,11 @@
 @mixin flex-shrink ($breakpoint) {
-  .flex-#{$breakpoint}shrink-0 {
-    flex-shrink: 0 !important;
+  .weave-flex-#{$breakpoint}shrink-0 {
+    flex-shrink: 0;
   }
 
-  .flex-#{$breakpoint}shrink-1 {
-    flex-shrink: 1 !important;
+  .weave-flex-#{$breakpoint}shrink-1 {
+    flex-shrink: 1;
   }
 }
 
-@include flex-shrink("");
+  @include flex-shrink("");

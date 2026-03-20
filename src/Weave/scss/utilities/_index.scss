@@ -1,21 +1,15 @@
 @use 'borders/border-radius';
-@use 'borders/border-style';
 @use 'borders/border-width';
-@use 'borders/outline';
 
 @use 'flexbox';
 
 @use 'interactivity/animation';
 @use 'interactivity/cursor';
 @use 'interactivity/opacity';
-@use 'interactivity/pointerevents';
 @use 'interactivity/transition-speed';
 
 @use 'layout/display';
-@use 'layout/object-fit';
-@use 'layout/object-position';
 @use 'layout/overflow';
-@use 'layout/position';
 @use 'layout/visibility';
 @use 'layout/zindex';
 

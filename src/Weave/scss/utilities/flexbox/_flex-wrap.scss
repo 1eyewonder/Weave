@@ -1,15 +1,15 @@
 @mixin flex-wrap ($breakpoint) {
-  .flex-#{$breakpoint}wrap {
-    flex-wrap: wrap !important;
+  .weave-flex-#{$breakpoint}wrap {
+    flex-wrap: wrap;
   }
 
-  .flex-#{$breakpoint}nowrap {
-    flex-wrap: nowrap !important;
+  .weave-flex-#{$breakpoint}nowrap {
+    flex-wrap: nowrap;
   }
 
-  .flex-#{$breakpoint}wrap-reverse {
-    flex-wrap: wrap-reverse !important;
+  .weave-flex-#{$breakpoint}wrap-reverse {
+    flex-wrap: wrap-reverse;
   }
 }
 
-@include flex-wrap("");
+  @include flex-wrap("");

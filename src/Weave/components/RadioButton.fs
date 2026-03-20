@@ -63,10 +63,10 @@ type Radio =
       Disabled.disabledClass Css.``weave-radio--disabled`` enabled
 
       Map.ofList [
-        Radio.ContentPlacement.Right, Css.``flex-row``
-        Radio.ContentPlacement.Left, Css.``flex-row-reverse``
-        Radio.ContentPlacement.Top, Css.``flex-column-reverse``
-        Radio.ContentPlacement.Bottom, Css.``flex-column``
+        Radio.ContentPlacement.Right, Css.``weave-flex-row``
+        Radio.ContentPlacement.Left, Css.``weave-flex-row-reverse``
+        Radio.ContentPlacement.Top, Css.``weave-flex-column-reverse``
+        Radio.ContentPlacement.Bottom, Css.``weave-flex-column``
       ]
       |> Attr.classSelection contentPlacement
 

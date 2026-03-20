@@ -1,17 +1,17 @@
 $count: 0;
 
 @mixin order ($breakpoint) {
-  .order-#{$breakpoint}first {
-    order: -9999 !important;
+  .weave-order-#{$breakpoint}first {
+    order: -9999;
   }
 
-  .order-#{$breakpoint}last {
-    order: 9999 !important;
+  .weave-order-#{$breakpoint}last {
+    order: 9999;
   }
 
   @while $count < 13 {
-    .order-#{$breakpoint}#{$count} {
-      order: $count !important;
+    .weave-order-#{$breakpoint}#{$count} {
+      order: $count;
     }
 
     $count: $count + 1;
@@ -19,4 +19,4 @@ $count: 0;
 }
 
 
-@include order("");
+  @include order("");

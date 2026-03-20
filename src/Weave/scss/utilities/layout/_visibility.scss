@@ -1,8 +1,8 @@
-.visible {
+.weave-visible {
   visibility: visible;
 }
 
-.invisible {
+.weave-invisible {
   visibility: hidden;
 }
 
@@ -11,7 +11,7 @@
 }
 
 // screen reader only
-.sr-only {
+.weave-sr-only {
   position: absolute;
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);

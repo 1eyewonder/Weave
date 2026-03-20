@@ -53,10 +53,10 @@ type Switch =
       Disabled.disabledClass Css.``weave-switch--disabled`` enabled
 
       Map.ofList [
-        Switch.ContentPlacement.Right, Css.``flex-row``
-        Switch.ContentPlacement.Left, Css.``flex-row-reverse``
-        Switch.ContentPlacement.Top, Css.``flex-column-reverse``
-        Switch.ContentPlacement.Bottom, Css.``flex-column``
+        Switch.ContentPlacement.Right, Css.``weave-flex-row``
+        Switch.ContentPlacement.Left, Css.``weave-flex-row-reverse``
+        Switch.ContentPlacement.Top, Css.``weave-flex-column-reverse``
+        Switch.ContentPlacement.Bottom, Css.``weave-flex-column``
       ]
       |> Attr.classSelection contentPlacement
 

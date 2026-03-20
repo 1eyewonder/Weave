@@ -1,38 +1,38 @@
 @use 'variables' as *;
 
 @each $color in $palette-colors {
-  .#{$color} {
-    background-color: var(--palette-#{$color}) !important;
+  .weave-#{$color} {
+    background-color: var(--palette-#{$color});
   }
 
-  .#{$color}-text {
-    color: var(--palette-#{$color}) !important;
-    --ripple-color: var(--palette-#{$color}) !important;
+  .weave-#{$color}-text {
+    color: var(--palette-#{$color});
+    --ripple-color: var(--palette-#{$color});
   }
 
-  .#{$color}-hover {
-    background-color: var(--palette-#{$color}-hover) !important;
+  .weave-#{$color}-hover {
+    background-color: var(--palette-#{$color}-hover);
   }
 
-  .hover\:#{$color}-hover {
+  .hover\:weave-#{$color}-hover {
     @media(hover: hover) and (pointer: fine) {
       &:hover {
-        background-color: var(--palette-#{$color}-hover) !important;
+        background-color: var(--palette-#{$color}-hover);
       }
     }
 
     &:focus-visible, &:active {
-      background-color: var(--palette-#{$color}-hover) !important;
+      background-color: var(--palette-#{$color}-hover);
     }
   }
 
-  .border-#{$color} {
-    border-color: var(--palette-#{$color}) !important;
+  .weave-border-#{$color} {
+    border-color: var(--palette-#{$color});
   }
 
-  .theme-#{$color} {
-    color: var(--palette-#{$color}-text) !important;
-    background-color: var(--palette-#{$color}) !important;
+  .weave-theme-#{$color} {
+    color: var(--palette-#{$color}-text);
+    background-color: var(--palette-#{$color});
   }
 
   // Automatically apply correct text color when background is set via inline style
@@ -41,59 +41,59 @@
   }
 }
 
-.inherit-text {
-  color: inherit !important;
+.weave-inherit-text {
+  color: inherit;
 }
 
-.border-lines-default {
+.weave-border-lines-default {
   border-color: var(--palette-lines-default);
 }
 
-.background {
-  background-color: var(--palette-background) !important;
+.weave-background {
+  background-color: var(--palette-background);
 }
 
-.background-gray {
-  background-color: var(--palette-background-gray) !important;
+.weave-background-gray {
+  background-color: var(--palette-background-gray);
 }
 
-.theme-transparent {
-  color: inherit !important;
-  background-color: transparent !important;
+.weave-theme-transparent {
+  color: inherit;
+  background-color: transparent;
 }
 
-.transparent {
-  background-color: transparent !important;
+.weave-transparent {
+  background-color: transparent;
 }
 
-.transparent-text {
-  color: transparent !important;
+.weave-transparent-text {
+  color: transparent;
 }
 
-.text-primary {
+.weave-text-primary {
   color: var(--palette-text-primary);
 }
 
-.text-secondary {
+.weave-text-secondary {
   color: var(--palette-text-secondary);
 }
 
-.text-disabled {
+.weave-text-disabled {
   color: var(--palette-text-disabled);
 }
 
-.white {
-  background-color: #FFFFFF !important;
+.weave-white {
+  background-color: #FFFFFF;
 }
 
-.white-text {
-  color: #FFFFFF !important;
+.weave-white-text {
+  color: #FFFFFF;
 }
 
-.black {
-  background-color: #000000 !important;
+.weave-black {
+  background-color: #000000;
 }
 
-.black-text {
-  color: #000000 !important;
+.weave-black-text {
+  color: #000000;
 }

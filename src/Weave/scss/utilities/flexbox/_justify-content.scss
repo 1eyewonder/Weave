@@ -1,27 +1,27 @@
 @mixin justify-content ($breakpoint) {
-  .justify-#{$breakpoint}start {
-    justify-content: flex-start !important;
+  .weave-justify-#{$breakpoint}start {
+    justify-content: flex-start;
   }
 
-  .justify-#{$breakpoint}end {
-    justify-content: flex-end !important;
+  .weave-justify-#{$breakpoint}end {
+    justify-content: flex-end;
   }
 
-  .justify-#{$breakpoint}center {
-    justify-content: center !important;
+  .weave-justify-#{$breakpoint}center {
+    justify-content: center;
   }
 
-  .justify-#{$breakpoint}space-between {
-    justify-content: space-between !important;
+  .weave-justify-#{$breakpoint}space-between {
+    justify-content: space-between;
   }
 
-  .justify-#{$breakpoint}space-around {
-    justify-content: space-around !important;
+  .weave-justify-#{$breakpoint}space-around {
+    justify-content: space-around;
   }
 
-  .justify-#{$breakpoint}space-evenly {
-    justify-content: space-evenly !important;
+  .weave-justify-#{$breakpoint}space-evenly {
+    justify-content: space-evenly;
   }
 }
 
-@include justify-content("");
+  @include justify-content("");

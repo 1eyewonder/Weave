@@ -11,8 +11,8 @@
 // a container's density for that instance only.
 // =============================================================================
 
-@each $name, $step in $density-steps {
-  .weave-density--#{$name} {
-    --weave-density: #{$step};
+  @each $name, $step in $density-steps {
+    .weave-density--#{$name} {
+      --weave-density: #{$step};
+    }
   }
-}

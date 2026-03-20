@@ -1,27 +1,27 @@
 @mixin align-content ($breakpoint) {
-  .align-content-#{$breakpoint}start {
-    align-content: flex-start !important;
+  .weave-align-content-#{$breakpoint}start {
+    align-content: flex-start;
   }
 
-  .align-content-#{$breakpoint}end {
-    align-content: flex-end !important;
+  .weave-align-content-#{$breakpoint}end {
+    align-content: flex-end;
   }
 
-  .align-content-#{$breakpoint}center {
-    align-content: center !important;
+  .weave-align-content-#{$breakpoint}center {
+    align-content: center;
   }
 
-  .align-content-#{$breakpoint}space-between {
-    align-content: space-between !important;
+  .weave-align-content-#{$breakpoint}space-between {
+    align-content: space-between;
   }
 
-  .align-content-#{$breakpoint}space-around {
-    align-content: space-around !important;
+  .weave-align-content-#{$breakpoint}space-around {
+    align-content: space-around;
   }
 
-  .align-content-#{$breakpoint}stretch {
-    align-content: stretch !important;
+  .weave-align-content-#{$breakpoint}stretch {
+    align-content: stretch;
   }
 }
 
-@include align-content("");
+  @include align-content("");

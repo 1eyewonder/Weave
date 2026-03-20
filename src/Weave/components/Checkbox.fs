@@ -60,10 +60,10 @@ type Checkbox =
       Disabled.disabledClass Css.``weave-checkbox--disabled`` enabled
 
       Map.ofList [
-        Checkbox.ContentPlacement.Right, Css.``flex-row``
-        Checkbox.ContentPlacement.Left, Css.``flex-row-reverse``
-        Checkbox.ContentPlacement.Top, Css.``flex-column-reverse``
-        Checkbox.ContentPlacement.Bottom, Css.``flex-column``
+        Checkbox.ContentPlacement.Right, Css.``weave-flex-row``
+        Checkbox.ContentPlacement.Left, Css.``weave-flex-row-reverse``
+        Checkbox.ContentPlacement.Top, Css.``weave-flex-column-reverse``
+        Checkbox.ContentPlacement.Bottom, Css.``weave-flex-column``
       ]
       |> Attr.classSelection contentPlacement
 

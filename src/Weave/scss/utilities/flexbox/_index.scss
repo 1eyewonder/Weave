@@ -11,7 +11,6 @@
 @use 'align-self' as *;
 @use 'gap' as *;
 
-
 @each $name, $value in $breakpoints {
   @media (min-width:$value) {
     @include flex($name + "-");

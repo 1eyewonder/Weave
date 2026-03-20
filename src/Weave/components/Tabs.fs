@@ -477,7 +477,7 @@ type Tabs =
         Attr.Create "tabindex" "-1"
         Attr.Create "aria-label" "Scroll tabs backward"
         on.clickTap (fun _ _ -> scrollBack ())
-        View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
+        View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``weave-d-none``
       ] [ scrollBackIcon ]
 
     let scrollFwdBtn =
@@ -487,7 +487,7 @@ type Tabs =
         Attr.Create "tabindex" "-1"
         Attr.Create "aria-label" "Scroll tabs forward"
         on.clickTap (fun _ _ -> scrollForward ())
-        View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``d-none``
+        View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``weave-d-none``
       ] [ scrollForwardIcon ]
 
     let panels =

@@ -32,7 +32,7 @@ module BorderExamples =
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
-        "Borders are composed from three independent axes: width (how thick), style (solid, dashed, etc.), and radius (corner rounding). Each axis is a module of Attr let-bindings that you compose directly in attrs. Combine them with BorderColor to set the border color from the palette."
+        "Borders are composed from three independent axes: width (how thick), style (solid, dashed, etc.), and radius (corner rounding). Width, color, and radius are F# modules you compose in attrs. Border style is set with a plain Attr.Style call — keeping it close to CSS without an extra indirection."
 
     let content =
       div [] [
@@ -77,43 +77,31 @@ module BorderExamples =
 
         div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
           table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
-            thead [] [
-              tr [] [
-                tableHeaderCell "Style"
-                tableHeaderCell "F# value"
-                tableHeaderCell "CSS class"
-              ]
-            ]
+            thead [] [ tr [] [ tableHeaderCell "Style"; tableHeaderCell "F# usage" ] ]
             tbody [] [
               tr [] [
                 tableCell [ text "Solid" ]
-                tableCell [ inlineCode "BorderStyle.solid" ]
-                tableCell [ inlineCode "border-solid" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"solid\"" ]
               ]
               tr [] [
                 tableCell [ text "Dashed" ]
-                tableCell [ inlineCode "BorderStyle.dashed" ]
-                tableCell [ inlineCode "border-dashed" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"dashed\"" ]
               ]
               tr [] [
                 tableCell [ text "Dotted" ]
-                tableCell [ inlineCode "BorderStyle.dotted" ]
-                tableCell [ inlineCode "border-dotted" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"dotted\"" ]
               ]
               tr [] [
                 tableCell [ text "Double" ]
-                tableCell [ inlineCode "BorderStyle.double" ]
-                tableCell [ inlineCode "border-double" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"double\"" ]
               ]
               tr [] [
                 tableCell [ text "Hidden" ]
-                tableCell [ inlineCode "BorderStyle.hidden" ]
-                tableCell [ inlineCode "border-hidden" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"hidden\"" ]
               ]
               tr [] [
                 tableCell [ text "None" ]
-                tableCell [ inlineCode "BorderStyle.none" ]
-                tableCell [ inlineCode "border-none" ]
+                tableCell [ inlineCode "Attr.Style \"border-style\" \"none\"" ]
               ]
             ]
           ]
@@ -178,7 +166,7 @@ module BorderExamples =
 // Compose width + style + color for a complete border
 div [
     BorderWidth.All.one
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.primary
     BorderRadius.All.small
     Padding.All.small
@@ -189,7 +177,7 @@ div [
 // Directional borders
 div [
     BorderWidth.Bottom.two
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.info
 ] [
     text "2px bottom border only"
@@ -198,7 +186,7 @@ div [
 // Mix and match any combination
 div [
     BorderWidth.All.four
-    BorderStyle.dashed
+    Attr.Style "border-style" "dashed"
     BorderColor.warning
     BorderRadius.All.large
 ] [
@@ -225,12 +213,12 @@ div [
     ]
 
     let allStyles = [
-      "Solid", BorderStyle.solid
-      "Dashed", BorderStyle.dashed
-      "Dotted", BorderStyle.dotted
-      "Double", BorderStyle.double
-      "Hidden", BorderStyle.hidden
-      "None", BorderStyle.none
+      "Solid", Attr.Style "border-style" "solid"
+      "Dashed", Attr.Style "border-style" "dashed"
+      "Dotted", Attr.Style "border-style" "dotted"
+      "Double", Attr.Style "border-style" "double"
+      "Hidden", Attr.Style "border-style" "hidden"
+      "None", Attr.Style "border-style" "none"
     ]
 
     let allColors = [
@@ -393,7 +381,7 @@ div [
 // Compose all four axes for a complete border
 div [
     BorderWidth.All.two
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.primary
     BorderRadius.All.medium
     Padding.All.medium
@@ -404,7 +392,7 @@ div [
 // Each axis is independent — omit any to use defaults
 div [
     BorderWidth.All.four
-    BorderStyle.dashed
+    Attr.Style "border-style" "dashed"
     BorderColor.warning
 ] [
     text "4px dashed warning"
@@ -541,13 +529,13 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
   let private borderWidthSection () =
     let description =
       Helpers.bodyText
-        "Border width controls thickness. Apply to all sides or target specific edges. All examples include BorderStyle.solid and a color for visibility."
+        "Border width controls thickness. Apply to all sides or target specific edges. All examples use a solid style and a color for visibility."
 
     let widthDemo (label: string) (fsharpLabel: string) (widthAttr: Attr) =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
         div [
           widthAttr
-          BorderStyle.solid
+          Attr.Style "border-style" "solid"
           BorderColor.primary
           BorderRadius.All.small
           SurfaceColor.toBackgroundColor SurfaceColor.Background
@@ -646,7 +634,7 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
 // All sides
 div [
     BorderWidth.All.two
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.primary
 ] [
     text "2px border on all sides"
@@ -655,7 +643,7 @@ div [
 // Directional: bottom border only
 div [
     BorderWidth.Bottom.four
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.error
 ] [
     text "4px bottom border"
@@ -664,7 +652,7 @@ div [
 // Combine directions: horizontal only
 div [
     BorderWidth.Horizontal.one
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.info
 ] [
     text "1px left and right"
@@ -701,37 +689,37 @@ div [
       Grid.create (
         [
           GridItem.create (
-            styleDemo "Solid" BorderStyle.solid,
+            styleDemo "Solid" (Attr.Style "border-style" "solid"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
           GridItem.create (
-            styleDemo "Dashed" BorderStyle.dashed,
+            styleDemo "Dashed" (Attr.Style "border-style" "dashed"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
           GridItem.create (
-            styleDemo "Dotted" BorderStyle.dotted,
+            styleDemo "Dotted" (Attr.Style "border-style" "dotted"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
           GridItem.create (
-            styleDemo "Double" BorderStyle.double,
+            styleDemo "Double" (Attr.Style "border-style" "double"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
           GridItem.create (
-            styleDemo "Hidden" BorderStyle.hidden,
+            styleDemo "Hidden" (Attr.Style "border-style" "hidden"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
           GridItem.create (
-            styleDemo "None" BorderStyle.none,
+            styleDemo "None" (Attr.Style "border-style" "none"),
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
@@ -745,20 +733,20 @@ div [
 
 
 // Each style applies the border-style CSS property
-div [ BorderWidth.All.two; BorderStyle.solid; BorderColor.primary ] [
+div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.primary ] [
     text "Solid"
 ]
 
-div [ BorderWidth.All.two; BorderStyle.dashed; BorderColor.info ] [
+div [ BorderWidth.All.two; Attr.Style "border-style" "dashed"; BorderColor.info ] [
     text "Dashed"
 ]
 
-div [ BorderWidth.All.two; BorderStyle.dotted; BorderColor.warning ] [
+div [ BorderWidth.All.two; Attr.Style "border-style" "dotted"; BorderColor.warning ] [
     text "Dotted"
 ]
 
 // Double requires a thicker width to be visible
-div [ BorderWidth.All.four; BorderStyle.double; BorderColor.error ] [
+div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.error ] [
     text "Double"
 ]"""
 
@@ -776,7 +764,7 @@ div [ BorderWidth.All.four; BorderStyle.double; BorderColor.error ] [
     let colorDemo (label: string) (colorAttr: Attr) =
       div [
         BorderWidth.All.two
-        BorderStyle.solid
+        Attr.Style "border-style" "solid"
         colorAttr
         BorderRadius.All.small
         SurfaceColor.toBackgroundColor SurfaceColor.Background
@@ -847,16 +835,16 @@ div [ BorderWidth.All.four; BorderStyle.double; BorderColor.error ] [
 
 
 // Palette colors
-div [ BorderWidth.All.two; BorderStyle.solid; BorderColor.primary ] [
+div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.primary ] [
     text "Primary border"
 ]
 
-div [ BorderWidth.All.two; BorderStyle.solid; BorderColor.error ] [
+div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.error ] [
     text "Error border"
 ]
 
 // Lines default — the standard divider color
-div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
+div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesDefault ] [
     text "Subtle border matching dividers"
 ]"""
 
@@ -884,12 +872,20 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
           Button.primary (
             text "Dashed border",
             onClick = ignore,
-            attrs = [ Button.Variant.outlined; BorderStyle.dashed; BorderWidth.All.two ]
+            attrs = [
+              Button.Variant.outlined
+              Attr.Style "border-style" "dashed"
+              BorderWidth.All.two
+            ]
           )
           Button.error (
             text "Dotted border",
             onClick = ignore,
-            attrs = [ Button.Variant.outlined; BorderStyle.dotted; BorderWidth.All.two ]
+            attrs = [
+              Button.Variant.outlined
+              Attr.Style "border-style" "dotted"
+              BorderWidth.All.two
+            ]
           )
           Button.success (
             text "Thick border",
@@ -912,7 +908,7 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
               Alert.Color.info
               Alert.Variant.outlined
               BorderWidth.Left.four
-              BorderStyle.solid
+              Attr.Style "border-style" "solid"
               BorderColor.info
             ]
           )
@@ -921,7 +917,7 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
             attrs = [
               Alert.Color.warning
               Alert.Variant.outlined
-              BorderStyle.dashed
+              Attr.Style "border-style" "dashed"
               BorderWidth.All.two
             ]
           )
@@ -937,11 +933,19 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
         ] [
           Chip.create (
             text "Dashed chip",
-            attrs = [ Chip.Variant.outlined; Chip.Color.primary; BorderStyle.dashed ]
+            attrs = [
+              Chip.Variant.outlined
+              Chip.Color.primary
+              Attr.Style "border-style" "dashed"
+            ]
           )
           Chip.create (
             text "Dotted chip",
-            attrs = [ Chip.Variant.outlined; Chip.Color.secondary; BorderStyle.dotted ]
+            attrs = [
+              Chip.Variant.outlined
+              Chip.Color.secondary
+              Attr.Style "border-style" "dotted"
+            ]
           )
           Chip.create (
             text "Thick chip",
@@ -957,7 +961,7 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
               div [
                 SurfaceColor.toBackgroundColor SurfaceColor.Surface
                 BorderWidth.All.one
-                BorderStyle.solid
+                Attr.Style "border-style" "solid"
                 BorderColor.linesDefault
                 BorderRadius.All.medium
                 Padding.All.small
@@ -974,7 +978,7 @@ div [ BorderWidth.All.one; BorderStyle.solid; BorderColor.linesDefault ] [
               div [
                 SurfaceColor.toBackgroundColor SurfaceColor.Surface
                 BorderWidth.Left.four
-                BorderStyle.solid
+                Attr.Style "border-style" "solid"
                 BorderColor.primary
                 BorderRadius.All.small
                 Padding.All.small
@@ -1002,7 +1006,7 @@ Button.primary(
     onClick = ignore,
     attrs = [
         Button.Variant.outlined
-        BorderStyle.dashed
+        Attr.Style "border-style" "dashed"
         BorderWidth.All.two
     ]
 )
@@ -1014,7 +1018,7 @@ Alert.create(
         Alert.Color.info
         Alert.Variant.outlined
         BorderWidth.Left.four
-        BorderStyle.solid
+        Attr.Style "border-style" "solid"
         BorderColor.info
     ]
 )
@@ -1023,7 +1027,7 @@ Alert.create(
 div [
     SurfaceColor.toBackgroundColor SurfaceColor.Surface
     BorderWidth.All.one
-    BorderStyle.solid
+    Attr.Style "border-style" "solid"
     BorderColor.linesDefault
     BorderRadius.All.medium
     Padding.All.small

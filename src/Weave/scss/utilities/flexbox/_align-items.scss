@@ -1,23 +1,23 @@
 @mixin align-items ($breakpoint) {
-  .align-#{$breakpoint}start {
-    align-items: flex-start !important;
+  .weave-align-#{$breakpoint}start {
+    align-items: flex-start;
   }
 
-  .align-#{$breakpoint}end {
-    align-items: flex-end !important;
+  .weave-align-#{$breakpoint}end {
+    align-items: flex-end;
   }
 
-  .align-#{$breakpoint}center {
-    align-items: center !important;
+  .weave-align-#{$breakpoint}center {
+    align-items: center;
   }
 
-  .align-#{$breakpoint}baseline {
-    align-items: baseline !important;
+  .weave-align-#{$breakpoint}baseline {
+    align-items: baseline;
   }
 
-  .align-#{$breakpoint}stretch {
-    align-items: stretch !important;
+  .weave-align-#{$breakpoint}stretch {
+    align-items: stretch;
   }
 }
 
-@include align-items("");
+  @include align-items("");

@@ -2,7 +2,7 @@ $count: 1;
 $value: 0;
 
 @while $count < 12 {
-  .z-#{$value} {
+  .weave-z-#{$value} {
     z-index: $value;
   }
 
@@ -10,6 +10,6 @@ $value: 0;
   $value: $value + 10;
 }
 
-.z-auto {
+.weave-z-auto {
   z-index: auto;
 }

@@ -1,19 +1,19 @@
 @mixin flex($breakpoint) {
-  .flex-#{$breakpoint}1 {
-    flex: 1 1 0% !important;
+  .weave-flex-#{$breakpoint}1 {
+    flex: 1 1 0%;
   }
 
-  .flex-#{$breakpoint}auto {
-    flex: 1 1 auto !important;
+  .weave-flex-#{$breakpoint}auto {
+    flex: 1 1 auto;
   }
 
-  .flex-#{$breakpoint}initial {
-    flex: 0 1 auto !important;
+  .weave-flex-#{$breakpoint}initial {
+    flex: 0 1 auto;
   }
 
-  .flex-#{$breakpoint}none {
-    flex: none !important;
+  .weave-flex-#{$breakpoint}none {
+    flex: none;
   }
 }
 
-@include flex("");
+  @include flex("");

@@ -49,6 +49,9 @@ module ExamplesRouter =
     | TransitionExamples
     | AnimationExamples
     | BorderExamples
+    | DisplayExamples
+    | ElevationExamples
+    | FlexboxExamples
     | ThemingExamples
 
   let private pageToString page =
@@ -87,6 +90,9 @@ module ExamplesRouter =
     | TransitionExamples -> "Transitions"
     | AnimationExamples -> "Animations"
     | BorderExamples -> "Borders"
+    | DisplayExamples -> "Display"
+    | ElevationExamples -> "Elevation"
+    | FlexboxExamples -> "Flexbox"
     | ThemingExamples -> "Theming"
 
   let private stringToPage s =
@@ -125,6 +131,9 @@ module ExamplesRouter =
     | "Transitions" -> Some TransitionExamples
     | "Animations" -> Some AnimationExamples
     | "Borders" -> Some BorderExamples
+    | "Display" -> Some DisplayExamples
+    | "Elevation" -> Some ElevationExamples
+    | "Flexbox" -> Some FlexboxExamples
     | "Theming" -> Some ThemingExamples
     | _ -> None
 
@@ -164,6 +173,9 @@ module ExamplesRouter =
     | TransitionExamples -> "#transitions"
     | AnimationExamples -> "#animations"
     | BorderExamples -> "#borders"
+    | DisplayExamples -> "#display"
+    | ElevationExamples -> "#elevation"
+    | FlexboxExamples -> "#flexbox"
     | ThemingExamples -> "#theming"
 
   let private hashToPage hash =
@@ -203,6 +215,9 @@ module ExamplesRouter =
     | "#transitions" -> Some TransitionExamples
     | "#animations" -> Some AnimationExamples
     | "#borders" -> Some BorderExamples
+    | "#display" -> Some DisplayExamples
+    | "#elevation" -> Some ElevationExamples
+    | "#flexbox" -> Some FlexboxExamples
     | "#theming" -> Some ThemingExamples
     | _ -> None
 
@@ -1396,6 +1411,134 @@ module ExamplesRouter =
           Attr.Style "border-radius" "50%"
         ] []
       ]
+    | DisplayExamples ->
+      cp [
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "10px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "14px"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "14px"
+          Attr.Style "opacity" "0.5"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "54%"
+          Attr.Style "height" "14px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "50px"
+          Attr.Style "left" "54%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "14px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "70px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "40%"
+          Attr.Style "height" "10px"
+        ] []
+      ]
+    | ElevationExamples ->
+      cp [
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "12px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "54%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-radius" "4px"
+          Attr.Style "box-shadow" "0 1px 3px rgba(0,0,0,0.2)"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "12px"
+          Attr.Style "left" "54%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-radius" "4px"
+          Attr.Style "box-shadow" "0 4px 12px rgba(0,0,0,0.3)"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "52px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "54%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-radius" "4px"
+          Attr.Style "box-shadow" "0 8px 24px rgba(0,0,0,0.4)"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "52px"
+          Attr.Style "left" "54%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "30px"
+          Attr.Style "border-radius" "4px"
+          Attr.Style "box-shadow" "0 12px 36px rgba(0,0,0,0.5)"
+        ] []
+      ]
+    | FlexboxExamples ->
+      cp [
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "26%"
+          Attr.Style "height" "20px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "38%"
+          Attr.Style "width" "26%"
+          Attr.Style "height" "20px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "68%"
+          Attr.Style "width" "26%"
+          Attr.Style "height" "20px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "46px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "42%"
+          Attr.Style "height" "16px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "46px"
+          Attr.Style "right" "8%"
+          Attr.Style "width" "42%"
+          Attr.Style "height" "16px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "68px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "16px"
+        ] []
+      ]
     | ThemingExamples ->
       cp [
         div [
@@ -1539,6 +1682,9 @@ module ExamplesRouter =
             "Spacing", SpacingExamples
             "Opacity", OpacityExamples
             "Borders", BorderExamples
+            "Display", DisplayExamples
+            "Elevation", ElevationExamples
+            "Flexbox", FlexboxExamples
             "Transitions", TransitionExamples
             "Animations", AnimationExamples
             "Theming", ThemingExamples
@@ -1579,6 +1725,9 @@ module ExamplesRouter =
     | TransitionExamples -> TransitionExamples.render ()
     | AnimationExamples -> AnimationExamples.render ()
     | BorderExamples -> BorderExamples.render ()
+    | DisplayExamples -> DisplayExamples.render ()
+    | ElevationExamples -> ElevationExamples.render ()
+    | FlexboxExamples -> FlexboxExamples.render ()
     | ThemingExamples -> ThemingExamples.render ()
 
   let private githubSvg =
@@ -1895,6 +2044,9 @@ module ExamplesRouter =
           navLeafItem "Spacing"
           navLeafItem "Opacity"
           navLeafItem "Borders"
+          navLeafItem "Display"
+          navLeafItem "Elevation"
+          navLeafItem "Flexbox"
           navLeafItem "Transitions"
           navLeafItem "Animations"
           navLeafItem "Theming"

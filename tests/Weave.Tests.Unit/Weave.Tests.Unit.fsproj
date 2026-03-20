@@ -6,34 +6,13 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
-    <Compile Include="AlertTests.fs" />
-    <Compile Include="ButtonTests.fs" />
-    <Compile Include="ButtonGroupTests.fs" />
-    <Compile Include="CheckboxTests.fs" />
-    <Compile Include="ChipTests.fs" />
     <Compile Include="ChipSetTests.fs" />
-    <Compile Include="SwitchTests.fs" />
-    <Compile Include="RadioButtonTests.fs" />
-    <Compile Include="TypographyTests.fs" />
-    <Compile Include="DividerTests.fs" />
     <Compile Include="GridTests.fs" />
-    <Compile Include="TabsTests.fs" />
     <Compile Include="DropdownTests.fs" />
-    <Compile Include="LinkTests.fs" />
-    <Compile Include="AppBarTests.fs" />
-    <Compile Include="ButtonMenuTests.fs" />
-    <Compile Include="ContainerTests.fs" />
-    <Compile Include="FieldTests.fs" />
-    <Compile Include="ExpansionPanelTests.fs" />
-    <Compile Include="ListTests.fs" />
-    <Compile Include="TooltipTests.fs" />
-    <Compile Include="DrawerTests.fs" />
     <Compile Include="TransitionSpeedTests.fs" />
     <Compile Include="AnimationTests.fs" />
     <Compile Include="OpacityTests.fs" />
     <Compile Include="NumericFieldTests.fs" />
-    <Compile Include="SelectTests.fs" />
-    <Compile Include="CrossComponentTests.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

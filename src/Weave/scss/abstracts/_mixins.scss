@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 // density-spacing($compact-base, $step)
 //
 // Returns a calc() expression for a single density-responsive spacing value.

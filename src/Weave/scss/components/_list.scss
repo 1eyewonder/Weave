@@ -164,9 +164,7 @@
   border: 2px solid var(--palette-action-default);
   border-radius: var(--default-borderradius);
   flex-shrink: 0;
-  transition:
-    background-color var(--weave-duration-short) $ease-standard,
-    border-color var(--weave-duration-short) $ease-standard;
+  @include transition((background-color, border-color), short);
   box-sizing: border-box;
   position: relative;
 }

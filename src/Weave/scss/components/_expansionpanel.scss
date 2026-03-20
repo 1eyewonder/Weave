@@ -45,7 +45,7 @@
 
   .weave-expansion-panel--expanded {
     .weave-expansion-panel__header {
-      transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
+      @include transition((color, background));
     }
 
     .weave-expansion-panel__content-wrapper {
@@ -53,7 +53,7 @@
     }
 
     .weave-expansion-panel__header--filled {
-      transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
+      @include transition((color, background));
       background-color: var(--palette-background);
     }
     @each $color in $palette-colors {
@@ -65,7 +65,7 @@
 
   // Hover highlights regardless of expanded/collapsed state
   .weave-expansion-panel__header--highlight {
-    transition: color var(--weave-duration-standard) $ease-standard, background var(--weave-duration-standard) $ease-standard;
+    @include transition((color, background));
     &:hover {
       color: var(--palette-action-default-hover);
     }
@@ -103,7 +103,7 @@
     font-size: var(--typography-body1-size);
     font-weight: var(--typography-body1-weight);
     line-height: var(--typography-body1-lineheight);
-    transition: margin var(--weave-duration-standard) $ease-standard, padding var(--weave-duration-standard) $ease-standard;
+    @include transition((margin, padding));
   }
 
   .weave-expansion-panel__content--with-gutters {

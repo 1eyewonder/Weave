@@ -81,7 +81,7 @@ $dot-size: 10px;
   border: 2px solid var(--radio-brand-color, var(--palette-action-default));
   background: var(--palette-background);
   cursor: pointer;
-  transition: background var(--weave-duration-standard) $ease-standard, border-color var(--weave-duration-standard) $ease-standard;
+  @include transition((background, border-color));
   position: relative;
 }
 

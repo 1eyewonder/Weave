@@ -59,7 +59,7 @@
   font-size: 18px;
   line-height: 1;
   opacity: 0;
-  transition: opacity var(--weave-duration-short) $ease-standard, background-color var(--weave-duration-short) $ease-standard;
+  @include transition((opacity, background-color), short);
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -115,18 +115,14 @@
   transform: scaleY(0.8);
   transform-origin: top center;
   pointer-events: none;
-  transition:
-    opacity var(--weave-duration-standard) $ease-standard,
-    transform var(--weave-duration-standard) $ease-standard;
+  @include transition((opacity, transform));
 }
 
 .weave-select--open .weave-select__popover {
   opacity: 1;
   transform: scaleY(1);
   pointer-events: auto;
-  transition:
-    opacity var(--weave-duration-short) $ease-standard,
-    transform var(--weave-duration-short) $ease-standard;
+  @include transition((opacity, transform), short);
 }
 
 .weave-select__search {
@@ -283,9 +279,7 @@
   flex-shrink: 0;
   box-sizing: border-box;
   position: relative;
-  transition:
-    background-color var(--weave-duration-short) $ease-standard,
-    border-color var(--weave-duration-short) $ease-standard;
+  @include transition((background-color, border-color), short);
 }
 
 .weave-select__item-checkbox--checked {

@@ -96,9 +96,7 @@
   font-weight: var(--typography-button-weight);
   letter-spacing: var(--typography-button-letterspacing);
   text-transform: var(--typography-button-text-transform);
-  transition:
-    color var(--weave-duration-standard) $ease-standard,
-    background-color var(--weave-duration-standard) $ease-standard;
+  @include transition((color, background-color));
 
   .weave-tabs--top &,
   .weave-tabs--bottom & {
@@ -147,11 +145,7 @@
 
 .weave-tabs__indicator {
   position: absolute;
-  transition:
-    left var(--weave-duration-long) $ease-standard,
-    top var(--weave-duration-long) $ease-standard,
-    width var(--weave-duration-long) $ease-standard,
-    height var(--weave-duration-long) $ease-standard;
+  @include transition((left, top, width, height), long);
   pointer-events: none;
   z-index: 1;
 

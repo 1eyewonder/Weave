@@ -101,8 +101,7 @@
   width: 100%;
   height: 100%;
   opacity: var(--weave-alpha-medium);
-  transition: opacity var(--weave-duration-short) $ease-standard 0ms,
-    background-color var(--weave-duration-short) $ease-standard 0ms;
+  @include transition((opacity, background-color), short);
   border-radius: 9px;
   background-color: var(--switch-brand-color, var(--palette-action-default));
 }
@@ -117,7 +116,7 @@
   top: 50%;
   left: 0;
   transform: translate(0, -50%);
-  transition: left var(--weave-duration-standard), background var(--weave-duration-standard);
+  @include transition((left, background));
   z-index: 1;
 }
 

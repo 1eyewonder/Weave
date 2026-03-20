@@ -1,4 +1,5 @@
 @use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
 
 .weave-button-menu {
   position: relative;
@@ -7,13 +8,18 @@
   justify-content: center;
 }
 
-// Trigger button icon rotation when no openIcon is provided
+// Trigger button icon rotation when no openIcon is provided.
+// Transition and rotation are scoped to > * (the inner label/icon) so the
+// button itself never pivots — only its content does.
 .weave-button-menu__trigger {
-  transition: transform var(--weave-duration-long) $ease-standard;
   z-index: 1;
 }
 
-.weave-button-menu__trigger--rotated {
+.weave-button-menu__trigger > * {
+  transition: transform var(--weave-duration-long) $ease-standard;
+}
+
+.weave-button-menu__trigger--rotated > * {
   transform: rotate(45deg);
 }
 
@@ -29,9 +35,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition:
-    opacity var(--weave-duration-long) $ease-standard,
-    transform var(--weave-duration-long) $ease-standard;
+  @include transition((opacity, transform), long);
   font-size: inherit;
 }
 
@@ -103,9 +107,7 @@
 .weave-button-menu__item {
   opacity: 0;
   transform: scale(0.4);
-  transition:
-    opacity var(--weave-duration-standard) $ease-standard,
-    transform var(--weave-duration-standard) $ease-standard;
+  @include transition((opacity, transform));
   pointer-events: none;
 }
 

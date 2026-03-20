@@ -16,11 +16,7 @@
   cursor: default;
   user-select: none;
   box-sizing: border-box;
-  transition:
-    background-color var(--weave-duration-medium) $ease-standard 0ms,
-    border-color var(--weave-duration-medium) $ease-standard 0ms,
-    box-shadow var(--weave-duration-medium) $ease-standard 0ms,
-    opacity var(--weave-duration-medium) $ease-standard 0ms;
+  @include transition((background-color, border-color, box-shadow, opacity), medium);
   border: 1px solid transparent;
   color: var(--palette-text-primary);
 

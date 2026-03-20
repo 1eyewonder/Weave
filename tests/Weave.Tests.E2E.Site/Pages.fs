@@ -237,7 +237,7 @@ module Pages =
           DialogTitle.create (text "Dialog Title"),
           DialogContent.create (
             div [] [
-              Body1.div ("Dialog content goes here.")
+              div [ Typography.body1 ] [ text "Dialog content goes here." ]
               div [] [
                 Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
               ]
@@ -253,7 +253,7 @@ module Pages =
       DialogTitle.create (text "Force Dialog Title"),
       DialogContent.create (
         div [] [
-          Body1.div ("You must complete this action.")
+          div [ Typography.body1 ] [ text "You must complete this action." ]
           div [] [
             Button.create (text "Confirm", (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
@@ -278,7 +278,7 @@ module Pages =
             DialogTitle.create (text "Triggered Dialog"),
             DialogContent.create (
               div [] [
-                Body1.div ("Dialog opened by button.")
+                div [ Typography.body1 ] [ text "Dialog opened by button." ]
                 div [] [
                   Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
                 ]
@@ -339,7 +339,7 @@ module Pages =
             expanded1,
             icon = ExpansionPanelHeader.defaultIcon expanded1
           ),
-          ExpansionPanelContent.create (Body1.div ("Expanded content")),
+          ExpansionPanelContent.create (div [ Typography.body1 ] [ text "Expanded content" ]),
           expanded = expanded1
         )
         ExpansionPanel.create (
@@ -348,7 +348,7 @@ module Pages =
             expanded2,
             icon = ExpansionPanelHeader.defaultIcon expanded2
           ),
-          ExpansionPanelContent.create (Body1.div ("Collapsed content")),
+          ExpansionPanelContent.create (div [ Typography.body1 ] [ text "Collapsed content" ]),
           expanded = expanded2
         )
         ExpansionPanel.create (
@@ -358,7 +358,7 @@ module Pages =
             icon = ExpansionPanelHeader.defaultIcon expanded3,
             attrs = [ ExpansionPanel.FocusColor.error ]
           ),
-          ExpansionPanelContent.create (Body1.div ("Focus color content")),
+          ExpansionPanelContent.create (div [ Typography.body1 ] [ text "Focus color content" ]),
           expanded = expanded3
         )
       ]
@@ -381,7 +381,7 @@ module Pages =
     let isOpen = Var.Create true
 
     DrawerContainer.create (
-      mainContent = div [] [ Body1.div ("Main content area") ],
+      mainContent = div [] [ div [ Typography.body1 ] [ text "Main content area" ] ],
       leftDrawer =
         Drawer.create (
           div [] [

@@ -30,7 +30,7 @@ module TooltipExamples =
                 onClick = (fun () -> ()),
                 attrs = [ Button.Variant.outlined; Button.Width.full ]
               ),
-            tooltipContent = Body1.div (sprintf "Tooltip on %A" direction),
+            tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
             direction = direction
           ),
         xs = Grid.Width.create 12,
@@ -64,7 +64,7 @@ let tooltipBtn direction =
                   Button.Width.full
               ]
           ),
-        tooltipContent = Body1.div(sprintf "Tooltip on %A" direction),
+        tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
         direction = direction // see here
     )
 
@@ -104,7 +104,7 @@ tooltipBtn Tooltip.Direction.Right
               onClick = (fun () -> ()),
               attrs = [ Button.Variant.filled; btnColor; Button.Width.full ]
             ),
-            Body1.div (sprintf "%s tooltip" displayText),
+            div [ Typography.body1 ] [ text (sprintf "%s tooltip" displayText) ],
             tooltipAttrs = [ tipColor ],
             wrapperAttrs = [ Margin.All.extraSmall ]
           )
@@ -135,7 +135,7 @@ for (displayText, btnColor, tipColor) in colors do
                 Button.Width.full
             ]
         ),
-        Body1.div(sprintf "%s tooltip" displayText),
+        div [ Typography.body1 ] [ text (sprintf "%s tooltip" displayText) ],
         tooltipAttrs = [ tipColor ] // see here
     )
     """
@@ -156,20 +156,20 @@ for (displayText, btnColor, tipColor) in colors do
         [
           Tooltip.create (
             Button.primary (text "Hover Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
-            Body1.div ("Appears on hover"),
+            div [ Typography.body1 ] [ text "Appears on hover" ],
             activationEvents = [ Tooltip.Activation.Hover ]
           )
-          Caption.div ("Hover activation", attrs = [ Margin.Top.small ])
+          div [ Typography.caption; Margin.Top.small ] [ text "Hover activation" ]
         ]
         |> gridItem
 
         [
           Tooltip.create (
             Button.secondary (text "Click Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
-            Body1.div ("Appears on click"),
+            div [ Typography.body1 ] [ text "Appears on click" ],
             activationEvents = [ Tooltip.Activation.Click ]
           )
-          Caption.div ("Click activation", attrs = [ Margin.Top.small ])
+          div [ Typography.caption; Margin.Top.small ] [ text "Click activation" ]
         ]
         |> gridItem
       ]
@@ -187,7 +187,7 @@ Tooltip.create(
             Button.Variant.outlined
         ]
     ),
-    Body1.div("Appears on hover"),
+    div [ Typography.body1 ] [ text "Appears on hover" ],
     activationEvents = [ Tooltip.Activation.Hover ] // see here
 )
 
@@ -199,7 +199,7 @@ Tooltip.create(
             Button.Variant.outlined
         ]
     ),
-    Body1.div("Appears on click"),
+    div [ Typography.body1 ] [ text "Appears on click" ],
     activationEvents = [ Tooltip.Activation.Click ] // see here
 )
     """
@@ -221,10 +221,10 @@ Tooltip.create(
         div [ Attr.Style "text-align" "center" ] [
           Tooltip.create (
             Button.primary (text "With Arrow", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ]),
-            Body1.div ("I have an arrow pointing"),
+            div [ Typography.body1 ] [ text "I have an arrow pointing" ],
             showArrow = true
           )
-          Caption.div ("showArrow = true (default)", attrs = [ Margin.Top.small ])
+          div [ Typography.caption; Margin.Top.small ] [ text "showArrow = true (default)" ]
         ]
 
         div [ Attr.Style "text-align" "center" ] [
@@ -234,10 +234,10 @@ Tooltip.create(
               onClick = (fun () -> ()),
               attrs = [ Button.Variant.filled ]
             ),
-            Body1.div ("No arrow here"),
+            div [ Typography.body1 ] [ text "No arrow here" ],
             showArrow = false
           )
-          Caption.div ("showArrow = false", attrs = [ Margin.Top.small ])
+          div [ Typography.caption; Margin.Top.small ] [ text "showArrow = false" ]
         ]
       ]
 
@@ -253,7 +253,7 @@ Tooltip.create(
             Button.Variant.filled
         ]
     ),
-    Body1.div("I have an arrow pointing"),
+    div [ Typography.body1 ] [ text "I have an arrow pointing" ],
     showArrow = true // see here (default)
 )
 
@@ -265,7 +265,7 @@ Tooltip.create(
             Button.Variant.filled
         ]
     ),
-    Body1.div("No arrow here"),
+    div [ Typography.body1 ] [ text "No arrow here" ],
     showArrow = false // see here
 )
     """
@@ -289,11 +289,10 @@ Tooltip.create(
             attrs = [ Button.Variant.filled ]
           ),
           div [ Attr.Style "padding" "4px" ] [
-            Body2.div (
-              "Custom Tooltip",
-              attrs = [ Attr.Style "font-weight" "bold"; Margin.Bottom.extraSmall ]
-            )
-            Caption.div ("You can use Doc elements for rich content")
+            div [ Typography.body2; Attr.Style "font-weight" "bold"; Margin.Bottom.extraSmall ] [
+              text "Custom Tooltip"
+            ]
+            div [ Typography.caption ] [ text "You can use Doc elements for rich content" ]
           ]
         )
       ]
@@ -311,14 +310,12 @@ Tooltip.create(
         ]
     ),
     div [ Attr.Style "padding" "4px" ] [ // see here - custom Doc content
-        Body2.div(
-            "Custom Tooltip",
-            attrs = [
-                Attr.Style "font-weight" "bold"
-                Margin.Bottom.extraSmall
-            ]
-        )
-        Caption.div("You can use Doc elements for rich content")
+        div [ Typography.body2
+              Attr.Style "font-weight" "bold"
+              Margin.Bottom.extraSmall ] [
+            text "Custom Tooltip"
+        ]
+        div [ Typography.caption ] [ text "You can use Doc elements for rich content" ]
     ]
 )
     """
@@ -331,29 +328,31 @@ Tooltip.create(
 
     let content =
       div [] [
-        Body1.span ("Hover over ")
+        span [ Typography.body1 ] [ text "Hover over " ]
 
         Tooltip.create (
-          Body1.span (
-            text "this text",
-            attrs = [ Typography.Color.primary; Attr.Style "text-decoration" "underline" ]
-          ),
-          Body1.span (text "This is a tooltip on inline text")
+          span [
+            Typography.body1
+            Typography.Color.primary
+            Attr.Style "text-decoration" "underline"
+          ] [ text "this text" ],
+          span [ Typography.body1 ] [ text "This is a tooltip on inline text" ]
         )
 
-        Body1.span (" to see a tooltip. You can also hover over ")
+        span [ Typography.body1 ] [ text " to see a tooltip. You can also hover over " ]
 
         Tooltip.create (
-          Body1.span (
-            text "this other text",
-            attrs = [ Typography.Color.secondary; Attr.Style "text-decoration" "underline" ]
-          ),
-          Body1.span (text "Another tooltip example"),
+          span [
+            Typography.body1
+            Typography.Color.secondary
+            Attr.Style "text-decoration" "underline"
+          ] [ text "this other text" ],
+          span [ Typography.body1 ] [ text "Another tooltip example" ],
           direction = Tooltip.Direction.Bottom,
           tooltipAttrs = [ Tooltip.Color.secondary ]
         )
 
-        Body1.span (" for more information.")
+        span [ Typography.body1 ] [ text " for more information." ]
       ]
 
     let code =
@@ -361,37 +360,33 @@ Tooltip.create(
 
 open WebSharper.UI
 
-Body1.span("Hover over ")
+span [ Typography.body1 ] [ text "Hover over " ]
 
 // see here
 Tooltip.create(
-    Body1.span(
-        text "this text",
-        attrs = [
-            Typography.Color.primary
-            Attr.Style "text-decoration" "underline"
-        ]
-    ),
-    Body1.span(text "This is a tooltip on inline text")
+    span [
+        Typography.body1
+        Typography.Color.primary
+        Attr.Style "text-decoration" "underline"
+    ] [ text "this text" ],
+    span [ Typography.body1 ] [ text "This is a tooltip on inline text" ]
 )
 
-Body1.span(" to see a tooltip. You can also hover over ")
+span [ Typography.body1 ] [ text " to see a tooltip. You can also hover over " ]
 
 // see here
 Tooltip.create(
-    Body1.span(
-        text "this other text",
-        attrs = [
-            Typography.Color.secondary
-            Attr.Style "text-decoration" "underline"
-        ]
-    ),
-    Body1.span(text "Another tooltip example"),
+    span [
+        Typography.body1
+        Typography.Color.secondary
+        Attr.Style "text-decoration" "underline"
+    ] [ text "this other text" ],
+    span [ Typography.body1 ] [ text "Another tooltip example" ],
     direction = Tooltip.Direction.Bottom,
     tooltipAttrs = [ Tooltip.Color.secondary ]
 )
 
-Body1.span(" for more information.")"""
+span [ Typography.body1 ] [ text " for more information." ]"""
 
     Helpers.codeSampleSection "Text Tooltips" description content code
 
@@ -410,7 +405,7 @@ Body1.span(" for more information.")"""
               Margin.All.extraSmall
             ]
           ),
-          Body1.span (text "Success!"),
+          span [ Typography.body1 ] [ text "Success!" ],
           tooltipAttrs = [ Tooltip.Color.success ]
         )
 
@@ -423,7 +418,7 @@ Body1.span(" for more information.")"""
               Margin.All.extraSmall
             ]
           ),
-          Body1.span (text "Warning: Be careful!"),
+          span [ Typography.body1 ] [ text "Warning: Be careful!" ],
           tooltipAttrs = [ Tooltip.Color.warning ]
         )
 
@@ -436,7 +431,7 @@ Body1.span(" for more information.")"""
               Margin.All.extraSmall
             ]
           ),
-          Body1.span (text "Error!!!!"),
+          span [ Typography.body1 ] [ text "Error!!!!" ],
           tooltipAttrs = [ Tooltip.Color.error ]
         )
       ]
@@ -455,7 +450,7 @@ Tooltip.create(
             Margin.All.extraSmall
         ]
     ),
-    Body1.span(text "Success!"),
+    span [ Typography.body1 ] [ text "Success!" ],
     tooltipAttrs = [ Tooltip.Color.success ]
 )
 
@@ -468,7 +463,7 @@ Tooltip.create(
             Margin.All.extraSmall
         ]
     ),
-    Body1.span(text "Warning: Be careful!"),
+    span [ Typography.body1 ] [ text "Warning: Be careful!" ],
     tooltipAttrs = [ Tooltip.Color.warning ]
 )
 
@@ -481,7 +476,7 @@ Tooltip.create(
             Margin.All.extraSmall
         ]
     ),
-    Body1.span(text "Error!!!!"),
+    span [ Typography.body1 ] [ text "Error!!!!" ],
     tooltipAttrs = [ Tooltip.Color.error ]
 )"""
 
@@ -491,10 +486,9 @@ Tooltip.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Tooltip"
-        Body1.div (
-          "Tooltips display informative text when users hover over, focus on, or tap an element.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Tooltips display informative text when users hover over, focus on, or tap an element."
+        ]
 
         Helpers.divider ()
         directionExamples ()

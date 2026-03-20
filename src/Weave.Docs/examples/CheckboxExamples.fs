@@ -255,7 +255,7 @@ Checkbox.create(
     let content =
       let col (label: string) densityAttr =
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           Checkbox.create (Var.Create false, View.Const "Unchecked", attrs = [ Checkbox.Color.primary ])
           Checkbox.create (Var.Create true, View.Const "Checked", attrs = [ Checkbox.Color.primary ])
         ]
@@ -308,10 +308,10 @@ Checkbox.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Checkbox"
-        Body1.div (
-          "The Checkbox component allows users to select one or more options from a set. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "The Checkbox component allows users to select one or more options from a set. It supports different sizes, colors, and can be disabled."
+        ]
 
         Helpers.divider ()
         basicCheckboxExample ()

@@ -266,7 +266,7 @@ visible.View
     let content =
       let col (label: string) densityAttr =
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           Alert.create (
             text "This is an alert message.",
             attrs = [ Alert.Variant.standard; Alert.Color.info ]

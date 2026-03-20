@@ -1395,20 +1395,18 @@ module ExamplesRouter =
               Attr.Style "object-fit" "contain"
               Margin.Bottom.small
             ] []
-            H2.div ("Weave", attrs = [ Margin.Bottom.extraSmall ])
-            Body1.div (
-              "Threading Logic. Fabricating UI.",
-              attrs = [
-                Attr.Style "font-style" "italic"
-                Attr.Style "opacity" "0.7"
-                Margin.Bottom.medium
-              ]
-            )
+            div [ Typography.h2; Margin.Bottom.extraSmall ] [ text "Weave" ]
+            div [
+              Typography.body1
+              Attr.Style "font-style" "italic"
+              Attr.Style "opacity" "0.7"
+              Margin.Bottom.medium
+            ] [ text "Threading Logic. Fabricating UI." ]
           ]
 
           let categorySection (title: string) (items: (string * Page) list) =
             div [ Margin.Bottom.medium ] [
-              H5.div (title, attrs = [ Margin.Bottom.small ])
+              div [ Typography.h5; Margin.Bottom.small ] [ text title ]
               Grid.create (
                 items
                 |> List.map (fun (label, page) ->
@@ -1433,7 +1431,7 @@ module ExamplesRouter =
                         Padding.Horizontal.extraSmall
                         Padding.Vertical.extraSmall
                         Attr.Style "flex-grow" "1"
-                      ] [ Body2.div (label, attrs = [ Typography.Align.center ]) ]
+                      ] [ div [ Typography.body2; Typography.Align.center ] [ text label ] ]
                     ],
                     xs = Grid.Width.create 6,
                     sm = Grid.Width.create 4,
@@ -1461,8 +1459,8 @@ module ExamplesRouter =
                 attrs = [ Attr.Style "font-size" "28px"; Attr.Style "color" "var(--palette-primary)" ]
               )
               div [] [
-                H5.div ("Getting Started")
-                Body2.div ("Learn the basics: installation, setup, and core concepts.")
+                div [ Typography.h5 ] [ text "Getting Started" ]
+                div [ Typography.body2 ] [ text "Learn the basics: installation, setup, and core concepts." ]
               ]
             ]
           ]
@@ -1666,7 +1664,7 @@ module ExamplesRouter =
         | Home -> Doc.Empty
         | _ ->
           div [ Attr.Class "docs-toc" ] [
-            Subtitle2.div ("Contents", attrs = [ Attr.Class "docs-toc__title" ])
+            div [ Typography.subtitle2; Attr.Class "docs-toc__title" ] [ text "Contents" ]
 
             tocSections.View
             |> Doc.BindView(fun sections ->
@@ -1690,7 +1688,7 @@ module ExamplesRouter =
                         |> Option.defaultValue "#home"
 
                       replaceStateHash (pageHash + "/" + id))
-                  ] [ Body2.div (title) ]
+                  ] [ div [ Typography.body2 ] [ text title ] ]
               ])
           ])
 
@@ -1762,7 +1760,7 @@ module ExamplesRouter =
         Attr.Class "weave-nav-leaf"
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
         on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
-      ] [ Body2.div (label) ]
+      ] [ div [ Typography.body2 ] [ text label ] ]
 
     let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) items =
       div [] [
@@ -1777,7 +1775,7 @@ module ExamplesRouter =
           on.click (fun _ _ -> Var.Update isExpanded not)
         ] [
           Icon.create (categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
-          Overline.div (label, attrs = [ Attr.Style "flex" "1"; Attr.Style "opacity" "0.7" ])
+          div [ Typography.overline; Attr.Style "flex" "1"; Attr.Style "opacity" "0.7" ] [ text label ]
           isExpanded.View
           |> Doc.BindView(fun exp ->
             Icon.create (
@@ -1810,7 +1808,7 @@ module ExamplesRouter =
           on.click (fun _ _ -> navigateTo Home)
         ] [
           Icon.create (Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
-          Body2.div ("Home")
+          div [ Typography.body2 ] [ text "Home" ]
         ]
 
         div [
@@ -1829,7 +1827,7 @@ module ExamplesRouter =
           on.click (fun _ _ -> navigateTo GettingStartedExamples)
         ] [
           Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
-          Body2.div ("Getting Started")
+          div [ Typography.body2 ] [ text "Getting Started" ]
         ]
 
         Divider.create (attrs = [ Margin.Vertical.extraSmall ])
@@ -1904,7 +1902,7 @@ module ExamplesRouter =
           Attr.Style "gap" "8px"
           Attr.Style "cursor" "pointer"
           on.click (fun _ _ -> navigateTo Home)
-        ] [ H6.div ("Weave") ]
+        ] [ div [ Typography.h6 ] [ text "Weave" ] ]
 
         Spacer.create ()
 

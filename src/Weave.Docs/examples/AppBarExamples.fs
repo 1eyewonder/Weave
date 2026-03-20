@@ -24,7 +24,7 @@ module AppBarExamples =
           AlignItems.center
           Padding.Horizontal.medium
           Padding.Vertical.small
-        ] [ H6.div ("My Application") ],
+        ] [ div [ Typography.h6 ] [ text "My Application" ] ],
         attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
       )
 
@@ -35,7 +35,7 @@ module AppBarExamples =
         AlignItems.center
         Padding.Horizontal.medium
         Padding.Vertical.small
-    ] [ H6.div("My Application") ],
+    ] [ div [ Typography.h6 ] [ text "My Application" ] ],
     attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
 )
 // Default position is Position.Fixed — sticks to the top of the viewport."""
@@ -55,11 +55,13 @@ module AppBarExamples =
         AlignItems.center
         Padding.Horizontal.medium
         Padding.Vertical.small
-      ] [ H6.div (title) ]
+      ] [ div [ Typography.h6 ] [ text title ] ]
 
     let filler () =
       div [ Padding.All.small ] [
-        yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
+        yield!
+          [ 1..10 ]
+          |> List.map (fun i -> div [ Typography.body2 ] [ text (sprintf "Content line %d" i) ])
       ]
 
     // Static: bar scrolls away with content inside a contained scroll box
@@ -94,7 +96,9 @@ module AppBarExamples =
           attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
         )
         div [ Attr.Style "overflow-y" "auto"; Attr.Style "flex" "1"; Padding.All.small ] [
-          yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
+          yield!
+            [ 1..10 ]
+            |> List.map (fun i -> div [ Typography.body2 ] [ text (sprintf "Content line %d" i) ])
         ]
       ]
 
@@ -106,7 +110,9 @@ module AppBarExamples =
         Attr.Style "height" "180px"
       ] [
         div [ Attr.Style "overflow-y" "auto"; Attr.Style "flex" "1"; Padding.All.small ] [
-          yield! [ 1..10 ] |> List.map (fun i -> Body2.div (sprintf "Content line %d" i))
+          yield!
+            [ 1..10 ]
+            |> List.map (fun i -> div [ Typography.body2 ] [ text (sprintf "Content line %d" i) ])
         ]
         AppBar.create (
           toolbarInner "Position.Bottom",
@@ -116,7 +122,7 @@ module AppBarExamples =
 
     let mkCard (title: string) (desc: string) (preview: Doc) =
       div [ Margin.Bottom.small; Attr.Style "width" "100%" ] [
-        H6.div (title, attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text title ]
         div [ Margin.Bottom.extraSmall ] [ Helpers.bodyText desc ]
         preview
       ]
@@ -188,7 +194,7 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
             onClick = (fun () -> ()),
             attrs = [ Margin.Right.extraSmall ]
           )
-          H6.div ("My Application")
+          div [ Typography.h6 ] [ text "My Application" ]
           Spacer.create ()
           IconButton.create (Icon.create (Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
           IconButton.create (Icon.create (Icon.Social Social.Person), onClick = (fun () -> ()))
@@ -209,7 +215,7 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
           onClick = (fun () -> ()),
           attrs = [ Margin.Right.extraSmall ]
         )
-        H6.div("My Application")
+        div [ Typography.h6 ] [ text "My Application" ]
         Spacer.create()
         IconButton.create(Icon.create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
         IconButton.create(Icon.create(Icon.Social Social.Person), onClick = (fun () -> ()))

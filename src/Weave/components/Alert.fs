@@ -41,7 +41,7 @@ type Alert =
     let closeDoc =
       match onClose with
       | Some callback ->
-        let closeIconDoc = defaultArg closeIcon (H6.span ("\u00D7"))
+        let closeIconDoc = defaultArg closeIcon (span [ Typography.h6 ] [ text "\u00D7" ])
 
         IconButton.create (
           closeIconDoc,

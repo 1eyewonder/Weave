@@ -84,6 +84,22 @@ $typography-types: (
   margin-bottom: 1em;
 }
 
+.weave-typography--weight-light {
+  font-weight: 300;
+}
+
+.weave-typography--weight-regular {
+  font-weight: 400;
+}
+
+.weave-typography--weight-medium {
+  font-weight: 500;
+}
+
+.weave-typography--weight-bold {
+  font-weight: 700;
+}
+
 // Color modifiers
 .weave-typography--primary {
   color: var(--palette-primary);

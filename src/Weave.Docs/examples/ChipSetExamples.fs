@@ -263,7 +263,7 @@ ChipSet.create(
         [
           GridItem.create (
             div [] [
-              Subtitle2.div ("Filled", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Filled" ]
               ChipSet.create (
                 chips ()
                 |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.filled; Chip.Color.primary ]),
@@ -276,7 +276,7 @@ ChipSet.create(
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("Outlined", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Outlined" ]
               ChipSet.create (
                 chips ()
                 |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.outlined; Chip.Color.secondary ]),
@@ -289,7 +289,7 @@ ChipSet.create(
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("Text", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Text" ]
               ChipSet.create (
                 chips ()
                 |> List.map (ChipSet.ChipDef.withAttrs [ Chip.Variant.text; Chip.Color.tertiary ]),
@@ -551,7 +551,9 @@ ChipSet.create(
       div [] [
         div [ Flex.Flex.allSizes; AlignItems.center; Margin.Bottom.extraSmall ] [
           Switch.create (enabled, attrs = [ Margin.Right.extraSmall ])
-          Body2.div (enabled.View |> View.MapCached(fun e -> if e then "Enabled" else "Disabled"))
+          div [ Typography.body2 ] [
+            textView (enabled.View |> View.MapCached(fun e -> if e then "Enabled" else "Disabled"))
+          ]
         ]
 
         ChipSet.create (

@@ -20,25 +20,25 @@ module IconsExamples =
 
     let content =
       div [] [
-        H6.div ("Outlined Icons", attrs = [ Margin.Bottom.extraSmall ])
-        Body1.div (
-          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Outlined Icons" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined\" rel=\"stylesheet\" />"
+        ]
 
-        H6.div ("Rounded Icons", attrs = [ Margin.Bottom.extraSmall ])
-        Body1.div (
-          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Rounded Icons" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded\" rel=\"stylesheet\" />"
+        ]
 
-        H6.div ("Sharp Icons", attrs = [ Margin.Bottom.extraSmall ])
-        Body1.div (
-          "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Sharp Icons" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "<link href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp\" rel=\"stylesheet\" />"
+        ]
 
-        H6.div ("More Styles", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "More Styles" ]
 
         let body =
           div [] [
@@ -50,7 +50,7 @@ module IconsExamples =
             ] [ text "Google's developer's guide" ]
           ]
 
-        Body1.div (body, attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ body ]
       ]
 
     let code =
@@ -240,7 +240,7 @@ module IconsExamples =
             | Icon.Travel tv -> sprintf "%A" tv
             | Icon.UiActions ua -> sprintf "%A" ua
 
-          Body2.div (iconText, attrs = [ Attr.Style "text-align" "center" ])
+          div [ Typography.body2; Attr.Style "text-align" "center" ] [ text iconText ]
         ],
         xs = Grid.Width.create 6,
         sm = Grid.Width.create 4,
@@ -250,7 +250,7 @@ module IconsExamples =
 
     let examples =
       div [] [
-        H6.div ("Sample Icons", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Sample Icons" ]
 
         Grid.create (
           [
@@ -390,29 +390,29 @@ module IconsExamples =
 
     let content =
       div [] [
-        H6.div ("Select Fill")
+        div [ Typography.h6 ] [ text "Select Fill" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! filledRadios ]
 
-        H6.div ("Select Style")
+        div [ Typography.h6 ] [ text "Select Style" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! styleRadios ]
 
-        H6.div ("Select Optical Size")
+        div [ Typography.h6 ] [ text "Select Optical Size" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [
           yield! opticalSizeRadios
         ]
 
-        H6.div ("Select Weight")
+        div [ Typography.h6 ] [ text "Select Weight" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! weightRadios ]
 
-        H6.div ("Select Grade")
+        div [ Typography.h6 ] [ text "Select Grade" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! gradeRadios ]
 
-        H6.div ("Select Color")
+        div [ Typography.h6 ] [ text "Select Color" ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; JustifyContent.flexStart ] [ yield! colorRadios ]
 
@@ -450,42 +450,42 @@ Icon.create(
 
   // Grid.create(
   //   [
-  //     H6.div("Select Fill")
+  //     div [ Typography.h6 ] [ text "Select Fill" ]
   //     GridItem.create(
   //       Grid.create(filledRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.div("Select Style")
+  //     div [ Typography.h6 ] [ text "Select Style" ]
   //     GridItem.create(
   //       Grid.create(styleRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.div("Select Optical Size")
+  //     div [ Typography.h6 ] [ text "Select Optical Size" ]
   //     GridItem.create(
   //       Grid.create(opticalSizeRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.div("Select Weight")
+  //     div [ Typography.h6 ] [ text "Select Weight" ]
   //     GridItem.create(
   //       Grid.create(weightRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.div("Select Grade")
+  //     div [ Typography.h6 ] [ text "Select Grade" ]
   //     GridItem.create(
   //       Grid.create(gradeRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
   //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
   //     )
 
-  //     H6.div("Select Color")
+  //     div [ Typography.h6 ] [ text "Select Color" ]
   //     GridItem.create(
   //       Grid.create(colorRadios, justify = JustifyContent.FlexStart),
   //       xs = Grid.Width.create 12,
@@ -502,15 +502,15 @@ Icon.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Icons"
-        Body1.div (
-          "Weave has built in helpers for Material Symbols icons. The icons are structured within a DU which is organized into child DUs which align with the categories defined by Google.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Weave has built in helpers for Material Symbols icons. The icons are structured within a DU which is organized into child DUs which align with the categories defined by Google."
+        ]
 
-        Body1.div (
-          "Note, that the Icon DU does not guarantee static type safety when selecting icons since the end user is reponsible for including the correct Google Fonts link in their HTML head section. Make sure to include the appropriate link for the style of icons you wish to use.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Note, that the Icon DU does not guarantee static type safety when selecting icons since the end user is reponsible for including the correct Google Fonts link in their HTML head section. Make sure to include the appropriate link for the style of icons you wish to use."
+        ]
 
         Helpers.divider ()
         referenceGoogleFonts ()

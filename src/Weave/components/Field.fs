@@ -87,7 +87,7 @@ type Field =
     let helpText = defaultArg helpText Doc.Empty
     let enabled = defaultArg enabled (View.Const true)
 
-    let typoAttrs = defaultArg typoAttrs [ cl Css.``weave-typography--body2`` ]
+    let typoAttrs = defaultArg typoAttrs [ Typography.body2 ]
 
     let attrs = defaultArg attrs List.empty
 

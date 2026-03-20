@@ -13,7 +13,7 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module Helpers =
 
-  let bodyText (text: string) = Body1.div (text)
+  let bodyText (str: string) = div [ Typography.body1 ] [ text str ]
 
   let divider () =
     Divider.create (attrs = [ Margin.Vertical.small ])
@@ -34,7 +34,7 @@ module Helpers =
       AlignItems.center
       Attr.Style "gap" "8px"
     ] [
-      H4.div (View.Const title)
+      div [ Typography.h4 ] [ textView (View.Const title) ]
       a [
         attr.href (sprintf "#%s" slug)
         Attr.Class "anchor-link"
@@ -58,7 +58,7 @@ module Helpers =
       AlignItems.center
       Attr.Style "gap" "12px"
     ] [
-      H1.div (title)
+      div [ Typography.h1 ] [ text title ]
       a [
         attr.href (sprintf "#%s" slug)
         Attr.Class "anchor-link"
@@ -130,7 +130,7 @@ module Helpers =
 
         let header =
           ExpansionPanelHeader.create (
-            content = Subtitle2.div (headerText),
+            content = div [ Typography.subtitle2 ] [ textView headerText ],
             expanded = codeIsExpanded,
             icon = icon,
             attrs = [ ExpansionPanel.Color.primary ]

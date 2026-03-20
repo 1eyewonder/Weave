@@ -86,7 +86,7 @@ module ListExamples =
           ListChild.Content(
             Switch.create (
               sentMailExpanded,
-              Body1.div ("\"Sent mail\" Expansion"),
+              div [ Typography.body1 ] [ text "\"Sent mail\" Expansion" ],
               attrs = [ Switch.Color.secondary; Margin.All.extraSmall ]
             )
           )
@@ -127,7 +127,7 @@ WeaveList.create(
     ListChild.Content(
       Switch.create(
         sentMailExpanded,
-        Body1.div("\"Sent mail\" Expansion"),
+        div [ Typography.body1 ] [ text "\"Sent mail\" Expansion" ],
         attrs = [
           Switch.Color.secondary
           Margin.All.extraSmall
@@ -157,7 +157,7 @@ WeaveList.create(
           Attr.Style "gap" "8px"
           Margin.Bottom.extraSmall
         ] [
-          Body1.span ("Your drink:")
+          span [ Typography.body1 ] [ text "Your drink:" ]
 
           selectedDrink.View
           |> Doc.BindView(fun sel ->
@@ -217,7 +217,11 @@ WeaveList.create(
         ]
 
         div [ Margin.Top.extraSmall ] [
-          Switch.create (readOnly, Body1.div ("ReadOnly"), attrs = [ Switch.Color.secondary ])
+          Switch.create (
+            readOnly,
+            div [ Typography.body1 ] [ text "ReadOnly" ],
+            attrs = [ Switch.Color.secondary ]
+          )
         ]
 
         div [
@@ -354,7 +358,11 @@ Switch.create(readOnly, displayText = View.Const "ReadOnly", attrs = [ Switch.Co
         ]
 
         div [ Margin.Top.extraSmall ] [
-          Switch.create (readOnly, Body1.div ("ReadOnly"), attrs = [ Switch.Color.secondary ])
+          Switch.create (
+            readOnly,
+            div [ Typography.body1 ] [ text "ReadOnly" ],
+            attrs = [ Switch.Color.secondary ]
+          )
         ]
       ]
 
@@ -452,7 +460,7 @@ WeaveList.create(
     let content =
       let col (label: string) densityAttr =
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           WeaveList.create (
             [
               ListItem.create (iconLabel (Icon.create (Icon.Communicate Communicate.Inbox)) "Item 1")
@@ -502,10 +510,10 @@ WeaveList.create(
     Container.create (
       div [] [
         Helpers.pageTitle "List"
-        Body1.div (
-          "A scrollable list for displaying text, avatars, icons, and interactive items. Use lists to help users find a specific item and act on it.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "A scrollable list for displaying text, avatars, icons, and interactive items. Use lists to help users find a specific item and act on it."
+        ]
 
         Helpers.divider ()
         simpleListExample ()

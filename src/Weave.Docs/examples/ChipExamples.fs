@@ -26,14 +26,14 @@ module ChipExamples =
 
     let content =
       div [] [
-        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Enabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.filled; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
@@ -90,14 +90,14 @@ colors
 
     let content =
       div [] [
-        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Enabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.text; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
@@ -137,14 +137,14 @@ Chip.create(
 
     let content =
       div [] [
-        Subtitle2.div ("Enabled", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Enabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.outlined; colorAttr ]))),
           spacing = Grid.GutterSpacing.create 2
         )
-        Subtitle2.div ("Disabled", attrs = [ Margin.Vertical.extraSmall ])
+        div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
           colors
           |> List.map (fun (label, colorAttr) ->
@@ -292,10 +292,9 @@ Chip.create(
 
     let content =
       div [] [
-        Body2.div (
-          count.View |> View.MapCached(sprintf "Clicked %d times"),
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body2; Margin.Bottom.extraSmall ] [
+          textView (count.View |> View.MapCached(sprintf "Clicked %d times"))
+        ]
 
         Chip.create (
           text "Click me",
@@ -386,7 +385,7 @@ Chip.create(
 
         GridItem.create (
           div [] [
-            Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+            div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
             div [ Flex.Flex.allSizes; AlignItems.center ] [
               Chip.create (text "Basic", attrs = attrs @ [ Margin.Right.extraSmall ])
               Chip.create (
@@ -515,13 +514,13 @@ Chip.create(
         [
           GridItem.create (
             div [] [
-              Subtitle2.div ("Pill (default)", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Pill (default)" ]
               Chip.create (text "Default", attrs = [ Chip.Variant.filled; Chip.Color.primary ])
             ]
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("Large", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Large" ]
               Chip.create (
                 text "Large",
                 attrs = [ Chip.Variant.filled; Chip.Color.secondary; BorderRadius.All.large ]
@@ -530,7 +529,7 @@ Chip.create(
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("Medium", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Medium" ]
               Chip.create (
                 text "Medium",
                 attrs = [ Chip.Variant.filled; Chip.Color.tertiary; BorderRadius.All.medium ]
@@ -539,7 +538,7 @@ Chip.create(
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("Small", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Small" ]
               Chip.create (
                 text "Small",
                 attrs = [ Chip.Variant.filled; Chip.Color.success; BorderRadius.All.small ]
@@ -548,7 +547,7 @@ Chip.create(
           )
           GridItem.create (
             div [] [
-              Subtitle2.div ("None", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "None" ]
               Chip.create (
                 text "None",
                 attrs = [ Chip.Variant.filled; Chip.Color.error; BorderRadius.All.none ]

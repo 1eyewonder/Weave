@@ -26,9 +26,10 @@ module GettingStartedExamples =
 
   let private installation () =
     Helpers.textSection "Installation" [
-      Body1.div (
-        "Weave is not yet published to NuGet. To use it, add a project reference to your WebSharper project."
-      )
+      div [ Typography.body1 ] [
+        text
+          "Weave is not yet published to NuGet. To use it, add a project reference to your WebSharper project."
+      ]
 
       div [ Margin.Top.extraSmall ] [
         codeBlock "xml" """<ProjectReference Include="../path/to/Weave/Weave.fsproj" />"""
@@ -37,9 +38,10 @@ module GettingStartedExamples =
 
   let private basicSetup () =
     Helpers.textSection "Basic Setup" [
-      Body1.div (
-        "Open the Weave namespaces and render a component. Here is a minimal example that displays a button."
-      )
+      div [ Typography.body1 ] [
+        text
+          "Open the Weave namespaces and render a component. Here is a minimal example that displays a button."
+      ]
 
       div [ Margin.Top.extraSmall ] [
         codeBlock

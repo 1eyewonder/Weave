@@ -432,10 +432,9 @@ let applyVariant variantName mode =
     Container.create (
       div [] [
         Helpers.pageTitle "Theming"
-        Body1.div (
-          "Manage light/dark mode and custom color palettes across your application.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Manage light/dark mode and custom color palettes across your application."
+        ]
 
         Helpers.divider ()
         lightDarkToggleSection ()

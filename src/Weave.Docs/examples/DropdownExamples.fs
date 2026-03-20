@@ -20,10 +20,10 @@ module DropdownExamples =
     |> Doc.BindView (function
       | Some message ->
         Dialog.create (
-          DialogTitle.create (H6.div ("Alert")),
+          DialogTitle.create (div [ Typography.h6 ] [ text "Alert" ]),
           DialogContent.create (
             div [] [
-              Body1.div (message)
+              div [ Typography.body1 ] [ text message ]
               div [ Margin.Top.small ] [
                 Button.primary (
                   text "OK",
@@ -136,7 +136,7 @@ Dropdown.create(
           [
             GridItem.create (
               div [] [
-                H6.div ("Anchor Origin", attrs = [ Margin.Bottom.extraSmall ])
+                div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Anchor Origin" ]
                 radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString Radio.Color.secondary
               ],
               xs = Grid.Width.create 6
@@ -144,7 +144,7 @@ Dropdown.create(
 
             GridItem.create (
               div [] [
-                H6.div ("Transform Origin", attrs = [ Margin.Bottom.extraSmall ])
+                div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Transform Origin" ]
                 radioGroup
                   transformOptions
                   transformVar
@@ -158,10 +158,10 @@ Dropdown.create(
               Grid.create (
                 [
                   GridItem.create (
-                    Body1.div (
-                      "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections.",
-                      attrs = [ Attr.Style "text-align" "center" ]
-                    )
+                    div [ Typography.body1; Attr.Style "text-align" "center" ] [
+                      text
+                        "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections."
+                    ]
                   )
                   GridItem.create (
                     Dropdown.create (
@@ -559,7 +559,7 @@ Dropdown.create(
           |> List.map (fun n -> DropdownItem.create (text (sprintf "Item %d" n), onClick = (fun () -> ())))
 
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           Dropdown.create (
             buttonContents = text "Open",
             items = items,
@@ -609,10 +609,10 @@ Dropdown.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Dropdown"
-        Body1.div (
-          "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items."
+        ]
 
         Helpers.divider ()
         basicDropdownExample ()

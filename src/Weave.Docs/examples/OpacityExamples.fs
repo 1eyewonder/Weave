@@ -12,7 +12,7 @@ open Weave.Icons.MaterialSymbols
 module OpacityExamples =
 
   let private inlineCode (value: string) =
-    Caption.span (value, attrs = [ Typography.Color.primary ])
+    span [ Typography.caption; Typography.Color.primary ] [ text value ]
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -114,8 +114,10 @@ div [
                   JustifyContent.center
                   Attr.Style "min-height" "64px"
                   Attr.Style "width" "100%"
-                ] [ Subtitle2.div (sprintf "%d%%" level) ]
-                Body2.div (sprintf "%d" level, attrs = [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ])
+                ] [ div [ Typography.subtitle2 ] [ text (sprintf "%d%%" level) ] ]
+                div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
+                  text (sprintf "%d" level)
+                ]
               ],
               xs = Grid.Width.create 6,
               sm = Grid.Width.create 4,
@@ -216,10 +218,9 @@ div [ Attr.Style "--weave-opacity-disabled" "0.5" ] [
     Container.create (
       div [] [
         Helpers.pageTitle "Opacity"
-        Body1.div (
-          "Control element transparency with a stepped utility scale and semantic design tokens.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Control element transparency with a stepped utility scale and semantic design tokens."
+        ]
 
         Helpers.divider ()
         howItWorksSection ()

@@ -40,10 +40,9 @@ module SelectExamples =
             GridItem.create (
               selected.View
               |> Doc.BindView(fun v ->
-                Body2.div (
-                  sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"),
-                  attrs = [ Margin.Top.extraSmall ]
-                )),
+                div [ Typography.body2; Margin.Top.extraSmall ] [
+                  text (sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"))
+                ]),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               attrs = [ Flex.Flex.allSizes; AlignItems.center ]
@@ -186,10 +185,9 @@ Select.create(
           GridItem.create (
             selected.View
             |> Doc.BindView(fun v ->
-              Body2.div (
-                sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"),
-                attrs = [ Margin.Top.extraSmall ]
-              )),
+              div [ Typography.body2; Margin.Top.extraSmall ] [
+                text (sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"))
+              ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             attrs = [ Flex.Flex.allSizes; AlignItems.center ]
@@ -322,7 +320,7 @@ Select.create(
                   else
                     sel |> Set.toList |> String.concat ", "
 
-                Body2.div (sprintf "Selected: %s" display, attrs = [ Margin.Top.extraSmall ])),
+                div [ Typography.body2; Margin.Top.extraSmall ] [ text (sprintf "Selected: %s" display) ]),
               xs = Grid.Width.create 12,
               sm = Grid.Width.create 6,
               attrs = [ Flex.Flex.allSizes; AlignItems.center ]
@@ -641,7 +639,7 @@ Select.create(
         [
           GridItem.create (
             div [] [
-              Body2.div ("Auto (default)", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Auto (default)" ]
 
               Select.create (
                 items,
@@ -657,7 +655,7 @@ Select.create(
 
           GridItem.create (
             div [ Attr.Style "width" "100%" ] [
-              Body2.div ("Full Width", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Full Width" ]
 
               Select.create (
                 items,
@@ -673,7 +671,7 @@ Select.create(
 
           GridItem.create (
             div [] [
-              Body2.div ("Fit Content", attrs = [ Margin.Bottom.extraSmall ])
+              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Fit Content" ]
 
               Select.create (
                 items,
@@ -788,11 +786,10 @@ Select.create(
             |> Doc.BindView(fun v ->
               match v with
               | Some lang ->
-                Body2.div (
-                  sprintf "Code: %s | Name: %s | Native: %s" lang.Code lang.Name lang.Native,
-                  attrs = [ Margin.Top.extraSmall ]
-                )
-              | None -> Body2.div ("No language selected", attrs = [ Margin.Top.extraSmall ])),
+                div [ Typography.body2; Margin.Top.extraSmall ] [
+                  text (sprintf "Code: %s | Name: %s | Native: %s" lang.Code lang.Name lang.Native)
+                ]
+              | None -> div [ Typography.body2; Margin.Top.extraSmall ] [ text "No language selected" ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             attrs = [ Flex.Flex.allSizes; AlignItems.center ]
@@ -838,10 +835,10 @@ Select.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Select"
-        Body1.div (
-          "Select components allow users to choose from a list of options in a dropdown. Supports single and multi-select, search filtering, clear, select-all, custom item rendering, and all Field variants.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Select components allow users to choose from a list of options in a dropdown. Supports single and multi-select, search filtering, clear, select-all, custom item rendering, and all Field variants."
+        ]
 
         Helpers.divider ()
         basicExample ()

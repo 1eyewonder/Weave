@@ -12,7 +12,7 @@ open Weave.Icons.MaterialSymbols
 module TransitionExamples =
 
   let private inlineCode (value: string) =
-    Caption.span (value, attrs = [ Typography.Color.primary ])
+    span [ Typography.caption; Typography.Color.primary ] [ text value ]
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -97,7 +97,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
     let content =
       let speedColumn (label: string) (speed: TransitionSpeed) =
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           div [ cl (TransitionSpeed.toClass speed) ] [
             Button.primary (text "Hover me", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
@@ -246,10 +246,10 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
 
     let content =
       div [] [
-        Body2.div (
-          "To test reduced motion in Chrome DevTools: open the Rendering panel, then set \"Emulate CSS media feature prefers-reduced-motion\" to \"reduce\". All Weave transitions will become instant.",
-          attrs = [ Attr.Style "opacity" "0.7" ]
-        )
+        div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
+          text
+            "To test reduced motion in Chrome DevTools: open the Rendering panel, then set \"Emulate CSS media feature prefers-reduced-motion\" to \"reduce\". All Weave transitions will become instant."
+        ]
       ]
 
     let code =
@@ -276,10 +276,9 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
     Container.create (
       div [] [
         Helpers.pageTitle "Transitions"
-        Body1.div (
-          "Control animation speed across components with transition speed classes and duration tokens.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Control animation speed across components with transition speed classes and duration tokens."
+        ]
 
         Helpers.divider ()
         howItWorksSection ()

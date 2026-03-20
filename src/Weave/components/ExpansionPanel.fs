@@ -75,8 +75,8 @@ type ExpansionPanelHeader =
   /// <summary>Creates the default expansion toggle icon (+ when collapsed, − when expanded).</summary>
   static member defaultIcon(expanded: Var<bool>) =
     ExpansionPanelIcon.create (
-      H6.div ("+", attrs = [ Attr.Style "text-align" "center" ]),
-      H6.div ("-", attrs = [ Attr.Style "text-align" "center" ]),
+      div [ Typography.h6; Attr.Style "text-align" "center" ] [ text "+" ],
+      div [ Typography.h6; Attr.Style "text-align" "center" ] [ text "-" ],
       expanded = expanded
     )
 

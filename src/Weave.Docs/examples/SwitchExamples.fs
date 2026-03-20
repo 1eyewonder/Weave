@@ -21,7 +21,7 @@ module SwitchExamples =
         basicIsChecked.View
         |> View.MapCached(sprintf "Basic is Checked: %b")
         |> View.printfn
-        Switch.create (basicIsChecked, Body1.div ("Default Switch"))
+        Switch.create (basicIsChecked, div [ Typography.body1 ] [ text "Default Switch" ])
       ]
 
     let code =
@@ -41,7 +41,12 @@ Switch.create(isChecked, View.Const "Default Switch")
 
     let content =
       let isChecked = Var.Create true
-      Switch.create (isChecked, Body1.div ("Disabled Switch"), enabled = View.Const false)
+
+      Switch.create (
+        isChecked,
+        div [ Typography.body1 ] [ text "Disabled Switch" ],
+        enabled = View.Const false
+      )
 
     let code =
       """open Weave
@@ -68,7 +73,7 @@ Switch.create(
       let label =
         isChecked.View
         |> View.Map(fun v -> if v then "I am on!" else "Turn me on!")
-        |> Doc.BindView(fun text -> Body1.div (text))
+        |> Doc.BindView(fun t -> div [ Typography.body1 ] [ text t ])
 
       Switch.create (isChecked, label)
 
@@ -102,7 +107,7 @@ Switch.create(isChecked, label)
         sizes
         |> List.map (fun (size, label, v) ->
           GridItem.create (
-            Switch.create (v, Body1.div (label), attrs = [ size ]),
+            Switch.create (v, div [ Typography.body1 ] [ text label ], attrs = [ size ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -158,7 +163,7 @@ Switch.create(
         switches
         |> List.map (fun (v, colorAttr, label) ->
           GridItem.create (
-            Switch.create (v, Body1.div (label), attrs = [ colorAttr ]),
+            Switch.create (v, div [ Typography.body1 ] [ text label ], attrs = [ colorAttr ]),
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6,
             md = Grid.Width.create 4
@@ -218,7 +223,7 @@ Switch.create(
           demoChecked,
           placement.View
           |> View.MapCached(sprintf "%A")
-          |> Doc.BindView(fun text -> Body1.div (text)),
+          |> Doc.BindView(fun t -> div [ Typography.body1 ] [ text t ]),
           contentPlacement = placement.View,
           attrs = [ Switch.Size.large; Switch.Color.primary ]
         )
@@ -255,9 +260,17 @@ Switch.create(
     let content =
       let col (label: string) densityAttr =
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
-          Switch.create (Var.Create false, Body1.div ("Off"), attrs = [ Switch.Color.primary ])
-          Switch.create (Var.Create true, Body1.div ("On"), attrs = [ Switch.Color.primary ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
+          Switch.create (
+            Var.Create false,
+            div [ Typography.body1 ] [ text "Off" ],
+            attrs = [ Switch.Color.primary ]
+          )
+          Switch.create (
+            Var.Create true,
+            div [ Typography.body1 ] [ text "On" ],
+            attrs = [ Switch.Color.primary ]
+          )
         ]
 
       Grid.create (
@@ -308,10 +321,10 @@ Switch.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Switch"
-        Body1.div (
-          "The Switch component allows users to toggle between two states. It supports different sizes, colors, and can be disabled.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "The Switch component allows users to toggle between two states. It supports different sizes, colors, and can be disabled."
+        ]
 
         Helpers.divider ()
         basicSwitchExample ()

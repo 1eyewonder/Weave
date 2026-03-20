@@ -15,9 +15,9 @@ module DividerExamples =
 
     let content =
       div [] [
-        Body1.div ("Content above the divider", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Content above the divider" ]
         Divider.create ()
-        Body1.div ("Content below the divider", attrs = [ Margin.Top.extraSmall ])
+        div [ Typography.body1; Margin.Top.extraSmall ] [ text "Content below the divider" ]
       ]
 
     let code =
@@ -37,7 +37,7 @@ Divider.create()
       div [] [
         let row (label: string) variant =
           div [ Margin.Bottom.small ] [
-            Caption.div (label, attrs = [ Margin.Bottom.extraSmall ])
+            div [ Typography.caption; Margin.Bottom.extraSmall ] [ text label ]
             Divider.create (attrs = [ variant ])
           ]
 
@@ -78,11 +78,11 @@ Divider.create(
         Attr.Style "height" "80px"
         Attr.Style "gap" "16px"
       ] [
-        Body1.div ("Left")
+        div [ Typography.body1 ] [ text "Left" ]
         Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
-        Body1.div ("Center")
+        div [ Typography.body1 ] [ text "Center" ]
         Divider.create (attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
-        Body1.div ("Right")
+        div [ Typography.body1 ] [ text "Right" ]
       ]
 
     let code =
@@ -97,11 +97,11 @@ div [
     Attr.Style "height" "80px"
     Attr.Style "gap" "16px"
 ] [
-    Body1.div("Left")
+    div [ Typography.body1 ] [ text "Left" ]
     Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
-    Body1.div("Center")
+    div [ Typography.body1 ] [ text "Center" ]
     Divider.create(attrs = [ Divider.Orientation.vertical; Attr.Style "align-self" "stretch" ])
-    Body1.div("Right")
+    div [ Typography.body1 ] [ text "Right" ]
 ]
 """
 
@@ -111,10 +111,9 @@ div [
     Container.create (
       div [] [
         Helpers.pageTitle "Divider"
-        Body1.div (
-          "Dividers are thin lines that group content in lists and layouts.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Dividers are thin lines that group content in lists and layouts."
+        ]
 
         Helpers.divider ()
         basicExample ()

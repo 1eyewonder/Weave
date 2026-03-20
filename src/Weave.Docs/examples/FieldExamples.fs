@@ -214,7 +214,7 @@ Field.create(
 
     let content =
       div [] [
-        Body1.div ("Start Adornment", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Start Adornment" ]
 
         Grid.create (
           [
@@ -225,7 +225,7 @@ Field.create(
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.div ("End Adornment", attrs = [ Margin.Vertical.extraSmall ])
+        div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "End Adornment" ]
 
         Grid.create (
           [
@@ -236,7 +236,7 @@ Field.create(
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.div ("Both Adornments", attrs = [ Margin.Vertical.extraSmall ])
+        div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "Both Adornments" ]
 
         Grid.create (
           [
@@ -682,7 +682,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               captionVal,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Caption",
-              typoAttrs = [ Typography.Variant.caption ],
+              typoAttrs = [ Typography.caption ],
               attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
@@ -694,7 +694,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               body1Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Body1",
-              typoAttrs = [ Typography.Variant.body1 ],
+              typoAttrs = [ Typography.body1 ],
               attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
@@ -706,7 +706,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               subtitle1Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "Subtitle1",
-              typoAttrs = [ Typography.Variant.subtitle1 ],
+              typoAttrs = [ Typography.subtitle1 ],
               attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
@@ -718,7 +718,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               h6Val,
               variant = Field.Variant.Outlined,
               labelText = View.Const "H6",
-              typoAttrs = [ Typography.Variant.h6 ],
+              typoAttrs = [ Typography.h6 ],
               attrs = [ Field.Width.full ]
             ),
             xs = Grid.Width.create 12,
@@ -738,14 +738,14 @@ let value = Var.Create ""
 Field.create(
     value,
     labelText = View.Const "Caption",
-    typoAttrs = [ Typography.Variant.caption ]
+    typoAttrs = [ Typography.caption ]
 )
 
 // Scale up with Subtitle1 typography
 Field.create(
     value,
     labelText = View.Const "Subtitle1",
-    typoAttrs = [ Typography.Variant.subtitle1 ]
+    typoAttrs = [ Typography.subtitle1 ]
 )
 """
 
@@ -758,10 +758,10 @@ Field.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Field"
-        Body1.div (
-          "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text."
+        ]
         Helpers.divider ()
         variantsExample ()
         Helpers.divider ()

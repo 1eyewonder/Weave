@@ -91,13 +91,11 @@ type Radio =
       span [ cls [ Css.``weave-radio__span`` ] ] []
       match displayText with
       | Some v ->
-        Body1.span (
-          v,
-          attrs = [
-            cl Css.``weave-radio__label``
-            JustifyContent.center
-            View.not enabled |> Attr.toggleColor Palette.textDisabled
-          ]
-        )
+        span [
+          Typography.body1
+          cl Css.``weave-radio__label``
+          JustifyContent.center
+          View.not enabled |> Attr.toggleColor Palette.textDisabled
+        ] [ textView v ]
       | None -> Doc.Empty
     ]

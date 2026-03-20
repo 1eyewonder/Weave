@@ -376,10 +376,10 @@ ButtonGroup.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Button Group"
-        Body1.div (
-          "ButtonGroup groups buttons, icon buttons, button menus, and dropdowns into a single visual unit with shared variant, color, and size styling.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "ButtonGroup groups buttons, icon buttons, button menus, and dropdowns into a single visual unit with shared variant, color, and size styling."
+        ]
 
         Helpers.divider ()
         basicExample ()

@@ -131,7 +131,7 @@ colors
     let content =
       let col (label: string) densityAttr =
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           div [] [
             Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
@@ -425,7 +425,11 @@ IconButton.info(
         div [ densityAttr; Margin.Bottom.small ] [
           Grid.create (
             [
-              GridItem.create (Subtitle2.div (label), xs = Grid.Width.create 12, sm = Grid.Width.create 3)
+              GridItem.create (
+                div [ Typography.subtitle2 ] [ text label ],
+                xs = Grid.Width.create 12,
+                sm = Grid.Width.create 3
+              )
               GridItem.create (
                 IconButton.secondary (
                   Icon.create (Icon.UiActions UiActions.Favorite),
@@ -565,10 +569,9 @@ IconButton.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Button"
-        Body1.div (
-          "Buttons allow users to take actions and make choices with a single tap.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Buttons allow users to take actions and make choices with a single tap."
+        ]
 
         Helpers.divider ()
         variantExamples ()

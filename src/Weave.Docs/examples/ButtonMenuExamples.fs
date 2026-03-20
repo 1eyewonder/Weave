@@ -26,7 +26,7 @@ module ButtonMenuExamples =
                 onClick = (fun () -> printfn "share clicked"),
                 attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.span ("Share"),
+              tooltipContent = span [ Typography.body1 ] [ text "Share" ],
               direction = Tooltip.Direction.Right
             )
             Tooltip.create (
@@ -39,7 +39,7 @@ module ButtonMenuExamples =
                   BorderRadius.circle
                 ]
               ),
-              tooltipContent = Body1.span ("Favorite"),
+              tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
               direction = Tooltip.Direction.Right
             )
             Tooltip.create (
@@ -48,7 +48,7 @@ module ButtonMenuExamples =
                 onClick = (fun () -> printfn "copy clicked"),
                 attrs = [ Attr.Create "aria-label" "copy"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.span ("Copy"),
+              tooltipContent = span [ Typography.body1 ] [ text "Copy" ],
               direction = Tooltip.Direction.Right
             )
           ],
@@ -75,7 +75,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.span("Share"),
+            tooltipContent = span [ Typography.body1 ] [ text "Share" ],
             direction = Tooltip.Direction.Right
         )
         Tooltip.create(
@@ -88,7 +88,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.span("Favorite"),
+            tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
             direction = Tooltip.Direction.Right
         )
         Tooltip.create(
@@ -101,7 +101,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                 ]
             ),
-            tooltipContent = Body1.span("Copy"),
+            tooltipContent = span [ Typography.body1 ] [ text "Copy" ],
             direction = Tooltip.Direction.Right
         )
     ],
@@ -123,7 +123,7 @@ IconButtonMenu.create(
     let content =
       div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "With openIcon", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "With openIcon" ]
           IconButtonMenu.create (
             closedIcon = Icon.create (Icon.Communicate Communicate.Send),
             openIcon = Icon.create (Icon.UiActions UiActions.Close),
@@ -134,7 +134,7 @@ IconButtonMenu.create(
                   onClick = (fun () -> ()),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -147,7 +147,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -155,7 +155,7 @@ IconButtonMenu.create(
           )
         ]
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "Without openIcon (rotates)", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "Without openIcon (rotates)" ]
           IconButtonMenu.create (
             closedIcon = Icon.create (Icon.UiActions UiActions.Add),
             items = [
@@ -165,7 +165,7 @@ IconButtonMenu.create(
                   onClick = (fun () -> ()),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -178,7 +178,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -232,7 +232,7 @@ IconButtonMenu.create(
         | ButtonMenu.Direction.Right -> Tooltip.Direction.Top
 
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        Caption.div (label, attrs = [ Margin.Bottom.small ])
+        div [ Typography.caption; Margin.Bottom.small ] [ text label ]
         IconButtonMenu.create (
           closedIcon = Icon.create (Icon.UiActions UiActions.Add),
           items = [
@@ -242,7 +242,7 @@ IconButtonMenu.create(
                 onClick = (fun () -> ()),
                 attrs = [ Attr.Create "aria-label" "alarm"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.span ("Alarm"),
+              tooltipContent = span [ Typography.body1 ] [ text "Alarm" ],
               direction = tooltipDir
             )
             Tooltip.create (
@@ -251,7 +251,7 @@ IconButtonMenu.create(
                 onClick = (fun () -> ()),
                 attrs = [ Attr.Create "aria-label" "star"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.span ("Star"),
+              tooltipContent = span [ Typography.body1 ] [ text "Star" ],
               direction = tooltipDir
             )
           ],
@@ -360,7 +360,7 @@ IconButtonMenu.create(
                 onClick = (fun () -> ()),
                 attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
               ),
-              tooltipContent = Body1.span ("Share"),
+              tooltipContent = span [ Typography.body1 ] [ text "Share" ],
               direction = Tooltip.Direction.Right
             )
             Tooltip.create (
@@ -373,7 +373,7 @@ IconButtonMenu.create(
                   BorderRadius.circle
                 ]
               ),
-              tooltipContent = Body1.span ("Favorite"),
+              tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
               direction = Tooltip.Direction.Right
             )
           ],
@@ -425,7 +425,7 @@ IconButtonMenu.create(
     let content =
       div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "Icon button", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "Icon button" ]
           IconButtonMenu.create (
             closedIcon = Icon.create (Icon.UiActions UiActions.Add),
             openIcon = Icon.create (Icon.UiActions UiActions.Close),
@@ -437,7 +437,7 @@ IconButtonMenu.create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -450,7 +450,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -458,7 +458,7 @@ IconButtonMenu.create(
           )
         ]
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "Text button", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "Text button" ]
           ButtonMenu.create (
             closedContent = text "Menu",
             openOnHover = View.Const true,
@@ -469,7 +469,7 @@ IconButtonMenu.create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -482,7 +482,7 @@ IconButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -552,7 +552,7 @@ ButtonMenu.create(
     let content =
       div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly; AlignItems.center ] [
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "Text only", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "Text only" ]
           ButtonMenu.create (
             closedContent = text "Menu",
             items = [
@@ -562,7 +562,7 @@ ButtonMenu.create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -575,7 +575,7 @@ ButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -583,7 +583,7 @@ ButtonMenu.create(
           )
         ]
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          Caption.div (content = "With icon and openContent", attrs = [ Margin.Bottom.small ])
+          div [ Typography.caption; Margin.Bottom.small ] [ text "With icon and openContent" ]
           ButtonMenu.create (
             closedContent = Doc.Concat [ Icon.create (Icon.UiActions UiActions.Add); text "Actions" ],
             openContent = Doc.Concat [ Icon.create (Icon.UiActions UiActions.Add); text "Close" ],
@@ -594,7 +594,7 @@ ButtonMenu.create(
                   onClick = (fun () -> printfn "share clicked"),
                   attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
                 ),
-                tooltipContent = Body1.span ("Share"),
+                tooltipContent = span [ Typography.body1 ] [ text "Share" ],
                 direction = Tooltip.Direction.Right
               )
               Tooltip.create (
@@ -607,7 +607,7 @@ ButtonMenu.create(
                     BorderRadius.circle
                   ]
                 ),
-                tooltipContent = Body1.span ("Favorite"),
+                tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
                 direction = Tooltip.Direction.Right
               )
             ],
@@ -671,10 +671,10 @@ ButtonMenu.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Button Menu"
-        Body1.div (
-          "A floating action button menu that fans out a list of items when clicked. Supports icon button triggers (IconButtonMenu) and standard text button triggers (ButtonMenu), four fan-out directions, and icon swap or rotation animations.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "A floating action button menu that fans out a list of items when clicked. Supports icon button triggers (IconButtonMenu) and standard text button triggers (ButtonMenu), four fan-out directions, and icon swap or rotation animations."
+        ]
 
         Helpers.divider ()
         basicExample ()

@@ -16,7 +16,7 @@ module ExpansionPanelExamples =
     let content =
       let headerContent n expanded =
         ExpansionPanelHeader.create (
-          Body1.div (sprintf "Expansion Panel %i" n),
+          div [ Typography.body1 ] [ text (sprintf "Expansion Panel %i" n) ],
           expanded,
           icon = ExpansionPanelHeader.defaultIcon expanded
         )
@@ -54,7 +54,7 @@ ExpansionPanelContainer.create(
     [
         ExpansionPanel.create(
             ExpansionPanelHeader.create(
-                Body1.div("Expansion Panel 1"),
+                div [ Typography.body1 ] [ text "Expansion Panel 1" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded
             ),
@@ -84,7 +84,7 @@ ExpansionPanelContainer.create(
 
       let header expanded (label: string) colorAttr =
         ExpansionPanelHeader.create (
-          Body1.div (label),
+          div [ Typography.body1 ] [ text label ],
           expanded,
           icon = ExpansionPanelHeader.defaultIcon expanded,
           attrs = [ colorAttr ]
@@ -115,7 +115,7 @@ ExpansionPanelContainer.create(
     [
         ExpansionPanel.create(
             ExpansionPanelHeader.create(
-                Body1.div("Primary"),
+                div [ Typography.body1 ] [ text "Primary" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
                 attrs = [ ExpansionPanel.Color.primary ] // see here
@@ -136,7 +136,7 @@ ExpansionPanelContainer.create(
     let content =
       let headerContent expanded variant =
         ExpansionPanelHeader.create (
-          Body1.div (sprintf "%A" variant),
+          div [ Typography.body1 ] [ text (sprintf "%A" variant) ],
           expanded,
           icon = ExpansionPanelHeader.defaultIcon expanded,
           highlightVariant = View.Const variant,
@@ -185,7 +185,7 @@ ExpansionPanelContainer.create(
     [
         ExpansionPanel.create(
             ExpansionPanelHeader.create(
-                Body1.div("Filled"),
+                div [ Typography.body1 ] [ text "Filled" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
                 highlightVariant = View.Const ExpansionPanel.HeaderVariant.Filled, // see here
@@ -214,7 +214,7 @@ ExpansionPanelContainer.create(
 
       let header expanded (label: string) colorAttr =
         ExpansionPanelHeader.create (
-          Body1.div (label),
+          div [ Typography.body1 ] [ text label ],
           expanded,
           icon = ExpansionPanelHeader.defaultIcon expanded,
           attrs = [ colorAttr ]
@@ -245,7 +245,7 @@ ExpansionPanelContainer.create(
     [
         ExpansionPanel.create(
             ExpansionPanelHeader.create(
-                Body1.div("Primary"),
+                div [ Typography.body1 ] [ text "Primary" ],
                 expanded,
                 icon = ExpansionPanelHeader.defaultIcon expanded,
                 attrs = [ ExpansionPanel.FocusColor.primary ] // see here
@@ -269,12 +269,12 @@ ExpansionPanelContainer.create(
         let expanded = Var.Create false
 
         div [ densityAttr ] [
-          Subtitle2.div (label, attrs = [ Margin.Bottom.extraSmall ])
+          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
           ExpansionPanelContainer.create (
             [
               ExpansionPanel.create (
                 ExpansionPanelHeader.create (
-                  Body1.div ("Panel Header"),
+                  div [ Typography.body1 ] [ text "Panel Header" ],
                   expanded,
                   icon = ExpansionPanelHeader.defaultIcon expanded
                 ),
@@ -312,7 +312,7 @@ let expanded = Var.Create false
 ExpansionPanelContainer.create(
     [
         ExpansionPanel.create(
-            ExpansionPanelHeader.create(Body1.div("Panel Header"), expanded, icon = ExpansionPanelHeader.defaultIcon expanded),
+            ExpansionPanelHeader.create(div [ Typography.body1 ] [ text "Panel Header" ], expanded, icon = ExpansionPanelHeader.defaultIcon expanded),
             expanded = expanded,
             content = ExpansionPanelContent.create(text "Panel content")
         )
@@ -327,10 +327,10 @@ ExpansionPanelContainer.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Expansion Panel"
-        Body1.div (
-          "The ExpansionPanel component allows for collapsible sections of content, useful for organizing information in a compact manner.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "The ExpansionPanel component allows for collapsible sections of content, useful for organizing information in a compact manner."
+        ]
 
         Helpers.divider ()
         multiplePanels ()

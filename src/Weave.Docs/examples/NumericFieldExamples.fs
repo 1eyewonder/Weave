@@ -180,7 +180,8 @@ NumericField.create(
               )
 
               value.View
-              |> Doc.BindView(fun v -> Body2.div ($"Current value: %i{v}", attrs = [ Margin.Top.extraSmall ]))
+              |> Doc.BindView(fun v ->
+                div [ Typography.body2; Margin.Top.extraSmall ] [ text $"Current value: %i{v}" ])
             ],
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -202,7 +203,7 @@ NumericField.create(
 
                floatVal.View
                |> Doc.BindView(fun v ->
-                 Body2.div ($"Current value: %f{v}", attrs = [ Margin.Top.extraSmall ]))
+                 div [ Typography.body2; Margin.Top.extraSmall ] [ text $"Current value: %f{v}" ])
              ]),
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
@@ -545,10 +546,10 @@ NumericField.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Numeric Field"
-        Body1.div (
-          "NumericField wraps Field to provide a typed numeric input with spin buttons, keyboard arrow keys, mouse wheel support, and optional min/max/step constraints. Separate overloads exist for int and float values.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "NumericField wraps Field to provide a typed numeric input with spin buttons, keyboard arrow keys, mouse wheel support, and optional min/max/step constraints. Separate overloads exist for int and float values."
+        ]
         Helpers.divider ()
         variantsExample ()
         Helpers.divider ()

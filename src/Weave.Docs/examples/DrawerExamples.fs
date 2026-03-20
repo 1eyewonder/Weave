@@ -13,7 +13,9 @@ module DrawerExamples =
 
   let private navList () =
     let item (label: string) =
-      div [ Padding.Horizontal.small; Padding.Vertical.extraSmall ] [ Body1.div (label) ]
+      div [ Padding.Horizontal.small; Padding.Vertical.extraSmall ] [
+        div [ Typography.body1 ] [ text label ]
+      ]
 
     div [] [ item "Dashboard"; item "Profile"; item "Settings"; item "Reports" ]
 
@@ -41,7 +43,7 @@ module DrawerExamples =
         isOpen
         |> Doc.BindView(fun isOpen ->
           if isOpen then
-            Body1.span (label, attrs = [ Attr.Class "weave-drawer-mini-label" ])
+            span [ Typography.body1; Attr.Class "weave-drawer-mini-label" ] [ text label ]
           else
             Doc.Empty)
       ]
@@ -60,11 +62,13 @@ module DrawerExamples =
       Padding.Horizontal.medium
       Padding.Vertical.extraSmall
       Attr.Style "gap" "12px"
-    ] [ toggleButton; H6.div (label) ]
+    ] [ toggleButton; div [ Typography.h6 ] [ text label ] ]
 
   let private pageContent () =
     div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Padding.All.small ] [
-      yield! [ 1..5 ] |> List.map (fun i -> Body2.div (sprintf "Content paragraph %d" i))
+      yield!
+        [ 1..5 ]
+        |> List.map (fun i -> div [ Typography.body2 ] [ text (sprintf "Content paragraph %d" i) ])
     ]
 
   /// Wraps a demo in a bounded, relatively-positioned box so that
@@ -280,7 +284,7 @@ DrawerContainer.create(
           onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
           attrs = [ Button.Variant.filled ]
         )
-        Switch.create (hoverEnabled, Body1.div ("Hover expand"))
+        Switch.create (hoverEnabled, div [ Typography.body1 ] [ text "Hover expand" ])
       ]
 
     let preview =
@@ -367,7 +371,7 @@ DrawerContainer.create(
               header =
                 DrawerHeader.create (
                   div [ Flex.Flex.allSizes; AlignItems.center; Padding.Horizontal.small ] [
-                    H6.div ("Navigation")
+                    div [ Typography.h6 ] [ text "Navigation" ]
                   ]
                 ),
               overlayClose = (fun () -> Var.Set isOpen false),
@@ -383,7 +387,7 @@ DrawerContainer.create(
     position = Drawer.Position.Left,
     header =
         DrawerHeader.create(
-            div [] [ H6.div("Navigation") ]
+            div [] [ div [ Typography.h6 ] [ text "Navigation" ] ]
         ),
     overlayClose = (fun () -> Var.Set isOpen false)
 )"""
@@ -518,12 +522,12 @@ DrawerContainer.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Drawer"
-        Body1.div (
-          "Drawers provide navigation panels that can slide in from any edge of \
-           the screen. Wrap side drawers in a DrawerContainer so the AppBar and \
-           main content area shift automatically.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "Drawers provide navigation panels that can slide in from any edge of \
+             the screen. Wrap side drawers in a DrawerContainer so the AppBar and \
+             main content area shift automatically."
+        ]
         Helpers.divider ()
         temporaryExample ()
         Helpers.divider ()

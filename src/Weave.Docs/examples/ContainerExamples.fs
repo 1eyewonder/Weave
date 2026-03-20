@@ -19,7 +19,7 @@ module ContainerExamples =
   ]
 
   let centeredText (displayText: string) =
-    H6.div (displayText, attrs = [ AlignSelf.center ])
+    div [ Typography.h6; AlignSelf.center ] [ text displayText ]
 
   let private variantExamples () =
     let description =
@@ -69,24 +69,21 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
   let private fixedWidthAndGuttersExample () =
     let description =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
-        Body1.div (
-          "The Container component supports two optional layout modifiers passed via attrs:",
-          attrs = [ Margin.Bottom.small ]
-        )
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text "The Container component supports two optional layout modifiers passed via attrs:"
+        ]
 
-        Subtitle2.div ("Container.fixedWidth")
+        div [ Typography.subtitle2 ] [ text "Container.fixedWidth" ]
 
-        Body1.div (
-          "Causes the container to snap to the nearest breakpoint width rather than growing fluidly.",
-          attrs = [ Margin.Bottom.small ]
-        )
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text "Causes the container to snap to the nearest breakpoint width rather than growing fluidly."
+        ]
 
-        Subtitle2.div ("Container.gutters")
+        div [ Typography.subtitle2 ] [ text "Container.gutters" ]
 
-        Body1.div (
-          "Adds horizontal padding inside the container so content does not touch the edges.",
-          attrs = [ Margin.Bottom.small ]
-        )
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text "Adds horizontal padding inside the container so content does not touch the edges."
+        ]
       ]
 
     let filler content =
@@ -160,10 +157,10 @@ Container.create(content)
     Container.create (
       div [] [
         Helpers.pageTitle "Container"
-        Body1.div (
-          "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts."
+        ]
 
         Helpers.divider ()
         variantExamples ()

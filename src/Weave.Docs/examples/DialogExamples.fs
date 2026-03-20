@@ -28,7 +28,7 @@ module DialogExamples =
 
     let dialogContent dialog =
       div [] [
-        Body1.div ("This is a basic dialog with title and content.")
+        div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ]
         div [ Margin.Top.small ] [ confirm dialog; cancel dialog ]
       ]
 
@@ -47,7 +47,7 @@ module DialogExamples =
         |> Doc.BindView(fun isOpen ->
           if isOpen then
             Dialog.create (
-              DialogTitle.create (H6.div ("Dialog Title")),
+              DialogTitle.create (div [ Typography.h6 ] [ text "Dialog Title" ]),
               DialogContent.create (dialogContent dialogVisible)
             )
           else
@@ -64,10 +64,10 @@ dialogVisible.View
 |> Doc.BindView(fun isOpen ->
     if isOpen then
         Dialog.create(
-            DialogTitle.create(H6.div("Dialog Title")),
+            DialogTitle.create(div [ Typography.h6 ] [ text "Dialog Title" ]),
             DialogContent.create(
                 div [] [
-                    Body1.div("This is a basic dialog with title and content.")
+                    div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ]
                     Button.create(
                         text "Close",
                         onClick = (fun () -> Var.Set dialogVisible false)
@@ -86,7 +86,7 @@ dialogVisible.View
 
     let dialogContent dialog =
       div [] [
-        Body1.div ("This dialog can be dismissed by clicking outside.")
+        div [ Typography.body1 ] [ text "This dialog can be dismissed by clicking outside." ]
         div [ Margin.Top.small ] [ confirm dialog; cancel dialog ]
       ]
 
@@ -105,7 +105,7 @@ dialogVisible.View
         |> Doc.BindView(fun isOpen ->
           if isOpen then
             Dialog.create (
-              DialogTitle.create (H6.div ("Optional Dialog")),
+              DialogTitle.create (div [ Typography.h6 ] [ text "Optional Dialog" ]),
               DialogContent.create (dialogContent dialogVisible),
               dialogInteraction =
                 View.Const(Dialog.Interaction.Optional(fun () -> Var.Set dialogVisible false))
@@ -122,9 +122,9 @@ open WebSharper.UI
 let dialogVisible = Var.Create false
 
 Dialog.create(
-    DialogTitle.create(H6.div("Optional Dialog")),
+    DialogTitle.create(div [ Typography.h6 ] [ text "Optional Dialog" ]),
     DialogContent.create(
-        div [] [ Body1.div("Click outside to dismiss.") ]
+        div [] [ div [ Typography.body1 ] [ text "Click outside to dismiss." ] ]
     ),
     dialogInteraction = // see here
         View.Const(
@@ -140,7 +140,7 @@ Dialog.create(
 
     let dialogContent dialog =
       div [] [
-        Body1.div ("This dialog demonstrates different positions.")
+        div [ Typography.body1 ] [ text "This dialog demonstrates different positions." ]
         div [ Margin.Top.small ] [
           Button.primary (
             text "Close",
@@ -175,7 +175,7 @@ Dialog.create(
           |> Doc.BindView (function
             | Some pos ->
               Dialog.create (
-                DialogTitle.create (H6.div (sprintf "%A Dialog" pos)),
+                DialogTitle.create (div [ Typography.h6 ] [ text (sprintf "%A Dialog" pos) ]),
                 DialogContent.create (dialogContent dialogVisible),
                 dialogPosition = View.Const pos
               )
@@ -190,17 +190,17 @@ open Weave.Dialog
 open WebSharper.UI
 
 Dialog.create(
-    DialogTitle.create(H6.div("Top Center Dialog")),
+    DialogTitle.create(div [ Typography.h6 ] [ text "Top Center Dialog" ]),
     DialogContent.create(
-        div [] [ Body1.div("Anchored to the top center.") ]
+        div [] [ div [ Typography.body1 ] [ text "Anchored to the top center." ] ]
     ),
     dialogPosition = View.Const DialogPosition.TopCenter // see here
 )
 
 Dialog.create(
-    DialogTitle.create(H6.div("Bottom Center Dialog")),
+    DialogTitle.create(div [ Typography.h6 ] [ text "Bottom Center Dialog" ]),
     DialogContent.create(
-        div [] [ Body1.div("Anchored to the bottom center.") ]
+        div [] [ div [ Typography.body1 ] [ text "Anchored to the bottom center." ] ]
     ),
     dialogPosition = View.Const DialogPosition.BottomCenter // see here
 )
@@ -212,10 +212,9 @@ Dialog.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Dialog"
-        Body1.div (
-          "Dialogs are used to display important information or request user input in a modal window.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Dialogs are used to display important information or request user input in a modal window."
+        ]
         Helpers.divider ()
         basicDialogExample ()
         Helpers.divider ()

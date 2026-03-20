@@ -12,7 +12,7 @@ module GridExamples =
 
   let private demoBox (label: View<string>) color =
     Container.create (
-      content = Typography.ButtonText.div (label),
+      content = div [ Typography.button ] [ textView label ],
       attrs = [
         BrandColor.toBackgroundColor color
         BorderRadius.All.small
@@ -138,21 +138,21 @@ GridItem.create(
         let item color =
           GridItem.create (demoBox (View.Const "Item") color, xs = Grid.Width.create 4)
 
-        Body1.div ("Spacing: 0", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 0" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
           spacing = Grid.GutterSpacing.create 0
         )
 
-        Body1.div ("Spacing: 10", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 10" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
           spacing = Grid.GutterSpacing.create 10
         )
 
-        Body1.div ("Spacing: 20", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 20" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
@@ -180,7 +180,7 @@ Grid.create(
 
     let content =
       div [] [
-        Body1.div ("Justify: Start", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Justify: Start" ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -189,7 +189,7 @@ Grid.create(
           justify = JustifyContent.flexStart
         )
 
-        Body1.div ("Justify: Center", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Center" ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -198,7 +198,7 @@ Grid.create(
           justify = JustifyContent.center
         )
 
-        Body1.div ("Justify: End", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: End" ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -207,7 +207,9 @@ Grid.create(
           justify = JustifyContent.flexEnd
         )
 
-        Body1.div ("Justify: Space Between", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [
+          text "Justify: Space Between"
+        ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -216,7 +218,7 @@ Grid.create(
           justify = JustifyContent.spaceBetween
         )
 
-        Body1.div ("Justify: Space Around", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Space Around" ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -225,7 +227,7 @@ Grid.create(
           justify = JustifyContent.spaceAround
         )
 
-        Body1.div ("Justify: Space Evenly", attrs = [ Margin.Top.medium; Margin.Bottom.extraSmall ])
+        div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Space Evenly" ]
         Grid.create (
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
@@ -300,10 +302,11 @@ Grid.create(
           GridItem.create (
             Container.create (
               [
-                Body1.div (
-                  "Outer Grid - Left Column",
-                  attrs = [ Margin.Bottom.extraSmall; Attr.Style "color" "var(--palette-text-primary)" ]
-                )
+                div [
+                  Typography.body1
+                  Margin.Bottom.extraSmall
+                  Attr.Style "color" "var(--palette-text-primary)"
+                ] [ text "Outer Grid - Left Column" ]
                 Grid.create (
                   [
                     GridItem.create (
@@ -330,10 +333,11 @@ Grid.create(
           GridItem.create (
             Container.create (
               [
-                Body1.div (
-                  "Outer Grid - Right Column",
-                  attrs = [ Margin.Bottom.extraSmall; Attr.Style "color" "var(--palette-text-primary)" ]
-                )
+                div [
+                  Typography.body1
+                  Margin.Bottom.extraSmall
+                  Attr.Style "color" "var(--palette-text-primary)"
+                ] [ text "Outer Grid - Right Column" ]
                 demoBox (View.Const "Full Height Item") BrandColor.Primary
               ]
               |> Doc.Concat
@@ -382,8 +386,8 @@ Grid.create(
         BorderRadius.All.medium
         Attr.Style "height" "100%"
       ] [
-        H5.div (View.Const title, attrs = [ Margin.Bottom.extraSmall ])
-        Body1.div (View.Const description)
+        div [ Typography.h5; Margin.Bottom.extraSmall ] [ text title ]
+        div [ Typography.body1 ] [ text description ]
       ]
 
     let content =
@@ -440,8 +444,8 @@ let card title description =
         SurfaceColor.toBackgroundColor SurfaceColor.Paper
         BorderRadius.All.medium
     ] [
-        H5.div(View.Const title)
-        Body1.div(View.Const description)
+        div [ Typography.h5 ] [ text title ]
+        div [ Typography.body1 ] [ text description ]
     ]
 
 Grid.create(
@@ -467,10 +471,10 @@ Grid.create(
     Container.create (
       div [] [
         Helpers.pageTitle "Grid"
-        Body1.div (
-          "The Grid component uses a 12-column system to create flexible, responsive layouts. Items can span different numbers of columns at different breakpoints.",
-          attrs = [ Margin.Bottom.extraSmall ]
-        )
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text
+            "The Grid component uses a 12-column system to create flexible, responsive layouts. Items can span different numbers of columns at different breakpoints."
+        ]
 
         Helpers.divider ()
         basicGridExample ()

@@ -11,7 +11,7 @@ open Weave.CssHelpers.Animation
 module AnimationExamples =
 
   let private inlineCode (value: string) =
-    Caption.span (value, attrs = [ Typography.Color.primary ])
+    span [ Typography.caption; Typography.Color.primary ] [ text value ]
 
   let private tableCell (children: Doc list) =
     td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
@@ -263,7 +263,7 @@ div [
               JustifyContent.center
               Attr.Style "min-height" "120px"
               Attr.Style "color" "white"
-            ] [ H5.div (animLabel) ]
+            ] [ div [ Typography.h5 ] [ text animLabel ] ]
           | None ->
             div [
               Attr.Style "min-height" "120px"
@@ -271,7 +271,7 @@ div [
               AlignItems.center
               JustifyContent.center
               Attr.Style "opacity" "0.5"
-            ] [ Body1.div ("Select an animation to preview") ])
+            ] [ div [ Typography.body1 ] [ text "Select an animation to preview" ] ])
       ]
 
     let code =
@@ -310,7 +310,7 @@ div [ AnimationEntrance.fadeIn ] [
         JustifyContent.center
         Attr.Style "min-height" "80px"
         Attr.Style "color" "white"
-      ] [ Body1.div ("I faded in when this page loaded") ]
+      ] [ div [ Typography.body1 ] [ text "I faded in when this page loaded" ] ]
 
     let code =
       """open Weave
@@ -331,7 +331,7 @@ div [ AnimationEntrance.fadeIn ] [  // see here
 
     let content =
       div [] [
-        Subtitle2.div (View.Const "Hover triggers")
+        div [ Typography.subtitle2 ] [ textView (View.Const "Hover triggers") ]
 
         div [
           Flex.Flex.allSizes
@@ -362,7 +362,7 @@ div [ AnimationEntrance.fadeIn ] [  // see here
           )
         ]
 
-        Subtitle2.div (View.Const "Focus triggers (use Tab to navigate)")
+        div [ Typography.subtitle2 ] [ textView (View.Const "Focus triggers (use Tab to navigate)") ]
 
         div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Attr.Style "gap" "12px" ] [
           Button.secondary (
@@ -553,7 +553,7 @@ Chip.create(
           JustifyContent.center
           Attr.Style "min-height" "80px"
           Attr.Style "color" "white"
-        ] [ Body1.div ("I toggle between fade-in and fade-out") ]
+        ] [ div [ Typography.body1 ] [ text "I toggle between fade-in and fade-out" ] ]
       ]
 
     let code =
@@ -1045,20 +1045,24 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
 
         Helpers.sectionHeader "When do animations play?"
 
-        Body1.div (
-          "There are six ways to trigger an animation. The default is on mount. AnimationOn (hover, focus, hover-focus) is a CSS-only trigger that composes as direct Attr bindings just like kind, duration, and easing. The remaining triggers — click, timer, reactive state, and mount/unmount — are JS-based and live in the Animate module as Attr helpers.",
-          attrs = [ Margin.Bottom.small ]
-        )
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text
+            "There are six ways to trigger an animation. The default is on mount. AnimationOn (hover, focus, hover-focus) is a CSS-only trigger that composes as direct Attr bindings just like kind, duration, and easing. The remaining triggers — click, timer, reactive state, and mount/unmount — are JS-based and live in the Animate module as Attr helpers."
+        ]
 
         triggerOnMountSection ()
         Helpers.divider ()
 
-        Subtitle2.div (View.Const "CSS triggers (AnimationOn)", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
+          textView (View.Const "CSS triggers (AnimationOn)")
+        ]
 
         triggerOnHoverFocusSection ()
         Helpers.divider ()
 
-        Subtitle2.div (View.Const "JS triggers (Animate module)", attrs = [ Margin.Bottom.extraSmall ])
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
+          textView (View.Const "JS triggers (Animate module)")
+        ]
 
         triggerOnClickSection ()
         Helpers.divider ()
@@ -1077,10 +1081,9 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
 
         Helpers.sectionHeader "Customizing components"
 
-        Body1.div (
-          "These recipes show how to compose triggers and animations on real Weave components.",
-          attrs = [ Margin.Bottom.small ]
-        )
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text "These recipes show how to compose triggers and animations on real Weave components."
+        ]
 
         animatedAlertsSection ()
         Helpers.divider ()

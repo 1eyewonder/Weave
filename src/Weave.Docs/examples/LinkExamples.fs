@@ -18,25 +18,37 @@ module LinkExamples =
     let content =
       div [] [
         div [] [
-          Body1.div (
+          div [ Typography.body1 ] [
             seq {
               yield text "Visit our "
-              yield Link.create (Body1.span ("documentation"), href = "https://1eyewonder.github.io/Weave/")
+
+              yield
+                Link.create (
+                  span [ Typography.body1 ] [ text "documentation" ],
+                  href = "https://1eyewonder.github.io/Weave/"
+                )
+
               yield text " for more details."
             }
             |> Doc.Concat
-          )
+          ]
         ]
 
         div [] [
-          Body1.div (
+          div [ Typography.body1 ] [
             seq {
               yield text "Visit our "
-              yield Link.create (H6.span ("documentation"), href = "https://1eyewonder.github.io/Weave/")
+
+              yield
+                Link.create (
+                  span [ Typography.h6 ] [ text "documentation" ],
+                  href = "https://1eyewonder.github.io/Weave/"
+                )
+
               yield text " for more details."
             }
             |> Doc.Concat
-          )
+          ]
         ]
       ]
 
@@ -44,31 +56,31 @@ module LinkExamples =
       """open Weave
 open WebSharper.UI.Html
 
-Body1.div(
+div [ Typography.body1 ] [
     seq {
         yield text "Visit our "
         yield
             Link.create(
-                Body1.span("documentation"),   // brings its own font style
+                span [ Typography.body1 ] [ text "documentation" ],   // brings its own font style
                 href = "https://1eyewonder.github.io/Weave/"
             )
         yield text " for more details."
     }
     |> Doc.Concat
-)
+]
 
-Body1.div(
+div [ Typography.body1 ] [
     seq {
         yield text "Visit our "
         yield
             Link.create(
-                H6.span("documentation"),   // brings its own font style
+                span [ Typography.h6 ] [ text "documentation" ],   // brings its own font style
                 href = "https://1eyewonder.github.io/Weave/"
             )
         yield text " for more details."
     }
     |> Doc.Concat
-)
+]
 """
 
     Helpers.codeSampleSection "Basic Link" description content code
@@ -84,7 +96,7 @@ Body1.div(
           GridItem.create (
             div [] [
               Link.create (
-                H3.div ("OnHover (default)"),
+                div [ Typography.h3 ] [ text "OnHover (default)" ],
                 href = "https://1eyewonder.github.io/Weave/",
                 attrs = [ Link.Underline.onHover ]
               )
@@ -93,7 +105,7 @@ Body1.div(
           GridItem.create (
             div [] [
               Link.create (
-                H3.div ("Always"),
+                div [ Typography.h3 ] [ text "Always" ],
                 href = "https://1eyewonder.github.io/Weave/",
                 attrs = [ Link.Underline.always ]
               )
@@ -102,7 +114,7 @@ Body1.div(
           GridItem.create (
             div [] [
               Link.create (
-                H3.div ("None"),
+                div [ Typography.h3 ] [ text "None" ],
                 href = "https://1eyewonder.github.io/Weave/",
                 attrs = [ Link.Underline.none ]
               )
@@ -117,19 +129,19 @@ Body1.div(
 
 
 Link.create(
-  H3.div("OnHover (default)"),
+  div [ Typography.h3 ] [ text "OnHover (default)" ],
   href = "https://1eyewonder.github.io/Weave/",
   attrs = [ Link.Underline.onHover ]
 )
 
 Link.create(
-  H3.div("Always"),
+  div [ Typography.h3 ] [ text "Always" ],
   href = "https://1eyewonder.github.io/Weave/",
   attrs = [ Link.Underline.always ]
 )
 
 Link.create(
-  H3.div("None"),
+  div [ Typography.h3 ] [ text "None" ],
   href = "https://1eyewonder.github.io/Weave/",
   attrs = [ Link.Underline.none ]
 )"""
@@ -197,7 +209,7 @@ colors |> List.map (fun (label, colorAttr) ->
         [
           GridItem.create (
             div [] [
-              Caption.div ("Start icon")
+              div [ Typography.caption ] [ text "Start icon" ]
               Link.create (
                 text "Open in new tab",
                 href = "https://1eyewonder.github.io/Weave/",
@@ -208,7 +220,7 @@ colors |> List.map (fun (label, colorAttr) ->
           )
           GridItem.create (
             div [] [
-              Caption.div ("End icon")
+              div [ Typography.caption ] [ text "End icon" ]
               Link.create (
                 text "Download",
                 href = "https://1eyewonder.github.io/Weave/",
@@ -219,7 +231,7 @@ colors |> List.map (fun (label, colorAttr) ->
           )
           GridItem.create (
             div [] [
-              Caption.div ("Both icons")
+              div [ Typography.caption ] [ text "Both icons" ]
               Link.create (
                 text "Send email",
                 href = "https://1eyewonder.github.io/Weave/",
@@ -318,7 +330,7 @@ IconLink.create(
         [
           GridItem.create (
             div [] [
-              Caption.div ("Enabled")
+              div [ Typography.caption ] [ text "Enabled" ]
               Link.create (
                 text "Active link",
                 href = "https://1eyewonder.github.io/Weave/",
@@ -329,7 +341,7 @@ IconLink.create(
           )
           GridItem.create (
             div [] [
-              Caption.div ("Disabled")
+              div [ Typography.caption ] [ text "Disabled" ]
               Link.create (
                 text "Disabled link",
                 href = "https://1eyewonder.github.io/Weave/",

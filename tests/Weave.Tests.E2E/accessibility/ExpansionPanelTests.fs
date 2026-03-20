@@ -60,6 +60,7 @@ type ExpansionPanelTests(server: TestServerFixture) =
   member this.``header aria-controls matches content region id``() = task {
     do! this.NavigateTo("expansion-panel")
     let header = this.Page.Locator(".weave-expansion-panel__header").First
+    do! this.Expect(header).ToHaveAttributeAsync("aria-controls", System.Text.RegularExpressions.Regex(".+"))
     let! controlsId = header.GetAttributeAsync("aria-controls")
     let region = this.Page.Locator(".weave-expansion-panel__content-wrapper").First
     do! this.Expect(region).ToHaveAttributeAsync("id", controlsId)
@@ -69,6 +70,7 @@ type ExpansionPanelTests(server: TestServerFixture) =
   member this.``content region has aria-labelledby matching header id``() = task {
     do! this.NavigateTo("expansion-panel")
     let header = this.Page.Locator(".weave-expansion-panel__header").First
+    do! this.Expect(header).ToHaveAttributeAsync("id", System.Text.RegularExpressions.Regex(".+"))
     let! headerId = header.GetAttributeAsync("id")
     let region = this.Page.Locator(".weave-expansion-panel__content-wrapper").First
     do! this.Expect(region).ToHaveAttributeAsync("aria-labelledby", headerId)

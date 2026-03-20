@@ -149,7 +149,7 @@ Field.create(
       """open Weave
 
 // When the Var has a value, the label automatically floats
-let value = Var.Create "Some Content 💛 follows here"
+let value = Var.Create "Some content here"
 
 Field.create(
     value,

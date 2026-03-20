@@ -1465,43 +1465,34 @@ module ExamplesRouter =
             ]
           ]
 
-          categorySection "Layout" [
+          categorySection "Components" [
+            "Alert", AlertExamples
             "App Bar", AppBarExamples
-            "Container", ContainerExamples
-            "Divider", DividerExamples
-            "Drawer", DrawerExamples
-            "Grid", GridExamples
-            "Spacer", SpacerExamples
-          ]
-
-          categorySection "Navigation" [ "Link", LinkExamples; "Tabs", TabsExamples ]
-
-          categorySection "Inputs" [
             "Button", ButtonExamples
             "Button Group", ButtonGroupExamples
             "Button Menu", ButtonMenuExamples
             "Checkbox", CheckboxExamples
             "Chip", ChipExamples
             "Chip Set", ChipSetExamples
+            "Container", ContainerExamples
+            "Dialog", DialogExamples
+            "Divider", DividerExamples
+            "Drawer", DrawerExamples
             "Dropdown", DropdownExamples
-            "Select", SelectExamples
+            "Expansion Panel", ExpansionPanelExamples
             "Field", FieldExamples
+            "Grid", GridExamples
+            "Icons", IconsExamples
+            "Link", LinkExamples
+            "List", ListExamples
             "Numeric Field", NumericFieldExamples
             "Radio Button", RadioButtonExamples
+            "Select", SelectExamples
+            "Spacer", SpacerExamples
             "Switch", SwitchExamples
-          ]
-
-          categorySection "Data Display" [
-            "Icons", IconsExamples
-            "List", ListExamples
+            "Tabs", TabsExamples
             "Tooltip", TooltipExamples
             "Typography", TypographyExamples
-          ]
-
-          categorySection "Feedback" [
-            "Alert", AlertExamples
-            "Dialog", DialogExamples
-            "Expansion Panel", ExpansionPanelExamples
           ]
 
           categorySection "Styling" [
@@ -1741,11 +1732,7 @@ module ExamplesRouter =
         replaceStateHash (pageHash + "/" + sectionSlug)
         scrollToSectionAfterDelay sectionSlug 0)
 
-    let layoutExpanded = Var.Create true
-    let navSectionExpanded = Var.Create true
-    let inputsExpanded = Var.Create true
-    let dataExpanded = Var.Create true
-    let feedbackExpanded = Var.Create true
+    let componentsExpanded = Var.Create true
     let stylingExpanded = Var.Create true
 
     let navLeafItem (label: string) =
@@ -1832,46 +1819,34 @@ module ExamplesRouter =
 
         Divider.create (attrs = [ Margin.Vertical.extraSmall ])
 
-        navGroup (Icon.Android Android.Widgets) "Layout" layoutExpanded [
+        navGroup (Icon.Android Android.Widgets) "Components" componentsExpanded [
+          navLeafItem "Alert"
           navLeafItem "App Bar"
-          navLeafItem "Container"
-          navLeafItem "Divider"
-          navLeafItem "Drawer"
-          navLeafItem "Grid"
-          navLeafItem "Spacer"
-        ]
-
-        navGroup (Icon.Maps Maps.Explore) "Navigation" navSectionExpanded [
-          navLeafItem "Link"
-          navLeafItem "Tabs"
-        ]
-
-        navGroup (Icon.UiActions UiActions.InputCircle) "Inputs" inputsExpanded [
           navLeafItem "Button"
           navLeafItem "Button Group"
           navLeafItem "Button Menu"
           navLeafItem "Checkbox"
           navLeafItem "Chip"
           navLeafItem "Chip Set"
+          navLeafItem "Container"
+          navLeafItem "Dialog"
+          navLeafItem "Divider"
+          navLeafItem "Drawer"
           navLeafItem "Dropdown"
-          navLeafItem "Select"
+          navLeafItem "Expansion Panel"
           navLeafItem "Field"
+          navLeafItem "Grid"
+          navLeafItem "Icons"
+          navLeafItem "Link"
+          navLeafItem "List"
           navLeafItem "Numeric Field"
           navLeafItem "Radio Button"
+          navLeafItem "Select"
+          navLeafItem "Spacer"
           navLeafItem "Switch"
-        ]
-
-        navGroup (Icon.Business Business.Analytics) "Data Display" dataExpanded [
-          navLeafItem "Icons"
-          navLeafItem "List"
+          navLeafItem "Tabs"
           navLeafItem "Tooltip"
           navLeafItem "Typography"
-        ]
-
-        navGroup (Icon.Action Action.Feedback) "Feedback" feedbackExpanded [
-          navLeafItem "Alert"
-          navLeafItem "Dialog"
-          navLeafItem "Expansion Panel"
         ]
 
         navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [

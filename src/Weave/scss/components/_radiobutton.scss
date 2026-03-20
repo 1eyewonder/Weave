@@ -34,26 +34,10 @@ $dot-size: 10px;
   cursor: default !important;
 }
 
-.weave-radio--primary {
-  --radio-brand-color: var(--palette-primary);
-}
-.weave-radio--secondary {
-  --radio-brand-color: var(--palette-secondary);
-}
-.weave-radio--tertiary {
-  --radio-brand-color: var(--palette-tertiary);
-}
-.weave-radio--error {
-  --radio-brand-color: var(--palette-error);
-}
-.weave-radio--warning {
-  --radio-brand-color: var(--palette-warning);
-}
-.weave-radio--success {
-  --radio-brand-color: var(--palette-success);
-}
-.weave-radio--info {
-  --radio-brand-color: var(--palette-info);
+@each $color in $palette-colors {
+  .weave-radio--#{$color} {
+    --radio-brand-color: var(--palette-#{$color});
+  }
 }
 
 // Input (hidden)
@@ -81,7 +65,7 @@ $dot-size: 10px;
 
 // Disabled state: filled background and border, no dot
 .weave-radio__input:disabled + .weave-radio__span {
-  background: var(--palette-action-disabled, #f0f0f0);
+  background: var(--palette-action-disabled);
   border: none;
 }
 .weave-radio__input:disabled + .weave-radio__span::after {

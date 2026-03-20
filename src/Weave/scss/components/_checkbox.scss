@@ -38,26 +38,10 @@ $checkmark-height: 12px;
   cursor: default !important;
 }
 
-.weave-checkbox--primary {
-  --checkbox-brand-color: var(--palette-primary);
-}
-.weave-checkbox--secondary {
-  --checkbox-brand-color: var(--palette-secondary);
-}
-.weave-checkbox--tertiary {
-  --checkbox-brand-color: var(--palette-tertiary);
-}
-.weave-checkbox--error {
-  --checkbox-brand-color: var(--palette-error);
-}
-.weave-checkbox--warning {
-  --checkbox-brand-color: var(--palette-warning);
-}
-.weave-checkbox--success {
-  --checkbox-brand-color: var(--palette-success);
-}
-.weave-checkbox--info {
-  --checkbox-brand-color: var(--palette-info);
+@each $color in $palette-colors {
+  .weave-checkbox--#{$color} {
+    --checkbox-brand-color: var(--palette-#{$color});
+  }
 }
 
 // Input (hidden)

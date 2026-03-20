@@ -1,3 +1,5 @@
+@use "../abstracts/variables" as *;
+
 .weave-typography {
   margin: 0;
 }
@@ -100,33 +102,10 @@ $typography-types: (
   font-weight: 700;
 }
 
-// Color modifiers
-.weave-typography--primary {
-  color: var(--palette-primary);
-}
-
-.weave-typography--secondary {
-  color: var(--palette-secondary);
-}
-
-.weave-typography--tertiary {
-  color: var(--palette-tertiary);
-}
-
-.weave-typography--success {
-  color: var(--palette-success);
-}
-
-.weave-typography--error {
-  color: var(--palette-error);
-}
-
-.weave-typography--warning {
-  color: var(--palette-warning);
-}
-
-.weave-typography--info {
-  color: var(--palette-info);
+@each $color in $palette-colors {
+  .weave-typography--#{$color} {
+    color: var(--palette-#{$color});
+  }
 }
 
 .weave-typography--text-primary {

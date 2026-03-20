@@ -64,26 +64,10 @@
   cursor: default !important;
 }
 
-.weave-switch--primary {
-  --switch-brand-color: var(--palette-primary);
-}
-.weave-switch--secondary {
-  --switch-brand-color: var(--palette-secondary);
-}
-.weave-switch--tertiary {
-  --switch-brand-color: var(--palette-tertiary);
-}
-.weave-switch--error {
-  --switch-brand-color: var(--palette-error);
-}
-.weave-switch--warning {
-  --switch-brand-color: var(--palette-warning);
-}
-.weave-switch--success {
-  --switch-brand-color: var(--palette-success);
-}
-.weave-switch--info {
-  --switch-brand-color: var(--palette-info);
+@each $color in $palette-colors {
+  .weave-switch--#{$color} {
+    --switch-brand-color: var(--palette-#{$color});
+  }
 }
 
 .weave-switch__container {
@@ -146,7 +130,7 @@
   top: 50%;
   width: 8px;
   height: 14px;
-  border: solid var(--palette-background-paper, #fff);
+  border: solid var(--palette-background-paper);
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -60%) rotate(45deg);
   pointer-events: none;
@@ -165,67 +149,14 @@
   opacity: var(--weave-opacity-muted);
 }
 
-.weave-switch--primary .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-primary);
-  border-color: var(--palette-lines-default, #f0f0f0);
-  border-radius: 50%;
-}
-.weave-switch--primary
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-primary-text);
-}
+@each $color in $palette-colors {
+  .weave-switch--#{$color} .weave-switch__input:checked ~ .weave-switch__thumb {
+    background: var(--palette-#{$color});
+  }
 
-.weave-switch--secondary .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-secondary);
-}
-.weave-switch--secondary
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-secondary-text);
-}
-
-.weave-switch--tertiary .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-tertiary);
-}
-.weave-switch--tertiary
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-tertiary-text);
-}
-
-.weave-switch--error .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-error);
-}
-.weave-switch--error
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-error-text);
-}
-
-.weave-switch--warning .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-warning);
-}
-.weave-switch--warning
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-warning-text);
-}
-
-.weave-switch--success .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-success);
-}
-.weave-switch--success
-  .weave-switch__input:checked
-  ~ .weave-switch__thumb::after {
-  border-color: var(--palette-success-text);
-}
-
-.weave-switch--info .weave-switch__input:checked ~ .weave-switch__thumb {
-  background: var(--palette-info);
-}
-.weave-switch--info .weave-switch__input:checked ~ .weave-switch__thumb::after {
-  border-color: var(--palette-info-text);
+  .weave-switch--#{$color} .weave-switch__input:checked ~ .weave-switch__thumb::after {
+    border-color: var(--palette-#{$color}-text);
+  }
 }
 
 .weave-switch__input {
@@ -246,7 +177,7 @@
   display: none;
 }
 .weave-switch__input:disabled ~ .weave-switch__track {
-  background: var(--palette-action-disabled, #f0f0f0);
+  background: var(--palette-action-disabled);
   opacity: 1;
 }
 

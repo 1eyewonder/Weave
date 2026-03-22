@@ -120,8 +120,7 @@ div [ Typography.body1 ] [
               )
             ]
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -172,8 +171,7 @@ Link.create(
               href = "https://1eyewonder.github.io/Weave/",
               attrs = [ colorAttr; Link.Underline.always ]
             )
-          )),
-        spacing = Grid.GutterSpacing.create 2
+          ))
       )
 
     let code =
@@ -231,8 +229,7 @@ Link.create(text "Info", href = "#", attrs = [ Link.Color.info; Link.Underline.a
               )
             ]
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -286,8 +283,7 @@ Link.create(
               attrs = [ Link.Color.error ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -340,8 +336,7 @@ IconLink.create(
               )
             ]
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

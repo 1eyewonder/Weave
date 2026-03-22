@@ -29,18 +29,14 @@ module Grid =
       | Breakpoint.Large -> "lg"
       | Breakpoint.ExtraLarge -> "xl"
 
-  [<Struct>]
-  type GutterSpacing = private Spacing of int
+  module Spacing =
 
-  module GutterSpacing =
-    let create spacing =
-      if spacing < 0 then Spacing 0
-      elif spacing > 20 then Spacing 20
-      else Spacing spacing
-
-    let value (Spacing s) = s
-
-    let toClass (Spacing size) = sprintf "weave-grid--spacing-%i" size
+    let none = cl Css.``weave-grid--spacing-0``
+    let extraSmall = cl Css.``weave-grid--spacing-2``
+    let small = cl Css.``weave-grid--spacing-4``
+    let medium = cl Css.``weave-grid--spacing-8``
+    let large = cl Css.``weave-grid--spacing-12``
+    let extraLarge = cl Css.``weave-grid--spacing-20``
 
   [<Struct>]
   type Width = private Width of int
@@ -62,19 +58,10 @@ open Grid
 [<JavaScript>]
 type Grid =
 
-  static member create(items: Doc list, ?spacing: GutterSpacing, ?justify: Attr, ?attrs: Attr list) =
-    let spacing = defaultArg spacing (GutterSpacing.create 5)
+  static member create(items: Doc list, ?attrs: Attr list) =
     let attrs = defaultArg attrs List.empty
-    let justify = defaultArg justify JustifyContent.spaceAround
 
-    div
-      [
-        cl Css.``weave-grid``
-        cl (GutterSpacing.toClass spacing)
-        justify
-        yield! attrs
-      ]
-      items
+    div [ cl Css.``weave-grid``; yield! attrs ] items
 
 [<JavaScript>]
 type GridItem =

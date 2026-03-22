@@ -31,7 +31,7 @@ module ChipExamples =
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.filled; colorAttr ]))),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
         div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
@@ -44,7 +44,7 @@ module ChipExamples =
                 attrs = [ Chip.Variant.filled; colorAttr ]
               )
             )),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -82,7 +82,7 @@ Chip.create(text "Info", attrs = [ Chip.Variant.filled; Chip.Color.info ])"""
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.text; colorAttr ]))),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
         div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
@@ -91,7 +91,7 @@ Chip.create(text "Info", attrs = [ Chip.Variant.filled; Chip.Color.info ])"""
             GridItem.create (
               Chip.create (text label, enabled = View.Const false, attrs = [ Chip.Variant.text; colorAttr ])
             )),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -129,7 +129,7 @@ Chip.create(text "Info", attrs = [ Chip.Variant.text; Chip.Color.info ])"""
           colors
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (Chip.create (text label, attrs = [ Chip.Variant.outlined; colorAttr ]))),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
         div [ Typography.subtitle2; Margin.Vertical.extraSmall ] [ text "Disabled" ]
         Grid.create (
@@ -142,7 +142,7 @@ Chip.create(text "Info", attrs = [ Chip.Variant.text; Chip.Color.info ])"""
                 attrs = [ Chip.Variant.outlined; colorAttr ]
               )
             )),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -342,8 +342,7 @@ Chip.create(
               attrs = [ Chip.Variant.outlined; Chip.Color.info ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -392,8 +391,7 @@ Chip.create(
           col "Compact" Chip.Density.compact
           col "Standard" Chip.Density.standard
           col "Spacious" Chip.Density.spacious
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -452,8 +450,7 @@ Chip.create(
               attrs = [ Chip.Variant.filled; Chip.Color.info ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -559,8 +556,7 @@ Chip.create(
               )
             ]
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

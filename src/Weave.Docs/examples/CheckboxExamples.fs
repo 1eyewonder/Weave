@@ -278,7 +278,6 @@ Checkbox.create(
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

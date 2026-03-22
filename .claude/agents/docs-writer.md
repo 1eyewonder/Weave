@@ -188,8 +188,7 @@ let content =
           text (sprintf "%A" color),
           attrs = [ MyComponent.Color.toAttr color ]
         )
-      )),
-    spacing = Grid.GutterSpacing.create 2
+      ))
   )
 ```
 

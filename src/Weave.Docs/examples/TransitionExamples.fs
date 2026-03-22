@@ -125,8 +125,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
             xs = Grid.Width.create 6,
             sm = Grid.Width.create 3
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

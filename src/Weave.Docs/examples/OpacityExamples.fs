@@ -122,8 +122,7 @@ div [
               sm = Grid.Width.create 4,
               md = Grid.Width.create 2
             )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

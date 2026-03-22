@@ -131,32 +131,47 @@ GridItem.create(
 
   let private spacingExample () =
     let description =
-      Helpers.bodyText "Control the gap between grid items with different spacing values (1-20)."
+      Helpers.bodyText
+        "Control the gap between grid items with semantic spacing values from extraSmall to extraLarge."
 
     let content =
       div [] [
         let item color =
           GridItem.create (demoBox (View.Const "Item") color, xs = Grid.Width.create 4)
 
-        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 0" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Extra Small" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
-          spacing = Grid.GutterSpacing.create 0
+          attrs = [ Grid.Spacing.extraSmall ]
         )
 
-        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 10" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Small (default)" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
-          spacing = Grid.GutterSpacing.create 10
+          attrs = [ Grid.Spacing.small ]
         )
 
-        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Spacing: 20" ]
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Medium" ]
 
         Grid.create (
           [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
-          spacing = Grid.GutterSpacing.create 20
+          attrs = [ Grid.Spacing.medium ]
+        )
+
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Large" ]
+
+        Grid.create (
+          [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
+          attrs = [ Grid.Spacing.large ]
+        )
+
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Extra Large" ]
+
+        Grid.create (
+          [ item BrandColor.Primary; item BrandColor.Secondary; item BrandColor.Tertiary ],
+          attrs = [ Grid.Spacing.extraLarge ]
         )
       ]
 
@@ -169,7 +184,7 @@ Grid.create(
         GridItem.create(item2, xs = Grid.Width.create 4)
         GridItem.create(item3, xs = Grid.Width.create 4)
     ],
-    spacing = Grid.GutterSpacing.create 10
+    attrs = [ Grid.Spacing.small ]
 )"""
 
     Helpers.codeSampleSection "Spacing" description content code
@@ -186,7 +201,7 @@ Grid.create(
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.flexStart
+          attrs = [ JustifyContent.flexStart ]
         )
 
         div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Center" ]
@@ -195,7 +210,7 @@ Grid.create(
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.center
+          attrs = [ JustifyContent.center ]
         )
 
         div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: End" ]
@@ -204,7 +219,7 @@ Grid.create(
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.flexEnd
+          attrs = [ JustifyContent.flexEnd ]
         )
 
         div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [
@@ -215,7 +230,7 @@ Grid.create(
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.spaceBetween
+          attrs = [ JustifyContent.spaceBetween ]
         )
 
         div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Space Around" ]
@@ -223,8 +238,7 @@ Grid.create(
           [
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
-          ],
-          justify = JustifyContent.spaceAround
+          ]
         )
 
         div [ Typography.body1; Margin.Top.medium; Margin.Bottom.extraSmall ] [ text "Justify: Space Evenly" ]
@@ -233,7 +247,7 @@ Grid.create(
             GridItem.create (demoBox (View.Const "Item 1") BrandColor.Primary, xs = Grid.Width.create 3)
             GridItem.create (demoBox (View.Const "Item 2") BrandColor.Secondary, xs = Grid.Width.create 3)
           ],
-          justify = JustifyContent.spaceEvenly
+          attrs = [ JustifyContent.spaceEvenly ]
         )
       ]
 
@@ -245,7 +259,7 @@ Grid.create(
         GridItem.create(item1, xs = Grid.Width.create 3)
         GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.center
+    attrs = [ JustifyContent.center ]
 )
 
 Grid.create(
@@ -253,7 +267,7 @@ Grid.create(
         GridItem.create(item1, xs = Grid.Width.create 3)
         GridItem.create(item2, xs = Grid.Width.create 3)
     ],
-    justify = JustifyContent.spaceBetween
+    attrs = [ JustifyContent.spaceBetween ]
 )"""
 
     Helpers.codeSampleSection "Justify Content" description content code

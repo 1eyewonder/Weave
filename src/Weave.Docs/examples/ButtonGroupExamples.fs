@@ -33,8 +33,6 @@ module ButtonGroupExamples =
           makeGroup ButtonGroup.Variant.text
           makeGroup ButtonGroup.Variant.outlined
         ],
-        spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.spaceAround,
         attrs = [ AlignItems.center ]
       )
 
@@ -102,8 +100,6 @@ ButtonGroup.create(
           makeGroup ButtonGroup.Variant.text
           makeGroup ButtonGroup.Variant.outlined
         ],
-        spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.spaceAround,
         attrs = [ AlignItems.start ]
       )
 
@@ -149,8 +145,6 @@ ButtonGroup.create(
           makeGroup ButtonGroup.Density.standard ButtonGroup.Color.error
           makeGroup ButtonGroup.Density.spacious ButtonGroup.Color.success
         ],
-        spacing = Grid.GutterSpacing.create 2,
-        justify = JustifyContent.spaceAround,
         attrs = [ AlignItems.center ]
       )
 

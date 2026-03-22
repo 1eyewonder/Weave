@@ -248,8 +248,7 @@ Tabs.create(
             xs = Grid.Width.create 12,
             lg = Grid.Width.create 6
           )
-        ],
-        justify = JustifyContent.spaceAround
+        ]
       )
 
     let code =
@@ -426,8 +425,7 @@ Tabs.create(
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 4
+        ]
       )
 
     let code =
@@ -595,7 +593,6 @@ div [ Attr.Style "max-width" "500px" ] [
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

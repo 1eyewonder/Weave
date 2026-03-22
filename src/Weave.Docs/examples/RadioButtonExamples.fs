@@ -88,7 +88,7 @@ Radio.create(
       let label =
         selected.View |> View.Map(fun v -> if v then "I am selected!" else "Select me!")
 
-      Grid.create ([ Radio.create (selected, true, displayText = label) ], justify = JustifyContent.center)
+      Grid.create ([ Radio.create (selected, true, displayText = label) ], attrs = [ JustifyContent.center ])
 
     let code =
       """open Weave
@@ -293,7 +293,6 @@ Radio.create(
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

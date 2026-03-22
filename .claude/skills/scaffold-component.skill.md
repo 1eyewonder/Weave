@@ -258,8 +258,7 @@ module {Name}Examples =
               ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

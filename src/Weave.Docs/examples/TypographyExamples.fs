@@ -267,8 +267,7 @@ div [ Typography.body1; Typography.noWrap ] [
             div [ Typography.h5; colorAttr ] [ text (sprintf "%s Color" label) ],
             xs = Grid.Width.create 6,
             md = Grid.Width.create 4
-          )),
-        spacing = Grid.GutterSpacing.create 2
+          ))
       )
 
     let code =

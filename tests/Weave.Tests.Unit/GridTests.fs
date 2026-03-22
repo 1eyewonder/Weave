@@ -33,43 +33,6 @@ let gridTests =
         Expect.equal (List.distinct strs).Length strs.Length "each breakpoint maps to a unique string"
     ]
 
-    testList "GutterSpacing.create clamping" [
-      testTheory "values in range [0, 20] are preserved" [ 0..20 ]
-      <| fun n -> Expect.equal (Grid.GutterSpacing.create n |> Grid.GutterSpacing.value) n ""
-
-      testTheory "values below minimum are clamped to 0" [ -1; -100; -999 ]
-      <| fun n -> Expect.equal (Grid.GutterSpacing.create n |> Grid.GutterSpacing.value) 0 ""
-
-      testTheory "values above maximum are clamped to 20" [ 21; 100; 999 ]
-      <| fun n -> Expect.equal (Grid.GutterSpacing.create n |> Grid.GutterSpacing.value) 20 ""
-
-      testProperty "arbitrary int clamps to [0, 20]"
-      <| fun (n: int) ->
-        let v = Grid.GutterSpacing.create n |> Grid.GutterSpacing.value
-        v >= 0 && v <= 20
-    ]
-
-    testList "GutterSpacing boundary values" [
-      yield!
-        testParam (Grid.GutterSpacing.create 0) [
-          "spacing 0: value is preserved", fun s () -> Expect.equal (Grid.GutterSpacing.value s) 0 ""
-          "spacing 0: class is weave-grid--spacing-0",
-          fun s () -> Expect.equal (Grid.GutterSpacing.toClass s) "weave-grid--spacing-0" ""
-        ]
-      yield!
-        testParam (Grid.GutterSpacing.create 5) [
-          "spacing 5: value is preserved", fun s () -> Expect.equal (Grid.GutterSpacing.value s) 5 ""
-          "spacing 5: class is weave-grid--spacing-5",
-          fun s () -> Expect.equal (Grid.GutterSpacing.toClass s) "weave-grid--spacing-5" ""
-        ]
-      yield!
-        testParam (Grid.GutterSpacing.create 20) [
-          "spacing 20: value is preserved", fun s () -> Expect.equal (Grid.GutterSpacing.value s) 20 ""
-          "spacing 20: class is weave-grid--spacing-20",
-          fun s () -> Expect.equal (Grid.GutterSpacing.toClass s) "weave-grid--spacing-20" ""
-        ]
-    ]
-
     testList "Width.create clamping" [
       testTheory "values in range [1, 12] are preserved" [ 1..12 ]
       <| fun n -> Expect.equal (Grid.Width.create n |> Grid.Width.value) n ""

@@ -63,7 +63,7 @@ module FieldExamples =
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 10
+        attrs = [ Grid.Spacing.large ]
       )
 
     let code =
@@ -142,7 +142,7 @@ Field.create(
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 10
+        attrs = [ Grid.Spacing.large ]
       )
 
     let code =
@@ -222,7 +222,7 @@ Field.create(
             mkItem Field.Variant.Filled "Filled" searchIcon noIcon startFilledVal
             mkItem Field.Variant.Outlined "Outlined" searchIcon noIcon startOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 10
+          attrs = [ Grid.Spacing.large ]
         )
 
         div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "End Adornment" ]
@@ -233,7 +233,7 @@ Field.create(
             mkItem Field.Variant.Filled "Filled" noIcon infoIcon endFilledVal
             mkItem Field.Variant.Outlined "Outlined" noIcon warningIcon endOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 10
+          attrs = [ Grid.Spacing.large ]
         )
 
         div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "Both Adornments" ]
@@ -244,7 +244,7 @@ Field.create(
             mkItem Field.Variant.Filled "Filled" searchIcon infoIcon bothFilledVal
             mkItem Field.Variant.Outlined "Outlined" searchIcon warningIcon bothOutlinedVal
           ],
-          spacing = Grid.GutterSpacing.create 10
+          attrs = [ Grid.Spacing.large ]
         )
       ]
 
@@ -493,7 +493,7 @@ Field.create(
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 10
+        attrs = [ Grid.Spacing.large ]
       )
 
     let code =
@@ -583,7 +583,7 @@ Field.create(
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 10
+        attrs = [ Grid.Spacing.large ]
       )
 
     let code =
@@ -725,7 +725,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
             md = Grid.Width.create 6
           )
         ],
-        spacing = Grid.GutterSpacing.create 10
+        attrs = [ Grid.Spacing.large ]
       )
 
     let code =

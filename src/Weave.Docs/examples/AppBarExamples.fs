@@ -156,8 +156,7 @@ module AppBarExamples =
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

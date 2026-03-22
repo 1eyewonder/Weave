@@ -50,8 +50,7 @@ Alert.create(
           alert "Standard" Alert.Variant.standard
           alert "Outlined" Alert.Variant.outlined
           alert "Filled" Alert.Variant.filled
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -114,7 +113,7 @@ Alert.create(
               sm = Grid.Width.create 6,
               md = Grid.Width.create 3
             )),
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -175,8 +174,7 @@ Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.i
             xs = Grid.Width.create 12,
             md = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -271,7 +269,6 @@ visible.View
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

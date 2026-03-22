@@ -10,6 +10,9 @@ $columns: 12;
   flex-wrap: wrap;
   box-sizing: border-box;
   align-items: stretch;
+  justify-content: space-around;
+  --grid-gap: #{$base-spacing * 8};
+  gap: var(--grid-gap);
 }
 
 .weave-grid__item {

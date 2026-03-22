@@ -272,7 +272,6 @@ ChipSet.create(
             md = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

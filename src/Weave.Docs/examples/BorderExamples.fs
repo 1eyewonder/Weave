@@ -450,7 +450,7 @@ div [
               sm = Grid.Width.create 3
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
 
         div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Special shapes" ]
@@ -468,7 +468,7 @@ div [
               sm = Grid.Width.create 3
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
 
         div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Directional" ]
@@ -496,7 +496,7 @@ div [
               sm = Grid.Width.create 3
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -585,7 +585,7 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
               md = Grid.Width.create 2
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
 
         div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Directional" ]
@@ -623,7 +623,7 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
               sm = Grid.Width.create 4
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -724,8 +724,7 @@ div [
             sm = Grid.Width.create 4,
             md = Grid.Width.create 2
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -826,8 +825,7 @@ div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.erro
             sm = Grid.Width.create 4,
             md = Grid.Width.create 3
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -992,7 +990,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
               sm = Grid.Width.create 6
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 

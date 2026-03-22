@@ -269,8 +269,7 @@ div [
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -350,8 +349,7 @@ div [ Margin.Vertical.small ] [
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -511,7 +509,7 @@ div [
               sm = Grid.Width.create 6
             )
           ],
-          spacing = Grid.GutterSpacing.create 2
+          attrs = [ Grid.Spacing.small ]
         )
       ]
 
@@ -586,7 +584,6 @@ div [
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

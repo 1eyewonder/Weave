@@ -308,8 +308,7 @@ div [
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -523,8 +522,7 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -628,8 +626,7 @@ div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
             xs = Grid.Width.create 12,
             sm = Grid.Width.create 6
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

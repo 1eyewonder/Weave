@@ -169,15 +169,13 @@ Dropdown.create(
                     xs = Grid.Width.create 12
                   )
                 ],
-                justify = JustifyContent.center,
-                attrs = [ AlignItems.center; AlignContent.center ]
+                attrs = [ JustifyContent.center; AlignItems.center; AlignContent.center ]
               ),
               xs = Grid.Width.create 10,
               attrs = [ Margin.Top.small ]
             )
 
-          ],
-          justify = JustifyContent.spaceAround
+          ]
         )
       ]
 
@@ -567,7 +565,6 @@ Dropdown.create(
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 

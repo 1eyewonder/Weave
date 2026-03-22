@@ -26,8 +26,7 @@ module ButtonExamples =
           GridItem.create (
             Button.primary (text "Text", onClick = (fun () -> ()), attrs = [ Button.Variant.text ])
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -130,7 +129,6 @@ Button.info(text "Info", onClick = (fun () -> ()), attrs = [ Button.Variant.fill
             sm = Grid.Width.create 4
           )
         ],
-        spacing = Grid.GutterSpacing.create 2,
         attrs = [ AlignItems.start ]
       )
 
@@ -189,8 +187,7 @@ Button.primary(
               attrs = [ Button.Variant.filled ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -259,8 +256,7 @@ Button.primary(
           btn "Large" BorderRadius.All.large
           btn "Pill" BorderRadius.pill
           btn "Circle" BorderRadius.circle
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -323,8 +319,7 @@ Button.primary(text "Circle", onClick = (fun () -> ()), attrs = [ Button.Variant
               ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =
@@ -416,9 +411,7 @@ IconButton.info(
                 sm = Grid.Width.create 3
               )
             ],
-            spacing = Grid.GutterSpacing.create 2,
-            justify = JustifyContent.flexStart,
-            attrs = [ AlignItems.center ]
+            attrs = [ JustifyContent.flexStart; AlignItems.center ]
           )
         ]
 
@@ -487,8 +480,7 @@ IconButton.primary(
               attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled ]
             )
           )
-        ],
-        spacing = Grid.GutterSpacing.create 2
+        ]
       )
 
     let code =

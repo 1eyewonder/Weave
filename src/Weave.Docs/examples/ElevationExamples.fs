@@ -182,8 +182,7 @@ div [ Elevation.e8; BorderRadius.All.large ] [
             sm = Grid.Width.create 4,
             md = Grid.Width.create 3
           )
-        ],
-        spacing = Grid.GutterSpacing.create 3
+        ]
       )
 
     let code =
@@ -407,8 +406,7 @@ div [
             sm = Grid.Width.create 6,
             md = Grid.Width.create 3
           )
-        ],
-        spacing = Grid.GutterSpacing.create 3
+        ]
       )
 
     let code =

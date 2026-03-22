@@ -96,6 +96,9 @@
   color: var(--palette-text-primary);
   border: 2px solid
     rgba(var(--palette-text-primary-rgb), var(--palette-border-opacity));
+  // Compensate for 2px top + 2px bottom border so height matches filled/text variants
+  padding-top: density-spacing(4, 4);
+  padding-bottom: density-spacing(4, 4);
 
   &.weave-button--inherit {
     color: inherit;

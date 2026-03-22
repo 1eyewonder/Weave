@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "variables" as *;
 
 // density-spacing($compact-base, $step)
@@ -24,7 +25,7 @@
   $value: ();
 
   @each $prop in $properties {
-    $value: append(
+    $value: list.append(
       $value,
       #{$prop} var(--weave-duration-#{$duration-name}) #{$easing} #{$delay},
       comma

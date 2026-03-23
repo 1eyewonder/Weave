@@ -84,7 +84,9 @@ src/
     scss/                 # SCSS source (compiled to styles.css)
   Weave.Docs/             # Interactive docs site (net10.0, ASP.NET Core + WebSharper)
     examples/             # One example file per component
-    ExamplesRouter.fs     # Client-side SPA routing
+    DocsRouting.fs        # Page DU, URL hash routing helpers
+    ComponentPreviews.fs  # Thumbnail previews for the home-page grid
+    ExamplesRouter.fs     # SPA shell: renderPage, navigation, scroll/TOC
 tests/
   Weave.Tests.Unit/       # Expecto unit tests
   Weave.Tests.Rendering/  # Playwright layout tests + HTML fixtures

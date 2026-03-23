@@ -7,1735 +7,314 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 
 open Weave
+open Weave.CssHelpers.Animation
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
+open Weave.Docs.Examples.DocsRouting
 
 [<JavaScript>]
 module ExamplesRouter =
 
-  [<Struct>]
-  type Page =
-    | Home
-    | GettingStartedExamples
-    | AppBarExamples
-    | SpacerExamples
-    | ButtonExamples
-    | ButtonGroupExamples
-    | ButtonMenuExamples
-    | TypographyExamples
-    | TooltipExamples
-    | GridExamples
-    | CheckboxExamples
-    | ChipExamples
-    | ChipSetExamples
-    | RadioButtonExamples
-    | SwitchExamples
-    | ContainerExamples
-    | FieldExamples
-    | NumericFieldExamples
-    | DropdownExamples
-    | SelectExamples
-    | ExpansionPanelExamples
-    | DialogExamples
-    | DrawerExamples
-    | IconsExamples
-    | TabsExamples
-    | ListExamples
-    | AlertExamples
-    | LinkExamples
-    | DividerExamples
-    | SpacingExamples
-    | OpacityExamples
-    | TransitionExamples
-    | AnimationExamples
-    | BorderExamples
-    | DisplayExamples
-    | ElevationExamples
-    | FlexboxExamples
-    | ThemingExamples
-
-  let private pageToString page =
-    match page with
-    | Home -> "Home"
-    | GettingStartedExamples -> "Getting Started"
-    | AppBarExamples -> "App Bar"
-    | SpacerExamples -> "Spacer"
-    | ButtonExamples -> "Button"
-    | ButtonGroupExamples -> "Button Group"
-    | ButtonMenuExamples -> "Button Menu"
-    | TypographyExamples -> "Typography"
-    | TooltipExamples -> "Tooltip"
-    | GridExamples -> "Grid"
-    | CheckboxExamples -> "Checkbox"
-    | ChipExamples -> "Chip"
-    | ChipSetExamples -> "Chip Set"
-    | RadioButtonExamples -> "Radio Button"
-    | SwitchExamples -> "Switch"
-    | ContainerExamples -> "Container"
-    | FieldExamples -> "Field"
-    | NumericFieldExamples -> "Numeric Field"
-    | DropdownExamples -> "Dropdown"
-    | SelectExamples -> "Select"
-    | ExpansionPanelExamples -> "Expansion Panel"
-    | DialogExamples -> "Dialog"
-    | DrawerExamples -> "Drawer"
-    | IconsExamples -> "Icons"
-    | TabsExamples -> "Tabs"
-    | ListExamples -> "List"
-    | AlertExamples -> "Alert"
-    | LinkExamples -> "Link"
-    | DividerExamples -> "Divider"
-    | SpacingExamples -> "Spacing"
-    | OpacityExamples -> "Opacity"
-    | TransitionExamples -> "Transitions"
-    | AnimationExamples -> "Animations"
-    | BorderExamples -> "Borders"
-    | DisplayExamples -> "Display"
-    | ElevationExamples -> "Elevation"
-    | FlexboxExamples -> "Flexbox"
-    | ThemingExamples -> "Theming"
-
-  let private stringToPage s =
-    match s with
-    | "Home" -> Some Home
-    | "Getting Started" -> Some GettingStartedExamples
-    | "App Bar" -> Some AppBarExamples
-    | "Spacer" -> Some SpacerExamples
-    | "Button" -> Some ButtonExamples
-    | "Button Group" -> Some ButtonGroupExamples
-    | "Button Menu" -> Some ButtonMenuExamples
-    | "Typography" -> Some TypographyExamples
-    | "Tooltip" -> Some TooltipExamples
-    | "Grid" -> Some GridExamples
-    | "Checkbox" -> Some CheckboxExamples
-    | "Chip" -> Some ChipExamples
-    | "Chip Set" -> Some ChipSetExamples
-    | "Radio Button" -> Some RadioButtonExamples
-    | "Switch" -> Some SwitchExamples
-    | "Container" -> Some ContainerExamples
-    | "Field" -> Some FieldExamples
-    | "Numeric Field" -> Some NumericFieldExamples
-    | "Dropdown" -> Some DropdownExamples
-    | "Select" -> Some SelectExamples
-    | "Expansion Panel" -> Some ExpansionPanelExamples
-    | "Dialog" -> Some DialogExamples
-    | "Drawer" -> Some DrawerExamples
-    | "Icons" -> Some IconsExamples
-    | "Tabs" -> Some TabsExamples
-    | "List" -> Some ListExamples
-    | "Alert" -> Some AlertExamples
-    | "Link" -> Some LinkExamples
-    | "Divider" -> Some DividerExamples
-    | "Spacing" -> Some SpacingExamples
-    | "Opacity" -> Some OpacityExamples
-    | "Transitions" -> Some TransitionExamples
-    | "Animations" -> Some AnimationExamples
-    | "Borders" -> Some BorderExamples
-    | "Display" -> Some DisplayExamples
-    | "Elevation" -> Some ElevationExamples
-    | "Flexbox" -> Some FlexboxExamples
-    | "Theming" -> Some ThemingExamples
-    | _ -> None
-
-  let private pageToHash page =
-    match page with
-    | Home -> ""
-    | GettingStartedExamples -> "#getting-started"
-    | AppBarExamples -> "#app-bar"
-    | SpacerExamples -> "#spacer"
-    | ButtonExamples -> "#button"
-    | ButtonGroupExamples -> "#button-group"
-    | ButtonMenuExamples -> "#button-menu"
-    | TypographyExamples -> "#typography"
-    | TooltipExamples -> "#tooltip"
-    | GridExamples -> "#grid"
-    | CheckboxExamples -> "#checkbox"
-    | ChipExamples -> "#chip"
-    | ChipSetExamples -> "#chip-set"
-    | RadioButtonExamples -> "#radio-button"
-    | SwitchExamples -> "#switch"
-    | ContainerExamples -> "#container"
-    | FieldExamples -> "#field"
-    | NumericFieldExamples -> "#numeric-field"
-    | DropdownExamples -> "#dropdown"
-    | SelectExamples -> "#select"
-    | ExpansionPanelExamples -> "#expansion-panel"
-    | DialogExamples -> "#dialog"
-    | DrawerExamples -> "#drawer"
-    | IconsExamples -> "#icons"
-    | TabsExamples -> "#tabs"
-    | ListExamples -> "#list"
-    | AlertExamples -> "#alert"
-    | LinkExamples -> "#link"
-    | DividerExamples -> "#divider"
-    | SpacingExamples -> "#spacing"
-    | OpacityExamples -> "#opacity"
-    | TransitionExamples -> "#transitions"
-    | AnimationExamples -> "#animations"
-    | BorderExamples -> "#borders"
-    | DisplayExamples -> "#display"
-    | ElevationExamples -> "#elevation"
-    | FlexboxExamples -> "#flexbox"
-    | ThemingExamples -> "#theming"
-
-  let private hashToPage hash =
-    match hash with
-    | s when String.length s = 0 -> Some Home
-    | "#home" -> Some Home
-    | "#getting-started" -> Some GettingStartedExamples
-    | "#app-bar" -> Some AppBarExamples
-    | "#spacer" -> Some SpacerExamples
-    | "#button" -> Some ButtonExamples
-    | "#button-group" -> Some ButtonGroupExamples
-    | "#button-menu" -> Some ButtonMenuExamples
-    | "#typography" -> Some TypographyExamples
-    | "#tooltip" -> Some TooltipExamples
-    | "#grid" -> Some GridExamples
-    | "#checkbox" -> Some CheckboxExamples
-    | "#chip" -> Some ChipExamples
-    | "#chip-set" -> Some ChipSetExamples
-    | "#radio-button" -> Some RadioButtonExamples
-    | "#switch" -> Some SwitchExamples
-    | "#container" -> Some ContainerExamples
-    | "#field" -> Some FieldExamples
-    | "#numeric-field" -> Some NumericFieldExamples
-    | "#dropdown" -> Some DropdownExamples
-    | "#select" -> Some SelectExamples
-    | "#expansion-panel" -> Some ExpansionPanelExamples
-    | "#dialog" -> Some DialogExamples
-    | "#drawer" -> Some DrawerExamples
-    | "#icons" -> Some IconsExamples
-    | "#tabs" -> Some TabsExamples
-    | "#list" -> Some ListExamples
-    | "#alert" -> Some AlertExamples
-    | "#link" -> Some LinkExamples
-    | "#divider" -> Some DividerExamples
-    | "#spacing" -> Some SpacingExamples
-    | "#opacity" -> Some OpacityExamples
-    | "#transitions" -> Some TransitionExamples
-    | "#animations" -> Some AnimationExamples
-    | "#borders" -> Some BorderExamples
-    | "#display" -> Some DisplayExamples
-    | "#elevation" -> Some ElevationExamples
-    | "#flexbox" -> Some FlexboxExamples
-    | "#theming" -> Some ThemingExamples
-    | _ -> None
-
-  [<Inline "window.location.hash">]
-  let private getLocationHash () = X<string>
-
-  [<Inline "window.location.hash = $hash">]
-  let private setLocationHash (hash: string) = X<unit>
-
-  [<Inline "window.addEventListener('hashchange', function() { $callback(window.location.hash); })">]
-  let private onHashChange (callback: string -> unit) = X<unit>
-
-  /// Update the URL without adding a browser history entry (won't fire hashchange)
-  [<Inline "history.replaceState(null, '', $hash)">]
-  let private replaceStateHash (hash: string) = X<unit>
-
-  /// Navigate to the root URL, removing the hash entirely (creates a history entry)
-  [<Inline "history.pushState(null, '', location.pathname + location.search)">]
-  let private clearHash () = X<unit>
-
-  /// Split a hash string on the first "/" — returns a 1- or 2-element array
-  [<Inline "$s.split('/')">]
-  let private splitHashParts (s: string) = X<string[]>
-
-  /// Remove a leading "#" character
-  [<Inline "$s.substring(1)">]
-  let private stripHash (s: string) = X<string>
-
-  let private previewFor page : Doc =
-    let cp children = div [ cl "cp" ] children
-
-    match page with
-    | AppBarExamples ->
-      cp [
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "0"
-          Attr.Style "left" "0"
-          Attr.Style "right" "0"
-          Attr.Style "height" "15px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "42px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "25%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | ContainerExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "16%"
-          Attr.Style "right" "16%"
-          Attr.Style "bottom" "10px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "26px"
-          Attr.Style "left" "22%"
-          Attr.Style "right" "22%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "22%"
-          Attr.Style "right" "34%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "53px"
-          Attr.Style "left" "22%"
-          Attr.Style "right" "28%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | DividerExamples ->
-      cp [
-        div [
-          cl "cp-line"
-          Attr.Style "top" "18px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "28px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "22%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "0"
-          Attr.Style "right" "0"
-          Attr.Style "height" "2px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "49px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "59px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "22%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | DrawerExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "0"
-          Attr.Style "left" "0"
-          Attr.Style "width" "30%"
-          Attr.Style "bottom" "0"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "16px"
-          Attr.Style "left" "4%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "28px"
-          Attr.Style "left" "4%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "4%"
-          Attr.Style "width" "16%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "4%"
-          Attr.Style "width" "18%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "26px"
-          Attr.Style "left" "36%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "36%"
-          Attr.Style "right" "20%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | GridExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "38%"
-          Attr.Style "height" "28px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "54%"
-          Attr.Style "width" "38%"
-          Attr.Style "height" "28px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "48px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "38%"
-          Attr.Style "height" "26px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "48px"
-          Attr.Style "left" "54%"
-          Attr.Style "width" "38%"
-          Attr.Style "height" "26px"
-        ] []
-      ]
-    | SpacerExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "right" "6%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "34%"
-          Attr.Style "right" "34%"
-          Attr.Style "height" "2px"
-          Attr.Style "background" "var(--palette-text-primary)"
-          Attr.Style "opacity" "0.25"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "34px"
-          Attr.Style "left" "33.5%"
-          Attr.Style "width" "2px"
-          Attr.Style "height" "14px"
-          Attr.Style "background" "var(--palette-text-primary)"
-          Attr.Style "opacity" "0.25"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "34px"
-          Attr.Style "right" "33.5%"
-          Attr.Style "width" "2px"
-          Attr.Style "height" "14px"
-          Attr.Style "background" "var(--palette-text-primary)"
-          Attr.Style "opacity" "0.25"
-        ] []
-      ]
-    | LinkExamples ->
-      cp [
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "52px"
-          Attr.Style "color" "var(--palette-primary)"
-          Attr.Style "top" "50%"
-          Attr.Style "left" "50%"
-          Attr.Style "transform" "translate(-50%,-50%)"
-          Attr.Style "line-height" "1"
-          Attr.Style "user-select" "none"
-        ] [ text "link" ]
-      ]
-    | TabsExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "0"
-          Attr.Style "left" "0"
-          Attr.Style "right" "0"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "5px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "14px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "36%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "60%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "24px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "3px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "40px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "54px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "22%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | ButtonExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "28px"
-          Attr.Style "left" "22%"
-          Attr.Style "right" "22%"
-          Attr.Style "height" "28px"
-        ] []
-      ]
-    | ButtonGroupExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "5%"
-          Attr.Style "width" "27%"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "37%"
-          Attr.Style "width" "27%"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "right" "5%"
-          Attr.Style "width" "27%"
-          Attr.Style "height" "24px"
-        ] []
-      ]
-    | ButtonMenuExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "52%"
-          Attr.Style "height" "26px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "30px"
-          Attr.Style "right" "10%"
-          Attr.Style "width" "24%"
-          Attr.Style "height" "26px"
-          Attr.Style "border-radius" "10px"
-        ] []
-      ]
-    | ChipExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "20px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "30%"
-          Attr.Style "height" "20px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "20px"
-          Attr.Style "left" "44%"
-          Attr.Style "width" "24%"
-          Attr.Style "height" "20px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "28%"
-          Attr.Style "height" "20px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "42%"
-          Attr.Style "width" "32%"
-          Attr.Style "height" "20px"
-        ] []
-      ]
-    | ChipSetExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "6%"
-          Attr.Style "right" "6%"
-          Attr.Style "bottom" "10px"
-          Attr.Style "border-radius" "6px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "24px"
-          Attr.Style "left" "12%"
-          Attr.Style "width" "22%"
-          Attr.Style "height" "18px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "24px"
-          Attr.Style "left" "40%"
-          Attr.Style "width" "22%"
-          Attr.Style "height" "18px"
-          Attr.Style "border-radius" "9px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "24px"
-          Attr.Style "left" "68%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "18px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "12%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "18px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "44%"
-          Attr.Style "width" "20%"
-          Attr.Style "height" "18px"
-        ] []
-      ]
-    | CheckboxExamples ->
-      cp [
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "15%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "37px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "39px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "28%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-box"
-          Attr.Style "top" "62px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "64px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "38%"
-          Attr.Style "height" "7px"
-        ] []
-      ]
-    | DropdownExamples ->
-      cp [
-        div [
-          cl "cp-box"
-          Attr.Style "top" "4px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "12%"
-          Attr.Style "height" "22px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "11px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "35%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "12px"
-          Attr.Style "right" "18%"
-          Attr.Style "width" "7px"
-          Attr.Style "height" "5px"
-          Attr.Style "border-radius" "1px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "28px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "12%"
-          Attr.Style "height" "54px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 4px 12px rgba(0,0,0,0.4)"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "34px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "35%"
-          Attr.Style "height" "7px"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "45%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "63px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "38%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | SelectExamples ->
-      cp [
-        div [
-          cl "cp-box"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "24px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "16%"
-          Attr.Style "right" "32%"
-          Attr.Style "height" "5px"
-          Attr.Style "opacity" "0.3"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "18px"
-          Attr.Style "left" "16%"
-          Attr.Style "right" "44%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "right" "16%"
-          Attr.Style "width" "6px"
-          Attr.Style "height" "6px"
-          Attr.Style "border-radius" "1px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "34px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "48px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 4px 12px rgba(0,0,0,0.4)"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "42px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "44%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "54px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "36%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "66px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "50%"
-          Attr.Style "height" "5px"
-        ] []
-      ]
-    | FieldExamples ->
-      cp [
-        div [
-          cl "cp-line"
-          Attr.Style "top" "20px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "50%"
-          Attr.Style "height" "5px"
-          Attr.Style "opacity" "0.3"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "35px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "12%"
-          Attr.Style "height" "7px"
-          Attr.Style "opacity" "0.35"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "46px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "12%"
-          Attr.Style "height" "2px"
-        ] []
-      ]
-    | NumericFieldExamples ->
-      cp [
-        div [
-          cl "cp-box"
-          Attr.Style "top" "19px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "50px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "26px"
-          Attr.Style "left" "16%"
-          Attr.Style "right" "28%"
-          Attr.Style "height" "5px"
-          Attr.Style "opacity" "0.3"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "39px"
-          Attr.Style "left" "16%"
-          Attr.Style "right" "44%"
-          Attr.Style "height" "7px"
-          Attr.Style "opacity" "0.35"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "19px"
-          Attr.Style "right" "10%"
-          Attr.Style "width" "1px"
-          Attr.Style "height" "50px"
-          Attr.Style "opacity" "0.3"
-        ] []
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "18px"
-          Attr.Style "color" "var(--palette-primary)"
-          Attr.Style "top" "22px"
-          Attr.Style "right" "11%"
-          Attr.Style "line-height" "1"
-          Attr.Style "user-select" "none"
-        ] [ text "expand_less" ]
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "18px"
-          Attr.Style "color" "var(--palette-primary)"
-          Attr.Style "top" "45px"
-          Attr.Style "right" "11%"
-          Attr.Style "line-height" "1"
-          Attr.Style "user-select" "none"
-        ] [ text "expand_more" ]
-      ]
-    | RadioButtonExamples ->
-      cp [
-        div [
-          cl "cp-ring"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "12px"
-          Attr.Style "height" "12px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "30%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "32px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "12px"
-          Attr.Style "height" "12px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "34px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "42%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-ring"
-          Attr.Style "top" "54px"
-          Attr.Style "left" "10%"
-          Attr.Style "width" "12px"
-          Attr.Style "height" "12px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "56px"
-          Attr.Style "left" "28%"
-          Attr.Style "right" "36%"
-          Attr.Style "height" "7px"
-        ] []
-      ]
-    | SwitchExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "18px"
-          Attr.Style "left" "calc(50% - 22px)"
-          Attr.Style "width" "44px"
-          Attr.Style "height" "22px"
-          Attr.Style "border-radius" "11px"
-        ] []
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "22px"
-          Attr.Style "left" "calc(50% - 19px)"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "calc(50% - 22px)"
-          Attr.Style "width" "44px"
-          Attr.Style "height" "22px"
-        ] []
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "56px"
-          Attr.Style "left" "calc(50% + 5px)"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-          Attr.Style "background" "rgba(255,255,255,0.9)"
-          Attr.Style "border-radius" "50%"
-        ] []
-      ]
-    | IconsExamples ->
-      cp [
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "44px"
-          Attr.Style "color" "var(--palette-primary)"
-          Attr.Style "top" "calc(50% - 22px)"
-          Attr.Style "left" "calc(25% - 22px)"
-          Attr.Style "line-height" "1"
-          Attr.Style "user-select" "none"
-        ] [ text "star" ]
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "44px"
-          Attr.Style "color" "var(--palette-primary)"
-          Attr.Style "top" "calc(50% - 22px)"
-          Attr.Style "left" "calc(75% - 22px)"
-          Attr.Style "line-height" "1"
-          Attr.Style "user-select" "none"
-        ] [ text "settings" ]
-      ]
-    | ListExamples ->
-      cp [
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "8px"
-          Attr.Style "height" "8px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "20%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "21px"
-          Attr.Style "left" "20%"
-          Attr.Style "right" "25%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "38px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "8px"
-          Attr.Style "height" "8px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "36px"
-          Attr.Style "left" "20%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "47px"
-          Attr.Style "left" "20%"
-          Attr.Style "right" "30%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-dot"
-          Attr.Style "top" "64px"
-          Attr.Style "left" "6%"
-          Attr.Style "width" "8px"
-          Attr.Style "height" "8px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "62px"
-          Attr.Style "left" "20%"
-          Attr.Style "right" "14%"
-          Attr.Style "height" "7px"
-        ] []
-      ]
-    | TooltipExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "calc(50% - 7px)"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "14px"
-          Attr.Style "transform" "rotate(45deg)"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "18%"
-          Attr.Style "height" "28px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 2px 8px rgba(0,0,0,0.3)"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "17px"
-          Attr.Style "left" "26%"
-          Attr.Style "right" "26%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-ring"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "calc(50% - 14px)"
-          Attr.Style "width" "28px"
-          Attr.Style "height" "28px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "57px"
-          Attr.Style "left" "calc(50% - 1px)"
-          Attr.Style "width" "2px"
-          Attr.Style "height" "14px"
-          Attr.Style "border-radius" "1px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "63px"
-          Attr.Style "left" "calc(50% - 7px)"
-          Attr.Style "width" "14px"
-          Attr.Style "height" "2px"
-          Attr.Style "border-radius" "1px"
-        ] []
-      ]
-    | TypographyExamples ->
-      cp [
-        div [
-          cl "cp-line"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "15%"
-          Attr.Style "height" "11px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "26px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "30%"
-          Attr.Style "height" "8px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "42px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "6px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "54px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "40%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "65px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "55%"
-          Attr.Style "height" "3px"
-        ] []
-      ]
-    | DialogExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "8px"
-          Attr.Style "left" "12%"
-          Attr.Style "right" "12%"
-          Attr.Style "bottom" "8px"
-          Attr.Style "box-shadow" "0 4px 20px rgba(0,0,0,0.5)"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "38%"
-          Attr.Style "height" "7px"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "28px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "18%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "38px"
-          Attr.Style "left" "18%"
-          Attr.Style "right" "28%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "57px"
-          Attr.Style "right" "18%"
-          Attr.Style "width" "22%"
-          Attr.Style "height" "16px"
-        ] []
-        div [
-          cl "cp-box"
-          Attr.Style "top" "57px"
-          Attr.Style "right" "44%"
-          Attr.Style "width" "22%"
-          Attr.Style "height" "16px"
-        ] []
-      ]
-    | ExpansionPanelExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "6px"
-          Attr.Style "left" "4%"
-          Attr.Style "right" "4%"
-          Attr.Style "height" "22px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "13px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "32%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "right" "10%"
-          Attr.Style "width" "10px"
-          Attr.Style "height" "6px"
-          Attr.Style "border-radius" "2px"
-        ] []
-        div [
-          cl "cp-fdim"
-          Attr.Style "top" "32px"
-          Attr.Style "left" "4%"
-          Attr.Style "right" "4%"
-          Attr.Style "height" "22px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "38px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "25%"
-          Attr.Style "height" "5px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "58px"
-          Attr.Style "left" "4%"
-          Attr.Style "right" "4%"
-          Attr.Style "height" "22px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "65px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "32%"
-          Attr.Style "height" "7px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "65px"
-          Attr.Style "right" "10%"
-          Attr.Style "width" "10px"
-          Attr.Style "height" "6px"
-          Attr.Style "border-radius" "2px"
-        ] []
-      ]
-    | AlertExamples ->
-      cp [
-        div [
-          Attr.Style "background" "rgba(var(--palette-warning-rgb), 0.15)"
-          Attr.Style "border-radius" "6px"
-          Attr.Style "top" "26px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "36px"
-          Attr.Style "position" "absolute"
-          Attr.Style "box-sizing" "border-box"
-        ] []
-        span [
-          Attr.Style "font-family" "'Material Symbols Outlined'"
-          Attr.Style "font-size" "18px"
-          Attr.Style "line-height" "1"
-          Attr.Style "color" "var(--palette-warning)"
-          Attr.Style "top" "35px"
-          Attr.Style "left" "14%"
-          Attr.Style "user-select" "none"
-        ] [ text "warning" ]
-        div [
-          cl "cp-line"
-          Attr.Style "top" "41px"
-          Attr.Style "left" "32%"
-          Attr.Style "right" "14%"
-          Attr.Style "height" "7px"
-        ] []
-      ]
-    | SpacingExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "16px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "36px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "20px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "66px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "24px"
-        ] []
-      ]
-    | OpacityExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "14px"
-          Attr.Style "opacity" "0.2"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "14px"
-          Attr.Style "opacity" "0.5"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "14px"
-          Attr.Style "opacity" "0.8"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "70px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "14px"
-        ] []
-      ]
-    | TransitionExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "50%"
-          Attr.Style "height" "12px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "34px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "30%"
-          Attr.Style "height" "12px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "54px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "12px"
-        ] []
-      ]
-    | BorderExamples ->
-      cp [
-        div [
-          cl "cp-box"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "54%"
-          Attr.Style "height" "30px"
-        ] []
-        div [
-          cl "cp-box"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "54%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-radius" "10px"
-        ] []
-        div [
-          cl "cp-box"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "54%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-style" "dashed"
-        ] []
-        div [
-          cl "cp-box"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "54%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-style" "dotted"
-          Attr.Style "border-radius" "50%"
-        ] []
-      ]
-    | DisplayExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "10px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "14px"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "30px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "14px"
-          Attr.Style "opacity" "0.5"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "54%"
-          Attr.Style "height" "14px"
-          Attr.Style "border-radius" "3px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "50px"
-          Attr.Style "left" "54%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "14px"
-          Attr.Style "border-radius" "3px"
-        ] []
-        div [
-          cl "cp-line"
-          Attr.Style "top" "70px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "40%"
-          Attr.Style "height" "10px"
-        ] []
-      ]
-    | ElevationExamples ->
-      cp [
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "54%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 1px 3px rgba(0,0,0,0.2)"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "54%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 4px 12px rgba(0,0,0,0.3)"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "54%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 8px 24px rgba(0,0,0,0.4)"
-        ] []
-        div [
-          cl "cp-fill"
-          Attr.Style "top" "52px"
-          Attr.Style "left" "54%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "30px"
-          Attr.Style "border-radius" "4px"
-          Attr.Style "box-shadow" "0 12px 36px rgba(0,0,0,0.5)"
-        ] []
-      ]
-    | FlexboxExamples ->
-      cp [
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "20px"
-          Attr.Style "border-radius" "3px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "38%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "20px"
-          Attr.Style "border-radius" "3px"
-        ] []
-        div [
-          cl "cp-bar"
-          Attr.Style "top" "14px"
-          Attr.Style "left" "68%"
-          Attr.Style "width" "26%"
-          Attr.Style "height" "20px"
-          Attr.Style "border-radius" "3px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "46px"
-          Attr.Style "left" "8%"
-          Attr.Style "width" "42%"
-          Attr.Style "height" "16px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "46px"
-          Attr.Style "right" "8%"
-          Attr.Style "width" "42%"
-          Attr.Style "height" "16px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "68px"
-          Attr.Style "left" "8%"
-          Attr.Style "right" "8%"
-          Attr.Style "height" "16px"
-        ] []
-      ]
-    | ThemingExamples ->
-      cp [
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "12px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "50%"
-          Attr.Style "height" "10px"
-        ] []
-        div [
-          cl "cp-pill"
-          Attr.Style "top" "32px"
-          Attr.Style "left" "10%"
-          Attr.Style "right" "10%"
-          Attr.Style "height" "50px"
-          Attr.Style "border-radius" "6px"
-        ] []
-      ]
-    | _ -> Doc.Empty
+  let private githubSvg =
+    Doc.Verbatim
+      """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>"""
 
   let private renderPage (navigate: Page -> unit) page =
     match page with
     | Home ->
-      Container.create (
-        div [] [
-          div [
-            Flex.Flex.allSizes
-            FlexDirection.Column.allSizes
-            AlignItems.center
-            Margin.Bottom.large
-            Margin.Top.medium
-          ] [
-            img [
-              attr.src "assets/weave-logo.png"
-              attr.alt "Weave Logo"
-              Attr.Style "height" "120px"
-              Attr.Style "object-fit" "contain"
-              Margin.Bottom.small
-            ] []
-            div [ Typography.h2; Margin.Bottom.extraSmall ] [ text "Weave" ]
+      div [] [
+        // Above-fold hero — full-bleed, no max-width cap
+        div [ Attr.Class "docs-home-above-fold docs-weave-pattern" ] [
+          div [ Attr.Class "docs-hero" ] [
+
             div [
-              Typography.body1
-              Attr.Style "font-style" "italic"
-              Attr.Style "opacity" "0.7"
+              Flex.Flex.allSizes
+              FlexDirection.Column.allSizes
+              AlignItems.center
               Margin.Bottom.medium
-            ] [ text "Threading Logic. Fabricating UI." ]
+            ] [
+              img [
+                attr.src "assets/weave-logo.png"
+                attr.alt "Weave Logo"
+                Attr.Style "height" "80px"
+                Attr.Style "object-fit" "contain"
+                Margin.Bottom.extraSmall
+              ] []
+              div [ Typography.h2; Margin.Bottom.extraSmall ] [ text "Weave" ]
+              div [
+                Typography.body1
+                Attr.Style "font-style" "italic"
+                Attr.Style "opacity" "0.7"
+              ] [ text "Threading Logic. Fabricating UI." ]
+            ]
+
+            div [ Attr.Class "docs-hero-cta" ] [
+              Button.create (
+                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
+                  text "Get Started"
+                  Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
+                ],
+                onClick = (fun () -> navigate GettingStartedExamples),
+                attrs = [ Button.Variant.outlined; Button.Color.primary ]
+              )
+
+              Button.create (
+                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
+                  Icon.create (Icon.Action Action.Stars, attrs = [ Attr.Style "font-size" "18px" ])
+                  text "GitHub"
+                ],
+                onClick =
+                  (fun () -> JS.Window?``open``("https://github.com/1eyewonder/Weave", "_blank") |> ignore),
+                attrs = [ Button.Variant.outlined ]
+              )
+            ]
           ]
 
-          let categorySection (title: string) (items: (string * Page) list) =
-            div [ Margin.Bottom.medium ] [
-              div [ Typography.h5; Margin.Bottom.small ] [ text title ]
-              Grid.create (
-                items
-                |> List.map (fun (label, page) ->
-                  GridItem.create (
-                    div [
-                      Flex.Flex.allSizes
-                      FlexDirection.Column.allSizes
-                      SurfaceColor.toBackgroundColor SurfaceColor.Surface
-                      BorderRadius.All.medium
-                      Attr.Style "cursor" "pointer"
-                      Attr.Style "height" "100%"
-                      Attr.Style "overflow" "hidden"
-                      Attr.Style "box-sizing" "border-box"
-                      Attr.Class "docs-component-card"
-                      on.click (fun _ _ -> navigate page)
-                    ] [
-                      previewFor page
+          // Scroll indicator
+          div [ Attr.Class "docs-scroll-indicator" ] [
+            div [
+              Typography.Color.textSecondary
+              Typography.overline
+              AnimationEmphasis.bounce
+              AnimationDuration.long
+              AnimationEasing.accelerate
+              Animate.replayEvery 2000
+            ] [ text "Scroll" ]
+            Icon.create (
+              Icon.Hardware Hardware.KeyboardArrowDown,
+              attrs = [
+                Typography.Color.textSecondary
+                AnimationEmphasis.bounce
+                AnimationDuration.long
+                AnimationEasing.accelerate
+                Animate.replayEvery 2000
+              ]
+            )
+          ]
+        ]
+
+        // Gradient divider — full-bleed
+        div [ Attr.Class "docs-section-divider" ] []
+
+        // Below-fold content — constrained for readability
+        Container.create (
+          div [] [
+
+            let categorySection (title: string) (items: (string * Page) list) =
+              div [
+                Margin.Bottom.medium
+                AnimationEntrance.fadeIn
+                AnimationDuration.medium
+                AnimationEasing.accelerate
+                Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
+              ] [
+                div [ Typography.h5; Margin.Bottom.small ] [ text title ]
+                Grid.create (
+                  items
+                  |> List.mapi (fun i (label, page) ->
+                    GridItem.create (
                       div [
                         Flex.Flex.allSizes
-                        JustifyContent.center
-                        AlignItems.center
-                        Padding.Horizontal.extraSmall
-                        Padding.Vertical.extraSmall
-                        Attr.Style "flex-grow" "1"
-                      ] [ div [ Typography.body2; Typography.Align.center ] [ text label ] ]
+                        FlexDirection.Column.allSizes
+                        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                        Cursor.pointer
+                        Attr.Style "height" "100%"
+                        Overflow.hidden
+                        Attr.Style "box-sizing" "border-box"
+                        Attr.Class "docs-component-card"
+                        on.click (fun _ _ -> navigate page)
+                      ] [
+                        ComponentPreviews.forPage page
+                        div [
+                          Flex.Flex.allSizes
+                          JustifyContent.center
+                          AlignItems.center
+                          Padding.Horizontal.extraSmall
+                          Padding.Vertical.extraSmall
+                          FlexItem.Grow.allSizes
+                        ] [
+                          div [
+                            Typography.body2
+                            Typography.Align.center
+                            Attr.Class "docs-component-card__label"
+                          ] [ text label ]
+                        ]
+                      ],
+                      attrs = [
+                        GridItem.Span.six
+                        GridItem.Span.Small.four
+                        GridItem.Span.Medium.three
+                        Flex.Flex.allSizes
+                        FlexDirection.Column.allSizes
+                        AnimationEntrance.fadeIn
+                        AnimationDelay.stagger (min (i + 1) 10)
+                        Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
+                      ]
+                    )),
+                  attrs = [ AlignItems.stretch ]
+                )
+              ]
+
+            div [
+              Margin.Bottom.medium
+              AnimationEntrance.fadeIn
+              AnimationDuration.medium
+              AnimationEasing.accelerate
+              Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
+            ] [
+              div [ Attr.Class "docs-why-weave-label" ] [ text "Why Weave" ]
+              div [ Attr.Class "docs-why-weave-heading" ] [ text "Write less. Express more." ]
+
+              Grid.create (
+                [
+                  "Type-Safe by Default",
+                  Icon.Action Action.Verified,
+                  "Styled through DUs and typed helpers — with full access to WebSharper's raw functionality when you need flexibility."
+
+                  "Functional-First API",
+                  Icon.Action Action.Code,
+                  "Clean camelCase APIs, optional params, and composable attrs. Designed for F#, not ported from another ecosystem."
+
+                  "Built-In Theming",
+                  Icon.Images Images.Palette,
+                  "Light and dark mode with CSS custom properties. One-line toggle, no config."
+
+                  "Seamless WebSharper Integration",
+                  Icon.Action Action.Extension,
+                  "Built on WebSharper's reactive model. Var/View bindings, native Attr/Doc — everything composes naturally."
+
+                  "Less Boilerplate",
+                  Icon.UiActions UiActions.Bolt,
+                  "Sensible defaults out of the box. Customize through ?attrs only when you actually need to."
+
+                  "Structured Styling",
+                  Icon.Maps Maps.Layers,
+                  "BEM + CSS custom properties. Themed by default, overridable by design."
+                ]
+                |> List.mapi (fun i (title, icon, desc) ->
+                  GridItem.create (
+                    div [
+                      SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                      Padding.All.small
+                      BorderRadius.All.large
+                      Attr.Class "docs-value-card docs-weave-pattern"
+                      Flex.Flex.allSizes
+                      FlexDirection.Column.allSizes
+                      Gap.All.g2
+                      Attr.Style "height" "100%"
+                      Attr.Style "box-sizing" "border-box"
+                    ] [
+                      Icon.create (
+                        icon,
+                        attrs = [ BrandColor.toColor BrandColor.Primary; Attr.Style "font-size" "28px" ]
+                      )
+
+                      div [ Typography.h6 ] [ text title ]
+
+                      div [ Typography.body2; Attr.Style "opacity" "0.8" ] [ text desc ]
                     ],
                     attrs = [
-                      GridItem.Span.six
-                      GridItem.Span.Small.four
-                      GridItem.Span.Medium.three
-                      Attr.Style "display" "flex"
-                      Attr.Style "flex-direction" "column"
+                      GridItem.Span.twelve
+                      GridItem.Span.Small.six
+                      GridItem.Span.Medium.four
+                      Flex.Flex.allSizes
+                      FlexDirection.Column.allSizes
+                      AnimationEntrance.fadeIn
+                      AnimationDelay.stagger (min (i + 1) 6)
+                      Animate.onScrollWith 0.1 "0px 0px -20px 0px" true
                     ]
                   )),
-                attrs = [ Attr.Style "align-items" "stretch" ]
+                attrs = [ AlignItems.stretch ]
               )
             ]
 
-          div [ Margin.Bottom.medium ] [
-            div [
-              SurfaceColor.toBackgroundColor SurfaceColor.Surface
-              BorderRadius.All.medium
-              Flex.Flex.allSizes
-              AlignItems.center
-              Padding.All.small
-              Attr.Style "cursor" "pointer"
-              Attr.Style "gap" "16px"
-              Attr.Class "docs-component-card"
-              on.click (fun _ _ -> navigate GettingStartedExamples)
-            ] [
-              Icon.create (
-                Icon.Social Social.RocketLaunch,
-                attrs = [ Attr.Style "font-size" "28px"; Attr.Style "color" "var(--palette-primary)" ]
-              )
-              div [] [
-                div [ Typography.h5 ] [ text "Getting Started" ]
-                div [ Typography.body2 ] [ text "Learn the basics: installation, setup, and core concepts." ]
-              ]
+            // Components — scroll-reveal: fades in as user scrolls down
+            categorySection "Components" [
+              "Alert", AlertExamples
+              "App Bar", AppBarExamples
+              "Button", ButtonExamples
+              "Button Group", ButtonGroupExamples
+              "Button Menu", ButtonMenuExamples
+              "Checkbox", CheckboxExamples
+              "Chip", ChipExamples
+              "Chip Set", ChipSetExamples
+              "Container", ContainerExamples
+              "Dialog", DialogExamples
+              "Divider", DividerExamples
+              "Drawer", DrawerExamples
+              "Dropdown", DropdownExamples
+              "Expansion Panel", ExpansionPanelExamples
+              "Field", FieldExamples
+              "Grid", GridExamples
+              "Icons", IconsExamples
+              "Link", LinkExamples
+              "List", ListExamples
+              "Numeric Field", NumericFieldExamples
+              "Radio Button", RadioButtonExamples
+              "Select", SelectExamples
+              "Spacer", SpacerExamples
+              "Switch", SwitchExamples
+              "Tabs", TabsExamples
+              "Tooltip", TooltipExamples
+              "Typography", TypographyExamples
             ]
-          ]
 
-          categorySection "Components" [
-            "Alert", AlertExamples
-            "App Bar", AppBarExamples
-            "Button", ButtonExamples
-            "Button Group", ButtonGroupExamples
-            "Button Menu", ButtonMenuExamples
-            "Checkbox", CheckboxExamples
-            "Chip", ChipExamples
-            "Chip Set", ChipSetExamples
-            "Container", ContainerExamples
-            "Dialog", DialogExamples
-            "Divider", DividerExamples
-            "Drawer", DrawerExamples
-            "Dropdown", DropdownExamples
-            "Expansion Panel", ExpansionPanelExamples
-            "Field", FieldExamples
-            "Grid", GridExamples
-            "Icons", IconsExamples
-            "Link", LinkExamples
-            "List", ListExamples
-            "Numeric Field", NumericFieldExamples
-            "Radio Button", RadioButtonExamples
-            "Select", SelectExamples
-            "Spacer", SpacerExamples
-            "Switch", SwitchExamples
-            "Tabs", TabsExamples
-            "Tooltip", TooltipExamples
-            "Typography", TypographyExamples
-          ]
-
-          categorySection "Styling" [
-            "Spacing", SpacingExamples
-            "Opacity", OpacityExamples
-            "Borders", BorderExamples
-            "Display", DisplayExamples
-            "Elevation", ElevationExamples
-            "Flexbox", FlexboxExamples
-            "Transitions", TransitionExamples
-            "Animations", AnimationExamples
-            "Theming", ThemingExamples
-          ]
-        ],
-        attrs = [ Container.MaxWidth.large ]
-      )
-    | GettingStartedExamples -> GettingStartedExamples.render ()
-    | AppBarExamples -> AppBarExamples.render ()
-    | SpacerExamples -> SpacerExamples.render ()
-    | ButtonExamples -> ButtonExamples.render ()
-    | ButtonGroupExamples -> ButtonGroupExamples.render ()
-    | ButtonMenuExamples -> ButtonMenuExamples.render ()
-    | TypographyExamples -> TypographyExamples.render ()
-    | TooltipExamples -> TooltipExamples.render ()
-    | GridExamples -> GridExamples.render ()
-    | CheckboxExamples -> CheckboxExamples.render ()
-    | ChipExamples -> ChipExamples.render ()
-    | ChipSetExamples -> ChipSetExamples.render ()
-    | RadioButtonExamples -> RadioButtonExamples.render ()
-    | SwitchExamples -> SwitchExamples.render ()
-    | ContainerExamples -> ContainerExamples.render ()
-    | FieldExamples -> FieldExamples.render ()
-    | NumericFieldExamples -> NumericFieldExamples.render ()
-    | DropdownExamples -> DropdownExamples.render ()
-    | SelectExamples -> SelectExamples.render ()
-    | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
-    | DialogExamples -> DialogExamples.render ()
-    | DrawerExamples -> DrawerExamples.render ()
-    | IconsExamples -> IconsExamples.render ()
-    | TabsExamples -> TabsExamples.render ()
-    | ListExamples -> ListExamples.render ()
-    | AlertExamples -> AlertExamples.render ()
-    | LinkExamples -> LinkExamples.render ()
-    | DividerExamples -> DividerExamples.render ()
-    | SpacingExamples -> SpacingExamples.render ()
-    | OpacityExamples -> OpacityExamples.render ()
-    | TransitionExamples -> TransitionExamples.render ()
-    | AnimationExamples -> AnimationExamples.render ()
-    | BorderExamples -> BorderExamples.render ()
-    | DisplayExamples -> DisplayExamples.render ()
-    | ElevationExamples -> ElevationExamples.render ()
-    | FlexboxExamples -> FlexboxExamples.render ()
-    | ThemingExamples -> ThemingExamples.render ()
-
-  let private githubSvg =
-    Doc.Verbatim
-      """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>"""
+            // Styling — scroll-reveal: fades in as user scrolls further
+            categorySection "Styling" [
+              "Spacing", SpacingExamples
+              "Opacity", OpacityExamples
+              "Borders", BorderExamples
+              "Display", DisplayExamples
+              "Elevation", ElevationExamples
+              "Flexbox", FlexboxExamples
+              "Transitions", TransitionExamples
+              "Animations", AnimationExamples
+              "Theming", ThemingExamples
+            ]
+          ],
+          attrs = [ Container.MaxWidth.large ]
+        )
+      ]
+    | componentPage ->
+      match componentPage with
+      | GettingStartedExamples -> GettingStartedExamples.render ()
+      | AppBarExamples -> AppBarExamples.render ()
+      | SpacerExamples -> SpacerExamples.render ()
+      | ButtonExamples -> ButtonExamples.render ()
+      | ButtonGroupExamples -> ButtonGroupExamples.render ()
+      | ButtonMenuExamples -> ButtonMenuExamples.render ()
+      | TypographyExamples -> TypographyExamples.render ()
+      | TooltipExamples -> TooltipExamples.render ()
+      | GridExamples -> GridExamples.render ()
+      | CheckboxExamples -> CheckboxExamples.render ()
+      | ChipExamples -> ChipExamples.render ()
+      | ChipSetExamples -> ChipSetExamples.render ()
+      | RadioButtonExamples -> RadioButtonExamples.render ()
+      | SwitchExamples -> SwitchExamples.render ()
+      | ContainerExamples -> ContainerExamples.render ()
+      | FieldExamples -> FieldExamples.render ()
+      | NumericFieldExamples -> NumericFieldExamples.render ()
+      | DropdownExamples -> DropdownExamples.render ()
+      | SelectExamples -> SelectExamples.render ()
+      | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
+      | DialogExamples -> DialogExamples.render ()
+      | DrawerExamples -> DrawerExamples.render ()
+      | IconsExamples -> IconsExamples.render ()
+      | TabsExamples -> TabsExamples.render ()
+      | ListExamples -> ListExamples.render ()
+      | AlertExamples -> AlertExamples.render ()
+      | LinkExamples -> LinkExamples.render ()
+      | DividerExamples -> DividerExamples.render ()
+      | SpacingExamples -> SpacingExamples.render ()
+      | OpacityExamples -> OpacityExamples.render ()
+      | TransitionExamples -> TransitionExamples.render ()
+      | AnimationExamples -> AnimationExamples.render ()
+      | BorderExamples -> BorderExamples.render ()
+      | DisplayExamples -> DisplayExamples.render ()
+      | ElevationExamples -> ElevationExamples.render ()
+      | FlexboxExamples -> FlexboxExamples.render ()
+      | ThemingExamples -> ThemingExamples.render ()
+      | Home -> Doc.Empty
 
   let render () =
     let initialHash = getLocationHash ()
@@ -1802,7 +381,7 @@ module ExamplesRouter =
       let sections = [|
         for i in 0 .. headers.Length - 1 do
           let h = As<Dom.Element>(headers.Item i)
-          (h.Id, As<string>(h?textContent).Replace("#", "").Trim())
+          h.Id, As<string>(h?textContent).Replace("#", "").Trim()
       |]
 
       Var.Set tocSections sections
@@ -1854,7 +433,7 @@ module ExamplesRouter =
             tocSections.View
             |> Doc.BindView(fun sections ->
               Doc.Concat [
-                for (id, title) in sections do
+                for id, title in sections do
                   div [
                     Attr.Class "docs-toc__item"
 
@@ -1935,9 +514,9 @@ module ExamplesRouter =
         AlignItems.center
         Padding.Vertical.extraSmall
         Padding.Horizontal.medium
-        Attr.Style "cursor" "pointer"
-        Attr.Style "border-radius" "6px"
-        Attr.Style "margin" "1px 8px"
+        Cursor.pointer
+        BorderRadius.All.large
+        Margin.All.extraSmall
         Attr.Class "weave-nav-leaf"
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
         on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
@@ -1950,13 +529,13 @@ module ExamplesRouter =
           AlignItems.center
           Padding.Vertical.extraSmall
           Padding.Horizontal.small
-          Attr.Style "cursor" "pointer"
-          Attr.Style "gap" "8px"
+          Cursor.pointer
+          Gap.All.g2
           Attr.Class "weave-nav-group-header"
           on.click (fun _ _ -> Var.Update isExpanded not)
         ] [
           Icon.create (categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
-          div [ Typography.overline; Attr.Style "flex" "1"; Attr.Style "opacity" "0.7" ] [ text label ]
+          div [ Typography.overline; FlexItem.Flex.allSizes; Attr.Style "opacity" "0.7" ] [ text label ]
           isExpanded.View
           |> Doc.BindView(fun exp ->
             Icon.create (
@@ -1978,10 +557,10 @@ module ExamplesRouter =
           AlignItems.center
           Padding.Vertical.extraSmall
           Padding.Horizontal.small
-          Attr.Style "cursor" "pointer"
-          Attr.Style "border-radius" "6px"
-          Attr.Style "margin" "1px 8px"
-          Attr.Style "gap" "8px"
+          Cursor.pointer
+          BorderRadius.All.large
+          Margin.All.extraSmall
+          Gap.All.g2
           Attr.Class "weave-nav-leaf"
           Attr.DynamicClassPred
             "weave-nav-item--active"
@@ -1997,10 +576,10 @@ module ExamplesRouter =
           AlignItems.center
           Padding.Vertical.extraSmall
           Padding.Horizontal.small
-          Attr.Style "cursor" "pointer"
-          Attr.Style "border-radius" "6px"
-          Attr.Style "margin" "1px 8px"
-          Attr.Style "gap" "8px"
+          Cursor.pointer
+          BorderRadius.All.large
+          Margin.All.extraSmall
+          Gap.All.g2
           Attr.Class "weave-nav-leaf"
           Attr.DynamicClassPred
             "weave-nav-item--active"
@@ -2072,8 +651,8 @@ module ExamplesRouter =
         div [
           Flex.Flex.allSizes
           AlignItems.center
-          Attr.Style "gap" "8px"
-          Attr.Style "cursor" "pointer"
+          Gap.All.g2
+          Cursor.pointer
           on.click (fun _ _ -> navigateTo Home)
         ] [ div [ Typography.h6 ] [ text "Weave" ] ]
 
@@ -2083,8 +662,8 @@ module ExamplesRouter =
           attr.href "https://github.com/1eyewonder/Weave"
           attr.target "_blank"
           Attr.Style "color" "inherit"
-          Attr.Style "display" "flex"
-          Attr.Style "align-items" "center"
+          Flex.Flex.allSizes
+          AlignItems.center
           Padding.Horizontal.extraSmall
         ] [ githubSvg ]
 
@@ -2103,7 +682,7 @@ module ExamplesRouter =
 
     div [
       Attr.Style "height" "100vh"
-      Attr.Style "overflow" "hidden"
+      Overflow.hidden
       Flex.Flex.allSizes
       FlexDirection.Column.allSizes
       SurfaceColor.toBackgroundColor SurfaceColor.Background
@@ -2116,7 +695,7 @@ module ExamplesRouter =
         mainContent =
           div [
             cl "weave-main-content"
-            Attr.Style "overflow-y" "auto"
+            Overflow.yAuto
             Attr.Style "scroll-behavior" "smooth"
             Attr.Style "height" "100%"
             on.afterRender (fun el -> Var.Set mainEl (Some el))
@@ -2139,7 +718,7 @@ module ExamplesRouter =
           ] [
             div [ Attr.Class "docs-page-layout" ] [
               div [
-                Attr.Style "flex" "1"
+                FlexItem.Flex.allSizes
                 Attr.Style "min-width" "0"
                 Padding.All.Medium.small
                 Padding.All.ExtraSmall.extraSmall
@@ -2161,8 +740,8 @@ module ExamplesRouter =
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set drawerOpen false),
             isFixed = false,
-            attrs = [ Attr.Style "overflow-y" "auto" ]
+            attrs = [ Overflow.yAuto ]
           ),
-        attrs = [ Attr.Style "flex" "1"; Attr.Style "min-height" "0" ]
+        attrs = [ FlexItem.Flex.allSizes; Attr.Style "min-height" "0" ]
       )
     ]

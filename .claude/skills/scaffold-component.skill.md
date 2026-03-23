@@ -304,16 +304,20 @@ module {Name}Examples =
 
 ### 6a. Add to `src/Weave.Docs/Weave.Docs.fsproj`
 
-Add the new example file **before** `ExamplesRouter.fs` in the compile order:
+Add the new example file **before** `DocsRouting.fs` in the compile order:
 
 ```xml
 <Compile Include="examples/{Name}Examples.fs" />
-<Compile Include="ExamplesRouter.fs" />    <!-- this line already exists, add above it -->
+<Compile Include="DocsRouting.fs" />          <!-- this line already exists, add above it -->
+<Compile Include="ComponentPreviews.fs" />    <!-- already exists -->
+<Compile Include="ExamplesRouter.fs" />       <!-- already exists -->
 ```
 
-### 6b. Update `src/Weave.Docs/ExamplesRouter.fs` in four places
+### 6b. Update docs routing files (five places across three files)
 
-**1 — Add to the `Page` DU:**
+Docs routing is split across `DocsRouting.fs`, `ComponentPreviews.fs`, and `ExamplesRouter.fs`.
+
+**1 — `DocsRouting.fs` — Add to the `Page` DU:**
 
 ```fsharp
 [<Struct>]
@@ -323,16 +327,25 @@ type Page =
   | {Name}Examples    // <-- add here
 ```
 
-**2 — Add to `pageToString`:**
+**2 — `DocsRouting.fs` — Add to `pageToString` / `stringToPage`:**
 
 ```fsharp
-let private pageToString page =
+let pageToString page =
   match page with
   // ... existing cases ...
-  | {Name}Examples -> "{Name}"
+  | {Name}Examples -> "{Display Name}"
 ```
 
-**3 — Add to `renderPage`:**
+(Also add the reverse mapping in `stringToPage`.)
+
+**3 — `DocsRouting.fs` — Add to `pageToHash` / `hashToPage`:**
+
+```fsharp
+| {Name}Examples -> "#{kebab-name}"   // in pageToHash
+| "#{kebab-name}" -> Some {Name}Examples  // in hashToPage
+```
+
+**4 — `ExamplesRouter.fs` — Add to `renderPage`:**
 
 ```fsharp
 let private renderPage page =
@@ -341,7 +354,7 @@ let private renderPage page =
   | {Name}Examples -> {Name}Examples.render ()
 ```
 
-**4 — Add to the nav item list inside `render ()`:**
+**5 — `ExamplesRouter.fs` — Add to the nav item list inside `render ()`:**
 
 ```fsharp
 yield!
@@ -611,8 +624,9 @@ Before marking the component as done, verify:
 - [ ] `src/Weave/scss/main.scss` has `@import "components/{name}";` in alphabetical order
 - [ ] `src/Weave/Weave.fsproj` has `<Compile Include="components/{Name}.fs" />`
 - [ ] `src/Weave.Docs/examples/{Name}Examples.fs` created with at least one example section and a `render ()` function
-- [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `ExamplesRouter.fs`
-- [ ] `ExamplesRouter.fs` updated in all four locations: `Page` DU, `pageToString`, `renderPage`, nav list
+- [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `DocsRouting.fs`
+- [ ] `DocsRouting.fs` updated: `Page` DU, `pageToString`, `stringToPage`, `pageToHash`, `hashToPage`
+- [ ] `ExamplesRouter.fs` updated: `renderPage`, nav list
 - [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created **only if** a mapping function like `Color.toAttr` is present — plain `let` style bindings need no unit tests since the type provider guarantees correctness
 - [ ] `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj` has `<Compile Include="{Name}Tests.fs" />`
 - [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship

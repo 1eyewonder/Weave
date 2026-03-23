@@ -598,3 +598,83 @@ module Animate =
     on.afterRender (fun (el: Dom.Element) ->
       el?style?animationName <- "none"
       el.AddEventListener("click", fun (_: Dom.Event) -> replay el))
+
+  /// <summary>
+  /// Sets up an IntersectionObserver that controls the element's animation
+  /// play state based on viewport intersection.
+  ///
+  /// On enter: resets the animation via the name-removal technique (same as
+  /// <c>replay</c>) then sets <c>animationPlayState</c> to <c>running</c>.
+  /// The name reset is synchronous (no paint between removal and restore),
+  /// so the user only sees the animation play from its "from" keyframe.
+  ///
+  /// On leave (when <c>once</c> is false): pauses the animation so it can
+  /// be replayed on next entry.
+  ///
+  /// When <c>once</c> is true: disconnects the observer after the first
+  /// trigger — the animation plays once and stays at its "to" keyframe.
+  /// </summary>
+  [<Inline """(function() {
+    var obs = new IntersectionObserver(function(entries, o) {
+      for (var i = 0; i < entries.length; i++) {
+        var el = entries[i].target;
+        if (entries[i].isIntersecting) {
+          el.style.animationName = 'none';
+          void el.offsetHeight;
+          el.style.animationName = '';
+          el.style.animationPlayState = 'running';
+          if ($3) o.unobserve(el);
+        } else if (!$3) {
+          el.style.animationPlayState = 'paused';
+        }
+      }
+    }, { threshold: $1, rootMargin: $2 });
+    obs.observe($0);
+  })()""">]
+  let private setupScrollTrigger
+    (el: Dom.Element)
+    (threshold: float)
+    (rootMargin: string)
+    (once: bool)
+    : unit
+    =
+    X<unit>
+
+  /// <summary>
+  /// Defers the element's CSS animation until it scrolls into the viewport.
+  /// Compose with any <c>AnimationEntrance</c> class plus optional
+  /// <c>AnimationDuration</c>, <c>AnimationDelay</c>, and
+  /// <c>AnimationEasing</c> overrides — the animation starts paused
+  /// (holding its "from" keyframe via <c>animation-fill-mode: both</c>)
+  /// and resumes when the IntersectionObserver fires.
+  /// </summary>
+  /// <param name="threshold">
+  /// Fraction of the element that must be visible to trigger (0.0–1.0).
+  /// Default: <c>0.1</c>.
+  /// </param>
+  /// <param name="rootMargin">
+  /// Margin around the viewport root, e.g. <c>"0px 0px -40px 0px"</c>
+  /// to trigger 40px before the bottom edge. Default: <c>"0px"</c>.
+  /// </param>
+  /// <param name="once">
+  /// When <c>true</c> (default), the observer disconnects after the first
+  /// trigger. Set to <c>false</c> for elements that should re-animate
+  /// each time they re-enter the viewport.
+  /// </param>
+  /// <remarks>
+  /// Do not combine with <c>AnimationOn</c> trigger classes —
+  /// they override <c>animation-name</c> which conflicts with the
+  /// paused play-state approach used here.
+  /// </remarks>
+  let onScrollWith (threshold: float) (rootMargin: string) (once: bool) : Attr =
+    Attr.Concat [
+      Attr.Style "animation-play-state" "paused"
+      on.afterRender (fun (el: Dom.Element) -> setupScrollTrigger el threshold rootMargin once)
+    ]
+
+  /// <summary>
+  /// Defers the element's CSS animation until it scrolls into the viewport,
+  /// using default settings (threshold: 0.1, no root margin, triggers once).
+  /// For custom IntersectionObserver settings, use <c>onScrollWith</c>.
+  /// </summary>
+  let onScroll: Attr = onScrollWith 0.1 "0px" true

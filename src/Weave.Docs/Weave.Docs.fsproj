@@ -42,6 +42,8 @@
     <Compile Include="examples/FlexboxExamples.fs" />
     <Compile Include="examples/SelectExamples.fs" />
     <Compile Include="examples/GettingStartedExamples.fs" />
+    <Compile Include="DocsRouting.fs" />
+    <Compile Include="ComponentPreviews.fs" />
     <Compile Include="ExamplesRouter.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Startup.fs" />

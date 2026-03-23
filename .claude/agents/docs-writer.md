@@ -213,14 +213,23 @@ GridItem.Create(
 
 ## Router Registration
 
-When creating a new example page, it must be registered in four places in `ExamplesRouter.fs`:
+Docs routing is split across three files (compiled in this order in `Weave.Docs.fsproj`):
 
-1. **`Page` DU** — add `| {Name}Examples`
-2. **`pageToString`** — add `| {Name}Examples -> "{Display Name}"`
-3. **`renderPage`** — add `| {Name}Examples -> {Name}Examples.render ()`
-4. **Nav list** inside `render ()` — add `{Name}Examples` to the list
+| File | Contents |
+|---|---|
+| `DocsRouting.fs` | `Page` DU, `pageToString`, `stringToPage`, `pageToHash`, `hashToPage`, JS inline helpers |
+| `ComponentPreviews.fs` | `forPage` — renders thumbnail previews for the home-page grid |
+| `ExamplesRouter.fs` | `renderPage`, navigation list, shell layout, scroll/TOC management |
 
-Also register the file in `Weave.Docs.fsproj` **before** `ExamplesRouter.fs` in compile order.
+When creating a new example page, register it in **five** places across these files:
+
+1. **`DocsRouting.fs` — `Page` DU** — add `| {Name}Examples`
+2. **`DocsRouting.fs` — `pageToString`** — add `| {Name}Examples -> "{Display Name}"`
+3. **`DocsRouting.fs` — `pageToHash` / `hashToPage`** — add the hash mapping (e.g. `"#{kebab-name}"`)
+4. **`ExamplesRouter.fs` — `renderPage`** — add `| {Name}Examples -> {Name}Examples.render ()`
+5. **`ExamplesRouter.fs` — Nav list** inside `render ()` — add `{Name}Examples` to the list
+
+Also register the example file in `Weave.Docs.fsproj` **before** `DocsRouting.fs` in compile order.
 
 ## Layout and Visual Balance
 
@@ -270,7 +279,7 @@ Your example pages are the public face of the design system. When the `visual-ar
 ## Deliverables
 
 - Component example files (`{Name}Examples.fs`) following the page structure above
-- Router registration in all four locations in `ExamplesRouter.fs`
+- Router registration across `DocsRouting.fs` and `ExamplesRouter.fs` (five places — see Router Registration section)
 - Inline XML doc comments (`///`) for public API members when requested
 - Usage guides explaining patterns (reactive params, theming, attrs composition)
 - Migration notes when an API changes

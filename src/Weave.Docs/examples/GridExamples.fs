@@ -96,7 +96,7 @@ Grid.create(
             GridItem.create (
               demoBox text color,
               attrs = [
-                GridItem.Span.Small.twelve
+                GridItem.Span.twelve
                 GridItem.Span.Medium.six
                 GridItem.Span.Large.four
                 GridItem.Span.ExtraLarge.three
@@ -124,9 +124,9 @@ Grid.create(
 GridItem.create(
     myContent,
     attrs = [
-        GridItem.Span.Small.twelve  // full width on small screens
-        GridItem.Span.Medium.six    // half width on medium
-        GridItem.Span.Large.four    // third width on large
+        GridItem.Span.twelve // full width on small & extra small screens
+        GridItem.Span.Medium.six // half width on medium
+        GridItem.Span.Large.four // third width on large
         GridItem.Span.ExtraLarge.three // quarter width on extra-large
     ]
 )"""

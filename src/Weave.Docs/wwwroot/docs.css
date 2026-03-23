@@ -48,18 +48,6 @@ body {
   opacity: 1 !important;
 }
 
-.docs-component-card {
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-.docs-component-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-}
-
-/* Navigation
-   ---------------------------------------- */
 .weave-nav-item--active {
   background: var(--palette-primary) !important;
   color: var(--palette-primary-text) !important;
@@ -74,10 +62,6 @@ body {
   border-radius: 6px;
 }
 
-/* Drawer containment
-   transform creates a new containing block so position:fixed children
-   (e.g. demo AppBars inside examples) are clipped to this panel
-   rather than the viewport, preventing them from escaping it. */
 .weave-drawer-container__main {
   transform: translateZ(0);
 }
@@ -183,4 +167,216 @@ body {
 .docs-toc__item--active {
   border-left-color: var(--palette-primary);
   color: var(--palette-primary);
+}
+
+
+/* ==========================================================================
+   Weave pattern — reusable diamond crosshatch texture
+   Diamond crosshatch woven pattern using the brand primary at low opacity.
+   CSS repeating-linear-gradient is used instead of SVG data URIs because
+   gradient rendering is guaranteed by the GPU compositor — SVG fill-opacity
+   at sub-3% is painted in software and often rounds to transparent.
+
+   Two diagonal gradient layers at +45 and -45 degrees intersect to form a
+   diamond lattice. Cell size and opacity are exposed as CSS custom properties
+   so each consumer can tune the texture density:
+     --weave-cell     Controls diamond size (default 20px)
+     --weave-opacity  Controls line visibility (default 0.05)
+   ========================================================================== */
+
+.docs-weave-pattern {
+  --weave-cell: 20px;
+  --weave-opacity: 0.05;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(var(--palette-primary-rgb), var(--weave-opacity)) 0px,
+      rgba(var(--palette-primary-rgb), var(--weave-opacity)) 1px,
+      transparent 1px,
+      transparent var(--weave-cell)
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(var(--palette-primary-rgb), var(--weave-opacity)) 0px,
+      rgba(var(--palette-primary-rgb), var(--weave-opacity)) 1px,
+      transparent 1px,
+      transparent var(--weave-cell)
+    );
+}
+
+.docs-hero {
+  padding: 52px 32px 44px;
+}
+
+.docs-section-divider {
+  height: 1px;
+  margin: 0 0 48px;
+  border: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--palette-primary-rgb), 0.25) 30%,
+    rgba(var(--palette-secondary-rgb), 0.25) 70%,
+    transparent 100%
+  );
+}
+
+.docs-section-divider--alt {
+  height: 2px;
+  border: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--palette-primary-rgb), 0.3) 15%,
+    rgba(var(--palette-secondary-rgb), 0.3) 85%,
+    transparent 100%
+  );
+}
+
+.docs-component-card {
+  /* Keep transition list in sync: transform, box-shadow, border-color */
+  transition:
+    transform var(--weave-duration-short) ease,
+    box-shadow var(--weave-duration-short) ease,
+    border-color var(--weave-duration-short) ease;
+  /* Transparent border at rest so layout does not shift on hover */
+  border: 1px solid transparent;
+  will-change: transform;
+  /* Ensure the ::after pseudo-element is positioned relative to the card */
+  position: relative;
+  /* Match the hero section's border-radius */
+  border-radius: 16px;
+}
+
+.docs-component-card:hover {
+  transform: scale(1.005) translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--palette-primary-rgb), 0.4);
+}
+
+.docs-component-card:hover::after {
+  opacity: 1;
+}
+
+.docs-component-card:hover .docs-component-card__label {
+  font-weight: 700;
+}
+
+.docs-component-page .weave-typography--h4 {
+  font-size: calc(var(--typography-h4-size) * 1.1);
+}
+
+.weave-nav-leaf:not(.weave-nav-item--active) {
+  font-weight: 400;
+}
+
+.docs-section + .docs-section {
+  margin-top: 16px;
+}
+
+.docs-home-above-fold {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(99svh - var(--appbar-height));
+  box-sizing: border-box;
+  padding-bottom: 0;
+  position: relative;
+}
+
+/* Fallback for browsers without svh support */
+@supports not (min-height: 1svh) {
+  .docs-home-above-fold {
+    min-height: calc(100vh - var(--appbar-height));
+  }
+}
+
+/* On very small screens, don't force centering — let content flow naturally */
+@media (max-height: 600px) {
+  .docs-home-above-fold {
+    justify-content: flex-start;
+    min-height: auto;
+    padding-bottom: 8svh;
+  }
+}
+
+.docs-scroll-indicator {
+  position: absolute;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.45;
+  transition: opacity 0.3s ease;
+  cursor: default;
+  user-select: none;
+}
+
+.docs-scroll-indicator:hover {
+  opacity: 0.7;
+}
+
+@keyframes docs-scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@media (max-height: 600px) {
+  .docs-scroll-indicator {
+    display: none;
+  }
+}
+
+.docs-hero-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.docs-hero-cta .weave-button {
+  min-width: 150px;
+}
+
+.docs-why-weave-label {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--palette-primary);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.docs-why-weave-heading {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.docs-value-card {
+  /* Tighter, slightly more visible weave for smaller card surfaces */
+  --weave-cell: 14px;
+  --weave-opacity: 0.06;
+  border: 1px solid rgba(var(--palette-primary-rgb), 0.14);
+  border-left: 3px solid var(--palette-primary);
+  transition:
+    transform var(--weave-duration-short) ease,
+    box-shadow var(--weave-duration-short) ease;
+}
+
+.docs-value-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.docs-component-card .cp {
+  border-top-left-radius: 15px;  /* 16px outer - 1px border */
+  border-top-right-radius: 15px;
 }

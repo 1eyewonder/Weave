@@ -16,7 +16,7 @@ module Helpers =
   let bodyText (str: string) = div [ Typography.body1 ] [ text str ]
 
   let divider () =
-    Divider.create (attrs = [ Margin.Vertical.small ])
+    Divider.create (attrs = [ Margin.Vertical.small; Attr.Class "docs-section-divider--alt" ])
 
   /// Generates a URL-friendly slug from a title string
   let private slugify (title: string) =

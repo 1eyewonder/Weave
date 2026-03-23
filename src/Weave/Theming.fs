@@ -34,21 +34,31 @@ module Theming =
     }
 
   type TypographyConfig = {
-    FontFamily: string option
-    FontSize: string option
-    FontWeight: string option
-    LineHeight: string option
-    LetterSpacing: string option
+    DisplayFamily: string option
+    BodyFamily: string option
+    MonoFamily: string option
+    WeightLight: string option
+    WeightRegular: string option
+    WeightBold: string option
+    DefaultSize: string option
+    DefaultWeight: string option
+    DefaultLineHeight: string option
+    DefaultLetterSpacing: string option
   }
 
   module TypographyConfig =
 
     let empty = {
-      FontFamily = None
-      FontSize = None
-      FontWeight = None
-      LineHeight = None
-      LetterSpacing = None
+      DisplayFamily = None
+      BodyFamily = None
+      MonoFamily = None
+      WeightLight = None
+      WeightRegular = None
+      WeightBold = None
+      DefaultSize = None
+      DefaultWeight = None
+      DefaultLineHeight = None
+      DefaultLetterSpacing = None
     }
 
   type ThemePalette = {
@@ -196,14 +206,23 @@ module Theming =
     palette.Background |> Option.iter (setCssVar "--input-label-background")
 
   let private applyTypography (typography: TypographyConfig) =
-    typography.FontFamily |> Option.iter (setCssVar "--typography-default-family")
-    typography.FontSize |> Option.iter (setCssVar "--typography-default-size")
-    typography.FontWeight |> Option.iter (setCssVar "--typography-default-weight")
+    typography.DisplayFamily
+    |> Option.iter (setCssVar "--weave-font-family-display")
 
-    typography.LineHeight
+    typography.BodyFamily |> Option.iter (setCssVar "--weave-font-family-body")
+    typography.MonoFamily |> Option.iter (setCssVar "--weave-font-family-mono")
+    typography.WeightLight |> Option.iter (setCssVar "--weave-weight-light")
+    typography.WeightRegular |> Option.iter (setCssVar "--weave-weight-regular")
+    typography.WeightBold |> Option.iter (setCssVar "--weave-weight-bold")
+    typography.DefaultSize |> Option.iter (setCssVar "--typography-default-size")
+
+    typography.DefaultWeight
+    |> Option.iter (setCssVar "--typography-default-weight")
+
+    typography.DefaultLineHeight
     |> Option.iter (setCssVar "--typography-default-lineheight")
 
-    typography.LetterSpacing
+    typography.DefaultLetterSpacing
     |> Option.iter (setCssVar "--typography-default-letterspacing")
 
   let setMode (mode: ThemeMode) =
@@ -278,6 +297,36 @@ module Theming =
 
     let withPrimary lightColor darkColor config =
       config |> withLightPrimary lightColor |> withDarkPrimary darkColor
+
+    let withDisplayFont family (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with DisplayFamily = Some family }
+    }
+
+    let withBodyFont family (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with BodyFamily = Some family }
+    }
+
+    let withMonoFont family (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with MonoFamily = Some family }
+    }
+
+    let withWeightLight weight (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with WeightLight = Some weight }
+    }
+
+    let withWeightRegular weight (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with WeightRegular = Some weight }
+    }
+
+    let withWeightBold weight (config: ThemeConfig) = {
+      config with
+          Typography = { config.Typography with WeightBold = Some weight }
+    }
 
     let withLightBackground bg bgPaper bgDefault (config: ThemeConfig) = {
       config with

@@ -13,8 +13,7 @@ module TypographyExamples =
 
   let private variantExamples () =
     let description =
-      Helpers.bodyText
-        "Weave provides 13 typography variants covering headings, subtitles, body text, and utility styles."
+      Helpers.bodyText "All available typography styles with their respective sizing and weights"
 
     let content =
       div [] [
@@ -117,6 +116,55 @@ div [ Typography.body1; Typography.Weight.bold ] [ text "Bold Body1 (weight 700)
 
     Helpers.codeSampleSection "Font Weights" description content code
 
+  let private fontFamilyExamples () =
+    let description =
+      Helpers.bodyText
+        "Apply a font-role family to any element using the Family module. This is useful when you want to apply the display, body, or monospace font to an element that doesn't normally use it."
+
+    let content =
+      div [] [
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Default body1 (uses body font family)" ]
+        div [ Typography.body1; Typography.Family.display; Margin.Bottom.extraSmall ] [
+          text "Body1 with display font family"
+        ]
+
+        Divider.create (attrs = [ Margin.Bottom.small; Margin.Top.small ])
+
+        div [ Typography.h5; Margin.Bottom.extraSmall ] [ text "Default H5 (uses display font family)" ]
+        div [ Typography.h5; Typography.Family.body; Margin.Bottom.extraSmall ] [
+          text "H5 with body font family"
+        ]
+
+        Divider.create (attrs = [ Margin.Bottom.small; Margin.Top.small ])
+
+        div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Inline code example:" ]
+        div [ Typography.body1 ] [
+          text "Use the "
+          span [ Typography.Family.mono ] [ text "Typography.Family.mono" ]
+          text " attr for inline code snippets."
+        ]
+      ]
+
+    let code =
+      """open Weave
+
+
+// Apply the display font to body text
+div [ Typography.body1; Typography.Family.display ] [ text "Body1 with display font" ]
+
+// Apply the body font to a heading
+div [ Typography.h5; Typography.Family.body ] [ text "H5 with body font" ]
+
+// Apply monospace for inline code
+div [ Typography.body1 ] [
+    text "Use the "
+    span [ Typography.Family.mono ] [ text "myFunction" ]
+    text " helper for inline code."
+]
+"""
+
+    Helpers.codeSampleSection "Font Family" description content code
+
   let private customWeightExamples () =
     let description =
       Helpers.bodyText
@@ -165,16 +213,16 @@ div [ Typography.body1; Typography.Weight.bold ] [ text "Bold Body1 (weight 700)
 
   let private alignmentExamples () =
     let description =
-      Helpers.bodyText "Align text within its container using Typography.Align helpers."
+      Helpers.bodyText "Demonstration of text alignment options available in typography components"
 
     let content =
       div [] [
-        let body alignment =
-          div [ Typography.body1; Margin.Bottom.extraSmall; alignment ] [ text (sprintf "%A" alignment) ]
+        let body label alignment =
+          div [ Typography.body1; Margin.Bottom.extraSmall; alignment ] [ text (sprintf "%s" label) ]
 
-        body Typography.Align.left
-        body Typography.Align.center
-        body Typography.Align.right
+        body "Left" Typography.Align.left
+        body "Center" Typography.Align.center
+        body "Right" Typography.Align.right
       ]
 
     let code =
@@ -192,8 +240,7 @@ div [ Typography.body1; Typography.Align.right ] [ text "Right" ]
 
   let private textWrapExamples () =
     let description =
-      Helpers.bodyText
-        "Prevent text from wrapping with Typography.noWrap, which truncates overflow with an ellipsis."
+      Helpers.bodyText "Examples of typography with and without text wrapping enabled"
 
     let content =
       div [] [
@@ -247,7 +294,7 @@ div [ Typography.body1; Typography.noWrap ] [
 
   let private colorExamples () =
     let description =
-      Helpers.bodyText "Apply a brand color to any text element using the Typography.Color module."
+      Helpers.bodyText "Typography components can utilize theme colors via CSS utility classes"
 
     let content =
       let colors = [
@@ -272,20 +319,30 @@ div [ Typography.body1; Typography.noWrap ] [
     let code =
       """open Weave
 
-div [ Typography.h5; Typography.Color.primary ] [ text "Primary Color" ]
-div [ Typography.h5; Typography.Color.secondary ] [ text "Secondary Color" ]
-div [ Typography.h5; Typography.Color.tertiary ] [ text "Tertiary Color" ]
-div [ Typography.h5; Typography.Color.error ] [ text "Error Color" ]
-div [ Typography.h5; Typography.Color.warning ] [ text "Warning Color" ]
-div [ Typography.h5; Typography.Color.success ] [ text "Success Color" ]
-div [ Typography.h5; Typography.Color.info ] [ text "Info Color" ]"""
+
+let colors = [
+    "Primary", Typography.Color.primary
+    "Secondary", Typography.Color.secondary
+    "Tertiary", Typography.Color.tertiary
+    "Success", Typography.Color.success
+    "Error", Typography.Color.error
+    "Warning", Typography.Color.warning
+    "Info", Typography.Color.info
+]
+
+colors
+|> List.map (fun (label, colorAttr) ->
+    div [ Typography.h5; colorAttr ] [
+        text (sprintf "%s Color" label)
+    ]
+)
+"""
 
     Helpers.codeSampleSection "Colors" description content code
 
   let private hierarchyExamples () =
     let description =
-      Helpers.bodyText
-        "Combine heading, subtitle, body, and caption variants to establish a clear reading hierarchy."
+      Helpers.bodyText "Combining different typography styles to create visual hierarchy"
 
     let content =
       div [] [
@@ -326,6 +383,84 @@ div [ Typography.caption ] [ text "Last updated: December 20, 2025" ]
 
     Helpers.codeSampleSection "Hierarchy Example" description content code
 
+  let private customizingFontsExamples () =
+    let description =
+      Helpers.bodyText
+        "Weave's typography system uses role tokens for both font families and font weights. Override these to match your chosen fonts without touching individual variants."
+
+    let content =
+      div [] [
+        div [ Typography.body1; Margin.Bottom.extraSmall ] [
+          text "Weave defines role tokens on :root that all typography variants inherit from:"
+        ]
+
+        div [ Margin.Bottom.small ] [
+          div [ Typography.body2; Typography.Weight.bold; Margin.Bottom.extraSmall ] [ text "Font families:" ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-font-family-display — headings (h1-h6)"
+          ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-font-family-body — body text, subtitles, UI controls"
+          ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-font-family-mono — code and monospace contexts"
+          ]
+        ]
+
+        div [ Margin.Bottom.small ] [
+          div [ Typography.body2; Typography.Weight.bold; Margin.Bottom.extraSmall ] [ text "Font weights:" ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-weight-light — display headings (h1, h2)"
+          ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-weight-regular — body text, subtitles, captions"
+          ]
+          div [ Typography.body2; Margin.Bottom.extraSmall ] [
+            text "--weave-weight-bold — emphasized UI text (h6, button, overline)"
+          ]
+        ]
+
+        div [ Typography.caption; Margin.Bottom.extraSmall ] [
+          text
+            "Weight-role tokens let you remap the entire scale to match any font's available weights. Per-variant escape hatches (e.g. --typography-h6-weight) still work for fine-grained control."
+        ]
+      ]
+
+    let code =
+      """/* 1. Load your custom fonts (e.g. in your HTML <head>): */
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet" />
+
+/* 2. Override the role tokens in CSS: */
+:root {
+    /* Font families */
+    --weave-font-family-display: "Playfair Display", serif;
+    --weave-font-family-body: "Inter", sans-serif;
+    --weave-font-family-mono: "JetBrains Mono", monospace;
+
+    /* Remap weights to match your font's available weights */
+    --weave-weight-light: 400;   /* Inter has no 300 — use 400 */
+    --weave-weight-regular: 400;
+    --weave-weight-bold: 700;
+}
+
+/* 3. Or override programmatically in F#: */
+open Weave.Theming
+
+let theme =
+    ThemeBuilder.empty
+    |> ThemeBuilder.withDisplayFont "\"Playfair Display\", serif"
+    |> ThemeBuilder.withBodyFont "\"Inter\", sans-serif"
+    |> ThemeBuilder.withWeightLight "400"
+    |> ThemeBuilder.withWeightBold "700"
+
+Theming.initialize theme Light
+
+(* Per-variant escape hatch — override a single variant: *)
+(* :root { --typography-h6-weight: 500; } *)
+"""
+
+    Helpers.codeSampleSection "Customizing Fonts" description content code
+
   let render () =
     Container.create (
       div [] [
@@ -340,6 +475,8 @@ div [ Typography.caption ] [ text "Last updated: December 20, 2025" ]
         Helpers.divider ()
         weightExamples ()
         Helpers.divider ()
+        fontFamilyExamples ()
+        Helpers.divider ()
         customWeightExamples ()
         Helpers.divider ()
         alignmentExamples ()
@@ -349,6 +486,8 @@ div [ Typography.caption ] [ text "Last updated: December 20, 2025" ]
         colorExamples ()
         Helpers.divider ()
         hierarchyExamples ()
+        Helpers.divider ()
+        customizingFontsExamples ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

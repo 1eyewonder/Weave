@@ -78,12 +78,21 @@ $typography-types: (
   text-overflow: ellipsis;
 }
 
-.weave-typography--gutterbottom {
-  margin-bottom: 0.35em;
-}
-
 .weave-typography--paragraph {
   margin-bottom: 1em;
+}
+
+// Font-family role modifiers
+.weave-typography--family-display {
+  font-family: var(--weave-font-family-display);
+}
+
+.weave-typography--family-body {
+  font-family: var(--weave-font-family-body);
+}
+
+.weave-typography--family-mono {
+  font-family: var(--weave-font-family-mono);
 }
 
 .weave-typography--weight-light {
@@ -98,6 +107,10 @@ $typography-types: (
   font-weight: 500;
 }
 
+.weave-typography--weight-semibold {
+  font-weight: 600;
+}
+
 .weave-typography--weight-bold {
   font-weight: 700;
 }
@@ -105,7 +118,7 @@ $typography-types: (
 @each $color in $palette-colors {
   .weave-typography--#{$color} {
     color: var(--palette-#{$color});
-  }
+}
 }
 
 .weave-typography--text-primary {

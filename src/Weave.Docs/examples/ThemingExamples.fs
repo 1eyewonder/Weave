@@ -91,11 +91,13 @@ module ThemingExamples =
               Some(PaletteColor.create "#64ffda" "rgba(0,0,0,0.87)" "#8cffe5" "#3dccab" "rgb(100, 255, 218)")
       }
       Typography = {
-        FontFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-        FontSize = Some "16px"
-        FontWeight = Some "400"
-        LineHeight = Some "1.5"
-        LetterSpacing = Some "0.00938em"
+        TypographyConfig.empty with
+            DisplayFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            BodyFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            DefaultSize = Some "16px"
+            DefaultWeight = Some "400"
+            DefaultLineHeight = Some "1.5"
+            DefaultLetterSpacing = Some "0.00938em"
       }
     }
 
@@ -113,13 +115,8 @@ module ThemingExamples =
       |> ThemeBuilder.withPrimary
         (PaletteColor.create "#1976d2" "#ffffff" "#42a5f5" "#1565c0" "rgb(25, 118, 210)")
         (PaletteColor.create "#90caf9" "rgba(0,0,0,0.87)" "#b3d9fb" "#5fa8e6" "rgb(144, 202, 249)")
-      |> ThemeBuilder.withTypography {
-        FontFamily = Some "'Roboto', sans-serif"
-        FontSize = Some "14px"
-        FontWeight = Some "400"
-        LineHeight = Some "1.43"
-        LetterSpacing = Some "0.01071em"
-      }
+      |> ThemeBuilder.withDisplayFont "'Roboto', sans-serif"
+      |> ThemeBuilder.withBodyFont "'Roboto', sans-serif"
 
     initialize myTheme Light
 
@@ -258,7 +255,6 @@ module ThemingExamples =
 
     let code =
       """open Weave.Theming
-open WebSharper.UI
 
 let currentMode = Var.Create Light
 
@@ -309,13 +305,8 @@ let myTheme =
     |> ThemeBuilder.withPrimary
         (PaletteColor.create "#1976d2" "#ffffff" "#42a5f5" "#1565c0" "rgb(25, 118, 210)")
         (PaletteColor.create "#90caf9" "rgba(0,0,0,0.87)" "#b3d9fb" "#5fa8e6" "rgb(144, 202, 249)")
-    |> ThemeBuilder.withTypography {
-        FontFamily = Some "'Roboto', sans-serif"
-        FontSize = Some "14px"
-        FontWeight = Some "400"
-        LineHeight = Some "1.43"
-        LetterSpacing = Some "0.01071em"
-    }
+    |> ThemeBuilder.withDisplayFont "'Roboto', sans-serif"
+    |> ThemeBuilder.withBodyFont "'Roboto', sans-serif"
 
 initialize myTheme Light"""
 
@@ -346,11 +337,13 @@ let customTheme = {
             Primary = Some(PaletteColor.create "#b388ff" "rgba(0,0,0,0.87)" "#d1b3ff" "#8e5fff" "rgb(179, 136, 255)")
     }
     Typography = {
-        FontFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-        FontSize = Some "16px"
-        FontWeight = Some "400"
-        LineHeight = Some "1.5"
-        LetterSpacing = Some "0.00938em"
+        TypographyConfig.empty with
+            DisplayFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            BodyFamily = Some "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            DefaultSize = Some "16px"
+            DefaultWeight = Some "400"
+            DefaultLineHeight = Some "1.5"
+            DefaultLetterSpacing = Some "0.00938em"
     }
 }
 

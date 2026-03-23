@@ -1,11 +1,36 @@
 @use "sass:map";
 @use "../utilities/borders/border-radius" as *;
 
-$font-family-base: "Fira Sans", sans-serif, monospace;
-$font-family-heading: $font-family-base;
+$font-family-body: "Fira Sans", sans-serif;
+$font-family-display: "Lato", sans-serif;
+$font-family-mono: "Fira Mono", "Consolas", monospace;
 
 :root {
-  --weave-font-family: #{$font-family-base};
+  // ---------------------------------------------------------------------------
+  // Font-role tokens — override these to change the entire typographic feel.
+  //
+  //   --weave-font-family-display  → headings (h1–h6)
+  //   --weave-font-family-body     → body text, subtitles, UI controls
+  //   --weave-font-family-mono     → code, pre, monospace contexts
+  //
+  // Per-variant --typography-{variant}-family vars still work as escape hatches.
+  // ---------------------------------------------------------------------------
+  --weave-font-family-display: #{$font-family-display};
+  --weave-font-family-body:    #{$font-family-body};
+  --weave-font-family-mono:    #{$font-family-mono};
+
+  // ---------------------------------------------------------------------------
+  // Weight-role tokens — override these to match your font's available weights.
+  //
+  //   --weave-weight-light   → display headings (h1, h2)
+  //   --weave-weight-regular → body text, subtitles, captions
+  //   --weave-weight-bold    → emphasized UI text (h6, button, overline)
+  //
+  // Per-variant --typography-{variant}-weight vars still work as escape hatches.
+  // ---------------------------------------------------------------------------
+  --weave-weight-light:   300;
+  --weave-weight-regular: 400;
+  --weave-weight-bold:    700;
 
   // Density scale: 0 = Compact, 1 = Standard, 2 = Spacious
   // Must be a bare unitless integer — never set with a unit (e.g. 1px).
@@ -97,8 +122,8 @@ $font-family-heading: $font-family-base;
   // Body / UI text stays at fixed rem values so it never drops below the 16 px
   // accessibility floor for primary reading text.
   //
-  // Weights graduate from light (300) at large display sizes → regular (400) →
-  // medium (500) at small / UI sizes, creating natural visual hierarchy.
+  // Weights use role tokens (--weave-weight-light/regular/bold) so users can
+  // remap the entire weight scale to match their chosen font's available weights.
   //
   // Letter-spacing follows optical best practice: tighter (negative) for large
   // headlines, neutral in the middle, and progressively wider for smaller and
@@ -106,99 +131,99 @@ $font-family-heading: $font-family-base;
   // ---------------------------------------------------------------------------
 
   --typography-h1-size: clamp(2.25rem, calc(1.8rem + 2.15vw), 3.75rem);
-  --typography-h1-family: #{$font-family-heading};
-  --typography-h1-weight: 300;
+  --typography-h1-family: var(--weave-font-family-display);
+  --typography-h1-weight: var(--weave-weight-light);
   --typography-h1-lineheight: 1.15;
   --typography-h1-letterspacing: -0.015em;
   --typography-h1-text-transform: none;
 
   --typography-h2-size: clamp(1.875rem, calc(1.5rem + 1.6vw), 3rem);
-  --typography-h2-family: #{$font-family-heading};
-  --typography-h2-weight: 300;
+  --typography-h2-family: var(--weave-font-family-display);
+  --typography-h2-weight: var(--weave-weight-light);
   --typography-h2-lineheight: 1.2;
   --typography-h2-letterspacing: -0.005em;
   --typography-h2-text-transform: none;
 
   --typography-h3-size: clamp(1.625rem, calc(1.35rem + 1.25vw), 2.5rem);
-  --typography-h3-family: #{$font-family-heading};
-  --typography-h3-weight: 400;
+  --typography-h3-family: var(--weave-font-family-display);
+  --typography-h3-weight: var(--weave-weight-regular);
   --typography-h3-lineheight: 1.25;
   --typography-h3-letterspacing: 0em;
   --typography-h3-text-transform: none;
 
   --typography-h4-size: clamp(1.375rem, calc(1.15rem + 0.9vw), 2rem);
-  --typography-h4-family: #{$font-family-heading};
-  --typography-h4-weight: 400;
+  --typography-h4-family: var(--weave-font-family-display);
+  --typography-h4-weight: var(--weave-weight-regular);
   --typography-h4-lineheight: 1.3;
   --typography-h4-letterspacing: 0.007em;
   --typography-h4-text-transform: none;
 
   --typography-h5-size: clamp(1.125rem, calc(1rem + 0.55vw), 1.5rem);
-  --typography-h5-family: #{$font-family-heading};
-  --typography-h5-weight: 400;
+  --typography-h5-family: var(--weave-font-family-display);
+  --typography-h5-weight: var(--weave-weight-regular);
   --typography-h5-lineheight: 1.35;
   --typography-h5-letterspacing: 0em;
   --typography-h5-text-transform: none;
 
-  --typography-h6-size: clamp(1rem, calc(0.9rem + 0.35vw), 1.25rem);
-  --typography-h6-family: #{$font-family-heading};
-  --typography-h6-weight: 500;
+  --typography-h6-size: clamp(1.0625rem, calc(0.9rem + 0.35vw), 1.25rem);
+  --typography-h6-family: var(--weave-font-family-display);
+  --typography-h6-weight: var(--weave-weight-bold);
   --typography-h6-lineheight: 1.4;
   --typography-h6-letterspacing: 0.008em;
   --typography-h6-text-transform: none;
 
   --typography-subtitle1-size: clamp(1rem, calc(0.95rem + 0.18vw), 1.125rem);
-  --typography-subtitle1-family: #{$font-family-base};
-  --typography-subtitle1-weight: 400;
+  --typography-subtitle1-family: var(--weave-font-family-body);
+  --typography-subtitle1-weight: var(--weave-weight-regular);
   --typography-subtitle1-lineheight: 1.5;
   --typography-subtitle1-letterspacing: 0.009em;
   --typography-subtitle1-text-transform: none;
 
   --typography-subtitle2-size: 0.875rem;
-  --typography-subtitle2-family: #{$font-family-base};
-  --typography-subtitle2-weight: 500;
+  --typography-subtitle2-family: var(--weave-font-family-body);
+  --typography-subtitle2-weight: var(--weave-weight-bold);
   --typography-subtitle2-lineheight: 1.5;
   --typography-subtitle2-letterspacing: 0.007em;
   --typography-subtitle2-text-transform: none;
 
   --typography-body1-size: 1rem;
-  --typography-body1-family: #{$font-family-base};
-  --typography-body1-weight: 400;
+  --typography-body1-family: var(--weave-font-family-body);
+  --typography-body1-weight: var(--weave-weight-regular);
   --typography-body1-lineheight: 1.6;
   --typography-body1-letterspacing: 0.01em;
   --typography-body1-text-transform: none;
 
   --typography-body2-size: 0.875rem;
-  --typography-body2-family: #{$font-family-base};
-  --typography-body2-weight: 400;
+  --typography-body2-family: var(--weave-font-family-body);
+  --typography-body2-weight: var(--weave-weight-regular);
   --typography-body2-lineheight: 1.5;
   --typography-body2-letterspacing: 0.011em;
   --typography-body2-text-transform: none;
 
   --typography-button-size: 0.875rem;
-  --typography-button-family: #{$font-family-base};
-  --typography-button-weight: 500;
+  --typography-button-family: var(--weave-font-family-body);
+  --typography-button-weight: var(--weave-weight-bold);
   --typography-button-lineheight: 1.75;
   --typography-button-letterspacing: 0.03em;
   --typography-button-text-transform: uppercase;
 
   --typography-caption-size: 0.75rem;
-  --typography-caption-family: #{$font-family-base};
-  --typography-caption-weight: 400;
+  --typography-caption-family: var(--weave-font-family-body);
+  --typography-caption-weight: var(--weave-weight-regular);
   --typography-caption-lineheight: 1.66;
   --typography-caption-letterspacing: 0.03em;
   --typography-caption-text-transform: none;
 
   --typography-overline-size: 0.75rem;
-  --typography-overline-family: #{$font-family-base};
-  --typography-overline-weight: 500;
+  --typography-overline-family: var(--weave-font-family-body);
+  --typography-overline-weight: var(--weave-weight-bold);
   --typography-overline-lineheight: 1.75;
   --typography-overline-letterspacing: 0.1em;
   --typography-overline-text-transform: uppercase;
 
-  --typography-default-family: #{$font-family-base};
+  --typography-default-family: var(--weave-font-family-body);
   --typography-default-size: 1rem;
-  --typography-default-weight: 400;
+  --typography-default-weight: var(--weave-weight-regular);
   --typography-default-lineheight: 1.6;
   --typography-default-letterspacing: 0.01em;
   --typography-default-text-transform: none;

@@ -142,6 +142,7 @@ module Helpers =
               SurfaceColor.toBackgroundColor SurfaceColor.Background
               Attr.Class "language-fsharp"
               on.afterRender highlightCodeElement
+              Typography.Family.mono
             ] [ text linesOfCode ]
           ]
 

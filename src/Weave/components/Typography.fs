@@ -28,12 +28,15 @@ module Typography =
   let caption = cls [ Css.``weave-typography``; Css.``weave-typography--caption`` ]
   let overline = cls [ Css.``weave-typography``; Css.``weave-typography--overline`` ]
 
+  let srOnly = cl Css.``weave-typography--sr-only``
+  let paragraph = cl Css.``weave-typography--paragraph``
   let noWrap = cl Css.``weave-typography--nowrap``
 
-  let textWrap (wrap: View<bool>) =
-    wrap
-    |> View.MapCached not
-    |> Attr.DynamicClassPred Css.``weave-typography--nowrap``
+  module Family =
+
+    let display = cl Css.``weave-typography--family-display``
+    let body = cl Css.``weave-typography--family-body``
+    let mono = cl Css.``weave-typography--family-mono``
 
   module Color =
 
@@ -44,12 +47,16 @@ module Typography =
     let warning = cl Css.``weave-typography--warning``
     let success = cl Css.``weave-typography--success``
     let info = cl Css.``weave-typography--info``
+    let textPrimary = cl Css.``weave-typography--text-primary``
+    let textSecondary = cl Css.``weave-typography--text-secondary``
+    let textDisabled = cl Css.``weave-typography--text-disabled``
 
   module Weight =
 
     let light = cl Css.``weave-typography--weight-light``
     let regular = cl Css.``weave-typography--weight-regular``
     let medium = cl Css.``weave-typography--weight-medium``
+    let semiBold = cl Css.``weave-typography--weight-semibold``
     let bold = cl Css.``weave-typography--weight-bold``
 
   module Align =
@@ -60,4 +67,4 @@ module Typography =
     let left = cl Css.``weave-typography--align-left``
     let right = cl Css.``weave-typography--align-right``
     let start = cl Css.``weave-typography--align-start``
-    let end' = cl Css.``weave-typography--align-end``
+    let ``end`` = cl Css.``weave-typography--align-end``

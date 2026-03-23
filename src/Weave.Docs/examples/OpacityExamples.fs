@@ -118,9 +118,7 @@ div [
                   text (sprintf "%d" level)
                 ]
               ],
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
         ]
       )

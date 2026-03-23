@@ -186,8 +186,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -198,8 +197,7 @@ div [
                 placeholder = View.Const "Default",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -210,8 +208,7 @@ div [
                 placeholder = View.Const "Default",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
           ]
         )

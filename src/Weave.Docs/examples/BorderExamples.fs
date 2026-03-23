@@ -279,8 +279,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               Select.create (
@@ -291,8 +290,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               Select.create (
@@ -303,8 +301,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               Select.create (
@@ -315,8 +312,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
           ]
         )
@@ -431,23 +427,19 @@ div [
           [
             GridItem.create (
               radiusDemo "none" "All.none" BorderRadius.All.none,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "sm" "All.small" BorderRadius.All.small,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "md" "All.medium" BorderRadius.All.medium,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "lg" "All.large" BorderRadius.All.large,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -459,13 +451,11 @@ div [
           [
             GridItem.create (
               radiusDemo "pill" "pill" BorderRadius.pill,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "circle" "circle" BorderRadius.circle,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -477,23 +467,19 @@ div [
           [
             GridItem.create (
               radiusDemo "top" "Top.large" BorderRadius.Top.large,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "bottom" "Bottom.large" BorderRadius.Bottom.large,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "left" "Left.large" BorderRadius.Left.large,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
             GridItem.create (
               radiusDemo "right" "Right.large" BorderRadius.Right.large,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 3
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -556,33 +542,23 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
           [
             GridItem.create (
               widthDemo "0px" "All.zero" BorderWidth.All.zero,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
             GridItem.create (
               widthDemo "1px" "All.one" BorderWidth.All.one,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
             GridItem.create (
               widthDemo "2px" "All.two" BorderWidth.All.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
             GridItem.create (
               widthDemo "4px" "All.four" BorderWidth.All.four,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
             GridItem.create (
               widthDemo "8px" "All.eight" BorderWidth.All.eight,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4,
-              md = Grid.Width.create 2
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -594,33 +570,27 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
           [
             GridItem.create (
               widthDemo "top" "Top.two" BorderWidth.Top.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               widthDemo "bottom" "Bottom.two" BorderWidth.Bottom.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               widthDemo "left" "Left.two" BorderWidth.Left.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               widthDemo "right" "Right.two" BorderWidth.Right.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               widthDemo "horiz" "Horizontal.two" BorderWidth.Horizontal.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               widthDemo "vert" "Vertical.two" BorderWidth.Vertical.two,
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -690,39 +660,27 @@ div [
         [
           GridItem.create (
             styleDemo "Solid" (Attr.Style "border-style" "solid"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
           GridItem.create (
             styleDemo "Dashed" (Attr.Style "border-style" "dashed"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
           GridItem.create (
             styleDemo "Dotted" (Attr.Style "border-style" "dotted"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
           GridItem.create (
             styleDemo "Double" (Attr.Style "border-style" "double"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
           GridItem.create (
             styleDemo "Hidden" (Attr.Style "border-style" "hidden"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
           GridItem.create (
             styleDemo "None" (Attr.Style "border-style" "none"),
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 2
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
           )
         ]
       )
@@ -779,51 +737,35 @@ div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.erro
         [
           GridItem.create (
             colorDemo "Primary" BorderColor.primary,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Secondary" BorderColor.secondary,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Tertiary" BorderColor.tertiary,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Info" BorderColor.info,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Success" BorderColor.success,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Warning" BorderColor.warning,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Error" BorderColor.error,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Lines Default" BorderColor.linesDefault,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
         ]
       )
@@ -969,8 +911,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
                   text "A surface with a thin border instead of a shadow."
                 ]
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
             GridItem.create (
               div [
@@ -986,8 +927,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
                   text "A left accent border draws attention to key content."
                 ]
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
           ],
           attrs = [ Grid.Spacing.small ]

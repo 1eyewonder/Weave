@@ -43,8 +43,7 @@ Alert.create(
           let alert label variant =
             GridItem.create (
               Alert.create (text label, attrs = [ variant; Alert.Color.info ]),
-              xs = Grid.Width.create 12,
-              md = Grid.Width.create 4
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
             )
 
           alert "Standard" Alert.Variant.standard
@@ -109,9 +108,7 @@ Alert.create(
           |> List.map (fun (label, colorAttr) ->
             GridItem.create (
               Alert.create (text label, attrs = [ Alert.Variant.standard; colorAttr ]),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              md = Grid.Width.create 3
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )),
           attrs = [ Grid.Spacing.small ]
         )
@@ -144,8 +141,7 @@ Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.i
               icon = Icon.create (Icon.UiActions UiActions.CheckCircle),
               attrs = [ Alert.Variant.standard; Alert.Color.success ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
           GridItem.create (
             Alert.create (
@@ -153,8 +149,7 @@ Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.i
               icon = Icon.create (Icon.Action Action.Warning),
               attrs = [ Alert.Variant.standard; Alert.Color.warning ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
           GridItem.create (
             Alert.create (
@@ -162,8 +157,7 @@ Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.i
               icon = Icon.create (Icon.Action Action.Error),
               attrs = [ Alert.Variant.standard; Alert.Color.error ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
           GridItem.create (
             Alert.create (
@@ -171,8 +165,7 @@ Alert.create(text "Info alert.", attrs = [ Alert.Variant.standard; Alert.Color.i
               icon = Icon.create (Icon.Action Action.Info),
               attrs = [ Alert.Variant.standard; Alert.Color.info ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ]
       )
@@ -257,16 +250,17 @@ visible.View
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

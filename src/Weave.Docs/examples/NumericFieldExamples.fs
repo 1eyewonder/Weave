@@ -34,8 +34,7 @@ module NumericFieldExamples =
               labelText = View.Const "Standard",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -45,8 +44,7 @@ module NumericFieldExamples =
               labelText = View.Const "Filled",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -56,8 +54,7 @@ module NumericFieldExamples =
               labelText = View.Const "Outlined",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -112,8 +109,7 @@ NumericField.create(
               labelText = View.Const "Integer",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -124,8 +120,7 @@ NumericField.create(
               step = View.Const 0.1,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -185,8 +180,7 @@ NumericField.Create(  // see here
               |> Doc.BindView(fun v ->
                 div [ Typography.body2; Margin.Top.extraSmall ] [ text $"Current value: %i{v}" ])
             ],
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -207,8 +201,7 @@ NumericField.Create(  // see here
                |> Doc.BindView(fun v ->
                  div [ Typography.body2; Margin.Top.extraSmall ] [ text $"Current value: %f{v}" ])
              ]),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -270,8 +263,7 @@ NumericField.Create(
               step = View.Const 5,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -285,8 +277,7 @@ NumericField.Create(
               enableArrowKeys = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -300,8 +291,7 @@ NumericField.Create(
               enableMouseWheel = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -316,8 +306,7 @@ NumericField.Create(
               enableMouseWheel = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -388,8 +377,7 @@ NumericField.create(
               showSpinButtons = View.Const true,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -400,8 +388,7 @@ NumericField.create(
               showSpinButtons = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -500,8 +487,7 @@ NumericField.create(
               enabled = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -512,8 +498,7 @@ NumericField.create(
               readOnly = View.Const true,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]

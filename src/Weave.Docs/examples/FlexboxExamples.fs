@@ -152,8 +152,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -164,8 +163,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -176,8 +174,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -188,8 +185,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
             GridItem.create (
               Select.create (
@@ -200,8 +196,7 @@ div [
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 6,
-              sm = Grid.Width.create 4
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
           ]
         )
@@ -290,23 +285,19 @@ div [
         [
           GridItem.create (
             dirDemo "Row" FlexDirection.Row.allSizes,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             dirDemo "Column" FlexDirection.Column.allSizes,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             dirDemo "Row Reverse" FlexDirection.RowReverse.allSizes,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             dirDemo "Column Reverse" FlexDirection.ColumnReverse.allSizes,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -494,33 +485,27 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
         [
           GridItem.create (
             contentDemo "Start" AlignContent.start,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             contentDemo "Center" AlignContent.center,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             contentDemo "End" AlignContent.end',
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             contentDemo "Space Between" AlignContent.spaceBetween,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             contentDemo "Space Around" AlignContent.spaceAround,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             contentDemo "Stretch" AlignContent.stretch,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -614,17 +599,21 @@ div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
     let content =
       Grid.create (
         [
-          GridItem.create (gapDemo "g0 (0px)" Gap.All.g0, xs = Grid.Width.create 12, sm = Grid.Width.create 6)
-          GridItem.create (gapDemo "g2 (8px)" Gap.All.g2, xs = Grid.Width.create 12, sm = Grid.Width.create 6)
+          GridItem.create (
+            gapDemo "g0 (0px)" Gap.All.g0,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+          )
+          GridItem.create (
+            gapDemo "g2 (8px)" Gap.All.g2,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+          )
           GridItem.create (
             gapDemo "g4 (16px)" Gap.All.g4,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             gapDemo "g8 (32px)" Gap.All.g8,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )

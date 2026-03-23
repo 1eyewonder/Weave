@@ -265,8 +265,7 @@ div [ Typography.body1; Typography.noWrap ] [
         |> List.map (fun (label, colorAttr) ->
           GridItem.create (
             div [ Typography.h5; colorAttr ] [ text (sprintf "%s Color" label) ],
-            xs = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.six; GridItem.Span.Medium.four ]
           ))
       )
 

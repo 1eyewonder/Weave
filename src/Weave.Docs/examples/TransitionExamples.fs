@@ -107,23 +107,19 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
         [
           GridItem.create (
             speedColumn "None" TransitionSpeed.None,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
             speedColumn "Fast" TransitionSpeed.Fast,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
             speedColumn "Standard" TransitionSpeed.Standard,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
             speedColumn "Slow" TransitionSpeed.Slow,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
         ]
       )

@@ -33,9 +33,7 @@ module TooltipExamples =
             tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
             direction = direction
           ),
-        xs = Grid.Width.create 12,
-        sm = Grid.Width.create 6,
-        md = Grid.Width.create 3
+        attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
       )
 
     let content =

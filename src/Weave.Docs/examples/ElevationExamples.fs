@@ -130,57 +130,39 @@ div [ Elevation.e8; BorderRadius.All.large ] [
         [
           GridItem.create (
             elevationDemo "0" Elevation.e0,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "2" Elevation.e2,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "4" Elevation.e4,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "6" Elevation.e6,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "8" Elevation.e8,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "12" Elevation.e12,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "16" Elevation.e16,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "20" Elevation.e20,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             elevationDemo "24" Elevation.e24,
-            xs = Grid.Width.create 6,
-            sm = Grid.Width.create 4,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
         ]
       )
@@ -254,8 +236,7 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
                 placeholder = View.Const "Choose...",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
           ]
         )
@@ -330,9 +311,7 @@ div [
                 ]
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             div [] [
@@ -349,9 +328,7 @@ div [
                 ]
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             div [] [
@@ -372,9 +349,7 @@ div [
                 ]
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             div [] [
@@ -402,9 +377,7 @@ div [
                 ]
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
           )
         ]
       )

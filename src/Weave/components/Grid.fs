@@ -11,24 +11,6 @@ open Weave.Operators
 [<JavaScript>]
 module Grid =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Breakpoint =
-    | ExtraSmall
-    | Small
-    | Medium
-    | Large
-    | ExtraLarge
-
-  module Breakpoint =
-
-    let toString breakpoint =
-      match breakpoint with
-      | Breakpoint.ExtraSmall -> "xs"
-      | Breakpoint.Small -> "sm"
-      | Breakpoint.Medium -> "md"
-      | Breakpoint.Large -> "lg"
-      | Breakpoint.ExtraLarge -> "xl"
-
   module Spacing =
 
     let none = cl Css.``weave-grid--spacing-0``
@@ -38,22 +20,79 @@ module Grid =
     let large = cl Css.``weave-grid--spacing-12``
     let extraLarge = cl Css.``weave-grid--spacing-20``
 
-  [<Struct>]
-  type Width = private Width of int
+[<JavaScript>]
+module GridItem =
 
-  module Width =
+  module Span =
 
-    let create spacing =
-      if spacing < 1 then Width 1
-      elif spacing > 12 then Width 12
-      else Width spacing
+    let one = cl Css.``weave-grid__item--xs-1``
+    let two = cl Css.``weave-grid__item--xs-2``
+    let three = cl Css.``weave-grid__item--xs-3``
+    let four = cl Css.``weave-grid__item--xs-4``
+    let five = cl Css.``weave-grid__item--xs-5``
+    let six = cl Css.``weave-grid__item--xs-6``
+    let seven = cl Css.``weave-grid__item--xs-7``
+    let eight = cl Css.``weave-grid__item--xs-8``
+    let nine = cl Css.``weave-grid__item--xs-9``
+    let ten = cl Css.``weave-grid__item--xs-10``
+    let eleven = cl Css.``weave-grid__item--xs-11``
+    let twelve = cl Css.``weave-grid__item--xs-12``
 
-    let value (Width s) = s
+    module Small =
+      let one = cl Css.``weave-grid__item--sm-1``
+      let two = cl Css.``weave-grid__item--sm-2``
+      let three = cl Css.``weave-grid__item--sm-3``
+      let four = cl Css.``weave-grid__item--sm-4``
+      let five = cl Css.``weave-grid__item--sm-5``
+      let six = cl Css.``weave-grid__item--sm-6``
+      let seven = cl Css.``weave-grid__item--sm-7``
+      let eight = cl Css.``weave-grid__item--sm-8``
+      let nine = cl Css.``weave-grid__item--sm-9``
+      let ten = cl Css.``weave-grid__item--sm-10``
+      let eleven = cl Css.``weave-grid__item--sm-11``
+      let twelve = cl Css.``weave-grid__item--sm-12``
 
-    let toClass breakpoint (Width width) =
-      sprintf "weave-grid__item--%s-%i" (Breakpoint.toString breakpoint) width
+    module Medium =
+      let one = cl Css.``weave-grid__item--md-1``
+      let two = cl Css.``weave-grid__item--md-2``
+      let three = cl Css.``weave-grid__item--md-3``
+      let four = cl Css.``weave-grid__item--md-4``
+      let five = cl Css.``weave-grid__item--md-5``
+      let six = cl Css.``weave-grid__item--md-6``
+      let seven = cl Css.``weave-grid__item--md-7``
+      let eight = cl Css.``weave-grid__item--md-8``
+      let nine = cl Css.``weave-grid__item--md-9``
+      let ten = cl Css.``weave-grid__item--md-10``
+      let eleven = cl Css.``weave-grid__item--md-11``
+      let twelve = cl Css.``weave-grid__item--md-12``
 
-open Grid
+    module Large =
+      let one = cl Css.``weave-grid__item--lg-1``
+      let two = cl Css.``weave-grid__item--lg-2``
+      let three = cl Css.``weave-grid__item--lg-3``
+      let four = cl Css.``weave-grid__item--lg-4``
+      let five = cl Css.``weave-grid__item--lg-5``
+      let six = cl Css.``weave-grid__item--lg-6``
+      let seven = cl Css.``weave-grid__item--lg-7``
+      let eight = cl Css.``weave-grid__item--lg-8``
+      let nine = cl Css.``weave-grid__item--lg-9``
+      let ten = cl Css.``weave-grid__item--lg-10``
+      let eleven = cl Css.``weave-grid__item--lg-11``
+      let twelve = cl Css.``weave-grid__item--lg-12``
+
+    module ExtraLarge =
+      let one = cl Css.``weave-grid__item--xl-1``
+      let two = cl Css.``weave-grid__item--xl-2``
+      let three = cl Css.``weave-grid__item--xl-3``
+      let four = cl Css.``weave-grid__item--xl-4``
+      let five = cl Css.``weave-grid__item--xl-5``
+      let six = cl Css.``weave-grid__item--xl-6``
+      let seven = cl Css.``weave-grid__item--xl-7``
+      let eight = cl Css.``weave-grid__item--xl-8``
+      let nine = cl Css.``weave-grid__item--xl-9``
+      let ten = cl Css.``weave-grid__item--xl-10``
+      let eleven = cl Css.``weave-grid__item--xl-11``
+      let twelve = cl Css.``weave-grid__item--xl-12``
 
 [<JavaScript>]
 type Grid =
@@ -66,21 +105,10 @@ type Grid =
 [<JavaScript>]
 type GridItem =
 
-  static member create
-    (content: Doc, ?xs: Width, ?sm: Width, ?md: Width, ?lg: Width, ?xl: Width, ?attrs: Attr list)
-    =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs List.empty
 
-    let itemClasses = [
-      cl Css.``weave-grid__item``
-      xs |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.ExtraSmall >> cl)
-      sm |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.Small >> cl)
-      md |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.Medium >> cl)
-      lg |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.Large >> cl)
-      xl |> Option.mapOrDefault Attr.Empty (Width.toClass Breakpoint.ExtraLarge >> cl)
-    ]
-
-    div [ yield! itemClasses; yield! attrs ] [ content ]
+    div [ cl Css.``weave-grid__item``; yield! attrs ] [ content ]
 
 [<JavaScript>]
 type FlexBreak =

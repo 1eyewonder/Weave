@@ -33,8 +33,7 @@ module SelectExamples =
                 placeholder = View.Const "Choose a fruit",
                 attrs = [ Select.Color.primary ]
               ),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
 
             GridItem.create (
@@ -43,9 +42,12 @@ module SelectExamples =
                 div [ Typography.body2; Margin.Top.extraSmall ] [
                   text (sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"))
                 ]),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              attrs = [ Flex.Flex.allSizes; AlignItems.center ]
+              attrs = [
+                GridItem.Span.twelve
+                GridItem.Span.Small.six
+                Flex.Flex.allSizes
+                AlignItems.center
+              ]
             )
           ]
         )
@@ -98,8 +100,7 @@ Select.create(
               labelText = View.Const "Standard",
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
 
           GridItem.create (
@@ -110,8 +111,7 @@ Select.create(
               labelText = View.Const "Filled",
               attrs = [ Select.Color.secondary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
 
           GridItem.create (
@@ -122,8 +122,7 @@ Select.create(
               labelText = View.Const "Outlined",
               attrs = [ Select.Color.tertiary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ]
       )
@@ -184,8 +183,7 @@ Select.create(
               clearable = View.Const true,
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
 
           GridItem.create (
@@ -194,9 +192,12 @@ Select.create(
               div [ Typography.body2; Margin.Top.extraSmall ] [
                 text (sprintf "Selected: %s" (v |> Option.defaultValue "Nothing"))
               ]),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            attrs = [ Flex.Flex.allSizes; AlignItems.center ]
+            attrs = [
+              GridItem.Span.twelve
+              GridItem.Span.Small.six
+              Flex.Flex.allSizes
+              AlignItems.center
+            ]
           )
         ]
       )
@@ -268,8 +269,7 @@ Select.create(
               clearable = View.Const true,
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -323,8 +323,7 @@ Select.create(
                 clearable = View.Const true,
                 attrs = [ Select.Color.secondary ]
               ),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
 
             GridItem.create (
@@ -337,9 +336,12 @@ Select.create(
                     sel |> Set.toList |> String.concat ", "
 
                 div [ Typography.body2; Margin.Top.extraSmall ] [ text (sprintf "Selected: %s" display) ]),
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              attrs = [ Flex.Flex.allSizes; AlignItems.center ]
+              attrs = [
+                GridItem.Span.twelve
+                GridItem.Span.Small.six
+                Flex.Flex.allSizes
+                AlignItems.center
+              ]
             )
           ]
         )
@@ -396,8 +398,7 @@ MultiSelect.create(
               selectionText = (fun sel -> sprintf "%d role(s) selected" (Set.count sel)),
               attrs = [ Select.Color.tertiary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -476,8 +477,7 @@ MultiSelect.create(
               clearable = View.Const true,
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -544,8 +544,7 @@ Select.create(
               enabled = View.Const false,
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
 
           GridItem.create (
@@ -557,8 +556,7 @@ Select.create(
               readOnly = View.Const true,
               attrs = [ Select.Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -628,9 +626,7 @@ Select.create(
               labelText = View.Const label,
               attrs = [ colorAttr ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
       )
 
@@ -685,8 +681,7 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
                 attrs = [ Select.Color.primary ]
               )
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
 
           GridItem.create (
@@ -701,8 +696,7 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
                 attrs = [ Select.Color.secondary; Select.Width.full ]
               )
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
 
           GridItem.create (
@@ -717,8 +711,7 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
                 attrs = [ Select.Color.tertiary; Select.Width.fitContent ]
               )
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ]
       )
@@ -825,8 +818,7 @@ Select.create(
               clearable = View.Const true,
               attrs = [ Select.Color.info ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
 
           GridItem.create (
@@ -838,9 +830,12 @@ Select.create(
                   text (sprintf "Code: %s | Name: %s | Native: %s" lang.Code lang.Name lang.Native)
                 ]
               | None -> div [ Typography.body2; Margin.Top.extraSmall ] [ text "No language selected" ]),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            attrs = [ Flex.Flex.allSizes; AlignItems.center ]
+            attrs = [
+              GridItem.Span.twelve
+              GridItem.Span.Small.six
+              Flex.Flex.allSizes
+              AlignItems.center
+            ]
           )
         ]
       )

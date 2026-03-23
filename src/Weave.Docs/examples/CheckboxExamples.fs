@@ -101,9 +101,7 @@ Checkbox.create(isChecked, label)
         |> List.map (fun (size, label, v) ->
           GridItem.create (
             Checkbox.create (v, View.Const label, attrs = [ size ]),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
       )
 
@@ -158,9 +156,7 @@ Checkbox.create(
         |> List.map (fun (v, colorAttr, label) ->
           GridItem.create (
             Checkbox.create (v, View.Const label, attrs = [ colorAttr ]),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
       )
 
@@ -199,8 +195,7 @@ Checkbox.create(isChecked, View.Const "Info", attrs = [ Checkbox.Color.info ])""
         |> List.map (fun (value, label) ->
           GridItem.create (
             Radio.create (placement, value, displayText = View.Const label),
-            xs = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Medium.three ]
           ))
 
       let demoChecked = Var.Create false
@@ -213,7 +208,10 @@ Checkbox.create(isChecked, View.Const "Info", attrs = [ Checkbox.Color.info ])""
           attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
         )
 
-      Grid.create (radioButtons @ [ GridItem.create (demoCheckBox, xs = Grid.Width.create 12) ])
+      Grid.create (
+        radioButtons
+        @ [ GridItem.create (demoCheckBox, attrs = [ GridItem.Span.twelve ]) ]
+      )
 
     let code =
       """open Weave
@@ -266,16 +264,17 @@ Checkbox.create(
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

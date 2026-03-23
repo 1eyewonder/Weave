@@ -224,8 +224,7 @@ ChipSet.create(
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
             ],
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
           GridItem.create (
             div [] [
@@ -252,8 +251,7 @@ ChipSet.create(
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
             ],
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
           GridItem.create (
             div [] [
@@ -268,8 +266,7 @@ ChipSet.create(
                 selectionMode = ChipSet.SelectionMode.Toggle
               )
             ],
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
         ],
         attrs = [ AlignItems.start ]

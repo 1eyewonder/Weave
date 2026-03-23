@@ -117,16 +117,17 @@ Button.info(text "Info", onClick = (fun () -> ()), attrs = [ Button.Variant.fill
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]
@@ -380,8 +381,7 @@ IconButton.info(
             [
               GridItem.create (
                 div [ Typography.subtitle2 ] [ text label ],
-                xs = Grid.Width.create 12,
-                sm = Grid.Width.create 3
+                attrs = [ GridItem.Span.twelve; GridItem.Span.Small.three ]
               )
               GridItem.create (
                 IconButton.secondary (
@@ -389,8 +389,7 @@ IconButton.info(
                   onClick = (fun () -> ()),
                   attrs = [ Attr.Create "aria-label" "favorite"; Button.Variant.filled ]
                 ),
-                xs = Grid.Width.create 4,
-                sm = Grid.Width.create 3
+                attrs = [ GridItem.Span.four; GridItem.Span.Small.three ]
               )
               GridItem.create (
                 IconButton.error (
@@ -398,8 +397,7 @@ IconButton.info(
                   onClick = (fun () -> ()),
                   attrs = [ Attr.Create "aria-label" "delete"; Button.Variant.outlined ]
                 ),
-                xs = Grid.Width.create 4,
-                sm = Grid.Width.create 3
+                attrs = [ GridItem.Span.four; GridItem.Span.Small.three ]
               )
               GridItem.create (
                 IconButton.primary (
@@ -407,8 +405,7 @@ IconButton.info(
                   onClick = (fun () -> ()),
                   attrs = [ Attr.Create "aria-label" "search"; Button.Variant.text ]
                 ),
-                xs = Grid.Width.create 4,
-                sm = Grid.Width.create 3
+                attrs = [ GridItem.Span.four; GridItem.Span.Small.three ]
               )
             ],
             attrs = [ JustifyContent.flexStart; AlignItems.center ]

@@ -236,8 +236,7 @@ div [
                 text "Margin.Bottom.small"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -246,8 +245,7 @@ div [
                 text "Margin.All.medium"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -256,8 +254,7 @@ div [
                 text "Margin.Vertical.small"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -266,8 +263,7 @@ div [
                 text "Margin.Horizontal.large"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -316,8 +312,7 @@ div [ Margin.Vertical.small ] [
                 text "Padding.All.small"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -326,8 +321,7 @@ div [ Margin.Vertical.small ] [
                 text "Padding.Horizontal.medium"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -336,8 +330,7 @@ div [ Margin.Vertical.small ] [
                 text "Padding.Vertical.large"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -346,8 +339,7 @@ div [ Margin.Vertical.small ] [
                 text "Padding.Top.extraLarge"
               ]
             ],
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )
@@ -460,8 +452,7 @@ div [
                     "margin: 0px (below Small)"
                 )
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
             GridItem.create (
               div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -472,8 +463,7 @@ div [
                     "margin: 0px (below Medium)"
                 )
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
             GridItem.create (
               div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -484,8 +474,7 @@ div [
                     "padding: 4px (Extra small active)"
                 )
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
             GridItem.create (
               div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
@@ -505,8 +494,7 @@ div [
                     "margin: 4px (Extra small active)"
                 )
               ],
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
           ],
           attrs = [ Grid.Spacing.small ]
@@ -572,16 +560,17 @@ div [
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

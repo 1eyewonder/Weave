@@ -35,8 +35,7 @@ module FieldExamples =
               labelText = View.Const "Standard",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -47,8 +46,7 @@ module FieldExamples =
               labelText = View.Const "Filled",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -59,8 +57,7 @@ module FieldExamples =
               labelText = View.Const "Outlined",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -114,8 +111,7 @@ Field.create(
               labelText = View.Const "Standard",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -126,8 +122,7 @@ Field.create(
               labelText = View.Const "Filled",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -138,8 +133,7 @@ Field.create(
               labelText = View.Const "Outlined",
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -192,8 +186,7 @@ Field.create(
           ?endAdornment = endAdornment (),
           attrs = [ Field.Width.full ]
         ),
-        xs = Grid.Width.create 12,
-        md = Grid.Width.create 4
+        attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
       )
 
     let searchIcon () =
@@ -458,8 +451,7 @@ Field.create(
                 FieldHelpText.create (text "Username is available", attrs = [ Field.HelpTextColor.success ]),
               attrs = [ Field.Width.full; Field.Color.success ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -475,8 +467,7 @@ Field.create(
                 ),
               attrs = [ Field.Width.full; Field.Color.warning ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -489,8 +480,7 @@ Field.create(
                 FieldHelpText.create (text "Invalid email address", attrs = [ Field.HelpTextColor.error ]),
               attrs = [ Field.Width.full; Field.Color.error ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -566,8 +556,7 @@ Field.create(
               enabled = View.Const false,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -579,8 +568,7 @@ Field.create(
               readOnly = View.Const true,
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]
@@ -622,9 +610,7 @@ Field.create(
           labelText = View.Const label,
           attrs = [ Field.Width.full; colorAttr ]
         ),
-        xs = Grid.Width.create 12,
-        sm = Grid.Width.create 6,
-        md = Grid.Width.create 4
+        attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
       )
 
     let description =
@@ -685,8 +671,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               typoAttrs = [ Typography.caption ],
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -697,8 +682,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               typoAttrs = [ Typography.body1 ],
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -709,8 +693,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               typoAttrs = [ Typography.subtitle1 ],
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
@@ -721,8 +704,7 @@ Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
               typoAttrs = [ Typography.h6 ],
               attrs = [ Field.Width.full ]
             ),
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ],
         attrs = [ Grid.Spacing.large ]

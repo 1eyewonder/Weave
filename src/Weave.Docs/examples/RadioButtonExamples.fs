@@ -123,9 +123,7 @@ Radio.create(selected, true, displayText = label)"""
         |> List.map (fun (label, sizeAttr) ->
           GridItem.create (
             Radio.create (selected, label, displayText = View.Const label, attrs = [ sizeAttr ]),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
       )
 
@@ -169,9 +167,7 @@ Radio.create(selected, "Large", displayText = View.Const "Large", attrs = [ Radi
               displayText = (sprintf "%A" color |> View.Const),
               attrs = [ colorAttr ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
       )
 
@@ -211,8 +207,7 @@ Radio.create(selected, BrandColor.Info, displayText = View.Const "Info", attrs =
         |> List.map (fun (value, label) ->
           GridItem.create (
             Radio.create (placement, value, displayText = View.Const label),
-            xs = Grid.Width.create 6,
-            md = Grid.Width.create 3
+            attrs = [ GridItem.Span.six; GridItem.Span.Medium.three ]
           ))
 
       let demoSelected = Var.Create false
@@ -226,7 +221,7 @@ Radio.create(selected, BrandColor.Info, displayText = View.Const "Info", attrs =
           attrs = [ Radio.Size.large; Radio.Color.primary ]
         )
 
-      Grid.create (radioButtons @ [ GridItem.create (demoRadio, xs = Grid.Width.create 12) ])
+      Grid.create (radioButtons @ [ GridItem.create (demoRadio, attrs = [ GridItem.Span.twelve ]) ])
 
     let code =
       """open Weave
@@ -281,16 +276,17 @@ Radio.create(
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

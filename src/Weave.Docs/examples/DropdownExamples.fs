@@ -132,7 +132,7 @@ Dropdown.create(
                 div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Anchor Origin" ]
                 radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString Radio.Color.secondary
               ],
-              xs = Grid.Width.create 6
+              attrs = [ GridItem.Span.six ]
             )
 
             GridItem.create (
@@ -144,7 +144,7 @@ Dropdown.create(
                   Dropdown.TransformOrigin.toString
                   Radio.Color.tertiary
               ],
-              xs = Grid.Width.create 6
+              attrs = [ GridItem.Span.six ]
             )
 
             GridItem.create (
@@ -166,13 +166,12 @@ Dropdown.create(
                       attrs = [ Margin.Top.large ],
                       buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
                     ),
-                    xs = Grid.Width.create 12
+                    attrs = [ GridItem.Span.twelve ]
                   )
                 ],
                 attrs = [ JustifyContent.center; AlignItems.center; AlignContent.center ]
               ),
-              xs = Grid.Width.create 10,
-              attrs = [ Margin.Top.small ]
+              attrs = [ GridItem.Span.ten; Margin.Top.small ]
             )
 
           ]
@@ -407,27 +406,19 @@ Dropdown.create(
           [
             GridItem.create (
               clickableDropdown,
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              md = Grid.Width.create 3
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
             GridItem.create (
               hoverDropdown,
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              md = Grid.Width.create 3
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
             GridItem.create (
               nestedClickableDropdown,
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              md = Grid.Width.create 3
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
             GridItem.create (
               nestedHoverDropdown,
-              xs = Grid.Width.create 12,
-              sm = Grid.Width.create 6,
-              md = Grid.Width.create 3
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
           ]
         )
@@ -553,16 +544,17 @@ Dropdown.create(
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

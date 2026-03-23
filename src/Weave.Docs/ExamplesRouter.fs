@@ -1616,10 +1616,13 @@ module ExamplesRouter =
                         Attr.Style "flex-grow" "1"
                       ] [ div [ Typography.body2; Typography.Align.center ] [ text label ] ]
                     ],
-                    xs = Grid.Width.create 6,
-                    sm = Grid.Width.create 4,
-                    md = Grid.Width.create 3,
-                    attrs = [ Attr.Style "display" "flex"; Attr.Style "flex-direction" "column" ]
+                    attrs = [
+                      GridItem.Span.six
+                      GridItem.Span.Small.four
+                      GridItem.Span.Medium.three
+                      Attr.Style "display" "flex"
+                      Attr.Style "flex-direction" "column"
+                    ]
                   )),
                 attrs = [ Attr.Style "align-items" "stretch" ]
               )

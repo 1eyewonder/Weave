@@ -242,10 +242,12 @@ module IconsExamples =
 
           div [ Typography.body2; Attr.Style "text-align" "center" ] [ text iconText ]
         ],
-        xs = Grid.Width.create 6,
-        sm = Grid.Width.create 4,
-        md = Grid.Width.create 2,
-        xl = Grid.Width.create 1
+        attrs = [
+          GridItem.Span.six
+          GridItem.Span.Small.four
+          GridItem.Span.Medium.two
+          GridItem.Span.ExtraLarge.one
+        ]
       )
 
     let examples =
@@ -451,48 +453,24 @@ Icon.create(
   // Grid.create(
   //   [
   //     div [ Typography.h6 ] [ text "Select Fill" ]
-  //     GridItem.create(
-  //       Grid.create(filledRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(filledRadios, justify = JustifyContent.FlexStart))
 
   //     div [ Typography.h6 ] [ text "Select Style" ]
-  //     GridItem.create(
-  //       Grid.create(styleRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(styleRadios, justify = JustifyContent.FlexStart))
 
   //     div [ Typography.h6 ] [ text "Select Optical Size" ]
-  //     GridItem.create(
-  //       Grid.create(opticalSizeRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(opticalSizeRadios, justify = JustifyContent.FlexStart))
 
   //     div [ Typography.h6 ] [ text "Select Weight" ]
-  //     GridItem.create(
-  //       Grid.create(weightRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(weightRadios, justify = JustifyContent.FlexStart))
 
   //     div [ Typography.h6 ] [ text "Select Grade" ]
-  //     GridItem.create(
-  //       Grid.create(gradeRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(gradeRadios, justify = JustifyContent.FlexStart))
 
   //     div [ Typography.h6 ] [ text "Select Color" ]
-  //     GridItem.create(
-  //       Grid.create(colorRadios, justify = JustifyContent.FlexStart),
-  //       xs = Grid.Width.create 12,
-  //       attrs = [ cls [ yield! Margin.toClasses Margin.Bottom.extraSmall ] ]
-  //     )
+  //     GridItem.create(//       Grid.create(colorRadios, justify = JustifyContent.FlexStart))
 
-  //     GridItem.create(examples, xs = Grid.Width.create 12)
+  //     GridItem.create(examples, attrs = [ GridItem.Span.twelve ])
   //   ],
   //   justify = JustifyContent.FlexStart
   // )

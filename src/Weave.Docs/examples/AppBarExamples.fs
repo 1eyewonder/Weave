@@ -135,26 +135,22 @@ module AppBarExamples =
               "Static"
               "Stays in document flow and scrolls away with content. Scroll the preview."
               staticPreview,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             mkCard
               "Sticky"
               "Scrolls with the page until it reaches the top, then sticks. Scroll the preview."
               stickyPreview,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             mkCard "Fixed" "Always pinned to the top of the viewport (simulated)." fixedPreview,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
           GridItem.create (
             mkCard "Bottom" "Always pinned to the bottom of the viewport (simulated)." bottomPreview,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
         ]
       )

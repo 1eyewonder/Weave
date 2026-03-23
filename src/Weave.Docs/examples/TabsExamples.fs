@@ -59,9 +59,7 @@ Tabs.create(
               ],
               attrs = [ Color.primary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -72,9 +70,7 @@ Tabs.create(
               ],
               attrs = [ Color.secondary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -85,9 +81,7 @@ Tabs.create(
               ],
               attrs = [ Color.tertiary ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -98,9 +92,7 @@ Tabs.create(
               ],
               attrs = [ Color.success ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -111,9 +103,7 @@ Tabs.create(
               ],
               attrs = [ Color.warning ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -124,9 +114,7 @@ Tabs.create(
               ],
               attrs = [ Color.error ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
 
           GridItem.create (
@@ -137,9 +125,7 @@ Tabs.create(
               ],
               attrs = [ Color.info ]
             ),
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 6,
-            md = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
         ]
       )
@@ -227,8 +213,7 @@ Tabs.create(
               div [ Typography.h4; Margin.Bottom.extraSmall ] [ text "Text Tab" ]
               Tabs.create (tabs (), attrs = [ Variant.text; Color.primary ])
             ],
-            xs = Grid.Width.create 12,
-            lg = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Large.six ]
           )
 
           GridItem.create (
@@ -236,8 +221,7 @@ Tabs.create(
               div [ Typography.h4; Margin.Bottom.extraSmall ] [ text "Outlined Tab" ]
               Tabs.create (tabs (), attrs = [ Variant.outlined; Color.secondary ])
             ],
-            xs = Grid.Width.create 12,
-            lg = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Large.six ]
           )
 
           GridItem.create (
@@ -245,8 +229,7 @@ Tabs.create(
               div [ Typography.h4; Margin.Bottom.extraSmall ] [ text "Filled Tab" ]
               Tabs.create (tabs (), attrs = [ Variant.filled; Color.tertiary ])
             ],
-            xs = Grid.Width.create 12,
-            lg = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Large.six ]
           )
         ]
       )
@@ -413,17 +396,21 @@ Tabs.create(
     let content =
       Grid.create (
         [
-          GridItem.create (makeTabs Position.Top "Top", xs = Grid.Width.create 12, md = Grid.Width.create 6)
+          GridItem.create (
+            makeTabs Position.Top "Top",
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
+          )
           GridItem.create (
             makeTabs Position.Bottom "Bottom",
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
-          GridItem.create (makeTabs Position.Left "Left", xs = Grid.Width.create 12, md = Grid.Width.create 6)
+          GridItem.create (
+            makeTabs Position.Left "Left",
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
+          )
           GridItem.create (
             makeTabs Position.Right "Right",
-            xs = Grid.Width.create 12,
-            md = Grid.Width.create 6
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ]
       )
@@ -581,16 +568,17 @@ div [ Attr.Style "max-width" "500px" ] [
 
       Grid.create (
         [
-          GridItem.create (col "Compact" Density.compact, xs = Grid.Width.create 12, sm = Grid.Width.create 4)
+          GridItem.create (
+            col "Compact" Density.compact,
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
           GridItem.create (
             col "Standard" Density.standard,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
           GridItem.create (
             col "Spacious" Density.spacious,
-            xs = Grid.Width.create 12,
-            sm = Grid.Width.create 4
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
         ],
         attrs = [ AlignItems.start ]

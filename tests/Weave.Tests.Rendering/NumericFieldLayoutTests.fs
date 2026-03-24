@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type NumericFieldLayoutTests() =
   inherit PageTest()
@@ -62,4 +63,60 @@ type NumericFieldLayoutTests() =
       spinBox.X >= inputBox.X + inputBox.Width - 1.0f,
       $"Spin buttons left ({spinBox.X}px) should be at or past input right ({inputBox.X + inputBox.Width}px)"
     )
+  }
+
+  [<Fact>]
+  member this.``spin buttons are contained within field control``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
+    assertContainedWithin "field control" "spin buttons" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``spin-up button is contained within spin buttons``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#spin-up").BoundingBoxAsync()
+    assertContainedWithin "spin buttons" "spin-up button" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``spin-down button is contained within spin buttons``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#spin-down").BoundingBoxAsync()
+    assertContainedWithin "spin buttons" "spin-down button" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``outlined spin buttons are contained within field control``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+    assertContainedWithin "field control" "outlined spin buttons" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``spin buttons fill field control height``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
+    assertFillsHeight "field control" "spin buttons" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``spin-up button fills spin buttons width``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#spin-up").BoundingBoxAsync()
+    assertFillsWidth "spin buttons" "spin-up button" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``outlined spin buttons fill field control height``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+    assertFillsHeight "field control" "outlined spin buttons" parentBox childBox
   }

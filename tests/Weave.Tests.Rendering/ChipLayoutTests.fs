@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type ChipLayoutTests() =
   inherit PageTest()
@@ -224,18 +225,15 @@ type ChipLayoutTests() =
     do! this.LoadFixture()
     let! chipBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
     let! closeBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+    assertContainedWithin "chip" "close button" chipBox closeBox
+  }
 
-    Assert.True(
-      closeBox.X >= chipBox.X - 1.0f
-      && closeBox.X + closeBox.Width <= chipBox.X + chipBox.Width + 1.0f,
-      $"Close button (x:{closeBox.X}, w:{closeBox.Width}) should be within chip bounds (x:{chipBox.X}, w:{chipBox.Width})"
-    )
-
-    Assert.True(
-      closeBox.Y >= chipBox.Y - 1.0f
-      && closeBox.Y + closeBox.Height <= chipBox.Y + chipBox.Height + 1.0f,
-      $"Close button (y:{closeBox.Y}, h:{closeBox.Height}) should be within chip bounds (y:{chipBox.Y}, h:{chipBox.Height})"
-    )
+  [<Fact(Skip = "Requires component update: close button has vertical padding inside chip")>]
+  member this.``close button fills chip height``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+    assertFillsHeight "chip" "close button" parentBox childBox
   }
 
   [<Fact>]

@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type ButtonLayoutTests() =
   inherit PageTest()
@@ -243,4 +244,44 @@ type ButtonLayoutTests() =
       this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).boxShadow")
 
     Assert.Equal("none", shadow)
+  }
+
+  [<Fact>]
+  member this.``label is contained within filled button``() = task {
+    do! this.LoadFixture 1280
+    let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+    assertContainedWithin "filled button" "label" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``label is contained within compact button``() = task {
+    do! this.LoadFixture 1280
+    let! parentBox = this.Page.Locator("#btn-compact").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#btn-compact .weave-button__label").BoundingBoxAsync()
+    assertContainedWithin "compact button" "label" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``icon content is contained within icon button``() = task {
+    do! this.LoadFixture 1280
+    let! parentBox = this.Page.Locator("#btn-icon").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
+    assertContainedWithin "icon button" "icon content" parentBox childBox
+  }
+
+  [<Fact(Skip = "Requires component update: label has vertical padding inside button")>]
+  member this.``label fills button height``() = task {
+    do! this.LoadFixture 1280
+    let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+    assertFillsHeight "filled button" "label" parentBox childBox
+  }
+
+  [<Fact(Skip = "Requires component update: icon span has vertical padding inside icon button")>]
+  member this.``icon fills icon button height``() = task {
+    do! this.LoadFixture 1280
+    let! parentBox = this.Page.Locator("#btn-icon").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
+    assertFillsHeight "icon button" "icon" parentBox childBox
   }

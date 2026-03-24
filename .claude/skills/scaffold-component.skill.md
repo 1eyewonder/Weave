@@ -444,6 +444,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type {Name}LayoutTests() =
   inherit PageTest()
@@ -480,7 +481,35 @@ type {Name}LayoutTests() =
 
     Assert.Equal("none", display)
   }
+
+  // --- Containment tests (must pass) ---
+  // Write one for every parent–child pair where the child could overflow.
+  [<Fact>]
+  member this.``child element is contained within parent``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#parent-id").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#parent-id .weave-{name}__child").BoundingBoxAsync()
+    assertContainedWithin "parent" "child element" parentBox childBox
+  }
+
+  // --- Edge-alignment tests (aspirational — skip if the component needs work) ---
+  // Verify child edges are flush with parent edges. If this fails due to
+  // intentional padding, mark it Skip = "Requires component update: ..."
+  [<Fact>]
+  member this.``child element fills parent height``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#parent-id").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#parent-id .weave-{name}__child").BoundingBoxAsync()
+    assertFillsHeight "parent" "child element" parentBox childBox
+  }
 ```
+
+**Containment & edge-alignment test rules:**
+
+- **Always** `open Weave.Tests.Rendering.ContainmentAssertions` and use the shared helpers — never write inline containment assertions.
+- **Containment tests** (`assertContainedWithin`): Write one `[<Fact>]` per parent–child pair where the child could visually overflow. These must pass — if they fail, the component/SCSS has a real bug.
+- **Edge-alignment tests** (`assertFillsHeight` / `assertFillsWidth`): Write these for pairs where the child should be flush with the parent. If they fail due to intentional padding or spacing, add `Skip = "Requires component update: <description>"` to the `[<Fact>]` attribute. Skipped tests become a visible TODO list in CI output.
+- Common parent–child pairs to test: icons inside buttons/chips/alerts, spin buttons inside field controls, labels inside buttons, chevrons inside selects, tab buttons inside headers, thumbs inside switch tracks, items inside list containers, adornments inside field controls.
 
 ### 8a. Create the HTML fixture — `tests/Weave.Tests.Rendering/fixtures/{name}.html`
 
@@ -630,6 +659,8 @@ Before marking the component as done, verify:
 - [ ] `tests/Weave.Tests.Unit/{Name}Tests.fs` created **only if** a mapping function like `Color.toAttr` is present — plain `let` style bindings need no unit tests since the type provider guarantees correctness
 - [ ] `tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj` has `<Compile Include="{Name}Tests.fs" />`
 - [ ] `tests/Weave.Tests.Rendering/{Name}LayoutTests.fs` created with at least one layout assertion per key structural relationship
+- [ ] Containment tests: at least one `assertContainedWithin` test per parent–child pair where overflow is possible
+- [ ] Edge-alignment tests: `assertFillsHeight` / `assertFillsWidth` for pairs where child should be flush (mark `Skip` if failing due to intentional padding)
 - [ ] `tests/Weave.Tests.Rendering/fixtures/{name}.html` created with BEM markup, `id` attributes, and stylesheet link
 - [ ] `tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj` has `<Compile Include="{Name}LayoutTests.fs" />`
 - [ ] `tests/Weave.Tests.E2E/accessibility/{Name}Tests.fs` created with axe-core scan and keyboard/focus tests using typed Playwright assertions

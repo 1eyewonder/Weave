@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type AlertLayoutTests() =
   inherit PageTest()
@@ -113,4 +114,28 @@ type AlertLayoutTests() =
     let! close = this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
 
     Assert.True(content.X < close.X, $"Content (x={content.X}) should be left of close button (x={close.X})")
+  }
+
+  [<Fact>]
+  member this.``icon is contained within alert``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#alert-with-icon").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+    assertContainedWithin "alert" "icon" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``close button is contained within alert``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#alert-with-close").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
+    assertContainedWithin "alert" "close button" parentBox childBox
+  }
+
+  [<Fact(Skip = "Requires component update: icon has vertical padding inside alert")>]
+  member this.``icon fills alert height``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#alert-with-icon").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+    assertFillsHeight "alert" "icon" parentBox childBox
   }

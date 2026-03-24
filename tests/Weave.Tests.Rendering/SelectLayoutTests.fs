@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type SelectLayoutTests() =
   inherit PageTest()
@@ -263,4 +264,36 @@ type SelectLayoutTests() =
       abs (checkbox.Width - checkbox.Height) <= 2.0f,
       $"Checkbox should be roughly square (width={checkbox.Width}, height={checkbox.Height})"
     )
+  }
+
+  [<Fact>]
+  member this.``chevron is contained within select root``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#select-closed").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#select-closed .weave-select__chevron").BoundingBoxAsync()
+    assertContainedWithin "select root" "chevron" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``clear button is contained within select root``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#select-clearable-value").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#select-clearable-value .weave-select__clear").BoundingBoxAsync()
+    assertContainedWithin "select root" "clear button" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``items are contained within popover list``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#select-open .weave-select__list").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
+    assertContainedWithin "popover list" "item" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``items fill popover list width``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#select-open .weave-select__list").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
+    assertFillsWidth "popover list" "item" parentBox childBox
   }

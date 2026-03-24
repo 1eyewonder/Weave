@@ -4,6 +4,7 @@ open Microsoft.Playwright.Xunit
 open Xunit
 open System.IO
 open System.Reflection
+open Weave.Tests.Rendering.ContainmentAssertions
 
 type TabsLayoutTests() =
   inherit PageTest()
@@ -126,4 +127,34 @@ type TabsLayoutTests() =
       abs (headerBox.Width - tabsBox.Width) <= 1.0f,
       $"Tabs header width ({headerBox.Width}px) should fill container ({tabsBox.Width}px) at {viewportWidth}px viewport"
     )
+  }
+
+  [<Theory>]
+  [<InlineData("#tab-0")>]
+  [<InlineData("#tab-1")>]
+  [<InlineData("#tab-2")>]
+  member this.``tab button is contained within header``(tabId: string) = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#tabs-header").BoundingBoxAsync()
+    let! childBox = this.Page.Locator(tabId).BoundingBoxAsync()
+    assertContainedWithin "header" $"tab button ({tabId})" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``panels area is contained within tabs root``() = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#tabs-top").BoundingBoxAsync()
+    let! childBox = this.Page.Locator("#tabs-panels").BoundingBoxAsync()
+    assertContainedWithin "tabs root" "panels area" parentBox childBox
+  }
+
+  [<Theory>]
+  [<InlineData("#tab-0")>]
+  [<InlineData("#tab-1")>]
+  [<InlineData("#tab-2")>]
+  member this.``tab button fills header height``(tabId: string) = task {
+    do! this.LoadFixture()
+    let! parentBox = this.Page.Locator("#tabs-header").BoundingBoxAsync()
+    let! childBox = this.Page.Locator(tabId).BoundingBoxAsync()
+    assertFillsHeight "header" $"tab button ({tabId})" parentBox childBox
   }

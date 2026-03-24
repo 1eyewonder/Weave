@@ -182,6 +182,7 @@
 
   .weave-field__control {
     border-bottom: 1px solid var(--input-border-color, currentColor);
+    margin-bottom: 1px; // reserve space so the 1px→2px focus border doesn't shift layout
   }
 }
 
@@ -206,6 +207,7 @@
     border-top-left-radius: var(--default-borderradius);
     border-top-right-radius: var(--default-borderradius);
     border-bottom: 1px solid var(--input-border-color, currentColor);
+    margin-bottom: 1px; // reserve space so the 1px→2px focus border doesn't shift layout
   }
 }
 
@@ -269,6 +271,7 @@
     .weave-field__control {
       border-bottom-width: 2px;
       border-bottom-color: var(--palette-primary);
+      margin-bottom: 0; // 2px border fills the reserved space
     }
   }
 
@@ -340,6 +343,17 @@
     padding-right: 0;
     margin-left: 0;
   }
+
+  // Prevent the field from shrinking below the spin buttons' min-width.
+  // Without this, narrow containers (e.g. small grid columns) can collapse
+  // the field so the spin buttons visually overflow the outlined border.
+  &.weave-field--has-spin {
+    min-width: 4em;
+  }
+
+  &.weave-field--standard.weave-field--has-spin {
+    --field-input-padding: 0.625rem 0.75em 0.625rem;
+  }
 }
 
 .weave-field__spin-buttons {
@@ -350,8 +364,15 @@
   overflow: hidden;
 }
 
-// Variant-specific corner rounding so buttons match the field outline.
+.weave-field--outlined.weave-field--numeric.weave-field--has-spin .weave-field__adornment--end {
+  margin-top: -0.125em;
+  overflow: hidden;
+  border-top-right-radius: var(--default-borderradius);
+  border-bottom-right-radius: var(--default-borderradius);
+}
+
 .weave-field--outlined .weave-field__spin-buttons {
+  height: calc(100% - 2px);
   border-top-right-radius: calc(var(--default-borderradius) - 1px);
   border-bottom-right-radius: calc(var(--default-borderradius) - 1px);
 }

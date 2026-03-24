@@ -119,13 +119,21 @@ type Field =
         div [ cls [ Css.``weave-field__adornment``; Css.``weave-field__adornment--end`` ] ] [ adornment ]
       | None -> Doc.Empty
 
+    let hasLabel =
+      labelText |> View.MapCached(fun txt -> not (System.String.IsNullOrEmpty txt))
+
     let outlineDoc =
       match variant with
       | Field.Variant.Outlined ->
+        // Only open the legend notch when there is actual label text.
+        // Without this guard, an empty label still creates a visible gap
+        // because the legend span has horizontal padding.
+        let legendShouldFloat = shouldFloat <&&> hasLabel
+
         Doc.Element "fieldset" [ Css.``weave-field__outline`` |> cl ] [
           Doc.Element "legend" [
             Css.``weave-field__outline-legend`` |> cl
-            Attr.DynamicClassPred Css.``weave-field__outline-legend--float`` shouldFloat
+            Attr.DynamicClassPred Css.``weave-field__outline-legend--float`` legendShouldFloat
           ] [
             // do not use a typography component here since we need specific
             // styling to deal with the outlined label when it hovers

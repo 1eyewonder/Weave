@@ -33,6 +33,38 @@ module Option =
     | None -> defaultValue
 
 [<JavaScript>]
+module Bounded =
+
+  /// Clamp a value to [lo, hi]. Works with any comparable ordered type (int, float, etc.).
+  [<Inline>]
+  let inline clamp lo hi v = max lo (min hi v)
+
+  /// Increment by step, clamped to [lo, hi].
+  [<Inline>]
+  let inline stepUp lo hi step v = clamp lo hi (v + step)
+
+  /// Decrement by step, clamped to [lo, hi].
+  [<Inline>]
+  let inline stepDown lo hi step v = clamp lo hi (v - step)
+
+  /// Value as a percentage within [lo, hi], result clamped to [0, 100].
+  let percentOf (lo: float) (hi: float) (value: float) : float =
+    if hi <= lo then
+      0.0
+    else
+      clamp 0.0 100.0 (((value - lo) / (hi - lo)) * 100.0)
+
+  /// Snap a value to the nearest step grid point within [lo, hi].
+  let snapToStep (lo: float) (hi: float) (step: float) (v: float) : float =
+    let clamped = clamp lo hi v
+
+    if step > 0.0 then
+      let steps = round ((clamped - lo) / step)
+      clamp lo hi (lo + steps * step)
+    else
+      clamped
+
+[<JavaScript>]
 module Doc =
 
   [<Inline>]
@@ -90,7 +122,7 @@ module View =
 
   [<Inline>]
   let inline zipCached view1 view2 =
-    View.Map2 (fun v1 v2 -> v1, v2) view1 view2
+    map2Cached (fun v1 v2 -> v1, v2) view1 view2
 
   [<Inline>]
   let inline zip3 view1 view2 view3 =
@@ -98,7 +130,7 @@ module View =
 
   [<Inline>]
   let inline zip3Cached view1 view2 view3 =
-    View.Map3 (fun v1 v2 v3 -> v1, v2, v3) view1 view2 view3
+    map3Cached (fun v1 v2 v3 -> v1, v2, v3) view1 view2 view3
 
   [<Inline>]
   let inline unzip view =

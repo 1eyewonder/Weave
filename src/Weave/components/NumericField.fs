@@ -15,8 +15,6 @@ module NumericField =
 
   type Variant = Field.Variant
 
-  let clamp lo hi v = Operators.max lo (Operators.min hi v)
-
 open NumericField
 
 [<JavaScript>]
@@ -104,17 +102,17 @@ type NumericField =
       |> Doc.sinkCached (fun s ->
         match Int32.TryParse(s) with
         | true, n ->
-          let clamped = clamp minVal maxVal n
+          let clamped = Bounded.clamp minVal maxVal n
 
           if value.Value <> clamped then
             value.Value <- clamped
         | false, _ -> ())
 
     let increment step =
-      value.Value <- clamp minVal maxVal (value.Value + step)
+      value.Value <- Bounded.stepUp minVal maxVal step value.Value
 
     let decrement step =
-      value.Value <- clamp minVal maxVal (value.Value - step)
+      value.Value <- Bounded.stepDown minVal maxVal step value.Value
 
     // Snapshot vars for event handlers that can't use *View helpers.
     let currentStep = Var.Create 1
@@ -156,7 +154,7 @@ type NumericField =
             isFocused.Value <- false
             // On blur, clamp and reset display to the canonical valid value.
             match inputToString with
-            | true, n -> value.Value <- clamp minVal maxVal n
+            | true, n -> value.Value <- Bounded.clamp minVal maxVal n
             | false, _ -> ()
 
             stringVar.Value <- string<int> value.Value)
@@ -192,7 +190,12 @@ type NumericField =
       showSpinButtons
       |> Doc.BindView(fun show ->
         if show then
-          div [ Css.``weave-field__spin-buttons`` |> cl ] [
+          div [
+            Css.``weave-field__spin-buttons`` |> cl
+            // Prevent mousedown from stealing focus from the input, which
+            // causes a blur→focus flicker and a 1px layout shift while held.
+            Attr.Handler "mousedown" (fun _ ev -> ev.PreventDefault())
+          ] [
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"
@@ -323,17 +326,17 @@ type NumericField =
       |> Doc.sinkCached (fun s ->
         match Double.TryParse(s) with
         | true, n when not (Double.IsNaN(n)) ->
-          let clamped = clamp minVal maxVal n
+          let clamped = Bounded.clamp minVal maxVal n
 
           if value.Value <> clamped then
             value.Value <- clamped
         | _ -> ())
 
     let increment step =
-      value.Value <- clamp minVal maxVal (value.Value + step)
+      value.Value <- Bounded.stepUp minVal maxVal step value.Value
 
     let decrement step =
-      value.Value <- clamp minVal maxVal (value.Value - step)
+      value.Value <- Bounded.stepDown minVal maxVal step value.Value
 
     let currentStep = Var.Create 1.0
     let currentEditable = Var.Create true
@@ -375,7 +378,7 @@ type NumericField =
             isFocused.Value <- false
 
             match inputToString with
-            | true, n when not (Double.IsNaN(n)) -> value.Value <- clamp minVal maxVal n
+            | true, n when not (Double.IsNaN(n)) -> value.Value <- Bounded.clamp minVal maxVal n
             | _ -> ()
 
             stringVar.Value <- string<float> value.Value)
@@ -410,7 +413,12 @@ type NumericField =
       showSpinButtons
       |> Doc.BindView(fun show ->
         if show then
-          div [ Css.``weave-field__spin-buttons`` |> cl ] [
+          div [
+            Css.``weave-field__spin-buttons`` |> cl
+            // Prevent mousedown from stealing focus from the input, which
+            // causes a blur→focus flicker and a 1px layout shift while held.
+            Attr.Handler "mousedown" (fun _ ev -> ev.PreventDefault())
+          ] [
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"

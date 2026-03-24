@@ -252,6 +252,7 @@ module ExamplesRouter =
               "Numeric Field", NumericFieldExamples
               "Radio Button", RadioButtonExamples
               "Select", SelectExamples
+              "Slider", SliderExamples
               "Spacer", SpacerExamples
               "Switch", SwitchExamples
               "Tabs", TabsExamples
@@ -291,6 +292,7 @@ module ExamplesRouter =
       | ChipSetExamples -> ChipSetExamples.render ()
       | RadioButtonExamples -> RadioButtonExamples.render ()
       | SwitchExamples -> SwitchExamples.render ()
+      | SliderExamples -> SliderExamples.render ()
       | ContainerExamples -> ContainerExamples.render ()
       | FieldExamples -> FieldExamples.render ()
       | NumericFieldExamples -> NumericFieldExamples.render ()
@@ -615,6 +617,7 @@ module ExamplesRouter =
           navLeafItem "Numeric Field"
           navLeafItem "Radio Button"
           navLeafItem "Select"
+          navLeafItem "Slider"
           navLeafItem "Spacer"
           navLeafItem "Switch"
           navLeafItem "Tabs"

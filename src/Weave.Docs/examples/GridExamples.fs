@@ -6,6 +6,8 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open WebSharper.JavaScript
 open Weave
+open Weave.Icons
+open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
 module GridExamples =
@@ -424,6 +426,250 @@ Grid.create(
 
     Helpers.codeSampleSection "Nested Grids" description content code
 
+  let private spanToAttr (n: int) =
+    match n with
+    | 1 -> GridItem.Span.one
+    | 2 -> GridItem.Span.two
+    | 3 -> GridItem.Span.three
+    | 4 -> GridItem.Span.four
+    | 5 -> GridItem.Span.five
+    | 6 -> GridItem.Span.six
+    | 7 -> GridItem.Span.seven
+    | 8 -> GridItem.Span.eight
+    | 9 -> GridItem.Span.nine
+    | 10 -> GridItem.Span.ten
+    | 11 -> GridItem.Span.eleven
+    | 12 -> GridItem.Span.twelve
+    | _ -> GridItem.Span.three
+
+  let private spanToName (n: int) =
+    match n with
+    | 1 -> "one"
+    | 2 -> "two"
+    | 3 -> "three"
+    | 4 -> "four"
+    | 5 -> "five"
+    | 6 -> "six"
+    | 7 -> "seven"
+    | 8 -> "eight"
+    | 9 -> "nine"
+    | 10 -> "ten"
+    | 11 -> "eleven"
+    | 12 -> "twelve"
+    | _ -> "three"
+
+  let private gridBuilderExample () =
+    let description =
+      Helpers.bodyText "Calculate your breakpoints with this tool. Move the slider to add and remove items."
+
+    let itemCount = Var.Create 4
+
+    // Each item gets its own span Var (pre-create 12 for max items)
+    let spanVars = [| for _ in 0..11 -> Var.Create 3 |]
+
+    let allJustify = [
+      "Flex Start", JustifyContent.flexStart, "JustifyContent.flexStart"
+      "Center", JustifyContent.center, "JustifyContent.center"
+      "Flex End", JustifyContent.flexEnd, "JustifyContent.flexEnd"
+      "Space Between", JustifyContent.spaceBetween, "JustifyContent.spaceBetween"
+      "Space Around", JustifyContent.spaceAround, "JustifyContent.spaceAround"
+      "Space Evenly", JustifyContent.spaceEvenly, "JustifyContent.spaceEvenly"
+    ]
+
+    let selectedJustify = Var.Create<string option>(Some "Flex Start")
+
+    let justifyItems =
+      allJustify
+      |> List.map (fun (label, _, _) -> SelectItem.create (text label, label, label))
+      |> View.Const
+
+    // Build the dynamic code string
+    let codeView =
+      let spanViews = spanVars |> Array.map (fun v -> v.View) |> Array.toList
+
+      let combinedSpans =
+        spanViews
+        |> List.fold (fun acc sv -> (acc, sv) ||> View.Map2(fun items s -> items @ [ s ])) (View.Const [])
+
+      View.Map3
+        (fun count justOpt (allSpans: int list) ->
+          let spans = allSpans |> List.take (min count (List.length allSpans))
+
+          let justifyCodeName =
+            justOpt
+            |> Option.bind (fun label ->
+              allJustify
+              |> List.tryFind (fun (l, _, _) -> l = label)
+              |> Option.map (fun (_, _, c) -> c))
+            |> Option.defaultValue "JustifyContent.flexStart"
+
+          let itemLines =
+            spans
+            |> List.mapi (fun i s ->
+              sprintf "        GridItem.create(item%d, attrs = [ GridItem.Span.%s ])" (i + 1) (spanToName s))
+            |> String.concat "\n"
+
+          sprintf
+            """open Weave
+
+Grid.create(
+    [
+%s
+    ],
+    attrs = [ %s ]
+)"""
+            itemLines
+            justifyCodeName)
+        itemCount.View
+        selectedJustify.View
+        combinedSpans
+
+    let content =
+      div [] [
+        // Slider for item count
+        Slider.primary (
+          itemCount,
+          min = 1,
+          max = 12,
+          step = 1,
+          showTickMarks = true,
+          tickMarkLabels = [ for i in 1..12 -> string i ],
+          labelText = View.Const "Items"
+        )
+
+        // Justify select
+        div [ Margin.Top.small; Margin.Bottom.small ] [
+          Select.create (
+            justifyItems,
+            selectedJustify,
+            variant = Select.Variant.Standard,
+            labelText = View.Const "Justify",
+            attrs = [ Select.Width.full; Select.Color.primary ]
+          )
+        ]
+
+        // Reactive grid preview
+        let combined =
+          let spanViews = spanVars |> Array.map (fun v -> v.View) |> Array.toList
+
+          let combinedSpans =
+            spanViews
+            |> List.fold (fun acc sv -> (acc, sv) ||> View.Map2(fun items s -> items @ [ s ])) (View.Const [])
+
+          View.Map3
+            (fun count justOpt allSpans -> count, justOpt, allSpans)
+            itemCount.View
+            selectedJustify.View
+            combinedSpans
+
+        combined
+        |> Doc.BindView(fun (count, justOpt, allSpans) ->
+          let justAttr =
+            justOpt
+            |> Option.bind (fun label ->
+              allJustify
+              |> List.tryFind (fun (l, _, _) -> l = label)
+              |> Option.map (fun (_, a, _) -> a))
+            |> Option.defaultValue JustifyContent.flexStart
+
+          let spans = allSpans |> List.take (min count (List.length allSpans))
+
+          Grid.create (
+            [
+              for i in 0 .. (List.length spans - 1) do
+                let spanVal = spans.[i]
+
+                GridItem.create (
+                  Container.create (
+                    NumericField.create (
+                      spanVars.[i],
+                      min = 1,
+                      max = 12,
+                      variant = Field.Variant.Outlined,
+                      attrs = [ Field.Width.full ]
+                    ),
+                    attrs = [
+                      Flex.Flex.allSizes
+                      JustifyContent.center
+                      AlignItems.center
+                      BorderWidth.All.one
+                      Attr.Style "border-style" "solid"
+                      BorderColor.linesDefault
+                      BorderRadius.All.small
+                      Padding.All.small
+                    ]
+                  ),
+                  attrs = [ spanToAttr spanVal ]
+                )
+            ],
+            attrs = [ justAttr; Grid.Spacing.medium ]
+          ))
+      ]
+
+    // Dynamic code via expansion panel
+    div [ Margin.Bottom.small ] [
+      Helpers.sectionHeader "Grid Builder"
+
+      div [ Margin.Bottom.extraSmall ] [ description ]
+
+      div [
+        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        Flex.Flex.allSizes
+        FlexDirection.Column.allSizes
+        Padding.All.small
+        BorderRadius.All.small
+      ] [
+        content
+
+        let codeIsExpanded = Var.Create false
+
+        let icon =
+          codeIsExpanded.View
+          |> Doc.BindView(fun expanded ->
+            let attrs = [ AlignItems.center ]
+
+            if expanded then
+              Icon.create (Icon.UiActions UiActions.CollapseAll, attrs = attrs)
+            else
+              Icon.create (Icon.UiActions UiActions.ExpandAll, attrs = attrs))
+
+        let headerText =
+          codeIsExpanded.View
+          |> View.MapCached(fun expanded -> if expanded then "Hide Code" else "Show Code")
+
+        let header =
+          ExpansionPanelHeader.create (
+            content = div [ Typography.subtitle2 ] [ textView headerText ],
+            expanded = codeIsExpanded,
+            icon = icon,
+            attrs = [ ExpansionPanel.Color.primary ]
+          )
+
+        let codeContent =
+          codeView
+          |> Doc.BindView(fun codeStr ->
+            pre [] [
+              code [
+                SurfaceColor.toBackgroundColor SurfaceColor.Background
+                Attr.Class "language-fsharp"
+                on.afterRender Helpers.highlightCodeElement
+                Typography.Family.mono
+              ] [ text codeStr ]
+            ])
+
+        ExpansionPanelContainer.create (
+          [
+            ExpansionPanel.create (
+              header = header,
+              content = ExpansionPanelContent.create (codeContent, gutters = View.Const false),
+              expanded = codeIsExpanded
+            )
+          ],
+          attrs = [ Margin.Top.extraSmall ]
+        )
+      ]
+    ]
+
   let private cardLayoutExample () =
     let description =
       Helpers.bodyText "A practical example using grid for a responsive card layout."
@@ -522,6 +768,8 @@ Grid.create(
         justifyContentExample ()
         Helpers.divider ()
         flexBreakExample ()
+        Helpers.divider ()
+        gridBuilderExample ()
         Helpers.divider ()
         nestedGridExample ()
         Helpers.divider ()

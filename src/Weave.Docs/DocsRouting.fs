@@ -23,6 +23,7 @@ module DocsRouting =
     | ChipSetExamples
     | RadioButtonExamples
     | SwitchExamples
+    | SliderExamples
     | ContainerExamples
     | FieldExamples
     | NumericFieldExamples
@@ -64,6 +65,7 @@ module DocsRouting =
     | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
     | SwitchExamples -> "Switch"
+    | SliderExamples -> "Slider"
     | ContainerExamples -> "Container"
     | FieldExamples -> "Field"
     | NumericFieldExamples -> "Numeric Field"
@@ -105,6 +107,7 @@ module DocsRouting =
     | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
     | "Switch" -> Some SwitchExamples
+    | "Slider" -> Some SliderExamples
     | "Container" -> Some ContainerExamples
     | "Field" -> Some FieldExamples
     | "Numeric Field" -> Some NumericFieldExamples
@@ -147,6 +150,7 @@ module DocsRouting =
     | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
     | SwitchExamples -> "#switch"
+    | SliderExamples -> "#slider"
     | ContainerExamples -> "#container"
     | FieldExamples -> "#field"
     | NumericFieldExamples -> "#numeric-field"
@@ -189,6 +193,7 @@ module DocsRouting =
     | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples
     | "#switch" -> Some SwitchExamples
+    | "#slider" -> Some SliderExamples
     | "#container" -> Some ContainerExamples
     | "#field" -> Some FieldExamples
     | "#numeric-field" -> Some NumericFieldExamples

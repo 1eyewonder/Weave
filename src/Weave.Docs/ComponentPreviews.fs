@@ -1322,4 +1322,101 @@ module ComponentPreviews =
           Attr.Style "border-radius" "6px"
         ] []
       ]
+    // Showcase thumbnails
+    | ShowcaseTaskTracker ->
+      cp [
+        // Checkbox + line rows (task list look)
+        for top in [ 12; 32; 52; 72 ] do
+          div [
+            cl "cp-dot"
+            Attr.Style "top" (sprintf "%dpx" top)
+            Attr.Style "left" "10%"
+            Attr.Style "width" "10px"
+            Attr.Style "height" "10px"
+          ] []
+
+          div [
+            cl "cp-pill"
+            Attr.Style "top" (sprintf "%dpx" top)
+            Attr.Style "left" "24%"
+            Attr.Style "right" "10%"
+            Attr.Style "height" "10px"
+          ] []
+      ]
+    | ShowcasePomodoroTimer ->
+      cp [
+        // Circular timer shape
+        div [
+          cl "cp-dot"
+          Attr.Style "top" "15px"
+          Attr.Style "left" "50%"
+          Attr.Style "transform" "translateX(-50%)"
+          Attr.Style "width" "50px"
+          Attr.Style "height" "50px"
+          Attr.Style "border-radius" "50%"
+        ] []
+
+        // Control buttons
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "75px"
+          Attr.Style "left" "20%"
+          Attr.Style "width" "25%"
+          Attr.Style "height" "10px"
+        ] []
+
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "75px"
+          Attr.Style "right" "20%"
+          Attr.Style "width" "25%"
+          Attr.Style "height" "10px"
+        ] []
+      ]
+    | ShowcaseExpenseTracker ->
+      cp [
+        // Summary cards row
+        for left in [ 8; 36; 64 ] do
+          div [
+            cl "cp-pill"
+            Attr.Style "top" "10px"
+            Attr.Style "left" (sprintf "%d%%" left)
+            Attr.Style "width" "26%"
+            Attr.Style "height" "28px"
+            Attr.Style "border-radius" "4px"
+          ] []
+
+        // Expense rows
+        for top in [ 48; 64; 80 ] do
+          div [
+            cl "cp-pill"
+            Attr.Style "top" (sprintf "%dpx" top)
+            Attr.Style "left" "8%"
+            Attr.Style "right" "8%"
+            Attr.Style "height" "10px"
+          ] []
+      ]
+    | ShowcaseCharacterSheet ->
+      cp [
+        // Tab bar
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "0"
+          Attr.Style "left" "0"
+          Attr.Style "right" "0"
+          Attr.Style "height" "12px"
+        ] []
+
+        // Ability score grid (2x3)
+        for row in [ 0; 1 ] do
+          for col in [ 0; 1; 2 ] do
+            div [
+              cl "cp-pill"
+              Attr.Style "top" (sprintf "%dpx" (22 + row * 35))
+              Attr.Style "left" (sprintf "%d%%" (8 + col * 31))
+              Attr.Style "width" "26%"
+              Attr.Style "height" "28px"
+              Attr.Style "border-radius" "4px"
+            ] []
+      ]
     | _ -> Doc.Empty

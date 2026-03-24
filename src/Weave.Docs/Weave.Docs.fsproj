@@ -43,6 +43,10 @@
     <Compile Include="examples/FlexboxExamples.fs" />
     <Compile Include="examples/SelectExamples.fs" />
     <Compile Include="examples/GettingStartedExamples.fs" />
+    <Compile Include="examples/ShowcaseTaskTracker.fs" />
+    <Compile Include="examples/ShowcasePomodoroTimer.fs" />
+    <Compile Include="examples/ShowcaseExpenseTracker.fs" />
+    <Compile Include="examples/ShowcaseCharacterSheet.fs" />
     <Compile Include="DocsRouting.fs" />
     <Compile Include="ComponentPreviews.fs" />
     <Compile Include="ExamplesRouter.fs" />

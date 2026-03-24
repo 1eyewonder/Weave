@@ -272,6 +272,13 @@ module ExamplesRouter =
               "Animations", AnimationExamples
               "Theming", ThemingExamples
             ]
+
+            categorySection "Showcases" [
+              "Task Tracker", ShowcaseTaskTracker
+              "Pomodoro Timer", ShowcasePomodoroTimer
+              "Expense Tracker", ShowcaseExpenseTracker
+              "Character Sheet", ShowcaseCharacterSheet
+            ]
           ],
           attrs = [ Container.MaxWidth.large ]
         )
@@ -316,6 +323,10 @@ module ExamplesRouter =
       | ElevationExamples -> ElevationExamples.render ()
       | FlexboxExamples -> FlexboxExamples.render ()
       | ThemingExamples -> ThemingExamples.render ()
+      | ShowcaseTaskTracker -> ShowcaseTaskTracker.render ()
+      | ShowcasePomodoroTimer -> ShowcasePomodoroTimer.render ()
+      | ShowcaseExpenseTracker -> ShowcaseExpenseTracker.render ()
+      | ShowcaseCharacterSheet -> ShowcaseCharacterSheet.render ()
       | Home -> Doc.Empty
 
   let render () =
@@ -509,6 +520,7 @@ module ExamplesRouter =
 
     let componentsExpanded = Var.Create true
     let stylingExpanded = Var.Create true
+    let showcasesExpanded = Var.Create true
 
     let navLeafItem (label: string) =
       div [
@@ -635,6 +647,15 @@ module ExamplesRouter =
           navLeafItem "Transitions"
           navLeafItem "Animations"
           navLeafItem "Theming"
+        ]
+
+        Divider.create (attrs = [ Margin.Vertical.extraSmall ])
+
+        navGroup (Icon.UiActions UiActions.Apps) "Showcases" showcasesExpanded [
+          navLeafItem "Task Tracker"
+          navLeafItem "Pomodoro Timer"
+          navLeafItem "Expense Tracker"
+          navLeafItem "Character Sheet"
         ]
       ]
 

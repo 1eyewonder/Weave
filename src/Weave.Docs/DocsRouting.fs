@@ -47,6 +47,10 @@ module DocsRouting =
     | ElevationExamples
     | FlexboxExamples
     | ThemingExamples
+    | ShowcaseTaskTracker
+    | ShowcasePomodoroTimer
+    | ShowcaseExpenseTracker
+    | ShowcaseCharacterSheet
 
   let pageToString page =
     match page with
@@ -89,6 +93,10 @@ module DocsRouting =
     | ElevationExamples -> "Elevation"
     | FlexboxExamples -> "Flexbox"
     | ThemingExamples -> "Theming"
+    | ShowcaseTaskTracker -> "Task Tracker"
+    | ShowcasePomodoroTimer -> "Pomodoro Timer"
+    | ShowcaseExpenseTracker -> "Expense Tracker"
+    | ShowcaseCharacterSheet -> "Character Sheet"
 
   let stringToPage s =
     match s with
@@ -131,6 +139,10 @@ module DocsRouting =
     | "Elevation" -> Some ElevationExamples
     | "Flexbox" -> Some FlexboxExamples
     | "Theming" -> Some ThemingExamples
+    | "Task Tracker" -> Some ShowcaseTaskTracker
+    | "Pomodoro Timer" -> Some ShowcasePomodoroTimer
+    | "Expense Tracker" -> Some ShowcaseExpenseTracker
+    | "Character Sheet" -> Some ShowcaseCharacterSheet
     | _ -> None
 
   let pageToHash page =
@@ -174,6 +186,10 @@ module DocsRouting =
     | ElevationExamples -> "#elevation"
     | FlexboxExamples -> "#flexbox"
     | ThemingExamples -> "#theming"
+    | ShowcaseTaskTracker -> "#showcase-task-tracker"
+    | ShowcasePomodoroTimer -> "#showcase-pomodoro-timer"
+    | ShowcaseExpenseTracker -> "#showcase-expense-tracker"
+    | ShowcaseCharacterSheet -> "#showcase-character-sheet"
 
   let hashToPage hash =
     match hash with
@@ -217,6 +233,10 @@ module DocsRouting =
     | "#elevation" -> Some ElevationExamples
     | "#flexbox" -> Some FlexboxExamples
     | "#theming" -> Some ThemingExamples
+    | "#showcase-task-tracker" -> Some ShowcaseTaskTracker
+    | "#showcase-pomodoro-timer" -> Some ShowcasePomodoroTimer
+    | "#showcase-expense-tracker" -> Some ShowcaseExpenseTracker
+    | "#showcase-character-sheet" -> Some ShowcaseCharacterSheet
     | _ -> None
 
   [<Inline "window.location.hash">]

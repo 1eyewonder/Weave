@@ -382,7 +382,7 @@ Chip.create(
               Chip.create (text "Closable", onClose = (fun () -> ()), attrs = attrs)
             ]
           ],
-          attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
         )
 
       Grid.create (

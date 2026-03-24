@@ -83,6 +83,15 @@ module Helpers =
       ] [ content ]
     ]
 
+  /// Section with header + description + content but no surface background wrapper.
+  /// Use for content that provides its own visual containers (e.g. guidance cards, grids).
+  let sectionPlain title description content =
+    div [ Margin.Bottom.small ] [
+      sectionHeader title
+      div [ Margin.Bottom.extraSmall ] [ description ]
+      content
+    ]
+
   let textSection title (children: Doc list) =
     div [ Margin.Bottom.small ] [
       sectionHeader title
@@ -96,6 +105,38 @@ module Helpers =
 
   [<Inline "window.highlightCodeElement($0)">]
   let highlightCodeElement (el: Dom.Element) = X<unit>
+
+  /// Inline code badge — renders text in a monospace pill (e.g. `ChipSet`)
+  let inlineCode (str: string) =
+    span [ Attr.Class "docs-inline-code" ] [ text str ]
+
+  /// A single bullet with a colored dot, bold lead text, and a description.
+  let guidanceBullet (lead: string) (desc: string) =
+    div [ Attr.Class "docs-guidance-bullet" ] [
+      span [ Attr.Class "docs-guidance-bullet__dot" ] []
+      div [] [
+        span [ Attr.Class "docs-guidance-bullet__lead" ] [ text lead ]
+        span [ Attr.Class "docs-guidance-bullet__desc" ] [ text (" — " + desc) ]
+      ]
+    ]
+
+  /// A guidance card with a title and a list of bullets. Pair two of these
+  /// inside a Grid for side-by-side comparison layouts.
+  let guidanceCard (title: string) (bullets: Doc list) =
+    div [ Attr.Class "docs-guidance-card" ] [
+      div [ Attr.Class "docs-guidance-card__title" ] [ text title ]
+      div [ Attr.Class "docs-guidance-card__list" ] [ yield! bullets ]
+    ]
+
+  /// Two guidance cards rendered side-by-side in a responsive grid row.
+  let guidanceColumns (left: Doc) (right: Doc) =
+    Grid.create (
+      [
+        GridItem.create (left, attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ])
+        GridItem.create (right, attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ])
+      ],
+      attrs = [ AlignItems.stretch ]
+    )
 
   let codeSampleSection title description (content: Doc) (linesOfCode: string) =
     div [ Margin.Bottom.small ] [

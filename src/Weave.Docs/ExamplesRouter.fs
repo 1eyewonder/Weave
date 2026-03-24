@@ -766,6 +766,10 @@ module ExamplesRouter =
             isFixed = false,
             attrs = [ Overflow.yAuto ]
           ),
-        attrs = [ FlexItem.Flex.allSizes; Attr.Style "min-height" "0" ]
+        attrs = [
+          FlexItem.Flex.allSizes
+          Attr.Style "min-height" "0"
+          Attr.Style "height" "100svh"
+        ]
       )
     ]

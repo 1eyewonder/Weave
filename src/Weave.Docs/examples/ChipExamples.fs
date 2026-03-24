@@ -577,6 +577,17 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
       div [] [
         Helpers.pageTitle "Chip"
         Helpers.bodyText "Chips represent compact elements such as tags, filters, or choices."
+
+        Alert.create (
+          div [ Typography.body1 ] [
+            text "Need a group of selectable chips? See "
+            Helpers.inlineCode "ChipSet"
+            text
+              " for built-in single/multi/toggle selection. Use standalone Chip when you need per-chip colors, conditional variant switching, or heterogeneous behavior. The ChipSet docs include a detailed comparison."
+          ],
+          attrs = [ Alert.Color.info; Alert.Variant.standard; Margin.Bottom.extraSmall ]
+        )
+
         Helpers.divider ()
         filledChipsExample ()
         Helpers.divider ()

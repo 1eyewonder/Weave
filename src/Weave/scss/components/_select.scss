@@ -4,6 +4,7 @@
 .weave-select {
   display: inline-flex;
   flex-direction: column;
+  justify-content: flex-end;
   position: relative;
   min-width: 120px;
   vertical-align: top;
@@ -89,6 +90,7 @@
   transition: transform var(--weave-duration-standard) $ease-standard;
   color: var(--palette-action-default);
   flex-shrink: 0;
+  font-size: 12px;
 }
 
 .weave-select--open .weave-select__chevron {

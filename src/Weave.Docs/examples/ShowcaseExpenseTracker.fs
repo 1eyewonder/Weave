@@ -135,6 +135,7 @@ module ShowcaseExpenseTracker =
             GridItem.create (
               NumericField.create (
                 newAmount,
+                variant = Field.Variant.Outlined,
                 labelText = View.Const "Amount",
                 min = 0,
                 max = 99999,
@@ -381,6 +382,7 @@ Grid.create([
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ])
     GridItem.create(
         NumericField.create(newAmount,
+            variant = Field.Variant.Outlined,
             labelText = View.Const "Amount",
             min = 0, max = 99999,
             attrs = [ Field.Color.primary; Field.Width.full ]),

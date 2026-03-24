@@ -251,6 +251,7 @@ module ShowcaseCharacterSheet =
             GridItem.create (
               NumericField.create (
                 level,
+                variant = Field.Variant.Outlined,
                 labelText = View.Const "Level",
                 min = 1,
                 max = 20,
@@ -286,6 +287,7 @@ module ShowcaseCharacterSheet =
 
         NumericField.create (
           score,
+          variant = Field.Variant.Outlined,
           min = 1,
           max = 30,
           attrs = [ Field.Color.primary; Attr.Style "max-width" "100px"; Typography.Align.center ]
@@ -343,9 +345,10 @@ module ShowcaseCharacterSheet =
 
                 NumericField.create (
                   maxHp,
+                  variant = Field.Variant.Outlined,
                   min = 1,
                   max = 999,
-                  attrs = [ Field.Color.primary; Field.Width.full ]
+                  attrs = [ Field.Color.primary; Attr.Style "width" "100%" ]
                 )
               ],
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]

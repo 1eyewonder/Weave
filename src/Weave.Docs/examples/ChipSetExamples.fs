@@ -695,12 +695,63 @@ ChipSet.create(
 
     Helpers.codeSampleSection "No Selected Icon" description content code
 
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "ChipSet"
+        text " and standalone "
+        Helpers.inlineCode "Chip"
+        text " render chips — but they handle selection differently. Use this to pick the right one."
+      ]
+
+    let content =
+      div [] [
+        Helpers.guidanceColumns
+          (Helpers.guidanceCard "Use ChipSet when\u2026" [
+            Helpers.guidanceBullet
+              "Chips share the same color and variant"
+              "e.g. a language picker where every chip is outlined/primary."
+            Helpers.guidanceBullet
+              "You need built-in selection tracking"
+              "single, multi, or toggle without writing your own logic."
+            Helpers.guidanceBullet
+              "Chips are a uniform set"
+              "sizes, tags, or categories with equal visual weight."
+            Helpers.guidanceBullet
+              "Layout and spacing should be automatic"
+              "let the chipset container handle it."
+          ])
+          (Helpers.guidanceCard "Use standalone Chip when\u2026" [
+            Helpers.guidanceBullet
+              "Each chip needs its own color"
+              "e.g. Food is green, Transport is blue, Bills is red."
+            Helpers.guidanceBullet "Variant switches on state" "filled when active, outlined when inactive."
+            Helpers.guidanceBullet
+              "Chips have heterogeneous behavior"
+              "some are links, some are clickable, some are display-only."
+            Helpers.guidanceBullet
+              "You need full rendering control"
+              "wrapping chips in Doc.BindView for reactive re-renders."
+          ])
+
+        Alert.create (
+          text
+            "The Expense Tracker showcase uses standalone Chips for its category filters — each maps to a unique color and toggles between filled/outlined, which requires per-chip control beyond what ChipSet provides.",
+          attrs = [ Alert.Color.tertiary; Alert.Variant.filled; Margin.Top.small ]
+        )
+      ]
+
+    Helpers.sectionPlain "When to Use" description content
+
   let render () =
     Container.create (
       div [] [
         Helpers.pageTitle "Chip Set"
         Helpers.bodyText
           "ChipSet groups multiple chips into a selectable set with single or multi selection modes."
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         singleSelectionExample ()
         Helpers.divider ()

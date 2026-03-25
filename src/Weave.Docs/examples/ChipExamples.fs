@@ -585,7 +585,12 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
             text
               " for built-in single/multi/toggle selection. Use standalone Chip when you need per-chip colors, conditional variant switching, or heterogeneous behavior. The ChipSet docs include a detailed comparison."
           ],
-          attrs = [ Alert.Color.info; Alert.Variant.standard; Margin.Bottom.extraSmall ]
+          attrs = [
+            Alert.Color.info
+            Alert.Variant.standard
+            Margin.Bottom.extraSmall
+            Margin.Top.extraSmall
+          ]
         )
 
         Helpers.divider ()

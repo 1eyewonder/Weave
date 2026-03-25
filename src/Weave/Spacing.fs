@@ -6,45 +6,12 @@ open Weave.CssHelpers.Core
 
 [<AutoOpen; JavaScript>]
 module Spacing =
+
   module Density =
 
     let compact = cl Css.``weave-density--compact``
     let standard = cl Css.``weave-density--standard``
     let spacious = cl Css.``weave-density--spacious``
-
-  /// <summary>
-  /// Represents a margin spacing value with an optional responsive breakpoint.
-  /// </summary>
-  [<RequireQualifiedAccess>]
-  type Margin =
-    | Top of Size option * Breakpoint option
-    | Bottom of Size option * Breakpoint option
-    | Left of Size option * Breakpoint option
-    | Right of Size option * Breakpoint option
-    | Vertical of Size option * Breakpoint option
-    | Horizontal of Size option * Breakpoint option
-    | All of Size option * Breakpoint option
-
-  module private SpacingHelpers =
-
-    let sizeToNum size =
-      match size with
-      | None -> "0"
-      | Some Size.ExtraSmall -> "4"
-      | Some Size.Small -> "8"
-      | Some Size.Medium -> "12"
-      | Some Size.Large -> "16"
-      | Some Size.ExtraLarge -> "20"
-
-    let breakpointPrefix bp =
-      match bp with
-      | None -> ""
-      | Some Breakpoint.ExtraSmall -> ""
-      | Some Breakpoint.Small -> "sm-"
-      | Some Breakpoint.Medium -> "md-"
-      | Some Breakpoint.Large -> "lg-"
-      | Some Breakpoint.ExtraLarge -> "xl-"
-      | Some Breakpoint.ExtraExtraLarge -> "xxl-"
 
   /// <summary>
   /// Provides preset margin values and a function to convert them to CSS class names.
@@ -1765,40 +1732,6 @@ module Spacing =
         /// Applies extra-large margin on all sides (20px) at the extra-extra-large breakpoint and above.
         /// </summary>
         let extraLarge = cl Css.``weave-ma-xxl-20``
-
-    /// <summary>
-    /// Converts a Margin value to its corresponding CSS utility class names.
-    /// </summary>
-    let private toClasses margin =
-      let bp = SpacingHelpers.breakpointPrefix
-      let sz = SpacingHelpers.sizeToNum
-
-      match margin with
-      | Margin.Top(size, b) -> [ $"mt-{bp b}{sz size}" ]
-      | Margin.Bottom(size, b) -> [ $"mb-{bp b}{sz size}" ]
-      | Margin.Left(size, b) -> [ $"ml-{bp b}{sz size}" ]
-      | Margin.Right(size, b) -> [ $"mr-{bp b}{sz size}" ]
-      | Margin.Vertical(size, b) -> [ $"mt-{bp b}{sz size}"; $"mb-{bp b}{sz size}" ]
-      | Margin.Horizontal(size, b) -> [ $"ml-{bp b}{sz size}"; $"mr-{bp b}{sz size}" ]
-      | Margin.All(size, b) -> [ $"ma-{bp b}{sz size}" ]
-
-    /// <summary>
-    /// Converts a Margin value to an <c>Attr</c> applying the corresponding CSS utility classes.
-    /// </summary>
-    let toAttr (margin: Margin) : Attr = cls (toClasses margin)
-
-  /// <summary>
-  /// Represents a padding spacing value with an optional responsive breakpoint.
-  /// </summary>
-  [<RequireQualifiedAccess>]
-  type Padding =
-    | Top of Size option * Breakpoint option
-    | Bottom of Size option * Breakpoint option
-    | Left of Size option * Breakpoint option
-    | Right of Size option * Breakpoint option
-    | Vertical of Size option * Breakpoint option
-    | Horizontal of Size option * Breakpoint option
-    | All of Size option * Breakpoint option
 
   /// <summary>
   /// Provides preset padding values and a function to convert them to CSS class names.

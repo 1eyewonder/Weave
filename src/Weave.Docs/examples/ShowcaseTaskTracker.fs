@@ -133,6 +133,7 @@ module ShowcaseTaskTracker =
                 attrs = [
                   Button.Color.primary
                   Button.Variant.filled
+                  Button.Width.full
                   Attr.Style "height" "100%"
                   Attr.Style "min-height" "40px"
                 ]

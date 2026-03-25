@@ -255,19 +255,22 @@ module Attr =
     let skip = Attr.Create "tabindex" "0"
 
 /// <summary>
+/// Active patterns for pointer event handling.
+/// </summary>
+[<JavaScript; RequireQualifiedAccess>]
+module internal Pointer =
+
+  /// Matches primary button interactions (left mouse click, touch tap, pen contact).
+  [<return: Struct>]
+  let (|Primary|_|) (ev: Dom.MouseEvent) =
+    if ev.Button = 0 then ValueSome() else ValueNone
+
+/// <summary>
 /// Active patterns for keyboard event handling. Provides a consistent,
 /// type-safe vocabulary for matching key presses across all components.
 /// </summary>
 [<JavaScript; RequireQualifiedAccess>]
 module internal Key =
-
-  /// Matches Enter or Space — the standard ARIA "activate" keys for buttons and interactive elements.
-  [<return: Struct>]
-  let (|Activate|_|) (ev: Dom.KeyboardEvent) =
-    match ev.Key with
-    | "Enter"
-    | " " -> ValueSome()
-    | _ -> ValueNone
 
   [<return: Struct>]
   let (|Enter|_|) (ev: Dom.KeyboardEvent) =
@@ -276,6 +279,14 @@ module internal Key =
   [<return: Struct>]
   let (|Space|_|) (ev: Dom.KeyboardEvent) =
     if ev.Key = " " then ValueSome() else ValueNone
+
+  /// Matches Enter or Space — the standard ARIA "activate" keys for buttons and interactive elements.
+  [<return: Struct>]
+  let (|Activate|_|) (ev: Dom.KeyboardEvent) =
+    match ev with
+    | Enter
+    | Space -> ValueSome()
+    | _ -> ValueNone
 
   [<return: Struct>]
   let (|Escape|_|) (ev: Dom.KeyboardEvent) =

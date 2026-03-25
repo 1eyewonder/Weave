@@ -181,7 +181,7 @@ type ChipSet =
           JS.SetTimeout (fun () -> setRovingTabindex el 0) 0 |> ignore)
 
         // Keep roving tabindex in sync when a chip receives focus via click
-        Attr.Handler "focusin" (fun el _ ->
+        on.focusIn (fun el _ ->
           let idx = currentIndex el
 
           if idx >= 0 then

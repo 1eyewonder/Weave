@@ -194,7 +194,7 @@ type NumericField =
             Css.``weave-field__spin-buttons`` |> cl
             // Prevent mousedown from stealing focus from the input, which
             // causes a blur→focus flicker and a 1px layout shift while held.
-            Attr.Handler "mousedown" (fun _ ev -> ev.PreventDefault())
+            on.mouseDown (fun _ ev -> ev.PreventDefault())
           ] [
             button [
               Css.``weave-field__spin-btn`` |> cl
@@ -417,7 +417,7 @@ type NumericField =
             Css.``weave-field__spin-buttons`` |> cl
             // Prevent mousedown from stealing focus from the input, which
             // causes a blur→focus flicker and a 1px layout shift while held.
-            Attr.Handler "mousedown" (fun _ ev -> ev.PreventDefault())
+            on.mouseDown (fun _ ev -> ev.PreventDefault())
           ] [
             button [
               Css.``weave-field__spin-btn`` |> cl

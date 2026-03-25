@@ -108,8 +108,8 @@ type Tooltip =
               on.mouseLeave (fun _ _ -> Var.Set isVisible false)
             ]
           | Tooltip.Activation.Focus -> [
-              Attr.Handler "focusin" (fun _ _ -> Var.Set isVisible true)
-              Attr.Handler "focusout" (fun _ _ -> Var.Set isVisible false)
+              on.focusIn (fun _ _ -> Var.Set isVisible true)
+              on.focusOut (fun _ _ -> Var.Set isVisible false)
             ]
           | Tooltip.Activation.Click -> [ on.clickTap (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
     ] [

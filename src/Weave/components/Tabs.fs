@@ -468,7 +468,7 @@ type Tabs =
             0
           |> ignore)
 
-        Attr.Handler "scroll" (fun _ _ -> updateOverflow ())
+        on.scroll (fun _ _ -> updateOverflow ())
       ] [
         tabs |> Doc.BindView(List.mapi (fun i t -> tabItem t i) >> Doc.Concat)
 

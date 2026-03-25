@@ -64,21 +64,21 @@ type Slider =
     let isDragging = Var.Create false
 
     let onPointerDown =
-      Attr.Handler "pointerdown" (fun el ev ->
+      on.pointerDown (fun el ev ->
         ev.PreventDefault()
         el?setPointerCapture (ev?pointerId)
         isDragging.Value <- true
-        updateFromPointer el (float ev?clientX))
+        updateFromPointer el (float ev.ClientX))
 
     let onPointerMove =
-      Attr.Handler "pointermove" (fun el ev ->
+      on.pointerMove (fun el ev ->
         if isDragging.Value then
-          updateFromPointer el (float ev?clientX))
+          updateFromPointer el (float ev.ClientX))
 
-    let onPointerUp = Attr.Handler "pointerup" (fun _ _ -> isDragging.Value <- false)
+    let onPointerUp = on.pointerUp (fun _ _ -> isDragging.Value <- false)
 
     let onPointerCancel =
-      Attr.Handler "pointercancel" (fun _ _ -> isDragging.Value <- false)
+      on.pointerCancel (fun _ _ -> isDragging.Value <- false)
 
     let label =
       labelText

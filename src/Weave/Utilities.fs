@@ -305,14 +305,36 @@ module on =
       if isEnabled then
         onClick ())
 
+  let pointerUp (handler: Dom.Element -> Dom.MouseEvent -> unit) =
+    Attr.Handler "pointerup" (fun el ev -> handler el (As<Dom.MouseEvent> ev))
+
+  let pointerDown (handler: Dom.Element -> Dom.MouseEvent -> unit) =
+    Attr.Handler "pointerdown" (fun el ev -> handler el (As<Dom.MouseEvent> ev))
+
+  let pointerMove (handler: Dom.Element -> Dom.MouseEvent -> unit) =
+    Attr.Handler "pointermove" (fun el ev -> handler el (As<Dom.MouseEvent> ev))
+
+  let pointerCancel (handler: Dom.Element -> Dom.Event -> unit) =
+    Attr.Handler "pointercancel" handler
+
+  let focusIn (handler: Dom.Element -> Dom.FocusEvent -> unit) =
+    Attr.Handler "focusin" (fun el ev -> handler el (As<Dom.FocusEvent> ev))
+
+  let focusOut (handler: Dom.Element -> Dom.FocusEvent -> unit) =
+    Attr.Handler "focusout" (fun el ev -> handler el (As<Dom.FocusEvent> ev))
+
+  let scroll (handler: Dom.Element -> Dom.Event -> unit) =
+    Attr.Handler "scroll" handler
+
   /// <summary>
   /// Handles both click and tap via the "pointerup" event.
   /// Fires the callback for primary pointer interactions (mouse left-click, touch, pen).
   /// </summary>
   let clickTap (handler: Dom.Element -> Dom.Event -> unit) =
-    Attr.Handler "pointerup" (fun el ev ->
-      if ev?button = 0 then
-        handler el ev)
+    pointerUp (fun el ev ->
+      match ev with
+      | Pointer.Primary -> handler el (ev :> Dom.Event)
+      | _ -> ())
 
   /// <summary>
   /// Handles both click and tap via the "pointerup" event,
@@ -326,11 +348,13 @@ module on =
 
     Attr.Concat [
       on.afterRender (fun _ -> view |> View.Sink(fun v -> Var.Set current (Some v)))
-      Attr.Handler "pointerup" (fun el ev ->
-        if ev?button = 0 then
+      pointerUp (fun el ev ->
+        match ev with
+        | Pointer.Primary ->
           match current.Value with
-          | Some v -> handler el ev v
-          | None -> ())
+          | Some v -> handler el (ev :> Dom.Event) v
+          | None -> ()
+        | _ -> ())
     ]
 
   /// <summary>
@@ -369,11 +393,13 @@ module on =
 
     Attr.Concat [
       on.afterRender (fun _ -> view |> View.Sink(fun v -> Var.Set current (Some v)))
-      Attr.Handler "pointerup" (fun el ev ->
-        if ev?button = 0 then
+      pointerUp (fun el ev ->
+        match ev with
+        | Pointer.Primary ->
           match current.Value with
-          | Some v -> handler el ev v
-          | None -> ())
+          | Some v -> handler el (ev :> Dom.Event) v
+          | None -> ()
+        | _ -> ())
       on.keyDown (fun el ev ->
         match ev with
         | Key.Activate ->

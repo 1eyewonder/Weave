@@ -288,5 +288,135 @@
         <div id="f4-spacious-list-item" class="weave-list-item">List Item</div>
       </div>
     </div>
+
+    <!-- ================================================================
+         FAMILY 5: Field controls — select control matches field control
+         Across all three variants (standard, filled, outlined), the
+         select's .weave-field__control must be the same height as a
+         standalone Field's, even when the select value div is empty.
+         ================================================================ -->
+
+    <!-- Family 5 — Standard -->
+    <div class="family" style="display: flex; gap: 16px;">
+      <div id="f5-standard-field" class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Field</span></label>
+          <input type="text" class="weave-field__input" placeholder="Placeholder text" />
+        </div>
+      </div>
+      <div id="f5-standard-select" class="weave-select">
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder">Placeholder text</span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="f5-standard-select-empty" class="weave-select">
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder"></span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family 5 — Filled -->
+    <div class="family" style="display: flex; gap: 16px;">
+      <div id="f5-filled-field" class="weave-field weave-field--filled weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Field</span></label>
+          <input type="text" class="weave-field__input" placeholder="Placeholder text" />
+        </div>
+      </div>
+      <div id="f5-filled-select" class="weave-select">
+        <div class="weave-field weave-field--filled weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder">Placeholder text</span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="f5-filled-select-empty" class="weave-select">
+        <div class="weave-field weave-field--filled weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder"></span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family 5 — Outlined -->
+    <div class="family" style="display: flex; gap: 16px;">
+      <div id="f5-outlined-field" class="weave-field weave-field--outlined weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Field</span></label>
+          <input type="text" class="weave-field__input" placeholder="Placeholder text" />
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend"><span>Field</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="f5-outlined-select" class="weave-select">
+        <div class="weave-field weave-field--outlined weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder">Placeholder text</span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="f5-outlined-select-empty" class="weave-select">
+        <div class="weave-field weave-field--outlined weave-typography--body2">
+          <div class="weave-field__control">
+            <label class="weave-field__label"><span>Select</span></label>
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+              <span class="weave-select__placeholder"></span>
+            </div>
+            <div class="weave-field__adornment weave-field__adornment--end">
+              <div class="weave-select__actions">
+                <span class="weave-select__chevron">&#x25BC;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

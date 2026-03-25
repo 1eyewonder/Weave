@@ -124,3 +124,32 @@ type SizingConsistencyTests() =
       ("list-item", listPl)
     ]
   }
+
+  [<Theory>]
+  [<InlineData("standard")>]
+  [<InlineData("filled")>]
+  [<InlineData("outlined")>]
+  member this.``field controls - select control matches field control height``(variant: string) = task {
+    do! this.LoadFixture()
+    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+    and! selectControl = this.Page.Locator($"#f5-{variant}-select .weave-field__control").BoundingBoxAsync()
+
+    assertHeightsMatch $"field controls ({variant})" [ ("field", fieldControl); ("select", selectControl) ]
+  }
+
+  [<Theory>]
+  [<InlineData("standard")>]
+  [<InlineData("filled")>]
+  [<InlineData("outlined")>]
+  member this.``field controls - empty select control matches field control height``(variant: string) = task {
+    do! this.LoadFixture()
+    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+    and! emptySelectControl =
+      this.Page.Locator($"#f5-{variant}-select-empty .weave-field__control").BoundingBoxAsync()
+
+    assertHeightsMatch $"field controls, empty ({variant})" [
+      ("field", fieldControl)
+      ("empty-select", emptySelectControl)
+    ]
+  }

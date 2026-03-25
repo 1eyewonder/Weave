@@ -21,10 +21,10 @@
   flex: 1 1 auto;
   min-width: 0;
   min-height: 1.4375em;
+  box-sizing: content-box;
   padding: var(--field-input-padding, 0);
   font: inherit;
   color: currentColor;
-  box-sizing: border-box;
   overflow: hidden;
   gap: 4px;
 }

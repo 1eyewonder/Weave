@@ -52,6 +52,11 @@ $dot-size: 10px;
   opacity: 0;
   cursor: inherit;
   z-index: 1;
+
+  &:focus-visible + .weave-radio__span {
+    outline: 2px solid var(--radio-brand-color, var(--palette-primary));
+    outline-offset: 2px;
+  }
 }
 
 // Checked state

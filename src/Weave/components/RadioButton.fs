@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -78,6 +79,11 @@ type Radio =
         Attr.enabled enabled
 
         on.clickViewGuarded enabled (fun () -> Var.Set userSelection value)
+
+        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
+          if ev.Key = "Enter" then
+            ev.PreventDefault()
+            Var.Set userSelection value)
 
         cl Css.``weave-radio__input``
       ] [

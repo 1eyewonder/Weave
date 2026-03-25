@@ -1419,4 +1419,95 @@ module ComponentPreviews =
               Attr.Style "border-radius" "4px"
             ] []
       ]
+    | SliderExamples ->
+      cp [
+        // Label text
+        div [
+          cl "cp-line"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "55%"
+          Attr.Style "height" "5px"
+        ] []
+        // Track background
+        div [
+          cl "cp-line"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "4px"
+        ] []
+        // Fill
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "50%"
+          Attr.Style "height" "4px"
+          Attr.Style "border-radius" "2px"
+        ] []
+        // Thumb
+        div [
+          cl "cp-dot"
+          Attr.Style "top" "26px"
+          Attr.Style "left" "calc(8% + 50% - 6px)"
+          Attr.Style "width" "12px"
+          Attr.Style "height" "12px"
+        ] []
+        // Second slider — track
+        div [
+          cl "cp-line"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "4px"
+        ] []
+        // Second slider — fill
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "8%"
+          Attr.Style "width" "30%"
+          Attr.Style "height" "4px"
+          Attr.Style "border-radius" "2px"
+        ] []
+        // Second slider — thumb
+        div [
+          cl "cp-dot"
+          Attr.Style "top" "54px"
+          Attr.Style "left" "calc(8% + 30% - 6px)"
+          Attr.Style "width" "12px"
+          Attr.Style "height" "12px"
+        ] []
+      ]
+    | AnimationExamples ->
+      cp [
+        // Three staggered bars suggesting a cascading slide-in animation
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "14px"
+          Attr.Style "left" "8%"
+          Attr.Style "right" "20%"
+          Attr.Style "height" "14px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "36px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "12%"
+          Attr.Style "height" "14px"
+          Attr.Style "border-radius" "3px"
+          Attr.Style "opacity" "0.7"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "28%"
+          Attr.Style "right" "8%"
+          Attr.Style "height" "14px"
+          Attr.Style "border-radius" "3px"
+          Attr.Style "opacity" "0.4"
+        ] []
+      ]
     | _ -> Doc.Empty

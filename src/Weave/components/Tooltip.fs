@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -93,6 +94,10 @@ type Tooltip =
       Attr.Create "aria-describedby" tooltipId
       yield! rootClasses |> List.map cl
       yield! attrs
+
+      Attr.Handler "keydown" (fun _ ev ->
+        if As<Dom.KeyboardEvent>(ev).Key = "Escape" && isVisible.Value then
+          Var.Set isVisible false)
 
       yield!
         activationEvents

@@ -372,24 +372,38 @@ module Pages =
   let private drawerPage () =
     let isOpen = Var.Create true
 
-    DrawerContainer.create (
-      mainContent = div [] [ div [ Typography.body1 ] [ text "Main content area" ] ],
-      leftDrawer =
-        Drawer.create (
+    div [] [
+      Button.create (
+        text "Toggle Drawer",
+        (fun () -> Var.Set isOpen (not isOpen.Value)),
+        attrs = [ Attr.Create "data-testid" "drawer-toggle"; Button.Variant.filled ]
+      )
+
+      DrawerContainer.create (
+        mainContent =
           div [] [
-            WeaveList.create (
-              [
-                ListItem.create (text "Nav Item 1")
-                ListItem.create (text "Nav Item 2")
-                ListItem.create (text "Nav Item 3")
-              ]
+            Button.create (
+              text "Main Focus Target",
+              (fun () -> ()),
+              attrs = [ Attr.Create "data-testid" "main-focus-target" ]
             )
           ],
-          isOpen.View,
-          variant = Drawer.Variant.Persistent,
-          attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
-        )
-    )
+        leftDrawer =
+          Drawer.create (
+            div [] [
+              Button.create (
+                text "Drawer Button",
+                (fun () -> ()),
+                attrs = [ Attr.Create "data-testid" "drawer-button" ]
+              )
+            ],
+            isOpen.View,
+            variant = Drawer.Variant.Temporary,
+            overlayClose = (fun () -> Var.Set isOpen false),
+            attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
+          )
+      )
+    ]
 
   let private linkPage () =
     div [] [
@@ -399,27 +413,83 @@ module Pages =
     ]
 
   let private listPage () =
-    WeaveList.create (
-      [
-        ListItem.create (text "Item 1", value = "1")
-        ListItem.create (text "Item 2", value = "2")
-        ListItem.create (text "Disabled Item", value = "3", disabled = View.Const true)
-      ]
-    )
+    let selected = Var.Create<string option> None
+
+    div [] [
+      selected.View
+      |> Doc.BindView(fun s ->
+        div [ Attr.Create "data-testid" "list-selection" ] [
+          text (
+            match s with
+            | Some v -> v
+            | None -> "none"
+          )
+        ])
+
+      WeaveList.create (
+        [
+          ListItem.create (text "Item 1", value = "1")
+          ListItem.create (text "Item 2", value = "2")
+          ListItem.create (text "Item 3", value = "3")
+          ListItem.create (text "Disabled Item", value = "4", disabled = View.Const true)
+        ],
+        selectedValue = selected,
+        attrs = [ Attr.Create "aria-label" "Test items" ]
+      )
+    ]
 
   let private chipPage () =
+    let clicked = Var.Create "none"
+
     div [] [
+      clicked.View
+      |> Doc.BindView(fun v -> div [ Attr.Create "data-testid" "chip-clicked" ] [ text v ])
+
+      Chip.create (
+        text "Clickable Chip",
+        onClick = (fun () -> Var.Set clicked "clicked"),
+        attrs = [ Chip.Variant.filled; Attr.Create "data-testid" "clickable-chip" ]
+      )
       Chip.create (text "Default Chip", attrs = [ Chip.Variant.filled ])
+      Chip.create (
+        text "Disabled Chip",
+        onClick = (fun () -> ()),
+        enabled = View.Const false,
+        attrs = [ Chip.Variant.filled; Attr.Create "data-testid" "disabled-chip" ]
+      )
       Chip.create (text "Deletable Chip", onClose = (fun () -> ()), attrs = [ Chip.Variant.outlined ])
     ]
 
   let private chipsetPage () =
-    ChipSet.create (
-      [
-        ChipItem.create (text "Chip A", "a")
-        ChipItem.create (text "Chip B", "b", closable = true)
-      ]
-    )
+    let selected = Var.Create<string option> None
+
+    div [] [
+      selected.View
+      |> Doc.BindView(fun s ->
+        div [ Attr.Create "data-testid" "chipset-selection" ] [
+          text (
+            match s with
+            | Some v -> v
+            | None -> "none"
+          )
+        ])
+
+      ChipSet.create (
+        [
+          ChipItem.create (text "Chip A", "a", attrs = [ Chip.Variant.outlined ])
+          ChipItem.create (text "Chip B", "b", attrs = [ Chip.Variant.outlined ])
+          ChipItem.create (text "Chip C", "c", attrs = [ Chip.Variant.outlined ])
+          ChipItem.create (
+            text "Disabled Chip",
+            "d",
+            disabled = View.Const true,
+            attrs = [ Chip.Variant.outlined ]
+          )
+        ],
+        selectedValue = selected,
+        selectionMode = ChipSet.SelectionMode.Toggle
+      )
+    ]
 
   let private buttonmenuPage () =
     div [] [

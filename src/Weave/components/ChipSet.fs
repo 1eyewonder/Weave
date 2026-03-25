@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -123,4 +124,109 @@ type ChipSet =
         attrs = def.Attrs
       )
 
-    div [ cl Css.``weave-chipset``; yield! attrs ] (chips |> List.map renderChip)
+    let chipSelector = ".weave-chip[role='button']"
+
+    let setRovingTabindex (container: Dom.Element) (focusedIndex: int) =
+      let items = container.QuerySelectorAll(chipSelector)
+
+      for i in 0 .. items.Length - 1 do
+        As<Dom.Element>(items.Item(i)).SetAttribute("tabindex", if i = focusedIndex then "0" else "-1")
+
+    let currentIndex (container: Dom.Element) =
+      let items = container.QuerySelectorAll(chipSelector)
+      let active = JS.Document?activeElement
+      let mutable idx = 0
+      let mutable found = -1
+
+      while idx < items.Length && found < 0 do
+        if JS.Inline("$0 === $1", items.Item(idx), active) then
+          found <- idx
+
+        idx <- idx + 1
+
+      found
+
+    let focusChipAt (container: Dom.Element) (index: int) =
+      let items = container.QuerySelectorAll(chipSelector)
+
+      if index >= 0 && index < items.Length then
+        setRovingTabindex container index
+        As<Dom.Element>(items.Item(index))?focus()
+
+    let findNextEnabled (container: Dom.Element) (fromIndex: int) (direction: int) =
+      let items = container.QuerySelectorAll(chipSelector)
+      let count = items.Length
+
+      if count = 0 then
+        None
+      else
+        let mutable i = (fromIndex + direction + count) % count
+        let mutable iterations = 0
+
+        while iterations < count
+              && As<Dom.Element>(items.Item(i)).ClassList.Contains(Css.``weave-chip--disabled``) do
+          i <- (i + direction + count) % count
+          iterations <- iterations + 1
+
+        if iterations < count then Some i else None
+
+    div
+      [
+        cl Css.``weave-chipset``
+        Attr.Create "role" "group"
+
+        on.afterRender (fun el ->
+          // Deferred to ensure individual Chip DynamicCustom tabindex bindings
+          // have already fired before we override them with roving tabindex.
+          JS.SetTimeout (fun () -> setRovingTabindex el 0) 0 |> ignore)
+
+        // Keep roving tabindex in sync when a chip receives focus via click
+        Attr.Handler "focusin" (fun el _ ->
+          let idx = currentIndex el
+
+          if idx >= 0 then
+            setRovingTabindex el idx)
+
+        on.keyDown (fun el (ev: Dom.KeyboardEvent) ->
+          let idx = currentIndex el
+
+          match ev.Key with
+          | "ArrowRight"
+          | "ArrowDown" ->
+            ev.PreventDefault()
+
+            if idx >= 0 then
+              match findNextEnabled el idx 1 with
+              | Some target -> focusChipAt el target
+              | None -> ()
+            else
+              focusChipAt el 0
+          | "ArrowLeft"
+          | "ArrowUp" ->
+            ev.PreventDefault()
+
+            if idx >= 0 then
+              match findNextEnabled el idx -1 with
+              | Some target -> focusChipAt el target
+              | None -> ()
+            else
+              focusChipAt el 0
+          | "Home" ->
+            ev.PreventDefault()
+            let items = el.QuerySelectorAll(chipSelector)
+
+            if items.Length > 0 then
+              match findNextEnabled el (items.Length - 1) 1 with
+              | Some target -> focusChipAt el target
+              | None -> ()
+          | "End" ->
+            ev.PreventDefault()
+
+            match findNextEnabled el 0 -1 with
+            | Some target -> focusChipAt el target
+            | None -> ()
+          | _ -> ())
+
+        yield! attrs
+      ]
+      (chips |> List.map renderChip)

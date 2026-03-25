@@ -108,5 +108,27 @@ type Chip =
         children
     | None ->
       match onClick with
-      | Some handler -> span [ yield! commonAttrs; on.clickTapViewGuarded enabled handler ] children
+      | Some handler ->
+        let enabledRef: bool ref = ref true
+
+        span
+          [
+            yield! commonAttrs
+            Attr.Create "role" "button"
+            on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
+
+            enabled
+            |> View.Map(fun e -> if e then "0" else "-1")
+            |> Attr.DynamicCustom(fun el v -> el.SetAttribute("tabindex", v))
+
+            on.clickTapViewGuarded enabled handler
+
+            on.keyDown (fun _ ev ->
+              if ev?key = "Enter" || ev?key = " " then
+                ev.PreventDefault()
+
+                if enabledRef.Value then
+                  handler ())
+          ]
+          children
       | None -> span [ yield! commonAttrs ] children

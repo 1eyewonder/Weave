@@ -53,3 +53,39 @@ type TooltipTests(server: TestServerFixture) =
     do! focusable.FocusAsync()
     do! this.Expect(tooltip).ToBeVisibleAsync()
   }
+
+  [<Fact>]
+  member this.``Escape dismisses tooltip shown via focus``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.Locator(".weave-tooltip-root").First
+    let tooltip = this.Page.Locator("[role='tooltip']").First
+    let focusable = wrapper.Locator(".weave-button").First
+    do! focusable.FocusAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(tooltip).ToBeHiddenAsync()
+  }
+
+  [<Fact>]
+  member this.``Escape dismisses tooltip shown via hover when trigger is focused``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.Locator(".weave-tooltip-root").First
+    let tooltip = this.Page.Locator("[role='tooltip']").First
+    let focusable = wrapper.Locator(".weave-button").First
+    // Hover to show tooltip, then focus the trigger so Escape has a target
+    do! wrapper.HoverAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+    do! focusable.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(tooltip).ToBeHiddenAsync()
+  }
+
+  [<Fact>]
+  member this.``focus remains on trigger after Escape``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.Locator(".weave-tooltip-root").First
+    let focusable = wrapper.Locator(".weave-button").First
+    do! focusable.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(focusable).ToBeFocusedAsync()
+  }

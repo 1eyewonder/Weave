@@ -144,11 +144,14 @@ let softDependency x y = x ?=> y |> ignore
 let (?=>!) = softDependency
 
 let runTests _ =
+  let runsettings = rootDir </> "tests" </> "playwright.runsettings"
+
   let setParams (defaults: DotNet.TestOptions) = {
     defaults with
         NoBuild = true
         NoRestore = true
         Configuration = DotNet.BuildConfiguration.fromString configuration
+        Settings = Some runsettings
   }
 
   !!testsGlob |> Seq.iter (DotNet.test setParams)

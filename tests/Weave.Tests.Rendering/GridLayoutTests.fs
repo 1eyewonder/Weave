@@ -1,33 +1,16 @@
 module Weave.Tests.Rendering.GridLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type GridLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "grid.html")
-
-  member this.LoadFixture(viewportWidth: int) = task {
-    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("grid")
 
   [<Fact>]
   member this.``xs-6 items each take half the grid width``() = task {
     do! this.LoadFixture 1280
     let! grid = this.Page.Locator("#grid-xs6").BoundingBoxAsync()
-    let! itemA = this.Page.Locator("#item-xs6-a").BoundingBoxAsync()
-    let! itemB = this.Page.Locator("#item-xs6-b").BoundingBoxAsync()
+    and! itemA = this.Page.Locator("#item-xs6-a").BoundingBoxAsync()
+    and! itemB = this.Page.Locator("#item-xs6-b").BoundingBoxAsync()
 
     let expected = grid.Width / 2.0f
 
@@ -46,7 +29,7 @@ type GridLayoutTests() =
   member this.``xs-12 item fills the grid width``() = task {
     do! this.LoadFixture 1280
     let! grid = this.Page.Locator("#grid-xs12").BoundingBoxAsync()
-    let! item = this.Page.Locator("#item-xs12").BoundingBoxAsync()
+    and! item = this.Page.Locator("#item-xs12").BoundingBoxAsync()
 
     Assert.True(
       abs (item.Width - grid.Width) <= 1.0f,
@@ -58,8 +41,8 @@ type GridLayoutTests() =
   member this.``xs-12 sm-6 items stack at xs viewport``() = task {
     do! this.LoadFixture 599
     let! grid = this.Page.Locator("#grid-responsive").BoundingBoxAsync()
-    let! itemA = this.Page.Locator("#item-responsive-a").BoundingBoxAsync()
-    let! itemB = this.Page.Locator("#item-responsive-b").BoundingBoxAsync()
+    and! itemA = this.Page.Locator("#item-responsive-a").BoundingBoxAsync()
+    and! itemB = this.Page.Locator("#item-responsive-b").BoundingBoxAsync()
 
     Assert.True(
       abs (itemA.Width - grid.Width) <= 1.0f,
@@ -79,8 +62,8 @@ type GridLayoutTests() =
   member this.``xs-12 sm-6 items go side by side at sm viewport``() = task {
     do! this.LoadFixture 600
     let! grid = this.Page.Locator("#grid-responsive").BoundingBoxAsync()
-    let! itemA = this.Page.Locator("#item-responsive-a").BoundingBoxAsync()
-    let! itemB = this.Page.Locator("#item-responsive-b").BoundingBoxAsync()
+    and! itemA = this.Page.Locator("#item-responsive-a").BoundingBoxAsync()
+    and! itemB = this.Page.Locator("#item-responsive-b").BoundingBoxAsync()
 
     let expected = grid.Width / 2.0f
 

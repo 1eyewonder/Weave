@@ -1,13 +1,10 @@
 module Weave.Tests.Rendering.ButtonLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 open Weave.Tests.Rendering.ContainmentAssertions
 
 type ButtonLayoutTests() =
-  inherit PageTest()
+  inherit LayoutTestBase("button")
 
   // Boundary pairs for CSS breakpoints: xs/sm (600px), sm/md (960px), md/lg (1280px)
   static member ViewportWidths: obj[][] = [|
@@ -19,50 +16,23 @@ type ButtonLayoutTests() =
     [| 1280 |]
   |]
 
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+  [<Theory>]
+  [<InlineData("#btn-compact", 30.0f)>]
+  [<InlineData("#btn-standard", 40.0f)>]
+  [<InlineData("#btn-spacious", 50.0f)>]
+  member this.``button meets density min height``(buttonId: string, minHeight: float32) = task {
+    do! this.LoadFixture()
+    let! box = this.Page.Locator(buttonId).BoundingBoxAsync()
 
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "button.html")
-
-  member this.LoadFixture(viewportWidth: int) = task {
-    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
-
-  [<Fact>]
-  member this.``compact button min height``() = task {
-    do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-compact").BoundingBoxAsync()
-
-    Assert.True(box.Height >= 30.0f, $"Compact button height {box.Height}px should be >= 30px")
-  }
-
-  [<Fact>]
-  member this.``standard button min height``() = task {
-    do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-standard").BoundingBoxAsync()
-
-    Assert.True(box.Height >= 40.0f, $"Standard button height {box.Height}px should be >= 40px")
-  }
-
-  [<Fact>]
-  member this.``spacious button min height``() = task {
-    do! this.LoadFixture 1280
-    let! box = this.Page.Locator("#btn-spacious").BoundingBoxAsync()
-
-    Assert.True(box.Height >= 50.0f, $"Spacious button height {box.Height}px should be >= 50px")
+    Assert.True(box.Height >= minHeight, $"{buttonId} height {box.Height}px should be >= {minHeight}px")
   }
 
   [<Fact>]
   member this.``density ordering is preserved``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! compact = this.Page.Locator("#btn-compact").BoundingBoxAsync()
-    let! standard = this.Page.Locator("#btn-standard").BoundingBoxAsync()
-    let! spacious = this.Page.Locator("#btn-spacious").BoundingBoxAsync()
+    and! standard = this.Page.Locator("#btn-standard").BoundingBoxAsync()
+    and! spacious = this.Page.Locator("#btn-spacious").BoundingBoxAsync()
 
     Assert.True(
       compact.Height < standard.Height,
@@ -80,7 +50,7 @@ type ButtonLayoutTests() =
   [<InlineData("#btn-standard")>]
   [<InlineData("#btn-spacious")>]
   member this.``filled button has min width``(buttonId: string) = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! box = this.Page.Locator(buttonId).BoundingBoxAsync()
 
     Assert.True(box.Width >= 64.0f, $"{buttonId} width {box.Width}px should be >= 64px")
@@ -88,7 +58,7 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``icon button does not enforce min width``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! box = this.Page.Locator("#btn-icon").BoundingBoxAsync()
 
     Assert.True(
@@ -102,7 +72,7 @@ type ButtonLayoutTests() =
   member this.``full width button fills container``(viewportWidth: int) = task {
     do! this.LoadFixture(viewportWidth)
     let! containerBox = this.Page.Locator("#full-width-container").BoundingBoxAsync()
-    let! buttonBox = this.Page.Locator("#btn-full-width").BoundingBoxAsync()
+    and! buttonBox = this.Page.Locator("#btn-full-width").BoundingBoxAsync()
 
     Assert.True(
       abs (buttonBox.Width - containerBox.Width) <= 1.0f,
@@ -136,7 +106,7 @@ type ButtonLayoutTests() =
   [<InlineData("light")>]
   [<InlineData("dark")>]
   member this.``button layout is stable across themes``(theme: string) = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! lightBox = this.Page.Locator("#btn-standard").BoundingBoxAsync()
     let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
     ()
@@ -155,10 +125,10 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``standard button height is consistent across variants``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! filled = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    let! outlined = this.Page.Locator("#btn-outlined").BoundingBoxAsync()
-    let! text = this.Page.Locator("#btn-text").BoundingBoxAsync()
+    and! outlined = this.Page.Locator("#btn-outlined").BoundingBoxAsync()
+    and! text = this.Page.Locator("#btn-text").BoundingBoxAsync()
 
     Assert.True(
       abs (filled.Height - outlined.Height) <= 1.0f,
@@ -176,7 +146,7 @@ type ButtonLayoutTests() =
   [<InlineData("#btn-error")>]
   [<InlineData("#btn-success")>]
   member this.``color variant buttons have opaque background``(buttonId: string) = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
 
     let! bg = this.Page.Locator(buttonId).EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
@@ -188,10 +158,10 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``color variant button height matches default filled``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! filled = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    let! primary = this.Page.Locator("#btn-primary").BoundingBoxAsync()
-    let! error = this.Page.Locator("#btn-error").BoundingBoxAsync()
+    and! primary = this.Page.Locator("#btn-primary").BoundingBoxAsync()
+    and! error = this.Page.Locator("#btn-error").BoundingBoxAsync()
 
     Assert.True(
       abs (filled.Height - primary.Height) <= 1.0f,
@@ -206,7 +176,7 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``outlined color variant has visible border``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
 
     let! border =
       this.Page
@@ -218,7 +188,7 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``disabled button has pointer-events none``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
 
     let! pointerEvents =
       this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).pointerEvents")
@@ -228,7 +198,7 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``disabled button has default cursor``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
 
     let! cursor =
       this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).cursor")
@@ -238,7 +208,7 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``disabled button has no box shadow``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
 
     let! shadow =
       this.Page.Locator("#btn-disabled").EvaluateAsync<string>("el => getComputedStyle(el).boxShadow")
@@ -248,40 +218,40 @@ type ButtonLayoutTests() =
 
   [<Fact>]
   member this.``label is contained within filled button``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
     assertContainedWithin "filled button" "label" parentBox childBox
   }
 
   [<Fact>]
   member this.``label is contained within compact button``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-compact").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#btn-compact .weave-button__label").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#btn-compact .weave-button__label").BoundingBoxAsync()
     assertContainedWithin "compact button" "label" parentBox childBox
   }
 
   [<Fact>]
   member this.``icon content is contained within icon button``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-icon").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
     assertContainedWithin "icon button" "icon content" parentBox childBox
   }
 
   [<Fact(Skip = "Requires component update: label has vertical padding inside button")>]
   member this.``label fills button height``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
     assertFillsHeight "filled button" "label" parentBox childBox
   }
 
   [<Fact(Skip = "Requires component update: icon span has vertical padding inside icon button")>]
   member this.``icon fills icon button height``() = task {
-    do! this.LoadFixture 1280
+    do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-icon").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
     assertFillsHeight "icon button" "icon" parentBox childBox
   }

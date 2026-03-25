@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slider Layout Tests</title>
+  <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+  <style>
+    body { margin: 0; padding: 16px; font-family: sans-serif; }
+    .test-container { width: 400px; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+  <!-- Basic slider at 50% -->
+  <div class="test-container">
+    <div id="slider-basic" class="weave-slider">
+      <div id="slider-track-container" class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div id="slider-fill" class="weave-slider__fill" style="width: 50%"></div>
+        <div id="slider-thumb" class="weave-slider__thumb" style="left: 50%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider at 0% -->
+  <div class="test-container">
+    <div id="slider-zero" class="weave-slider">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div id="slider-fill-zero" class="weave-slider__fill" style="width: 0%"></div>
+        <div id="slider-thumb-zero" class="weave-slider__thumb" style="left: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider at 100% -->
+  <div class="test-container">
+    <div id="slider-full" class="weave-slider">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div id="slider-fill-full" class="weave-slider__fill" style="width: 100%"></div>
+        <div id="slider-thumb-full" class="weave-slider__thumb" style="left: 100%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider with label -->
+  <div class="test-container">
+    <div id="slider-labeled" class="weave-slider">
+      <div id="slider-label" class="weave-slider__label">Volume</div>
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div class="weave-slider__fill" style="width: 75%"></div>
+        <div class="weave-slider__thumb" style="left: 75%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disabled slider -->
+  <div class="test-container">
+    <div id="slider-disabled" class="weave-slider weave-slider--disabled">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div class="weave-slider__fill" style="width: 30%"></div>
+        <div class="weave-slider__thumb" style="left: 30%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider with tick marks -->
+  <div class="test-container">
+    <div id="slider-ticks" class="weave-slider">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div class="weave-slider__fill" style="width: 50%"></div>
+        <div id="slider-tick-container" class="weave-slider__tick-container">
+          <div class="weave-slider__tick weave-slider__tick--active" style="left: 0%"></div>
+          <div class="weave-slider__tick weave-slider__tick--active" style="left: 25%"></div>
+          <div class="weave-slider__tick weave-slider__tick--active" style="left: 50%"></div>
+          <div class="weave-slider__tick" style="left: 75%"></div>
+          <div class="weave-slider__tick" style="left: 100%"></div>
+        </div>
+        <div class="weave-slider__thumb" style="left: 50%"></div>
+      </div>
+      <div id="slider-tick-labels" class="weave-slider__tick-labels">
+        <div class="weave-slider__tick-label">0</div>
+        <div class="weave-slider__tick-label">25</div>
+        <div class="weave-slider__tick-label">50</div>
+        <div class="weave-slider__tick-label">75</div>
+        <div class="weave-slider__tick-label">100</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width slider in container -->
+  <div id="slider-full-width-container" style="width: 600px;">
+    <div id="slider-full-width" class="weave-slider">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div class="weave-slider__fill" style="width: 50%"></div>
+        <div class="weave-slider__thumb" style="left: 50%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color variant -->
+  <div class="test-container" style="margin-top: 24px;">
+    <div id="slider-primary" class="weave-slider weave-slider--primary">
+      <div class="weave-slider__track-container" role="slider" tabindex="0"
+           aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+        <div class="weave-slider__track"></div>
+        <div class="weave-slider__fill" style="width: 60%"></div>
+        <div class="weave-slider__thumb" style="left: 60%"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

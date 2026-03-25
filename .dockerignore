@@ -1,0 +1,31 @@
+# Build outputs
+bin/
+**/bin/
+**/obj/
+
+# Node
+node_modules/
+.yarn/cache/
+.yarn/unplugged/
+.pnp.*
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CI/CD
+.github/
+
+# Claude Code worktrees
+.claude/worktrees/
+
+# Docker (prevent recursive context)
+Dockerfile*
+docker-compose*.yml

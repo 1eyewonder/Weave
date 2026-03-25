@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.ChipSetLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type ChipSetLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "chipset.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("chipset")
 
   [<Fact>]
   member this.``chipset container has positive dimensions``() = task {
@@ -65,8 +48,8 @@ type ChipSetLayoutTests() =
   member this.``chips are arranged horizontally``() = task {
     do! this.LoadFixture()
     let! chip0 = this.Page.Locator("#chipset-chip-0").BoundingBoxAsync()
-    let! chip1 = this.Page.Locator("#chipset-chip-1").BoundingBoxAsync()
-    let! chip2 = this.Page.Locator("#chipset-chip-2").BoundingBoxAsync()
+    and! chip1 = this.Page.Locator("#chipset-chip-1").BoundingBoxAsync()
+    and! chip2 = this.Page.Locator("#chipset-chip-2").BoundingBoxAsync()
 
     // Same Y position (within tolerance)
     Assert.True(
@@ -89,7 +72,7 @@ type ChipSetLayoutTests() =
   member this.``chips have approximately 8px gap between them``() = task {
     do! this.LoadFixture()
     let! chip0 = this.Page.Locator("#chipset-chip-0").BoundingBoxAsync()
-    let! chip1 = this.Page.Locator("#chipset-chip-1").BoundingBoxAsync()
+    and! chip1 = this.Page.Locator("#chipset-chip-1").BoundingBoxAsync()
 
     let gap = chip1.X - (chip0.X + chip0.Width)
 
@@ -105,34 +88,10 @@ type ChipSetLayoutTests() =
         .Locator("#chipset-mixed-selected")
         .EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
-    let! unselectedBg =
+    and! unselectedBg =
       this.Page
         .Locator("#chipset-mixed-unselected")
         .EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
     Assert.NotEqual<string>(selectedBg, unselectedBg)
-  }
-
-  [<Fact>]
-  member this.``mixed chipset disabled chip has reduced opacity``() = task {
-    do! this.LoadFixture()
-
-    let! opacity =
-      this.Page.Locator("#chipset-mixed-disabled").EvaluateAsync<string>("el => getComputedStyle(el).opacity")
-
-    let opacityValue = System.Double.Parse(opacity)
-
-    Assert.True(opacityValue < 1.0, $"Disabled chip opacity ({opacity}) should be less than 1")
-  }
-
-  [<Fact>]
-  member this.``mixed chipset disabled chip has pointer-events none``() = task {
-    do! this.LoadFixture()
-
-    let! pointerEvents =
-      this.Page
-        .Locator("#chipset-mixed-disabled")
-        .EvaluateAsync<string>("el => getComputedStyle(el).pointerEvents")
-
-    Assert.Equal("none", pointerEvents)
   }

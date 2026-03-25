@@ -66,7 +66,6 @@ dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj
 
 ```bash
 dotnet fantomas .              # format all files
-dotnet fantomas --check .      # verify formatting (what CI runs)
 ```
 
 **Other FAKE build targets:** `Clean`, `Restore`, `Build`, `BuildDocs`, `Analyze`, `CheckFormat`
@@ -111,7 +110,7 @@ build/
 
 See `weave-component-conventions.skill.md` for full patterns and code templates. The essentials:
 
-- `[<JavaScript>]` on every module and type (required for WebSharper transpilation)
+- `[<JavaScript>]` on every top level module and type (required for WebSharper transpilation). Child modules/types inherit from parents, so only the root module and root types need the attribute.
 - **Static member functions use camelCase** (e.g., `Button.create`, `IconButton.create`), not PascalCase
 - **No styling parameters** on `create` — callers pass them via `?attrs` using the component's style modules
 - `?attrs: Attr list` is always the last optional parameter; defaults to `[]`; `yield! attrs` comes last

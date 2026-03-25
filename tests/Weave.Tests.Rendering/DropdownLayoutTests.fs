@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.DropdownLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type DropdownLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "dropdown.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("dropdown")
 
   [<Fact>]
   member this.``dropdown list has positive dimensions``() = task {
@@ -35,8 +18,8 @@ type DropdownLayoutTests() =
   member this.``items stack vertically``() = task {
     do! this.LoadFixture()
     let! item1 = this.Page.Locator("#dropdown-item-1").BoundingBoxAsync()
-    let! item2 = this.Page.Locator("#dropdown-item-2").BoundingBoxAsync()
-    let! item3 = this.Page.Locator("#dropdown-item-3").BoundingBoxAsync()
+    and! item2 = this.Page.Locator("#dropdown-item-2").BoundingBoxAsync()
+    and! item3 = this.Page.Locator("#dropdown-item-3").BoundingBoxAsync()
 
     Assert.True(item1.Y < item2.Y, $"Item 1 (y={item1.Y}) should be above item 2 (y={item2.Y})")
 
@@ -47,8 +30,8 @@ type DropdownLayoutTests() =
   member this.``each item has positive height``() = task {
     do! this.LoadFixture()
     let! item1 = this.Page.Locator("#dropdown-item-1").BoundingBoxAsync()
-    let! item2 = this.Page.Locator("#dropdown-item-2").BoundingBoxAsync()
-    let! item3 = this.Page.Locator("#dropdown-item-3").BoundingBoxAsync()
+    and! item2 = this.Page.Locator("#dropdown-item-2").BoundingBoxAsync()
+    and! item3 = this.Page.Locator("#dropdown-item-3").BoundingBoxAsync()
 
     Assert.True(item1.Height > 0.0f, $"Item 1 height {item1.Height}px should be > 0")
     Assert.True(item2.Height > 0.0f, $"Item 2 height {item2.Height}px should be > 0")
@@ -59,7 +42,7 @@ type DropdownLayoutTests() =
   member this.``dropdown list is positioned below trigger``() = task {
     do! this.LoadFixture()
     let! trigger = this.Page.Locator("#dropdown-open > button").BoundingBoxAsync()
-    let! list = this.Page.Locator("#dropdown-list").BoundingBoxAsync()
+    and! list = this.Page.Locator("#dropdown-list").BoundingBoxAsync()
 
     let triggerBottom = trigger.Y + trigger.Height
 
@@ -81,7 +64,7 @@ type DropdownLayoutTests() =
   member this.``anchor-origin-top-right positions list at trigger top``() = task {
     do! this.LoadFixture()
     let! trigger = this.Page.Locator("#dropdown-anchor-top-right > button").BoundingBoxAsync()
-    let! list = this.Page.Locator("#dropdown-list-top-right").BoundingBoxAsync()
+    and! list = this.Page.Locator("#dropdown-list-top-right").BoundingBoxAsync()
 
     // With anchor-origin-top-right + transform-origin-top-right, list aligns to trigger's top-right
     Assert.True(
@@ -94,10 +77,7 @@ type DropdownLayoutTests() =
   member this.``disabled dropdown item has pointer-events none``() = task {
     do! this.LoadFixture()
 
-    let! pointerEvents =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('.weave-dropdown__item--disabled')).pointerEvents"
-      )
+    let! pointerEvents = this.ComputedStyle(".weave-dropdown__item--disabled", "pointerEvents")
 
     Assert.Equal("none", pointerEvents)
   }

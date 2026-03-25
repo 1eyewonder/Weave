@@ -1,32 +1,15 @@
 module Weave.Tests.Rendering.DividerLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type DividerLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "divider.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("divider")
 
   [<Fact>]
   member this.``horizontal divider spans its container width``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#divider-h-container").BoundingBoxAsync()
-    let! divider = this.Page.Locator("#divider-horizontal").BoundingBoxAsync()
+    and! divider = this.Page.Locator("#divider-horizontal").BoundingBoxAsync()
 
     Assert.True(
       abs (divider.Width - container.Width) <= 1.0f,
@@ -56,7 +39,7 @@ type DividerLayoutTests() =
   member this.``vertical divider fills its flex container height``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#divider-v-container").BoundingBoxAsync()
-    let! divider = this.Page.Locator("#divider-vertical").BoundingBoxAsync()
+    and! divider = this.Page.Locator("#divider-vertical").BoundingBoxAsync()
 
     Assert.True(
       abs (divider.Height - container.Height) <= 1.0f,
@@ -68,7 +51,7 @@ type DividerLayoutTests() =
   member this.``middle variant has horizontal margins``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#divider-middle-container").BoundingBoxAsync()
-    let! divider = this.Page.Locator("#divider-middle").BoundingBoxAsync()
+    and! divider = this.Page.Locator("#divider-middle").BoundingBoxAsync()
 
     let leftMargin = divider.X - container.X
     let rightMargin = (container.X + container.Width) - (divider.X + divider.Width)
@@ -81,7 +64,7 @@ type DividerLayoutTests() =
   member this.``inset variant has large left margin``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#divider-inset-container").BoundingBoxAsync()
-    let! divider = this.Page.Locator("#divider-inset").BoundingBoxAsync()
+    and! divider = this.Page.Locator("#divider-inset").BoundingBoxAsync()
 
     let leftMargin = divider.X - container.X
 

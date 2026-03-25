@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContainmentAssertions.fs" />
+    <Compile Include="LayoutTestBase.fs" />
     <Compile Include="AlertLayoutTests.fs" />
     <Compile Include="ButtonLayoutTests.fs" />
     <Compile Include="ButtonGroupLayoutTests.fs" />
@@ -33,7 +34,9 @@
     <Compile Include="ChipLayoutTests.fs" />
     <Compile Include="ChipSetLayoutTests.fs" />
     <Compile Include="SelectLayoutTests.fs" />
+    <Compile Include="SliderLayoutTests.fs" />
     <Compile Include="ElevationStackingTests.fs" />
+    <Compile Include="SizingConsistencyTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />

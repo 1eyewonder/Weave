@@ -1,34 +1,15 @@
 module Weave.Tests.Rendering.FieldLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type FieldLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "field.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("field")
 
   [<Fact>]
   member this.``floated label has scale transform applied``() = task {
     do! this.LoadFixture()
 
-    let! transform =
-      this.Page.EvaluateAsync<string>
-        "() => getComputedStyle(document.querySelector('#label-floated')).transform"
+    let! transform = this.ComputedStyle("#label-floated", "transform")
 
     // scale(0.75) is serialized as a matrix: matrix(0.75, 0, 0, 0.75, tx, ty)
     Assert.Contains("0.75", transform)
@@ -38,9 +19,7 @@ type FieldLayoutTests() =
   member this.``non-floated label does not have scale transform``() = task {
     do! this.LoadFixture()
 
-    let! transform =
-      this.Page.EvaluateAsync<string>
-        "() => getComputedStyle(document.querySelector('#label-standard')).transform"
+    let! transform = this.ComputedStyle("#label-standard", "transform")
 
     // Non-floated label should use scale(1), serialized as matrix(1, 0, 0, 1, tx, ty)
     Assert.DoesNotContain("0.75", transform)
@@ -50,16 +29,14 @@ type FieldLayoutTests() =
   member this.``floated label is positioned above non-floated label``() = task {
     do! this.LoadFixture()
     let! standard = this.Page.Locator("#label-standard").BoundingBoxAsync()
-    let! floated = this.Page.Locator("#label-floated").BoundingBoxAsync()
+    and! floated = this.Page.Locator("#label-floated").BoundingBoxAsync()
 
-    // Floated label renders higher (lower Y) relative to its own field control
-    // Compare Y relative to each field control
-    let! standardControlY =
+    and! standardControlY =
       this.Page.EvaluateAsync<float>(
         "() => document.querySelector('#field-standard .weave-field__control').getBoundingClientRect().top"
       )
 
-    let! floatedControlY =
+    and! floatedControlY =
       this.Page.EvaluateAsync<float>(
         "() => document.querySelector('#field-floated .weave-field__control').getBoundingClientRect().top"
       )
@@ -77,7 +54,7 @@ type FieldLayoutTests() =
   member this.``full-width field fills its container``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#full-width-container").BoundingBoxAsync()
-    let! field = this.Page.Locator("#field-full-width").BoundingBoxAsync()
+    and! field = this.Page.Locator("#field-full-width").BoundingBoxAsync()
 
     Assert.True(
       abs (field.Width - container.Width) <= 1.0f,
@@ -89,10 +66,7 @@ type FieldLayoutTests() =
   member this.``help text is hidden by default``() = task {
     do! this.LoadFixture()
 
-    let! maxHeight =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#help-text')).maxHeight"
-      )
+    let! maxHeight = this.ComputedStyle("#help-text", "maxHeight")
 
     Assert.Equal("0px", maxHeight)
   }
@@ -101,17 +75,9 @@ type FieldLayoutTests() =
   member this.``help text is visible when show-help-text modifier is applied``() = task {
     do! this.LoadFixture()
 
-    let! maxHeight =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#help-text-shown')).maxHeight"
-      )
+    let! maxHeight = this.ComputedStyle("#help-text-shown", "maxHeight")
 
     Assert.True(maxHeight <> "0px")
-  }
-
-  member private this.SetTheme(theme: string) = task {
-    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
-    ()
   }
 
   [<Theory>]
@@ -121,10 +87,7 @@ type FieldLayoutTests() =
     do! this.LoadFixture()
     do! this.SetTheme(theme)
 
-    let! borderColor =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#field-outlined .weave-field__outline')).borderColor"
-      )
+    let! borderColor = this.ComputedStyle("#field-outlined .weave-field__outline", "borderColor")
 
     Assert.False(
       borderColor = "transparent" || borderColor = "rgba(0, 0, 0, 0)",

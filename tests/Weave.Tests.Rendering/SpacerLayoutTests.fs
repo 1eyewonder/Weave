@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.SpacerLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type SpacerLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "spacer.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("spacer")
 
   [<Fact>]
   member this.``spacer occupies space between siblings``() = task {
@@ -34,7 +17,7 @@ type SpacerLayoutTests() =
   member this.``spacer pushes right item to end of container``() = task {
     do! this.LoadFixture()
     let! containerBox = this.Page.Locator("#flex-row").BoundingBoxAsync()
-    let! rightBox = this.Page.Locator("#item-right").BoundingBoxAsync()
+    and! rightBox = this.Page.Locator("#item-right").BoundingBoxAsync()
 
     let rightEdge = rightBox.X + rightBox.Width
     let containerRight = containerBox.X + containerBox.Width
@@ -49,9 +32,9 @@ type SpacerLayoutTests() =
   member this.``total layout width equals container width``() = task {
     do! this.LoadFixture()
     let! containerBox = this.Page.Locator("#flex-row").BoundingBoxAsync()
-    let! leftBox = this.Page.Locator("#item-left").BoundingBoxAsync()
-    let! spacerBox = this.Page.Locator("#spacer").BoundingBoxAsync()
-    let! rightBox = this.Page.Locator("#item-right").BoundingBoxAsync()
+    and! leftBox = this.Page.Locator("#item-left").BoundingBoxAsync()
+    and! spacerBox = this.Page.Locator("#spacer").BoundingBoxAsync()
+    and! rightBox = this.Page.Locator("#item-right").BoundingBoxAsync()
 
     let totalWidth = leftBox.Width + spacerBox.Width + rightBox.Width
 
@@ -65,7 +48,7 @@ type SpacerLayoutTests() =
   member this.``without spacer items are adjacent``() = task {
     do! this.LoadFixture()
     let! leftBox = this.Page.Locator("#no-spacer-left").BoundingBoxAsync()
-    let! rightBox = this.Page.Locator("#no-spacer-right").BoundingBoxAsync()
+    and! rightBox = this.Page.Locator("#no-spacer-right").BoundingBoxAsync()
 
     let gap = rightBox.X - (leftBox.X + leftBox.Width)
 

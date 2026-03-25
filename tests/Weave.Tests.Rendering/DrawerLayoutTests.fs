@@ -1,32 +1,9 @@
 module Weave.Tests.Rendering.DrawerLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type DrawerLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "drawer.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
-
-  member this.LoadFixture(viewportWidth: int) = task {
-    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("drawer")
 
   [<Fact>]
   member this.``drawer has positive height``() = task {
@@ -37,18 +14,31 @@ type DrawerLayoutTests() =
   }
 
   [<Fact>]
-  member this.``drawer has positive width``() = task {
+  member this.``drawer width comes from CSS custom property``() = task {
     do! this.LoadFixture()
     let! box = this.Page.Locator("#drawer-left").BoundingBoxAsync()
 
-    Assert.True(box.Width > 0.0f, $"Drawer width {box.Width}px should be > 0")
+    // Width should match --drawer-width-left (256px) set in the fixture's :root
+    Assert.True(
+      abs (box.Width - 256.0f) <= 1.0f,
+      $"Drawer width {box.Width}px should match --drawer-width-left (256px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``drawer has position absolute from CSS``() = task {
+    do! this.LoadFixture()
+
+    let! position = this.ComputedStyle("#drawer-left", "position")
+
+    Assert.Equal("absolute", position)
   }
 
   [<Fact>]
   member this.``drawer is to the left of main content``() = task {
     do! this.LoadFixture()
     let! drawerBox = this.Page.Locator("#drawer-left").BoundingBoxAsync()
-    let! mainBox = this.Page.Locator("#drawer-container .weave-main-content").BoundingBoxAsync()
+    and! mainBox = this.Page.Locator("#drawer-container .weave-main-content").BoundingBoxAsync()
 
     Assert.True(
       drawerBox.X < mainBox.X,
@@ -99,7 +89,7 @@ type DrawerLayoutTests() =
   member this.``right drawer is positioned on the right``() = task {
     do! this.LoadFixture()
     let! containerBox = this.Page.Locator("#drawer-right-container").BoundingBoxAsync()
-    let! drawerBox = this.Page.Locator("#drawer-right").BoundingBoxAsync()
+    and! drawerBox = this.Page.Locator("#drawer-right").BoundingBoxAsync()
 
     // Right drawer should be at or near the right edge of its container
     let drawerRightEdge = drawerBox.X + drawerBox.Width

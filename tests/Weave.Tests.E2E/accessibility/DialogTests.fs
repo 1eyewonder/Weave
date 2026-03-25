@@ -69,12 +69,8 @@ type DialogTests(server: TestServerFixture) =
     for _ in 1..10 do
       do! this.Page.Keyboard.PressAsync("Tab")
 
-    let! isInsideDialog =
-      this.Page.EvaluateAsync<bool>(
-        "() => document.querySelector('.weave-dialog__window').contains(document.activeElement)"
-      )
-
-    Assert.True(isInsideDialog, "Focus should remain inside the dialog window")
+    let focusedInsideDialog = this.Page.Locator(".weave-dialog__window :focus")
+    do! this.Expect(focusedInsideDialog).ToHaveCountAsync(1)
   }
 
   [<Fact>]

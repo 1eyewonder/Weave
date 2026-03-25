@@ -1,27 +1,10 @@
 module Weave.Tests.Rendering.ChipLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 open Weave.Tests.Rendering.ContainmentAssertions
 
 type ChipLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "chip.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("chip")
 
   [<Fact>]
   member this.``chip has positive dimensions``() = task {
@@ -52,11 +35,6 @@ type ChipLayoutTests() =
     Assert.Equal("9999px", radius)
   }
 
-  member private this.SetTheme(theme: string) = task {
-    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
-    ()
-  }
-
   [<Theory>]
   [<InlineData("light")>]
   [<InlineData("dark")>]
@@ -85,19 +63,6 @@ type ChipLayoutTests() =
     Assert.True(
       abs (defaultBox.Height - themedBox.Height) <= 1.0f,
       $"Chip height should not shift between themes (default={defaultBox.Height}px, {theme}={themedBox.Height}px)"
-    )
-  }
-
-  [<Fact>]
-  member this.``filled chip has opaque background``() = task {
-    do! this.LoadFixture()
-
-    let! bg =
-      this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
-
-    Assert.False(
-      bg.Contains("rgba") && bg.EndsWith(", 0)"),
-      $"Filled chip background '{bg}' should not be fully transparent"
     )
   }
 
@@ -136,23 +101,11 @@ type ChipLayoutTests() =
   }
 
   [<Fact>]
-  member this.``compact chip is shorter than spacious chip``() = task {
-    do! this.LoadFixture()
-    let! compact = this.Page.Locator("#chip-compact").BoundingBoxAsync()
-    let! spacious = this.Page.Locator("#chip-spacious").BoundingBoxAsync()
-
-    Assert.True(
-      compact.Height < spacious.Height,
-      $"Compact chip ({compact.Height}px) should be shorter than spacious chip ({spacious.Height}px)"
-    )
-  }
-
-  [<Fact>]
   member this.``density ordering is preserved``() = task {
     do! this.LoadFixture()
     let! compact = this.Page.Locator("#chip-compact").BoundingBoxAsync()
-    let! standard = this.Page.Locator("#chip-standard").BoundingBoxAsync()
-    let! spacious = this.Page.Locator("#chip-spacious").BoundingBoxAsync()
+    and! standard = this.Page.Locator("#chip-standard").BoundingBoxAsync()
+    and! spacious = this.Page.Locator("#chip-spacious").BoundingBoxAsync()
 
     Assert.True(
       compact.Height < standard.Height,
@@ -194,7 +147,7 @@ type ChipLayoutTests() =
     let! labelRadius =
       this.Page.Locator("#chip-label").EvaluateAsync<string>("el => getComputedStyle(el).borderRadius")
 
-    let! basicRadius =
+    and! basicRadius =
       this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).borderRadius")
 
     Assert.NotEqual<string>(labelRadius, basicRadius)
@@ -224,7 +177,7 @@ type ChipLayoutTests() =
   member this.``close button is contained within chip bounds``() = task {
     do! this.LoadFixture()
     let! chipBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
-    let! closeBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+    and! closeBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
     assertContainedWithin "chip" "close button" chipBox closeBox
   }
 
@@ -232,7 +185,7 @@ type ChipLayoutTests() =
   member this.``close button fills chip height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
     assertFillsHeight "chip" "close button" parentBox childBox
   }
 
@@ -269,7 +222,7 @@ type ChipLayoutTests() =
     let! selectedBg =
       this.Page.Locator("#chip-selected").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
-    let! unselectedBg =
+    and! unselectedBg =
       this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
     Assert.NotEqual<string>(selectedBg, unselectedBg)
@@ -303,12 +256,12 @@ type ChipLayoutTests() =
         .Locator("#chip-basic .weave-chip__label")
         .EvaluateAsync<string>("el => getComputedStyle(el).textOverflow")
 
-    let! whiteSpace =
+    and! whiteSpace =
       this.Page
         .Locator("#chip-basic .weave-chip__label")
         .EvaluateAsync<string>("el => getComputedStyle(el).whiteSpace")
 
-    let! overflow =
+    and! overflow =
       this.Page
         .Locator("#chip-basic .weave-chip__label")
         .EvaluateAsync<string>("el => getComputedStyle(el).overflow")

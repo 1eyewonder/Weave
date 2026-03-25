@@ -1,27 +1,10 @@
 module Weave.Tests.Rendering.SelectLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 open Weave.Tests.Rendering.ContainmentAssertions
 
 type SelectLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "select.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("select")
 
   [<Fact>]
   member this.``select root has positive dimensions``() = task {
@@ -36,15 +19,8 @@ type SelectLayoutTests() =
   member this.``closed popover is hidden``() = task {
     do! this.LoadFixture()
 
-    let! opacity =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-closed .weave-select__popover')).opacity"
-      )
-
-    let! pointerEvents =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-closed .weave-select__popover')).pointerEvents"
-      )
+    let! opacity = this.ComputedStyle("#select-closed .weave-select__popover", "opacity")
+    and! pointerEvents = this.ComputedStyle("#select-closed .weave-select__popover", "pointerEvents")
 
     Assert.Equal("0", opacity)
     Assert.Equal("none", pointerEvents)
@@ -54,15 +30,8 @@ type SelectLayoutTests() =
   member this.``open popover is visible and interactive``() = task {
     do! this.LoadFixture()
 
-    let! opacity =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-open .weave-select__popover')).opacity"
-      )
-
-    let! pointerEvents =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-open .weave-select__popover')).pointerEvents"
-      )
+    let! opacity = this.ComputedStyle("#select-open .weave-select__popover", "opacity")
+    and! pointerEvents = this.ComputedStyle("#select-open .weave-select__popover", "pointerEvents")
 
     Assert.Equal("1", opacity)
     Assert.Equal("auto", pointerEvents)
@@ -72,7 +41,7 @@ type SelectLayoutTests() =
   member this.``popover is positioned below the select``() = task {
     do! this.LoadFixture()
     let! root = this.Page.Locator("#select-open").BoundingBoxAsync()
-    let! popover = this.Page.Locator("#select-open .weave-select__popover").BoundingBoxAsync()
+    and! popover = this.Page.Locator("#select-open .weave-select__popover").BoundingBoxAsync()
 
     let rootBottom = root.Y + root.Height
 
@@ -86,8 +55,8 @@ type SelectLayoutTests() =
   member this.``items stack vertically``() = task {
     do! this.LoadFixture()
     let! item1 = this.Page.Locator("#select-item-1").BoundingBoxAsync()
-    let! item2 = this.Page.Locator("#select-item-2").BoundingBoxAsync()
-    let! item3 = this.Page.Locator("#select-item-3").BoundingBoxAsync()
+    and! item2 = this.Page.Locator("#select-item-2").BoundingBoxAsync()
+    and! item3 = this.Page.Locator("#select-item-3").BoundingBoxAsync()
 
     Assert.True(item1.Y < item2.Y, $"Item 1 (y={item1.Y}) should be above item 2 (y={item2.Y})")
     Assert.True(item2.Y < item3.Y, $"Item 2 (y={item2.Y}) should be above item 3 (y={item3.Y})")
@@ -97,10 +66,7 @@ type SelectLayoutTests() =
   member this.``disabled select has pointer-events none``() = task {
     do! this.LoadFixture()
 
-    let! pointerEvents =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-disabled')).pointerEvents"
-      )
+    let! pointerEvents = this.ComputedStyle("#select-disabled", "pointerEvents")
 
     Assert.Equal("none", pointerEvents)
   }
@@ -109,10 +75,7 @@ type SelectLayoutTests() =
   member this.``disabled item has pointer-events none``() = task {
     do! this.LoadFixture()
 
-    let! pointerEvents =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-open .weave-select__item--disabled')).pointerEvents"
-      )
+    let! pointerEvents = this.ComputedStyle("#select-open .weave-select__item--disabled", "pointerEvents")
 
     Assert.Equal("none", pointerEvents)
   }
@@ -121,7 +84,7 @@ type SelectLayoutTests() =
   member this.``full-width select fills its container``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#select-full-width-container").BoundingBoxAsync()
-    let! select = this.Page.Locator("#select-full-width").BoundingBoxAsync()
+    and! select = this.Page.Locator("#select-full-width").BoundingBoxAsync()
 
     Assert.True(
       abs (select.Width - container.Width) <= 1.0f,
@@ -133,10 +96,7 @@ type SelectLayoutTests() =
   member this.``fit-content sizer is in flow``() = task {
     do! this.LoadFixture()
 
-    let! position =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-fit-content .weave-select__sizer')).position"
-      )
+    let! position = this.ComputedStyle("#select-fit-content .weave-select__sizer", "position")
 
     Assert.Equal("relative", position)
   }
@@ -145,15 +105,8 @@ type SelectLayoutTests() =
   member this.``default sizer is out of flow and hidden``() = task {
     do! this.LoadFixture()
 
-    let! position =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-closed .weave-select__sizer')).position"
-      )
-
-    let! visibility =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-closed .weave-select__sizer')).visibility"
-      )
+    let! position = this.ComputedStyle("#select-closed .weave-select__sizer", "position")
+    and! visibility = this.ComputedStyle("#select-closed .weave-select__sizer", "visibility")
 
     Assert.Equal("absolute", position)
     Assert.Equal("hidden", visibility)
@@ -163,10 +116,7 @@ type SelectLayoutTests() =
   member this.``clear button is hidden by default``() = task {
     do! this.LoadFixture()
 
-    let! display =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-closed .weave-select__clear')).display"
-      )
+    let! display = this.ComputedStyle("#select-closed .weave-select__clear", "display")
 
     Assert.Equal("none", display)
   }
@@ -175,10 +125,7 @@ type SelectLayoutTests() =
   member this.``clear button is visible when clearable with value``() = task {
     do! this.LoadFixture()
 
-    let! display =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-clearable-value .weave-select__clear')).display"
-      )
+    let! display = this.ComputedStyle("#select-clearable-value .weave-select__clear", "display")
 
     Assert.NotEqual<string>("none", display)
   }
@@ -187,10 +134,7 @@ type SelectLayoutTests() =
   member this.``readonly select hides the popover``() = task {
     do! this.LoadFixture()
 
-    let! display =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-readonly .weave-select__popover')).display"
-      )
+    let! display = this.ComputedStyle("#select-readonly .weave-select__popover", "display")
 
     Assert.Equal("none", display)
   }
@@ -199,7 +143,7 @@ type SelectLayoutTests() =
   member this.``search input sits above the list``() = task {
     do! this.LoadFixture()
     let! search = this.Page.Locator("#select-searchable .weave-select__search").BoundingBoxAsync()
-    let! list = this.Page.Locator("#select-searchable .weave-select__list").BoundingBoxAsync()
+    and! list = this.Page.Locator("#select-searchable .weave-select__list").BoundingBoxAsync()
 
     let searchBottom = search.Y + search.Height
 
@@ -213,8 +157,8 @@ type SelectLayoutTests() =
   member this.``select-all and divider are above the list``() = task {
     do! this.LoadFixture()
     let! selectAll = this.Page.Locator("#select-multi-open .weave-select__select-all").BoundingBoxAsync()
-    let! divider = this.Page.Locator("#select-multi-open .weave-select__divider").BoundingBoxAsync()
-    let! list = this.Page.Locator("#select-multi-open .weave-select__list").BoundingBoxAsync()
+    and! divider = this.Page.Locator("#select-multi-open .weave-select__divider").BoundingBoxAsync()
+    and! list = this.Page.Locator("#select-multi-open .weave-select__list").BoundingBoxAsync()
 
     Assert.True(
       selectAll.Y < divider.Y,
@@ -236,15 +180,9 @@ type SelectLayoutTests() =
   member this.``no-items message is centered``() = task {
     do! this.LoadFixture()
 
-    let! justifyContent =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-no-items .weave-select__no-items')).justifyContent"
-      )
+    let! justifyContent = this.ComputedStyle("#select-no-items .weave-select__no-items", "justifyContent")
 
-    let! alignItems =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#select-no-items .weave-select__no-items')).alignItems"
-      )
+    and! alignItems = this.ComputedStyle("#select-no-items .weave-select__no-items", "alignItems")
 
     Assert.Equal("center", justifyContent)
     Assert.Equal("center", alignItems)
@@ -270,7 +208,7 @@ type SelectLayoutTests() =
   member this.``chevron is contained within select root``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#select-closed").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#select-closed .weave-select__chevron").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#select-closed .weave-select__chevron").BoundingBoxAsync()
     assertContainedWithin "select root" "chevron" parentBox childBox
   }
 
@@ -278,7 +216,7 @@ type SelectLayoutTests() =
   member this.``clear button is contained within select root``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#select-clearable-value").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#select-clearable-value .weave-select__clear").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#select-clearable-value .weave-select__clear").BoundingBoxAsync()
     assertContainedWithin "select root" "clear button" parentBox childBox
   }
 
@@ -286,7 +224,7 @@ type SelectLayoutTests() =
   member this.``items are contained within popover list``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#select-open .weave-select__list").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
     assertContainedWithin "popover list" "item" parentBox childBox
   }
 
@@ -294,6 +232,6 @@ type SelectLayoutTests() =
   member this.``items fill popover list width``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#select-open .weave-select__list").BoundingBoxAsync()
-    let! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
+    and! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
     assertFillsWidth "popover list" "item" parentBox childBox
   }

@@ -459,6 +459,22 @@ module Pages =
       )
     ]
 
+  let private sliderPage () =
+    div [] [
+      Slider.create (Var.Create 50, labelText = View.Const "Default Slider")
+      Slider.create (
+        Var.Create 0,
+        min = 0,
+        max = 10,
+        step = 1,
+        showTickMarks = true,
+        tickMarkLabels = [ "0"; "5"; "10" ],
+        labelText = View.Const "With Ticks"
+      )
+      Slider.create (Var.Create 30, labelText = View.Const "Disabled Slider", enabled = View.Const false)
+      Slider.primary (Var.Create 75, labelText = View.Const "Primary Slider")
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | "checkbox" -> checkboxPage ()
@@ -485,6 +501,7 @@ module Pages =
     | "buttonmenu" -> buttonmenuPage ()
     | "buttongroup" -> buttongroupPage ()
     | "tooltip" -> tooltipPage ()
+    | "slider" -> sliderPage ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 
   [<Inline "window.location.hash.replace('#', '')">]

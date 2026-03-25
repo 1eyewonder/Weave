@@ -1,32 +1,15 @@
 module Weave.Tests.Rendering.AppBarLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type AppBarLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "appbar.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("appbar")
 
   [<Fact>]
   member this.``static appbar spans the full viewport width``() = task {
     do! this.LoadFixture()
     let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
-    let! vp = this.Page.EvaluateAsync<int>("() => window.innerWidth")
+    and! vp = this.Page.EvaluateAsync<int>("() => window.innerWidth")
 
     Assert.True(
       abs (bar.Width - float32 vp) <= 1.0f,
@@ -46,7 +29,7 @@ type AppBarLayoutTests() =
   member this.``content after static appbar is placed below it``() = task {
     do! this.LoadFixture()
     let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
-    let! content = this.Page.Locator("#content-after-static").BoundingBoxAsync()
+    and! content = this.Page.Locator("#content-after-static").BoundingBoxAsync()
 
     Assert.True(
       content.Y >= bar.Y + bar.Height - 1.0f,
@@ -58,18 +41,9 @@ type AppBarLayoutTests() =
   member this.``fixed appbar has CSS position fixed``() = task {
     do! this.LoadFixture()
 
-    let! position =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#appbar-fixed')).position"
-      )
+    let! position = this.ComputedStyle("#appbar-fixed", "position")
 
     Assert.Equal("fixed", position)
-  }
-
-  member this.LoadFixtureAtWidth(viewportWidth: int) = task {
-    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
   }
 
   [<Theory>]
@@ -79,7 +53,7 @@ type AppBarLayoutTests() =
   [<InlineData(960)>]
   [<InlineData(1280)>]
   member this.``static appbar spans full width at all viewport sizes``(viewportWidth: int) = task {
-    do! this.LoadFixtureAtWidth(viewportWidth)
+    do! this.LoadFixture(viewportWidth)
     let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
 
     Assert.True(
@@ -92,7 +66,7 @@ type AppBarLayoutTests() =
   [<InlineData(375)>]
   [<InlineData(1280)>]
   member this.``appbar min height is preserved at mobile and desktop``(viewportWidth: int) = task {
-    do! this.LoadFixtureAtWidth(viewportWidth)
+    do! this.LoadFixture(viewportWidth)
     let! bar = this.Page.Locator("#appbar-static").BoundingBoxAsync()
 
     Assert.True(

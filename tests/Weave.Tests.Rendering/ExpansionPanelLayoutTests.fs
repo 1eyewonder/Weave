@@ -1,35 +1,15 @@
 module Weave.Tests.Rendering.ExpansionPanelLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type ExpansionPanelLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "expansion-panel.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("expansion-panel")
 
   [<Fact>]
   member this.``collapsed panel content wrapper has zero-fraction grid rows``() = task {
     do! this.LoadFixture()
 
-    let! gridRows =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#wrapper-collapsed')).gridTemplateRows"
-      )
+    let! gridRows = this.ComputedStyle("#wrapper-collapsed", "gridTemplateRows")
 
     Assert.Equal("0px", gridRows)
   }
@@ -38,10 +18,7 @@ type ExpansionPanelLayoutTests() =
   member this.``collapsed panel content is hidden via overflow``() = task {
     do! this.LoadFixture()
 
-    let! overflow =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#content-collapsed')).overflow"
-      )
+    let! overflow = this.ComputedStyle("#content-collapsed", "overflow")
 
     Assert.Equal("hidden", overflow)
   }
@@ -63,7 +40,7 @@ type ExpansionPanelLayoutTests() =
     do! this.LoadFixture()
     let! header = this.Page.Locator("#header-expanded").BoundingBoxAsync()
 
-    let! contentTop =
+    and! contentTop =
       this.Page.EvaluateAsync<float>(
         "() => document.querySelector('#content-expanded').getBoundingClientRect().top"
       )
@@ -86,8 +63,8 @@ type ExpansionPanelLayoutTests() =
   member this.``group panels stack vertically``() = task {
     do! this.LoadFixture()
     let! panel1 = this.Page.Locator("#group-panel-1").BoundingBoxAsync()
-    let! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
-    let! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
+    and! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
+    and! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
 
     Assert.True(panel1.Y < panel2.Y, $"Panel 1 (y={panel1.Y}) should be above panel 2 (y={panel2.Y})")
     Assert.True(panel2.Y < panel3.Y, $"Panel 2 (y={panel2.Y}) should be above panel 3 (y={panel3.Y})")
@@ -102,12 +79,12 @@ type ExpansionPanelLayoutTests() =
         "() => document.querySelector('#group-content-1').getBoundingClientRect().height"
       )
 
-    let! content2Height =
+    and! content2Height =
       this.Page.EvaluateAsync<float>(
         "() => document.querySelector('#group-content-2').getBoundingClientRect().height"
       )
 
-    let! content3Height =
+    and! content3Height =
       this.Page.EvaluateAsync<float>(
         "() => document.querySelector('#group-content-3').getBoundingClientRect().height"
       )
@@ -126,7 +103,7 @@ type ExpansionPanelLayoutTests() =
         "() => getComputedStyle(document.querySelector('#header-collapsed')).getPropertyValue('--expansion-panel-focus-color').trim()"
       )
 
-    let! focusColor =
+    and! focusColor =
       this.Page.EvaluateAsync<string>(
         "() => getComputedStyle(document.querySelector('#header-focus-color')).getPropertyValue('--expansion-panel-focus-color').trim()"
       )
@@ -138,8 +115,8 @@ type ExpansionPanelLayoutTests() =
   member this.``expanded panel in group is taller than collapsed siblings``() = task {
     do! this.LoadFixture()
     let! panel1 = this.Page.Locator("#group-panel-1").BoundingBoxAsync()
-    let! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
-    let! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
+    and! panel2 = this.Page.Locator("#group-panel-2").BoundingBoxAsync()
+    and! panel3 = this.Page.Locator("#group-panel-3").BoundingBoxAsync()
 
     Assert.True(
       panel2.Height > panel1.Height,

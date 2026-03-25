@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sizing Consistency Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+      .family {
+        margin-bottom: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ================================================================
+         FAMILY 1: Menu/list items — min-height: density-spacing(38, 10)
+         Compact=38px, Standard=48px, Spacious=58px
+         ================================================================ -->
+
+    <!-- Family 1 — Compact -->
+    <div class="family weave-density--compact">
+      <div class="weave-list" style="width: 300px;">
+        <div id="f1-compact-list-item" class="weave-list-item">List Item</div>
+      </div>
+
+      <div class="weave-select weave-select--open" style="margin-top: 8px;">
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+              <span class="weave-select__placeholder"></span>
+            </div>
+          </div>
+        </div>
+        <div class="weave-select__popover">
+          <div class="weave-select__list" role="listbox">
+            <div id="f1-compact-select-item" class="weave-select__item" role="option">
+              <span class="weave-select__item-content">Select Item</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-dropdown weave-dropdown--open" style="margin-top: 8px;">
+        <button type="button" style="display: none;">Trigger</button>
+        <div class="weave-dropdown__list">
+          <div id="f1-compact-dropdown-item" class="weave-dropdown__item">
+            <span class="weave-dropdown__item-text">Dropdown Item</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-tabs weave-tabs--start weave-tabs--text weave-tabs--primary" style="width: 300px; height: 80px; margin-top: 8px;">
+        <div class="weave-tabs__header-wrapper">
+          <div class="weave-tabs__header">
+            <button id="f1-compact-tab" class="weave-tabs__tab weave-tabs__tab--active">Tab</button>
+            <div class="weave-tabs__indicator"></div>
+          </div>
+        </div>
+        <div class="weave-tabs__panels">
+          <div class="weave-tabs__panel">Panel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family 1 — Standard -->
+    <div class="family weave-density--standard">
+      <div class="weave-list" style="width: 300px;">
+        <div id="f1-standard-list-item" class="weave-list-item">List Item</div>
+      </div>
+
+      <div class="weave-select weave-select--open" style="margin-top: 8px;">
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+              <span class="weave-select__placeholder"></span>
+            </div>
+          </div>
+        </div>
+        <div class="weave-select__popover">
+          <div class="weave-select__list" role="listbox">
+            <div id="f1-standard-select-item" class="weave-select__item" role="option">
+              <span class="weave-select__item-content">Select Item</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-dropdown weave-dropdown--open" style="margin-top: 8px;">
+        <button type="button" style="display: none;">Trigger</button>
+        <div class="weave-dropdown__list">
+          <div id="f1-standard-dropdown-item" class="weave-dropdown__item">
+            <span class="weave-dropdown__item-text">Dropdown Item</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-tabs weave-tabs--start weave-tabs--text weave-tabs--primary" style="width: 300px; height: 80px; margin-top: 8px;">
+        <div class="weave-tabs__header-wrapper">
+          <div class="weave-tabs__header">
+            <button id="f1-standard-tab" class="weave-tabs__tab weave-tabs__tab--active">Tab</button>
+            <div class="weave-tabs__indicator"></div>
+          </div>
+        </div>
+        <div class="weave-tabs__panels">
+          <div class="weave-tabs__panel">Panel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family 1 — Spacious -->
+    <div class="family weave-density--spacious">
+      <div class="weave-list" style="width: 300px;">
+        <div id="f1-spacious-list-item" class="weave-list-item">List Item</div>
+      </div>
+
+      <div class="weave-select weave-select--open" style="margin-top: 8px;">
+        <div class="weave-field weave-field--standard weave-typography--body2">
+          <div class="weave-field__control">
+            <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+              <span class="weave-select__placeholder"></span>
+            </div>
+          </div>
+        </div>
+        <div class="weave-select__popover">
+          <div class="weave-select__list" role="listbox">
+            <div id="f1-spacious-select-item" class="weave-select__item" role="option">
+              <span class="weave-select__item-content">Select Item</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-dropdown weave-dropdown--open" style="margin-top: 8px;">
+        <button type="button" style="display: none;">Trigger</button>
+        <div class="weave-dropdown__list">
+          <div id="f1-spacious-dropdown-item" class="weave-dropdown__item">
+            <span class="weave-dropdown__item-text">Dropdown Item</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="weave-tabs weave-tabs--start weave-tabs--text weave-tabs--primary" style="width: 300px; height: 80px; margin-top: 8px;">
+        <div class="weave-tabs__header-wrapper">
+          <div class="weave-tabs__header">
+            <button id="f1-spacious-tab" class="weave-tabs__tab weave-tabs__tab--active">Tab</button>
+            <div class="weave-tabs__indicator"></div>
+          </div>
+        </div>
+        <div class="weave-tabs__panels">
+          <div class="weave-tabs__panel">Panel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         FAMILY 2: Form control padding — density-spacing(4, 4)
+         Compact=4px, Standard=8px, Spacious=12px
+         ================================================================ -->
+
+    <!-- Family 2 — Compact -->
+    <div class="family weave-density--compact">
+      <label id="f2-compact-checkbox" class="weave-checkbox weave-checkbox--medium weave-flex-row">
+        <input type="checkbox" class="weave-checkbox__input" />
+        <span class="weave-checkbox__span"></span>
+      </label>
+
+      <label id="f2-compact-radio" class="weave-radio weave-radio--medium weave-d-inline-flex weave-flex-row" style="margin-left: 16px;">
+        <input type="radio" class="weave-radio__input" />
+        <span class="weave-radio__span"></span>
+      </label>
+
+      <label id="f2-compact-switch" class="weave-switch weave-flex-row" style="margin-left: 16px;">
+        <div class="weave-switch__container">
+          <input type="checkbox" class="weave-switch__input" />
+          <span class="weave-switch__track"></span>
+          <span class="weave-switch__thumb"></span>
+        </div>
+      </label>
+    </div>
+
+    <!-- Family 2 — Standard -->
+    <div class="family weave-density--standard">
+      <label id="f2-standard-checkbox" class="weave-checkbox weave-checkbox--medium weave-flex-row">
+        <input type="checkbox" class="weave-checkbox__input" />
+        <span class="weave-checkbox__span"></span>
+      </label>
+
+      <label id="f2-standard-radio" class="weave-radio weave-radio--medium weave-d-inline-flex weave-flex-row" style="margin-left: 16px;">
+        <input type="radio" class="weave-radio__input" />
+        <span class="weave-radio__span"></span>
+      </label>
+
+      <label id="f2-standard-switch" class="weave-switch weave-flex-row" style="margin-left: 16px;">
+        <div class="weave-switch__container">
+          <input type="checkbox" class="weave-switch__input" />
+          <span class="weave-switch__track"></span>
+          <span class="weave-switch__thumb"></span>
+        </div>
+      </label>
+    </div>
+
+    <!-- Family 2 — Spacious -->
+    <div class="family weave-density--spacious">
+      <label id="f2-spacious-checkbox" class="weave-checkbox weave-checkbox--medium weave-flex-row">
+        <input type="checkbox" class="weave-checkbox__input" />
+        <span class="weave-checkbox__span"></span>
+      </label>
+
+      <label id="f2-spacious-radio" class="weave-radio weave-radio--medium weave-d-inline-flex weave-flex-row" style="margin-left: 16px;">
+        <input type="radio" class="weave-radio__input" />
+        <span class="weave-radio__span"></span>
+      </label>
+
+      <label id="f2-spacious-switch" class="weave-switch weave-flex-row" style="margin-left: 16px;">
+        <div class="weave-switch__container">
+          <input type="checkbox" class="weave-switch__input" />
+          <span class="weave-switch__track"></span>
+          <span class="weave-switch__thumb"></span>
+        </div>
+      </label>
+    </div>
+
+    <!-- ================================================================
+         FAMILY 3: Button min-height — density-spacing(30, 10)
+         Compact=30px, Standard=40px, Spacious=50px
+         ================================================================ -->
+
+    <!-- Family 3 — Compact -->
+    <div class="family weave-density--compact">
+      <button id="f3-compact-button" class="weave-button weave-button--filled">
+        <span class="weave-button__label">Button</span>
+      </button>
+    </div>
+
+    <!-- Family 3 — Standard -->
+    <div class="family weave-density--standard">
+      <button id="f3-standard-button" class="weave-button weave-button--filled">
+        <span class="weave-button__label">Button</span>
+      </button>
+    </div>
+
+    <!-- Family 3 — Spacious -->
+    <div class="family weave-density--spacious">
+      <button id="f3-spacious-button" class="weave-button weave-button--filled">
+        <span class="weave-button__label">Button</span>
+      </button>
+    </div>
+
+    <!-- ================================================================
+         FAMILY 4: Alert/list item padding — density-spacing(4,4) density-spacing(12,4)
+         Compact=4px 12px, Standard=8px 16px, Spacious=12px 20px
+         ================================================================ -->
+
+    <!-- Family 4 — Compact -->
+    <div class="family weave-density--compact">
+      <div id="f4-compact-alert" class="weave-alert weave-alert--standard weave-alert--info" style="width: 300px;">
+        <div class="weave-alert__content">Alert</div>
+      </div>
+
+      <div class="weave-list" style="width: 300px; margin-top: 8px;">
+        <div id="f4-compact-list-item" class="weave-list-item">List Item</div>
+      </div>
+    </div>
+
+    <!-- Family 4 — Standard -->
+    <div class="family weave-density--standard">
+      <div id="f4-standard-alert" class="weave-alert weave-alert--standard weave-alert--info" style="width: 300px;">
+        <div class="weave-alert__content">Alert</div>
+      </div>
+
+      <div class="weave-list" style="width: 300px; margin-top: 8px;">
+        <div id="f4-standard-list-item" class="weave-list-item">List Item</div>
+      </div>
+    </div>
+
+    <!-- Family 4 — Spacious -->
+    <div class="family weave-density--spacious">
+      <div id="f4-spacious-alert" class="weave-alert weave-alert--standard weave-alert--info" style="width: 300px;">
+        <div class="weave-alert__content">Alert</div>
+      </div>
+
+      <div class="weave-list" style="width: 300px; margin-top: 8px;">
+        <div id="f4-spacious-list-item" class="weave-list-item">List Item</div>
+      </div>
+    </div>
+  </body>
+</html>

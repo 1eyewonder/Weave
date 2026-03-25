@@ -60,3 +60,27 @@ let assertFillsWidth
     <= tolerance,
     $"{childName} right ({childBox.X + childBox.Width}) should align with {parentName} right ({parentBox.X + parentBox.Width})"
   )
+
+/// All elements in the list should have the same rendered height (1px tolerance).
+let assertHeightsMatch (familyName: string) (entries: (string * LocatorBoundingBoxResult) list) =
+  match entries with
+  | []
+  | [ _ ] -> ()
+  | (refName, refBox) :: rest ->
+    for (name, box) in rest do
+      Assert.True(
+        abs (box.Height - refBox.Height) <= tolerance,
+        $"[{familyName}] {name} height ({box.Height}px) should match {refName} height ({refBox.Height}px)"
+      )
+
+/// All elements should share the same computed CSS property value.
+let assertComputedValuesMatch (familyName: string) (propertyName: string) (entries: (string * string) list) =
+  match entries with
+  | []
+  | [ _ ] -> ()
+  | (refName, refValue) :: rest ->
+    for (name, actual) in rest do
+      Assert.True(
+        (actual = refValue),
+        $"[{familyName}] {name} {propertyName} ('{actual}') should match {refName} ('{refValue}')"
+      )

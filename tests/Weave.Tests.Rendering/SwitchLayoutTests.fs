@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.SwitchLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type SwitchLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "switch.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("switch")
 
   [<Fact>]
   member this.``switch container is 40px wide``() = task {
@@ -48,7 +31,7 @@ type SwitchLayoutTests() =
   member this.``unchecked thumb is in the left half of the container``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#switch-container-off").BoundingBoxAsync()
-    let! thumb = this.Page.Locator("#thumb-off").BoundingBoxAsync()
+    and! thumb = this.Page.Locator("#thumb-off").BoundingBoxAsync()
 
     let thumbCenter = thumb.X + thumb.Width / 2.0f
     let containerCenter = container.X + container.Width / 2.0f
@@ -63,7 +46,7 @@ type SwitchLayoutTests() =
   member this.``checked thumb is in the right half of the container``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#switch-container-on").BoundingBoxAsync()
-    let! thumb = this.Page.Locator("#thumb-on").BoundingBoxAsync()
+    and! thumb = this.Page.Locator("#thumb-on").BoundingBoxAsync()
 
     let thumbCenter = thumb.X + thumb.Width / 2.0f
     let containerCenter = container.X + container.Width / 2.0f
@@ -78,7 +61,7 @@ type SwitchLayoutTests() =
   member this.``label appears to the right of the switch container``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#switch-container-off").BoundingBoxAsync()
-    let! label = this.Page.Locator("#switch-label").BoundingBoxAsync()
+    and! label = this.Page.Locator("#switch-label").BoundingBoxAsync()
 
     Assert.True(
       label.X > container.X + container.Width - 1.0f,

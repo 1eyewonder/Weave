@@ -14,7 +14,7 @@ type TooltipTests(server: TestServerFixture) =
   [<Fact>]
   member this.``tooltip content has role tooltip``() = task {
     do! this.NavigateTo("tooltip")
-    let tooltip = this.Page.Locator("[role='tooltip']").First
+    let tooltip = this.Page.Locator("[role='tooltip']")
     do! this.Expect(tooltip).ToHaveCountAsync(1)
   }
 
@@ -41,5 +41,15 @@ type TooltipTests(server: TestServerFixture) =
     let wrapper = this.Page.Locator(".weave-tooltip-root").First
     let tooltip = this.Page.Locator("[role='tooltip']").First
     do! wrapper.HoverAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+  }
+
+  [<Fact>]
+  member this.``focus shows the tooltip``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.Locator(".weave-tooltip-root").First
+    let tooltip = this.Page.Locator("[role='tooltip']").First
+    let focusable = wrapper.Locator(".weave-button").First
+    do! focusable.FocusAsync()
     do! this.Expect(tooltip).ToBeVisibleAsync()
   }

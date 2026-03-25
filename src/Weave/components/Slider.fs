@@ -135,7 +135,17 @@ type Slider =
         cl Css.``weave-slider__track-container``
         Attr.Create "role" "slider"
         Attr.Create "tabindex" "0"
-        Attr.DynamicProp "aria-valuenow" (valueAsFloat.View |> View.Map(sprintf "%.2f"))
+        valueAsFloat.View
+        |> View.Map(sprintf "%.2f")
+        |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-valuenow", v))
+
+        labelText
+        |> Attr.DynamicCustom(fun el v ->
+          if not (System.String.IsNullOrEmpty v) then
+            el.SetAttribute("aria-label", v)
+          else
+            el.RemoveAttribute("aria-label"))
+
         Attr.Create "aria-valuemin" (sprintf "%.2f" minVal)
         Attr.Create "aria-valuemax" (sprintf "%.2f" maxVal)
 

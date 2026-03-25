@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.LinkLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type LinkLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "link.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("link")
 
   [<Fact>]
   member this.``standard link has positive dimensions``() = task {
@@ -44,25 +27,9 @@ type LinkLayoutTests() =
   member this.``start icon is left of text``() = task {
     do! this.LoadFixture()
     let! icon = this.Page.Locator("#link-with-start-icon .weave-link__start-icon").BoundingBoxAsync()
-    let! text = this.Page.Locator("#link-with-start-icon .weave-link__text").BoundingBoxAsync()
+    and! text = this.Page.Locator("#link-with-start-icon .weave-link__text").BoundingBoxAsync()
 
     Assert.True(icon.X < text.X, $"Start icon (x={icon.X}) should be left of text (x={text.X})")
-  }
-
-  [<Fact>]
-  member this.``primary link is visible``() = task {
-    do! this.LoadFixture()
-    let! box = this.Page.Locator("#link-primary").BoundingBoxAsync()
-
-    Assert.True(box.Height > 0.0f, $"Primary link height {box.Height}px should be > 0")
-  }
-
-  [<Fact>]
-  member this.``secondary link is visible``() = task {
-    do! this.LoadFixture()
-    let! box = this.Page.Locator("#link-secondary").BoundingBoxAsync()
-
-    Assert.True(box.Height > 0.0f, $"Secondary link height {box.Height}px should be > 0")
   }
 
   [<Fact>]

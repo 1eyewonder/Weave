@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.ContainerLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type ContainerLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "container.html")
-
-  member this.LoadFixture(viewportWidth: int) = task {
-    do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("container")
 
   [<Fact>]
   member this.``maxwidth-xs container is constrained to 444px at wide viewport``() = task {
@@ -62,10 +45,7 @@ type ContainerLayoutTests() =
   member this.``gutters container has 16px padding at narrow viewport``() = task {
     do! this.LoadFixture 400
 
-    let! paddingLeft =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#container-gutters')).paddingLeft"
-      )
+    let! paddingLeft = this.ComputedStyle("#container-gutters", "paddingLeft")
 
     Assert.Equal("16px", paddingLeft)
   }
@@ -74,10 +54,7 @@ type ContainerLayoutTests() =
   member this.``gutters container has 24px padding at wide viewport``() = task {
     do! this.LoadFixture 600
 
-    let! paddingLeft =
-      this.Page.EvaluateAsync<string>(
-        "() => getComputedStyle(document.querySelector('#container-gutters')).paddingLeft"
-      )
+    let! paddingLeft = this.ComputedStyle("#container-gutters", "paddingLeft")
 
     Assert.Equal("24px", paddingLeft)
   }

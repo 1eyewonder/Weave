@@ -26,6 +26,7 @@
     <Compile Include="accessibility/NumericFieldTests.fs" />
     <Compile Include="accessibility/RadioTests.fs" />
     <Compile Include="accessibility/SelectTests.fs" />
+    <Compile Include="accessibility/SliderTests.fs" />
     <Compile Include="accessibility/SwitchTests.fs" />
     <Compile Include="accessibility/TabsTests.fs" />
     <Compile Include="accessibility/TooltipTests.fs" />

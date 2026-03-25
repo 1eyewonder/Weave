@@ -1,26 +1,9 @@
 module Weave.Tests.Rendering.DialogLayoutTests
 
-open Microsoft.Playwright.Xunit
 open Xunit
-open System.IO
-open System.Reflection
 
 type DialogLayoutTests() =
-  inherit PageTest()
-
-  member private _.FixturePath =
-    let assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-    let fixtureDir =
-      Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "fixtures"))
-
-    Path.Combine(fixtureDir, "dialog.html")
-
-  member this.LoadFixture() = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    ()
-  }
+  inherit LayoutTestBase("dialog")
 
   [<Fact>]
   member this.``dialog window has positive dimensions``() = task {
@@ -35,7 +18,7 @@ type DialogLayoutTests() =
   member this.``title is above content``() = task {
     do! this.LoadFixture()
     let! title = this.Page.Locator("#dialog-title").BoundingBoxAsync()
-    let! content = this.Page.Locator("#dialog-content").BoundingBoxAsync()
+    and! content = this.Page.Locator("#dialog-content").BoundingBoxAsync()
 
     Assert.True(title.Y < content.Y, $"Title (y={title.Y}) should be above content (y={content.Y})")
   }
@@ -44,7 +27,7 @@ type DialogLayoutTests() =
   member this.``content is above actions``() = task {
     do! this.LoadFixture()
     let! content = this.Page.Locator("#dialog-content").BoundingBoxAsync()
-    let! actions = this.Page.Locator("#dialog-actions").BoundingBoxAsync()
+    and! actions = this.Page.Locator("#dialog-actions").BoundingBoxAsync()
 
     Assert.True(content.Y < actions.Y, $"Content (y={content.Y}) should be above actions (y={actions.Y})")
   }
@@ -85,7 +68,7 @@ type DialogLayoutTests() =
   member this.``topcenter dialog window is near top of container``() = task {
     do! this.LoadFixture()
     let! containerBox = this.Page.Locator("#dialog-topcenter").BoundingBoxAsync()
-    let! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
+    and! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
 
     // Window should be near the top of the dialog container
     Assert.True(
@@ -98,7 +81,7 @@ type DialogLayoutTests() =
   member this.``topcenter dialog is horizontally centered``() = task {
     do! this.LoadFixture()
     let! containerBox = this.Page.Locator("#dialog-topcenter").BoundingBoxAsync()
-    let! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
+    and! windowBox = this.Page.Locator("#dialog-topcenter-window").BoundingBoxAsync()
 
     let windowCenter = windowBox.X + windowBox.Width / 2.0f
     let containerCenter = containerBox.X + containerBox.Width / 2.0f

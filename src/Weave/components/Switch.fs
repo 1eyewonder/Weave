@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -65,6 +66,7 @@ type Switch =
       div [ cls [ Css.``weave-switch__container`` ] ] [
         input [
           Attr.Prop "type" "checkbox"
+          Attr.Create "role" "switch"
           Attr.Checked isChecked
           Attr.enabled enabled
           cl Css.``weave-switch__input``
@@ -74,6 +76,11 @@ type Switch =
           on.clickView clickable (fun _ _ (flag, enabled) ->
             if enabled then
               not flag |> Var.Set isChecked)
+
+          on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
+            if ev.Key = "Enter" then
+              ev.PreventDefault()
+              not isChecked.Value |> Var.Set isChecked)
         ] []
         span [ cls [ Css.``weave-switch__track`` ] ] []
         span [ cls [ Css.``weave-switch__thumb`` ] ] []

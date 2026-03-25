@@ -169,6 +169,11 @@
   opacity: 0;
   cursor: inherit;
   z-index: 1;
+
+  &:focus-visible ~ .weave-switch__track {
+    outline: 2px solid var(--switch-brand-color, var(--palette-primary));
+    outline-offset: 2px;
+  }
 }
 
 // Disabled state: hide thumb, style track

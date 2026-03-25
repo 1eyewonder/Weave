@@ -159,14 +159,14 @@ type Dialog =
 
         on.keyDownView forceInteraction
         <| fun el ev interaction ->
-          match ev.Key with
-          | "Escape" ->
+          match ev with
+          | Key.Escape ->
             match interaction with
             | Interaction.Optional closeDialog ->
               restoreFocus ()
               closeDialog ()
             | Interaction.Force -> ()
-          | "Tab" -> trapFocus el ev
+          | Key.Tab -> trapFocus el ev
           | _ -> ()
       ] [ title; content ]
     ]

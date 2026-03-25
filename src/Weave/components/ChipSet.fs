@@ -187,12 +187,12 @@ type ChipSet =
           if idx >= 0 then
             setRovingTabindex el idx)
 
-        on.keyDown (fun el (ev: Dom.KeyboardEvent) ->
+        on.keyDown (fun el ev ->
           let idx = currentIndex el
 
-          match ev.Key with
-          | "ArrowRight"
-          | "ArrowDown" ->
+          match ev with
+          | Key.ArrowRight
+          | Key.ArrowDown ->
             ev.PreventDefault()
 
             if idx >= 0 then
@@ -201,8 +201,8 @@ type ChipSet =
               | None -> ()
             else
               focusChipAt el 0
-          | "ArrowLeft"
-          | "ArrowUp" ->
+          | Key.ArrowLeft
+          | Key.ArrowUp ->
             ev.PreventDefault()
 
             if idx >= 0 then
@@ -211,7 +211,7 @@ type ChipSet =
               | None -> ()
             else
               focusChipAt el 0
-          | "Home" ->
+          | Key.Home ->
             ev.PreventDefault()
             let items = el.QuerySelectorAll(chipSelector)
 
@@ -219,7 +219,7 @@ type ChipSet =
               match findNextEnabled el (items.Length - 1) 1 with
               | Some target -> focusChipAt el target
               | None -> ()
-          | "End" ->
+          | Key.End ->
             ev.PreventDefault()
 
             match findNextEnabled el 0 -1 with

@@ -72,9 +72,11 @@ type Chip =
           Attr.Create "aria-label" "remove"
           on.clickTapViewGuarded enabled callback
           on.keyDown (fun _ ev ->
-            if ev?key = "Enter" || ev?key = " " then
+            match ev with
+            | Key.Activate ->
               ev.PreventDefault()
-              callback ())
+              callback ()
+            | _ -> ())
         ] [ closeIconDoc ]
       | None -> Doc.Empty
 
@@ -124,11 +126,13 @@ type Chip =
             on.clickTapViewGuarded enabled handler
 
             on.keyDown (fun _ ev ->
-              if ev?key = "Enter" || ev?key = " " then
+              match ev with
+              | Key.Activate ->
                 ev.PreventDefault()
 
                 if enabledRef.Value then
-                  handler ())
+                  handler ()
+              | _ -> ())
           ]
           children
       | None -> span [ yield! commonAttrs ] children

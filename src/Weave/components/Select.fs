@@ -53,11 +53,13 @@ module Select =
         on.clickTap (fun _ ev ->
           ev?stopPropagation ()
           onClear ())
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          if ev.Key = "Enter" || ev.Key = " " then
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.Activate ->
             ev.PreventDefault()
             ev?stopPropagation ()
-            onClear ())
+            onClear ()
+          | _ -> ())
       ] [ text "\u00D7" ]
 
     let searchInput (searchText: Var<string>) (onKeyDown: Dom.KeyboardEvent -> unit) =
@@ -68,15 +70,15 @@ module Select =
             Attr.Create "placeholder" "Search..."
             Attr.Create "aria-label" "Search options"
             on.afterRender (fun el -> el?focus ())
-            on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-              match ev.Key with
-              | "ArrowDown"
-              | "ArrowUp"
-              | "Enter"
-              | "Escape" ->
+            on.keyDown (fun _ ev ->
+              match ev with
+              | Key.ArrowDown
+              | Key.ArrowUp
+              | Key.Enter
+              | Key.Escape ->
                 ev.PreventDefault()
                 onKeyDown ev
-              | "Tab" -> onKeyDown ev
+              | Key.Tab -> onKeyDown ev
               | _ -> ())
           ]
           searchText
@@ -331,8 +333,8 @@ type Select =
       let items = filteredSnapshot.Value
       let count = List.length items
 
-      match ev.Key with
-      | "Enter" ->
+      match ev with
+      | Key.Enter ->
         if not openVar.Value then
           openVar.Value <- true
           highlightedIndex.Value <- -1
@@ -344,10 +346,10 @@ type Select =
             let def = items.[idx]
             selectedValue.Value <- Some def.Value
             openVar.Value <- false
-      | "Escape" ->
+      | Key.Escape ->
         if openVar.Value then
           openVar.Value <- false
-      | "ArrowDown" ->
+      | Key.ArrowDown ->
         if not openVar.Value then
           openVar.Value <- true
           highlightedIndex.Value <- 0
@@ -357,10 +359,10 @@ type Select =
 
           if next < count then
             highlightedIndex.Value <- next
-      | "ArrowUp" ->
+      | Key.ArrowUp ->
         if openVar.Value && highlightedIndex.Value > 0 then
           highlightedIndex.Value <- highlightedIndex.Value - 1
-      | "Tab" ->
+      | Key.Tab ->
         if openVar.Value then
           openVar.Value <- false
       | _ -> ()
@@ -384,16 +386,16 @@ type Select =
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          match ev.Key with
-          | "Enter"
-          | " "
-          | "Escape"
-          | "ArrowDown"
-          | "ArrowUp" ->
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.Enter
+          | Key.Space
+          | Key.Escape
+          | Key.ArrowDown
+          | Key.ArrowUp ->
             ev.PreventDefault()
             handleKeyNav ev
-          | "Tab" -> handleKeyNav ev
+          | Key.Tab -> handleKeyNav ev
           | _ -> ())
       ] [
         Doc.EmbedView selectedDisplay
@@ -585,8 +587,8 @@ type MultiSelect =
       let items = filteredSnapshot.Value
       let count = List.length items
 
-      match ev.Key with
-      | "Enter" ->
+      match ev with
+      | Key.Enter ->
         if not openVar.Value then
           openVar.Value <- true
           highlightedIndex.Value <- -1
@@ -602,10 +604,10 @@ type MultiSelect =
               selectedValues.Value <- Set.remove def.Value current
             else
               selectedValues.Value <- Set.add def.Value current
-      | "Escape" ->
+      | Key.Escape ->
         if openVar.Value then
           openVar.Value <- false
-      | "ArrowDown" ->
+      | Key.ArrowDown ->
         if not openVar.Value then
           openVar.Value <- true
           highlightedIndex.Value <- 0
@@ -615,10 +617,10 @@ type MultiSelect =
 
           if next < count then
             highlightedIndex.Value <- next
-      | "ArrowUp" ->
+      | Key.ArrowUp ->
         if openVar.Value && highlightedIndex.Value > 0 then
           highlightedIndex.Value <- highlightedIndex.Value - 1
-      | "Tab" ->
+      | Key.Tab ->
         if openVar.Value then
           openVar.Value <- false
       | _ -> ()
@@ -642,16 +644,16 @@ type MultiSelect =
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          match ev.Key with
-          | "Enter"
-          | " "
-          | "Escape"
-          | "ArrowDown"
-          | "ArrowUp" ->
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.Enter
+          | Key.Space
+          | Key.Escape
+          | Key.ArrowDown
+          | Key.ArrowUp ->
             ev.PreventDefault()
             handleKeyNav ev
-          | "Tab" -> handleKeyNav ev
+          | Key.Tab -> handleKeyNav ev
           | _ -> ())
       ] [
         Doc.EmbedView selectedDisplay

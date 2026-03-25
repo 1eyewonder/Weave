@@ -124,12 +124,14 @@ type ExpansionPanelHeader =
           if isEnabled then
             Var.Set expanded (not isExpanded)
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          if ev.Key = "Enter" || ev.Key = " " then
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.Activate ->
             ev.PreventDefault()
 
             if enabledRef.Value then
-              Var.Set expanded (not expanded.Value))
+              Var.Set expanded (not expanded.Value)
+          | _ -> ())
 
         Map.ofList [
           ExpansionPanel.HeaderVariant.Filled, Css.``weave-expansion-panel__header--filled``

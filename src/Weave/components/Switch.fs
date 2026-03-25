@@ -77,10 +77,12 @@ type Switch =
             if enabled then
               not flag |> Var.Set isChecked)
 
-          on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-            if ev.Key = "Enter" then
+          on.keyDown (fun _ ev ->
+            match ev with
+            | Key.Activate ->
               ev.PreventDefault()
-              not isChecked.Value |> Var.Set isChecked)
+              not isChecked.Value |> Var.Set isChecked
+            | _ -> ())
         ] []
         span [ cls [ Css.``weave-switch__track`` ] ] []
         span [ cls [ Css.``weave-switch__thumb`` ] ] []

@@ -154,20 +154,20 @@ type Slider =
         onPointerUp
         onPointerCancel
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          match ev.Key with
-          | "ArrowRight"
-          | "ArrowUp" ->
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.ArrowRight
+          | Key.ArrowUp ->
             ev.PreventDefault()
             valueAsFloat.Value <- Bounded.snapToStep minVal maxVal stepVal (valueAsFloat.Value + stepVal)
-          | "ArrowLeft"
-          | "ArrowDown" ->
+          | Key.ArrowLeft
+          | Key.ArrowDown ->
             ev.PreventDefault()
             valueAsFloat.Value <- Bounded.snapToStep minVal maxVal stepVal (valueAsFloat.Value - stepVal)
-          | "Home" ->
+          | Key.Home ->
             ev.PreventDefault()
             valueAsFloat.Value <- minVal
-          | "End" ->
+          | Key.End ->
             ev.PreventDefault()
             valueAsFloat.Value <- maxVal
           | _ -> ())

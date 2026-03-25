@@ -80,10 +80,12 @@ type Radio =
 
         on.clickViewGuarded enabled (fun () -> Var.Set userSelection value)
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          if ev.Key = "Enter" then
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.Activate ->
             ev.PreventDefault()
-            Var.Set userSelection value)
+            Var.Set userSelection value
+          | _ -> ())
 
         cl Css.``weave-radio__input``
       ] [

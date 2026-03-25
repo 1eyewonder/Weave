@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -252,3 +253,64 @@ module Attr =
     /// Will still be focusable
     /// </summary>
     let skip = Attr.Create "tabindex" "0"
+
+/// <summary>
+/// Active patterns for keyboard event handling. Provides a consistent,
+/// type-safe vocabulary for matching key presses across all components.
+/// </summary>
+[<JavaScript; RequireQualifiedAccess>]
+module internal Key =
+
+  /// Matches Enter or Space — the standard ARIA "activate" keys for buttons and interactive elements.
+  [<return: Struct>]
+  let (|Activate|_|) (ev: Dom.KeyboardEvent) =
+    match ev.Key with
+    | "Enter"
+    | " " -> ValueSome()
+    | _ -> ValueNone
+
+  [<return: Struct>]
+  let (|Enter|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "Enter" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|Space|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = " " then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|Escape|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "Escape" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|Tab|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "Tab" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|ArrowUp|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "ArrowUp" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|ArrowDown|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "ArrowDown" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|ArrowLeft|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "ArrowLeft" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|ArrowRight|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "ArrowRight" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|Home|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "Home" then ValueSome() else ValueNone
+
+  [<return: Struct>]
+  let (|End|_|) (ev: Dom.KeyboardEvent) =
+    if ev.Key = "End" then ValueSome() else ValueNone
+
+  /// Matches when the pressed key equals the given string.
+  /// Useful for parameterized navigation where next/prev keys vary by orientation.
+  [<return: Struct>]
+  let (|NavKey|_|) (key: string) (ev: Dom.KeyboardEvent) =
+    if ev.Key = key then ValueSome() else ValueNone

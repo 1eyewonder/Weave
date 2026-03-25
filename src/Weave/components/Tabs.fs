@@ -425,22 +425,21 @@ type Tabs =
           if not disabled then
             selectTab index)
 
-        on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-          match ev.Key with
-          | k when k = nextKey ->
+        on.keyDown (fun _ ev ->
+          match ev with
+          | Key.NavKey nextKey ->
             ev.PreventDefault()
             navigateTo (fun el -> TabsInternal.findEnabledTabIndex el index 1)
-          | k when k = prevKey ->
+          | Key.NavKey prevKey ->
             ev.PreventDefault()
             navigateTo (fun el -> TabsInternal.findEnabledTabIndex el index -1)
-          | "Home" ->
+          | Key.Home ->
             ev.PreventDefault()
             navigateTo TabsInternal.findFirstEnabledTabIndex
-          | "End" ->
+          | Key.End ->
             ev.PreventDefault()
             navigateTo TabsInternal.findLastEnabledTabIndex
-          | "Enter"
-          | " " ->
+          | Key.Activate ->
             ev.PreventDefault()
             selectTab index
           | _ -> ())

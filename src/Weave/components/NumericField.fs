@@ -159,14 +159,14 @@ type NumericField =
 
             stringVar.Value <- string<int> value.Value)
 
-          on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-            match ev.Key with
-            | "ArrowUp" ->
+          on.keyDown (fun _ ev ->
+            match ev with
+            | Key.ArrowUp ->
               ev.PreventDefault()
 
               if currentEditable.Value && currentArrowKeys.Value then
                 increment currentStep.Value
-            | "ArrowDown" ->
+            | Key.ArrowDown ->
               ev.PreventDefault()
 
               if currentEditable.Value && currentArrowKeys.Value then
@@ -383,14 +383,14 @@ type NumericField =
 
             stringVar.Value <- string<float> value.Value)
 
-          on.keyDown (fun _ (ev: Dom.KeyboardEvent) ->
-            match ev.Key with
-            | "ArrowUp" ->
+          on.keyDown (fun _ ev ->
+            match ev with
+            | Key.ArrowUp ->
               ev.PreventDefault()
 
               if currentEditable.Value && currentArrowKeys.Value then
                 increment currentStep.Value
-            | "ArrowDown" ->
+            | Key.ArrowDown ->
               ev.PreventDefault()
 
               if currentEditable.Value && currentArrowKeys.Value then

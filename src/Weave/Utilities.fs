@@ -116,25 +116,25 @@ module MenuKeyboardNav =
     let handleKeyDown (ev: Dom.KeyboardEvent) =
       let container = containerRef.Value
 
-      match ev.Key with
-      | "Escape" ->
+      match ev with
+      | Key.Escape ->
         ev.PreventDefault()
         isOpen.Value <- false
         focusedIdx.Value <- -1
         triggerRef.Value?focus()
-      | key when key = nextKey ->
+      | Key.NavKey nextKey ->
         ev.PreventDefault()
         focusByOffset container focusedIdx 1
-      | key when key = prevKey ->
+      | Key.NavKey prevKey ->
         ev.PreventDefault()
         focusByOffset container focusedIdx -1
-      | "Home" ->
+      | Key.Home ->
         ev.PreventDefault()
         let items = container.QuerySelectorAll("[role='menuitem']")
 
         if items.Length > 0 then
           focusItemAt container focusedIdx 0
-      | "End" ->
+      | Key.End ->
         ev.PreventDefault()
         let items = container.QuerySelectorAll("[role='menuitem']")
 
@@ -352,12 +352,12 @@ module on =
   let clickTapKey (handler: Dom.Element -> Dom.Event -> unit) =
     Attr.Concat [
       clickTap handler
-      Attr.Handler "keydown" (fun el ev ->
-        let key = ev?key: string
-
-        if key = "Enter" || key = " " then
+      on.keyDown (fun el ev ->
+        match ev with
+        | Key.Activate ->
           ev.PreventDefault()
-          handler el ev)
+          handler el (ev :> Dom.Event)
+        | _ -> ())
     ]
 
   /// <summary>
@@ -374,15 +374,15 @@ module on =
           match current.Value with
           | Some v -> handler el ev v
           | None -> ())
-      Attr.Handler "keydown" (fun el ev ->
-        let key = ev?key: string
-
-        if key = "Enter" || key = " " then
+      on.keyDown (fun el ev ->
+        match ev with
+        | Key.Activate ->
           ev.PreventDefault()
 
           match current.Value with
-          | Some v -> handler el ev v
-          | None -> ())
+          | Some v -> handler el (ev :> Dom.Event) v
+          | None -> ()
+        | _ -> ())
     ]
 
   /// <summary>

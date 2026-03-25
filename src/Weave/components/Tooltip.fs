@@ -95,9 +95,10 @@ type Tooltip =
       yield! rootClasses |> List.map cl
       yield! attrs
 
-      Attr.Handler "keydown" (fun _ ev ->
-        if As<Dom.KeyboardEvent>(ev).Key = "Escape" && isVisible.Value then
-          Var.Set isVisible false)
+      on.keyDown (fun _ ev ->
+        match ev with
+        | Key.Escape when isVisible.Value -> Var.Set isVisible false
+        | _ -> ())
 
       yield!
         activationEvents

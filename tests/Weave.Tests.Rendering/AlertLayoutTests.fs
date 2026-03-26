@@ -110,7 +110,7 @@ type AlertLayoutTests() =
     assertContainedWithin "alert" "close button" parentBox childBox
   }
 
-  [<Fact(Skip = "Requires component update: icon has vertical padding inside alert")>]
+  [<Fact>]
   member this.``icon fills alert height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#alert-with-icon").BoundingBoxAsync()

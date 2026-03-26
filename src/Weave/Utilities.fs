@@ -314,8 +314,7 @@ module on =
   let pointerMove (handler: Dom.Element -> Dom.MouseEvent -> unit) =
     Attr.Handler "pointermove" (fun el ev -> handler el (As<Dom.MouseEvent> ev))
 
-  let pointerCancel (handler: Dom.Element -> Dom.Event -> unit) =
-    Attr.Handler "pointercancel" handler
+  let pointerCancel (handler: Dom.Element -> Dom.Event -> unit) = Attr.Handler "pointercancel" handler
 
   let focusIn (handler: Dom.Element -> Dom.FocusEvent -> unit) =
     Attr.Handler "focusin" (fun el ev -> handler el (As<Dom.FocusEvent> ev))
@@ -323,8 +322,7 @@ module on =
   let focusOut (handler: Dom.Element -> Dom.FocusEvent -> unit) =
     Attr.Handler "focusout" (fun el ev -> handler el (As<Dom.FocusEvent> ev))
 
-  let scroll (handler: Dom.Element -> Dom.Event -> unit) =
-    Attr.Handler "scroll" handler
+  let scroll (handler: Dom.Element -> Dom.Event -> unit) = Attr.Handler "scroll" handler
 
   /// <summary>
   /// Handles both click and tap via the "pointerup" event.

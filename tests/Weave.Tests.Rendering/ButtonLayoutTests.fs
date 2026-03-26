@@ -240,7 +240,7 @@ type ButtonLayoutTests() =
     assertContainedWithin "icon button" "icon content" parentBox childBox
   }
 
-  [<Fact(Skip = "Requires component update: label has vertical padding inside button")>]
+  [<Fact>]
   member this.``label fills button height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
@@ -248,7 +248,7 @@ type ButtonLayoutTests() =
     assertFillsHeight "filled button" "label" parentBox childBox
   }
 
-  [<Fact(Skip = "Requires component update: icon span has vertical padding inside icon button")>]
+  [<Fact>]
   member this.``icon fills icon button height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-icon").BoundingBoxAsync()

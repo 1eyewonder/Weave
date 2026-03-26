@@ -77,8 +77,7 @@ type Slider =
 
     let onPointerUp = on.pointerUp (fun _ _ -> isDragging.Value <- false)
 
-    let onPointerCancel =
-      on.pointerCancel (fun _ _ -> isDragging.Value <- false)
+    let onPointerCancel = on.pointerCancel (fun _ _ -> isDragging.Value <- false)
 
     let label =
       labelText

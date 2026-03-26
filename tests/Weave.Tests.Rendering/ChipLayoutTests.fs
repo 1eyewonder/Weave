@@ -181,7 +181,7 @@ type ChipLayoutTests() =
     assertContainedWithin "chip" "close button" chipBox closeBox
   }
 
-  [<Fact(Skip = "Requires component update: close button has vertical padding inside chip")>]
+  [<Fact>]
   member this.``close button fills chip height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()

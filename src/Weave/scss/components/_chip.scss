@@ -50,11 +50,12 @@
   &__close {
     display: inline-flex;
     align-items: center;
+    align-self: stretch;
     flex-shrink: 0;
     color: inherit;
-    font-size: 16px;
+    font-size: 28px;
     line-height: 1;
-    margin-left: density-spacing(4, 2);
+    margin-left: density-spacing(2, 2);
     cursor: pointer;
     opacity: var(--weave-opacity-secondary-hover);
     transition: opacity var(--weave-duration-short) $ease-standard;

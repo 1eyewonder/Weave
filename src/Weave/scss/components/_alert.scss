@@ -13,8 +13,15 @@
   &__icon {
     display: flex;
     align-items: center;
+    align-self: stretch;
     flex-shrink: 0;
     margin-right: 12px;
+    // Negative margins extend through the alert's vertical padding so the
+    // icon bounding box fills the full alert height; matching positive padding
+    // keeps the visual content centered at the same position.
+    margin-top: calc(-1 * #{density-spacing(4, 4)});
+    margin-bottom: calc(-1 * #{density-spacing(4, 4)});
+    padding: density-spacing(4, 4) 0;
   }
 
   &__content {

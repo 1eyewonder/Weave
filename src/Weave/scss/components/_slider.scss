@@ -95,7 +95,6 @@
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
   margin-top: 0.25em;
   pointer-events: none;
   // Minimum height reserves space even with short labels
@@ -103,16 +102,22 @@
 }
 
 .weave-slider__tick-label {
+  flex: 1 1 0%;
+  min-width: 0;
   font-size: 0.75em;
   color: var(--palette-text-secondary, currentColor);
   white-space: nowrap;
   text-align: center;
 
+  // First and last labels get half the width so their
+  // outer edge (not center) aligns with the end ticks.
   &:first-child {
+    flex: 0.5 1 0%;
     text-align: left;
   }
 
   &:last-child {
+    flex: 0.5 1 0%;
     text-align: right;
   }
 }

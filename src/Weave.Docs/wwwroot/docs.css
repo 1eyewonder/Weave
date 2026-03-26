@@ -391,6 +391,32 @@ body {
   white-space: nowrap;
 }
 
+/* ==========================================================================
+   Copy-code button — fades in on hover over the expansion panel content area
+   ========================================================================== */
+
+.docs-copy-code-wrapper {
+  position: relative;
+}
+
+.docs-copy-code {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.docs-copy-code-wrapper:hover .docs-copy-code {
+  opacity: 1;
+}
+
+/* Keep button visible while it's being interacted with (focus, active) */
+.docs-copy-code:focus-within {
+  opacity: 1;
+}
+
 .docs-guidance-card {
   background: var(--palette-surface);
   border-radius: var(--default-borderradius);

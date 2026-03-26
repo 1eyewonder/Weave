@@ -106,6 +106,12 @@ module Helpers =
   [<Inline "window.highlightCodeElement($0)">]
   let highlightCodeElement (el: Dom.Element) = X<unit>
 
+  [<Inline "navigator.clipboard.writeText($0)">]
+  let private copyToClipboard (text: string) = X<Promise<unit>>
+
+  [<Inline "setTimeout($0, $1)">]
+  let private delay (callback: unit -> unit) (ms: int) = X<unit>
+
   /// Inline code badge — renders text in a monospace pill (e.g. `ChipSet`)
   let inlineCode (str: string) =
     span [ Attr.Class "docs-inline-code" ] [ text str ]
@@ -154,6 +160,7 @@ module Helpers =
         content
 
         let codeIsExpanded = Var.Create false
+        let justCopied = Var.Create false
 
         let icon =
           codeIsExpanded.View
@@ -177,14 +184,45 @@ module Helpers =
             attrs = [ ExpansionPanel.Color.primary ]
           )
 
+        let copyIcon =
+          justCopied.View
+          |> Doc.BindView(fun copied ->
+            if copied then
+              Icon.create (Icon.UiActions UiActions.Check)
+            else
+              Icon.create (Icon.Text Text.ContentCopy))
+
+        let copy () =
+          copyToClipboard linesOfCode |> ignore
+          Var.Set justCopied true
+
+        let revertOnCollapse =
+          codeIsExpanded.View
+          |> Doc.sink (fun expanded ->
+            if not expanded then
+              Var.Set justCopied false)
+
+        let copyButton =
+          div [ Attr.Class "docs-copy-code" ] [
+            IconButton.create (
+              copyIcon,
+              onClick = copy,
+              attrs = [ Button.Variant.text; Button.Color.primary ]
+            )
+          ]
+
         let codeContent =
-          pre [] [
-            code [
-              //SurfaceColor.toBackgroundColor SurfaceColor.Background
-              Attr.Class "language-fsharp"
-              on.afterRender highlightCodeElement
-              Typography.Family.mono
-            ] [ text linesOfCode ]
+          div [ Attr.Class "docs-copy-code-wrapper" ] [
+            copyButton
+            revertOnCollapse
+
+            pre [] [
+              code [
+                Attr.Class "language-fsharp"
+                on.afterRender highlightCodeElement
+                Typography.Family.mono
+              ] [ text linesOfCode ]
+            ]
           ]
 
         ExpansionPanelContainer.create (

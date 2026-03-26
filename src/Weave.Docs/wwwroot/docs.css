@@ -11,7 +11,7 @@ body {
 }
 
 .hljs {
-  background: var(--palette-background-darken);
+  background: var(--palette-background);
   color: var(--palette-text-primary);
   font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
 }
@@ -303,7 +303,7 @@ body {
 
 .docs-scroll-indicator {
   position: absolute;
-  bottom: 64px;
+  bottom: 5svh;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

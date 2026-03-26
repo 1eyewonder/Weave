@@ -146,16 +146,10 @@ type ExpansionPanelHeader =
 [<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanelContent =
 
-  static member create(content: Doc, ?gutters: View<bool>, ?attrs: Attr list) =
+  static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
-    let gutters = defaultArg gutters (View.Const true)
 
-    div [
-      cls [ Css.``weave-expansion-panel__content`` ]
-      gutters
-      |> Attr.DynamicClassPred Css.``weave-expansion-panel__content--with-gutters``
-      yield! attrs
-    ] [ content ]
+    div [ cls [ Css.``weave-expansion-panel__content`` ]; yield! attrs ] [ content ]
 
 [<JavaScript; RequireQualifiedAccess>]
 type ExpansionPanel =

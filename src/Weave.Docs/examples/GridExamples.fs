@@ -661,7 +661,7 @@ Grid.create(
           [
             ExpansionPanel.create (
               header = header,
-              content = ExpansionPanelContent.create (codeContent, gutters = View.Const false),
+              content = ExpansionPanelContent.create (codeContent),
               expanded = codeIsExpanded
             )
           ],

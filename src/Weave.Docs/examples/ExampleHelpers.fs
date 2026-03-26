@@ -180,7 +180,7 @@ module Helpers =
         let codeContent =
           pre [] [
             code [
-              SurfaceColor.toBackgroundColor SurfaceColor.Background
+              //SurfaceColor.toBackgroundColor SurfaceColor.Background
               Attr.Class "language-fsharp"
               on.afterRender highlightCodeElement
               Typography.Family.mono
@@ -191,7 +191,7 @@ module Helpers =
           [
             ExpansionPanel.create (
               header = header,
-              content = ExpansionPanelContent.create (codeContent, gutters = View.Const false),
+              content = ExpansionPanelContent.create (codeContent),
               expanded = codeIsExpanded
             )
           ],

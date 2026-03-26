@@ -5,14 +5,30 @@
   flex: 0 1 auto;
   position: relative;
   max-width: 100%;
-  transition: var(--weave-duration-long) $ease-expansion;
   border-radius: var(--default-borderradius);
 
   .weave-expansion-panel {
-    border-radius: var(--default-borderradius);
-    box-shadow: var(--weave-shadow-card);
+    border-radius: 0;
     overflow: hidden;
-    transition: box-shadow var(--weave-duration-standard) $ease-standard;
+    @include transition((margin, border-radius), standard, $ease-accelerate);
+
+    // Divider between adjacent panels (transparent when not needed)
+    border-top: 1px solid transparent;
+
+    &:not(:first-child) {
+      border-top-color: var(--palette-divider);
+    }
+
+    // Group outer corners: first panel → top, last panel → bottom
+    &:first-child {
+      border-top-left-radius: var(--default-borderradius);
+      border-top-right-radius: var(--default-borderradius);
+    }
+
+    &:last-child {
+      border-bottom-left-radius: var(--default-borderradius);
+      border-bottom-right-radius: var(--default-borderradius);
+    }
   }
 
   .weave-expansion-panel__header {
@@ -22,9 +38,8 @@
     cursor: pointer;
     // density 0 (Compact): 12px | density 1 (Standard): 16px | density 2 (Spacious): 20px
     padding: density-spacing(12, 4);
-    background: var(--palette-surface);
-    border-bottom: 1px solid var(--palette-divider);
-    transition: background var(--weave-duration-standard) $ease-standard;
+    background: var(--palette-background);
+    @include transition((color, background));
     font-family: var(--typography-h6-family);
     font-size: var(--typography-h6-size);
     font-weight: var(--typography-h6-weight);
@@ -43,9 +58,29 @@
     }
   }
 
+  // --- Expanded state: panel separates from group with gap + full border-radius ---
   .weave-expansion-panel--expanded {
-    .weave-expansion-panel__header {
-      @include transition((color, background));
+    margin-top: 16px;
+    margin-bottom: 16px;
+
+    // Full border-radius when expanded — must override first/last child specificity
+    &,
+    &:first-child,
+    &:last-child {
+      border-radius: var(--default-borderradius);
+    }
+
+    // Hide top divider (gap replaces it) — must match :not(:first-child) specificity
+    &:not(:first-child) {
+      border-top-color: transparent;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
 
     .weave-expansion-panel__content-wrapper {
@@ -59,15 +94,29 @@
     @each $color in $palette-colors {
       .weave-expansion-panel__header--filled.weave-expansion-panel__header--#{$color} {
         background-color: var(--palette-#{$color});
+        color: var(--palette-#{$color}-text);
       }
     }
+  }
+
+  // Panel directly after an expanded one: gap replaces border, round top corners
+  .weave-expansion-panel--expanded + .weave-expansion-panel {
+    border-top-color: transparent;
+    border-top-left-radius: var(--default-borderradius);
+    border-top-right-radius: var(--default-borderradius);
+  }
+
+  // Panel directly before an expanded one: round bottom corners
+  .weave-expansion-panel:has(+ .weave-expansion-panel--expanded) {
+    border-bottom-left-radius: var(--default-borderradius);
+    border-bottom-right-radius: var(--default-borderradius);
   }
 
   // Hover highlights regardless of expanded/collapsed state
   .weave-expansion-panel__header--highlight {
     @include transition((color, background));
     &:hover {
-      color: var(--palette-action-default-hover);
+      color: var(--palette-primary);
     }
   }
   @each $color in $palette-colors {
@@ -79,14 +128,13 @@
   .weave-expansion-panel__content-wrapper {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows var(--weave-duration-standard) $ease-expansion;
+    transition: grid-template-rows var(--weave-duration-standard) $ease-accelerate;
   }
 
   .weave-expansion-panel--collapsed {
     .weave-expansion-panel__content {
       padding-top: 0;
       padding-bottom: 0;
-      border-top: none;
     }
   }
 
@@ -97,17 +145,13 @@
 
   .weave-expansion-panel__content {
     overflow: hidden;
-    background: var(--palette-surface);
+    background: var(--palette-background);
     color: var(--palette-text-primary);
     font-family: var(--typography-body1-family);
     font-size: var(--typography-body1-size);
     font-weight: var(--typography-body1-weight);
     line-height: var(--typography-body1-lineheight);
-    @include transition((margin, padding));
-  }
-
-  .weave-expansion-panel__content--with-gutters {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    @include transition((padding));
+    padding: 1rem;
   }
 }

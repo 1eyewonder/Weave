@@ -520,8 +520,11 @@ The fixture is a hand-written static HTML file using the component's BEM classes
 - Link to the compiled stylesheet with `<link rel="stylesheet" href="../../../src/Weave/styles.css" />`.
 - Apply `margin: 0; padding: 16px; box-sizing: border-box;` on `body` to give a predictable layout origin.
 - Assign `id` attributes to every element that a test will locate.
-- Use explicit `style="display: block;"` / `style="display: none;"` on panels/content that are statically active or hidden.
+- Use explicit `style="display: block;"` / `style="display: none;"` on panels/content that are statically active or hidden — but **only on elements that are not flex/grid containers** being tested for layout. Never override a component's own `display` value (e.g. `inline-flex`) with an inline style, as this silently breaks flex layout and produces false test results.
 - Cover enough states to make at least one meaningful layout assertion per important structural relationship (e.g. tab order, panel visibility, alignment).
+- **Fixture fidelity:** The fixture DOM must match the component's actual rendered output as closely as possible. Before writing a fixture, read the component's F# source to understand its element hierarchy, tag types, CSS classes, and nesting. If the component renders `<label> → <div.container> → <div.label>`, the fixture must reproduce that — not substitute different tags, add wrapper elements, or omit structural nesting.
+- **No non-component elements inside a component.** If fixture elements need vertical separation, use block-level spacer `<div>` elements *between* components (as siblings), not wrapping them. Wrapping changes the component's layout context and can mask real CSS bugs.
+- **If a fixture won't work without structural changes, suspect a component bug first.** Investigate the component's CSS or markup before altering the fixture. If a non-component element is truly unavoidable, add an HTML comment explaining why and that it is not part of the component DOM.
 
 ```html
 <!doctype html>

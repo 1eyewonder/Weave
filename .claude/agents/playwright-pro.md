@@ -100,6 +100,34 @@ Fixtures are static HTML files at `tests/Weave.Tests.Rendering/fixtures/{name}.h
 - Assign `id` attributes to every element under test
 - For containment tests, ensure both parent and child are reachable via `id` or `#parent-id .weave-component__child` CSS selector
 
+### Fixture fidelity — match the component DOM
+
+Fixtures must faithfully reproduce the DOM structure that the F# component actually renders. Before writing a fixture, **read the component's F# source** to understand its element hierarchy, tag types (`div` vs `span` vs `label`), CSS classes, and nesting.
+
+**Rules:**
+
+1. **Mirror the real DOM.** Every element in the fixture should correspond to an element the component produces. If the component renders `<label> → <input> → <span> → <span.label>`, the fixture must use that same structure — not `<label> → <input> → <span> → <div.label>` or wrap elements in extra containers.
+2. **Never add non-component elements inside a component to fix test scaffolding problems.** If fixture elements need vertical separation, use block-level spacer `<div>` elements *between* components (as siblings), not wrapping them. Wrapping a component in a `<div>` changes its flex-item or layout context and can mask real CSS bugs or make tests pass for the wrong reasons.
+3. **Never override a component's `display` property with inline styles** (e.g., `style="display: block;"` on an `inline-flex` component) for layout convenience — this silently disables flex layout and produces false results. If you need line breaks between inline-flex components, place block-level spacer elements between them:
+   ```html
+   <!-- WRONG: kills inline-flex, breaks flex layout tests -->
+   <label class="weave-checkbox weave-flex-row" style="display: block;">...</label>
+
+   <!-- WRONG: wrapper div changes the component's layout context -->
+   <div style="margin-top: 16px;">
+     <label class="weave-checkbox weave-flex-row">...</label>
+   </div>
+
+   <!-- CORRECT: spacer div between components forces line break without altering component -->
+   <div style="margin-top: 16px;"></div>
+   <label class="weave-checkbox weave-flex-row">...</label>
+   ```
+4. **If a non-component element is truly unavoidable**, add an HTML comment explaining why it exists and that it is not part of the component's actual DOM:
+   ```html
+   <!-- Scaffold-only: wrapper needed because ... (not in component DOM) -->
+   ```
+5. **When a fixture won't work without structural changes, suspect a component bug first.** If you can't faithfully reproduce the component's DOM and get the test to pass, the problem is likely in the component's CSS or markup — investigate that before altering the fixture.
+
 ## Test Architecture
 - Page objects
 - Fixtures pattern

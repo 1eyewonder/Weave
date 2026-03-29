@@ -21,7 +21,7 @@ module SpacerExamples =
         Flex.Flex.allSizes
         AlignItems.center
         Padding.All.small
-        SurfaceColor.toBackgroundColor SurfaceColor.Paper
+        SurfaceColor.BackgroundColor.paper
       ] [
         Button.primary (text "Left", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
         Spacer.create ()
@@ -53,7 +53,7 @@ div [ Flex.Flex.allSizes; AlignItems.center ] [
         Flex.Flex.allSizes
         AlignItems.center
         Padding.All.small
-        SurfaceColor.toBackgroundColor SurfaceColor.Paper
+        SurfaceColor.BackgroundColor.paper
       ] [ btn "One"; Spacer.create (); btn "Two"; Spacer.create (); btn "Three" ]
 
     let code =

@@ -31,11 +31,11 @@ module ShowcasePomodoroTimer =
     | ShortBreak -> "Short Break"
     | LongBreak -> "Long Break"
 
-  let private phaseToColor (p: TimerPhase) =
+  let private phaseToBackgroundColor (p: TimerPhase) =
     match p with
-    | Work -> BrandColor.Primary
-    | ShortBreak -> BrandColor.Success
-    | LongBreak -> BrandColor.Tertiary
+    | Work -> BrandColor.BackgroundColor.primary
+    | ShortBreak -> BrandColor.BackgroundColor.success
+    | LongBreak -> BrandColor.BackgroundColor.tertiary
 
   let private fullAppSection () =
     let phase = Var.Create Work
@@ -138,7 +138,7 @@ module ShowcasePomodoroTimer =
                 attrs = [
                   if p = currentPhase then
                     Chip.Variant.filled
-                    BrandColor.toBackgroundColor (phaseToColor p)
+                    phaseToBackgroundColor p
                   else
                     Chip.Variant.outlined
                 ]
@@ -322,11 +322,11 @@ type TimerState =
     | Running
     | Paused
 
-let phaseToColor (p: TimerPhase) =
+let phaseToBackgroundColor (p: TimerPhase) =
     match p with
-    | Work -> BrandColor.Primary
-    | ShortBreak -> BrandColor.Success
-    | LongBreak -> BrandColor.Tertiary"""
+    | Work -> BrandColor.BackgroundColor.primary
+    | ShortBreak -> BrandColor.BackgroundColor.success
+    | LongBreak -> BrandColor.BackgroundColor.tertiary"""
 
     Helpers.codeSampleSection "Timer State Machine" description content code
 

@@ -177,7 +177,7 @@ module ShowcaseExpenseTracker =
           [
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e1
@@ -187,7 +187,7 @@ module ShowcaseExpenseTracker =
               ] [
                 div [ Typography.overline; Typography.Color.textSecondary ] [ text "Total" ]
 
-                div [ Typography.h4; BrandColor.toColor BrandColor.Primary ] [
+                div [ Typography.h4; BrandColor.TextColor.primary ] [
                   textView (totalAmount |> View.MapCached(sprintf "$%.2f"))
                 ]
               ],
@@ -196,7 +196,7 @@ module ShowcaseExpenseTracker =
 
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e1
@@ -212,7 +212,7 @@ module ShowcaseExpenseTracker =
 
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e1
@@ -222,7 +222,7 @@ module ShowcaseExpenseTracker =
               ] [
                 div [ Typography.overline; Typography.Color.textSecondary ] [ text "Average" ]
 
-                div [ Typography.h4; BrandColor.toColor BrandColor.Tertiary ] [
+                div [ Typography.h4; BrandColor.TextColor.tertiary ] [
                   textView (avgAmount |> View.MapCached(sprintf "$%.2f"))
                 ]
               ],
@@ -286,7 +286,7 @@ module ShowcaseExpenseTracker =
                   Gap.All.g2
                   Padding.Vertical.extraSmall
                   Padding.Horizontal.extraSmall
-                  SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                  SurfaceColor.BackgroundColor.surface
                   BorderRadius.All.small
                   Margin.Bottom.extraSmall
                   Elevation.e1
@@ -462,7 +462,7 @@ Grid.create([
     GridItem.create(
         div [ Padding.All.small; Elevation.e1 ] [
             div [ Typography.overline ] [ text "Total" ]
-            div [ Typography.h4; BrandColor.toColor BrandColor.Primary ] [
+            div [ Typography.h4; BrandColor.TextColor.primary ] [
                 textView (totalAmount |> View.MapCached(sprintf "$%.2f"))
             ]
         ],
@@ -478,7 +478,7 @@ Grid.create([
     GridItem.create(
         div [ Padding.All.small; Elevation.e1 ] [
             div [ Typography.overline ] [ text "Average" ]
-            div [ Typography.h4; BrandColor.toColor BrandColor.Tertiary ] [
+            div [ Typography.h4; BrandColor.TextColor.tertiary ] [
                 textView (avgAmount |> View.MapCached(sprintf "$%.2f"))
             ]
         ],

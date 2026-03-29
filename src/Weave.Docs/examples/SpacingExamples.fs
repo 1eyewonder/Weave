@@ -47,13 +47,10 @@ module SpacingExamples =
 
   /// A box inside a dashed-border container that makes margin visible as the gap between them.
   let private marginDemoBox (label: string) (marginAttrs: Attr list) =
-    div [
-      BorderRadius.All.small
-      SurfaceColor.toBackgroundColor SurfaceColor.Background
-    ] [
+    div [ BorderRadius.All.small; SurfaceColor.BackgroundColor.background ] [
       div [
         BorderRadius.All.small
-        BrandColor.toBackgroundColor BrandColor.Primary
+        BrandColor.BackgroundColor.primary
         Flex.Flex.allSizes
         AlignItems.center
         JustifyContent.center
@@ -65,12 +62,12 @@ module SpacingExamples =
   /// A box with visible padding: outer surface shows the padding zone, inner primary box shows content.
   let private paddingDemoBox (label: string) (paddingAttrs: Attr list) =
     div [
-      SurfaceColor.toBackgroundColor SurfaceColor.Background
+      SurfaceColor.BackgroundColor.background
       BorderRadius.All.small
       yield! paddingAttrs
     ] [
       div [
-        BrandColor.toBackgroundColor BrandColor.Primary
+        BrandColor.BackgroundColor.primary
         BorderRadius.All.small
         Padding.All.extraSmall
         Flex.Flex.allSizes

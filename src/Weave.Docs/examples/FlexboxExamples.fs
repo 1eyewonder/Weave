@@ -27,7 +27,7 @@ module FlexboxExamples =
   let private flexContainer (extraAttrs: Attr list) (children: Doc list) =
     div
       [
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         BorderRadius.All.small
         BorderWidth.All.one
         Attr.Style "border-style" "dashed"
@@ -54,7 +54,7 @@ module FlexboxExamples =
         JustifyContent.center
         AlignItems.center
         Gap.All.g3
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         BorderRadius.All.small
         Padding.All.small
         Attr.Style "min-height" "80px"

@@ -28,49 +28,32 @@ module Radio =
     let success = cl Css.``weave-radio--success``
     let info = cl Css.``weave-radio--info``
 
-  [<RequireQualifiedAccess; Struct>]
-  type ContentPlacement =
-    | Top
-    | Bottom
-    | Left
-    | Right
+  module ContentPlacement =
 
-open WebSharper.UI.Server
+    let right = cl Css.``weave-flex-row``
+    let left = cl Css.``weave-flex-row-reverse``
+    let top = cl Css.``weave-flex-column-reverse``
+    let bottom = cl Css.``weave-flex-column``
 
 [<JavaScript; RequireQualifiedAccess>]
 type Radio =
 
   static member create<'T when 'T: equality>
-    (
-      userSelection: Var<'T>,
-      value: 'T,
-      ?displayText: View<string>,
-      ?enabled: View<bool>,
-      ?contentPlacement: View<Radio.ContentPlacement>,
-      ?attrs: Attr list
-    ) =
+    (userSelection: Var<'T>, value: 'T, ?displayText: View<string>, ?enabled: View<bool>, ?attrs: Attr list)
+    =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
-
-    let contentPlacement =
-      defaultArg contentPlacement (View.Const Radio.ContentPlacement.Right)
 
     let isSelected = Var.Create false
 
     label [
       cl Css.``weave-radio``
       Flex.Inline.allSizes
+      FlexWrap.NoWrap.allSizes
+      AlignItems.center
 
       Disabled.disabledClass Css.``weave-radio--disabled`` enabled
-
-      Map.ofList [
-        Radio.ContentPlacement.Right, Css.``weave-flex-row``
-        Radio.ContentPlacement.Left, Css.``weave-flex-row-reverse``
-        Radio.ContentPlacement.Top, Css.``weave-flex-column-reverse``
-        Radio.ContentPlacement.Bottom, Css.``weave-flex-column``
-      ]
-      |> Attr.classSelection contentPlacement
-
+      Radio.ContentPlacement.right
       yield! attrs
     ] [
       input [

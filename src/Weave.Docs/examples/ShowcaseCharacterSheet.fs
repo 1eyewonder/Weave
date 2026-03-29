@@ -266,7 +266,7 @@ module ShowcaseCharacterSheet =
         div [ Margin.Top.small; Flex.Flex.allSizes; AlignItems.center; Gap.All.g2 ] [
           div [ Typography.subtitle2 ] [ text "Proficiency Bonus:" ]
 
-          div [ Typography.h6; BrandColor.toColor BrandColor.Primary ] [
+          div [ Typography.h6; BrandColor.TextColor.primary ] [
             textView (level.View |> View.MapCached(proficiencyBonus >> formatModifier))
           ]
         ]
@@ -274,7 +274,7 @@ module ShowcaseCharacterSheet =
 
     let abilityCard (ability: Ability) (score: Var<int>) =
       div [
-        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        SurfaceColor.BackgroundColor.surface
         Padding.All.small
         BorderRadius.All.small
         Elevation.e1
@@ -293,7 +293,7 @@ module ShowcaseCharacterSheet =
           attrs = [ Field.Color.primary; Attr.Style "max-width" "100px"; Typography.Align.center ]
         )
 
-        div [ Typography.h5; BrandColor.toColor BrandColor.Primary ] [
+        div [ Typography.h5; BrandColor.TextColor.primary ] [
           textView (score.View |> View.MapCached(abilityModifier >> formatModifier))
         ]
 
@@ -336,7 +336,7 @@ module ShowcaseCharacterSheet =
           [
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e1
@@ -356,7 +356,7 @@ module ShowcaseCharacterSheet =
 
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e1
@@ -420,7 +420,7 @@ module ShowcaseCharacterSheet =
         div [ Flex.Flex.allSizes; AlignItems.center; Gap.All.g2; Margin.Bottom.small ] [
           div [ Typography.subtitle2 ] [ text "Proficiency Bonus:" ]
 
-          div [ Typography.body1; BrandColor.toColor BrandColor.Primary ] [
+          div [ Typography.body1; BrandColor.TextColor.primary ] [
             textView (level.View |> View.MapCached(proficiencyBonus >> formatModifier))
           ]
         ]
@@ -449,7 +449,7 @@ module ShowcaseCharacterSheet =
 
             div [
               Typography.subtitle2
-              BrandColor.toColor BrandColor.Primary
+              BrandColor.TextColor.primary
               Attr.Style "min-width" "30px"
               Typography.Align.center
             ] [
@@ -498,7 +498,7 @@ module ShowcaseCharacterSheet =
             match roll with
             | Some result ->
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 Padding.All.small
                 BorderRadius.All.small
                 Elevation.e2
@@ -508,7 +508,7 @@ module ShowcaseCharacterSheet =
                 Attr.Style "min-width" "150px"
               ] [
                 div [ Typography.overline; Typography.Color.textSecondary ] [ text "Result" ]
-                div [ Typography.h3; BrandColor.toColor BrandColor.Primary ] [ text result ]
+                div [ Typography.h3; BrandColor.TextColor.primary ] [ text result ]
               ]
             | None ->
               div [ Typography.body2; Typography.Color.textSecondary ] [ text "Click a die to roll!" ])
@@ -607,7 +607,7 @@ let abilityCard (ability: Ability) (score: Var<int>) =
     div [ Elevation.e1; Padding.All.small ] [
         div [ Typography.overline ] [ text (abilityToString ability) ]
         NumericField.create(score, min = 1, max = 30)
-        div [ Typography.h5; BrandColor.toColor BrandColor.Primary ] [
+        div [ Typography.h5; BrandColor.TextColor.primary ] [
             textView (score.View
                 |> View.MapCached(abilityModifier >> formatModifier))
         ]
@@ -693,7 +693,7 @@ for skill in skills do
         div [ Typography.caption ] [ text (abilityToString skill.Ability) ]
 
         // Computed skill bonus — reactive over 3 inputs
-        div [ Typography.subtitle2; BrandColor.toColor BrandColor.Primary ] [
+        div [ Typography.subtitle2; BrandColor.TextColor.primary ] [
             textView (
                 (abilityScore.View, level.View, skill.Proficient.View)
                 |||> View.Map3(fun score lvl prof ->
@@ -737,7 +737,7 @@ lastRoll.View
 |> Doc.BindView(fun roll ->
     match roll with
     | Some result ->
-        div [ Typography.h3; BrandColor.toColor BrandColor.Primary ] [
+        div [ Typography.h3; BrandColor.TextColor.primary ] [
             text result
         ]
     | None ->

@@ -32,11 +32,48 @@
       <span id="span-large" class="weave-checkbox__span"></span>
     </label>
 
-    <!-- Default (flex-row): label appears to the right of the checkbox span -->
-    <label id="checkbox-labeled" class="weave-checkbox weave-flex-row" style="margin-top: 16px;">
+    <!-- Default (content-right): label appears to the right of the checkbox span -->
+    <label id="checkbox-labeled" class="weave-checkbox weave-checkbox--content-right" style="margin-top: 16px;">
       <input type="checkbox" class="weave-checkbox__input" />
       <span id="span-labeled" class="weave-checkbox__span"></span>
       <div id="label-text" class="weave-typography weave-checkbox__label">Label</div>
+    </label>
+
+    <!-- Content Placement orientations -->
+    <div style="margin-top: 32px;"></div>
+
+    <!-- Right (row): label to the right of checkbox -->
+    <label class="weave-checkbox weave-flex-row">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="cp-right-span" class="weave-checkbox__span"></span>
+      <div id="cp-right-label" class="weave-checkbox__label">Right</div>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Left (row-reverse): label to the left of checkbox -->
+    <label class="weave-checkbox weave-flex-row-reverse">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="cp-left-span" class="weave-checkbox__span"></span>
+      <div id="cp-left-label" class="weave-checkbox__label">Left</div>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Bottom (column): label below checkbox -->
+    <label class="weave-checkbox weave-flex-column">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="cp-bottom-span" class="weave-checkbox__span"></span>
+      <div id="cp-bottom-label" class="weave-checkbox__label">Bottom</div>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Top (column-reverse): label above checkbox -->
+    <label class="weave-checkbox weave-flex-column-reverse">
+      <input type="checkbox" class="weave-checkbox__input" />
+      <span id="cp-top-span" class="weave-checkbox__span"></span>
+      <div id="cp-top-label" class="weave-checkbox__label">Top</div>
     </label>
   </body>
 </html>

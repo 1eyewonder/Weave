@@ -119,14 +119,6 @@ module Core =
     let backgroundDisabled = "var(--palette-action-disabled-background)"
 
   [<RequireQualifiedAccess; Struct>]
-  type Size =
-    | ExtraSmall
-    | Small
-    | Medium
-    | Large
-    | ExtraLarge
-
-  [<RequireQualifiedAccess; Struct>]
   type BrandColor =
     | Primary
     | Secondary
@@ -138,132 +130,76 @@ module Core =
 
   module BrandColor =
 
-    let internal toStyle style color =
-      match color with
-      | BrandColor.Primary -> Attr.Style style Palette.primary
-      | BrandColor.Secondary -> Attr.Style style Palette.secondary
-      | BrandColor.Tertiary -> Attr.Style style Palette.tertiary
-      | BrandColor.Error -> Attr.Style style Palette.error
-      | BrandColor.Warning -> Attr.Style style Palette.warning
-      | BrandColor.Success -> Attr.Style style Palette.success
-      | BrandColor.Info -> Attr.Style style Palette.info
+    module BackgroundColor =
 
-    let palette color =
-      match color with
-      | BrandColor.Primary -> Palette.primary
-      | BrandColor.Secondary -> Palette.secondary
-      | BrandColor.Tertiary -> Palette.tertiary
-      | BrandColor.Error -> Palette.error
-      | BrandColor.Warning -> Palette.warning
-      | BrandColor.Success -> Palette.success
-      | BrandColor.Info -> Palette.info
+      let primary = Attr.Style Style.backgroundColor Palette.primary
+      let secondary = Attr.Style Style.backgroundColor Palette.secondary
+      let tertiary = Attr.Style Style.backgroundColor Palette.tertiary
+      let error = Attr.Style Style.backgroundColor Palette.error
+      let warning = Attr.Style Style.backgroundColor Palette.warning
+      let success = Attr.Style Style.backgroundColor Palette.success
+      let info = Attr.Style Style.backgroundColor Palette.info
 
-    let toBackgroundColor color = toStyle Style.backgroundColor color
-    let toColor color = toStyle Style.color color
+    module TextColor =
 
-  [<RequireQualifiedAccess; Struct>]
-  type TransitionSpeed =
-    | None
-    | Fast
-    | Standard
-    | Slow
+      let primary = Attr.Style Style.color Palette.primary
+      let secondary = Attr.Style Style.color Palette.secondary
+      let tertiary = Attr.Style Style.color Palette.tertiary
+      let error = Attr.Style Style.color Palette.error
+      let warning = Attr.Style Style.color Palette.warning
+      let success = Attr.Style Style.color Palette.success
+      let info = Attr.Style Style.color Palette.info
 
   module TransitionSpeed =
 
-    let toClass speed =
-      match speed with
-      | TransitionSpeed.None -> Css.``weave-transition--none``
-      | TransitionSpeed.Fast -> Css.``weave-transition--fast``
-      | TransitionSpeed.Standard -> Css.``weave-transition--standard``
-      | TransitionSpeed.Slow -> Css.``weave-transition--slow``
-
-  [<Struct>]
-  type Opacity = private Opacity of int
+    let none = cl Css.``weave-transition--none``
+    let fast = cl Css.``weave-transition--fast``
+    let standard = cl Css.``weave-transition--standard``
+    let slow = cl Css.``weave-transition--slow``
 
   module Opacity =
 
-    let create percent =
-      match percent with
-      | p when p < 0 -> Opacity 0
-      | p when p > 100 -> Opacity 100
-      | p -> Opacity p
-
-    let toClass (Opacity percent) = $"weave-opacity-{percent}"
-
-  [<RequireQualifiedAccess; Struct>]
-  type SurfaceColor =
-    | Background
-    | BackgroundDarker
-    | Paper
-    | Surface
+    let zero = cl Css.``weave-opacity-0``
+    let ten = cl Css.``weave-opacity-10``
+    let twenty = cl Css.``weave-opacity-20``
+    let thirty = cl Css.``weave-opacity-30``
+    let forty = cl Css.``weave-opacity-40``
+    let fifty = cl Css.``weave-opacity-50``
+    let sixty = cl Css.``weave-opacity-60``
+    let seventy = cl Css.``weave-opacity-70``
+    let eighty = cl Css.``weave-opacity-80``
+    let ninety = cl Css.``weave-opacity-90``
+    let hundred = cl Css.``weave-opacity-100``
 
   module SurfaceColor =
 
-    let internal toStyle style color =
-      match color with
-      | SurfaceColor.Background -> Attr.Style style Palette.background
-      | SurfaceColor.BackgroundDarker -> Attr.Style style Palette.backgroundDarken
-      | SurfaceColor.Paper -> Attr.Style style Palette.backgroundPaper
-      | SurfaceColor.Surface -> Attr.Style style Palette.surface
+    module BackgroundColor =
 
-    let palette color =
-      match color with
-      | SurfaceColor.Background -> Palette.background
-      | SurfaceColor.BackgroundDarker -> Palette.backgroundDarken
-      | SurfaceColor.Paper -> Palette.backgroundPaper
-      | SurfaceColor.Surface -> Palette.surface
+      let background = Attr.Style Style.backgroundColor Palette.background
+      let backgroundDarker = Attr.Style Style.backgroundColor Palette.backgroundDarken
+      let paper = Attr.Style Style.backgroundColor Palette.backgroundPaper
+      let surface = Attr.Style Style.backgroundColor Palette.surface
 
-    let toBackgroundColor color = toStyle Style.backgroundColor color
-    let toColor color = toStyle Style.color color
+    module TextColor =
 
-  [<RequireQualifiedAccess; Struct>]
-  type DisabledColor =
-    | Background
-    | Text
-    | Action
+      let background = Attr.Style Style.color Palette.background
+      let backgroundDarker = Attr.Style Style.color Palette.backgroundDarken
+      let paper = Attr.Style Style.color Palette.backgroundPaper
+      let surface = Attr.Style Style.color Palette.surface
 
   module DisabledColor =
 
-    let internal toStyle style color =
-      match color with
-      | DisabledColor.Background -> Attr.Style style Palette.backgroundDisabled
-      | DisabledColor.Text -> Attr.Style style Palette.textDisabled
-      | DisabledColor.Action -> Attr.Style style Palette.actionDisabled
+    module BackgroundColor =
 
-    let palette color =
-      match color with
-      | DisabledColor.Background -> Palette.backgroundDisabled
-      | DisabledColor.Text -> Palette.textDisabled
-      | DisabledColor.Action -> Palette.actionDisabled
+      let background = Attr.Style Style.backgroundColor Palette.backgroundDisabled
+      let text = Attr.Style Style.backgroundColor Palette.textDisabled
+      let action = Attr.Style Style.backgroundColor Palette.actionDisabled
 
-    let toBackgroundColor color = toStyle Style.backgroundColor color
-    let toColor color = toStyle Style.color color
+    module TextColor =
 
-  [<RequireQualifiedAccess; Struct>]
-  type Color =
-    | Brand of brand: BrandColor
-    | Surface of surface: SurfaceColor
-    | Disabled of disabled: DisabledColor
-
-  module Color =
-
-    let palette color =
-      match color with
-      | Color.Brand brand -> BrandColor.palette brand
-      | Color.Surface surface -> SurfaceColor.palette surface
-      | Color.Disabled disabled -> DisabledColor.palette disabled
-
-    let toBackgroundColor color =
-      match color with
-      | Color.Brand brand -> BrandColor.toBackgroundColor brand
-      | Color.Surface surface -> SurfaceColor.toBackgroundColor surface
-      | Color.Disabled disabled -> DisabledColor.toBackgroundColor disabled
-
-    let toColor color =
-      match color with
-      | Color.Brand brand -> BrandColor.toColor brand
-      | Color.Surface surface -> SurfaceColor.toColor surface
-      | Color.Disabled disabled -> DisabledColor.toColor disabled
+      let background = Attr.Style Style.color Palette.backgroundDisabled
+      let text = Attr.Style Style.color Palette.textDisabled
+      let action = Attr.Style Style.color Palette.actionDisabled
 
   [<RequireQualifiedAccess; Struct>]
   type Breakpoint =

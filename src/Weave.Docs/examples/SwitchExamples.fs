@@ -215,41 +215,27 @@ Switch.create(
   let private contentPlacementExample () =
     let description =
       Helpers.bodyText
-        "Change the label position using the contentPlacement parameter. Use the radio buttons below to see each placement in action."
+        "Change the label position using the ContentPlacement module. Available placements are right (default), left, top, and bottom."
 
     let content =
-      let placement = Var.Create Switch.ContentPlacement.Right
-
-      let radioOptions = [
-        Switch.ContentPlacement.Left, "Left"
-        Switch.ContentPlacement.Right, "Right"
-        Switch.ContentPlacement.Top, "Top"
-        Switch.ContentPlacement.Bottom, "Bottom"
+      let placements = [
+        Switch.ContentPlacement.left, "Left"
+        Switch.ContentPlacement.right, "Right"
+        Switch.ContentPlacement.top, "Top"
+        Switch.ContentPlacement.bottom, "Bottom"
       ]
 
-      let radioButtons =
-        radioOptions
-        |> List.map (fun (value, label) ->
+      Grid.create (
+        placements
+        |> List.map (fun (placementAttr, label) ->
           GridItem.create (
-            Radio.create (placement, value, displayText = View.Const label),
+            Switch.create (
+              Var.Create false,
+              div [ Typography.body1 ] [ text label ],
+              attrs = [ Switch.Size.large; Switch.Color.primary; placementAttr ]
+            ),
             attrs = [ GridItem.Span.six; GridItem.Span.Medium.three ]
           ))
-
-      let demoChecked = Var.Create false
-
-      let demoSwitch =
-        Switch.create (
-          demoChecked,
-          placement.View
-          |> View.MapCached(sprintf "%A")
-          |> Doc.BindView(fun t -> div [ Typography.body1 ] [ text t ]),
-          contentPlacement = placement.View,
-          attrs = [ Switch.Size.large; Switch.Color.primary ]
-        )
-
-      Grid.create (
-        radioButtons
-        @ [ GridItem.create (demoSwitch, attrs = [ GridItem.Span.twelve ]) ]
       )
 
     let code =
@@ -261,25 +247,25 @@ let isChecked = Var.Create false
 Switch.create(
     isChecked,
     div [ Typography.body1 ] [ text "Left" ],
-    contentPlacement = View.Const Switch.ContentPlacement.Left
+    attrs = [ Switch.ContentPlacement.left; Switch.Color.primary ] // see here
 )
 
 Switch.create(
     isChecked,
     div [ Typography.body1 ] [ text "Right" ],
-    contentPlacement = View.Const Switch.ContentPlacement.Right
+    attrs = [ Switch.ContentPlacement.right; Switch.Color.primary ]
 )
 
 Switch.create(
     isChecked,
     div [ Typography.body1 ] [ text "Top" ],
-    contentPlacement = View.Const Switch.ContentPlacement.Top
+    attrs = [ Switch.ContentPlacement.top; Switch.Color.primary ]
 )
 
 Switch.create(
     isChecked,
     div [ Typography.body1 ] [ text "Bottom" ],
-    contentPlacement = View.Const Switch.ContentPlacement.Bottom
+    attrs = [ Switch.ContentPlacement.bottom; Switch.Color.primary ]
 )"""
 
     Helpers.codeSampleSection "Content Placement" description content code

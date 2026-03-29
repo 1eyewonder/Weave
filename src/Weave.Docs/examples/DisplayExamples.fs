@@ -148,14 +148,14 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
         div [ Margin.Bottom.small ] [
           div [
             Display.Block.always
-            BrandColor.toBackgroundColor BrandColor.Primary
+            BrandColor.BackgroundColor.primary
             Padding.All.extraSmall
             BorderRadius.All.small
             Margin.Bottom.extraSmall
           ] [ div [ Typography.body2 ] [ text "Block A — takes full width" ] ]
           div [
             Display.Block.always
-            BrandColor.toBackgroundColor BrandColor.Secondary
+            BrandColor.BackgroundColor.secondary
             Padding.All.extraSmall
             BorderRadius.All.small
           ] [ div [ Typography.body2 ] [ text "Block B — stacks below" ] ]
@@ -165,21 +165,21 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
         div [ Margin.Bottom.small ] [
           span [
             Display.Inline.always
-            BrandColor.toBackgroundColor BrandColor.Info
+            BrandColor.BackgroundColor.info
             Padding.All.extraSmall
             BorderRadius.All.small
           ] [ text "Inline A" ]
           text " "
           span [
             Display.Inline.always
-            BrandColor.toBackgroundColor BrandColor.Success
+            BrandColor.BackgroundColor.success
             Padding.All.extraSmall
             BorderRadius.All.small
           ] [ text "Inline B" ]
           text " "
           span [
             Display.Inline.always
-            BrandColor.toBackgroundColor BrandColor.Warning
+            BrandColor.BackgroundColor.warning
             Padding.All.extraSmall
             BorderRadius.All.small
           ] [ text "Inline C" ]
@@ -189,7 +189,7 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
         div [ Margin.Bottom.small ] [
           div [
             Display.InlineBlock.always
-            BrandColor.toBackgroundColor BrandColor.Error
+            BrandColor.BackgroundColor.error
             Padding.All.extraSmall
             BorderRadius.All.small
             Attr.Style "width" "120px"
@@ -197,7 +197,7 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
           text " "
           div [
             Display.InlineBlock.always
-            BrandColor.toBackgroundColor BrandColor.Tertiary
+            BrandColor.BackgroundColor.tertiary
             Padding.All.extraSmall
             BorderRadius.All.small
             Attr.Style "width" "120px"

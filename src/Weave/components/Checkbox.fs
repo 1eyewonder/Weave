@@ -27,29 +27,21 @@ module Checkbox =
     let success = cl Css.``weave-checkbox--success``
     let info = cl Css.``weave-checkbox--info``
 
-  [<RequireQualifiedAccess; Struct>]
-  type ContentPlacement =
-    | Top
-    | Bottom
-    | Left
-    | Right
+  module ContentPlacement =
+
+    let right = cl Css.``weave-flex-row``
+    let left = cl Css.``weave-flex-row-reverse``
+    let top = cl Css.``weave-flex-column-reverse``
+    let bottom = cl Css.``weave-flex-column``
 
 [<JavaScript; RequireQualifiedAccess>]
 type Checkbox =
 
   static member create
-    (
-      isChecked: Var<bool>,
-      ?displayText: View<string>,
-      ?enabled: View<bool>,
-      ?contentPlacement: View<Checkbox.ContentPlacement>,
-      ?attrs: Attr list
-    ) =
+    (isChecked: Var<bool>, ?displayText: View<string>, ?enabled: View<bool>, ?attrs: Attr list)
+    =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
-
-    let contentPlacement =
-      defaultArg contentPlacement (View.Const Checkbox.ContentPlacement.Right)
 
     label [
       cl Css.``weave-checkbox``
@@ -58,15 +50,7 @@ type Checkbox =
       AlignItems.center
 
       Disabled.disabledClass Css.``weave-checkbox--disabled`` enabled
-
-      Map.ofList [
-        Checkbox.ContentPlacement.Right, Css.``weave-flex-row``
-        Checkbox.ContentPlacement.Left, Css.``weave-flex-row-reverse``
-        Checkbox.ContentPlacement.Top, Css.``weave-flex-column-reverse``
-        Checkbox.ContentPlacement.Bottom, Css.``weave-flex-column``
-      ]
-      |> Attr.classSelection contentPlacement
-
+      Checkbox.ContentPlacement.right
       yield! attrs
     ] [
       input [

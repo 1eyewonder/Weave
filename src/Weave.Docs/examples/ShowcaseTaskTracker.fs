@@ -196,7 +196,7 @@ module ShowcaseTaskTracker =
                   Gap.All.g2
                   Padding.Vertical.extraSmall
                   Padding.Horizontal.extraSmall
-                  SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                  SurfaceColor.BackgroundColor.surface
                   BorderRadius.All.small
                   Margin.Bottom.extraSmall
                   Elevation.e1

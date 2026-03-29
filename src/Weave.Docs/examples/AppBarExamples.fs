@@ -25,7 +25,7 @@ module AppBarExamples =
           Padding.Horizontal.medium
           Padding.Vertical.small
         ] [ div [ Typography.h6 ] [ text "My Application" ] ],
-        attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
+        attrs = [ BrandColor.BackgroundColor.primary ]
       )
 
     let code =
@@ -36,7 +36,7 @@ module AppBarExamples =
         Padding.Horizontal.medium
         Padding.Vertical.small
     ] [ div [ Typography.h6 ] [ text "My Application" ] ],
-    attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
+    attrs = [ BrandColor.BackgroundColor.primary ]
 )
 // Default position is Position.Fixed — sticks to the top of the viewport."""
 
@@ -67,10 +67,7 @@ module AppBarExamples =
     // Static: bar scrolls away with content inside a contained scroll box
     let staticPreview =
       div [ Attr.Style "height" "180px"; Attr.Style "overflow-y" "auto" ] [
-        AppBar.create (
-          toolbarInner "Position.Static",
-          attrs = [ BrandColor.toBackgroundColor BrandColor.Info ]
-        )
+        AppBar.create (toolbarInner "Position.Static", attrs = [ BrandColor.BackgroundColor.info ])
         filler ()
       ]
 
@@ -79,7 +76,7 @@ module AppBarExamples =
       div [ Attr.Style "height" "180px"; Attr.Style "overflow-y" "auto" ] [
         AppBar.create (
           toolbarInner "Position.Sticky",
-          attrs = [ AppBar.Position.sticky; BrandColor.toBackgroundColor BrandColor.Success ]
+          attrs = [ AppBar.Position.sticky; BrandColor.BackgroundColor.success ]
         )
         filler ()
       ]
@@ -91,10 +88,7 @@ module AppBarExamples =
         FlexDirection.Column.allSizes
         Attr.Style "height" "180px"
       ] [
-        AppBar.create (
-          toolbarInner "Position.Fixed",
-          attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
-        )
+        AppBar.create (toolbarInner "Position.Fixed", attrs = [ BrandColor.BackgroundColor.primary ])
         div [ Attr.Style "overflow-y" "auto"; Attr.Style "flex" "1"; Padding.All.small ] [
           yield!
             [ 1..10 ]
@@ -114,10 +108,7 @@ module AppBarExamples =
             [ 1..10 ]
             |> List.map (fun i -> div [ Typography.body2 ] [ text (sprintf "Content line %d" i) ])
         ]
-        AppBar.create (
-          toolbarInner "Position.Bottom",
-          attrs = [ BrandColor.toBackgroundColor BrandColor.Secondary ]
-        )
+        AppBar.create (toolbarInner "Position.Bottom", attrs = [ BrandColor.BackgroundColor.secondary ])
       ]
 
     let mkCard (title: string) (desc: string) (preview: Doc) =
@@ -194,7 +185,7 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
           IconButton.create (Icon.create (Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
           IconButton.create (Icon.create (Icon.Social Social.Person), onClick = (fun () -> ()))
         ],
-        attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
+        attrs = [ BrandColor.BackgroundColor.primary ]
       )
 
     let code =
@@ -215,7 +206,7 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
         IconButton.create(Icon.create(Icon.UiActions UiActions.Search), onClick = (fun () -> ()))
         IconButton.create(Icon.create(Icon.Social Social.Person), onClick = (fun () -> ()))
     ],
-    attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
+    attrs = [ BrandColor.BackgroundColor.primary ]
 )"""
 
     Helpers.codeSampleSection "Content Composition" description preview code

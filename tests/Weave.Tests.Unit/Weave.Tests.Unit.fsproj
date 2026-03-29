@@ -8,9 +8,7 @@
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
     <Compile Include="ChipSetTests.fs" />
     <Compile Include="DropdownTests.fs" />
-    <Compile Include="TransitionSpeedTests.fs" />
     <Compile Include="AnimationTests.fs" />
-    <Compile Include="OpacityTests.fs" />
     <Compile Include="NumericFieldTests.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -350,7 +350,7 @@ div [
               styleAttr
               colorAttr
               radiusAttr
-              SurfaceColor.toBackgroundColor SurfaceColor.Background
+              SurfaceColor.BackgroundColor.background
               Padding.All.medium
               Flex.Flex.allSizes
               AlignItems.center
@@ -408,7 +408,7 @@ div [
     let radiusDemo (label: string) (fsharpLabel: string) (radiusAttr: Attr) =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
         div [
-          BrandColor.toBackgroundColor BrandColor.Primary
+          BrandColor.BackgroundColor.primary
           radiusAttr
           Flex.Flex.allSizes
           AlignItems.center
@@ -524,7 +524,7 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
           Attr.Style "border-style" "solid"
           BorderColor.primary
           BorderRadius.All.small
-          SurfaceColor.toBackgroundColor SurfaceColor.Background
+          SurfaceColor.BackgroundColor.background
           Flex.Flex.allSizes
           AlignItems.center
           JustifyContent.center
@@ -646,7 +646,7 @@ div [
           styleAttr
           BorderColor.primary
           BorderRadius.All.small
-          SurfaceColor.toBackgroundColor SurfaceColor.Background
+          SurfaceColor.BackgroundColor.background
           Flex.Flex.allSizes
           AlignItems.center
           JustifyContent.center
@@ -724,7 +724,7 @@ div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.erro
         Attr.Style "border-style" "solid"
         colorAttr
         BorderRadius.All.small
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         Padding.All.small
         Flex.Flex.allSizes
         AlignItems.center
@@ -899,7 +899,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
           [
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 BorderWidth.All.one
                 Attr.Style "border-style" "solid"
                 BorderColor.linesDefault
@@ -915,7 +915,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
             )
             GridItem.create (
               div [
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 BorderWidth.Left.four
                 Attr.Style "border-style" "solid"
                 BorderColor.primary
@@ -963,7 +963,7 @@ Alert.create(
 
 // Card with subtle border instead of shadow
 div [
-    SurfaceColor.toBackgroundColor SurfaceColor.Surface
+    SurfaceColor.BackgroundColor.surface
     BorderWidth.All.one
     Attr.Style "border-style" "solid"
     BorderColor.linesDefault

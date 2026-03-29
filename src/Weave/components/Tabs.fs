@@ -63,10 +63,15 @@ module Tabs =
   /// </summary>
   module HeaderBackground =
 
-    let toAttr (color: Color) =
-      Attr.Style "--tabs-header-background" (Color.palette color)
+    let primary = Attr.Style "--tabs-header-background" Palette.primary
+    let secondary = Attr.Style "--tabs-header-background" Palette.secondary
+    let tertiary = Attr.Style "--tabs-header-background" Palette.tertiary
+    let error = Attr.Style "--tabs-header-background" Palette.error
+    let warning = Attr.Style "--tabs-header-background" Palette.warning
+    let success = Attr.Style "--tabs-header-background" Palette.success
+    let info = Attr.Style "--tabs-header-background" Palette.info
 
-    let toCustomAttr (value: string) =
+    let custom (value: string) =
       Attr.Style "--tabs-header-background" value
 
   module Color =

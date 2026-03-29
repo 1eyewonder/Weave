@@ -28,39 +28,25 @@ module Switch =
     let success = cl Css.``weave-switch--success``
     let info = cl Css.``weave-switch--info``
 
-  [<RequireQualifiedAccess; Struct>]
-  type ContentPlacement =
-    | Top
-    | Bottom
-    | Left
-    | Right
+  module ContentPlacement =
+
+    let right = cl Css.``weave-flex-row``
+    let left = cl Css.``weave-flex-row-reverse``
+    let top = cl Css.``weave-flex-column-reverse``
+    let bottom = cl Css.``weave-flex-column``
 
 [<JavaScript; RequireQualifiedAccess>]
 type Switch =
 
-  static member private render
-    (
-      isChecked: Var<bool>,
-      content: Doc,
-      enabled: View<bool>,
-      contentPlacement: View<Switch.ContentPlacement>,
-      attrs: Attr list
-    ) =
+  static member private render(isChecked: Var<bool>, content: Doc, enabled: View<bool>, attrs: Attr list) =
     label [
       cl Css.``weave-switch``
       Flex.Inline.allSizes
+      FlexWrap.NoWrap.allSizes
       AlignItems.center
 
       Disabled.disabledClass Css.``weave-switch--disabled`` enabled
-
-      Map.ofList [
-        Switch.ContentPlacement.Right, Css.``weave-flex-row``
-        Switch.ContentPlacement.Left, Css.``weave-flex-row-reverse``
-        Switch.ContentPlacement.Top, Css.``weave-flex-column-reverse``
-        Switch.ContentPlacement.Bottom, Css.``weave-flex-column``
-      ]
-      |> Attr.classSelection contentPlacement
-
+      Switch.ContentPlacement.right
       yield! attrs
     ] [
       div [ cls [ Css.``weave-switch__container`` ] ] [
@@ -90,22 +76,12 @@ type Switch =
       div [ View.not enabled |> Attr.toggleColor Palette.textDisabled ] [ content ]
     ]
 
-  static member create
-    (
-      isChecked: Var<bool>,
-      ?content: Doc,
-      ?enabled: View<bool>,
-      ?contentPlacement: View<Switch.ContentPlacement>,
-      ?attrs: Attr list
-    ) =
+  static member create(isChecked: Var<bool>, ?content: Doc, ?enabled: View<bool>, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     let enabled = defaultArg enabled (View.Const true)
-
-    let contentPlacement =
-      defaultArg contentPlacement (View.Const Switch.ContentPlacement.Right)
 
     let content =
       content
       |> Option.mapOrDefault Doc.Empty (fun d -> div [ cls [ Css.``weave-switch__label`` ] ] [ d ])
 
-    Switch.render (isChecked, content, enabled, contentPlacement, attrs)
+    Switch.render (isChecked, content, enabled, attrs)

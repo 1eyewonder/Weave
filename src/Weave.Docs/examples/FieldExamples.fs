@@ -190,18 +190,16 @@ Field.create(
       )
 
     let searchIcon () =
-      Some(Icon.create (Icon.UiActions UiActions.Search, attrs = [ BrandColor.toColor BrandColor.Primary ]))
+      Some(Icon.create (Icon.UiActions UiActions.Search, attrs = [ BrandColor.TextColor.primary ]))
 
     let checkIcon () =
-      Some(
-        Icon.create (Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.toColor BrandColor.Success ])
-      )
+      Some(Icon.create (Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.TextColor.success ]))
 
     let infoIcon () =
-      Some(Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]))
+      Some(Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.TextColor.info ]))
 
     let warningIcon () =
-      Some(Icon.create (Icon.Action Action.Warning, attrs = [ BrandColor.toColor BrandColor.Warning ]))
+      Some(Icon.create (Icon.Action Action.Warning, attrs = [ BrandColor.TextColor.warning ]))
 
     let noIcon () = None
 
@@ -255,7 +253,7 @@ Field.create(
     labelText = View.Const "Outlined",
     startAdornment = Icon.create(
         Icon.UiActions UiActions.Search,
-        attrs = [ BrandColor.toColor BrandColor.Primary ]
+        attrs = [ BrandColor.TextColor.primary ]
     )
 )
 
@@ -266,7 +264,7 @@ Field.create(
     labelText = View.Const "Outlined",
     endAdornment = Icon.create(
         Icon.UiActions UiActions.CheckCircle,
-        attrs = [ BrandColor.toColor BrandColor.Success ]
+        attrs = [ BrandColor.TextColor.success ]
     )
 )
 
@@ -277,11 +275,11 @@ Field.create(
     labelText = View.Const "Outlined",
     startAdornment = Icon.create(
         Icon.UiActions UiActions.Search,
-        attrs = [ BrandColor.toColor BrandColor.Primary ]
+        attrs = [ BrandColor.TextColor.primary ]
     ),
     endAdornment = Icon.create( // and here
         Icon.UiActions UiActions.CheckCircle,
-        attrs = [ BrandColor.toColor BrandColor.Success ]
+        attrs = [ BrandColor.TextColor.success ]
     )
 )
 """
@@ -305,7 +303,7 @@ Field.create(
         variant = Field.Variant.Outlined,
         labelText = View.Const "ShrinkLabel Override",
         shrinkLabel = View.Const true,
-        endAdornment = Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.toColor BrandColor.Info ]),
+        endAdornment = Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.TextColor.info ]),
         attrs = [ Field.Width.full ]
       )
 

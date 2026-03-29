@@ -16,7 +16,7 @@ module AlertExamples =
 
     let content =
       div [
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         Padding.All.small
         BorderRadius.All.small
       ] [ Alert.create (text "This is an alert.", attrs = [ Alert.Variant.standard ]) ]
@@ -99,7 +99,7 @@ Alert.create(
 
     let content =
       div [
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         Padding.All.small
         BorderRadius.All.small
       ] [

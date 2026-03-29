@@ -28,7 +28,7 @@ module TransitionExamples =
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
-        "Transition speed controls how fast component animations play. Weave uses CSS custom properties for all transition durations, so you can override them per-element or subtree. Apply a speed class via TransitionSpeed.toClass in attrs."
+        "Transition speed controls how fast component animations play. Weave uses CSS custom properties for all transition durations, so you can override them per-element or subtree. Apply a speed class via the TransitionSpeed module callsites."
 
     let content =
       div [ Attr.Style "overflow-x" "auto" ] [
@@ -40,22 +40,22 @@ module TransitionExamples =
             tr [] [
               tableCell [ text "None" ]
               tableCell [ text "Instant (0ms)" ]
-              tableCell [ inlineCode "TransitionSpeed.toClass TransitionSpeed.None" ]
+              tableCell [ inlineCode "TransitionSpeed.none" ]
             ]
             tr [] [
               tableCell [ text "Fast" ]
               tableCell [ text "Half speed" ]
-              tableCell [ inlineCode "TransitionSpeed.toClass TransitionSpeed.Fast" ]
+              tableCell [ inlineCode "TransitionSpeed.fast" ]
             ]
             tr [] [
               tableCell [ text "Standard" ]
               tableCell [ text "Default" ]
-              tableCell [ inlineCode "TransitionSpeed.toClass TransitionSpeed.Standard" ]
+              tableCell [ inlineCode "TransitionSpeed.standard" ]
             ]
             tr [] [
               tableCell [ text "Slow" ]
               tableCell [ text "Double speed" ]
-              tableCell [ inlineCode "TransitionSpeed.toClass TransitionSpeed.Slow" ]
+              tableCell [ inlineCode "TransitionSpeed.slow" ]
             ]
           ]
         ]
@@ -66,18 +66,18 @@ module TransitionExamples =
 
 
 // Apply a transition speed to a single element
-div [ cl (TransitionSpeed.toClass TransitionSpeed.Fast) ] [
+div [ TransitionSpeed.fast ] [
     text "Animations inside here run at half the default duration"
 ]
 
 // Disable transitions entirely
-div [ cl (TransitionSpeed.toClass TransitionSpeed.None) ] [
+div [ TransitionSpeed.none ] [
     text "No transitions — all changes are instant"
 ]
 
 // The speed class overrides CSS custom properties,
 // so all children inherit the new durations
-div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
+div [ TransitionSpeed.slow ] [
     Button.primary(
         text "Slow hover",
         onClick = (fun () -> ()),
@@ -95,10 +95,10 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
         "Hover over each button below to see the same hover transition at different speeds. The speed class is applied to a wrapper div, so all children inherit the speed override."
 
     let content =
-      let speedColumn (label: string) (speed: TransitionSpeed) =
+      let speedColumn (label: string) (speed: Attr) =
         div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
           div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
-          div [ cl (TransitionSpeed.toClass speed) ] [
+          div [ speed ] [
             Button.primary (text "Hover me", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
         ]
@@ -106,19 +106,19 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
       Grid.create (
         [
           GridItem.create (
-            speedColumn "None" TransitionSpeed.None,
+            speedColumn "None" TransitionSpeed.none,
             attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
-            speedColumn "Fast" TransitionSpeed.Fast,
+            speedColumn "Fast" TransitionSpeed.fast,
             attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
-            speedColumn "Standard" TransitionSpeed.Standard,
+            speedColumn "Standard" TransitionSpeed.standard,
             attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
           GridItem.create (
-            speedColumn "Slow" TransitionSpeed.Slow,
+            speedColumn "Slow" TransitionSpeed.slow,
             attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
           )
         ]
@@ -128,7 +128,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
       """open Weave
 
 // None: instant (0ms transitions)
-div [ cl (TransitionSpeed.toClass TransitionSpeed.None) ] [
+div [ TransitionSpeed.none ] [
     Button.primary(
         text "Hover me",
         onClick = (fun () -> ()),
@@ -137,7 +137,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.None) ] [
 ]
 
 // Fast: half the default duration
-div [ cl (TransitionSpeed.toClass TransitionSpeed.Fast) ] [
+div [ TransitionSpeed.fast ] [
     Button.primary(
         text "Hover me",
         onClick = (fun () -> ()),
@@ -146,7 +146,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Fast) ] [
 ]
 
 // Standard: the default duration
-div [ cl (TransitionSpeed.toClass TransitionSpeed.Standard) ] [
+div [ TransitionSpeed.standard ] [
     Button.primary(
         text "Hover me",
         onClick = (fun () -> ()),
@@ -155,7 +155,7 @@ div [ cl (TransitionSpeed.toClass TransitionSpeed.Standard) ] [
 ]
 
 // Slow: double the default duration
-div [ cl (TransitionSpeed.toClass TransitionSpeed.Slow) ] [
+div [ TransitionSpeed.slow ] [
     Button.primary(
         text "Hover me",
         onClick = (fun () -> ()),

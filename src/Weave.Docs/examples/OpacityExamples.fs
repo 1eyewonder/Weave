@@ -28,7 +28,7 @@ module OpacityExamples =
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
-        "Opacity utility classes control element transparency on a stepped scale from 0 (invisible) to 100 (fully opaque) in increments of 5. Create an Opacity value with Opacity.create, then convert to a CSS class with Opacity.toClass."
+        "Opacity utility classes control element transparency on a stepped scale from 0 (invisible) to 100 (fully opaque) in increments of 10. Apply an opacity class via the Opacity module callsites (e.g. Opacity.fifty for 50%)."
 
     let content =
       div [ Attr.Style "overflow-x" "auto" ] [
@@ -44,27 +44,57 @@ module OpacityExamples =
             tr [] [
               tableCell [ text "0" ]
               tableCell [ text "0%" ]
-              tableCell [ inlineCode "Opacity.create 0 |> Opacity.toClass" ]
+              tableCell [ inlineCode "Opacity.zero" ]
             ]
             tr [] [
-              tableCell [ text "25" ]
-              tableCell [ text "25%" ]
-              tableCell [ inlineCode "Opacity.create 25 |> Opacity.toClass" ]
+              tableCell [ text "10" ]
+              tableCell [ text "10%" ]
+              tableCell [ inlineCode "Opacity.ten" ]
+            ]
+            tr [] [
+              tableCell [ text "20" ]
+              tableCell [ text "20%" ]
+              tableCell [ inlineCode "Opacity.twenty" ]
+            ]
+            tr [] [
+              tableCell [ text "30" ]
+              tableCell [ text "30%" ]
+              tableCell [ inlineCode "Opacity.thirty" ]
+            ]
+            tr [] [
+              tableCell [ text "40" ]
+              tableCell [ text "40%" ]
+              tableCell [ inlineCode "Opacity.forty" ]
             ]
             tr [] [
               tableCell [ text "50" ]
               tableCell [ text "50%" ]
-              tableCell [ inlineCode "Opacity.create 50 |> Opacity.toClass" ]
+              tableCell [ inlineCode "Opacity.fifty" ]
             ]
             tr [] [
-              tableCell [ text "75" ]
-              tableCell [ text "75%" ]
-              tableCell [ inlineCode "Opacity.create 75 |> Opacity.toClass" ]
+              tableCell [ text "60" ]
+              tableCell [ text "60%" ]
+              tableCell [ inlineCode "Opacity.sixty" ]
+            ]
+            tr [] [
+              tableCell [ text "70" ]
+              tableCell [ text "70%" ]
+              tableCell [ inlineCode "Opacity.seventy" ]
+            ]
+            tr [] [
+              tableCell [ text "80" ]
+              tableCell [ text "80%" ]
+              tableCell [ inlineCode "Opacity.eighty" ]
+            ]
+            tr [] [
+              tableCell [ text "90" ]
+              tableCell [ text "90%" ]
+              tableCell [ inlineCode "Opacity.ninety" ]
             ]
             tr [] [
               tableCell [ text "100" ]
               tableCell [ text "100%" ]
-              tableCell [ inlineCode "Opacity.create 100 |> Opacity.toClass" ]
+              tableCell [ inlineCode "Opacity.hundred" ]
             ]
           ]
         ]
@@ -73,22 +103,22 @@ module OpacityExamples =
     let code =
       """open Weave
 
-// Create an opacity value and apply it as a CSS class
-div [ Opacity.create 50 |> Opacity.toClass |> cl ] [
+// Apply an opacity class directly
+div [ Opacity.fifty ] [
     text "This element is 50% transparent"
 ]
 
-// Opacity values are clamped to 0-100
-let hidden = Opacity.create 0 |> Opacity.toClass   // weave-opacity-0
-let half   = Opacity.create 50 |> Opacity.toClass   // weave-opacity-50
-let full   = Opacity.create 100 |> Opacity.toClass  // weave-opacity-100
+// Named callsites for each step of 10
+// Opacity.zero       → weave-opacity-0
+// Opacity.fifty      → weave-opacity-50
+// Opacity.hundred    → weave-opacity-100
 
 // Combine with other attrs
 div [
-    Opacity.create 75 |> Opacity.toClass |> cl
+    Opacity.seventy
     Padding.All.small
 ] [
-    text "75% opacity with padding"
+    text "70% opacity with padding"
 ]"""
 
     Helpers.codeSampleSection "How it works" description content code
@@ -98,16 +128,30 @@ div [
       Helpers.bodyText
         "The full opacity scale applied to a colored surface. Each box shows its opacity percentage."
 
+    let opacityLevels = [
+      0, Opacity.zero
+      10, Opacity.ten
+      20, Opacity.twenty
+      30, Opacity.thirty
+      40, Opacity.forty
+      50, Opacity.fifty
+      60, Opacity.sixty
+      70, Opacity.seventy
+      80, Opacity.eighty
+      90, Opacity.ninety
+      100, Opacity.hundred
+    ]
+
     let content =
       Grid.create (
         [
-          for level in [ 0; 10; 20; 30; 40; 50; 60; 70; 80; 90; 100 ] do
+          for (level, opacity) in opacityLevels do
             GridItem.create (
               div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
                 div [
-                  BrandColor.toBackgroundColor BrandColor.Primary
+                  BrandColor.BackgroundColor.primary
                   BorderRadius.All.small
-                  Opacity.create level |> Opacity.toClass |> cl
+                  opacity
                   Flex.Flex.allSizes
                   AlignItems.center
                   JustifyContent.center
@@ -126,22 +170,19 @@ div [
     let code =
       """open Weave
 
-// Apply opacity to any element via the class
+// Apply opacity to any element via the module callsite
 div [
-    BrandColor.toBackgroundColor BrandColor.Primary
-    Opacity.create 50 |> Opacity.toClass |> cl
+    BrandColor.BackgroundColor.primary
+    Opacity.fifty
 ] [
     text "50% opacity"
 ]
 
-// Build a scale programmatically
-for level in [ 0; 25; 50; 75; 100 ] do
-    div [
-        BrandColor.toBackgroundColor BrandColor.Primary
-        Opacity.create level |> Opacity.toClass |> cl
-    ] [
-        text (sprintf "%d%%" level)
-    ]"""
+// Each step of 10 has a named callsite
+div [ BrandColor.BackgroundColor.primary; Opacity.zero ] [ text "0%" ]
+div [ BrandColor.BackgroundColor.primary; Opacity.thirty ] [ text "30%" ]
+div [ BrandColor.BackgroundColor.primary; Opacity.seventy ] [ text "70%" ]
+div [ BrandColor.BackgroundColor.primary; Opacity.hundred ] [ text "100%" ]"""
 
     Helpers.codeSampleSection "Visual scale" description content code
 

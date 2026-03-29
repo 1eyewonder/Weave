@@ -11,51 +11,12 @@
   // density 0 (Compact): 4px | density 1 (Standard): 8px | density 2 (Spacious): 12px
   padding: density-spacing(4, 4);
 
-  &.weave-flex-row {
-    flex-direction: row;
-    align-items: center;
-  }
-  &.weave-flex-row-reverse {
-    flex-direction: row-reverse;
-    align-items: center;
-  }
-  &.weave-flex-column {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  &.weave-flex-column,
   &.weave-flex-column-reverse {
-    flex-direction: column-reverse;
-    align-items: flex-end;
-    justify-content: center;
     width: max-content;
   }
   .weave-switch__label {
     font-size: 1em;
-    text-align: center;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    .weave-switch.weave-flex-row & {
-      margin-left: 0.5em;
-    }
-
-    .weave-switch.weave-flex-row-reverse & {
-      margin-left: 0;
-      margin-right: 0.5em;
-    }
-
-    .weave-switch.weave-flex-column & {
-      margin-left: 0;
-      margin-bottom: 0.5em;
-    }
-
-    .weave-switch.weave-flex-column-reverse & {
-      margin-left: 0;
-      margin-top: 0.5em;
-    }
   }
 }
 
@@ -80,19 +41,23 @@
   vertical-align: middle;
 
   .weave-switch.weave-flex-row & {
+    margin: 0;
     margin-right: 0.5em;
   }
 
   .weave-switch.weave-flex-row-reverse & {
+    margin: 0;
     margin-left: 0.5em;
   }
 
   .weave-switch.weave-flex-column & {
-    margin-bottom: 0.3em;
+    margin: 0;
+    margin-bottom: 0.5em;
   }
 
   .weave-switch.weave-flex-column-reverse & {
-    margin-top: 0.3em;
+    margin: 0;
+    margin-top: 0.5em;
   }
 }
 

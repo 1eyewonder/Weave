@@ -87,7 +87,7 @@ div [
     Elevation.e4
     Padding.All.small
     BorderRadius.All.medium
-    SurfaceColor.toBackgroundColor SurfaceColor.Surface
+    SurfaceColor.BackgroundColor.surface
 ] [
     text "Elevated card at level 4"
 ]
@@ -112,7 +112,7 @@ div [ Elevation.e8; BorderRadius.All.large ] [
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
         div [
           elevAttr
-          SurfaceColor.toBackgroundColor SurfaceColor.Surface
+          SurfaceColor.BackgroundColor.surface
           BorderRadius.All.medium
           Flex.Flex.allSizes
           AlignItems.center
@@ -254,7 +254,7 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
           div [ Margin.Top.small ] [
             div [
               elevAttr
-              SurfaceColor.toBackgroundColor SurfaceColor.Surface
+              SurfaceColor.BackgroundColor.surface
               BorderRadius.All.medium
               Flex.Flex.allSizes
               AlignItems.center
@@ -272,7 +272,7 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
 // Apply any elevation level — the shadow scales smoothly from 0 to 25
 div [
     Elevation.e4  // see here
-    SurfaceColor.toBackgroundColor SurfaceColor.Surface
+    SurfaceColor.BackgroundColor.surface
     BorderRadius.All.medium
     Padding.All.medium
 ] [
@@ -298,7 +298,7 @@ div [
               div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Flat card (e0)" ]
               div [
                 Elevation.e0
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 BorderWidth.All.one
                 Attr.Style "border-style" "solid"
                 BorderColor.linesDefault
@@ -318,7 +318,7 @@ div [
               div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Raised card (e2)" ]
               div [
                 Elevation.e2
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 BorderRadius.All.medium
                 Padding.All.small
               ] [
@@ -335,7 +335,7 @@ div [
               div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Dialog surface (e8)" ]
               div [
                 Elevation.e8
-                SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                SurfaceColor.BackgroundColor.surface
                 BorderRadius.All.medium
                 Padding.All.small
               ] [
@@ -362,7 +362,7 @@ div [
               ] [
                 div [
                   Elevation.e6
-                  BrandColor.toBackgroundColor BrandColor.Primary
+                  BrandColor.BackgroundColor.primary
                   BorderRadius.circle
                   Flex.Flex.allSizes
                   AlignItems.center
@@ -398,7 +398,7 @@ div [
 // Raised card — default card level
 div [
     Elevation.e2  // see here
-    SurfaceColor.toBackgroundColor SurfaceColor.Surface
+    SurfaceColor.BackgroundColor.surface
     BorderRadius.All.medium
     Padding.All.small
 ] [ text "Raised card" ]
@@ -411,7 +411,7 @@ div [ Elevation.e8; BorderRadius.All.medium; Padding.All.small ] [
 // FAB — floating action button level
 div [
     Elevation.e6  // see here
-    BrandColor.toBackgroundColor BrandColor.Primary
+    BrandColor.BackgroundColor.primary
     BorderRadius.circle
 ] [ text "+" ]"""
 

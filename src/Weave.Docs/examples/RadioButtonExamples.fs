@@ -190,38 +190,29 @@ Radio.create(selected, BrandColor.Info, displayText = View.Const "Info", attrs =
   let private contentPlacementExample () =
     let description =
       Helpers.bodyText
-        "Position the label relative to the radio indicator using contentPlacement: Right (default), Left, Top, or Bottom."
+        "Position the label relative to the radio indicator using the ContentPlacement module. Available placements are right (default), left, top, and bottom."
 
     let content =
-      let placement = Var.Create Radio.ContentPlacement.Right
-
-      let radioOptions = [
-        Radio.ContentPlacement.Left, "Left"
-        Radio.ContentPlacement.Right, "Right"
-        Radio.ContentPlacement.Top, "Top"
-        Radio.ContentPlacement.Bottom, "Bottom"
+      let placements = [
+        Radio.ContentPlacement.left, "Left"
+        Radio.ContentPlacement.right, "Right"
+        Radio.ContentPlacement.top, "Top"
+        Radio.ContentPlacement.bottom, "Bottom"
       ]
 
-      let radioButtons =
-        radioOptions
-        |> List.map (fun (value, label) ->
+      Grid.create (
+        placements
+        |> List.map (fun (placementAttr, label) ->
           GridItem.create (
-            Radio.create (placement, value, displayText = View.Const label),
+            Radio.create (
+              Var.Create false,
+              true,
+              displayText = View.Const label,
+              attrs = [ Radio.Size.large; Radio.Color.primary; placementAttr ]
+            ),
             attrs = [ GridItem.Span.six; GridItem.Span.Medium.three ]
           ))
-
-      let demoSelected = Var.Create false
-
-      let demoRadio =
-        Radio.create (
-          demoSelected,
-          true,
-          displayText = (placement.View |> View.MapCached(sprintf "%A")),
-          contentPlacement = placement.View,
-          attrs = [ Radio.Size.large; Radio.Color.primary ]
-        )
-
-      Grid.create (radioButtons @ [ GridItem.create (demoRadio, attrs = [ GridItem.Span.twelve ]) ])
+      )
 
     let code =
       """open Weave
@@ -233,28 +224,28 @@ let selected = Var.Create false
 Radio.create(
     selected, true,
     displayText = View.Const "Right",
-    contentPlacement = View.Const Radio.ContentPlacement.Right
+    attrs = [ Radio.ContentPlacement.right ] // see here
 )
 
 // Label to the left
 Radio.create(
     selected, true,
     displayText = View.Const "Left",
-    contentPlacement = View.Const Radio.ContentPlacement.Left
+    attrs = [ Radio.ContentPlacement.left ]
 )
 
 // Label above
 Radio.create(
     selected, true,
     displayText = View.Const "Top",
-    contentPlacement = View.Const Radio.ContentPlacement.Top
+    attrs = [ Radio.ContentPlacement.top ]
 )
 
 // Label below
 Radio.create(
     selected, true,
     displayText = View.Const "Bottom",
-    contentPlacement = View.Const Radio.ContentPlacement.Bottom
+    attrs = [ Radio.ContentPlacement.bottom ]
 )"""
 
     Helpers.codeSampleSection "Content Placement" description content code

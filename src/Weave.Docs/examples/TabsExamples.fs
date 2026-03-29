@@ -195,7 +195,7 @@ Tabs.create(
   let private variantExample () =
     let description =
       Helpers.bodyText
-        "Tabs support three visual styles: Text (default), Outlined, and Filled. Pass a variant class via attrs. For the Filled variant, use HeaderBackground.toAttr to optionally set a background tray on the header strip."
+        "Tabs support three visual styles: Text (default), Outlined, and Filled. Pass a variant class via attrs. For the Filled variant, use a HeaderBackground callsite to optionally set a background tray on the header strip."
 
     let tabs () =
       [
@@ -256,7 +256,7 @@ Tabs.create(
     tabs,
     attrs = [
         Variant.filled; Color.tertiary
-        HeaderBackground.toAttr Color.Tertiary
+        HeaderBackground.tertiary
     ]
 )
 """

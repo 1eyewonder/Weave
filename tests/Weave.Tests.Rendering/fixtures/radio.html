@@ -15,28 +15,65 @@
   </head>
   <body>
     <!-- Small: --radio-size: 16px → span BoundingBox ≈ 20px (16px + 2px border each side) -->
-    <label class="weave-radio weave-radio--small weave-d-inline-flex weave-flex-row">
+    <label class="weave-radio weave-radio--small weave-d-inline-flex weave-radio--content-right">
       <input type="radio" class="weave-radio__input" />
       <span id="span-small" class="weave-radio__span"></span>
     </label>
 
     <!-- Medium: --radio-size: 20px → span BoundingBox ≈ 24px -->
-    <label class="weave-radio weave-radio--medium weave-d-inline-flex weave-flex-row" style="margin-top: 16px; display: block;">
+    <label class="weave-radio weave-radio--medium weave-d-inline-flex weave-radio--content-right" style="margin-top: 16px; display: block;">
       <input type="radio" class="weave-radio__input" />
       <span id="span-medium" class="weave-radio__span"></span>
     </label>
 
     <!-- Large: --radio-size: 28px → span BoundingBox ≈ 32px -->
-    <label class="weave-radio weave-radio--large weave-d-inline-flex weave-flex-row" style="margin-top: 16px; display: block;">
+    <label class="weave-radio weave-radio--large weave-d-inline-flex weave-radio--content-right" style="margin-top: 16px; display: block;">
       <input type="radio" class="weave-radio__input" />
       <span id="span-large" class="weave-radio__span"></span>
     </label>
 
-    <!-- Default (flex-row): label appears to the right of the radio span -->
-    <label id="radio-labeled" class="weave-radio weave-radio--medium weave-d-inline-flex weave-flex-row" style="margin-top: 16px;">
+    <!-- Default (content-right): label appears to the right of the radio span -->
+    <label id="radio-labeled" class="weave-radio weave-radio--medium weave-d-inline-flex weave-radio--content-right" style="margin-top: 16px;">
       <input type="radio" class="weave-radio__input" />
       <span id="span-labeled" class="weave-radio__span"></span>
       <span id="label-text" class="weave-typography weave-typography--body1 weave-radio__label">Label</span>
+    </label>
+
+    <!-- Content Placement orientations -->
+    <div style="margin-top: 32px;"></div>
+
+    <!-- Right (row): label to the right of radio -->
+    <label class="weave-radio weave-flex-row">
+      <input type="radio" class="weave-radio__input" />
+      <span id="cp-right-span" class="weave-radio__span"></span>
+      <span id="cp-right-label" class="weave-radio__label">Right</span>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Left (row-reverse): label to the left of radio -->
+    <label class="weave-radio weave-flex-row-reverse">
+      <input type="radio" class="weave-radio__input" />
+      <span id="cp-left-span" class="weave-radio__span"></span>
+      <span id="cp-left-label" class="weave-radio__label">Left</span>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Bottom (column): label below radio -->
+    <label class="weave-radio weave-flex-column">
+      <input type="radio" class="weave-radio__input" />
+      <span id="cp-bottom-span" class="weave-radio__span"></span>
+      <span id="cp-bottom-label" class="weave-radio__label">Bottom</span>
+    </label>
+
+    <div style="margin-top: 16px;"></div>
+
+    <!-- Top (column-reverse): label above radio -->
+    <label class="weave-radio weave-flex-column-reverse">
+      <input type="radio" class="weave-radio__input" />
+      <span id="cp-top-span" class="weave-radio__span"></span>
+      <span id="cp-top-label" class="weave-radio__label">Top</span>
     </label>
   </body>
 </html>

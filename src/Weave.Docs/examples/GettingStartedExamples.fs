@@ -12,7 +12,7 @@ module GettingStartedExamples =
   let private codeBlock lang content =
     pre [] [
       code [
-        SurfaceColor.toBackgroundColor SurfaceColor.Background
+        SurfaceColor.BackgroundColor.background
         Attr.Class(sprintf "language-%s" lang)
         on.afterRender Helpers.highlightCodeElement
       ] [ text content ]

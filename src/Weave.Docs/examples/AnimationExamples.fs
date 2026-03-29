@@ -250,7 +250,7 @@ div [
           match animAttr with
           | Some kindAttr ->
             div [
-              BrandColor.toBackgroundColor BrandColor.Primary
+              BrandColor.BackgroundColor.primary
               BorderRadius.All.medium
               kindAttr
               durAttr
@@ -299,7 +299,7 @@ div [ AnimationEntrance.fadeIn ] [
 
     let content =
       div [
-        BrandColor.toBackgroundColor BrandColor.Primary
+        BrandColor.BackgroundColor.primary
         BorderRadius.All.medium
         AnimationEntrance.fadeIn
         Flex.Flex.allSizes
@@ -538,7 +538,7 @@ Chip.create(
         ]
 
         div [
-          BrandColor.toBackgroundColor BrandColor.Secondary
+          BrandColor.BackgroundColor.secondary
           BorderRadius.All.medium
           Animate.toggleClass AnimationPair.fadeInOut isActive.View
           Flex.Flex.allSizes

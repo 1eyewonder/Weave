@@ -38,12 +38,9 @@ module ContainerExamples =
                 Margin.Bottom.small
                 AlignItems.center
                 JustifyContent.center
-                if i % 2 = 0 then
-                  BrandColor.toBackgroundColor BrandColor.Primary
-                elif i % 3 = 0 then
-                  BrandColor.toBackgroundColor BrandColor.Secondary
-                else
-                  BrandColor.toBackgroundColor BrandColor.Tertiary
+                if i % 2 = 0 then BrandColor.BackgroundColor.primary
+                elif i % 3 = 0 then BrandColor.BackgroundColor.secondary
+                else BrandColor.BackgroundColor.tertiary
               ]
             ))
       ]
@@ -91,7 +88,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
         content,
         attrs = [
           Attr.Style "min-height" "1vh"
-          BrandColor.toBackgroundColor BrandColor.Primary
+          BrandColor.BackgroundColor.primary
           JustifyContent.center
         ]
       )
@@ -104,7 +101,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
             Container.gutters
             Margin.Bottom.small
             JustifyContent.center
-            SurfaceColor.toBackgroundColor SurfaceColor.Background
+            SurfaceColor.BackgroundColor.background
           ]
         )
         Container.create (
@@ -112,7 +109,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
           attrs = [
             Margin.Bottom.small
             JustifyContent.center
-            SurfaceColor.toBackgroundColor SurfaceColor.Background
+            SurfaceColor.BackgroundColor.background
           ]
         )
         Container.create (
@@ -122,7 +119,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
             Container.gutters
             Margin.Bottom.small
             JustifyContent.center
-            SurfaceColor.toBackgroundColor SurfaceColor.Background
+            SurfaceColor.BackgroundColor.background
           ]
         )
         Container.create (
@@ -130,7 +127,7 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
           attrs = [
             Container.fixedWidth
             JustifyContent.center
-            SurfaceColor.toBackgroundColor SurfaceColor.Background
+            SurfaceColor.BackgroundColor.background
           ]
         )
       ]

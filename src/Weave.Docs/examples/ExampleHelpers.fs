@@ -78,7 +78,7 @@ module Helpers =
 
       div [
         Padding.All.small
-        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        SurfaceColor.BackgroundColor.surface
         BorderRadius.All.small
       ] [ content ]
     ]
@@ -98,7 +98,7 @@ module Helpers =
 
       div [
         Padding.All.small
-        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        SurfaceColor.BackgroundColor.surface
         BorderRadius.All.small
       ] [ yield! children ]
     ]
@@ -151,7 +151,7 @@ module Helpers =
       div [ Margin.Bottom.extraSmall ] [ description ]
 
       div [
-        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+        SurfaceColor.BackgroundColor.surface
         Flex.Flex.allSizes
         FlexDirection.Column.allSizes
         Padding.All.small

@@ -106,22 +106,23 @@ $dot-size: 10px;
 
 .weave-radio__label {
   .weave-radio.weave-flex-row & {
+    margin: 0;
     margin-left: 0.5em;
   }
 
   .weave-radio.weave-flex-row-reverse & {
-    margin-left: 0;
+    margin: 0;
     margin-right: 0.5em;
   }
 
   .weave-radio.weave-flex-column & {
-    margin-left: 0;
-    margin-bottom: 0.5em;
+    margin: 0;
+    margin-top: 0.5em;
   }
 
   .weave-radio.weave-flex-column-reverse & {
-    margin-left: 0;
-    margin-top: 0.5em;
+    margin: 0;
+    margin-bottom: 0.5em;
   }
 
   .weave-radio--small & {

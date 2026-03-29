@@ -453,7 +453,7 @@ span [ Typography.body1 ] [ text " for more information." ]"""
           Icon.create (
             Icon.UiActions UiActions.CheckCircle,
             attrs = [
-              BrandColor.toColor BrandColor.Success
+              BrandColor.TextColor.success
               Attr.Style "font-size" "32px"
               Margin.All.extraSmall
             ]
@@ -466,7 +466,7 @@ span [ Typography.body1 ] [ text " for more information." ]"""
           Icon.create (
             Icon.Action Action.Warning,
             attrs = [
-              BrandColor.toColor BrandColor.Warning
+              BrandColor.TextColor.warning
               Attr.Style "font-size" "32px"
               Margin.All.extraSmall
             ]
@@ -479,7 +479,7 @@ span [ Typography.body1 ] [ text " for more information." ]"""
           Icon.create (
             Icon.Action Action.Error,
             attrs = [
-              BrandColor.toColor BrandColor.Error
+              BrandColor.TextColor.error
               Attr.Style "font-size" "32px"
               Margin.All.extraSmall
             ]
@@ -498,7 +498,7 @@ Tooltip.create(
     Icon.create(
         Icon.UiActions UiActions.CheckCircle,
         attrs = [
-            BrandColor.toColor BrandColor.Success
+            BrandColor.TextColor.success
             Attr.Style "font-size" "32px"
             Margin.All.extraSmall
         ]
@@ -511,7 +511,7 @@ Tooltip.create(
     Icon.create(
         Icon.Action Action.Warning,
         attrs = [
-            BrandColor.toColor BrandColor.Warning
+            BrandColor.TextColor.warning
             Attr.Style "font-size" "32px"
             Margin.All.extraSmall
         ]
@@ -524,7 +524,7 @@ Tooltip.create(
     Icon.create(
         Icon.Action Action.Error,
         attrs = [
-            BrandColor.toColor BrandColor.Error
+            BrandColor.TextColor.error
             Attr.Style "font-size" "32px"
             Margin.All.extraSmall
         ]

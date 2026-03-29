@@ -178,39 +178,28 @@ Checkbox.create(isChecked, View.Const "Info", attrs = [ Checkbox.Color.info ])""
 
   let private contentPlacementExample () =
     let description =
-      Helpers.bodyText "Change the label position using the ContentPlacement option."
+      Helpers.bodyText
+        "Change the label position using the ContentPlacement module. Available placements are right (default), left, top, and bottom."
 
     let content =
-      let placement = Var.Create Checkbox.ContentPlacement.Right
-
-      let radioOptions = [
-        Checkbox.ContentPlacement.Left, "Left"
-        Checkbox.ContentPlacement.Right, "Right"
-        Checkbox.ContentPlacement.Top, "Top"
-        Checkbox.ContentPlacement.Bottom, "Bottom"
+      let placements = [
+        Checkbox.ContentPlacement.left, "Left"
+        Checkbox.ContentPlacement.right, "Right"
+        Checkbox.ContentPlacement.top, "Top"
+        Checkbox.ContentPlacement.bottom, "Bottom"
       ]
 
-      let radioButtons =
-        radioOptions
-        |> List.map (fun (value, label) ->
+      Grid.create (
+        placements
+        |> List.map (fun (placementAttr, label) ->
           GridItem.create (
-            Radio.create (placement, value, displayText = View.Const label),
+            Checkbox.create (
+              Var.Create false,
+              View.Const label,
+              attrs = [ Checkbox.Size.large; Checkbox.Color.primary; placementAttr ]
+            ),
             attrs = [ GridItem.Span.six; GridItem.Span.Medium.three ]
           ))
-
-      let demoChecked = Var.Create false
-
-      let demoCheckBox =
-        Checkbox.create (
-          demoChecked,
-          placement.View |> View.MapCached(sprintf "%A"),
-          contentPlacement = placement.View,
-          attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
-        )
-
-      Grid.create (
-        radioButtons
-        @ [ GridItem.create (demoCheckBox, attrs = [ GridItem.Span.twelve ]) ]
       )
 
     let code =
@@ -222,29 +211,25 @@ let isChecked = Var.Create false
 Checkbox.create(
     isChecked,
     View.Const "Left",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Left, // see here
-    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+    attrs = [ Checkbox.ContentPlacement.left; Checkbox.Color.primary ] // see here
 )
 
 Checkbox.create(
     isChecked,
     View.Const "Right",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Right,
-    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+    attrs = [ Checkbox.ContentPlacement.right; Checkbox.Color.primary ]
 )
 
 Checkbox.create(
     isChecked,
     View.Const "Top",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Top,
-    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+    attrs = [ Checkbox.ContentPlacement.top; Checkbox.Color.primary ]
 )
 
 Checkbox.create(
     isChecked,
     View.Const "Bottom",
-    contentPlacement = View.Const Checkbox.ContentPlacement.Bottom,
-    attrs = [ Checkbox.Size.large; Checkbox.Color.primary ]
+    attrs = [ Checkbox.ContentPlacement.bottom; Checkbox.Color.primary ]
 )"""
 
     Helpers.codeSampleSection "Content Placement" description content code

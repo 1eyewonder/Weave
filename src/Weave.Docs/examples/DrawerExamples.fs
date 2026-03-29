@@ -79,7 +79,7 @@ module DrawerExamples =
       Attr.Style "height" "280px"
       Attr.Style "overflow" "hidden"
       Attr.Style "isolation" "isolate"
-      SurfaceColor.toBackgroundColor SurfaceColor.Background
+      SurfaceColor.BackgroundColor.background
       BorderRadius.All.small
     ] [ child ]
 
@@ -111,7 +111,7 @@ module DrawerExamples =
                     onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
                     attrs = [ Button.Variant.filled ]
                   )),
-                attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ]
+                attrs = [ BrandColor.BackgroundColor.primary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
@@ -171,7 +171,7 @@ DrawerContainer.create(
             Doc.Concat [
               AppBar.create (
                 toolbar "Persistent Drawer" toggleButton,
-                attrs = [ BrandColor.toBackgroundColor BrandColor.Secondary ]
+                attrs = [ BrandColor.BackgroundColor.secondary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
@@ -225,7 +225,7 @@ DrawerContainer.create(
             Doc.Concat [
               AppBar.create (
                 toolbar "Responsive Drawer" toggleButton,
-                attrs = [ BrandColor.toBackgroundColor BrandColor.Tertiary ]
+                attrs = [ BrandColor.BackgroundColor.tertiary ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
@@ -292,10 +292,7 @@ DrawerContainer.create(
         DrawerContainer.create (
           mainContent =
             Doc.Concat [
-              AppBar.create (
-                toolbar "Mini Drawer" controls,
-                attrs = [ BrandColor.toBackgroundColor BrandColor.Info ]
-              )
+              AppBar.create (toolbar "Mini Drawer" controls, attrs = [ BrandColor.BackgroundColor.info ])
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
           leftDrawer =
@@ -359,7 +356,7 @@ DrawerContainer.create(
                 toolbar
                   "Drawer with Header"
                   (filledButton "Toggle" (fun () -> Var.Set isOpen (not isOpen.Value))),
-                attrs = [ BrandColor.toBackgroundColor BrandColor.Error ]
+                attrs = [ BrandColor.BackgroundColor.error ]
               )
               div [ cl "weave-main-content" ] [ pageContent () ]
             ],
@@ -449,7 +446,7 @@ DrawerContainer.create(
           Attr.Style "flex-direction" "column"
           Attr.Style "height" "360px"
           Attr.Style "overflow" "hidden"
-          SurfaceColor.toBackgroundColor SurfaceColor.Background
+          SurfaceColor.BackgroundColor.background
         ] [
           clipMode.View
           |> Doc.BindView(fun mode ->
@@ -459,7 +456,7 @@ DrawerContainer.create(
               Doc.Concat [
                 AppBar.create (
                   toolbar "Clip Mode Demo" (div [] []),
-                  attrs = [ BrandColor.toBackgroundColor BrandColor.Warning ]
+                  attrs = [ BrandColor.BackgroundColor.warning ]
                 )
                 DrawerContainer.create (
                   mainContent = div [ cl "weave-main-content" ] [ pageContent () ],
@@ -482,7 +479,7 @@ DrawerContainer.create(
                   Doc.Concat [
                     AppBar.create (
                       toolbar "Clip Mode Demo" (div [] []),
-                      attrs = [ BrandColor.toBackgroundColor BrandColor.Warning ]
+                      attrs = [ BrandColor.BackgroundColor.warning ]
                     )
                     div [ cl "weave-main-content" ] [ pageContent () ]
                   ],

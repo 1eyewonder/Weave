@@ -381,3 +381,4 @@ src/Weave.Docs/wwwroot/assets/weave-logo.png
 .vscode/
 .paket/
 .yarn/
+.claude/worktrees

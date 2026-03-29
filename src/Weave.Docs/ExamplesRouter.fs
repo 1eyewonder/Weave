@@ -116,7 +116,7 @@ module ExamplesRouter =
                       div [
                         Flex.Flex.allSizes
                         FlexDirection.Column.allSizes
-                        SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                        SurfaceColor.BackgroundColor.surface
                         Cursor.pointer
                         Attr.Style "height" "100%"
                         Overflow.hidden
@@ -194,7 +194,7 @@ module ExamplesRouter =
                 |> List.mapi (fun i (title, icon, desc) ->
                   GridItem.create (
                     div [
-                      SurfaceColor.toBackgroundColor SurfaceColor.Surface
+                      SurfaceColor.BackgroundColor.surface
                       Padding.All.small
                       BorderRadius.All.large
                       Attr.Class "docs-value-card docs-weave-pattern"
@@ -206,7 +206,7 @@ module ExamplesRouter =
                     ] [
                       Icon.create (
                         icon,
-                        attrs = [ BrandColor.toColor BrandColor.Primary; Attr.Style "font-size" "28px" ]
+                        attrs = [ BrandColor.TextColor.primary; Attr.Style "font-size" "28px" ]
                       )
 
                       div [ Typography.h6 ] [ text title ]
@@ -709,11 +709,11 @@ module ExamplesRouter =
       Overflow.hidden
       Flex.Flex.allSizes
       FlexDirection.Column.allSizes
-      SurfaceColor.toBackgroundColor SurfaceColor.Background
+      SurfaceColor.BackgroundColor.background
     ] [
       navEffects
 
-      AppBar.create (appBarContent, attrs = [ BrandColor.toBackgroundColor BrandColor.Primary ])
+      AppBar.create (appBarContent, attrs = [ BrandColor.BackgroundColor.primary ])
 
       DrawerContainer.create (
         mainContent =

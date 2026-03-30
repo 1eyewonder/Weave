@@ -1,0 +1,37 @@
+@use "sass:map";
+
+// Animation distance modifiers — control how far elements translate during
+// slide, shake, and bounce animations.
+// Apply to the animated element to override the root distance tokens.
+//
+// The keyframes reference --weave-animation-distance-{sm|md|lg|xl};
+// each level here scales the entire set proportionally.
+
+$animation-distances: (
+  "extra-small": (sm:  2px, md:  4px, lg:   8px, xl:  16px),
+  "small":       (sm:  4px, md:  8px, lg:  16px, xl:  32px),
+  "medium":      (sm:  8px, md: 16px, lg:  32px, xl:  64px),
+  "large":       (sm: 12px, md: 24px, lg:  48px, xl:  96px),
+  "extra-large": (sm: 16px, md: 32px, lg:  64px, xl: 128px),
+);
+
+@each $name, $values in $animation-distances {
+  .weave-animation-distance--#{$name} {
+    --weave-animation-distance-sm: #{map.get($values, sm)};
+    --weave-animation-distance-md: #{map.get($values, md)};
+    --weave-animation-distance-lg: #{map.get($values, lg)};
+    --weave-animation-distance-xl: #{map.get($values, xl)};
+  }
+}
+
+// Respect reduced-motion: collapse all distances to zero regardless of level.
+@media (prefers-reduced-motion: reduce) {
+  @each $name, $_ in $animation-distances {
+    .weave-animation-distance--#{$name} {
+      --weave-animation-distance-sm: 0px;
+      --weave-animation-distance-md: 0px;
+      --weave-animation-distance-lg: 0px;
+      --weave-animation-distance-xl: 0px;
+    }
+  }
+}

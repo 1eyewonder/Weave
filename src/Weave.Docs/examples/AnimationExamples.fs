@@ -62,6 +62,16 @@ module AnimationExamples =
               tableCell [ inlineCode "AnimationEasing.bounce" ]
             ]
             tr [] [
+              tableCell [ text "AnimationDistance" ]
+              tableCell [ text "Override travel distance" ]
+              tableCell [ inlineCode "AnimationDistance.large" ]
+            ]
+            tr [] [
+              tableCell [ text "AnimationScale" ]
+              tableCell [ text "Override scale intensity" ]
+              tableCell [ inlineCode "AnimationScale.extraSmall" ]
+            ]
+            tr [] [
               tableCell [ text "AnimationOn" ]
               tableCell [ text "CSS-only trigger (hover/focus)" ]
               tableCell [ inlineCode "AnimationOn.hover" ]
@@ -85,30 +95,34 @@ div [ AnimationEntrance.fadeIn ] [
     text "I fade in when rendered"
 ]
 
-// Compose all four axes: kind + duration + easing + trigger
+// Compose all axes: kind + duration + easing + distance + trigger
 div [
     AnimationEmphasis.bounce
     AnimationDuration.short
     AnimationEasing.bounce
-    AnimationOn.hover  — CSS-only trigger
+    AnimationDistance.large
+    AnimationOn.hover
 ] [
-    text "Bounces on hover"
+    text "Bounces further on hover"
 ]
 
-// AnimationOn is optional — without it, the animation plays on mount
+// Override distance and scale for dramatic entrances
 div [
     AnimationEntrance.slideUpIn
     AnimationDuration.long
-    AnimationEasing.bounce
+    AnimationDistance.extraLarge
 ] [
-    text "Slides up slowly with a bounce"
+    text "Slides up extra far"
+]
+
+div [
+    AnimationEntrance.scaleIn
+    AnimationScale.extraSmall
+] [
+    text "Barely perceptible scale"
 ]"""
 
     Helpers.codeSampleSection "How it works" description content code
-
-  // ---------------------------------------------------------------------------
-  // 2. Playground — interactive picker for animation / duration / easing
-  // ---------------------------------------------------------------------------
 
   let private playgroundSection () =
     let description =
@@ -153,9 +167,27 @@ div [
       "Bounce", Some AnimationEasing.bounce
     ]
 
+    let allDistances = [
+      "Extra Small", Some AnimationDistance.extraSmall
+      "Small", Some AnimationDistance.small
+      "Medium", Some AnimationDistance.medium
+      "Large", Some AnimationDistance.large
+      "Extra Large", Some AnimationDistance.extraLarge
+    ]
+
+    let allScales = [
+      "Extra Small", Some AnimationScale.extraSmall
+      "Small", Some AnimationScale.small
+      "Medium", Some AnimationScale.medium
+      "Large", Some AnimationScale.large
+      "Extra Large", Some AnimationScale.extraLarge
+    ]
+
     let selectedAnimation = Var.Create<string option>(Some "Entrance: Fade In")
     let selectedDuration = Var.Create<string option>(Some "Standard (400ms)")
     let selectedEasing = Var.Create<string option>(Some "Decelerate")
+    let selectedDistance = Var.Create<string option>(Some "Medium")
+    let selectedScale = Var.Create<string option>(Some "Medium")
     let replayKey = Var.Create 0
 
     let animationItems =
@@ -170,6 +202,16 @@ div [
 
     let easingItems =
       allEasings
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
+      |> View.Const
+
+    let distanceItems =
+      allDistances
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
+      |> View.Const
+
+    let scaleItems =
+      allScales
       |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
       |> View.Const
 
@@ -210,6 +252,28 @@ div [
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
+            GridItem.create (
+              Select.create (
+                distanceItems,
+                selectedDistance,
+                variant = Select.Variant.Outlined,
+                labelText = View.Const "Distance",
+                placeholder = View.Const "Default",
+                attrs = [ Select.Color.primary ]
+              ),
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.six ]
+            )
+            GridItem.create (
+              Select.create (
+                scaleItems,
+                selectedScale,
+                variant = Select.Variant.Outlined,
+                labelText = View.Const "Scale",
+                placeholder = View.Const "Default",
+                attrs = [ Select.Color.primary ]
+              ),
+              attrs = [ GridItem.Span.six; GridItem.Span.Small.six ]
+            )
           ]
         )
 
@@ -226,8 +290,13 @@ div [
           selectedAnimation.View
           selectedDuration.View
           selectedEasing.View
-        |> View.Map2 (fun key (animSel, durSel, easSel) -> key, animSel, durSel, easSel) replayKey.View
-        |> Doc.BindView(fun (_, animSel, durSel, easSel) ->
+        |> View.Map2 (fun distSel tuple -> tuple, distSel) selectedDistance.View
+        |> View.Map2 (fun scaleSel (tuple, distSel) -> tuple, distSel, scaleSel) selectedScale.View
+        |> View.Map2
+          (fun key ((animSel, durSel, easSel), distSel, scaleSel) ->
+            key, animSel, durSel, easSel, distSel, scaleSel)
+          replayKey.View
+        |> Doc.BindView(fun (_, animSel, durSel, easSel, distSel, scaleSel) ->
           let animAttr =
             animSel
             |> Option.bind (fun label -> allAnimations |> List.tryFind (fun (l, _) -> l = label))
@@ -245,6 +314,18 @@ div [
             |> Option.bind snd
             |> Option.defaultValue Attr.Empty
 
+          let distAttr =
+            distSel
+            |> Option.bind (fun label -> allDistances |> List.tryFind (fun (l, _) -> l = label))
+            |> Option.bind snd
+            |> Option.defaultValue Attr.Empty
+
+          let scaleAttr =
+            scaleSel
+            |> Option.bind (fun label -> allScales |> List.tryFind (fun (l, _) -> l = label))
+            |> Option.bind snd
+            |> Option.defaultValue Attr.Empty
+
           let animLabel = animSel |> Option.defaultValue "Fade In"
 
           match animAttr with
@@ -255,6 +336,8 @@ div [
               kindAttr
               durAttr
               easAttr
+              distAttr
+              scaleAttr
               Flex.Flex.allSizes
               AlignItems.center
               JustifyContent.center
@@ -276,21 +359,167 @@ div [
 open Weave.CssHelpers.Animation
 
 
-// Compose any entrance with optional duration and easing overrides
+// Compose any entrance with optional duration, easing, distance, and scale
 div [
     AnimationEntrance.slideUpIn
     AnimationDuration.long
     AnimationEasing.bounce
+    AnimationDistance.extraLarge
 ] [
-    text "Slow bouncy slide"
+    text "Slow bouncy slide — extra far"
+]
+
+// Override scale for a subtle entrance
+div [
+    AnimationEntrance.scaleIn
+    AnimationScale.extraSmall
+] [
+    text "Barely perceptible scale"
 ]
 
 // Each axis is independent — use just the kind for defaults
 div [ AnimationEntrance.fadeIn ] [
-    text "Uses default duration and easing"
+    text "Uses default duration, easing, distance, and scale"
 ]"""
 
     Helpers.codeSampleSection "Playground" description content code
+
+  // ---------------------------------------------------------------------------
+  // 2b. Distance & Scale — side-by-side comparison of all 5 levels
+  // ---------------------------------------------------------------------------
+
+  let private distanceAndScaleSection () =
+    let description =
+      Helpers.bodyText
+        "AnimationDistance controls how far elements translate during slide, shake, and bounce animations. AnimationScale controls how dramatically elements shrink or grow during scale and pulse animations. Each has five levels from ExtraSmall (subtle) to ExtraLarge (dramatic). Medium matches the root defaults."
+
+    let replayDistance = Var.Create 0
+    let replayScale = Var.Create 0
+
+    let distanceLevels = [
+      "XS", AnimationDistance.extraSmall
+      "S", AnimationDistance.small
+      "M", AnimationDistance.medium
+      "L", AnimationDistance.large
+      "XL", AnimationDistance.extraLarge
+    ]
+
+    let scaleLevels = [
+      "XS", AnimationScale.extraSmall
+      "S", AnimationScale.small
+      "M", AnimationScale.medium
+      "L", AnimationScale.large
+      "XL", AnimationScale.extraLarge
+    ]
+
+    let content =
+      div [] [
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ textView (View.Const "Distance (slide up)") ]
+
+        div [ Margin.Bottom.small ] [
+          Button.primary (
+            text "Replay",
+            onClick = (fun () -> replayDistance.Value <- replayDistance.Value + 1),
+            attrs = [ Button.Variant.outlined ]
+          )
+        ]
+
+        replayDistance.View
+        |> Doc.BindView(fun _ ->
+          div [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            Attr.Style "gap" "12px"
+            Margin.Bottom.medium
+          ] [
+            yield!
+              distanceLevels
+              |> List.map (fun (label, distAttr) ->
+                div [
+                  BrandColor.BackgroundColor.primary
+                  BorderRadius.All.medium
+                  AnimationEntrance.slideUpIn
+                  AnimationDuration.long
+                  distAttr
+                  Flex.Flex.allSizes
+                  AlignItems.center
+                  JustifyContent.center
+                  Attr.Style "min-height" "80px"
+                  Attr.Style "min-width" "80px"
+                  Attr.Style "flex" "1"
+                  Attr.Style "color" "white"
+                ] [ div [ Typography.body1 ] [ text label ] ])
+          ])
+
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ textView (View.Const "Scale (scale in)") ]
+
+        div [ Margin.Bottom.small ] [
+          Button.primary (
+            text "Replay",
+            onClick = (fun () -> replayScale.Value <- replayScale.Value + 1),
+            attrs = [ Button.Variant.outlined ]
+          )
+        ]
+
+        replayScale.View
+        |> Doc.BindView(fun _ ->
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Attr.Style "gap" "12px" ] [
+            yield!
+              scaleLevels
+              |> List.map (fun (label, scaleAttr) ->
+                div [
+                  BrandColor.BackgroundColor.secondary
+                  BorderRadius.All.medium
+                  AnimationEntrance.scaleIn
+                  AnimationDuration.long
+                  scaleAttr
+                  Flex.Flex.allSizes
+                  AlignItems.center
+                  JustifyContent.center
+                  Attr.Style "min-height" "80px"
+                  Attr.Style "min-width" "80px"
+                  Attr.Style "flex" "1"
+                  Attr.Style "color" "white"
+                ] [ div [ Typography.body1 ] [ text label ] ])
+          ])
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers.Animation
+
+
+// Override distance — controls how far slides, shakes, and bounces travel
+div [
+    AnimationEntrance.slideUpIn
+    AnimationDistance.extraSmall   // barely moves (8px)
+] [ text "Subtle slide" ]
+
+div [
+    AnimationEntrance.slideUpIn
+    AnimationDistance.extraLarge   // dramatic travel (64px)
+] [ text "Big slide" ]
+
+// Override scale — controls how much elements shrink/grow
+div [
+    AnimationEntrance.scaleIn
+    AnimationScale.extraSmall     // nearly invisible scale (0.95)
+] [ text "Gentle scale" ]
+
+div [
+    AnimationEntrance.scaleIn
+    AnimationScale.extraLarge     // dramatic scale from 0.6
+] [ text "Dramatic scale" ]
+
+// Compose distance and scale with other axes
+div [
+    AnimationEntrance.slideUpIn
+    AnimationDuration.long
+    AnimationEasing.bounce
+    AnimationDistance.large
+] [ text "Long bouncy slide" ]"""
+
+    Helpers.codeSampleSection "Distance & scale" description content code
 
   let private triggerOnMountSection () =
     let description =
@@ -575,7 +804,7 @@ Button.create(
       Helpers.bodyText
         "Animate.show mounts content with an entrance animation and listens for the animationend event before removing it from the DOM. Without this, hidden elements would disappear instantly with no exit animation."
 
-    let isVisible = Var.Create false
+    let isVisible = Var.Create true
 
     let content =
       div [] [
@@ -602,7 +831,7 @@ Button.create(
 open Weave.CssHelpers.Animation
 
 
-let isVisible = Var.Create false
+let isVisible = Var.Create true
 
 // Content is added to DOM on enter, removed after exit animation completes
 Animate.show
@@ -942,76 +1171,156 @@ Animate.showWith
   let private designTokensSection () =
     let description =
       Helpers.bodyText
-        "Animation intensity is controlled by CSS custom properties. Override them on any element or subtree to tune distance, scale, and stagger timing. Under prefers-reduced-motion: reduce, distances and scales collapse automatically."
+        "Animation intensity is controlled by CSS custom properties. Use AnimationDistance and AnimationScale for the five predefined levels, or override the raw tokens on any element or subtree for fine-grained control. Under prefers-reduced-motion: reduce, all distances and scales collapse automatically."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
-        table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
-          thead [] [
-            tr [] [
-              tableHeaderCell "Token"
-              tableHeaderCell "Default"
-              tableHeaderCell "Reduced motion"
+      div [] [
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
+          textView (View.Const "AnimationDistance levels")
+        ]
+
+        div [ Typography.body2; Margin.Bottom.small ] [
+          text "Each level sets all four "
+          inlineCode "--weave-animation-distance-*"
+          text " tokens proportionally. Slide, shake, and bounce keyframes reference these tokens."
+        ]
+
+        div [ Attr.Style "overflow-x" "auto"; Margin.Bottom.medium ] [
+          table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
+            thead [] [
+              tr [] [
+                tableHeaderCell "Level"
+                tableHeaderCell "Multiplier"
+                tableHeaderCell "Slide travel"
+                tableHeaderCell "Shake travel"
+                tableHeaderCell "Bounce travel"
+              ]
+            ]
+            tbody [] [
+              tr [] [
+                tableCell [ inlineCode "AnimationDistance.extraSmall" ]
+                tableCell [ text "0.25x" ]
+                tableCell [ text "8px" ]
+                tableCell [ text "2px" ]
+                tableCell [ text "4px" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationDistance.small" ]
+                tableCell [ text "0.5x" ]
+                tableCell [ text "16px" ]
+                tableCell [ text "4px" ]
+                tableCell [ text "8px" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationDistance.medium" ]
+                tableCell [ text "1x" ]
+                tableCell [ text "32px" ]
+                tableCell [ text "8px" ]
+                tableCell [ text "16px" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationDistance.large" ]
+                tableCell [ text "1.5x" ]
+                tableCell [ text "48px" ]
+                tableCell [ text "12px" ]
+                tableCell [ text "24px" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationDistance.extraLarge" ]
+                tableCell [ text "2x" ]
+                tableCell [ text "64px" ]
+                tableCell [ text "16px" ]
+                tableCell [ text "32px" ]
+              ]
             ]
           ]
-          tbody [] [
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-distance-sm" ]
-              tableCell [ text "8px" ]
-              tableCell [ text "0px" ]
+        ]
+
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
+          textView (View.Const "AnimationScale levels")
+        ]
+
+        div [ Typography.body2; Margin.Bottom.small ] [
+          text "Each level sets all four "
+          inlineCode "--weave-animation-scale-*"
+          text " tokens. Scale-in/out, scale-y-in/out, and pulse keyframes reference these tokens."
+        ]
+
+        div [ Attr.Style "overflow-x" "auto"; Margin.Bottom.medium ] [
+          table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
+            thead [] [
+              tr [] [
+                tableHeaderCell "Level"
+                tableHeaderCell "Scale in/out"
+                tableHeaderCell "Scale Y in/out"
+                tableHeaderCell "Pulse"
+              ]
             ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-distance-md" ]
-              tableCell [ text "16px" ]
-              tableCell [ text "0px" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-distance-lg" ]
-              tableCell [ text "32px" ]
-              tableCell [ text "0px" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-distance-xl" ]
-              tableCell [ text "64px" ]
-              tableCell [ text "0px" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-scale-sm" ]
-              tableCell [ text "0.9" ]
-              tableCell [ text "1" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-scale-md" ]
-              tableCell [ text "0.8" ]
-              tableCell [ text "1" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-animation-scale-lg" ]
-              tableCell [ text "0.65" ]
-              tableCell [ text "1" ]
-            ]
-            tr [] [
-              tableCell [ inlineCode "--weave-stagger-delay" ]
-              tableCell [ text "50ms" ]
-              tableCell [ text "0ms" ]
+            tbody [] [
+              tr [] [
+                tableCell [ inlineCode "AnimationScale.extraSmall" ]
+                tableCell [ text "0.95" ]
+                tableCell [ text "0.9" ]
+                tableCell [ text "1.03" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationScale.small" ]
+                tableCell [ text "0.9" ]
+                tableCell [ text "0.8" ]
+                tableCell [ text "1.05" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationScale.medium" ]
+                tableCell [ text "0.8" ]
+                tableCell [ text "0.65" ]
+                tableCell [ text "1.1" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationScale.large" ]
+                tableCell [ text "0.7" ]
+                tableCell [ text "0.5" ]
+                tableCell [ text "1.15" ]
+              ]
+              tr [] [
+                tableCell [ inlineCode "AnimationScale.extraLarge" ]
+                tableCell [ text "0.6" ]
+                tableCell [ text "0.35" ]
+                tableCell [ text "1.2" ]
+              ]
             ]
           ]
+        ]
+
+        div [ Typography.body2 ] [
+          text "Under "
+          inlineCode "prefers-reduced-motion: reduce"
+          text
+            ", all distances collapse to 0px and all scales collapse to 1 (identity), regardless of which level is applied. The "
+          inlineCode "--weave-stagger-delay"
+          text " token (default 50ms) is also zeroed."
         ]
       ]
 
     let code =
-      """// Override animation distance for a subtree
-div [ Attr.Style "--weave-animation-distance-lg" "32px" ] [
-    // Slide animations inside here travel twice as far
-    div [ AnimationEntrance.slideUpIn ] [
-        text "Longer slide distance"
-    ]
-]
+      """open Weave
+open Weave.CssHelpers.Animation
 
-// Override scale for more dramatic entrances
-div [ Attr.Style "--weave-animation-scale-md" "0.5" ] [
-    div [ AnimationEntrance.scaleIn ] [
-        text "Scales from 50% instead of 90%"
+
+// Preferred: use the typed F# modules for predefined levels
+div [
+    AnimationEntrance.slideUpIn
+    AnimationDistance.large        // all distance tokens scaled to 1.5x
+] [ text "Longer slide distance" ]
+
+div [
+    AnimationEntrance.scaleIn
+    AnimationScale.extraSmall     // very subtle scale (0.95)
+] [ text "Gentle scale entrance" ]
+
+// Escape hatch: override individual CSS custom properties directly
+div [ Attr.Style "--weave-animation-distance-lg" "100px" ] [
+    div [ AnimationEntrance.slideUpIn ] [
+        text "Slides exactly 100px"
     ]
 ]
 
@@ -1027,13 +1336,16 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
       div [] [
         Helpers.pageTitle "Animations"
         Helpers.bodyText
-          "Apply entrance, exit, and emphasis animations to any element with composable CSS classes. Each animation is built from four axes — kind, duration, easing, and trigger — all composed the same way as direct Attr bindings. For JS-driven triggers (click, timer, reactive state), use the Animate module instead."
+          "Apply entrance, exit, and emphasis animations to any element with composable CSS classes. Each animation is built from six axes — kind, duration, easing, distance, scale, and trigger — all composed the same way as direct Attr bindings. For JS-driven triggers (click, timer, reactive state), use the Animate module instead."
         Helpers.divider ()
 
         howItWorksSection ()
         Helpers.divider ()
 
         playgroundSection ()
+        Helpers.divider ()
+
+        distanceAndScaleSection ()
         Helpers.divider ()
 
         Helpers.sectionHeader "When do animations play?"

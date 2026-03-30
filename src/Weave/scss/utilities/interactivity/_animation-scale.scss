@@ -1,0 +1,37 @@
+@use "sass:map";
+
+// Animation scale modifiers — control how dramatically elements scale during
+// scale-in/out, scale-y-in/out, and pulse animations.
+// Apply to the animated element to override the root scale tokens.
+//
+// Values closer to 1.0 produce subtler motion; values further from 1.0
+// produce more dramatic motion.
+
+$animation-scales: (
+  "extra-small": (sm: 0.97, md: 0.95, lg: 0.9,  pulse: 1.03),
+  "small":       (sm: 0.95, md: 0.9,  lg: 0.8,  pulse: 1.05),
+  "medium":      (sm: 0.9,  md: 0.8,  lg: 0.65, pulse: 1.1),
+  "large":       (sm: 0.85, md: 0.7,  lg: 0.5,  pulse: 1.15),
+  "extra-large": (sm: 0.8,  md: 0.6,  lg: 0.35, pulse: 1.2),
+);
+
+@each $name, $values in $animation-scales {
+  .weave-animation-scale--#{$name} {
+    --weave-animation-scale-sm: #{map.get($values, sm)};
+    --weave-animation-scale-md: #{map.get($values, md)};
+    --weave-animation-scale-lg: #{map.get($values, lg)};
+    --weave-animation-scale-pulse: #{map.get($values, pulse)};
+  }
+}
+
+// Respect reduced-motion: collapse all scales to identity regardless of level.
+@media (prefers-reduced-motion: reduce) {
+  @each $name, $_ in $animation-scales {
+    .weave-animation-scale--#{$name} {
+      --weave-animation-scale-sm: 1;
+      --weave-animation-scale-md: 1;
+      --weave-animation-scale-lg: 1;
+      --weave-animation-scale-pulse: 1;
+    }
+  }
+}

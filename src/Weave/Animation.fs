@@ -95,6 +95,28 @@ module Animation =
     let longer = cl Css.``weave-animation-duration--longer``
     let longest = cl Css.``weave-animation-duration--longest``
 
+  /// Overrides the travel distance of slide, shake, and bounce animations.
+  /// Each level scales the entire set of --weave-animation-distance-* tokens
+  /// proportionally, from subtle (extraSmall) to dramatic (extraLarge).
+  module AnimationDistance =
+
+    let extraSmall = cl Css.``weave-animation-distance--extra-small``
+    let small = cl Css.``weave-animation-distance--small``
+    let medium = cl Css.``weave-animation-distance--medium``
+    let large = cl Css.``weave-animation-distance--large``
+    let extraLarge = cl Css.``weave-animation-distance--extra-large``
+
+  /// Overrides the scale intensity of scale-in/out, scale-y-in/out, and pulse
+  /// animations. Values closer to identity (1.0) produce subtler motion;
+  /// values further from identity produce more dramatic motion.
+  module AnimationScale =
+
+    let extraSmall = cl Css.``weave-animation-scale--extra-small``
+    let small = cl Css.``weave-animation-scale--small``
+    let medium = cl Css.``weave-animation-scale--medium``
+    let large = cl Css.``weave-animation-scale--large``
+    let extraLarge = cl Css.``weave-animation-scale--extra-large``
+
   /// Overrides the animation timing function set by the kind class.
   module AnimationEasing =
 

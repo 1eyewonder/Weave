@@ -5,8 +5,8 @@ open Microsoft.Playwright.Xunit
 open Xunit
 
 [<Collection("E2E")>]
-type ExpansionPanelTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type ExpansionPanelTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``passes axe-core accessibility scan``() = this.RunAxeScan("expansion-panel")

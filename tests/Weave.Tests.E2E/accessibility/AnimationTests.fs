@@ -5,15 +5,15 @@ open Microsoft.Playwright.Xunit
 open Xunit
 
 [<Collection("E2E")>]
-type AnimationAccessibilityTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationAccessibilityTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``passes axe-core accessibility scan``() = this.RunAxeScan("animation")
 
 [<Collection("E2E")>]
-type AnimationClassTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationClassTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``fade-in-static has weave-animation--fade-in class``() = task {
@@ -44,8 +44,8 @@ type AnimationClassTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationComputedStyleTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationComputedStyleTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``bounce animation uses linear timing function``() = task {
@@ -75,8 +75,8 @@ type AnimationComputedStyleTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationSuppressTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationSuppressTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``suppress-container has weave-animation--none class``() = task {
@@ -98,8 +98,8 @@ type AnimationSuppressTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationShowTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationShowTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``show-wrapper is absent from DOM when isVisible is false``() = task {
@@ -136,8 +136,8 @@ type AnimationShowTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationToggleClassTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationToggleClassTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``toggle-target has no animation class on initial render``() = task {
@@ -167,8 +167,8 @@ type AnimationToggleClassTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationReducedMotionTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationReducedMotionTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   let emulateReducedMotion (page: Microsoft.Playwright.IPage) =
     page.EmulateMediaAsync(
@@ -215,8 +215,8 @@ type AnimationReducedMotionTests(server: TestServerFixture) =
   }
 
 [<Collection("E2E")>]
-type AnimationStaggerTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AnimationStaggerTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``stagger-1 has weave-animation-delay--1 class``() = task {

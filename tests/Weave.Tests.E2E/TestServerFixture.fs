@@ -6,7 +6,9 @@ open System.IO
 open System.Net.Http
 open System.Net.Sockets
 open System.Threading
+open System.Threading.Tasks
 open Xunit
+open Microsoft.Playwright
 
 module private ServerHelpers =
 
@@ -22,10 +24,15 @@ module private ServerHelpers =
     | cfg when String.IsNullOrEmpty cfg -> "Debug"
     | cfg -> cfg
 
-type TestServerFixture() =
+/// Shared fixture for the E2E test collection.
+/// Hosts the test server process and a single Chromium browser instance.
+/// Each test creates a fresh BrowserContext + Page for isolation.
+type TestFixture() =
   let port = ServerHelpers.findFreePort ()
   let baseUrl = $"http://localhost:%d{port}"
   let mutable proc: Process option = None
+  let mutable playwright: IPlaywright = null
+  let mutable browser: IBrowser = null
 
   do
     let rootDir =
@@ -54,6 +61,13 @@ type TestServerFixture() =
     let p = Process.Start(psi)
     proc <- Some p
 
+    // Drain stdout/stderr to prevent pipe buffer deadlock.
+    // Without this, the 64 KB OS pipe buffer fills after ~190 requests,
+    // causing ASP.NET Core's console logger to block on write and
+    // deadlocking Kestrel's request pipeline.
+    p.StandardOutput.ReadToEndAsync() |> ignore
+    p.StandardError.ReadToEndAsync() |> ignore
+
     // Wait for the server to be ready
     use client = new HttpClient()
     let mutable ready = false
@@ -74,15 +88,39 @@ type TestServerFixture() =
 
   member _.BaseUrl = baseUrl
 
-  interface IDisposable with
-    member _.Dispose() =
-      proc
-      |> Option.iter (fun p ->
-        if not p.HasExited then
-          p.Kill(entireProcessTree = true)
+  member _.NewPageAsync() = task {
+    let! context = browser.NewContextAsync()
+    let! page = context.NewPageAsync()
+    return context, page
+  }
 
-        p.Dispose())
+  interface IAsyncLifetime with
+    member _.InitializeAsync() =
+      task {
+        let! pw = Playwright.CreateAsync()
+        playwright <- pw
+        let! b = pw.Chromium.LaunchAsync(BrowserTypeLaunchOptions(Headless = true))
+        browser <- b
+      }
+      :> Task
+
+    member _.DisposeAsync() =
+      task {
+        if not (isNull browser) then
+          do! browser.CloseAsync()
+
+        if not (isNull playwright) then
+          playwright.Dispose()
+
+        proc
+        |> Option.iter (fun p ->
+          if not p.HasExited then
+            p.Kill(entireProcessTree = true)
+
+          p.Dispose())
+      }
+      :> Task
 
 [<CollectionDefinition("E2E")>]
 type E2ECollection() =
-  interface ICollectionFixture<TestServerFixture>
+  interface ICollectionFixture<TestFixture>

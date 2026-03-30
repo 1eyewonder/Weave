@@ -1,34 +1,47 @@
 namespace Weave.Tests.E2E
 
+open System.Threading.Tasks
+open Xunit
 open Deque.AxeCore.Commons
 open Deque.AxeCore.Playwright
-open Microsoft.Playwright.Xunit
-open Xunit
+open Microsoft.Playwright
 
 [<AbstractClass>]
-type E2ETestBase(server: TestServerFixture) =
-  inherit PageTest()
+type E2ETestBase(fixture: TestFixture) =
+  let mutable context: IBrowserContext = null
+  let mutable page: IPage = null
 
-  member this.NavigateTo(page: string) = task {
+  member _.Page = page
+
+  interface IAsyncLifetime with
+    member _.InitializeAsync() = task {
+      let! ctx, p = fixture.NewPageAsync()
+      context <- ctx
+      page <- p
+    }
+
+    member _.DisposeAsync() = task {
+      if not (isNull context) then
+        do! context.CloseAsync()
+    }
+
+  member this.NavigateTo(pageName: string) = task {
     do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"%s{server.BaseUrl}/#%s{page}")
+    let! _ = this.Page.GotoAsync($"%s{fixture.BaseUrl}/#%s{pageName}")
 
     let! _ =
       this.Page.WaitForSelectorAsync(
         "[data-e2e-ready]",
-        Microsoft.Playwright.PageWaitForSelectorOptions(
-          State = Microsoft.Playwright.WaitForSelectorState.Attached
-        )
+        PageWaitForSelectorOptions(State = WaitForSelectorState.Attached)
       )
 
     ()
   }
 
-  member _.Expect(locator: Microsoft.Playwright.ILocator) =
-    Microsoft.Playwright.Assertions.Expect(locator)
+  member _.Expect(locator: ILocator) = Assertions.Expect(locator)
 
-  member this.RunAxeScan(page: string) = task {
-    do! this.NavigateTo(page)
+  member this.RunAxeScan(pageName: string) = task {
+    do! this.NavigateTo(pageName)
 
     let options = AxeRunOptions()
 
@@ -54,5 +67,5 @@ type E2ETestBase(server: TestServerFixture) =
           $"[{v.Impact}] {v.Id}: {v.Description}\n{nodes}")
         |> String.concat "\n\n"
 
-      Assert.Fail($"Accessibility violations on #{page}:\n\n{violations}")
+      Assert.Fail($"Accessibility violations on #{pageName}:\n\n{violations}")
   }

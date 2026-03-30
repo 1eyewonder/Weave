@@ -4,8 +4,8 @@ open Microsoft.Playwright.Xunit
 open Xunit
 
 [<Collection("E2E")>]
-type AlertTests(server: TestServerFixture) =
-  inherit E2ETestBase(server)
+type AlertTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
 
   [<Fact>]
   member this.``passes axe-core accessibility scan``() = this.RunAxeScan("alert")

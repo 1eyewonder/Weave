@@ -525,7 +525,44 @@ module Pages =
     div [] [
       Tooltip.create (
         Button.create (text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
-        text "Tooltip text"
+        text "Tooltip text",
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-default" ]
+      )
+      Tooltip.create (
+        Button.create (text "Click me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "Click tooltip",
+        activationEvents = [ Tooltip.Activation.Click ],
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-click" ]
+      )
+      Tooltip.create (
+        Button.create (text "Bottom", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "Bottom tooltip",
+        direction = Tooltip.Direction.Bottom,
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-bottom" ]
+      )
+      Tooltip.create (
+        Button.create (text "Left", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "Left tooltip",
+        direction = Tooltip.Direction.Left,
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-left" ]
+      )
+      Tooltip.create (
+        Button.create (text "Right", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "Right tooltip",
+        direction = Tooltip.Direction.Right,
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-right" ]
+      )
+      Tooltip.create (
+        Button.create (text "No arrow", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "No arrow tooltip",
+        showArrow = false,
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-no-arrow" ]
+      )
+      Tooltip.create (
+        Button.create (text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled ]),
+        text "Primary tooltip",
+        tooltipAttrs = [ Tooltip.Color.primary ],
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-primary" ]
       )
     ]
 

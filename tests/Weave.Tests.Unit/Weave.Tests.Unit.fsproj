@@ -6,10 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
-    <Compile Include="ChipSetTests.fs" />
-    <Compile Include="DropdownTests.fs" />
-    <Compile Include="AnimationTests.fs" />
-    <Compile Include="NumericFieldTests.fs" />
+    <Compile Include="components/ChipSetTests.fs" />
+    <Compile Include="components/DropdownTests.fs" />
+    <Compile Include="utilities/AnimationTests.fs" />
+    <Compile Include="utilities/BoundedTests.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

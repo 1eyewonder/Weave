@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TestServerFixture.fs" />
-    <Compile Include="accessibility/TestBase.fs" />
+    <Compile Include="TestBase.fs" />
     <Compile Include="accessibility/AlertTests.fs" />
     <Compile Include="accessibility/AnimationTests.fs" />
     <Compile Include="accessibility/AppBarTests.fs" />
@@ -30,6 +30,26 @@
     <Compile Include="accessibility/SwitchTests.fs" />
     <Compile Include="accessibility/TabsTests.fs" />
     <Compile Include="accessibility/TooltipTests.fs" />
+    <Compile Include="interaction/AlertInteractionTests.fs" />
+    <Compile Include="interaction/AnimationInteractionTests.fs" />
+    <Compile Include="interaction/ButtonInteractionTests.fs" />
+    <Compile Include="interaction/ButtonMenuInteractionTests.fs" />
+    <Compile Include="interaction/CheckboxInteractionTests.fs" />
+    <Compile Include="interaction/ChipInteractionTests.fs" />
+    <Compile Include="interaction/ChipSetInteractionTests.fs" />
+    <Compile Include="interaction/DialogInteractionTests.fs" />
+    <Compile Include="interaction/DrawerInteractionTests.fs" />
+    <Compile Include="interaction/DropdownInteractionTests.fs" />
+    <Compile Include="interaction/ExpansionPanelInteractionTests.fs" />
+    <Compile Include="interaction/FieldInteractionTests.fs" />
+    <Compile Include="interaction/LinkInteractionTests.fs" />
+    <Compile Include="interaction/NumericFieldInteractionTests.fs" />
+    <Compile Include="interaction/RadioInteractionTests.fs" />
+    <Compile Include="interaction/SelectInteractionTests.fs" />
+    <Compile Include="interaction/SliderInteractionTests.fs" />
+    <Compile Include="interaction/SwitchInteractionTests.fs" />
+    <Compile Include="interaction/TabsInteractionTests.fs" />
+    <Compile Include="interaction/TooltipInteractionTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />

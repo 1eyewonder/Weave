@@ -1,4 +1,4 @@
-module Weave.Tests.Unit.NumericFieldTests
+module Weave.Tests.Unit.BoundedTests
 
 open System
 open Expecto

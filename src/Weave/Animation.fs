@@ -125,6 +125,18 @@ module Animation =
     let accelerate = cl Css.``weave-animation-easing--accelerate``
     let bounce = cl Css.``weave-animation-easing--bounce``
 
+  /// Overrides the transition timing function on an element and its entire subtree.
+  /// Drop onto any component to change how its CSS transitions feel.
+  /// For example, apply TransitionEasing.bounce to Tabs for a springy indicator.
+  /// Falls back to standard easing when prefers-reduced-motion is active.
+  module TransitionEasing =
+
+    let standard = cl Css.``weave-transition-easing--standard``
+    let decelerate = cl Css.``weave-transition-easing--decelerate``
+    let accelerate = cl Css.``weave-transition-easing--accelerate``
+    let bounce = cl Css.``weave-transition-easing--bounce``
+    let smooth = cl Css.``weave-transition-easing--smooth``
+
   /// Controls animation iteration count (CSS-only, seamless looping).
   /// For periodic replay with pauses between plays, use Animate.replayEvery instead.
   module AnimationIteration =

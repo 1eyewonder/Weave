@@ -81,6 +81,11 @@ module AnimationExamples =
               tableCell [ text "Suppress all animations" ]
               tableCell [ inlineCode "AnimationKind.suppress" ]
             ]
+            tr [] [
+              tableCell [ text "TransitionEasing" ]
+              tableCell [ text "Override transition easing on a subtree" ]
+              tableCell [ inlineCode "TransitionEasing.bounce" ]
+            ]
           ]
         ]
       ]
@@ -1331,12 +1336,164 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
 
     Helpers.codeSampleSection "Design tokens" description content code
 
+  let private transitionEasingSection () =
+    let description =
+      Helpers.bodyText
+        "TransitionEasing overrides the CSS transition-timing-function on an element and its entire subtree. Unlike AnimationEasing (which targets keyframe animations), TransitionEasing affects CSS transitions — the property changes that components use for interactive state like tab indicators sliding, switches toggling, or accordions expanding. Drop it onto any component's attrs to change how its transitions feel."
+
+    let selectedEasing = Var.Create<string option>(Some "Standard (default)")
+
+    let allEasings = [
+      "Standard (default)", Attr.Empty
+      "Decelerate", TransitionEasing.decelerate
+      "Accelerate", TransitionEasing.accelerate
+      "Bounce", TransitionEasing.bounce
+      "Smooth", TransitionEasing.smooth
+    ]
+
+    let easingItems =
+      allEasings
+      |> List.map (fun (label, _) -> SelectItem.create (text label, label, label))
+      |> View.Const
+
+    let easingAttrView =
+      selectedEasing.View
+      |> View.MapCached(fun sel ->
+        sel
+        |> Option.bind (fun label -> allEasings |> List.tryFind (fun (l, _) -> l = label))
+        |> Option.map snd
+        |> Option.defaultValue Attr.Empty)
+
+    let content =
+      div [] [
+        div [ Margin.Bottom.small ] [
+          Grid.create [
+            GridItem.create (
+              Select.create (
+                easingItems,
+                selectedEasing,
+                variant = Select.Variant.Outlined,
+                labelText = View.Const "Transition Easing",
+                placeholder = View.Const "Choose...",
+                attrs = [ Select.Color.primary ]
+              ),
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+            )
+          ]
+        ]
+
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
+          textView (View.Const "Tabs — indicator slides between tabs")
+        ]
+
+        easingAttrView
+        |> Doc.BindView(fun easAttr ->
+          Tabs.create (
+            View.Const [
+              TabItem.create (
+                "Dashboard",
+                div [ Typography.body1; Padding.All.small ] [ text "Dashboard content" ]
+              )
+              TabItem.create (
+                "Settings",
+                div [ Typography.body1; Padding.All.small ] [ text "Settings content" ]
+              )
+              TabItem.create (
+                "Profile",
+                div [ Typography.body1; Padding.All.small ] [ text "Profile content" ]
+              )
+            ],
+            attrs = [ Tabs.Color.primary; Tabs.Variant.filled; easAttr ]
+          ))
+
+        div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [
+          textView (View.Const "Switch — thumb slides between states")
+        ]
+
+        div [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          Attr.Style "gap" "24px"
+          AlignItems.center
+        ] [
+          easingAttrView
+          |> Doc.BindView(fun easAttr ->
+            div [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
+              Switch.create (
+                Var.Create false,
+                content = text "Primary",
+                attrs = [ Switch.Color.primary; easAttr ]
+              )
+            ])
+
+          easingAttrView
+          |> Doc.BindView(fun easAttr ->
+            div [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
+              Switch.create (
+                Var.Create false,
+                content = text "Secondary",
+                attrs = [ Switch.Color.secondary; easAttr ]
+              )
+            ])
+
+          easingAttrView
+          |> Doc.BindView(fun easAttr ->
+            div [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "8px" ] [
+              Switch.create (
+                Var.Create false,
+                content = text "Success",
+                attrs = [ Switch.Color.success; easAttr ]
+              )
+            ])
+        ]
+      ]
+
+    let code =
+      """open Weave
+open Weave.CssHelpers.Animation
+
+
+// Add spring easing to Tabs — the indicator bounces between tabs
+Tabs.create(
+    View.Const [
+        TabItem.create ("Dashboard", dashboardContent)
+        TabItem.create ("Settings", settingsContent)
+        TabItem.create ("Profile", profileContent)
+    ],
+    attrs = [
+        Tabs.Color.primary
+        TransitionEasing.bounce   // springy indicator
+    ]
+)
+
+// Add spring easing to a Switch toggle
+Switch.create(
+    isEnabled,
+    content = text "Dark mode",
+    attrs = [
+        Switch.Color.primary
+        TransitionEasing.bounce   // thumb overshoots slightly
+    ]
+)
+
+// Available easing curves:
+// TransitionEasing.standard     — default ease (no-op, useful for resetting)
+// TransitionEasing.decelerate   — ease-out (fast start, slow end)
+// TransitionEasing.accelerate   — ease-in (slow start, fast end)
+// TransitionEasing.bounce       — spring overshoot (playful, physical)
+// TransitionEasing.smooth       — smooth ease (subtle, refined)
+
+// Works on any component with CSS transitions — just add to attrs.
+// Falls back to standard easing under prefers-reduced-motion."""
+
+    Helpers.codeSampleSection "Transition easing" description content code
+
   let render () =
     Container.create (
       div [] [
         Helpers.pageTitle "Animations"
         Helpers.bodyText
-          "Apply entrance, exit, and emphasis animations to any element with composable CSS classes. Each animation is built from six axes — kind, duration, easing, distance, scale, and trigger — all composed the same way as direct Attr bindings. For JS-driven triggers (click, timer, reactive state), use the Animate module instead."
+          "Apply entrance, exit, and emphasis animations to any element with composable CSS classes. Each animation is built from six axes — kind, duration, easing, distance, scale, and trigger — all composed the same way as direct Attr bindings. For JS-driven triggers (click, timer, reactive state), use the Animate module. For overriding transition curves on existing components (e.g., springy tab indicators), see TransitionEasing."
         Helpers.divider ()
 
         howItWorksSection ()
@@ -1382,6 +1539,20 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
         Helpers.divider ()
 
         staggeredListSection ()
+        Helpers.divider ()
+
+        Helpers.sectionHeader "Transition easing"
+
+        div [ Typography.body1; Margin.Bottom.small ] [
+          text
+            "TransitionEasing is separate from AnimationEasing — it targets CSS transitions (property changes) rather than CSS animations (keyframes). Drop it onto any component to override how its internal transitions feel. The bounce curve uses "
+          inlineCode "cubic-bezier(0.34, 1.56, 0.64, 1)"
+          text " and falls back to standard easing under "
+          inlineCode "prefers-reduced-motion: reduce"
+          text "."
+        ]
+
+        transitionEasingSection ()
         Helpers.divider ()
 
         Helpers.sectionHeader "Customizing components"

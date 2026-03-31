@@ -296,6 +296,43 @@ $animation-duration-names: shortest, shorter, short, standard, medium, long, lon
   }
 }
 
+// --- Transition easing modifiers ---
+// Override the transition timing function on an element and its entire subtree.
+// Drop onto any component to change how its CSS transitions feel.
+// Uses !important to override timing functions set by component transition shorthands.
+
+.weave-transition-easing--standard,
+.weave-transition-easing--standard * {
+  transition-timing-function: $ease-standard !important;
+}
+
+.weave-transition-easing--decelerate,
+.weave-transition-easing--decelerate * {
+  transition-timing-function: $ease-decelerate !important;
+}
+
+.weave-transition-easing--accelerate,
+.weave-transition-easing--accelerate * {
+  transition-timing-function: $ease-accelerate !important;
+}
+
+.weave-transition-easing--bounce,
+.weave-transition-easing--bounce * {
+  transition-timing-function: $ease-bounce !important;
+}
+
+.weave-transition-easing--smooth,
+.weave-transition-easing--smooth * {
+  transition-timing-function: $ease-smooth !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-transition-easing--bounce,
+  .weave-transition-easing--bounce * {
+    transition-timing-function: $ease-standard !important;
+  }
+}
+
 // --- Animation suppression ---
 // Disables all animations and transitions within the element and its subtree.
 .weave-animation--none,

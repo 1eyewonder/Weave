@@ -56,13 +56,15 @@ $checkmark-height: 12px;
   z-index: 1;
 }
 
-// Checked state
+// Checked state — decelerate into resting position
 .weave-checkbox__input:checked + .weave-checkbox__span {
   background: var(--checkbox-brand-color, var(--palette-action-default));
   border-color: var(--checkbox-brand-color, var(--palette-action-default));
 }
 .weave-checkbox__input:checked + .weave-checkbox__span::after {
-  display: block;
+  transform: translate(-50%, -60%) rotate(45deg) scale(1);
+  opacity: 1;
+  transition-timing-function: $ease-decelerate;
   border-color: var(--palette-background);
 }
 
@@ -72,7 +74,8 @@ $checkmark-height: 12px;
   cursor: default;
 }
 .weave-checkbox__input:disabled + .weave-checkbox__span::after {
-  display: none;
+  transform: translate(-50%, -60%) rotate(45deg) scale(0);
+  transition: none;
 }
 
 // Visual box
@@ -88,10 +91,12 @@ $checkmark-height: 12px;
   position: relative;
 }
 
-// Checkmark
+// Checkmark — hidden via scale(0) + opacity: 0 at rest, transitions to
+// scale(1) + opacity: 1 on :checked. Opacity is needed because the white
+// checkmark loses contrast against the background as it transitions back
+// to white on deselection.
 .weave-checkbox__span::after {
   content: "";
-  display: none;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -99,7 +104,16 @@ $checkmark-height: 12px;
   height: var(--checkmark-height, 12px);
   border: solid var(--palette-background);
   border-width: 0 2px 2px 0;
-  transform: translate(-50%, -60%) rotate(45deg);
+  transform: translate(-50%, -60%) rotate(45deg) scale(0);
+  opacity: 0;
+  transition: transform var(--weave-duration-standard) $ease-accelerate,
+              opacity var(--weave-duration-standard) $ease-accelerate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-checkbox__span::after {
+    transition: none;
+  }
 }
 
 .weave-checkbox__label {

@@ -59,12 +59,9 @@ module ExamplesRouter =
               )
 
               Button.create (
-                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
-                  Icon.create (Icon.Action Action.Stars, attrs = [ Attr.Style "font-size" "18px" ])
-                  text "GitHub"
-                ],
+                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [ githubSvg; text "GitHub" ],
                 onClick =
-                  (fun () -> JS.Window?``open``("https://github.com/1eyewonder/Weave", "_blank") |> ignore),
+                  (fun () -> JS.Window.Open("https://github.com/1eyewonder/Weave", "_blank") |> ignore),
                 attrs = [ Button.Variant.outlined ]
               )
             ]

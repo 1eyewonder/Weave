@@ -535,6 +535,54 @@ Tooltip.create(
 
     Helpers.codeSampleSection "Icon Tooltips" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Tooltip.") [
+      Helpers.apiTable "Tooltip.create" [
+        Helpers.apiParam "innerContent" "Doc" "" "The element that triggers the tooltip on interaction"
+        Helpers.apiParam "tooltipContent" "Doc" "" "Content displayed inside the tooltip popup"
+        Helpers.apiParam
+          "?activationEvents"
+          "Activation list"
+          "[Hover; Focus]"
+          "Which interactions show the tooltip"
+        Helpers.apiParam "?direction" "Direction" "Top" "Which side of the trigger the tooltip appears on"
+        Helpers.apiParam "?showArrow" "bool" "true" "Whether to display a directional arrow on the tooltip"
+        Helpers.apiParam
+          "?tooltipAttrs"
+          "Attr list"
+          "[]"
+          "Additional attributes applied to the tooltip popup element"
+        Helpers.apiParam
+          "?wrapperAttrs"
+          "Attr list"
+          "[]"
+          "Additional attributes applied to the root wrapper element"
+      ]
+
+      Helpers.styleModuleTable "Tooltip.Direction (DU)" [
+        ("Top", "Tooltip appears above the trigger (default)")
+        ("Bottom", "Tooltip appears below the trigger")
+        ("Left", "Tooltip appears to the left of the trigger")
+        ("Right", "Tooltip appears to the right of the trigger")
+      ]
+
+      Helpers.styleModuleTable "Tooltip.Activation (DU)" [
+        ("Hover", "Show on mouse enter, hide on mouse leave (default)")
+        ("Focus", "Show on focus, hide on blur (default)")
+        ("Click", "Toggle visibility on click/tap")
+      ]
+
+      Helpers.styleModuleTable "Tooltip.Color" [
+        ("primary", "Primary brand color tooltip background")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -557,6 +605,8 @@ Tooltip.create(
         textTooltipExample ()
         Helpers.divider ()
         iconTooltipExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

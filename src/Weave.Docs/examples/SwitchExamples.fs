@@ -344,6 +344,43 @@ div [ Density.spacious ] [
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Switch.") [
+      Helpers.apiTable "Switch.create" [
+        Helpers.apiParam "isChecked" "Var<bool>" "" "Two-way binding for the on/off state"
+        Helpers.apiParam "?content" "Doc" "" "Optional label content displayed next to the switch"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the switch is interactive"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (size, color, content placement, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Switch.Size" [
+        ("small", "Small switch")
+        ("medium", "Medium switch (default)")
+        ("large", "Large switch")
+      ]
+
+      Helpers.styleModuleTable "Switch.Color" [
+        ("primary", "Primary brand color when on")
+        ("secondary", "Secondary brand color when on")
+        ("tertiary", "Tertiary brand color when on")
+        ("error", "Error/red color when on")
+        ("warning", "Warning/orange color when on")
+        ("success", "Success/green color when on")
+        ("info", "Info/blue color when on")
+      ]
+
+      Helpers.styleModuleTable "Switch.ContentPlacement" [
+        ("right", "Label to the right of the switch (default)")
+        ("left", "Label to the left")
+        ("top", "Label above the switch")
+        ("bottom", "Label below the switch")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -367,6 +404,8 @@ div [ Density.spacious ] [
         contentPlacementExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

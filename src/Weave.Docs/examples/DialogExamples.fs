@@ -252,6 +252,53 @@ Dialog.create(
 
     Helpers.sectionPlain "When to Use" description content
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Dialog, DialogTitle, and DialogContent.") [
+      Helpers.apiTable "Dialog.create" [
+        Helpers.apiParam "title" "Doc" "" "Title content — typically built with DialogTitle.create"
+        Helpers.apiParam "content" "Doc" "" "Body content — typically built with DialogContent.create"
+        Helpers.apiParam
+          "?blurBackground"
+          "View<bool>"
+          "View.Const true"
+          "Whether the backdrop uses a blur filter"
+        Helpers.apiParam
+          "?dialogPosition"
+          "View<DialogPosition>"
+          "View.Const Center"
+          "Where the dialog is positioned on screen"
+        Helpers.apiParam
+          "?dialogInteraction"
+          "View<Interaction>"
+          "View.Const Force"
+          "Whether the dialog can be dismissed by clicking the backdrop or pressing Escape"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+      ]
+
+      Helpers.apiTable "DialogTitle.create" [
+        Helpers.apiParam "content" "Doc" "" "Title content rendered inside the dialog header"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the title element"
+      ]
+
+      Helpers.apiTable "DialogContent.create" [
+        Helpers.apiParam "content" "Doc" "" "Body content rendered inside the dialog"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the content element"
+      ]
+
+      Helpers.styleModuleTable "Dialog.DialogPosition (DU)" [
+        ("Center", "Centered on screen (default)")
+        ("TopCenter", "Centered horizontally, near the top")
+        ("BottomCenter", "Centered horizontally, near the bottom")
+        ("CenterRight", "Centered vertically, on the right")
+        ("CenterLeft", "Centered vertically, on the left")
+      ]
+
+      Helpers.styleModuleTable "Dialog.Interaction (DU)" [
+        ("Force", "User cannot dismiss the dialog — must interact with its content (default)")
+        ("Optional of closeDialog", "User can dismiss via backdrop click or Escape; provide a close callback")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -267,6 +314,8 @@ Dialog.create(
         optionalDialogExample ()
         Helpers.divider ()
         positionDialogExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

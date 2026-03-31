@@ -323,6 +323,81 @@ ExpansionPanelContainer.create(
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for ExpansionPanel and its companion types.") [
+      Helpers.apiTable "ExpansionPanel.create" [
+        Helpers.apiParam "header" "Doc" "" "Header content (typically built with ExpansionPanelHeader.create)"
+        Helpers.apiParam "content" "Doc" "" "Body content (typically wrapped in ExpansionPanelContent.create)"
+        Helpers.apiParam
+          "?expanded"
+          "Var<bool>"
+          "Var.Create false"
+          "Two-way binding controlling whether the panel is open"
+        Helpers.apiParam "?enabled" "View<bool>" "" "Whether the panel header is clickable"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the panel root element"
+      ]
+
+      Helpers.apiTable "ExpansionPanelHeader.create" [
+        Helpers.apiParam "content" "Doc" "" "Content displayed in the header row"
+        Helpers.apiParam "expanded" "Var<bool>" "" "Shared expanded state — toggled on click/keyboard"
+        Helpers.apiParam
+          "?enabled"
+          "View<bool>"
+          "View.Const true"
+          "Whether the header responds to interaction"
+        Helpers.apiParam "?icon" "Doc" "" "Custom expand/collapse icon (use ExpansionPanelIcon.create)"
+        Helpers.apiParam
+          "?highlightVariant"
+          "View<HeaderVariant>"
+          "View.Const Highlight"
+          "Reactive header style when expanded — Filled, Highlight, or None"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the header element"
+      ]
+
+      Helpers.apiTable "ExpansionPanelContent.create" [
+        Helpers.apiParam "content" "Doc" "" "Body content rendered inside the collapsible region"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the content wrapper"
+      ]
+
+      Helpers.apiTable "ExpansionPanelContainer.create" [
+        Helpers.apiParam "panels" "Doc list" "" "List of ExpansionPanel docs to render as a group"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the container element"
+      ]
+
+      Helpers.apiTable "ExpansionPanelIcon.create" [
+        Helpers.apiParam "unexpandedIcon" "Doc" "" "Icon shown when the panel is collapsed"
+        Helpers.apiParam "expandedIcon" "Doc" "" "Icon shown when the panel is expanded"
+        Helpers.apiParam "expanded" "Var<bool>" "" "Shared expanded state to switch between icons"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the icon wrapper"
+      ]
+
+      Helpers.styleModuleTable "ExpansionPanel.Color" [
+        ("primary", "Primary brand color applied to header")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+
+      Helpers.styleModuleTable "ExpansionPanel.FocusColor" [
+        ("primary", "Primary color on focus")
+        ("secondary", "Secondary color on focus")
+        ("tertiary", "Tertiary color on focus")
+        ("error", "Error color on focus")
+        ("warning", "Warning color on focus")
+        ("success", "Success color on focus")
+        ("info", "Info color on focus")
+      ]
+
+      Helpers.styleModuleTable "ExpansionPanel.HeaderVariant (DU)" [
+        ("Filled", "Solid background fill when expanded")
+        ("Highlight", "Subtle highlight background when expanded (default)")
+        ("None", "No visual change when expanded")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -342,6 +417,8 @@ ExpansionPanelContainer.create(
         focusColor ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

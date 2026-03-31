@@ -309,6 +309,52 @@ div [ Density.spacious ] [
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Radio.") [
+      Helpers.apiTable "Radio.create" [
+        Helpers.apiParam
+          "userSelection"
+          "Var<'T>"
+          ""
+          "Two-way binding for the selected value shared across a group"
+        Helpers.apiParam "value" "'T" "" "The value this radio button represents (must support equality)"
+        Helpers.apiParam
+          "?displayText"
+          "View<string>"
+          ""
+          "Reactive label text displayed next to the radio button"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether this radio button is interactive"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (size, color, content placement, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Radio.Size" [
+        ("small", "Small radio button")
+        ("medium", "Medium radio button (default)")
+        ("large", "Large radio button")
+      ]
+
+      Helpers.styleModuleTable "Radio.Color" [
+        ("primary", "Primary brand color when selected")
+        ("secondary", "Secondary brand color when selected")
+        ("tertiary", "Tertiary brand color when selected")
+        ("error", "Error/red color when selected")
+        ("warning", "Warning/orange color when selected")
+        ("success", "Success/green color when selected")
+        ("info", "Info/blue color when selected")
+      ]
+
+      Helpers.styleModuleTable "Radio.ContentPlacement" [
+        ("right", "Label to the right of the radio button (default)")
+        ("left", "Label to the left")
+        ("top", "Label above the radio button")
+        ("bottom", "Label below the radio button")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -332,6 +378,8 @@ div [ Density.spacious ] [
         contentPlacementExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

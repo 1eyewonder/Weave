@@ -540,6 +540,110 @@ DrawerContainer.create(
 
     Helpers.codeSampleSection "Clip Mode" description preview code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection
+      (Helpers.bodyText "Complete API reference for Drawer, DrawerContainer, and DrawerHeader.")
+      [
+        Helpers.returnTypeNote
+          "Drawer.create returns a Drawer.Config record, not a Doc. Pass the config to DrawerContainer.create for layout-aware usage, or call Drawer.Render to get a standalone Doc."
+
+        Helpers.apiTable "Drawer.create" [
+          Helpers.apiParam "content" "Doc" "" "The content to render inside the drawer"
+          Helpers.apiParam "isOpen" "View<bool>" "" "Reactive view controlling whether the drawer is open"
+          Helpers.apiParam
+            "?variant"
+            "Drawer.Variant"
+            "Temporary"
+            "How the drawer displays and interacts with the layout"
+          Helpers.apiParam "?position" "Drawer.Position" "Left" "The edge the drawer slides from"
+          Helpers.apiParam
+            "?clipMode"
+            "Drawer.ClipMode"
+            "FullHeight"
+            "How the drawer interacts with the AppBar vertically"
+          Helpers.apiParam
+            "?breakpoint"
+            "Drawer.DrawerBreakpoint"
+            "At Medium"
+            "Breakpoint at which Responsive and Mini drawers switch states"
+          Helpers.apiParam
+            "?overlayClose"
+            "unit -> unit"
+            ""
+            "Callback invoked when the user clicks the overlay backdrop"
+          Helpers.apiParam
+            "?expandOnHover"
+            "View<bool>"
+            "View.Const false"
+            "Mini drawer expands to full width on pointer hover without shifting layout"
+          Helpers.apiParam
+            "?isFixed"
+            "bool"
+            "true"
+            "Whether the drawer is positioned relative to the viewport"
+          Helpers.apiParam "?width" "int" "" "Custom width in pixels, overriding the CSS custom property"
+          Helpers.apiParam
+            "?header"
+            "Doc"
+            ""
+            "Optional header Doc rendered above drawer content; use DrawerHeader.create"
+          Helpers.apiParam
+            "?attrs"
+            "Attr list"
+            "[]"
+            "Additional attributes applied to the drawer root element"
+        ]
+
+        Helpers.apiTable "DrawerContainer.create" [
+          Helpers.apiParam "mainContent" "Doc" "" "Primary page content, including the AppBar if used"
+          Helpers.apiParam
+            "?leftDrawer"
+            "Drawer.Config"
+            ""
+            "Left-side drawer config produced by Drawer.create"
+          Helpers.apiParam
+            "?rightDrawer"
+            "Drawer.Config"
+            ""
+            "Right-side drawer config produced by Drawer.create"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the container element"
+        ]
+
+        Helpers.apiTable "DrawerHeader.create" [
+          Helpers.apiParam "content" "Doc" "" "Content rendered inside the header"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the header element"
+        ]
+
+        Helpers.styleModuleTable "Drawer.Variant (DU)" [
+          ("Temporary", "Overlays content with an optional backdrop; does not shift AppBar or main content")
+          ("Persistent", "Always visible at configured width; shifts AppBar and main content")
+          ("Responsive", "Persistent above breakpoint, Temporary below it")
+          ("Mini", "Collapses to narrow icon strip; expands to full width on open")
+        ]
+
+        Helpers.styleModuleTable "Drawer.Position (DU)" [
+          ("Left", "Drawer slides from the left edge")
+          ("Right", "Drawer slides from the right edge")
+        ]
+
+        Helpers.styleModuleTable "Drawer.ClipMode (DU)" [
+          ("AppBar", "Drawer starts below the AppBar")
+          ("FullHeight", "Drawer renders at full height, overlapping the AppBar")
+        ]
+
+        Helpers.styleModuleTable "Drawer.DrawerBreakpoint (DU)" [
+          ("At Breakpoint", "Drawer switches at the specified breakpoint (ExtraSmall through ExtraExtraLarge)")
+          ("None", "Always in compact/temporary state — never pushes layout")
+          ("Always", "Always expanded — always pushes layout")
+        ]
+
+        Helpers.styleModuleTable "Drawer.Density" [
+          ("compact", "Compact header height")
+          ("standard", "Standard header height")
+          ("spacious", "Spacious header height")
+        ]
+      ]
+
   let render () =
     Container.create (
       div [] [
@@ -564,6 +668,8 @@ DrawerContainer.create(
         headerExample ()
         Helpers.divider ()
         clipModeExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

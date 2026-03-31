@@ -405,6 +405,43 @@ Link.create(
 
     Helpers.codeSampleSection "Disabled" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Link and IconLink.") [
+      Helpers.apiTable "Link.create" [
+        Helpers.apiParam "innerContents" "Doc" "" "Text or content displayed as the link label"
+        Helpers.apiParam "?href" "string" "\"#\"" "URL to navigate to"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the link is interactive"
+        Helpers.apiParam "?onClick" "unit -> unit" "" "Additional click handler fired alongside navigation"
+        Helpers.apiParam "?startIcon" "Doc" "" "Icon rendered before the link text"
+        Helpers.apiParam "?endIcon" "Doc" "" "Icon rendered after the link text"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (underline, color, etc.)"
+      ]
+
+      Helpers.apiTable "IconLink.create" [
+        Helpers.apiParam "icon" "Doc" "" "Icon content (no text label, no underline)"
+        Helpers.apiParam "?href" "string" "\"#\"" "URL to navigate to"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the link is interactive"
+        Helpers.apiParam "?onClick" "unit -> unit" "" "Additional click handler fired alongside navigation"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (color, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Link.Underline" [
+        ("onHover", "Underline appears only on hover")
+        ("always", "Underline is always visible")
+        ("none", "No underline decoration")
+      ]
+
+      Helpers.styleModuleTable "Link.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -425,6 +462,8 @@ Link.create(
         iconOnlyExample ()
         Helpers.divider ()
         disabledExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

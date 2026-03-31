@@ -578,6 +578,94 @@ div [ Density.spacious ] [
     )
 ]"""
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for WeaveList, ListItem, and ListSubheader.") [
+      Helpers.apiTable "WeaveList.create" [
+        Helpers.apiParam
+          "children"
+          "ListChild list"
+          ""
+          "Child elements — use ListItem.create or ListChild.Content for arbitrary Docs"
+        Helpers.apiParam
+          "?selectedValue"
+          "Var<string option>"
+          ""
+          "Two-way binding for single/toggle selection"
+        Helpers.apiParam
+          "?selectedValues"
+          "Var<Set<string>>"
+          ""
+          "Two-way binding for multi-selection (shows checkboxes)"
+        Helpers.apiParam
+          "?selectionMode"
+          "SelectionMode"
+          "SingleSelection"
+          "How items respond to clicks — SingleSelection, ToggleSelection, or MultiSelection"
+        Helpers.apiParam
+          "?readOnly"
+          "View<bool>"
+          "View.Const false"
+          "Items display state but do not respond to clicks"
+        Helpers.apiParam "?bordered" "View<bool>" "View.Const true" "Whether to draw a border around the list"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+      ]
+
+      Helpers.returnTypeNote
+        "ListItem.create returns a ListChild union case, not a Doc. Build items with ListItem.create and pass them as a list to WeaveList.create."
+
+      Helpers.apiTable "ListItem.create" [
+        Helpers.apiParam "content" "Doc" "" "Primary content (text, icons, avatars, etc.)"
+        Helpers.apiParam
+          "?value"
+          "string"
+          ""
+          "Selectable value — required when using selection on the parent list"
+        Helpers.apiParam "?secondaryContent" "Doc" "" "Secondary line rendered below the primary content"
+        Helpers.apiParam
+          "?nestedChildren"
+          "ListChild list"
+          "[]"
+          "Child items rendered as an expandable nested list"
+        Helpers.apiParam
+          "?expanded"
+          "Var<bool>"
+          "Var.Create false"
+          "Reactive variable controlling nested list expansion"
+        Helpers.apiParam
+          "?disabled"
+          "View<bool>"
+          "View.Const false"
+          "Whether this item is non-interactive and visually dimmed"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the item row"
+      ]
+
+      Helpers.apiTable "ListSubheader.create" [
+        Helpers.apiParam "content" "Doc" "" "The subheader content"
+        Helpers.apiParam
+          "?inset"
+          "bool"
+          "false"
+          "When true, aligns with items that have icons (adds left padding)"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the subheader element"
+      ]
+
+      Helpers.styleModuleTable "WeaveList.SelectionMode (DU)" [
+        ("SingleSelection", "Clicking an item selects it; clicking another deselects the previous one")
+        ("ToggleSelection", "Like SingleSelection, but clicking the selected item deselects it")
+        ("MultiSelection", "Multiple items can be selected simultaneously; shows checkboxes")
+      ]
+
+      Helpers.styleModuleTable "WeaveList.Color" [
+        ("primary", "Primary brand color for selected item highlight")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -599,6 +687,8 @@ div [ Density.spacious ] [
         interactiveExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

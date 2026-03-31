@@ -298,6 +298,37 @@ Alert.create(
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Alert.") [
+      Helpers.apiTable "Alert.create" [
+        Helpers.apiParam "content" "Doc" "" "The alert message content"
+        Helpers.apiParam "?icon" "Doc" "" "Optional icon displayed at the start of the alert"
+        Helpers.apiParam
+          "?onClose"
+          "unit -> unit"
+          ""
+          "Callback invoked when the close button is clicked; shows close button when provided"
+        Helpers.apiParam "?closeIcon" "Doc" "" "Custom close icon (defaults to × character)"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (variant, color, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Alert.Variant" [
+        ("standard", "Default style with colored left border")
+        ("outlined", "Bordered alert with transparent background")
+        ("filled", "Solid background alert with white text")
+      ]
+
+      Helpers.styleModuleTable "Alert.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -315,6 +346,8 @@ Alert.create(
         closeExamples ()
         Helpers.divider ()
         densityExamples ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

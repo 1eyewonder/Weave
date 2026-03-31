@@ -530,6 +530,125 @@ NumericField.create(
     Helpers.codeSampleSection "Disabled & Read Only" description content code
 
   // ---------------------------------------------------------------------------
+  // API Reference
+  // ---------------------------------------------------------------------------
+  let private apiReferenceSection () =
+    Helpers.apiSection
+      (Helpers.bodyText
+        "Complete API reference for NumericField. Two overloads exist: create (lowercase) for int values and Create (uppercase) for float values.")
+      [
+        Helpers.apiTable "NumericField.create (int)" [
+          Helpers.apiParam "value" "Var<int>" "" "Two-way binding for the integer value"
+          Helpers.apiParam
+            "?variant"
+            "Variant"
+            "Standard"
+            "Visual style — Standard, Filled, or Outlined (shared with Field)"
+          Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
+          Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
+          Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
+          Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
+          Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
+          Helpers.apiParam
+            "?readOnly"
+            "View<bool>"
+            "View.Const false"
+            "Display the value without allowing changes"
+          Helpers.apiParam
+            "?shrinkLabel"
+            "View<bool>"
+            "View.Const false"
+            "Force the label to always float above the input"
+          Helpers.apiParam "?startAdornment" "Doc" "" "Content placed before the input (e.g. currency symbol)"
+          Helpers.apiParam "?min" "int" "Int32.MinValue" "Minimum allowed value (clamped on blur and spin)"
+          Helpers.apiParam "?max" "int" "Int32.MaxValue" "Maximum allowed value (clamped on blur and spin)"
+          Helpers.apiParam
+            "?step"
+            "View<int>"
+            "View.Const 1"
+            "Increment/decrement step for spin buttons and arrow keys"
+          Helpers.apiParam "?showSpinButtons" "View<bool>" "View.Const true" "Show the up/down spin buttons"
+          Helpers.apiParam
+            "?enableArrowKeys"
+            "View<bool>"
+            "View.Const true"
+            "Allow ArrowUp/ArrowDown to increment/decrement"
+          Helpers.apiParam
+            "?enableMouseWheel"
+            "View<bool>"
+            "View.Const true"
+            "Allow mouse wheel to increment/decrement when focused"
+          Helpers.apiParam "?upIcon" "Doc" "text \"▲\"" "Custom icon for the increment spin button"
+          Helpers.apiParam "?downIcon" "Doc" "text \"▼\"" "Custom icon for the decrement spin button"
+          Helpers.apiParam
+            "?inputAttrs"
+            "Attr list"
+            "[]"
+            "Additional attributes applied to the inner input element"
+          Helpers.apiParam "?typoAttrs" "Attr list" "" "Typography attributes applied to the field wrapper"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+        ]
+
+        Helpers.apiTable "NumericField.Create (float)" [
+          Helpers.apiParam "value" "Var<float>" "" "Two-way binding for the floating-point value"
+          Helpers.apiParam
+            "?variant"
+            "Variant"
+            "Standard"
+            "Visual style — Standard, Filled, or Outlined (shared with Field)"
+          Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
+          Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
+          Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
+          Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
+          Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
+          Helpers.apiParam
+            "?readOnly"
+            "View<bool>"
+            "View.Const false"
+            "Display the value without allowing changes"
+          Helpers.apiParam
+            "?shrinkLabel"
+            "View<bool>"
+            "View.Const false"
+            "Force the label to always float above the input"
+          Helpers.apiParam "?startAdornment" "Doc" "" "Content placed before the input (e.g. currency symbol)"
+          Helpers.apiParam "?min" "float" "-infinity" "Minimum allowed value (clamped on blur and spin)"
+          Helpers.apiParam "?max" "float" "infinity" "Maximum allowed value (clamped on blur and spin)"
+          Helpers.apiParam
+            "?step"
+            "View<float>"
+            "View.Const 1.0"
+            "Increment/decrement step for spin buttons and arrow keys"
+          Helpers.apiParam "?showSpinButtons" "View<bool>" "View.Const true" "Show the up/down spin buttons"
+          Helpers.apiParam
+            "?enableArrowKeys"
+            "View<bool>"
+            "View.Const true"
+            "Allow ArrowUp/ArrowDown to increment/decrement"
+          Helpers.apiParam
+            "?enableMouseWheel"
+            "View<bool>"
+            "View.Const true"
+            "Allow mouse wheel to increment/decrement when focused"
+          Helpers.apiParam "?upIcon" "Doc" "text \"▲\"" "Custom icon for the increment spin button"
+          Helpers.apiParam "?downIcon" "Doc" "text \"▼\"" "Custom icon for the decrement spin button"
+          Helpers.apiParam
+            "?inputAttrs"
+            "Attr list"
+            "[]"
+            "Additional attributes applied to the inner input element"
+          Helpers.apiParam "?typoAttrs" "Attr list" "" "Typography attributes applied to the field wrapper"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+        ]
+
+        Helpers.styleModuleTable "Field.Variant (shared)" [
+          ("standard", "Underline-only input style (default)")
+          ("filled", "Filled background with underline")
+          ("outlined", "Bordered outline with floating label notch")
+        ]
+      ]
+
+  // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
   let render () =
@@ -554,6 +673,8 @@ NumericField.create(
         customIconsExample ()
         Helpers.divider ()
         disabledExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

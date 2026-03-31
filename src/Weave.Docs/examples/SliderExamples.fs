@@ -278,6 +278,46 @@ Slider.primary(
 
     Helpers.codeSampleSection "Disabled" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection
+      (Helpers.bodyText
+        "Complete API reference for Slider. Two overloads exist: one for Var<int> and one for Var<float>.")
+      [
+        Helpers.apiTable "Slider.create (int)" [
+          Helpers.apiParam "value" "Var<int>" "" "Two-way binding for the integer slider value"
+          Helpers.apiParam "?min" "int" "0" "Minimum value of the slider range"
+          Helpers.apiParam "?max" "int" "100" "Maximum value of the slider range"
+          Helpers.apiParam "?step" "int" "1" "Step increment for keyboard and tick marks"
+          Helpers.apiParam "?labelText" "View<string>" "\"\"" "Label displayed above the slider"
+          Helpers.apiParam "?showTickMarks" "bool" "false" "Show tick marks at each step position"
+          Helpers.apiParam "?tickMarkLabels" "string list" "[]" "Labels displayed below tick mark positions"
+          Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the slider is interactive"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (color, etc.)"
+        ]
+
+        Helpers.apiTable "Slider.create (float)" [
+          Helpers.apiParam "value" "Var<float>" "" "Two-way binding for the floating-point slider value"
+          Helpers.apiParam "?min" "float" "0.0" "Minimum value of the slider range"
+          Helpers.apiParam "?max" "float" "100.0" "Maximum value of the slider range"
+          Helpers.apiParam "?step" "float" "1.0" "Step increment for keyboard and tick marks"
+          Helpers.apiParam "?labelText" "View<string>" "\"\"" "Label displayed above the slider"
+          Helpers.apiParam "?showTickMarks" "bool" "false" "Show tick marks at each step position"
+          Helpers.apiParam "?tickMarkLabels" "string list" "[]" "Labels displayed below tick mark positions"
+          Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the slider is interactive"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (color, etc.)"
+        ]
+
+        Helpers.styleModuleTable "Slider.Color" [
+          ("primary", "Primary brand color for the slider fill and thumb")
+          ("secondary", "Secondary brand color")
+          ("tertiary", "Tertiary brand color")
+          ("error", "Error/red color")
+          ("warning", "Warning/orange color")
+          ("success", "Success/green color")
+          ("info", "Info/blue color")
+        ]
+      ]
+
   let render () =
     Container.create (
       div [] [
@@ -301,6 +341,8 @@ Slider.primary(
         floatSliderExample ()
         Helpers.divider ()
         disabledSliderExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

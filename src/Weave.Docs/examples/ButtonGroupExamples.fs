@@ -358,6 +358,48 @@ ButtonGroup.create(
 
     Helpers.codeSampleSection "Dropdown" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for ButtonGroup.") [
+      Helpers.apiTable "ButtonGroup.create" [
+        Helpers.apiParam
+          "items"
+          "Doc list"
+          ""
+          "List of child elements (buttons, icon buttons, dropdowns, etc.)"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (variant, orientation, density, color, etc.)"
+      ]
+
+      Helpers.styleModuleTable "ButtonGroup.Variant" [
+        ("filled", "Solid background buttons")
+        ("outlined", "Bordered buttons with transparent background")
+        ("text", "Text-only buttons")
+      ]
+
+      Helpers.styleModuleTable "ButtonGroup.Orientation" [
+        ("vertical", "Stack buttons vertically instead of horizontally")
+      ]
+
+      Helpers.styleModuleTable "ButtonGroup.Density" [
+        ("compact", "Compact button sizing")
+        ("standard", "Standard button sizing (default)")
+        ("spacious", "Spacious button sizing")
+      ]
+
+      Helpers.styleModuleTable "ButtonGroup.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -379,6 +421,8 @@ ButtonGroup.create(
         iconButtonExample ()
         Helpers.divider ()
         dropdownExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

@@ -558,6 +558,41 @@ IconButton.create(
 
     Helpers.sectionPlain "When to Use" description content
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Button and IconButton.") [
+      Helpers.apiTable "Button.create" [
+        Helpers.apiParam "innerContents" "Doc" "" "Content rendered inside the button label"
+        Helpers.apiParam "onClick" "unit -> unit" "" "Callback invoked on click, tap, or keyboard activation"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Reactive enabled/disabled state"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (variant, color, width, etc.)"
+      ]
+
+      Helpers.apiTable "IconButton.create" [
+        Helpers.apiParam "icon" "Doc" "" "Icon content rendered inside the button"
+        Helpers.apiParam "onClick" "unit -> unit" "" "Callback invoked on click, tap, or keyboard activation"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Reactive enabled/disabled state"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (variant, color, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Button.Variant" [
+        ("filled", "Solid background button (default)")
+        ("outlined", "Bordered button with transparent background")
+        ("text", "Text-only button with no background or border")
+      ]
+
+      Helpers.styleModuleTable "Button.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+
+      Helpers.styleModuleTable "Button.Width" [ ("full", "Button stretches to fill its container width") ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -586,6 +621,8 @@ IconButton.create(
         iconButtonDensityExamples ()
         Helpers.divider ()
         iconButtonDisabledExamples ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

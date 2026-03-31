@@ -211,6 +211,20 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
 
     Helpers.codeSampleSection "Content Composition" description preview code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for AppBar.") [
+      Helpers.apiTable "AppBar.create" [
+        Helpers.apiParam "content" "Doc" "" "Content rendered inside the bar (branding, navigation, actions)"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (position, etc.)"
+      ]
+
+      Helpers.styleModuleTable "AppBar.Position" [
+        ("fixedTop", "Fixes the bar to the top of the viewport")
+        ("fixedBottom", "Fixes the bar to the bottom of the viewport")
+        ("sticky", "Sticks to the top once the page scrolls past it")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -224,6 +238,8 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
         positionExample ()
         Helpers.divider ()
         contentExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

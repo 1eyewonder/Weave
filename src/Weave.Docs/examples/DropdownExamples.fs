@@ -624,6 +624,112 @@ Dropdown.create(
 
     Helpers.sectionPlain "When to Use" description content
 
+  let private apiReferenceSection () =
+    Helpers.apiSection
+      (Helpers.bodyText "Complete API reference for Dropdown, DropdownItem, and NestedDropdown.")
+      [
+        Helpers.apiTable "Dropdown.create" [
+          Helpers.apiParam "buttonContents" "Doc" "" "Content displayed inside the trigger button"
+          Helpers.apiParam
+            "items"
+            "Doc seq"
+            ""
+            "Sequence of menu item Docs (use DropdownItem.create for styled items)"
+          Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the dropdown open/closed state"
+          Helpers.apiParam
+            "?openOn"
+            "View<OpenOn>"
+            "View.Const Click"
+            "Whether the menu opens on Click or Hover"
+          Helpers.apiParam
+            "?anchorOrigin"
+            "View<AnchorOrigin>"
+            "View.Const BottomLeft"
+            "Position on the button where the menu is anchored (9-point grid)"
+          Helpers.apiParam
+            "?transformOrigin"
+            "View<TransformOrigin>"
+            "View.Const TopLeft"
+            "Point on the menu aligned to the anchor (9-point grid)"
+          Helpers.apiParam
+            "?enabled"
+            "View<bool>"
+            "View.Const true"
+            "Whether the dropdown trigger is interactive"
+          Helpers.apiParam
+            "?closeOnOutsideClick"
+            "View<bool>"
+            "View.Const true"
+            "Close the menu when clicking outside"
+          Helpers.apiParam
+            "?buttonAttrs"
+            "Attr list"
+            "[]"
+            "Additional attributes applied to the trigger button"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root container"
+        ]
+
+        Helpers.apiTable "DropdownItem.create" [
+          Helpers.apiParam "innerContents" "Doc" "" "Content displayed inside the menu item"
+          Helpers.apiParam "onClick" "unit -> unit" "" "Callback invoked when the item is clicked"
+          Helpers.apiParam "?enabled" "View<bool>" "" "Whether this item is interactive"
+          Helpers.apiParam "?attrs" "Attr list" "" "Additional attributes applied to the item"
+        ]
+
+        Helpers.apiTable "NestedDropdown.create" [
+          Helpers.apiParam "buttonContents" "Doc" "" "Content displayed inside the nested trigger button"
+          Helpers.apiParam "items" "Doc seq" "" "Sequence of submenu item Docs"
+          Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the submenu open/closed state"
+          Helpers.apiParam
+            "?openOn"
+            "View<OpenOn>"
+            "View.Const Click"
+            "Whether the submenu opens on Click or Hover"
+          Helpers.apiParam
+            "?anchorOrigin"
+            "View<AnchorOrigin>"
+            "View.Const TopRight"
+            "Anchor position (defaults to TopRight for side-opening)"
+          Helpers.apiParam "?transformOrigin" "View<TransformOrigin>" "" "Transform origin for the submenu"
+          Helpers.apiParam "?enabled" "View<bool>" "" "Whether the nested trigger is interactive"
+          Helpers.apiParam
+            "?buttonAttrs"
+            "Attr list"
+            ""
+            "Additional attributes applied to the nested trigger button"
+          Helpers.apiParam "?attrs" "Attr list" "" "Additional attributes applied to the nested container"
+        ]
+
+        Helpers.styleModuleTable "Dropdown.AnchorOrigin (DU)" [
+          ("TopLeft", "Anchor at top-left of trigger")
+          ("TopCenter", "Anchor at top-center of trigger")
+          ("TopRight", "Anchor at top-right of trigger")
+          ("CenterLeft", "Anchor at center-left of trigger")
+          ("CenterCenter", "Anchor at center of trigger")
+          ("CenterRight", "Anchor at center-right of trigger")
+          ("BottomLeft", "Anchor at bottom-left of trigger (default)")
+          ("BottomCenter", "Anchor at bottom-center of trigger")
+          ("BottomRight", "Anchor at bottom-right of trigger")
+        ]
+
+        Helpers.styleModuleTable "Dropdown.TransformOrigin (DU)" [
+          ("TopLeft", "Menu aligns its top-left to the anchor (default)")
+          ("TopCenter", "Menu aligns its top-center to the anchor")
+          ("TopRight", "Menu aligns its top-right to the anchor")
+          ("CenterLeft", "Menu aligns its center-left to the anchor")
+          ("CenterCenter", "Menu aligns its center to the anchor")
+          ("CenterRight", "Menu aligns its center-right to the anchor")
+          ("BottomLeft", "Menu aligns its bottom-left to the anchor")
+          ("BottomCenter", "Menu aligns its bottom-center to the anchor")
+          ("BottomRight", "Menu aligns its bottom-right to the anchor")
+        ]
+
+        Helpers.styleModuleTable "Dropdown.OpenOn (DU)" [
+          ("Click", "Menu opens/closes on button click (default)")
+          ("Hover", "Menu opens on mouse enter, closes on mouse leave")
+        ]
+      ]
+
   let render () =
     Container.create (
       div [] [
@@ -647,6 +753,8 @@ Dropdown.create(
         disabledExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

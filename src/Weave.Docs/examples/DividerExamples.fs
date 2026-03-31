@@ -107,6 +107,25 @@ div [
 
     Helpers.codeSampleSection "Orientation" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Divider.") [
+      Helpers.apiTable "Divider.create" [
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (variant, orientation, spacing, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Divider.Variant" [
+        ("fullWidth", "Full-width divider spanning the container")
+        ("inset", "Inset divider with left padding")
+        ("middle", "Middle divider with padding on both sides")
+      ]
+
+      Helpers.styleModuleTable "Divider.Orientation" [ ("vertical", "Renders the divider as a vertical bar") ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -121,6 +140,8 @@ div [
         variantExamples ()
         Helpers.divider ()
         orientationExamples ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

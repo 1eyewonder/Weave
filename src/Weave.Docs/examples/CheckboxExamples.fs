@@ -300,6 +300,43 @@ Checkbox.create(
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Checkbox.") [
+      Helpers.apiTable "Checkbox.create" [
+        Helpers.apiParam "isChecked" "Var<bool>" "" "Two-way binding for the checked state"
+        Helpers.apiParam "?displayText" "View<string>" "" "Reactive label text displayed next to the checkbox"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the checkbox is interactive"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (size, color, content placement, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Checkbox.Size" [
+        ("small", "Small checkbox")
+        ("medium", "Medium checkbox (default)")
+        ("large", "Large checkbox")
+      ]
+
+      Helpers.styleModuleTable "Checkbox.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+
+      Helpers.styleModuleTable "Checkbox.ContentPlacement" [
+        ("right", "Label to the right of the checkbox (default)")
+        ("left", "Label to the left")
+        ("top", "Label above the checkbox")
+        ("bottom", "Label below the checkbox")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -323,6 +360,8 @@ Checkbox.create(
         contentPlacementExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

@@ -150,6 +150,32 @@ Container.create(content)
 
     Helpers.codeSampleSection "Fixed Width & Gutters" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Container.") [
+      Helpers.apiTable "Container.create" [
+        Helpers.apiParam "content" "Doc" "" "The content to render inside the container"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (max width, fixed width, gutters, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Container.MaxWidth" [
+        ("extraSmall", "Max width constrained to extra-small breakpoint")
+        ("small", "Max width constrained to small breakpoint")
+        ("medium", "Max width constrained to medium breakpoint")
+        ("large", "Max width constrained to large breakpoint")
+        ("extraLarge", "Max width constrained to extra-large breakpoint")
+        ("extraExtraLarge", "Max width constrained to extra-extra-large breakpoint")
+      ]
+
+      Helpers.styleModuleTable "Container (module-level)" [
+        ("fixedWidth", "Container uses fixed width instead of fluid max-width")
+        ("gutters", "Adds horizontal padding to the container edges")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -163,6 +189,8 @@ Container.create(content)
         variantExamples ()
         Helpers.divider ()
         fixedWidthAndGuttersExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

@@ -782,6 +782,50 @@ Grid.create(
 
     Helpers.codeSampleSection "Card Layout" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Grid, GridItem, and FlexBreak.") [
+      Helpers.apiTable "Grid.create" [
+        Helpers.apiParam "items" "Doc list" "" "List of grid item Docs (typically built with GridItem.create)"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (spacing, alignment, etc.)"
+      ]
+
+      Helpers.apiTable "GridItem.create" [
+        Helpers.apiParam "content" "Doc" "" "Content rendered inside the grid cell"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (span at various breakpoints, etc.)"
+      ]
+
+      Helpers.apiTable "FlexBreak.create" []
+
+      Helpers.styleModuleTable "Grid.Spacing" [
+        ("none", "No gap between grid items (0px)")
+        ("extraSmall", "Extra-small gap (2px)")
+        ("small", "Small gap (4px)")
+        ("medium", "Medium gap (8px)")
+        ("large", "Large gap (12px)")
+        ("extraLarge", "Extra-large gap (20px)")
+      ]
+
+      Helpers.styleModuleTable "GridItem.Span (default / XS)" [
+        ("one through twelve", "Column span from 1 to 12 at the default (extra-small) breakpoint")
+      ]
+
+      Helpers.styleModuleTable "GridItem.Span.Small" [
+        ("one through twelve", "Column span from 1 to 12 at the small breakpoint and above")
+      ]
+
+      Helpers.styleModuleTable "GridItem.Span.Medium" [
+        ("one through twelve", "Column span from 1 to 12 at the medium breakpoint and above")
+      ]
+
+      Helpers.styleModuleTable "GridItem.Span.Large" [
+        ("one through twelve", "Column span from 1 to 12 at the large breakpoint and above")
+      ]
+
+      Helpers.styleModuleTable "GridItem.Span.ExtraLarge" [
+        ("one through twelve", "Column span from 1 to 12 at the extra-large breakpoint and above")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -809,6 +853,8 @@ Grid.create(
         nestedGridExample ()
         Helpers.divider ()
         cardLayoutExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

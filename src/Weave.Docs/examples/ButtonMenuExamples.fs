@@ -619,6 +619,66 @@ ButtonMenu.create(
 
     Helpers.codeSampleSection "Text Button Trigger" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for ButtonMenu and IconButtonMenu.") [
+      Helpers.apiTable "ButtonMenu.create" [
+        Helpers.apiParam "closedContent" "Doc" "" "Button content shown when the menu is closed"
+        Helpers.apiParam "items" "Doc list" "" "List of menu item Docs"
+        Helpers.apiParam "?openContent" "Doc" "" "Alternative button content shown when the menu is open"
+        Helpers.apiParam
+          "?direction"
+          "Direction"
+          "Top"
+          "Direction items fan out — Top, Bottom, Left, or Right"
+        Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the menu open/closed state"
+        Helpers.apiParam
+          "?openOnHover"
+          "View<bool>"
+          "View.Const false"
+          "Open the menu on mouse hover instead of click"
+        Helpers.apiParam
+          "?triggerAttrs"
+          "Attr list"
+          "[]"
+          "Additional attributes applied to the trigger button"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root container"
+      ]
+
+      Helpers.apiTable "IconButtonMenu.create" [
+        Helpers.apiParam "closedIcon" "Doc" "" "Icon shown when the menu is closed"
+        Helpers.apiParam "items" "Doc list" "" "List of menu item Docs"
+        Helpers.apiParam
+          "?openIcon"
+          "Doc"
+          ""
+          "Alternative icon shown when open; if omitted, closedIcon rotates 45°"
+        Helpers.apiParam
+          "?direction"
+          "Direction"
+          "Top"
+          "Direction items fan out — Top, Bottom, Left, or Right"
+        Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the menu open/closed state"
+        Helpers.apiParam
+          "?openOnHover"
+          "View<bool>"
+          "View.Const false"
+          "Open the menu on mouse hover instead of click"
+        Helpers.apiParam
+          "?triggerAttrs"
+          "Attr list"
+          "[]"
+          "Additional attributes applied to the trigger icon button"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root container"
+      ]
+
+      Helpers.styleModuleTable "ButtonMenu.Direction (DU)" [
+        ("Top", "Items fan out upward from the trigger (default)")
+        ("Bottom", "Items fan out downward from the trigger")
+        ("Left", "Items fan out to the left of the trigger")
+        ("Right", "Items fan out to the right of the trigger")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -640,6 +700,8 @@ ButtonMenu.create(
         hoverExample ()
         Helpers.divider ()
         textButtonExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

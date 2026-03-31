@@ -69,6 +69,13 @@ div [ Flex.Flex.allSizes; AlignItems.center ] [
 
     Helpers.codeSampleSection "Multiple Spacers" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Spacer.") [
+      Helpers.apiTable "Spacer.create" [
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the spacer element"
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -81,6 +88,8 @@ div [ Flex.Flex.allSizes; AlignItems.center ] [
         basicExample ()
         Helpers.divider ()
         multipleExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

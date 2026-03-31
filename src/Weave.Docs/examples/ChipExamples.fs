@@ -572,6 +572,51 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
 
     Helpers.codeSampleSection "Border Radius" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Chip.") [
+      Helpers.apiTable "Chip.create" [
+        Helpers.apiParam "label" "Doc" "" "Visual content displayed as the chip label"
+        Helpers.apiParam
+          "?onClick"
+          "unit -> unit"
+          ""
+          "Click handler; makes the chip clickable with keyboard support"
+        Helpers.apiParam "?onClose" "unit -> unit" "" "Close handler; shows a close button when provided"
+        Helpers.apiParam "?closeIcon" "Doc" "" "Custom close icon (defaults to × character)"
+        Helpers.apiParam "?content" "Doc" "" "Leading content slot (e.g. avatar, icon)"
+        Helpers.apiParam "?href" "string" "" "URL to navigate to; renders the chip as an anchor element"
+        Helpers.apiParam
+          "?selected"
+          "View<bool>"
+          "View.Const false"
+          "Reactive selected state for visual highlighting"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the chip is interactive"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (variant, density, color, etc.)"
+      ]
+
+      Helpers.styleModuleTable "Chip.Variant" [
+        ("filled", "Solid background chip (default)")
+        ("outlined", "Bordered chip with transparent background")
+        ("text", "Text-only chip with no background or border")
+      ]
+
+      Helpers.styleModuleTable "Chip.Density" [
+        ("compact", "Compact chip height")
+        ("standard", "Standard chip height (default)")
+        ("spacious", "Spacious chip height")
+      ]
+
+      Helpers.styleModuleTable "Chip.Color" [
+        ("primary", "Primary brand color")
+        ("secondary", "Secondary brand color")
+        ("tertiary", "Tertiary brand color")
+        ("error", "Error/red color")
+        ("warning", "Warning/orange color")
+        ("success", "Success/green color")
+        ("info", "Info/blue color")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -615,6 +660,8 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
         densityExample ()
         Helpers.divider ()
         borderRadiusExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

@@ -744,6 +744,67 @@ ChipSet.create(
 
     Helpers.sectionPlain "When to Use" description content
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for ChipSet and ChipItem.") [
+      Helpers.apiTable "ChipSet.create" [
+        Helpers.apiParam "chips" "ChipDef list" "" "List of chip definitions built with ChipItem.create"
+        Helpers.apiParam
+          "?selectedValue"
+          "Var<string option>"
+          ""
+          "Two-way binding for single/toggle selection (Some value or None)"
+        Helpers.apiParam "?selectedValues" "Var<Set<string>>" "" "Two-way binding for multi-selection"
+        Helpers.apiParam
+          "?selectionMode"
+          "SelectionMode"
+          "Single"
+          "How chips respond to clicks — Single, Toggle, or Multi"
+        Helpers.apiParam "?selectedIcon" "(unit -> Doc)" "" "Custom icon factory shown on selected chips"
+        Helpers.apiParam
+          "?showSelectedIcon"
+          "bool"
+          "true"
+          "Whether to display the selected icon on chosen chips"
+        Helpers.apiParam
+          "?onClose"
+          "string -> unit"
+          ""
+          "Callback when a closable chip's close button is clicked; receives the chip value"
+        Helpers.apiParam
+          "?enabled"
+          "View<bool>"
+          "View.Const true"
+          "Whether the entire chip set is interactive"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+      ]
+
+      Helpers.returnTypeNote
+        "ChipItem.create returns a ChipSet.ChipDef record, not a Doc. Build items with ChipItem.create and pass them as a list to ChipSet.create."
+
+      Helpers.apiTable "ChipItem.create" [
+        Helpers.apiParam "label" "Doc" "" "Visual content displayed as the chip label"
+        Helpers.apiParam "value" "string" "" "Unique identifier for this chip used in selection"
+        Helpers.apiParam
+          "?content"
+          "Doc"
+          ""
+          "Optional content slot (e.g. avatar or icon); replaced by selected icon when chosen"
+        Helpers.apiParam "?closable" "bool" "false" "Whether this chip shows a close button"
+        Helpers.apiParam
+          "?disabled"
+          "View<bool>"
+          "View.Const false"
+          "Whether this individual chip is non-interactive"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to this chip"
+      ]
+
+      Helpers.styleModuleTable "ChipSet.SelectionMode (DU)" [
+        ("Single", "Clicking a chip selects it; clicking another deselects the previous one")
+        ("Toggle", "Like Single, but clicking the already-selected chip deselects it")
+        ("Multi", "Multiple chips can be selected simultaneously")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -774,6 +835,8 @@ ChipSet.create(
         customSelectedIconExample ()
         Helpers.divider ()
         noSelectedIconExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

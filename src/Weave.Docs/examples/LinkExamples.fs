@@ -10,6 +10,49 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module LinkExamples =
 
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "Link"
+        text " and "
+        Helpers.inlineCode "Button"
+        text " are clickable elements — but they serve different purposes. Use this to pick the right one."
+      ]
+
+    let content =
+      Helpers.guidanceColumns
+        (Helpers.guidanceCard "Use Link when\u2026" [
+          Helpers.guidanceBullet
+            "The action navigates to a URL"
+            "internal routes and external pages are both navigation, not side effects."
+          Helpers.guidanceBullet
+            "The element should be an anchor tag"
+            "an <a> gives you right-click \u2018Open in new tab\u2019, SEO crawlability, and correct semantics."
+          Helpers.guidanceBullet
+            "The text is inline within a paragraph"
+            "links flow naturally inside body text without breaking the reading rhythm."
+          Helpers.guidanceBullet
+            "You need underline or color-only styling"
+            "Link supports onHover, always, and none underline modes for inline contexts."
+        ])
+        (Helpers.guidanceCard "Use Button when\u2026" [
+          Helpers.guidanceBullet
+            "The action triggers a side effect"
+            "submitting a form, toggling state, or opening a dialog are actions, not navigation."
+          Helpers.guidanceBullet
+            "The element should be a button tag"
+            "a <button> has correct ARIA role and keyboard activation semantics for actions."
+          Helpers.guidanceBullet
+            "There is no URL to navigate to"
+            "if the action doesn\u2019t have an href, it\u2019s a Button, not a Link."
+          Helpers.guidanceBullet
+            "The action needs visual weight"
+            "filled, outlined, and text variants give buttons prominence that links lack."
+        ])
+
+    Helpers.sectionPlain "When to Use" description content
+
   let private basicExample () =
     let description =
       Helpers.bodyText
@@ -368,6 +411,8 @@ Link.create(
         Helpers.pageTitle "Link"
         Helpers.bodyText
           "A component that wraps an anchor element with configurable underline behaviour, icon adornments, and reactive enable/disable state."
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         basicExample ()
         Helpers.divider ()

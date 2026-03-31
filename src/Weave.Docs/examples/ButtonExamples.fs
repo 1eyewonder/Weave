@@ -507,6 +507,57 @@ IconButton.create(
 
     Helpers.codeSampleSection "Disabled Icon Buttons" description content code
 
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "Button"
+        text " and "
+        Helpers.inlineCode "IconButton"
+        text " trigger actions — but they communicate intent differently. Use this to pick the right one."
+      ]
+
+    let content =
+      div [] [
+        Helpers.guidanceColumns
+          (Helpers.guidanceCard "Use Button when\u2026" [
+            Helpers.guidanceBullet
+              "The action needs a text label"
+              "labels like Save, Cancel, or Submit make the purpose immediately clear to all users."
+            Helpers.guidanceBullet
+              "Users must distinguish multiple actions"
+              "side-by-side buttons need visible labels to differentiate — icons alone can be ambiguous."
+            Helpers.guidanceBullet
+              "The action is the primary call-to-action"
+              "filled or outlined variants give text buttons the visual weight a CTA needs."
+            Helpers.guidanceBullet
+              "Accessibility requires a visible label"
+              "screen readers and sighted users both benefit from explicit text."
+          ])
+          (Helpers.guidanceCard "Use IconButton when\u2026" [
+            Helpers.guidanceBullet
+              "The icon is universally understood"
+              "close (X), menu (hamburger), and theme toggle have strong recognition."
+            Helpers.guidanceBullet
+              "Space is constrained"
+              "toolbars, table rows, and mobile app bars leave little room for text."
+            Helpers.guidanceBullet
+              "The action is secondary or repeated"
+              "edit and delete icons in a list row keep the layout clean."
+            Helpers.guidanceBullet
+              "Always pair with aria-label or Tooltip"
+              "a bare icon without a text alternative fails WCAG 2.1 SC 1.1.1."
+          ])
+
+        Alert.create (
+          text
+            "IconButton always needs an aria-label or Tooltip so screen readers can announce the action. Use Tooltip.create to provide both a visual hint and accessible name.",
+          attrs = [ Alert.Color.warning; Alert.Variant.outlined; Margin.Top.small ]
+        )
+      ]
+
+    Helpers.sectionPlain "When to Use" description content
+
   let render () =
     Container.create (
       div [] [
@@ -515,6 +566,8 @@ IconButton.create(
           text "Buttons allow users to take actions and make choices with a single tap."
         ]
 
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         variantExamples ()
         Helpers.divider ()

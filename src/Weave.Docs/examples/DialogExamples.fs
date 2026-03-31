@@ -208,6 +208,50 @@ Dialog.create(
 
     Helpers.codeSampleSection "Dialog Positions" description content code
 
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "Dialog"
+        text " and "
+        Helpers.inlineCode "Drawer"
+        text
+          " overlay content on the page — but they serve different interaction patterns. Use this to pick the right one."
+      ]
+
+    let content =
+      Helpers.guidanceColumns
+        (Helpers.guidanceCard "Use Dialog when\u2026" [
+          Helpers.guidanceBullet
+            "The user must respond before continuing"
+            "confirmations, destructive-action warnings, and save prompts need a blocking overlay."
+          Helpers.guidanceBullet
+            "Content is self-contained and temporary"
+            "the dialog opens, the user acts, and it closes — no persistent state."
+          Helpers.guidanceBullet
+            "Focus trapping is needed"
+            "keyboard focus stays inside the dialog for accessibility compliance."
+          Helpers.guidanceBullet
+            "The overlay should block page interaction"
+            "backdrop prevents accidental clicks on the content behind."
+        ])
+        (Helpers.guidanceCard "Use Drawer when\u2026" [
+          Helpers.guidanceBullet
+            "Content is persistent navigation or tools"
+            "sidebars, filter panels, and settings that stay open across page changes."
+          Helpers.guidanceBullet
+            "The user interacts with both surfaces"
+            "Persistent and Mini drawers let users work with the main content simultaneously."
+          Helpers.guidanceBullet
+            "Layout should respond to open/close state"
+            "main content shifts or resizes when the drawer opens."
+          Helpers.guidanceBullet
+            "The panel persists across navigations"
+            "drawers stay open as the user moves between pages."
+        ])
+
+    Helpers.sectionPlain "When to Use" description content
+
   let render () =
     Container.create (
       div [] [
@@ -215,6 +259,8 @@ Dialog.create(
         div [ Typography.body1; Margin.Bottom.extraSmall ] [
           text "Dialogs are used to display important information or request user input in a modal window."
         ]
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         basicDialogExample ()
         Helpers.divider ()

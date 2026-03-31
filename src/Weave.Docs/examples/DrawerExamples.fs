@@ -11,6 +11,31 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module DrawerExamples =
 
+  let private variantGuidanceSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text
+          "Drawer offers four layout variants. Choose based on how the drawer should interact with the main content and how often users need access."
+      ]
+
+    let content =
+      Helpers.guidanceCard "Choosing a Drawer Variant" [
+        Helpers.guidanceBullet
+          "Temporary"
+          "overlays content with no layout shift. Best for mobile navigation or panels accessed infrequently."
+        Helpers.guidanceBullet
+          "Persistent"
+          "always visible and shifts main content aside. Best for desktop navigation in content-heavy applications."
+        Helpers.guidanceBullet
+          "Responsive"
+          "automatic: Persistent above the configured breakpoint, Temporary below. Best for adaptive layouts targeting both mobile and desktop."
+        Helpers.guidanceBullet
+          "Mini"
+          "collapses to a narrow icon strip when closed and expands on open or hover. Best for dense dashboards where navigation is used frequently."
+      ]
+
+    Helpers.sectionPlain "Choosing a Variant" description content
+
   let private navList () =
     let item (label: string) =
       div [ Padding.Horizontal.small; Padding.Vertical.extraSmall ] [
@@ -525,6 +550,8 @@ DrawerContainer.create(
              the screen. Wrap side drawers in a DrawerContainer so the AppBar and \
              main content area shift automatically."
         ]
+        Helpers.divider ()
+        variantGuidanceSection ()
         Helpers.divider ()
         temporaryExample ()
         Helpers.divider ()

@@ -580,6 +580,50 @@ Dropdown.create(
 
     Helpers.codeSampleSection "Density" description content code
 
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "Dropdown"
+        text " and "
+        Helpers.inlineCode "ButtonMenu"
+        text
+          " reveal a set of actions from a trigger — but they differ in interaction style and layout. Use this to pick the right one."
+      ]
+
+    let content =
+      Helpers.guidanceColumns
+        (Helpers.guidanceCard "Use Dropdown when\u2026" [
+          Helpers.guidanceBullet
+            "Items are a flat list of actions"
+            "edit, delete, share — standard menu actions triggered by onClick."
+          Helpers.guidanceBullet
+            "You need precise positioning control"
+            "anchorOrigin and transformOrigin give 9-point placement."
+          Helpers.guidanceBullet
+            "Nested submenus are required"
+            "NestedDropdown supports hierarchical menu structures."
+          Helpers.guidanceBullet
+            "Standard click-to-open behavior"
+            "familiar menu pattern that works on all devices."
+        ])
+        (Helpers.guidanceCard "Use ButtonMenu when\u2026" [
+          Helpers.guidanceBullet
+            "The trigger animates between states"
+            "the button content morphs between open and closed icons."
+          Helpers.guidanceBullet
+            "Items fan out directionally"
+            "top, bottom, left, or right from the trigger button."
+          Helpers.guidanceBullet
+            "Hover-open behavior is needed"
+            "openOnHover enables menus that appear without clicking."
+          Helpers.guidanceBullet
+            "The trigger is a FAB-like action button"
+            "circular icon buttons that reveal a radial menu."
+        ])
+
+    Helpers.sectionPlain "When to Use" description content
+
   let render () =
     Container.create (
       div [] [
@@ -589,6 +633,8 @@ Dropdown.create(
             "Dropdowns allow users to select an option from a list. They can be customized with anchor origins, nested menus, and disabled items."
         ]
 
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         basicDropdownExample ()
         Helpers.divider ()

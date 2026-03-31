@@ -12,9 +12,49 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module FieldExamples =
 
-  // ---------------------------------------------------------------------------
-  // Variants
-  // ---------------------------------------------------------------------------
+  let private whenToUseSection () =
+    let description =
+      div [ Typography.body1 ] [
+        text "Both "
+        Helpers.inlineCode "Field"
+        text " and "
+        Helpers.inlineCode "NumericField"
+        text " handle user input — but they target different value types. Use this to pick the right one."
+      ]
+
+    let content =
+      Helpers.guidanceColumns
+        (Helpers.guidanceCard "Use Field when\u2026" [
+          Helpers.guidanceBullet
+            "Input accepts freeform text"
+            "names, emails, descriptions, and search queries are all string-typed inputs."
+          Helpers.guidanceBullet
+            "You need full control over validation"
+            "custom regex, async validation, or format masking require direct input access."
+          Helpers.guidanceBullet
+            "The value type is string"
+            "Field binds a Var<string> and lets you map or parse it yourself."
+          Helpers.guidanceBullet
+            "Custom input elements are needed"
+            "wrap a textarea, contenteditable, or third-party input inside Field."
+        ])
+        (Helpers.guidanceCard "Use NumericField when\u2026" [
+          Helpers.guidanceBullet
+            "The value is an int or float with a range"
+            "quantities, prices, and ratings have well-defined numeric bounds."
+          Helpers.guidanceBullet
+            "Spin buttons or keyboard stepping is expected"
+            "arrow keys, mouse wheel, and +/\u2212 buttons increment in configurable steps."
+          Helpers.guidanceBullet
+            "Built-in clamping and step-snapping are needed"
+            "values are always valid numbers within [min, max], snapped to the step grid."
+          Helpers.guidanceBullet
+            "The display must always show a valid number"
+            "empty or non-numeric states are prevented by the component."
+        ])
+
+    Helpers.sectionPlain "When to Use" description content
+
   let private variantsExample () =
     let stdVal = Var.Create ""
     let filledVal = Var.Create ""
@@ -89,9 +129,6 @@ Field.create(
 
     Helpers.codeSampleSection "Variants" description content code
 
-  // ---------------------------------------------------------------------------
-  // With content
-  // ---------------------------------------------------------------------------
   let private withContentExample () =
     let stdVal = Var.Create "Some content here"
     let filledVal = Var.Create "Some content here"
@@ -154,9 +191,6 @@ Field.create(
 
     Helpers.codeSampleSection "With Content" description content code
 
-  // ---------------------------------------------------------------------------
-  // With adornments
-  // ---------------------------------------------------------------------------
   let private adornmentsExample () =
     // Start adornment row
     let startStdVal = Var.Create ""
@@ -286,9 +320,6 @@ Field.create(
 
     Helpers.codeSampleSection "Adornments" description content code
 
-  // ---------------------------------------------------------------------------
-  // Shrink label override
-  // ---------------------------------------------------------------------------
   let private shrinkLabelExample () =
     let value = Var.Create ""
 
@@ -322,9 +353,6 @@ Field.create(
 
     Helpers.codeSampleSection "Shrink Label Override" description content code
 
-  // ---------------------------------------------------------------------------
-  // Placeholder text
-  // ---------------------------------------------------------------------------
   let private placeholderExample () =
     let value = Var.Create ""
 
@@ -357,9 +385,6 @@ Field.create(
 
     Helpers.codeSampleSection "Placeholder" description content code
 
-  // ---------------------------------------------------------------------------
-  // Help text with validation
-  // ---------------------------------------------------------------------------
   let private helpTextValidationExample () =
     let value = Var.Create ""
 
@@ -742,6 +767,8 @@ Field.create(
           text
             "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text."
         ]
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         variantsExample ()
         Helpers.divider ()

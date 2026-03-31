@@ -51,6 +51,8 @@ module DocsRouting =
     | ShowcasePomodoroTimer
     | ShowcaseExpenseTracker
     | ShowcaseCharacterSheet
+    | ReactiveHelpersExamples
+    | EventHandlersExamples
 
   let pageToString page =
     match page with
@@ -97,6 +99,8 @@ module DocsRouting =
     | ShowcasePomodoroTimer -> "Pomodoro Timer"
     | ShowcaseExpenseTracker -> "Expense Tracker"
     | ShowcaseCharacterSheet -> "Character Sheet"
+    | ReactiveHelpersExamples -> "Reactive Helpers"
+    | EventHandlersExamples -> "Event Handlers"
 
   let stringToPage s =
     match s with
@@ -143,6 +147,8 @@ module DocsRouting =
     | "Pomodoro Timer" -> Some ShowcasePomodoroTimer
     | "Expense Tracker" -> Some ShowcaseExpenseTracker
     | "Character Sheet" -> Some ShowcaseCharacterSheet
+    | "Reactive Helpers" -> Some ReactiveHelpersExamples
+    | "Event Handlers" -> Some EventHandlersExamples
     | _ -> None
 
   let pageToHash page =
@@ -190,6 +196,8 @@ module DocsRouting =
     | ShowcasePomodoroTimer -> "#showcase-pomodoro-timer"
     | ShowcaseExpenseTracker -> "#showcase-expense-tracker"
     | ShowcaseCharacterSheet -> "#showcase-character-sheet"
+    | ReactiveHelpersExamples -> "#reactive-helpers"
+    | EventHandlersExamples -> "#event-handlers"
 
   let hashToPage hash =
     match hash with
@@ -237,6 +245,8 @@ module DocsRouting =
     | "#showcase-pomodoro-timer" -> Some ShowcasePomodoroTimer
     | "#showcase-expense-tracker" -> Some ShowcaseExpenseTracker
     | "#showcase-character-sheet" -> Some ShowcaseCharacterSheet
+    | "#reactive-helpers" -> Some ReactiveHelpersExamples
+    | "#event-handlers" -> Some EventHandlersExamples
     | _ -> None
 
   [<Inline "window.location.hash">]

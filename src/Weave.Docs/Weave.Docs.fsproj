@@ -47,6 +47,8 @@
     <Compile Include="examples/ShowcasePomodoroTimer.fs" />
     <Compile Include="examples/ShowcaseExpenseTracker.fs" />
     <Compile Include="examples/ShowcaseCharacterSheet.fs" />
+    <Compile Include="examples/ReactiveHelpersExamples.fs" />
+    <Compile Include="examples/EventHandlersExamples.fs" />
     <Compile Include="DocsRouting.fs" />
     <Compile Include="ComponentPreviews.fs" />
     <Compile Include="ExamplesRouter.fs" />

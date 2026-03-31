@@ -270,6 +270,11 @@ module ExamplesRouter =
               "Theming", ThemingExamples
             ]
 
+            categorySection "Utilities" [
+              "Reactive Helpers", ReactiveHelpersExamples
+              "Event Handlers", EventHandlersExamples
+            ]
+
             categorySection "Showcases" [
               "Task Tracker", ShowcaseTaskTracker
               "Pomodoro Timer", ShowcasePomodoroTimer
@@ -324,6 +329,8 @@ module ExamplesRouter =
       | ShowcasePomodoroTimer -> ShowcasePomodoroTimer.render ()
       | ShowcaseExpenseTracker -> ShowcaseExpenseTracker.render ()
       | ShowcaseCharacterSheet -> ShowcaseCharacterSheet.render ()
+      | ReactiveHelpersExamples -> ReactiveHelpersExamples.render ()
+      | EventHandlersExamples -> EventHandlersExamples.render ()
       | Home -> Doc.Empty
 
   let render () =
@@ -517,6 +524,7 @@ module ExamplesRouter =
 
     let componentsExpanded = Var.Create true
     let stylingExpanded = Var.Create true
+    let utilitiesExpanded = Var.Create true
     let showcasesExpanded = Var.Create true
 
     let navLeafItem (label: string) =
@@ -644,6 +652,11 @@ module ExamplesRouter =
           navLeafItem "Transitions"
           navLeafItem "Animations"
           navLeafItem "Theming"
+        ]
+
+        navGroup (Icon.Action Action.Code) "Utilities" utilitiesExpanded [
+          navLeafItem "Reactive Helpers"
+          navLeafItem "Event Handlers"
         ]
 
         Divider.create (attrs = [ Margin.Vertical.extraSmall ])

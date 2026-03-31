@@ -1510,4 +1510,119 @@ module ComponentPreviews =
           Attr.Style "opacity" "0.4"
         ] []
       ]
+    | ReactiveHelpersExamples ->
+      cp [
+        // Two small boxes connected by an arrow
+        div [
+          cl "cp-box"
+          Attr.Style "top" "20px"
+          Attr.Style "left" "12px"
+          Attr.Style "width" "24px"
+          Attr.Style "height" "24px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "40px"
+          Attr.Style "width" "30px"
+          Attr.Style "height" "4px"
+          Attr.Style "border-radius" "2px"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "20px"
+          Attr.Style "left" "74px"
+          Attr.Style "width" "24px"
+          Attr.Style "height" "24px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "102px"
+          Attr.Style "width" "30px"
+          Attr.Style "height" "4px"
+          Attr.Style "border-radius" "2px"
+        ] []
+        div [
+          cl "cp-fill"
+          Attr.Style "top" "16px"
+          Attr.Style "left" "136px"
+          Attr.Style "width" "32px"
+          Attr.Style "height" "32px"
+        ] []
+        // Bottom flow
+        div [
+          cl "cp-line"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "12px"
+          Attr.Style "width" "80px"
+          Attr.Style "height" "6px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "100px"
+          Attr.Style "width" "50px"
+          Attr.Style "height" "6px"
+        ] []
+      ]
+    | EventHandlersExamples ->
+      cp [
+        // Cursor-like triangle
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "22px"
+          Attr.Style "left" "30px"
+          Attr.Style "width" "20px"
+          Attr.Style "height" "28px"
+          Attr.Style "clip-path" "polygon(0 0, 100% 50%, 30% 100%)"
+        ] []
+        // Action lines radiating from cursor
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "18px"
+          Attr.Style "left" "56px"
+          Attr.Style "width" "40px"
+          Attr.Style "height" "4px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "30px"
+          Attr.Style "left" "56px"
+          Attr.Style "width" "30px"
+          Attr.Style "height" "4px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "top" "42px"
+          Attr.Style "left" "56px"
+          Attr.Style "width" "35px"
+          Attr.Style "height" "4px"
+        ] []
+        // Keyboard key shapes
+        div [
+          cl "cp-box"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "12px"
+          Attr.Style "width" "22px"
+          Attr.Style "height" "18px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "38px"
+          Attr.Style "width" "22px"
+          Attr.Style "height" "18px"
+          Attr.Style "border-radius" "3px"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "64px"
+          Attr.Style "width" "50px"
+          Attr.Style "height" "18px"
+          Attr.Style "border-radius" "3px"
+        ] []
+      ]
     | _ -> Doc.Empty

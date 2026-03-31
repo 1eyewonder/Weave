@@ -59,22 +59,24 @@ $dot-size: 10px;
   }
 }
 
-// Checked state
+// Checked state — decelerate into resting position
 .weave-radio__input:checked + .weave-radio__span {
   border-color: var(--radio-brand-color, var(--palette-action-default));
 }
 .weave-radio__input:checked + .weave-radio__span::after {
-  display: block;
+  transform: translate(-50%, -50%) scale(1);
+  transition-timing-function: $ease-decelerate;
   background: var(--radio-brand-color, var(--palette-action-default));
 }
 
-// Disabled state: filled background and border, no dot
+// Disabled state: filled background and border, no dot, no transition
 .weave-radio__input:disabled + .weave-radio__span {
   background: var(--palette-action-disabled);
   border: none;
 }
 .weave-radio__input:disabled + .weave-radio__span::after {
-  display: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: none;
 }
 
 // Visual circle
@@ -90,10 +92,11 @@ $dot-size: 10px;
   position: relative;
 }
 
-// Dot
+// Dot — hidden via scale(0) at rest, transitions to scale(1) on :checked.
+// The base state carries the exit easing (accelerate out); the :checked
+// state overrides with the enter easing (decelerate in).
 .weave-radio__span::after {
   content: "";
-  display: none;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -101,7 +104,14 @@ $dot-size: 10px;
   height: var(--dot-size, 10px);
   background: var(--radio-brand-color, var(--palette-action-default));
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform var(--weave-duration-standard) $ease-accelerate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-radio__span::after {
+    transition: none;
+  }
 }
 
 .weave-radio__label {

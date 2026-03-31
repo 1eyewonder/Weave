@@ -130,6 +130,10 @@ See `weave-component-conventions.skill.md` for full patterns and code templates.
 
 Use the `/scaffold-component` skill — it provides the full step-by-step checklist covering the F# component, SCSS, docs example, router registration, unit tests, rendering tests, E2E accessibility tests, and verification builds.
 
+## API Documentation
+
+Each component's docs example page has an **API reference section** at the bottom using `Helpers.apiSection`, `Helpers.apiTable`, `Helpers.styleModuleTable`, and `Helpers.returnTypeNote` from `ExampleHelpers.fs`. **When modifying a component's public API** (parameters, types, companion types, style modules), update the corresponding API tables in `src/Weave.Docs/examples/{Name}Examples.fs` to match — they are hand-authored and will not update automatically.
+
 ## Testing Patterns
 
 Detailed patterns and code templates live in the agent/skill definitions. Quick reference:

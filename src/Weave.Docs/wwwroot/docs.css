@@ -465,3 +465,116 @@ body {
 .docs-guidance-bullet__desc {
   color: var(--palette-text-secondary);
 }
+
+/* ==========================================================================
+   API reference tables
+   ========================================================================== */
+
+.docs-api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--typography-body2-size, 0.875rem);
+  line-height: var(--typography-body2-lineheight, 1.43);
+}
+
+.docs-api-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: var(--typography-overline-size, 0.625rem);
+  font-weight: var(--typography-overline-weight, 500);
+  letter-spacing: var(--typography-overline-letterspacing, 0.083em);
+  text-transform: uppercase;
+  color: var(--palette-text-secondary);
+  border-bottom: 2px solid var(--palette-primary);
+  white-space: nowrap;
+}
+
+.docs-api-table td {
+  padding: 8px 12px;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(var(--palette-text-primary-rgb), 0.08);
+}
+
+.docs-api-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Give the description column room to breathe on wide screens */
+.docs-api-table__desc {
+  width: 45%;
+}
+
+/* Tighten inline-code pills inside table cells */
+.docs-api-table .docs-inline-code {
+  font-size: 0.8125em;
+  padding: 0.1em 0.4em;
+  word-break: break-all;
+}
+
+/* Prevent parameter names from wrapping */
+.docs-api-table td:first-child {
+  white-space: nowrap;
+}
+
+/* Compact variant for style module tables */
+.docs-api-table--compact th,
+.docs-api-table--compact td {
+  padding: 6px 10px;
+}
+
+/* ---- Mobile: stack rows into cards ---- */
+@media (max-width: 767px) {
+  .docs-api-table thead {
+    display: none;
+  }
+
+  .docs-api-table,
+  .docs-api-table tbody,
+  .docs-api-table tr,
+  .docs-api-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .docs-api-table tr {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(var(--palette-text-primary-rgb), 0.08);
+  }
+
+  .docs-api-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .docs-api-table td {
+    padding: 2px 0;
+    border-bottom: none;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .docs-api-table td:first-child {
+    white-space: normal;
+  }
+
+  /* Show the data-label as an inline header before each value */
+  .docs-api-table td::before {
+    content: attr(data-label);
+    font-size: var(--typography-overline-size, 0.625rem);
+    font-weight: var(--typography-overline-weight, 500);
+    letter-spacing: var(--typography-overline-letterspacing, 0.083em);
+    text-transform: uppercase;
+    color: var(--palette-text-secondary);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+
+  .docs-api-table__desc {
+    width: auto;
+  }
+
+  /* Hide em-dash-only Default cells on mobile to save space */
+  .docs-api-table td.docs-api-table__empty-default {
+    display: none;
+  }
+}

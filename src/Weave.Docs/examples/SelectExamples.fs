@@ -873,6 +873,117 @@ Select.create(
 
     Helpers.codeSampleSection "Generic Types" description content code
 
+  let private apiReferenceSection () =
+    Helpers.apiSection (Helpers.bodyText "Complete API reference for Select, MultiSelect, and SelectItem.") [
+      Helpers.apiTable "Select.create" [
+        Helpers.apiParam "items" "View<SelectItemDef<'T> list>" "" "Reactive list of selectable items"
+        Helpers.apiParam
+          "selectedValue"
+          "Var<'T option>"
+          ""
+          "Two-way binding for the selected value; None when nothing is selected"
+        Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
+        Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
+        Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no value is selected"
+        Helpers.apiParam
+          "?showHelpText"
+          "View<bool>"
+          "View.Const false"
+          "Whether to display the help text area"
+        Helpers.apiParam
+          "?helpText"
+          "Doc"
+          "Doc.Empty"
+          "Content shown below the select when showHelpText is true"
+        Helpers.apiParam
+          "?clearable"
+          "View<bool>"
+          "View.Const false"
+          "Show a clear button when a value is selected"
+        Helpers.apiParam "?searchable" "bool" "false" "Enable type-to-filter on the item list"
+        Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the dropdown open state"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the select is interactive"
+        Helpers.apiParam
+          "?readOnly"
+          "View<bool>"
+          "View.Const false"
+          "Display the selected value without allowing changes"
+        Helpers.apiParam "?noItemsContent" "Doc" "" "Content shown when the filtered item list is empty"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+      ]
+
+      Helpers.apiTable "MultiSelect.create" [
+        Helpers.apiParam "items" "View<SelectItemDef<'T> list>" "" "Reactive list of selectable items"
+        Helpers.apiParam "selectedValues" "Var<Set<'T>>" "" "Two-way binding for the set of selected values"
+        Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
+        Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
+        Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no values are selected"
+        Helpers.apiParam
+          "?showHelpText"
+          "View<bool>"
+          "View.Const false"
+          "Whether to display the help text area"
+        Helpers.apiParam
+          "?helpText"
+          "Doc"
+          "Doc.Empty"
+          "Content shown below the select when showHelpText is true"
+        Helpers.apiParam
+          "?selectionText"
+          "Set<'T> -> string"
+          ""
+          "Custom function to format the display text from the selected set"
+        Helpers.apiParam
+          "?clearable"
+          "View<bool>"
+          "View.Const false"
+          "Show a clear button when values are selected"
+        Helpers.apiParam "?searchable" "bool" "false" "Enable type-to-filter on the item list"
+        Helpers.apiParam "?showSelectAll" "bool" "false" "Show a Select All checkbox at the top of the list"
+        Helpers.apiParam "?selectAllText" "string" "\"Select All\"" "Label for the Select All checkbox"
+        Helpers.apiParam "?isOpen" "Var<bool>" "" "External control over the dropdown open state"
+        Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the select is interactive"
+        Helpers.apiParam
+          "?readOnly"
+          "View<bool>"
+          "View.Const false"
+          "Display the selected values without allowing changes"
+        Helpers.apiParam "?noItemsContent" "Doc" "" "Content shown when the filtered item list is empty"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+      ]
+
+      Helpers.returnTypeNote
+        "SelectItem.create returns a SelectItemDef<'T> record, not a Doc. Build items with SelectItem.create and pass them as a reactive list to Select.create or MultiSelect.create."
+
+      Helpers.apiTable "SelectItem.create" [
+        Helpers.apiParam "content" "Doc" "" "Visual content displayed in the dropdown list"
+        Helpers.apiParam "text" "string" "" "Plain-text label used for search filtering and accessibility"
+        Helpers.apiParam "value" "'T" "" "The typed value associated with this item"
+        Helpers.apiParam
+          "?selectedContent"
+          "Doc"
+          ""
+          "Alternative content shown in the input when this item is selected"
+        Helpers.apiParam "?disabled" "View<bool>" "View.Const false" "Whether this item is non-selectable"
+        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the item element"
+      ]
+
+      Helpers.styleModuleTable "Select.Color" [
+        ("primary", "Default blue accent color")
+        ("secondary", "Purple accent color")
+        ("tertiary", "Teal accent color")
+        ("error", "Red accent — use for validation errors")
+        ("warning", "Orange accent color")
+        ("success", "Green accent color")
+        ("info", "Light blue accent color")
+      ]
+
+      Helpers.styleModuleTable "Select.Width" [
+        ("full", "Select stretches to fill its container width")
+        ("fitContent", "Select shrinks to fit the selected content")
+      ]
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -904,6 +1015,8 @@ Select.create(
         disabledReadonlyExample ()
         Helpers.divider ()
         genericTypeExample ()
+        Helpers.divider ()
+        apiReferenceSection ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

@@ -144,6 +144,91 @@ module Helpers =
       attrs = [ AlignItems.stretch ]
     )
 
+  type ApiParam = {
+    Name: string
+    Type: string
+    Default: string
+    Description: string
+  }
+
+  let apiParam name typ def desc = {
+    Name = name
+    Type = typ
+    Default = def
+    Description = desc
+  }
+
+  let apiTable (title: string) (rows: ApiParam list) : Doc =
+    div [ Margin.Bottom.small ] [
+      div [ Typography.h6; Margin.Bottom.extraSmall ] [ text title ]
+      div [ Attr.Style "overflow-x" "auto" ] [
+        table [ Attr.Class "docs-api-table" ] [
+          thead [] [
+            tr [] [
+              th [] [ text "Parameter" ]
+              th [] [ text "Type" ]
+              th [] [ text "Default" ]
+              th [ Attr.Class "docs-api-table__desc" ] [ text "Description" ]
+            ]
+          ]
+          tbody [] [
+            for row in rows do
+              tr [] [
+                td [ Attr.Create "data-label" "Parameter" ] [ inlineCode row.Name ]
+                td [ Attr.Create "data-label" "Type" ] [ inlineCode row.Type ]
+                td [
+                  Attr.Create "data-label" "Default"
+                  if row.Default = "" then
+                    Attr.Class "docs-api-table__empty-default"
+                ] [
+                  if row.Default = "" then
+                    text "\u2014"
+                  else
+                    inlineCode row.Default
+                ]
+                td [ Attr.Create "data-label" "Description"; Attr.Class "docs-api-table__desc" ] [
+                  text row.Description
+                ]
+              ]
+          ]
+        ]
+      ]
+    ]
+
+  let apiSection (description: Doc) (tables: Doc list) : Doc =
+    div [ Margin.Bottom.small ] [
+      sectionHeader "API"
+      div [ Margin.Bottom.extraSmall ] [ description ]
+      div [
+        Padding.All.small
+        SurfaceColor.BackgroundColor.surface
+        BorderRadius.All.small
+        Flex.Flex.allSizes
+        FlexDirection.Column.allSizes
+        Gap.All.g4
+      ] [ yield! tables ]
+    ]
+
+  let styleModuleTable (moduleName: string) (values: (string * string) list) : Doc =
+    div [ Margin.Bottom.small ] [
+      div [ Typography.h6; Margin.Bottom.extraSmall ] [ text moduleName ]
+      div [ Attr.Style "overflow-x" "auto" ] [
+        table [ Attr.Class "docs-api-table docs-api-table--compact" ] [
+          thead [] [ tr [] [ th [] [ text "Value" ]; th [] [ text "Description" ] ] ]
+          tbody [] [
+            for (value, desc) in values do
+              tr [] [
+                td [ Attr.Create "data-label" "Value" ] [ inlineCode value ]
+                td [ Attr.Create "data-label" "Description" ] [ text desc ]
+              ]
+          ]
+        ]
+      ]
+    ]
+
+  let returnTypeNote (noteText: string) : Doc =
+    Alert.create (text noteText, attrs = [ Alert.Color.info; Alert.Variant.outlined; Margin.Bottom.small ])
+
   let codeSampleSection title description (content: Doc) (linesOfCode: string) =
     div [ Margin.Bottom.small ] [
       sectionHeader title

@@ -656,6 +656,7 @@ Before marking the component as done, verify:
 - [ ] `src/Weave/scss/main.scss` has `@import "components/{name}";` in alphabetical order
 - [ ] `src/Weave/Weave.fsproj` has `<Compile Include="components/{Name}.fs" />`
 - [ ] `src/Weave.Docs/examples/{Name}Examples.fs` created with at least one example section and a `render ()` function
+- [ ] `src/Weave.Docs/examples/{Name}Examples.fs` has an `apiReferenceSection()` as the last section in `render()`, using `Helpers.apiSection` with `Helpers.apiTable` for each `create` overload and companion type, `Helpers.styleModuleTable` for each style module, and `Helpers.returnTypeNote` for any non-Doc return types — parameter names, types, and defaults must match the actual F# signatures in `src/Weave/components/{Name}.fs`
 - [ ] `src/Weave.Docs/Weave.Docs.fsproj` has `<Compile Include="examples/{Name}Examples.fs" />` before `DocsRouting.fs`
 - [ ] `DocsRouting.fs` updated: `Page` DU, `pageToString`, `stringToPage`, `pageToHash`, `hashToPage`
 - [ ] `ExamplesRouter.fs` updated: `renderPage`, nav list

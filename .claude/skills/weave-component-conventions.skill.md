@@ -216,3 +216,19 @@ type ChipSet =
 ```
 
 Canonical examples: `ListItem.create`, `ChipItem.create`, `TabItem.create` (with `createIconOnly`, `createCustom`), `SelectItem.create`
+
+## API Documentation
+
+Each component's docs example page (`src/Weave.Docs/examples/{Name}Examples.fs`) includes an **API reference section** at the bottom of `render()` built with helpers from `ExampleHelpers.fs`:
+
+- `Helpers.apiSection` — wraps all tables with a TOC-visible "API" header
+- `Helpers.apiTable "TypeName.create" [...]` — one table per `create` overload and companion type, with columns: Parameter, Type, Default, Description
+- `Helpers.styleModuleTable "ModuleName" [...]` — compact table for style module values (e.g., `Button.Color`, `Button.Variant`)
+- `Helpers.returnTypeNote "..."` — info alert for components that return non-Doc types (e.g., `Drawer.Config`, `SelectItemDef<'T>`)
+
+**When modifying a component's API** (adding, removing, or changing parameters, renaming types, adding companion types or style modules), you must update the corresponding API reference section in the docs example file to match. The API tables are hand-authored — they will not update automatically. Verify that:
+
+1. Every `create` parameter appears in the `apiTable` with the correct name, type, and default value
+2. All companion types (e.g., `IconButton`, `MultiSelect`, `DrawerContainer`) have their own `apiTable`
+3. All style modules (e.g., `Color`, `Variant`, `Size`) have a `styleModuleTable` entry
+4. Any non-Doc return types have a `returnTypeNote`

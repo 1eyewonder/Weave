@@ -79,6 +79,9 @@
   --palette-drawer-text: #424242;
   --palette-drawer-icon: #616161;
 
+  // --- Switch Component Colors ---
+  --switch-thumb-idle: var(--palette-action-default);
+
   // --- Input Component Colors ---
   --input-border-color: rgba(0, 0, 0, 0.42);
   --input-outlined-border: rgba(0, 0, 0, 0.42);
@@ -214,6 +217,9 @@
   --palette-drawer-background: #27272f;
   --palette-drawer-text: rgba(255, 255, 255, 0.5);
   --palette-drawer-icon: rgba(255, 255, 255, 0.5);
+
+  // --- Switch Component Colors ---
+  --switch-thumb-idle: var(--palette-action-default);
 
   // --- Input Component Colors ---
   --input-border-color: rgba(255, 255, 255, 0.42);

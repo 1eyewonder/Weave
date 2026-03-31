@@ -65,52 +65,38 @@
   display: block;
   width: 100%;
   height: 100%;
-  opacity: var(--weave-alpha-medium);
-  @include transition((opacity, background-color), short);
-  border-radius: 9px;
-  background-color: var(--switch-brand-color, var(--palette-action-default));
+  box-sizing: border-box;
+  border: 2px solid var(--switch-brand-color, var(--palette-action-default));
+  border-radius: 10px;
+  background-color: transparent;
+  @include transition((opacity, background-color, border-color), short);
 }
 
 .weave-switch__thumb {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   box-shadow: var(--weave-shadow-thumb);
   border-radius: 50%;
-  background-color: currentColor;
+  background-color: var(--switch-thumb-idle, currentColor);
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 2px;
   transform: translate(0, -50%);
-  @include transition((left, background));
+  @include transition((left, background, width, height), standard, $ease-bounce);
   z-index: 1;
 }
 
-// Checkmark inside thumb when toggled
-.weave-switch__thumb::after {
-  content: "";
-  display: none;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8px;
-  height: 14px;
-  border: solid var(--palette-background-paper);
-  border-width: 0 2px 2px 0;
-  transform: translate(-50%, -60%) rotate(45deg);
-  pointer-events: none;
-}
 
-.weave-switch__input:checked ~ .weave-switch__thumb::after {
-  display: block;
-}
-
-/* Checked state: move thumb to right */
+/* Checked state: grow thumb and move to right */
 .weave-switch__input:checked ~ .weave-switch__thumb {
+  width: 20px;
+  height: 20px;
   left: calc(100% - 20px);
 }
 .weave-switch__input:checked ~ .weave-switch__track {
   background: var(--switch-brand-color, var(--palette-action-default));
-  opacity: var(--weave-opacity-muted);
+  border-color: transparent;
+  opacity: var(--weave-alpha-medium);
 }
 
 @each $color in $palette-colors {
@@ -118,9 +104,6 @@
     background: var(--palette-#{$color});
   }
 
-  .weave-switch--#{$color} .weave-switch__input:checked ~ .weave-switch__thumb::after {
-    border-color: var(--palette-#{$color}-text);
-  }
 }
 
 .weave-switch__input {
@@ -147,6 +130,7 @@
 }
 .weave-switch__input:disabled ~ .weave-switch__track {
   background: var(--palette-action-disabled);
+  border-color: transparent;
   opacity: 1;
 }
 

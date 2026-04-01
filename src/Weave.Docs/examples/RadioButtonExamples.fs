@@ -76,7 +76,7 @@ Radio.create(
     enabled = View.Const false  // see here
 )"""
 
-    Helpers.codeSampleSection "Disabled Radio" description content code
+    Helpers.codeSampleSection "Disabled" description content code
 
   let private radioWithDynamicLabel () =
     let description =
@@ -367,8 +367,6 @@ div [ Density.spacious ] [
         Helpers.divider ()
         basicRadioExample ()
         Helpers.divider ()
-        disabledRadioExample ()
-        Helpers.divider ()
         radioWithDynamicLabel ()
         Helpers.divider ()
         radioSizesExample ()
@@ -376,6 +374,8 @@ div [ Density.spacious ] [
         radioColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
+        Helpers.divider ()
+        disabledRadioExample ()
         Helpers.divider ()
         densityExample ()
         Helpers.divider ()

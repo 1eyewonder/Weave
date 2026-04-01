@@ -591,7 +591,7 @@ Select.create(
     readOnly = View.Const true  // see here
 )"""
 
-    Helpers.codeSampleSection "Disabled and Read Only" description content code
+    Helpers.codeSampleSection "Disabled & Read Only" description content code
 
   let private colorsExample () =
     let colors = [

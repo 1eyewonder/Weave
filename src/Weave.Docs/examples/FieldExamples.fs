@@ -667,7 +667,7 @@ Field.create(value, labelText = View.Const "Error", attrs = [ Field.Color.error 
 Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
 """
 
-    Helpers.codeSampleSection "Color Variants" description content code
+    Helpers.codeSampleSection "Colors" description content code
 
   // ---------------------------------------------------------------------------
   // Typography Configuration

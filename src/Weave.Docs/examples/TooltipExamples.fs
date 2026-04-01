@@ -109,9 +109,9 @@ Tooltip.create(
           "Primary", Button.Color.primary, Tooltip.Color.primary
           "Secondary", Button.Color.secondary, Tooltip.Color.secondary
           "Tertiary", Button.Color.tertiary, Tooltip.Color.tertiary
-          "Success", Button.Color.success, Tooltip.Color.success
           "Error", Button.Color.error, Tooltip.Color.error
           "Warning", Button.Color.warning, Tooltip.Color.warning
+          "Success", Button.Color.success, Tooltip.Color.success
           "Info", Button.Color.info, Tooltip.Color.info
         ]
 

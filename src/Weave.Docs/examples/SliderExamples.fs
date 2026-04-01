@@ -78,11 +78,19 @@ Slider.create(
       """open Weave
 open WebSharper.UI
 
-Slider.primary(Var.Create 50, labelText = View.Const "Primary")
+Slider.primary(Var.Create 20, labelText = View.Const "Primary")
 
-Slider.secondary(Var.Create 50, labelText = View.Const "Secondary")
+Slider.secondary(Var.Create 30, labelText = View.Const "Secondary")
 
-Slider.error(Var.Create 50, labelText = View.Const "Error")"""
+Slider.tertiary(Var.Create 40, labelText = View.Const "Tertiary")
+
+Slider.error(Var.Create 50, labelText = View.Const "Error")
+
+Slider.warning(Var.Create 60, labelText = View.Const "Warning")
+
+Slider.success(Var.Create 70, labelText = View.Const "Success")
+
+Slider.info(Var.Create 80, labelText = View.Const "Info")"""
 
     Helpers.codeSampleSection "Colors" description content code
 

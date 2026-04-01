@@ -59,7 +59,7 @@ Switch.create(
     enabled = View.Const false
 )"""
 
-    Helpers.codeSampleSection "Disabled Switch" description content code
+    Helpers.codeSampleSection "Disabled" description content code
 
   let private switchWithDynamicLabel () =
     let description =
@@ -393,8 +393,6 @@ div [ Density.spacious ] [
         Helpers.divider ()
         basicSwitchExample ()
         Helpers.divider ()
-        disabledSwitchExample ()
-        Helpers.divider ()
         switchWithDynamicLabel ()
         Helpers.divider ()
         switchSizesExample ()
@@ -402,6 +400,8 @@ div [ Density.spacious ] [
         switchColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
+        Helpers.divider ()
+        disabledSwitchExample ()
         Helpers.divider ()
         densityExample ()
         Helpers.divider ()

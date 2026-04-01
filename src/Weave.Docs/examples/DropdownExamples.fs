@@ -583,6 +583,12 @@ Dropdown.create(
 )
 
 Dropdown.create(
+    buttonContents = text "Standard",
+    items = items,
+    attrs = [ Density.standard ]
+)
+
+Dropdown.create(
     buttonContents = text "Spacious",
     items = items,
     attrs = [ Density.spacious ]

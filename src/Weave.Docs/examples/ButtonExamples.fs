@@ -209,7 +209,7 @@ Button.create(
     attrs = [ Button.Variant.filled ]
 )"""
 
-    Helpers.codeSampleSection "Disabled State" description content code
+    Helpers.codeSampleSection "Disabled" description content code
 
   let private fullWidthExample () =
     let description =
@@ -608,8 +608,6 @@ IconButton.create(
         Helpers.divider ()
         colorExamples ()
         Helpers.divider ()
-        densityExamples ()
-        Helpers.divider ()
         disabledExamples ()
         Helpers.divider ()
         fullWidthExample ()
@@ -621,6 +619,8 @@ IconButton.create(
         iconButtonDensityExamples ()
         Helpers.divider ()
         iconButtonDisabledExamples ()
+        Helpers.divider ()
+        densityExamples ()
         Helpers.divider ()
         apiReferenceSection ()
       ],

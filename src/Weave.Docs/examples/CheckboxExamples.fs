@@ -55,7 +55,7 @@ Checkbox.create(
 )
 """
 
-    Helpers.codeSampleSection "Disabled Checkbox" description content code
+    Helpers.codeSampleSection "Disabled" description content code
 
   let private checkboxWithDynamicLabel () =
     let description =
@@ -349,8 +349,6 @@ Checkbox.create(
         Helpers.divider ()
         basicCheckboxExample ()
         Helpers.divider ()
-        disabledCheckboxExample ()
-        Helpers.divider ()
         checkboxWithDynamicLabel ()
         Helpers.divider ()
         checkboxSizesExample ()
@@ -358,6 +356,8 @@ Checkbox.create(
         checkboxColorsExample ()
         Helpers.divider ()
         contentPlacementExample ()
+        Helpers.divider ()
+        disabledCheckboxExample ()
         Helpers.divider ()
         densityExample ()
         Helpers.divider ()

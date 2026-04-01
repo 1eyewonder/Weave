@@ -87,10 +87,10 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                TabItem.create ("Success", div [ Typography.body1 ] [ text "Success color" ])
+                TabItem.create ("Error", div [ Typography.body1 ] [ text "Error color" ])
                 TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
-              attrs = [ Color.success ]
+              attrs = [ Color.error ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
@@ -109,10 +109,10 @@ Tabs.create(
           GridItem.create (
             Tabs.create (
               View.Const [
-                TabItem.create ("Error", div [ Typography.body1 ] [ text "Error color" ])
+                TabItem.create ("Success", div [ Typography.body1 ] [ text "Success color" ])
                 TabItem.create ("Tab Two", div [ Typography.body1 ] [ text "Content Two" ])
               ],
-              attrs = [ Color.error ]
+              attrs = [ Color.success ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           )
@@ -190,7 +190,7 @@ Tabs.create(
     attrs = [ Color.info ]
 )"""
 
-    Helpers.codeSampleSection "Color Variants" description content code
+    Helpers.codeSampleSection "Colors" description content code
 
   let private variantExample () =
     let description =
@@ -358,7 +358,7 @@ Tabs.create(
 )
 """
 
-    Helpers.codeSampleSection "Disabled Tabs" description content code
+    Helpers.codeSampleSection "Disabled" description content code
 
   let private positionExample () =
     let description =
@@ -733,13 +733,11 @@ Tabs.create(
         Helpers.divider ()
         basicExample ()
         Helpers.divider ()
-        colorExample ()
-        Helpers.divider ()
         variantExample ()
         Helpers.divider ()
-        iconExample ()
+        colorExample ()
         Helpers.divider ()
-        disabledExample ()
+        iconExample ()
         Helpers.divider ()
         positionExample ()
         Helpers.divider ()
@@ -748,6 +746,8 @@ Tabs.create(
         scrollableExample ()
         Helpers.divider ()
         customScrollIconsExample ()
+        Helpers.divider ()
+        disabledExample ()
         Helpers.divider ()
         densityExample ()
         Helpers.divider ()

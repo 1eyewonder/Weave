@@ -127,7 +127,7 @@ ExpansionPanelContainer.create(
 )
 """
 
-    Helpers.codeSampleSection "Coloring" description content code
+    Helpers.codeSampleSection "Colors" description content code
 
   let private highlightVariants () =
     let description =
@@ -319,6 +319,28 @@ ExpansionPanelContainer.create(
     ],
     attrs = [ Density.compact ]
 )
+
+ExpansionPanelContainer.create(
+    [
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(div [ Typography.body1 ] [ text "Panel Header" ], expanded, icon = ExpansionPanelHeader.defaultIcon expanded),
+            expanded = expanded,
+            content = ExpansionPanelContent.create(text "Panel content")
+        )
+    ],
+    attrs = [ Density.standard ]
+)
+
+ExpansionPanelContainer.create(
+    [
+        ExpansionPanel.create(
+            ExpansionPanelHeader.create(div [ Typography.body1 ] [ text "Panel Header" ], expanded, icon = ExpansionPanelHeader.defaultIcon expanded),
+            expanded = expanded,
+            content = ExpansionPanelContent.create(text "Panel content")
+        )
+    ],
+    attrs = [ Density.spacious ]
+)
 """
 
     Helpers.codeSampleSection "Density" description content code
@@ -410,9 +432,9 @@ ExpansionPanelContainer.create(
         Helpers.divider ()
         multiplePanels ()
         Helpers.divider ()
-        color ()
-        Helpers.divider ()
         highlightVariants ()
+        Helpers.divider ()
+        color ()
         Helpers.divider ()
         focusColor ()
         Helpers.divider ()

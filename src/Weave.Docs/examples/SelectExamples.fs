@@ -753,6 +753,151 @@ Select.create(
 
     Helpers.codeSampleSection "Width Modes" description content code
 
+  let private placementExample () =
+    let selected = Var.Create<string option>(Some "Cherry")
+    let anchorVar = Var.Create "Bottom Left"
+    let transformVar = Var.Create "Top Left"
+
+    let items =
+      [ "Apple"; "Banana"; "Cherry"; "Date"; "Elderberry" ]
+      |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
+      |> View.Const
+
+    let anchorClassMap =
+      Map.ofList [
+        "Top Left", "weave-select--anchor-origin-top-left"
+        "Top Center", "weave-select--anchor-origin-top-center"
+        "Top Right", "weave-select--anchor-origin-top-right"
+        "Center Left", "weave-select--anchor-origin-center-left"
+        "Center Center", "weave-select--anchor-origin-center-center"
+        "Center Right", "weave-select--anchor-origin-center-right"
+        "Bottom Left", "weave-select--anchor-origin-bottom-left"
+        "Bottom Center", "weave-select--anchor-origin-bottom-center"
+        "Bottom Right", "weave-select--anchor-origin-bottom-right"
+      ]
+
+    let transformClassMap =
+      Map.ofList [
+        "Top Left", "weave-select--transform-origin-top-left"
+        "Top Center", "weave-select--transform-origin-top-center"
+        "Top Right", "weave-select--transform-origin-top-right"
+        "Center Left", "weave-select--transform-origin-center-left"
+        "Center Center", "weave-select--transform-origin-center-center"
+        "Center Right", "weave-select--transform-origin-center-right"
+        "Bottom Left", "weave-select--transform-origin-bottom-left"
+        "Bottom Center", "weave-select--transform-origin-bottom-center"
+        "Bottom Right", "weave-select--transform-origin-bottom-right"
+      ]
+
+    let radioGroup (classMap: Map<string, string>) selectedVar colorAttr =
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
+        yield!
+          classMap
+          |> Map.keys
+          |> Seq.toList
+          |> List.map (fun label ->
+            Radio.create (
+              selectedVar,
+              label,
+              displayText = View.Const label,
+              attrs = [ colorAttr; Margin.Bottom.extraSmall ]
+            ))
+      ]
+
+    let description =
+      Helpers.bodyText
+        "Select popover placement can be controlled using anchor origin and transform origin. Anchor origin sets which point on the trigger the popover attaches to, while transform origin controls which corner of the popover aligns to that point."
+
+    let content =
+      Grid.create (
+        [
+          GridItem.create (
+            div [] [
+              div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Anchor Origin" ]
+              radioGroup anchorClassMap anchorVar Radio.Color.secondary
+            ],
+            attrs = [ GridItem.Span.six ]
+          )
+
+          GridItem.create (
+            div [] [
+              div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Transform Origin" ]
+              radioGroup transformClassMap transformVar Radio.Color.tertiary
+            ],
+            attrs = [ GridItem.Span.six ]
+          )
+
+          GridItem.create (
+            Grid.create (
+              [
+                GridItem.create (
+                  Select.create (
+                    items,
+                    selected,
+                    variant = Field.Variant.Outlined,
+                    labelText = View.Const "Fruit",
+                    attrs = [
+                      anchorClassMap |> Attr.classSelection anchorVar.View
+                      transformClassMap |> Attr.classSelection transformVar.View
+                      Select.Color.primary
+                    ]
+                  ),
+                  attrs = [ GridItem.Span.twelve ]
+                )
+              ],
+              attrs = [ JustifyContent.center; AlignItems.center; AlignContent.center ]
+            ),
+            attrs = [ GridItem.Span.ten; Margin.Top.small ]
+          )
+        ]
+      )
+
+    let code =
+      """open Weave
+open WebSharper.UI
+
+let selected = Var.Create<string option> None
+
+let items =
+    [ "Apple"; "Banana"; "Cherry"; "Date"; "Elderberry" ]
+    |> List.map (fun fruit ->
+        SelectItem.create (text fruit, fruit, fruit))
+    |> View.Const
+
+// Static placement — pass style modules directly via attrs
+Select.create(
+    items,
+    selected,
+    variant = Field.Variant.Outlined,
+    labelText = View.Const "Fruit",
+    attrs = [
+        Select.AnchorOrigin.bottomRight
+        Select.TransformOrigin.topRight
+    ]
+)
+
+// Reactive placement — use Attr.classSelection with a Map<'T, string>
+let anchorVar = Var.Create "Bottom Left"
+
+let anchorClassMap =
+    Map.ofList [
+        "Top Left", "weave-select--anchor-origin-top-left"
+        "Bottom Left", "weave-select--anchor-origin-bottom-left"
+        // ...
+    ]
+
+Select.create(
+    items,
+    selected,
+    variant = Field.Variant.Outlined,
+    labelText = View.Const "Fruit",
+    attrs = [
+        anchorClassMap |> Attr.classSelection anchorVar.View
+    ]
+)"""
+
+    Helpers.codeSampleSection "Placement" description content code
+
   type private Language = {
     Code: string
     Name: string
@@ -982,6 +1127,30 @@ Select.create(
         ("full", "Select stretches to fill its container width")
         ("fitContent", "Select shrinks to fit the selected content")
       ]
+
+      Helpers.styleModuleTable "Select.AnchorOrigin" [
+        ("topLeft", "Anchor at top-left of trigger")
+        ("topCenter", "Anchor at top-center of trigger")
+        ("topRight", "Anchor at top-right of trigger")
+        ("centerLeft", "Anchor at center-left of trigger")
+        ("center", "Anchor at center of trigger")
+        ("centerRight", "Anchor at center-right of trigger")
+        ("bottomLeft", "Anchor at bottom-left of trigger (default)")
+        ("bottomCenter", "Anchor at bottom-center of trigger")
+        ("bottomRight", "Anchor at bottom-right of trigger")
+      ]
+
+      Helpers.styleModuleTable "Select.TransformOrigin" [
+        ("topLeft", "Popover aligns its top-left to the anchor (default)")
+        ("topCenter", "Popover aligns its top-center to the anchor")
+        ("topRight", "Popover aligns its top-right to the anchor")
+        ("centerLeft", "Popover aligns its center-left to the anchor")
+        ("center", "Popover aligns its center to the anchor")
+        ("centerRight", "Popover aligns its center-right to the anchor")
+        ("bottomLeft", "Popover aligns its bottom-left to the anchor")
+        ("bottomCenter", "Popover aligns its bottom-center to the anchor")
+        ("bottomRight", "Popover aligns its bottom-right to the anchor")
+      ]
     ]
 
   let render () =
@@ -999,6 +1168,8 @@ Select.create(
         variantsExample ()
         Helpers.divider ()
         widthExample ()
+        Helpers.divider ()
+        placementExample ()
         Helpers.divider ()
         colorsExample ()
         Helpers.divider ()

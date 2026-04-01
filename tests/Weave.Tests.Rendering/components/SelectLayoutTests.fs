@@ -235,3 +235,87 @@ type SelectLayoutTests() =
     and! childBox = this.Page.Locator("#select-item-1").BoundingBoxAsync()
     assertFillsWidth "popover list" "item" parentBox childBox
   }
+
+  [<Fact>]
+  member this.``anchor-origin-top-left positions popover at trigger top``() = task {
+    do! this.LoadFixture()
+    let! root = this.Page.Locator("#select-anchor-top-left").BoundingBoxAsync()
+    and! popover = this.Page.Locator("#select-anchor-top-left .weave-select__popover").BoundingBoxAsync()
+
+    Assert.True(
+      abs (popover.Y - root.Y) <= 1.0f,
+      $"Top-left anchored popover top ({popover.Y}px) should align to trigger top ({root.Y}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``anchor-origin-bottom-right positions popover at trigger right edge``() = task {
+    do! this.LoadFixture()
+    let! root = this.Page.Locator("#select-anchor-bottom-right").BoundingBoxAsync()
+    and! popover = this.Page.Locator("#select-anchor-bottom-right .weave-select__popover").BoundingBoxAsync()
+
+    let rootRight = root.X + root.Width
+
+    Assert.True(
+      abs (popover.X - rootRight) <= 1.0f,
+      $"Bottom-right anchored popover left ({popover.X}px) should align to trigger right ({rootRight}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``transform-origin-top-right shifts popover so its right edge meets the anchor``() = task {
+    do! this.LoadFixture()
+    let! root = this.Page.Locator("#select-transform-top-right").BoundingBoxAsync()
+    and! popover = this.Page.Locator("#select-transform-top-right .weave-select__popover").BoundingBoxAsync()
+
+    let popoverRight = popover.X + popover.Width
+
+    // Default anchor is bottom-left (left: 0), so the popover's right edge
+    // should align with the root's left edge after translateX(-100%).
+    Assert.True(
+      abs (popoverRight - root.X) <= 2.0f,
+      $"Popover right edge ({popoverRight}px) should align to trigger left ({root.X}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``transform-origin-bottom-left shifts popover upward``() = task {
+    do! this.LoadFixture()
+    let! root = this.Page.Locator("#select-transform-bottom-left").BoundingBoxAsync()
+
+    and! popover =
+      this.Page.Locator("#select-transform-bottom-left .weave-select__popover").BoundingBoxAsync()
+
+    let rootBottom = root.Y + root.Height
+    let popoverBottom = popover.Y + popover.Height
+
+    // Default anchor is bottom-left (top: 100%), so the popover's bottom
+    // should be near the root's bottom after translateY(-100%).
+    // Tolerance of 3px accounts for the 2px margin-top on the popover.
+    Assert.True(
+      abs (popoverBottom - rootBottom) <= 3.0f,
+      $"Popover bottom ({popoverBottom}px) should be near trigger bottom ({rootBottom}px)"
+    )
+  }
+
+  [<Fact>]
+  member this.``combined anchor-top-right and transform-top-right aligns popover right to trigger right``() = task {
+    do! this.LoadFixture()
+    let! root = this.Page.Locator("#select-origin-combined").BoundingBoxAsync()
+    and! popover = this.Page.Locator("#select-origin-combined .weave-select__popover").BoundingBoxAsync()
+
+    let rootRight = root.X + root.Width
+    let popoverRight = popover.X + popover.Width
+
+    // Anchor at top-right: popover attaches at (top: 0, left: 100%)
+    // Transform top-right: popover translates X by -100% so its right edge meets the anchor
+    Assert.True(
+      abs (popover.Y - root.Y) <= 1.0f,
+      $"Popover top ({popover.Y}px) should align to trigger top ({root.Y}px)"
+    )
+
+    Assert.True(
+      abs (popoverRight - rootRight) <= 2.0f,
+      $"Popover right ({popoverRight}px) should align to trigger right ({rootRight}px)"
+    )
+  }

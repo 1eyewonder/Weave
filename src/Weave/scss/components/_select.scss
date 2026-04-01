@@ -112,9 +112,14 @@
   box-sizing: border-box;
   margin-top: 2px;
 
+  // Translate offsets set by transform-origin modifiers; composed with the
+  // scaleY entry animation so both positioning and animation work together.
+  --_select-tx: 0px;
+  --_select-ty: 0px;
+
   // Entry animation
   opacity: 0;
-  transform: scaleY(0.8);
+  transform: translateX(var(--_select-tx)) translateY(var(--_select-ty)) scaleY(0.8);
   transform-origin: top center;
   pointer-events: none;
   @include transition((opacity, transform));
@@ -122,9 +127,100 @@
 
 .weave-select--open .weave-select__popover {
   opacity: 1;
-  transform: scaleY(1);
+  transform: translateX(var(--_select-tx)) translateY(var(--_select-ty)) scaleY(1);
   pointer-events: auto;
   @include transition((opacity, transform), short);
+}
+
+// ─── Anchor Origin ───────────────────────────────────────────────────────────
+// Controls which point on the trigger the popover attaches to.
+// Default (no modifier): bottom-left (top: 100%; left: 0).
+
+.weave-select--anchor-origin-top-left .weave-select__popover {
+  top: 0;
+  left: 0;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-top-center .weave-select__popover {
+  top: 0;
+  left: 50%;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-top-right .weave-select__popover {
+  top: 0;
+  left: 100%;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-center-left .weave-select__popover {
+  top: 50%;
+  left: 0;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-center-center .weave-select__popover {
+  top: 50%;
+  left: 50%;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-center-right .weave-select__popover {
+  top: 50%;
+  left: 100%;
+  margin-top: 0;
+}
+.weave-select--anchor-origin-bottom-left .weave-select__popover {
+  top: 100%;
+  left: 0;
+}
+.weave-select--anchor-origin-bottom-center .weave-select__popover {
+  top: 100%;
+  left: 50%;
+}
+.weave-select--anchor-origin-bottom-right .weave-select__popover {
+  top: 100%;
+  left: 100%;
+}
+
+// ─── Transform Origin ────────────────────────────────────────────────────────
+// Controls which point on the popover aligns to the anchor point, and sets
+// the CSS transform-origin for the scale animation pivot.
+
+.weave-select--transform-origin-top-left .weave-select__popover {
+  transform-origin: top left;
+}
+.weave-select--transform-origin-top-center .weave-select__popover {
+  transform-origin: top center;
+  --_select-tx: -50%;
+}
+.weave-select--transform-origin-top-right .weave-select__popover {
+  transform-origin: top right;
+  --_select-tx: -100%;
+}
+.weave-select--transform-origin-center-left .weave-select__popover {
+  transform-origin: center left;
+  --_select-ty: -50%;
+}
+.weave-select--transform-origin-center-center .weave-select__popover {
+  transform-origin: center center;
+  --_select-tx: -50%;
+  --_select-ty: -50%;
+}
+.weave-select--transform-origin-center-right .weave-select__popover {
+  transform-origin: center right;
+  --_select-tx: -100%;
+  --_select-ty: -50%;
+}
+.weave-select--transform-origin-bottom-left .weave-select__popover {
+  transform-origin: bottom left;
+  --_select-ty: -100%;
+}
+.weave-select--transform-origin-bottom-center .weave-select__popover {
+  transform-origin: bottom center;
+  --_select-tx: -50%;
+  --_select-ty: -100%;
+}
+.weave-select--transform-origin-bottom-right .weave-select__popover {
+  transform-origin: bottom right;
+  --_select-tx: -100%;
+  --_select-ty: -100%;
 }
 
 .weave-select__search {

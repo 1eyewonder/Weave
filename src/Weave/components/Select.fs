@@ -30,6 +30,30 @@ module Select =
     let full = cl Css.``weave-select--full-width``
     let fitContent = cl Css.``weave-select--fit-content``
 
+  module AnchorOrigin =
+
+    let topLeft = cl Css.``weave-select--anchor-origin-top-left``
+    let topCenter = cl Css.``weave-select--anchor-origin-top-center``
+    let topRight = cl Css.``weave-select--anchor-origin-top-right``
+    let centerLeft = cl Css.``weave-select--anchor-origin-center-left``
+    let center = cl Css.``weave-select--anchor-origin-center-center``
+    let centerRight = cl Css.``weave-select--anchor-origin-center-right``
+    let bottomLeft = cl Css.``weave-select--anchor-origin-bottom-left``
+    let bottomCenter = cl Css.``weave-select--anchor-origin-bottom-center``
+    let bottomRight = cl Css.``weave-select--anchor-origin-bottom-right``
+
+  module TransformOrigin =
+
+    let topLeft = cl Css.``weave-select--transform-origin-top-left``
+    let topCenter = cl Css.``weave-select--transform-origin-top-center``
+    let topRight = cl Css.``weave-select--transform-origin-top-right``
+    let centerLeft = cl Css.``weave-select--transform-origin-center-left``
+    let center = cl Css.``weave-select--transform-origin-center-center``
+    let centerRight = cl Css.``weave-select--transform-origin-center-right``
+    let bottomLeft = cl Css.``weave-select--transform-origin-bottom-left``
+    let bottomCenter = cl Css.``weave-select--transform-origin-bottom-center``
+    let bottomRight = cl Css.``weave-select--transform-origin-bottom-right``
+
   type SelectItemDef<'T when 'T: comparison> = {
     Content: Doc
     Value: 'T

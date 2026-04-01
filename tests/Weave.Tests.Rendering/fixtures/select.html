@@ -267,5 +267,119 @@
         </div>
       </div>
     </div>
+    <!-- Anchor origin: top-left (popover anchored at trigger's top-left) -->
+    <div id="select-anchor-top-left" class="weave-select weave-select--open weave-select--anchor-origin-top-left" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Anchor TL</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item A</span></div>
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item B</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anchor origin: bottom-right (popover anchored at trigger's bottom-right) -->
+    <div id="select-anchor-bottom-right" class="weave-select weave-select--open weave-select--anchor-origin-bottom-right" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Anchor BR</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item A</span></div>
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item B</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transform origin: top-right (popover shifted so its top-right meets the anchor) -->
+    <div id="select-transform-top-right" class="weave-select weave-select--open weave-select--transform-origin-top-right" style="margin-top: 250px; margin-left: 200px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Transform TR</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item A</span></div>
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item B</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transform origin: bottom-left (popover shifted so its bottom-left meets the anchor) -->
+    <div id="select-transform-bottom-left" class="weave-select weave-select--open weave-select--transform-origin-bottom-left" style="margin-top: 250px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Transform BL</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item A</span></div>
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item B</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined: anchor top-right + transform top-right (popover opens left from trigger's top-right) -->
+    <div id="select-origin-combined" class="weave-select weave-select--open weave-select--anchor-origin-top-right weave-select--transform-origin-top-right" style="margin-top: 250px; margin-left: 200px;">
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Combined</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox" aria-expanded="true">
+            <span class="weave-select__placeholder"></span>
+          </div>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-select__actions">
+              <span class="weave-select__chevron">&#x25BC;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="weave-select__popover">
+        <div class="weave-select__list" role="listbox">
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item A</span></div>
+          <div class="weave-select__item" role="option"><span class="weave-select__item-content">Item B</span></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

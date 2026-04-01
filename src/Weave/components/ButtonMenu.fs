@@ -53,6 +53,8 @@ module private ButtonMenuInternal =
     let keyboardWatcher =
       MenuKeyboardNav.watch containerEl triggerEl isOpen nextKey prevKey
 
+    let itemCount = items.Length
+
     let menuItems =
       items
       |> List.mapi (fun i item ->
@@ -60,7 +62,13 @@ module private ButtonMenuInternal =
           cl Css.``weave-button-menu__item``
           Attr.Create "role" "menuitem"
           Attr.Create "tabindex" "-1"
-          Attr.Style "transition-delay" (sprintf "%dms" (i * 50))
+          isOpen.View
+          |> View.Map(fun opened ->
+            if opened then
+              sprintf "%dms" (i * 50)
+            else
+              sprintf "%dms" ((itemCount - 1 - i) * 50))
+          |> Attr.DynamicStyle "transition-delay"
           on.afterRender (fun el ->
             let children = el.QuerySelectorAll("button, a, [tabindex]")
 

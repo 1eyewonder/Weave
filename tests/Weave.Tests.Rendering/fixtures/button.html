@@ -82,5 +82,45 @@
     <button id="btn-disabled-outlined" class="weave-button weave-button--outlined weave-button--disabled weave-density--standard" disabled>
       <span class="weave-button__label">Disabled Outlined</span>
     </button>
+
+    <!-- flex-shrink regression: button should not compress when inside a constrained flex container -->
+    <button id="btn-natural-width" class="weave-button weave-button--filled weave-density--standard">
+      <span class="weave-button__label">Click To Open Nested</span>
+    </button>
+
+    <div id="flex-shrink-container" style="display: flex; width: 100px;">
+      <button id="btn-in-narrow-flex" class="weave-button weave-button--filled weave-density--standard">
+        <span class="weave-button__label">Click To Open Nested</span>
+      </button>
+    </div>
+
+    <!-- flex-shrink regression: multiple buttons in a tight flex row should each keep their natural width -->
+    <button id="btn-standalone-1" class="weave-button weave-button--filled weave-density--standard">
+      <span class="weave-button__label">Click To Open</span>
+    </button>
+    <button id="btn-standalone-2" class="weave-button weave-button--outlined weave-density--standard">
+      <span class="weave-button__label">Hover To Open</span>
+    </button>
+    <button id="btn-standalone-3" class="weave-button weave-button--primary weave-density--standard">
+      <span class="weave-button__label">Click To Open Nested</span>
+    </button>
+    <button id="btn-standalone-4" class="weave-button weave-button--secondary weave-density--standard">
+      <span class="weave-button__label">Hover To Open Nested</span>
+    </button>
+
+    <div id="flex-row-multi" style="display: flex; width: 350px;">
+      <button id="btn-multi-1" class="weave-button weave-button--filled weave-density--standard">
+        <span class="weave-button__label">Click To Open</span>
+      </button>
+      <button id="btn-multi-2" class="weave-button weave-button--outlined weave-density--standard">
+        <span class="weave-button__label">Hover To Open</span>
+      </button>
+      <button id="btn-multi-3" class="weave-button weave-button--primary weave-density--standard">
+        <span class="weave-button__label">Click To Open Nested</span>
+      </button>
+      <button id="btn-multi-4" class="weave-button weave-button--secondary weave-density--standard">
+        <span class="weave-button__label">Hover To Open Nested</span>
+      </button>
+    </div>
   </body>
 </html>

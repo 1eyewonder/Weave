@@ -255,3 +255,34 @@ type ButtonLayoutTests() =
     and! childBox = this.Page.Locator("#btn-icon > span").BoundingBoxAsync()
     assertFillsHeight "icon button" "icon" parentBox childBox
   }
+
+  [<Fact>]
+  member this.``button does not compress in a constrained flex row``() = task {
+    do! this.LoadFixture()
+    let! natural = this.Page.Locator("#btn-natural-width").BoundingBoxAsync()
+    and! inFlex = this.Page.Locator("#btn-in-narrow-flex").BoundingBoxAsync()
+
+    Assert.True(
+      abs (natural.Width - inFlex.Width) <= 1.0f,
+      $"Button in narrow flex ({inFlex.Width}px) should match its natural width ({natural.Width}px) — flex-shrink must be 0"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData("#btn-multi-1", "#btn-standalone-1")>]
+  [<InlineData("#btn-multi-2", "#btn-standalone-2")>]
+  [<InlineData("#btn-multi-3", "#btn-standalone-3")>]
+  [<InlineData("#btn-multi-4", "#btn-standalone-4")>]
+  member this.``button in tight multi-button flex row matches standalone width``
+    (flexId: string, standaloneId: string)
+    =
+    task {
+      do! this.LoadFixture()
+      let! flexBox = this.Page.Locator(flexId).BoundingBoxAsync()
+      and! standaloneBox = this.Page.Locator(standaloneId).BoundingBoxAsync()
+
+      Assert.True(
+        abs (flexBox.Width - standaloneBox.Width) <= 1.0f,
+        $"{flexId} in flex row ({flexBox.Width}px) should match standalone width ({standaloneBox.Width}px)"
+      )
+    }

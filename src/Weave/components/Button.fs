@@ -43,12 +43,7 @@ type Button =
     let attrs = defaultArg attrs List.empty
 
     let content =
-      div [
-        Typography.button
-        Typography.noWrap
-        cl Css.``weave-button__label``
-        Flex.Inline.allSizes
-      ] [ innerContents ]
+      div [ Typography.button; cl Css.``weave-button__label`` ] [ innerContents ]
 
     button [
       attr.``type`` "button"

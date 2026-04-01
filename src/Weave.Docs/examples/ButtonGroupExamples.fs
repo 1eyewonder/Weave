@@ -323,9 +323,7 @@ ButtonGroup.create(
                 DropdownItem.create (text "Save as Draft", onClick = (fun () -> printfn "Draft"))
                 DropdownItem.create (text "Save and Publish", onClick = (fun () -> printfn "Publish"))
                 DropdownItem.create (text "Save and Close", onClick = (fun () -> printfn "Close"))
-              ],
-              anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
-              transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft
+              ]
             )
           ],
           attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
@@ -345,9 +343,7 @@ ButtonGroup.create(
                 DropdownItem.create(text "Save as Draft", onClick = (fun () -> printfn "Draft"))
                 DropdownItem.create(text "Save and Publish", onClick = (fun () -> printfn "Publish"))
                 DropdownItem.create(text "Save and Close", onClick = (fun () -> printfn "Close"))
-            ],
-            anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
-            transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft
+            ]
         )
     ],
     attrs = [

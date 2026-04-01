@@ -13,63 +13,29 @@ open Weave.Operators
 [<JavaScript>]
 module Dropdown =
 
-  /// <summary>
-  /// Position on the button where the dropdown menu is anchored.
-  /// </summary>
-  [<RequireQualifiedAccess; Struct>]
-  type AnchorOrigin =
-    | TopLeft
-    | TopCenter
-    | TopRight
-    | CenterLeft
-    | CenterCenter
-    | CenterRight
-    | BottomLeft
-    | BottomCenter
-    | BottomRight
-
   module AnchorOrigin =
 
-    let toString anchor =
-      match anchor with
-      | AnchorOrigin.TopLeft -> "Top Left"
-      | AnchorOrigin.TopCenter -> "Top Center"
-      | AnchorOrigin.TopRight -> "Top Right"
-      | AnchorOrigin.CenterLeft -> "Center Left"
-      | AnchorOrigin.CenterCenter -> "Center Center"
-      | AnchorOrigin.CenterRight -> "Center Right"
-      | AnchorOrigin.BottomLeft -> "Bottom Left"
-      | AnchorOrigin.BottomCenter -> "Bottom Center"
-      | AnchorOrigin.BottomRight -> "Bottom Right"
-
-  /// <summary>
-  /// Area of the dropdown menu that is aligned to the anchor point on the button.
-  /// </summary>
-  [<RequireQualifiedAccess; Struct>]
-  type TransformOrigin =
-    | TopLeft
-    | TopCenter
-    | TopRight
-    | CenterLeft
-    | CenterCenter
-    | CenterRight
-    | BottomLeft
-    | BottomCenter
-    | BottomRight
+    let topLeft = cl Css.``weave-dropdown--anchor-origin-top-left``
+    let topCenter = cl Css.``weave-dropdown--anchor-origin-top-center``
+    let topRight = cl Css.``weave-dropdown--anchor-origin-top-right``
+    let centerLeft = cl Css.``weave-dropdown--anchor-origin-center-left``
+    let center = cl Css.``weave-dropdown--anchor-origin-center-center``
+    let centerRight = cl Css.``weave-dropdown--anchor-origin-center-right``
+    let bottomLeft = cl Css.``weave-dropdown--anchor-origin-bottom-left``
+    let bottomCenter = cl Css.``weave-dropdown--anchor-origin-bottom-center``
+    let bottomRight = cl Css.``weave-dropdown--anchor-origin-bottom-right``
 
   module TransformOrigin =
 
-    let toString origin =
-      match origin with
-      | TransformOrigin.TopLeft -> "Top Left"
-      | TransformOrigin.TopCenter -> "Top Center"
-      | TransformOrigin.TopRight -> "Top Right"
-      | TransformOrigin.CenterLeft -> "Center Left"
-      | TransformOrigin.CenterCenter -> "Center Center"
-      | TransformOrigin.CenterRight -> "Center Right"
-      | TransformOrigin.BottomLeft -> "Bottom Left"
-      | TransformOrigin.BottomCenter -> "Bottom Center"
-      | TransformOrigin.BottomRight -> "Bottom Right"
+    let topLeft = cl Css.``weave-dropdown--transform-origin-top-left``
+    let topCenter = cl Css.``weave-dropdown--transform-origin-top-center``
+    let topRight = cl Css.``weave-dropdown--transform-origin-top-right``
+    let centerLeft = cl Css.``weave-dropdown--transform-origin-center-left``
+    let center = cl Css.``weave-dropdown--transform-origin-center-center``
+    let centerRight = cl Css.``weave-dropdown--transform-origin-center-right``
+    let bottomLeft = cl Css.``weave-dropdown--transform-origin-bottom-left``
+    let bottomCenter = cl Css.``weave-dropdown--transform-origin-bottom-center``
+    let bottomRight = cl Css.``weave-dropdown--transform-origin-bottom-right``
 
   [<RequireQualifiedAccess; Struct>]
   type OpenOn =
@@ -86,8 +52,6 @@ type Dropdown =
       items: Doc seq,
       ?isOpen: Var<bool>,
       ?openOn: View<OpenOn>,
-      ?anchorOrigin: View<AnchorOrigin>,
-      ?transformOrigin: View<TransformOrigin>,
       ?enabled: View<bool>,
       ?closeOnOutsideClick: View<bool>,
       ?buttonAttrs: Attr list,
@@ -98,11 +62,6 @@ type Dropdown =
     let enabled = defaultArg enabled (View.Const true)
     let closeOnOutsideClick = defaultArg closeOnOutsideClick (View.Const true)
     let buttonAttrs = defaultArg buttonAttrs []
-    let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.BottomLeft)
-
-    let transformOrigin =
-      defaultArg transformOrigin (View.Const TransformOrigin.TopLeft)
-
     let attrs = defaultArg attrs []
 
     let containerRef = ref (JS.Document.CreateElement "div")
@@ -164,36 +123,7 @@ type Dropdown =
       |> View.MapCached(fun isOpen ->
         if isOpen then
           div
-            [
-              cls [ Css.``weave-dropdown__list`` ]
-              Attr.Create "role" "menu"
-              Map.ofList [
-                AnchorOrigin.TopLeft, Css.``weave-dropdown__list--anchor-origin-top-left``
-                AnchorOrigin.TopCenter, Css.``weave-dropdown__list--anchor-origin-top-center``
-                AnchorOrigin.TopRight, Css.``weave-dropdown__list--anchor-origin-top-right``
-                AnchorOrigin.CenterLeft, Css.``weave-dropdown__list--anchor-origin-center-left``
-                AnchorOrigin.CenterCenter, Css.``weave-dropdown__list--anchor-origin-center-center``
-                AnchorOrigin.CenterRight, Css.``weave-dropdown__list--anchor-origin-center-right``
-                AnchorOrigin.BottomLeft, Css.``weave-dropdown__list--anchor-origin-bottom-left``
-                AnchorOrigin.BottomCenter, Css.``weave-dropdown__list--anchor-origin-bottom-center``
-                AnchorOrigin.BottomRight, Css.``weave-dropdown__list--anchor-origin-bottom-right``
-              ]
-              |> Attr.classSelection anchorOrigin
-
-              Map.ofList [
-                TransformOrigin.TopLeft, Css.``weave-dropdown__list--transform-origin-top-left``
-                TransformOrigin.TopCenter, Css.``weave-dropdown__list--transform-origin-top-center``
-                TransformOrigin.TopRight, Css.``weave-dropdown__list--transform-origin-top-right``
-                TransformOrigin.CenterLeft, Css.``weave-dropdown__list--transform-origin-center-left``
-                TransformOrigin.CenterCenter, Css.``weave-dropdown__list--transform-origin-center-center``
-                TransformOrigin.CenterRight, Css.``weave-dropdown__list--transform-origin-center-right``
-                TransformOrigin.BottomLeft, Css.``weave-dropdown__list--transform-origin-bottom-left``
-                TransformOrigin.BottomCenter, Css.``weave-dropdown__list--transform-origin-bottom-center``
-                TransformOrigin.BottomRight, Css.``weave-dropdown__list--transform-origin-bottom-right``
-              ]
-              |> Attr.classSelection transformOrigin
-
-            ]
+            [ cls [ Css.``weave-dropdown__list`` ]; Attr.Create "role" "menu" ]
             (items |> Seq.map renderItem)
         else
           Doc.Empty)
@@ -239,10 +169,7 @@ type DropdownItem =
 
 [<JavaScript>]
 type NestedDropdown =
-  static member create
-    (buttonContents, items, ?isOpen, ?openOn, ?anchorOrigin, ?transformOrigin, ?enabled, ?buttonAttrs, ?attrs)
-    =
-    let anchorOrigin = defaultArg anchorOrigin (View.Const AnchorOrigin.TopRight)
+  static member create(buttonContents, items, ?isOpen, ?openOn, ?enabled, ?buttonAttrs, ?attrs) =
     let openOn = defaultArg openOn (View.Const OpenOn.Click)
 
     Dropdown.create (
@@ -250,8 +177,6 @@ type NestedDropdown =
       items,
       ?isOpen = isOpen,
       openOn = openOn,
-      anchorOrigin = anchorOrigin,
-      ?transformOrigin = transformOrigin,
       ?enabled = enabled,
       buttonAttrs = [
         Button.Variant.text
@@ -260,5 +185,9 @@ type NestedDropdown =
 
         yield! buttonAttrs |> Option.defaultValue []
       ],
-      ?attrs = attrs
+      attrs = [
+        AnchorOrigin.topRight
+
+        yield! attrs |> Option.defaultValue []
+      ]
     )

@@ -36,75 +36,75 @@
   left: 0;
 }
 
-.weave-dropdown__list--anchor-origin-top-left {
+.weave-dropdown--anchor-origin-top-left > .weave-dropdown__list {
   top: 0;
   left: 0;
 }
-.weave-dropdown__list--anchor-origin-top-center {
+.weave-dropdown--anchor-origin-top-center > .weave-dropdown__list {
   top: 0;
   left: 50%;
 }
-.weave-dropdown__list--anchor-origin-top-right {
+.weave-dropdown--anchor-origin-top-right > .weave-dropdown__list {
   top: 0;
   left: 100%;
 }
-.weave-dropdown__list--anchor-origin-center-left {
+.weave-dropdown--anchor-origin-center-left > .weave-dropdown__list {
   top: 50%;
   left: 0;
 }
-.weave-dropdown__list--anchor-origin-center-center {
+.weave-dropdown--anchor-origin-center-center > .weave-dropdown__list {
   top: 50%;
   left: 50%;
 }
-.weave-dropdown__list--anchor-origin-center-right {
+.weave-dropdown--anchor-origin-center-right > .weave-dropdown__list {
   top: 50%;
   left: 100%;
 }
-.weave-dropdown__list--anchor-origin-bottom-left {
+.weave-dropdown--anchor-origin-bottom-left > .weave-dropdown__list {
   top: 100%;
   left: 0;
 }
-.weave-dropdown__list--anchor-origin-bottom-center {
+.weave-dropdown--anchor-origin-bottom-center > .weave-dropdown__list {
   top: 100%;
   left: 50%;
 }
-.weave-dropdown__list--anchor-origin-bottom-right {
+.weave-dropdown--anchor-origin-bottom-right > .weave-dropdown__list {
   top: 100%;
   left: 100%;
 }
 
-.weave-dropdown__list--transform-origin-top-left {
+.weave-dropdown--transform-origin-top-left > .weave-dropdown__list {
   transform-origin: top left;
 }
-.weave-dropdown__list--transform-origin-top-center {
+.weave-dropdown--transform-origin-top-center > .weave-dropdown__list {
   transform-origin: top center;
   transform: translateX(-50%);
 }
-.weave-dropdown__list--transform-origin-top-right {
+.weave-dropdown--transform-origin-top-right > .weave-dropdown__list {
   transform-origin: top right;
   transform: translateX(-100%);
 }
-.weave-dropdown__list--transform-origin-center-left {
+.weave-dropdown--transform-origin-center-left > .weave-dropdown__list {
   transform-origin: center left;
   transform: translateY(-50%);
 }
-.weave-dropdown__list--transform-origin-center-center {
+.weave-dropdown--transform-origin-center-center > .weave-dropdown__list {
   transform-origin: center center;
   transform: translate(-50%, -50%);
 }
-.weave-dropdown__list--transform-origin-center-right {
+.weave-dropdown--transform-origin-center-right > .weave-dropdown__list {
   transform-origin: center right;
   transform: translateY(-50%) translateX(-100%);
 }
-.weave-dropdown__list--transform-origin-bottom-left {
+.weave-dropdown--transform-origin-bottom-left > .weave-dropdown__list {
   transform-origin: bottom left;
   transform: translateY(-100%);
 }
-.weave-dropdown__list--transform-origin-bottom-center {
+.weave-dropdown--transform-origin-bottom-center > .weave-dropdown__list {
   transform-origin: bottom center;
   transform: translateY(-100%) translateX(-50%);
 }
-.weave-dropdown__list--transform-origin-bottom-right {
+.weave-dropdown--transform-origin-bottom-right > .weave-dropdown__list {
   transform-origin: bottom right;
   transform: translateY(-100%) translateX(-100%);
 }

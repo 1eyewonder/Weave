@@ -77,50 +77,55 @@ Dropdown.create(
 
   let private placementExample () =
     let alertVar = Var.Create None
-    let anchorVar = Var.Create Dropdown.AnchorOrigin.BottomLeft
-    let transformVar = Var.Create Dropdown.TransformOrigin.TopLeft
+    let anchorVar = Var.Create "Bottom Left"
+    let transformVar = Var.Create "Top Left"
 
     let items = [ 1..3 ] |> List.map (clickableItem alertVar)
 
-    let anchorOptions = [
-      Dropdown.AnchorOrigin.TopLeft
-      Dropdown.AnchorOrigin.TopCenter
-      Dropdown.AnchorOrigin.TopRight
-      Dropdown.AnchorOrigin.CenterLeft
-      Dropdown.AnchorOrigin.CenterCenter
-      Dropdown.AnchorOrigin.CenterRight
-      Dropdown.AnchorOrigin.BottomLeft
-      Dropdown.AnchorOrigin.BottomCenter
-      Dropdown.AnchorOrigin.BottomRight
-    ]
+    let anchorClassMap =
+      Map.ofList [
+        "Top Left", "weave-dropdown--anchor-origin-top-left"
+        "Top Center", "weave-dropdown--anchor-origin-top-center"
+        "Top Right", "weave-dropdown--anchor-origin-top-right"
+        "Center Left", "weave-dropdown--anchor-origin-center-left"
+        "Center Center", "weave-dropdown--anchor-origin-center-center"
+        "Center Right", "weave-dropdown--anchor-origin-center-right"
+        "Bottom Left", "weave-dropdown--anchor-origin-bottom-left"
+        "Bottom Center", "weave-dropdown--anchor-origin-bottom-center"
+        "Bottom Right", "weave-dropdown--anchor-origin-bottom-right"
+      ]
 
-    let transformOptions = [
-      Dropdown.TransformOrigin.TopLeft
-      Dropdown.TransformOrigin.TopCenter
-      Dropdown.TransformOrigin.TopRight
-      Dropdown.TransformOrigin.CenterLeft
-      Dropdown.TransformOrigin.CenterCenter
-      Dropdown.TransformOrigin.CenterRight
-      Dropdown.TransformOrigin.BottomLeft
-      Dropdown.TransformOrigin.BottomCenter
-      Dropdown.TransformOrigin.BottomRight
-    ]
+    let transformClassMap =
+      Map.ofList [
+        "Top Left", "weave-dropdown--transform-origin-top-left"
+        "Top Center", "weave-dropdown--transform-origin-top-center"
+        "Top Right", "weave-dropdown--transform-origin-top-right"
+        "Center Left", "weave-dropdown--transform-origin-center-left"
+        "Center Center", "weave-dropdown--transform-origin-center-center"
+        "Center Right", "weave-dropdown--transform-origin-center-right"
+        "Bottom Left", "weave-dropdown--transform-origin-bottom-left"
+        "Bottom Center", "weave-dropdown--transform-origin-bottom-center"
+        "Bottom Right", "weave-dropdown--transform-origin-bottom-right"
+      ]
 
-    let radioGroup options selected toString colorAttr =
+    let radioGroup (classMap: Map<string, string>) selected colorAttr =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [
         yield!
-          options
-          |> List.map (fun opt ->
+          classMap
+          |> Map.keys
+          |> Seq.toList
+          |> List.map (fun label ->
             Radio.create (
               selected,
-              opt,
-              displayText = View.Const(toString opt),
+              label,
+              displayText = View.Const label,
               attrs = [ colorAttr; Margin.Bottom.extraSmall ]
             ))
       ]
 
     let description =
-      Helpers.bodyText "Dropdowns can be positioned using both anchor origin and transform origin."
+      Helpers.bodyText
+        "Dropdowns can be positioned using both anchor origin and transform origin. Pass the style modules via attrs for static placement, or use Attr.classSelection for reactive selection."
 
     let content =
       div [] [
@@ -130,7 +135,7 @@ Dropdown.create(
             GridItem.create (
               div [] [
                 div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Anchor Origin" ]
-                radioGroup anchorOptions anchorVar Dropdown.AnchorOrigin.toString Radio.Color.secondary
+                radioGroup anchorClassMap anchorVar Radio.Color.secondary
               ],
               attrs = [ GridItem.Span.six ]
             )
@@ -138,11 +143,7 @@ Dropdown.create(
             GridItem.create (
               div [] [
                 div [ Typography.h6; Margin.Bottom.extraSmall ] [ text "Transform Origin" ]
-                radioGroup
-                  transformOptions
-                  transformVar
-                  Dropdown.TransformOrigin.toString
-                  Radio.Color.tertiary
+                radioGroup transformClassMap transformVar Radio.Color.tertiary
               ],
               attrs = [ GridItem.Span.six ]
             )
@@ -151,19 +152,15 @@ Dropdown.create(
               Grid.create (
                 [
                   GridItem.create (
-                    div [ Typography.body1; Attr.Style "text-align" "center" ] [
-                      text
-                        "The dropdown below will open based on the selected anchor and transform origins. It is configured to stay open when you are changing the selections."
-                    ]
-                  )
-                  GridItem.create (
                     Dropdown.create (
                       buttonContents = text "Placement",
                       items = items,
-                      anchorOrigin = anchorVar.View,
-                      transformOrigin = transformVar.View,
                       closeOnOutsideClick = View.Const false,
-                      attrs = [ Margin.Top.large ],
+                      attrs = [
+                        anchorClassMap |> Attr.classSelection anchorVar.View
+                        transformClassMap |> Attr.classSelection transformVar.View
+                        Margin.Top.large
+                      ],
                       buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
                     ),
                     attrs = [ GridItem.Span.twelve ]
@@ -180,21 +177,35 @@ Dropdown.create(
 
     let code =
       """open Weave
-open WebSharper.UI
+
+// Static placement — pass style modules directly via attrs
+Dropdown.create(
+    buttonContents = text "Below Right",
+    items = items,
+    attrs = [
+        Dropdown.AnchorOrigin.bottomRight
+        Dropdown.TransformOrigin.topRight
+    ],
+    buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
+)
+
+// Reactive placement — use Attr.classSelection with a Map<'T, string>
+let anchorVar = Var.Create "Bottom Left"
+
+let anchorClassMap =
+    Map.ofList [
+        "Top Left", "weave-dropdown--anchor-origin-top-left"
+        "Bottom Left", "weave-dropdown--anchor-origin-bottom-left"
+        // ...
+    ]
 
 Dropdown.create(
     buttonContents = text "Placement",
-    items = [
-        DropdownItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
-        DropdownItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
-        DropdownItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+    items = items,
+    attrs = [
+        anchorClassMap |> Attr.classSelection anchorVar.View
     ],
-    anchorOrigin = View.Const Dropdown.AnchorOrigin.BottomLeft,
-    transformOrigin = View.Const Dropdown.TransformOrigin.TopLeft,
-    buttonAttrs = [
-        Button.Variant.filled
-        Button.Color.primary
-    ]
+    buttonAttrs = [ Button.Variant.filled; Button.Color.primary ]
 )"""
 
     Helpers.codeSampleSection "Placement" description content code
@@ -294,10 +305,10 @@ let nestedDropdown =
         isOpen = nestedIsOpen,
         buttonAttrs = [
             nestedIsOpen.View
-            |> Attr.DynamicClassPred Css.``weave-button--tertiary``
+            |> Attr.DynamicClassPred "weave-button--tertiary"
 
             nestedIsOpen.View
-            |> Attr.DynamicClassPred Css.``weave-button--outlined``
+            |> Attr.DynamicClassPred "weave-button--outlined"
         ]
     )
 
@@ -642,16 +653,6 @@ Dropdown.create(
             "View.Const Click"
             "Whether the menu opens on Click or Hover"
           Helpers.apiParam
-            "?anchorOrigin"
-            "View<AnchorOrigin>"
-            "View.Const BottomLeft"
-            "Position on the button where the menu is anchored (9-point grid)"
-          Helpers.apiParam
-            "?transformOrigin"
-            "View<TransformOrigin>"
-            "View.Const TopLeft"
-            "Point on the menu aligned to the anchor (9-point grid)"
-          Helpers.apiParam
             "?enabled"
             "View<bool>"
             "View.Const true"
@@ -666,7 +667,11 @@ Dropdown.create(
             "Attr list"
             "[]"
             "Additional attributes applied to the trigger button"
-          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root container"
+          Helpers.apiParam
+            "?attrs"
+            "Attr list"
+            "[]"
+            "Additional attributes (AnchorOrigin, TransformOrigin, etc.) applied to the root container"
         ]
 
         Helpers.apiTable "DropdownItem.create" [
@@ -685,43 +690,41 @@ Dropdown.create(
             "View<OpenOn>"
             "View.Const Click"
             "Whether the submenu opens on Click or Hover"
-          Helpers.apiParam
-            "?anchorOrigin"
-            "View<AnchorOrigin>"
-            "View.Const TopRight"
-            "Anchor position (defaults to TopRight for side-opening)"
-          Helpers.apiParam "?transformOrigin" "View<TransformOrigin>" "" "Transform origin for the submenu"
           Helpers.apiParam "?enabled" "View<bool>" "" "Whether the nested trigger is interactive"
           Helpers.apiParam
             "?buttonAttrs"
             "Attr list"
             ""
             "Additional attributes applied to the nested trigger button"
-          Helpers.apiParam "?attrs" "Attr list" "" "Additional attributes applied to the nested container"
+          Helpers.apiParam
+            "?attrs"
+            "Attr list"
+            ""
+            "Additional attributes applied to the nested container (includes AnchorOrigin.topRight by default)"
         ]
 
-        Helpers.styleModuleTable "Dropdown.AnchorOrigin (DU)" [
-          ("TopLeft", "Anchor at top-left of trigger")
-          ("TopCenter", "Anchor at top-center of trigger")
-          ("TopRight", "Anchor at top-right of trigger")
-          ("CenterLeft", "Anchor at center-left of trigger")
-          ("CenterCenter", "Anchor at center of trigger")
-          ("CenterRight", "Anchor at center-right of trigger")
-          ("BottomLeft", "Anchor at bottom-left of trigger (default)")
-          ("BottomCenter", "Anchor at bottom-center of trigger")
-          ("BottomRight", "Anchor at bottom-right of trigger")
+        Helpers.styleModuleTable "Dropdown.AnchorOrigin" [
+          ("topLeft", "Anchor at top-left of trigger")
+          ("topCenter", "Anchor at top-center of trigger")
+          ("topRight", "Anchor at top-right of trigger")
+          ("centerLeft", "Anchor at center-left of trigger")
+          ("center", "Anchor at center of trigger")
+          ("centerRight", "Anchor at center-right of trigger")
+          ("bottomLeft", "Anchor at bottom-left of trigger")
+          ("bottomCenter", "Anchor at bottom-center of trigger")
+          ("bottomRight", "Anchor at bottom-right of trigger")
         ]
 
-        Helpers.styleModuleTable "Dropdown.TransformOrigin (DU)" [
-          ("TopLeft", "Menu aligns its top-left to the anchor (default)")
-          ("TopCenter", "Menu aligns its top-center to the anchor")
-          ("TopRight", "Menu aligns its top-right to the anchor")
-          ("CenterLeft", "Menu aligns its center-left to the anchor")
-          ("CenterCenter", "Menu aligns its center to the anchor")
-          ("CenterRight", "Menu aligns its center-right to the anchor")
-          ("BottomLeft", "Menu aligns its bottom-left to the anchor")
-          ("BottomCenter", "Menu aligns its bottom-center to the anchor")
-          ("BottomRight", "Menu aligns its bottom-right to the anchor")
+        Helpers.styleModuleTable "Dropdown.TransformOrigin" [
+          ("topLeft", "Menu aligns its top-left to the anchor")
+          ("topCenter", "Menu aligns its top-center to the anchor")
+          ("topRight", "Menu aligns its top-right to the anchor")
+          ("centerLeft", "Menu aligns its center-left to the anchor")
+          ("center", "Menu aligns its center to the anchor")
+          ("centerRight", "Menu aligns its center-right to the anchor")
+          ("bottomLeft", "Menu aligns its bottom-left to the anchor")
+          ("bottomCenter", "Menu aligns its bottom-center to the anchor")
+          ("bottomRight", "Menu aligns its bottom-right to the anchor")
         ]
 
         Helpers.styleModuleTable "Dropdown.OpenOn (DU)" [

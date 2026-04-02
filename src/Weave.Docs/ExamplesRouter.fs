@@ -170,7 +170,7 @@ module ExamplesRouter =
 
                   "Functional-First API",
                   Icon.Action Action.Code,
-                  "Clean camelCase APIs, optional params, and composable attrs. Designed for F#, not ported from another ecosystem."
+                  "Clean, composable APIs designed for F#, not ported from another ecosystem."
 
                   "Built-In Theming",
                   Icon.Images Images.Palette,
@@ -378,7 +378,7 @@ module ExamplesRouter =
     let mutable pendingSection: string option = initialSection
 
     let selectedNav = Var.Create<string option>(Some(pageToString initialPage))
-    let drawerOpen = Var.Create true
+    let drawerOpen = Var.Create false
 
     let navigateTo (page: Page) =
       setLocationHash (pageToHash page)
@@ -522,10 +522,10 @@ module ExamplesRouter =
         replaceStateHash (pageHash + "/" + sectionSlug)
         scrollToSectionAfterDelay sectionSlug 0)
 
-    let componentsExpanded = Var.Create true
-    let stylingExpanded = Var.Create true
-    let utilitiesExpanded = Var.Create true
-    let showcasesExpanded = Var.Create true
+    let componentsExpanded = Var.Create false
+    let stylingExpanded = Var.Create false
+    let utilitiesExpanded = Var.Create false
+    let showcasesExpanded = Var.Create false
 
     let navLeafItem (label: string) =
       div [

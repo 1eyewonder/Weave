@@ -324,47 +324,54 @@ IconButtonMenu.create(
     let isMenuOpen = Var.Create false
 
     let content =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        div [ Attr.Style "margin-bottom" "16px" ] [
-          Button.secondary (
-            isMenuOpen.View
-            |> View.Map(fun o -> if o then text "Close Menu" else text "Open Menu")
-            |> Doc.EmbedView,
-            onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
-            attrs = [ Button.Variant.outlined ]
+      Grid.create (
+        [
+          GridItem.create (
+            IconButtonMenu.create (
+              closedIcon = Icon.create (Icon.UiActions UiActions.Add),
+              openIcon = Icon.create (Icon.UiActions UiActions.Close),
+              items = [
+                Tooltip.create (
+                  IconButton.info (
+                    Icon.create (Icon.Social Social.Share),
+                    onClick = (fun () -> ()),
+                    attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
+                  ),
+                  tooltipContent = span [ Typography.body1 ] [ text "Share" ],
+                  direction = Tooltip.Direction.Right
+                )
+                Tooltip.create (
+                  IconButton.error (
+                    Icon.create (Icon.UiActions UiActions.Favorite),
+                    onClick = (fun () -> ()),
+                    attrs = [
+                      Attr.Create "aria-label" "favorite"
+                      Button.Variant.filled
+                      BorderRadius.circle
+                    ]
+                  ),
+                  tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
+                  direction = Tooltip.Direction.Right
+                )
+              ],
+              isOpen = isMenuOpen,
+              triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
+            ),
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
+          )
+
+          GridItem.create (
+            Button.secondary (
+              isMenuOpen.View
+              |> View.Map(fun o -> if o then text "Close Menu" else text "Open Menu")
+              |> Doc.EmbedView,
+              onClick = (fun () -> isMenuOpen.Value <- not isMenuOpen.Value),
+              attrs = [ Button.Variant.filled ]
+            ),
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
         ]
-        IconButtonMenu.create (
-          closedIcon = Icon.create (Icon.UiActions UiActions.Add),
-          openIcon = Icon.create (Icon.UiActions UiActions.Close),
-          items = [
-            Tooltip.create (
-              IconButton.info (
-                Icon.create (Icon.Social Social.Share),
-                onClick = (fun () -> ()),
-                attrs = [ Attr.Create "aria-label" "share"; Button.Variant.filled; BorderRadius.circle ]
-              ),
-              tooltipContent = span [ Typography.body1 ] [ text "Share" ],
-              direction = Tooltip.Direction.Right
-            )
-            Tooltip.create (
-              IconButton.error (
-                Icon.create (Icon.UiActions UiActions.Favorite),
-                onClick = (fun () -> ()),
-                attrs = [
-                  Attr.Create "aria-label" "favorite"
-                  Button.Variant.filled
-                  BorderRadius.circle
-                ]
-              ),
-              tooltipContent = span [ Typography.body1 ] [ text "Favorite" ],
-              direction = Tooltip.Direction.Right
-            )
-          ],
-          isOpen = isMenuOpen,
-          triggerAttrs = [ Button.Variant.filled; Button.Color.primary; BorderRadius.circle ]
-        )
-      ]
+      )
 
     let code =
       """open Weave

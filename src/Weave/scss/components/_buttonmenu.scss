@@ -113,24 +113,28 @@
 
 .weave-button-menu--top > .weave-button-menu__items > .weave-button-menu__item {
   margin-bottom: 8px;
+  transform-origin: bottom center;
 }
 
 .weave-button-menu--bottom
   > .weave-button-menu__items
   > .weave-button-menu__item {
   margin-top: 8px;
+  transform-origin: top center;
 }
 
 .weave-button-menu--left
   > .weave-button-menu__items
   > .weave-button-menu__item {
   margin-right: 8px;
+  transform-origin: center right;
 }
 
 .weave-button-menu--right
   > .weave-button-menu__items
   > .weave-button-menu__item {
   margin-left: 8px;
+  transform-origin: center left;
 }
 
 // Open state

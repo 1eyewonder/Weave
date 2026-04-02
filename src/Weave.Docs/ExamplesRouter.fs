@@ -537,12 +537,18 @@ module ExamplesRouter =
         BorderRadius.All.large
         Margin.All.extraSmall
         Attr.Class "weave-nav-leaf"
+        Attr.Create "role" "treeitem"
+        Attr.Create "tabindex" "0"
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
         on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
+        on.keyDown (fun _ ev ->
+          if ev?key = "Enter" || ev?key = " " then
+            ev.PreventDefault()
+            stringToPage label |> Option.iter navigateTo)
       ] [ div [ Typography.body2 ] [ text label ] ]
 
     let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) items =
-      div [] [
+      div [ Attr.Create "role" "treeitem" ] [
         div [
           Flex.Flex.allSizes
           AlignItems.center
@@ -551,7 +557,15 @@ module ExamplesRouter =
           Cursor.pointer
           Gap.All.g2
           Attr.Class "weave-nav-group-header"
+          Attr.Create "tabindex" "0"
+          Attr.DynamicCustom
+            (fun el v -> el.SetAttribute("aria-expanded", v))
+            (isExpanded.View |> View.Map string)
           on.click (fun _ _ -> Var.Update isExpanded not)
+          on.keyDown (fun _ ev ->
+            if ev?key = "Enter" || ev?key = " " then
+              ev.PreventDefault()
+              Var.Update isExpanded not)
         ] [
           Icon.create (categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
           div [ Typography.overline; FlexItem.Flex.allSizes; Attr.Style "opacity" "0.7" ] [ text label ]
@@ -566,11 +580,15 @@ module ExamplesRouter =
             ))
         ]
         isExpanded.View
-        |> Doc.BindView(fun exp -> if exp then div [] items else Doc.Empty)
+        |> Doc.BindView(fun exp ->
+          if exp then
+            div [ Attr.Create "role" "group" ] items
+          else
+            Doc.Empty)
       ]
 
     let navList =
-      div [ Padding.Vertical.extraSmall ] [
+      div [ Padding.Vertical.extraSmall; Attr.Create "role" "tree" ] [
         div [
           Flex.Flex.allSizes
           AlignItems.center
@@ -581,10 +599,16 @@ module ExamplesRouter =
           Margin.All.extraSmall
           Gap.All.g2
           Attr.Class "weave-nav-leaf"
+          Attr.Create "role" "treeitem"
+          Attr.Create "tabindex" "0"
           Attr.DynamicClassPred
             "weave-nav-item--active"
             (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
           on.click (fun _ _ -> navigateTo Home)
+          on.keyDown (fun _ ev ->
+            if ev?key = "Enter" || ev?key = " " then
+              ev.PreventDefault()
+              navigateTo Home)
         ] [
           Icon.create (Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
           div [ Typography.body2 ] [ text "Home" ]
@@ -600,10 +624,16 @@ module ExamplesRouter =
           Margin.All.extraSmall
           Gap.All.g2
           Attr.Class "weave-nav-leaf"
+          Attr.Create "role" "treeitem"
+          Attr.Create "tabindex" "0"
           Attr.DynamicClassPred
             "weave-nav-item--active"
             (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
           on.click (fun _ _ -> navigateTo GettingStartedExamples)
+          on.keyDown (fun _ ev ->
+            if ev?key = "Enter" || ev?key = " " then
+              ev.PreventDefault()
+              navigateTo GettingStartedExamples)
         ] [
           Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
           div [ Typography.body2 ] [ text "Getting Started" ]

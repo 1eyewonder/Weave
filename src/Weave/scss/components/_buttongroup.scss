@@ -10,14 +10,14 @@
   > .weave-button-group__item {
     &:not(:first-child) > .weave-button,
     &:not(:first-child) > .weave-button-menu > .weave-button,
-    &:not(:first-child) > .weave-dropdown > .weave-button {
+    &:not(:first-child) > .weave-dropdownmenu > .weave-button {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
 
     &:not(:last-child) > .weave-button,
     &:not(:last-child) > .weave-button-menu > .weave-button,
-    &:not(:last-child) > .weave-dropdown > .weave-button {
+    &:not(:last-child) > .weave-dropdownmenu > .weave-button {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -32,25 +32,25 @@
 
     > .weave-button,
     > .weave-button-menu,
-    > .weave-dropdown {
+    > .weave-dropdownmenu {
       flex: 1;
     }
 
     > .weave-button-menu > .weave-button,
-    > .weave-dropdown > .weave-button {
+    > .weave-dropdownmenu > .weave-button {
       width: 100%;
     }
     // Zero all radii on every item, then restore only outer corners
     > .weave-button,
     > .weave-button-menu > .weave-button,
-    > .weave-dropdown > .weave-button {
+    > .weave-dropdownmenu > .weave-button {
       border-radius: 0;
     }
 
     // First item: restore top corners
     &:first-child > .weave-button,
     &:first-child > .weave-button-menu > .weave-button,
-    &:first-child > .weave-dropdown > .weave-button {
+    &:first-child > .weave-dropdownmenu > .weave-button {
       border-top-left-radius: var(--default-button-borderradius);
       border-top-right-radius: var(--default-button-borderradius);
     }
@@ -58,7 +58,7 @@
     // Last item: restore bottom corners
     &:last-child > .weave-button,
     &:last-child > .weave-button-menu > .weave-button,
-    &:last-child > .weave-dropdown > .weave-button {
+    &:last-child > .weave-dropdownmenu > .weave-button {
       border-bottom-left-radius: var(--default-button-borderradius);
       border-bottom-right-radius: var(--default-button-borderradius);
     }
@@ -81,9 +81,9 @@
   }
 
   // Let button menus & dropdowns stretch to fill the group item height.
-  // align-self: stretch overrides .weave-dropdown's own align-self: center.
+  // align-self: stretch overrides .weave-dropdownmenu's own align-self: center.
   > .weave-button-menu,
-  > .weave-dropdown {
+  > .weave-dropdownmenu {
     height: 100%;
     align-self: stretch;
 
@@ -110,7 +110,7 @@
 .weave-button-group--filled {
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
+  .weave-button-group__item > .weave-dropdownmenu > .weave-button {
     color: var(--palette-text-primary);
     background-color: var(--palette-action-default-hover);
 
@@ -139,7 +139,7 @@
     &.weave-button-group--#{$color} {
       .weave-button-group__item > .weave-button,
       .weave-button-group__item > .weave-button-menu > .weave-button,
-      .weave-button-group__item > .weave-dropdown > .weave-button {
+      .weave-button-group__item > .weave-dropdownmenu > .weave-button {
         color: var(--palette-#{$color}-text);
         background-color: var(--palette-#{$color});
 
@@ -176,7 +176,7 @@
 
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
+  .weave-button-group__item > .weave-dropdownmenu > .weave-button {
     color: var(--palette-text-primary);
     border: none;
 
@@ -212,7 +212,7 @@
     > .weave-button-group__item:first-child {
       > .weave-button,
       > .weave-button-menu > .weave-button,
-      > .weave-dropdown > .weave-button {
+      > .weave-dropdownmenu > .weave-button {
         border-top-left-radius: calc(var(--default-button-borderradius) - 2px);
         border-bottom-left-radius: calc(var(--default-button-borderradius) - 2px);
       }
@@ -221,7 +221,7 @@
     > .weave-button-group__item:last-child {
       > .weave-button,
       > .weave-button-menu > .weave-button,
-      > .weave-dropdown > .weave-button {
+      > .weave-dropdownmenu > .weave-button {
         border-top-right-radius: calc(var(--default-button-borderradius) - 2px);
         border-bottom-right-radius: calc(var(--default-button-borderradius) - 2px);
       }
@@ -233,7 +233,7 @@
     > .weave-button-group__item:first-child {
       > .weave-button,
       > .weave-button-menu > .weave-button,
-      > .weave-dropdown > .weave-button {
+      > .weave-dropdownmenu > .weave-button {
         border-top-left-radius: calc(var(--default-button-borderradius) - 2px);
         border-top-right-radius: calc(var(--default-button-borderradius) - 2px);
       }
@@ -242,7 +242,7 @@
     > .weave-button-group__item:last-child {
       > .weave-button,
       > .weave-button-menu > .weave-button,
-      > .weave-dropdown > .weave-button {
+      > .weave-dropdownmenu > .weave-button {
         border-bottom-left-radius: calc(var(--default-button-borderradius) - 2px);
         border-bottom-right-radius: calc(var(--default-button-borderradius) - 2px);
       }
@@ -258,7 +258,7 @@
 
       .weave-button-group__item > .weave-button,
       .weave-button-group__item > .weave-button-menu > .weave-button,
-      .weave-button-group__item > .weave-dropdown > .weave-button {
+      .weave-button-group__item > .weave-dropdownmenu > .weave-button {
         color: var(--palette-#{$color});
 
         @media (hover: hover) and (pointer: fine) {
@@ -296,7 +296,7 @@
 
   .weave-button-group__item > .weave-button,
   .weave-button-group__item > .weave-button-menu > .weave-button,
-  .weave-button-group__item > .weave-dropdown > .weave-button {
+  .weave-button-group__item > .weave-dropdownmenu > .weave-button {
     color: var(--palette-text-primary);
     border: none;
 
@@ -329,7 +329,7 @@
     &.weave-button-group--#{$color} {
       .weave-button-group__item > .weave-button,
       .weave-button-group__item > .weave-button-menu > .weave-button,
-      .weave-button-group__item > .weave-dropdown > .weave-button {
+      .weave-button-group__item > .weave-dropdownmenu > .weave-button {
         color: var(--palette-#{$color});
 
         @media (hover: hover) and (pointer: fine) {
@@ -368,7 +368,7 @@
 .weave-button-group {
   .weave-button-group__item > .weave-button--disabled,
   .weave-button-group__item > .weave-button-menu > .weave-button--disabled,
-  .weave-button-group__item > .weave-dropdown > .weave-button--disabled {
+  .weave-button-group__item > .weave-dropdownmenu > .weave-button--disabled {
     color: var(--palette-action-disabled) !important;
     cursor: default;
     pointer-events: none;
@@ -377,7 +377,7 @@
   &.weave-button-group--filled {
     .weave-button-group__item > .weave-button--disabled,
     .weave-button-group__item > .weave-button-menu > .weave-button--disabled,
-    .weave-button-group__item > .weave-dropdown > .weave-button--disabled {
+    .weave-button-group__item > .weave-dropdownmenu > .weave-button--disabled {
       background-color: var(--palette-action-disabled-background) !important;
     }
   }

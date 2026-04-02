@@ -23,7 +23,7 @@
     <Compile Include="components/TypographyLayoutTests.fs" />
     <Compile Include="components/FieldLayoutTests.fs" />
     <Compile Include="components/DialogLayoutTests.fs" />
-    <Compile Include="components/DropdownLayoutTests.fs" />
+    <Compile Include="components/DropdownMenuLayoutTests.fs" />
     <Compile Include="components/LinkLayoutTests.fs" />
     <Compile Include="components/TooltipLayoutTests.fs" />
     <Compile Include="components/ButtonMenuLayoutTests.fs" />

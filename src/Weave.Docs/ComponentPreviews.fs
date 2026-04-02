@@ -477,7 +477,7 @@ module ComponentPreviews =
           Attr.Style "height" "7px"
         ] []
       ]
-    | DropdownExamples ->
+    | DropdownMenuExamples ->
       cp [
         div [
           cl "cp-box"

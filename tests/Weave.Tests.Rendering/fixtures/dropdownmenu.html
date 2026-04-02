@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DropdownMenu Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Open dropdown with items (new __popover → __list structure) -->
+    <div id="dropdown-open" class="weave-dropdownmenu weave-dropdownmenu--open">
+      <button type="button">Menu</button>
+      <div class="weave-dropdownmenu__popover">
+        <div id="dropdown-list" class="weave-dropdownmenu__list" role="menu">
+          <div id="dropdown-item-1" class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Item One</span>
+          </div>
+          <div id="dropdown-item-2" class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Item Two</span>
+          </div>
+          <div id="dropdown-item-3" class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Item Three</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closed dropdown: popover should not be visible -->
+    <div id="dropdown-closed" class="weave-dropdownmenu" style="margin-top: 16px;">
+      <button type="button">Closed Menu</button>
+      <div class="weave-dropdownmenu__popover">
+        <div id="dropdown-closed-list" class="weave-dropdownmenu__list" role="menu">
+          <div class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Hidden Item</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anchor origin: top-right with transform-origin top-right -->
+    <div id="dropdown-anchor-top-right" class="weave-dropdownmenu weave-dropdownmenu--open weave-dropdownmenu--anchor-origin-top-right weave-dropdownmenu--transform-origin-top-right" style="margin-top: 16px; position: relative;">
+      <button type="button">Top Right</button>
+      <div class="weave-dropdownmenu__popover">
+        <div id="dropdown-list-top-right" class="weave-dropdownmenu__list" role="menu">
+          <div class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Anchored Item</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropdown with divider and disabled item -->
+    <div id="dropdown-divider" class="weave-dropdownmenu weave-dropdownmenu--open" style="margin-top: 200px;">
+      <button type="button">Actions</button>
+      <div class="weave-dropdownmenu__popover">
+        <div id="dropdown-divider-list" class="weave-dropdownmenu__list" role="menu">
+          <div class="weave-dropdownmenu__item" role="menuitem">
+            <span class="weave-dropdownmenu__item-text">Edit</span>
+          </div>
+          <div class="weave-dropdownmenu__divider" role="separator"></div>
+          <div class="weave-dropdownmenu__item weave-dropdownmenu__item--disabled" role="menuitem" aria-disabled="true">
+            <span class="weave-dropdownmenu__item-text">Delete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

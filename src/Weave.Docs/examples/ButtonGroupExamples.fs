@@ -310,19 +310,19 @@ ButtonGroup.create(
   let private dropdownExample () =
     let description =
       Helpers.bodyText
-        "A Dropdown can be placed inside a button group to create a split button with a dropdown menu."
+        "A DropdownMenu can be placed inside a button group to create a split button with a dropdown menu."
 
     let content =
       div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
         ButtonGroup.create (
           [
             Button.create (text "Save", onClick = (fun () -> printfn "Save clicked"))
-            Dropdown.create (
+            DropdownMenu.create (
               text "Save Options",
-              [
-                DropdownItem.create (text "Save as Draft", onClick = (fun () -> printfn "Draft"))
-                DropdownItem.create (text "Save and Publish", onClick = (fun () -> printfn "Publish"))
-                DropdownItem.create (text "Save and Close", onClick = (fun () -> printfn "Close"))
+              View.Const [
+                DropdownMenuItem.create (text "Save as Draft", (fun () -> printfn "Draft"))
+                DropdownMenuItem.create (text "Save and Publish", (fun () -> printfn "Publish"))
+                DropdownMenuItem.create (text "Save and Close", (fun () -> printfn "Close"))
               ]
             )
           ],
@@ -337,12 +337,12 @@ open WebSharper.UI
 ButtonGroup.create(
     [
         Button.create(text "Save", onClick = (fun () -> printfn "Save clicked"))
-        Dropdown.create(
+        DropdownMenu.create(
             text "Save Options",
-            [
-                DropdownItem.create(text "Save as Draft", onClick = (fun () -> printfn "Draft"))
-                DropdownItem.create(text "Save and Publish", onClick = (fun () -> printfn "Publish"))
-                DropdownItem.create(text "Save and Close", onClick = (fun () -> printfn "Close"))
+            View.Const [
+                DropdownMenuItem.create(text "Save as Draft", (fun () -> printfn "Draft"))
+                DropdownMenuItem.create(text "Save and Publish", (fun () -> printfn "Publish"))
+                DropdownMenuItem.create(text "Save and Close", (fun () -> printfn "Close"))
             ]
         )
     ],
@@ -352,7 +352,7 @@ ButtonGroup.create(
     ]
 )"""
 
-    Helpers.codeSampleSection "Dropdown" description content code
+    Helpers.codeSampleSection "Dropdown Menu" description content code
 
   let private apiReferenceSection () =
     Helpers.apiSection (Helpers.bodyText "Complete API reference for ButtonGroup.") [

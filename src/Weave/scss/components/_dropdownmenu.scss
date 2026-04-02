@@ -1,0 +1,422 @@
+@use "sass:map";
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+// ==========================================================================
+// DropdownMenu Component
+// ==========================================================================
+//
+// Structure (with __popover wrapper, matching Select):
+//   .weave-dropdownmenu                        Block root
+//     button                               Trigger (renders via Button.create)
+//       .weave-dropdownmenu__chevron            Chevron indicator
+//     .weave-dropdownmenu__popover              Animated floating container
+//       .weave-dropdownmenu__list               Scrollable item list
+//         .weave-dropdownmenu__item             Individual menu entry
+//           .weave-dropdownmenu__item-icon      Leading icon
+//           .weave-dropdownmenu__item-text      Label text
+//           .weave-dropdownmenu__subdropdown-icon  Trailing nested-menu indicator
+//         .weave-dropdownmenu__divider          Visual separator
+//
+// Private custom properties (set on root, consumed by children):
+//   --_dropdownmenu-tx           translateX for transform-origin positioning
+//   --_dropdownmenu-ty           translateY for transform-origin positioning
+//   --_dropdownmenu-brand-color  Brand color for the active palette variant
+//   --_dropdownmenu-brand-rgb    Brand color RGB triplet for alpha compositing
+// ==========================================================================
+
+// ---------------------------------------------------------------------------
+// Block root
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu {
+  display: inline-flex;
+  align-self: center;
+  position: relative;
+  width: fit-content;
+  color: var(--palette-text-primary, currentColor);
+
+  // Private custom properties — defaults for top-left origin
+  --_dropdownmenu-tx: 0%;
+  --_dropdownmenu-ty: 0%;
+  --_dropdownmenu-brand-color: var(--palette-primary);
+  --_dropdownmenu-brand-rgb: var(--palette-primary-rgb);
+}
+
+// ---------------------------------------------------------------------------
+// Chevron
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-inline-start: 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--palette-action-default);
+  transition: transform var(--weave-duration-standard) $ease-standard;
+}
+
+.weave-dropdownmenu__chevron--open {
+  transform: rotate(180deg);
+}
+
+// ---------------------------------------------------------------------------
+// Popover (animated floating container)
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__popover {
+  position: absolute;
+  z-index: var(--weave-zindex-dropdown);
+  background: var(--palette-surface);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+  border-radius: var(--default-borderradius);
+  box-shadow: var(--palette-shadow-2);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 100%;
+  width: max-content;
+  max-width: none;
+  margin-top: 2px;
+
+  // Default anchor: below the trigger, aligned left
+  top: 100%;
+  left: 0;
+
+  // Entry animation — collapsed by default
+  opacity: 0;
+  transform: scale(0.85) translate(var(--_dropdownmenu-tx), var(--_dropdownmenu-ty));
+  transform-origin: top left;
+  pointer-events: none;
+  @include transition((opacity, transform));
+}
+
+.weave-dropdownmenu--open .weave-dropdownmenu__popover {
+  opacity: 1;
+  transform: scale(1) translate(var(--_dropdownmenu-tx), var(--_dropdownmenu-ty));
+  pointer-events: auto;
+  @include transition((opacity, transform), short);
+}
+
+// ---------------------------------------------------------------------------
+// List (scrollable menu inside the popover)
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--palette-text-primary-rgb), var(--weave-alpha-hover));
+    border-radius: 3px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Item
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__item {
+  width: 100%;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  text-align: start;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 12px;
+  padding: density-spacing(4, 4) 16px;
+  min-height: density-spacing(38, 10);
+  color: var(--palette-text-primary);
+  font-family: var(--typography-body1-family);
+  font-size: var(--typography-body1-size);
+  font-weight: var(--typography-body1-weight);
+  line-height: var(--typography-body1-lineheight);
+  letter-spacing: var(--typography-body1-letterspacing);
+  user-select: none;
+  transition: background-color var(--weave-duration-short) $ease-standard;
+}
+
+// Hover — pointer devices only
+@media (hover: hover) and (pointer: fine) {
+  .weave-dropdownmenu__item:hover:not(.weave-dropdownmenu__item--disabled) {
+    background-color: var(--palette-action-default-hover);
+  }
+}
+
+// Focus-visible — keyboard navigation
+.weave-dropdownmenu__item:focus-visible {
+  outline: 2px solid var(--_dropdownmenu-brand-color);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+// Highlighted (keyboard-driven highlight)
+.weave-dropdownmenu__item--highlighted:not(.weave-dropdownmenu__item--disabled) {
+  background-color: var(--palette-action-default-hover);
+}
+
+// Active — press feedback
+.weave-dropdownmenu__item:active:not(.weave-dropdownmenu__item--disabled) {
+  background-color: var(--palette-action-hover);
+}
+
+// Disabled
+.weave-dropdownmenu__item--disabled {
+  color: var(--palette-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+// ---------------------------------------------------------------------------
+// Item children
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--palette-action-default);
+}
+
+.weave-dropdownmenu__item-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weave-dropdownmenu__subdropdown-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--palette-action-default);
+}
+
+// When some items have leading icons, indent items that lack them so text aligns
+.weave-dropdownmenu__list:has(.weave-dropdownmenu__item-icon)
+  .weave-dropdownmenu__item:not(:has(.weave-dropdownmenu__item-icon))
+  .weave-dropdownmenu__item-text {
+  margin-inline-start: 36px;
+}
+
+// When some items have trailing subdropdown icons, add end padding to those without
+.weave-dropdownmenu__list:has(.weave-dropdownmenu__subdropdown-icon)
+  .weave-dropdownmenu__item:not(:has(.weave-dropdownmenu__subdropdown-icon))
+  .weave-dropdownmenu__item-text {
+  margin-inline-end: 36px;
+}
+
+// Disabled item icon inherits disabled color
+.weave-dropdownmenu__item--disabled .weave-dropdownmenu__item-icon {
+  color: var(--palette-text-disabled);
+}
+
+.weave-dropdownmenu__item--disabled .weave-dropdownmenu__subdropdown-icon {
+  color: var(--palette-text-disabled);
+}
+
+// ---------------------------------------------------------------------------
+// Divider
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu__divider {
+  height: 1px;
+  background: rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+  margin: 4px 0;
+  flex-shrink: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Color modifiers — Brand palette loop
+// ---------------------------------------------------------------------------
+// Sets private cascade properties on the root. Children consume them
+// generically via var(--_dropdownmenu-brand-color) and var(--_dropdownmenu-brand-rgb),
+// so adding a new palette color requires zero changes below.
+
+@each $color in $palette-colors {
+  .weave-dropdownmenu--#{$color} {
+    --_dropdownmenu-brand-color: var(--palette-#{$color});
+    --_dropdownmenu-brand-rgb: var(--palette-#{$color}-rgb);
+  }
+}
+
+// Chevron picks up brand color when dropdown is open
+.weave-dropdownmenu--open .weave-dropdownmenu__chevron {
+  color: var(--_dropdownmenu-brand-color);
+}
+
+// Brand-aware hover on highlighted items (subtle brand tint)
+@media (hover: hover) and (pointer: fine) {
+  .weave-dropdownmenu__item--highlighted:hover:not(.weave-dropdownmenu__item--disabled) {
+    background-color: rgba(var(--_dropdownmenu-brand-rgb), var(--weave-alpha-hover));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Anchor origin modifiers (root modifiers → cascade to __popover)
+// ---------------------------------------------------------------------------
+// Position the popover relative to the trigger element.
+
+$anchor-positions: (
+  top-left:       (top: 0,    left: 0),
+  top-center:     (top: 0,    left: 50%),
+  top-right:      (top: 0,    left: 100%),
+  center-left:    (top: 50%,  left: 0),
+  center-center:  (top: 50%,  left: 50%),
+  center-right:   (top: 50%,  left: 100%),
+  bottom-left:    (top: 100%, left: 0),
+  bottom-center:  (top: 100%, left: 50%),
+  bottom-right:   (top: 100%, left: 100%),
+);
+
+@each $name, $pos in $anchor-positions {
+  .weave-dropdownmenu--anchor-origin-#{$name} .weave-dropdownmenu__popover {
+    top: map.get($pos, top);
+    left: map.get($pos, left);
+
+    // Reset default margin when the popover is not anchored below the trigger
+    @if map.get($pos, top) != 100% {
+      margin-top: 0;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Transform origin modifiers (root modifiers → cascade to __popover)
+// ---------------------------------------------------------------------------
+// Custom properties --_dropdownmenu-tx and --_dropdownmenu-ty are set on the root and
+// consumed by the __popover transform. The transform-origin itself is set
+// directly on __popover via descendant selector.
+
+$transform-origins: (
+  top-left:       (tx: 0%,    ty: 0%,    origin: top left),
+  top-center:     (tx: -50%,  ty: 0%,    origin: top center),
+  top-right:      (tx: -100%, ty: 0%,    origin: top right),
+  center-left:    (tx: 0%,    ty: -50%,  origin: center left),
+  center-center:  (tx: -50%,  ty: -50%,  origin: center center),
+  center-right:   (tx: -100%, ty: -50%,  origin: center right),
+  bottom-left:    (tx: 0%,    ty: -100%, origin: bottom left),
+  bottom-center:  (tx: -50%,  ty: -100%, origin: bottom center),
+  bottom-right:   (tx: -100%, ty: -100%, origin: bottom right),
+);
+
+@each $name, $values in $transform-origins {
+  .weave-dropdownmenu--transform-origin-#{$name} {
+    --_dropdownmenu-tx: #{map.get($values, tx)};
+    --_dropdownmenu-ty: #{map.get($values, ty)};
+
+    .weave-dropdownmenu__popover {
+      transform-origin: #{map.get($values, origin)};
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Open state on root
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu--open {
+  z-index: var(--weave-zindex-dropdown);
+}
+
+// ---------------------------------------------------------------------------
+// Disabled state
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu--disabled {
+  opacity: var(--weave-opacity-disabled-container);
+  pointer-events: none;
+  cursor: default;
+
+  .weave-dropdownmenu__chevron {
+    color: var(--palette-action-disabled);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Width modifiers
+// ---------------------------------------------------------------------------
+
+.weave-dropdownmenu--full-width {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+
+  .weave-dropdownmenu__popover {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.weave-dropdownmenu--fit-content .weave-dropdownmenu__popover {
+  min-width: 100%;
+  width: max-content;
+  max-width: min(400px, 90vw);
+}
+
+// ---------------------------------------------------------------------------
+// Density modifiers
+// ---------------------------------------------------------------------------
+
+@each $name, $step in $density-steps {
+  .weave-dropdownmenu--#{$name} {
+    --weave-density: #{$step};
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Popover host integration
+// ---------------------------------------------------------------------------
+// When the dropdown list is rendered inside a .weave-popover host (external
+// positioning layer), clip overflow and hide empty menus.
+
+.weave-popover:has(> .weave-dropdownmenu__list) {
+  overflow: hidden;
+}
+
+.weave-popover:has(> .weave-dropdownmenu__list:empty) {
+  visibility: hidden;
+}
+
+// ===========================================================================
+// Legacy compatibility classes
+// ===========================================================================
+// The previous DropdownMenu.fs structure had no __popover wrapper — anchor-origin
+// and transform-origin modifiers on the root targeted > __list directly.
+// These selectors preserve backward compatibility for any external code still
+// using the old structure.
+// ---------------------------------------------------------------------------
+
+@each $name, $pos in $anchor-positions {
+  .weave-dropdownmenu--anchor-origin-#{$name} > .weave-dropdownmenu__list {
+    top: map.get($pos, top);
+    left: map.get($pos, left);
+  }
+}
+
+@each $name, $values in $transform-origins {
+  .weave-dropdownmenu--transform-origin-#{$name} > .weave-dropdownmenu__list {
+    transform-origin: #{map.get($values, origin)};
+    transform: translate(#{map.get($values, tx)}, #{map.get($values, ty)});
+  }
+}

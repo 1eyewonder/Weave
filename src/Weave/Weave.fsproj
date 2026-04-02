@@ -30,7 +30,7 @@
     <Compile Include="components/RadioButton.fs" />
     <Compile Include="components/Switch.fs" />
     <Compile Include="components/Slider.fs" />
-    <Compile Include="components/Dropdown.fs" />
+    <Compile Include="components/DropdownMenu.fs" />
     <Compile Include="components/List.fs" />
     <Compile Include="components/Select.fs" />
     <Compile Include="components/Link.fs" />

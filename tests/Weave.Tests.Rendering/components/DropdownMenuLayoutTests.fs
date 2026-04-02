@@ -1,17 +1,17 @@
-module Weave.Tests.Rendering.DropdownLayoutTests
+module Weave.Tests.Rendering.DropdownMenuLayoutTests
 
 open Xunit
 
-type DropdownLayoutTests() =
-  inherit LayoutTestBase("dropdown")
+type DropdownMenuLayoutTests() =
+  inherit LayoutTestBase("dropdownmenu")
 
   [<Fact>]
-  member this.``dropdown list has positive dimensions``() = task {
+  member this.``dropdown menu list has positive dimensions``() = task {
     do! this.LoadFixture()
     let! box = this.Page.Locator("#dropdown-list").BoundingBoxAsync()
 
-    Assert.True(box.Width > 0.0f, $"Dropdown list width {box.Width}px should be > 0")
-    Assert.True(box.Height > 0.0f, $"Dropdown list height {box.Height}px should be > 0")
+    Assert.True(box.Width > 0.0f, $"Dropdown menu list width {box.Width}px should be > 0")
+    Assert.True(box.Height > 0.0f, $"Dropdown menu list height {box.Height}px should be > 0")
   }
 
   [<Fact>]
@@ -39,7 +39,7 @@ type DropdownLayoutTests() =
   }
 
   [<Fact>]
-  member this.``dropdown list is positioned below trigger``() = task {
+  member this.``dropdown menu list is positioned below trigger``() = task {
     do! this.LoadFixture()
     let! trigger = this.Page.Locator("#dropdown-open > button").BoundingBoxAsync()
     and! list = this.Page.Locator("#dropdown-list").BoundingBoxAsync()
@@ -48,16 +48,16 @@ type DropdownLayoutTests() =
 
     Assert.True(
       list.Y >= triggerBottom - 1.0f,
-      $"Dropdown list top ({list.Y}px) should be at or below trigger bottom ({triggerBottom}px)"
+      $"Dropdown menu list top ({list.Y}px) should be at or below trigger bottom ({triggerBottom}px)"
     )
   }
 
   [<Fact>]
   member this.``divider has minimal height``() = task {
     do! this.LoadFixture()
-    let! divider = this.Page.Locator("#dropdown-divider-list .weave-dropdown__divider").BoundingBoxAsync()
+    let! divider = this.Page.Locator("#dropdown-divider-list .weave-dropdownmenu__divider").BoundingBoxAsync()
 
-    Assert.True(divider.Height <= 2.0f, $"Dropdown divider height {divider.Height}px should be <= 2px")
+    Assert.True(divider.Height <= 2.0f, $"Dropdown menu divider height {divider.Height}px should be <= 2px")
   }
 
   [<Fact>]
@@ -74,10 +74,10 @@ type DropdownLayoutTests() =
   }
 
   [<Fact>]
-  member this.``disabled dropdown item has pointer-events none``() = task {
+  member this.``disabled dropdown menu item has pointer-events none``() = task {
     do! this.LoadFixture()
 
-    let! pointerEvents = this.ComputedStyle(".weave-dropdown__item--disabled", "pointerEvents")
+    let! pointerEvents = this.ComputedStyle(".weave-dropdownmenu__item--disabled", "pointerEvents")
 
     Assert.Equal("none", pointerEvents)
   }

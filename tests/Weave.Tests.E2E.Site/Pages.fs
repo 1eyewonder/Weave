@@ -307,12 +307,12 @@ module Pages =
 
   let private dropdownPage () =
     div [] [
-      Dropdown.create (
+      DropdownMenu.create (
         text "Open Menu",
-        [
-          DropdownItem.create (text "Item 1", fun () -> ())
-          DropdownItem.create (text "Item 2", fun () -> ())
-          DropdownItem.create (text "Disabled Item", (fun () -> ()), enabled = View.Const false)
+        View.Const [
+          DropdownMenuItem.create (text "Item 1", (fun () -> ()))
+          DropdownMenuItem.create (text "Item 2", (fun () -> ()))
+          DropdownMenuItem.create (text "Disabled Item", (fun () -> ()), disabled = View.Const true)
         ]
       )
       Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
@@ -492,20 +492,18 @@ module Pages =
     ]
 
   let private buttonmenuPage () =
-    div [] [
-      ButtonMenu.create (
-        text "Menu",
-        [
-          DropdownItem.create (text "Action 1", fun () -> ())
-          DropdownItem.create (text "Action 2", fun () -> ())
-        ]
+    let menuItem label =
+      Button.create (
+        text label,
+        (fun () -> ()),
+        attrs = [ Button.Variant.text; Button.Width.full; BorderRadius.All.none ]
       )
+
+    div [] [
+      ButtonMenu.create (text "Menu", [ menuItem "Action 1"; menuItem "Action 2" ])
       ButtonMenu.create (
         text "Horizontal Menu",
-        [
-          DropdownItem.create (text "Left 1", fun () -> ())
-          DropdownItem.create (text "Left 2", fun () -> ())
-        ],
+        [ menuItem "Left 1"; menuItem "Left 2" ],
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
       )
@@ -596,7 +594,7 @@ module Pages =
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
-    | "dropdown" -> dropdownPage ()
+    | "dropdown-menu" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "alert" -> alertPage ()
     | "appbar" -> appbarPage ()

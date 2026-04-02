@@ -239,7 +239,7 @@ module ExamplesRouter =
               "Dialog", DialogExamples
               "Divider", DividerExamples
               "Drawer", DrawerExamples
-              "Dropdown", DropdownExamples
+              "Dropdown Menu", DropdownMenuExamples
               "Expansion Panel", ExpansionPanelExamples
               "Field", FieldExamples
               "Grid", GridExamples
@@ -305,7 +305,7 @@ module ExamplesRouter =
       | ContainerExamples -> ContainerExamples.render ()
       | FieldExamples -> FieldExamples.render ()
       | NumericFieldExamples -> NumericFieldExamples.render ()
-      | DropdownExamples -> DropdownExamples.render ()
+      | DropdownMenuExamples -> DropdownMenuExamples.render ()
       | SelectExamples -> SelectExamples.render ()
       | ExpansionPanelExamples -> ExpansionPanelExamples.render ()
       | DialogExamples -> DialogExamples.render ()
@@ -624,7 +624,7 @@ module ExamplesRouter =
           navLeafItem "Dialog"
           navLeafItem "Divider"
           navLeafItem "Drawer"
-          navLeafItem "Dropdown"
+          navLeafItem "Dropdown Menu"
           navLeafItem "Expansion Panel"
           navLeafItem "Field"
           navLeafItem "Grid"

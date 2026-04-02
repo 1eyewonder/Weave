@@ -27,7 +27,7 @@ module DocsRouting =
     | ContainerExamples
     | FieldExamples
     | NumericFieldExamples
-    | DropdownExamples
+    | DropdownMenuExamples
     | SelectExamples
     | ExpansionPanelExamples
     | DialogExamples
@@ -75,7 +75,7 @@ module DocsRouting =
     | ContainerExamples -> "Container"
     | FieldExamples -> "Field"
     | NumericFieldExamples -> "Numeric Field"
-    | DropdownExamples -> "Dropdown"
+    | DropdownMenuExamples -> "Dropdown Menu"
     | SelectExamples -> "Select"
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
@@ -123,7 +123,7 @@ module DocsRouting =
     | "Container" -> Some ContainerExamples
     | "Field" -> Some FieldExamples
     | "Numeric Field" -> Some NumericFieldExamples
-    | "Dropdown" -> Some DropdownExamples
+    | "Dropdown Menu" -> Some DropdownMenuExamples
     | "Select" -> Some SelectExamples
     | "Expansion Panel" -> Some ExpansionPanelExamples
     | "Dialog" -> Some DialogExamples
@@ -172,7 +172,7 @@ module DocsRouting =
     | ContainerExamples -> "#container"
     | FieldExamples -> "#field"
     | NumericFieldExamples -> "#numeric-field"
-    | DropdownExamples -> "#dropdown"
+    | DropdownMenuExamples -> "#dropdown-menu"
     | SelectExamples -> "#select"
     | ExpansionPanelExamples -> "#expansion-panel"
     | DialogExamples -> "#dialog"
@@ -221,7 +221,7 @@ module DocsRouting =
     | "#container" -> Some ContainerExamples
     | "#field" -> Some FieldExamples
     | "#numeric-field" -> Some NumericFieldExamples
-    | "#dropdown" -> Some DropdownExamples
+    | "#dropdown-menu" -> Some DropdownMenuExamples
     | "#select" -> Some SelectExamples
     | "#expansion-panel" -> Some ExpansionPanelExamples
     | "#dialog" -> Some DialogExamples

@@ -27,13 +27,25 @@
   border-radius: var(--default-borderradius);
   z-index: var(--weave-zindex-tooltip);
   white-space: nowrap;
+  box-shadow: var(--elevation-2);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  @include transition((opacity, visibility, transform), shorter, $ease-decelerate);
+
+  &.weave-tooltip--visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
 
   &.weave-tooltip--default {
     color: var(--palette-text-primary);
     background-color: var(--palette-background-paper);
 
     &.weave-tooltip--arrow::after {
-      border-color: var(--palette-divider) transparent transparent transparent;
+      border-color: var(--palette-background-paper) transparent transparent transparent;
     }
   }
 
@@ -56,10 +68,14 @@
     &--center-right[data-popover-flip] {
       right: 100%;
       top: 50%;
-      transform: translateY(-50%) translateX(-10px);
+      transform: translateY(-50%) translateX(-4px);
+
+      &.weave-tooltip--visible {
+        transform: translateY(-50%) translateX(-10px);
+      }
 
       &.weave-tooltip--arrow::after {
-        left: 100%;
+        left: calc(100% - 1px);
         top: 50%;
         transform: translateY(-50%) rotate(270deg);
       }
@@ -69,10 +85,14 @@
     &--center-left[data-popover-flip] {
       left: 100%;
       top: 50%;
-      transform: translateY(-50%) translateX(10px);
+      transform: translateY(-50%) translateX(4px);
+
+      &.weave-tooltip--visible {
+        transform: translateY(-50%) translateX(10px);
+      }
 
       &.weave-tooltip--arrow::after {
-        right: 100%;
+        right: calc(100% - 1px);
         top: 50%;
         transform: translateY(-50%) rotate(90deg);
       }
@@ -82,10 +102,14 @@
     &--bottom-center[data-popover-flip] {
       bottom: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(-10px);
+      transform: translateX(-50%) translateY(-4px);
+
+      &.weave-tooltip--visible {
+        transform: translateX(-50%) translateY(-10px);
+      }
 
       &.weave-tooltip--arrow::after {
-        top: 100%;
+        top: calc(100% - 1px);
         left: 50%;
         transform: translateX(-50%) rotate(0deg);
       }
@@ -95,10 +119,14 @@
     &--top-center[data-popover-flip] {
       top: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(10px);
+      transform: translateX(-50%) translateY(4px);
+
+      &.weave-tooltip--visible {
+        transform: translateX(-50%) translateY(10px);
+      }
 
       &.weave-tooltip--arrow::after {
-        bottom: 100%;
+        bottom: calc(100% - 1px);
         left: 50%;
         transform: translateX(-50%) rotate(180deg);
       }

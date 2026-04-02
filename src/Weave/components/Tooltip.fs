@@ -122,8 +122,6 @@ type Tooltip =
         directionAttr
         yield! tooltipAttrs
 
-        Attr.DynamicStyle
-          "display"
-          (isVisible.View |> View.Map(fun visible -> if visible then "block" else "none"))
+        isVisible.View |> Attr.DynamicClassPred Css.``weave-tooltip--visible``
       ] [ tooltipContent ]
     ]

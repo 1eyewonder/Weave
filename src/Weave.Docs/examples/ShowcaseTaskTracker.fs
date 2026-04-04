@@ -102,12 +102,11 @@ module ShowcaseTaskTracker =
         Grid.create (
           [
             GridItem.create (
-              Field.create (
+              TextField.singleLine (
                 newText,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "New task",
                 placeholder = View.Const "What needs to be done?",
-                attrs = [ Field.Color.primary; Field.Width.full ]
+                attrs = [ TextField.Variant.outlined; TextField.Color.primary; TextField.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.five ]
             )
@@ -116,9 +115,8 @@ module ShowcaseTaskTracker =
               Select.create (
                 priorityItems,
                 newPriority,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Priority",
-                attrs = [ Select.Color.primary; Select.Width.full ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
             )
@@ -299,12 +297,11 @@ let addTask () =
 // The form
 Grid.create ([
     GridItem.create (
-        Field.create(
+        TextField.singleLine(
             newText,
-            variant = Field.Variant.Outlined,
             labelText = View.Const "New task",
             placeholder = View.Const "What needs to be done?",
-            attrs = [ Field.Color.primary; Field.Width.full ]
+            attrs = [ TextField.Variant.outlined; TextField.Color.primary; TextField.Width.full ]
         ),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.five ]
     )
@@ -312,9 +309,8 @@ Grid.create ([
         Select.create(
             priorityItems,
             newPriority,
-            variant = Select.Variant.Outlined,
             labelText = View.Const "Priority",
-            attrs = [ Select.Color.primary; Select.Width.full ]
+            attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]
         ),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
     )

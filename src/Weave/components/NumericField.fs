@@ -10,12 +10,28 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 open Weave.Operators
 
-[<JavaScript>]
+[<JavaScript; RequireQualifiedAccess>]
 module NumericField =
 
-  type Variant = Field.Variant
+  module Variant =
 
-open NumericField
+    let standard = cl Css.``weave-field--standard``
+    let filled = cl Css.``weave-field--filled``
+    let outlined = cl Css.``weave-field--outlined``
+
+  module Color =
+
+    let primary = cl Css.``weave-field--primary``
+    let secondary = cl Css.``weave-field--secondary``
+    let tertiary = cl Css.``weave-field--tertiary``
+    let error = cl Css.``weave-field--error``
+    let warning = cl Css.``weave-field--warning``
+    let success = cl Css.``weave-field--success``
+    let info = cl Css.``weave-field--info``
+
+  module Width =
+
+    let full = cl Css.``weave-field--full-width``
 
 [<JavaScript>]
 type NumericField =
@@ -26,14 +42,12 @@ type NumericField =
   static member create
     (
       value: Var<int>,
-      ?variant: Variant,
       ?labelText: View<string>,
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
-      ?shrinkLabel: View<bool>,
       ?startAdornment: Doc,
       ?min: int,
       ?max: int,
@@ -48,12 +62,10 @@ type NumericField =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let placeholder = defaultArg placeholder (View.Const "")
     let enabled = defaultArg enabled (View.Const true)
     let readOnly = defaultArg readOnly (View.Const false)
-    let shrinkLabel = defaultArg shrinkLabel (View.Const false)
     let inputAttrs = defaultArg inputAttrs List.empty
     let minVal = defaultArg min Int32.MinValue
     let maxVal = defaultArg max Int32.MaxValue
@@ -72,20 +84,9 @@ type NumericField =
     let stringVar = Var.Create(string<int> value.Value)
 
     // Numeric fields always "have a value" so the label should always float.
-    let hasValue = View.Const true
+    let shouldFloat = View.Const true
 
-    let hasExplicitPlaceholder =
-      placeholder |> View.MapCached(fun p -> not (String.IsNullOrEmpty(p)))
-
-    let shouldFloat =
-      isFocused.View <||> hasValue <||> shrinkLabel <||> hasExplicitPlaceholder
-
-    let effectivePlaceholder =
-      (placeholder, shouldFloat)
-      ||> View.Map2(fun ph floated ->
-        if String.IsNullOrEmpty(ph) then ""
-        elif floated then ph
-        else "")
+    let effectivePlaceholder = placeholder
 
     // Sync: int -> string (when value changes programmatically, e.g. increment/decrement).
     let syncToString =
@@ -230,7 +231,6 @@ type NumericField =
         inputElement,
         isFocused.View,
         shouldFloat,
-        variant = variant,
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,
@@ -251,17 +251,15 @@ type NumericField =
   /// <summary>
   /// Creates a numeric field for floating-point values.
   /// </summary>
-  static member Create
+  static member create
     (
       value: Var<float>,
-      ?variant: Variant,
       ?labelText: View<string>,
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
-      ?shrinkLabel: View<bool>,
       ?startAdornment: Doc,
       ?min: float,
       ?max: float,
@@ -276,12 +274,10 @@ type NumericField =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let placeholder = defaultArg placeholder (View.Const "")
     let enabled = defaultArg enabled (View.Const true)
     let readOnly = defaultArg readOnly (View.Const false)
-    let shrinkLabel = defaultArg shrinkLabel (View.Const false)
     let inputAttrs = defaultArg inputAttrs List.empty
     let minVal = defaultArg min -infinity
     let maxVal = defaultArg max infinity
@@ -298,20 +294,10 @@ type NumericField =
 
     let stringVar = Var.Create(string<float> value.Value)
 
-    let hasValue = View.Const true
+    // Numeric fields always "have a value" so the label should always float.
+    let shouldFloat = View.Const true
 
-    let hasExplicitPlaceholder =
-      placeholder |> View.MapCached(fun p -> not (String.IsNullOrEmpty(p)))
-
-    let shouldFloat =
-      isFocused.View <||> hasValue <||> shrinkLabel <||> hasExplicitPlaceholder
-
-    let effectivePlaceholder =
-      (placeholder, shouldFloat)
-      ||> View.Map2(fun ph floated ->
-        if String.IsNullOrEmpty(ph) then ""
-        elif floated then ph
-        else "")
+    let effectivePlaceholder = placeholder
 
     let syncToString =
       value.View
@@ -332,11 +318,29 @@ type NumericField =
             value.Value <- clamped
         | _ -> ())
 
+    // Counts the decimal places in a float's string representation.
+    // Used to round step results back to a clean precision (avoids 3.24 + 0.1 = 3.3400000000000003).
+    let decimalPlaces (f: float) =
+      let s = string f
+
+      match s.IndexOf('.') with
+      | -1 -> 0
+      | i -> s.Length - i - 1
+
+    // Rounds f to dp decimal places using Operators.round (avoids WebSharper.JavaScript.Math conflicts).
+    let roundToDecimals (dp: int) (f: float) =
+      let factor = pown 10.0 dp
+      round (f * factor) / factor
+
     let increment step =
-      value.Value <- Bounded.stepUp minVal maxVal step value.Value
+      let raw = Bounded.stepUp minVal maxVal step value.Value
+      let a, b = decimalPlaces step, decimalPlaces value.Value
+      value.Value <- roundToDecimals (if a >= b then a else b) raw
 
     let decrement step =
-      value.Value <- Bounded.stepDown minVal maxVal step value.Value
+      let raw = Bounded.stepDown minVal maxVal step value.Value
+      let a, b = decimalPlaces step, decimalPlaces value.Value
+      value.Value <- roundToDecimals (if a >= b then a else b) raw
 
     let currentStep = Var.Create 1.0
     let currentEditable = Var.Create true
@@ -453,7 +457,6 @@ type NumericField =
         inputElement,
         isFocused.View,
         shouldFloat,
-        variant = variant,
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,

@@ -122,12 +122,11 @@ module ShowcaseExpenseTracker =
         Grid.create (
           [
             GridItem.create (
-              Field.create (
+              TextField.singleLine (
                 newDesc,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Description",
                 placeholder = View.Const "What did you spend on?",
-                attrs = [ Field.Color.primary; Field.Width.full ]
+                attrs = [ TextField.Variant.outlined; TextField.Color.primary; TextField.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
             )
@@ -135,11 +134,14 @@ module ShowcaseExpenseTracker =
             GridItem.create (
               NumericField.create (
                 newAmount,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Amount",
                 min = 0,
                 max = 99999,
-                attrs = [ Field.Color.primary; Field.Width.full ]
+                attrs = [
+                  NumericField.Variant.outlined
+                  NumericField.Color.primary
+                  NumericField.Width.full
+                ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
@@ -148,9 +150,8 @@ module ShowcaseExpenseTracker =
               Select.create (
                 categoryItems,
                 newCategory,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Category",
-                attrs = [ Select.Color.primary; Select.Width.full ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
             )
@@ -375,23 +376,20 @@ let addExpense () =
 // Form layout
 Grid.create([
     GridItem.create(
-        Field.create(newDesc,
-            variant = Field.Variant.Outlined,
+        TextField.singleLine(newDesc,
             labelText = View.Const "Description",
-            attrs = [ Field.Color.primary; Field.Width.full ]),
+            attrs = [ TextField.Variant.outlined; TextField.Color.primary; TextField.Width.full ]),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ])
     GridItem.create(
         NumericField.create(newAmount,
-            variant = Field.Variant.Outlined,
             labelText = View.Const "Amount",
             min = 0, max = 99999,
-            attrs = [ Field.Color.primary; Field.Width.full ]),
+            attrs = [ NumericField.Variant.outlined; NumericField.Color.primary; NumericField.Width.full ]),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.three ])
     GridItem.create(
         Select.create(categoryItems, newCategory,
-            variant = Select.Variant.Outlined,
             labelText = View.Const "Category",
-            attrs = [ Select.Color.primary; Select.Width.full ]),
+            attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.three ])
 ])"""
 

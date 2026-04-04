@@ -13,7 +13,11 @@ open Weave.Operators
 [<JavaScript>]
 module Select =
 
-  type Variant = Field.Variant
+  module Variant =
+
+    let standard = cl Css.``weave-field--standard``
+    let filled = cl Css.``weave-field--filled``
+    let outlined = cl Css.``weave-field--outlined``
 
   module Color =
 
@@ -263,7 +267,6 @@ type Select =
     (
       items: View<SelectItemDef<'T> list>,
       selectedValue: Var<'T option>,
-      ?variant: Variant,
       ?labelText: View<string>,
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
@@ -277,7 +280,6 @@ type Select =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let placeholder = defaultArg placeholder (View.Const "")
     let clearable = defaultArg clearable (View.Const false)
@@ -488,12 +490,12 @@ type Select =
           inputElement,
           isFocused.View <||> openVar.View,
           shouldFloat,
-          variant = variant,
           labelText = labelText,
           ?showHelpText = showHelpText,
           ?helpText = helpText,
           enabled = enabled,
-          endAdornment = endAdornment
+          endAdornment = endAdornment,
+          attrs = attrs
         )
         popover
       ]
@@ -507,7 +509,6 @@ type MultiSelect =
     (
       items: View<SelectItemDef<'T> list>,
       selectedValues: Var<Set<'T>>,
-      ?variant: Variant,
       ?labelText: View<string>,
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
@@ -524,7 +525,6 @@ type MultiSelect =
       ?attrs: Attr list
     ) =
 
-    let variant = defaultArg variant Variant.Standard
     let labelText = defaultArg labelText (View.Const "")
     let placeholder = defaultArg placeholder (View.Const "")
     let clearable = defaultArg clearable (View.Const false)
@@ -755,12 +755,12 @@ type MultiSelect =
           inputElement,
           isFocused.View <||> openVar.View,
           shouldFloat,
-          variant = variant,
           labelText = labelText,
           ?showHelpText = showHelpText,
           ?helpText = helpText,
           enabled = enabled,
-          endAdornment = endAdornment
+          endAdornment = endAdornment,
+          attrs = attrs
         )
         popover
       ]

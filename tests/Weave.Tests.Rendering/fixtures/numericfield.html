@@ -15,10 +15,10 @@
   </head>
   <body>
     <!-- Standard numeric field with spin buttons -->
-    <div id="numeric-standard" class="weave-field weave-field--standard weave-field--numeric weave-field--has-spin">
+    <div id="numeric-standard" class="weave-field weave-field--standard weave-field--numeric weave-field--has-spin weave-typography--body2">
       <div class="weave-field__control">
         <input id="numeric-input" class="weave-field__input" type="number" value="5" />
-        <label class="weave-field__label">Quantity</label>
+        <label id="numeric-label" class="weave-field__label weave-field__label--float"><span>Quantity</span></label>
         <div class="weave-field__adornment weave-field__adornment--end">
           <div id="spin-buttons" class="weave-field__spin-buttons">
             <button id="spin-up" class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
@@ -28,11 +28,25 @@
       </div>
     </div>
 
+    <!-- Filled numeric field with spin buttons -->
+    <div id="numeric-filled" class="weave-field weave-field--filled weave-field--numeric weave-field--has-spin weave-typography--body2" style="margin-top: 16px;">
+      <div class="weave-field__control">
+        <input class="weave-field__input" type="number" value="7" />
+        <label class="weave-field__label weave-field__label--float"><span>Count</span></label>
+        <div class="weave-field__adornment weave-field__adornment--end">
+          <div class="weave-field__spin-buttons">
+            <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+            <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Outlined numeric field with spin buttons -->
-    <div id="numeric-outlined" class="weave-field weave-field--outlined weave-field--numeric weave-field--has-spin" style="margin-top: 16px;">
+    <div id="numeric-outlined" class="weave-field weave-field--outlined weave-field--numeric weave-field--has-spin weave-typography--body2" style="margin-top: 16px;">
       <div class="weave-field__control">
         <input class="weave-field__input" type="number" value="10" />
-        <label class="weave-field__label">Amount</label>
+        <label class="weave-field__label weave-field__label--float"><span>Amount</span></label>
         <div class="weave-field__adornment weave-field__adornment--end">
           <div class="weave-field__spin-buttons">
             <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>

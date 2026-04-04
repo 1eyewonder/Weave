@@ -25,10 +25,6 @@ module ElevationExamples =
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
-  // ---------------------------------------------------------------------------
-  // 1. How it works
-  // ---------------------------------------------------------------------------
-
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
@@ -99,10 +95,7 @@ div [ Elevation.e8; BorderRadius.All.large ] [
 
     Helpers.codeSampleSection "How it works" description content code
 
-  // ---------------------------------------------------------------------------
   // 2. Visual scale
-  // ---------------------------------------------------------------------------
-
   let private visualScaleSection () =
     let description =
       Helpers.bodyText
@@ -179,10 +172,7 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
 
     Helpers.codeSampleSection "Visual scale" description content code
 
-  // ---------------------------------------------------------------------------
   // 3. Playground
-  // ---------------------------------------------------------------------------
-
   let private playgroundSection () =
     let description =
       Helpers.bodyText "Pick an elevation level from the dropdown to preview the shadow on a live card."
@@ -231,10 +221,9 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
               Select.create (
                 levelItems,
                 selectedLevel,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Elevation Level",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
@@ -281,10 +270,7 @@ div [
 
     Helpers.codeSampleSection "Playground" description content code
 
-  // ---------------------------------------------------------------------------
   // 4. Common patterns
-  // ---------------------------------------------------------------------------
-
   let private commonPatternsSection () =
     let description =
       Helpers.bodyText
@@ -417,10 +403,7 @@ div [
 
     Helpers.codeSampleSection "Common patterns" description content code
 
-  // ---------------------------------------------------------------------------
   // Render
-  // ---------------------------------------------------------------------------
-
   let render () =
     Container.create (
       div [] [

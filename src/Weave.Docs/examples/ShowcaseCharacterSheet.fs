@@ -214,12 +214,11 @@ module ShowcaseCharacterSheet =
         Grid.create (
           [
             GridItem.create (
-              Field.create (
+              TextField.singleLine (
                 charName,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Character Name",
                 placeholder = View.Const "Enter your hero's name",
-                attrs = [ Field.Color.primary; Field.Width.full ]
+                attrs = [ TextField.Variant.outlined; TextField.Color.primary; TextField.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve ]
             )
@@ -228,10 +227,9 @@ module ShowcaseCharacterSheet =
               Select.create (
                 raceItems,
                 race,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Race",
                 placeholder = View.Const "Choose a race",
-                attrs = [ Select.Color.primary; Select.Width.full ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
             )
@@ -240,10 +238,9 @@ module ShowcaseCharacterSheet =
               Select.create (
                 classItems,
                 charClass,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Class",
                 placeholder = View.Const "Choose a class",
-                attrs = [ Select.Color.primary; Select.Width.full ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary; Select.Width.full ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
             )
@@ -251,11 +248,14 @@ module ShowcaseCharacterSheet =
             GridItem.create (
               NumericField.create (
                 level,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Level",
                 min = 1,
                 max = 20,
-                attrs = [ Field.Color.primary; Field.Width.full ]
+                attrs = [
+                  NumericField.Variant.outlined
+                  NumericField.Color.primary
+                  NumericField.Width.full
+                ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
             )
@@ -287,10 +287,14 @@ module ShowcaseCharacterSheet =
 
         NumericField.create (
           score,
-          variant = Field.Variant.Outlined,
           min = 1,
           max = 30,
-          attrs = [ Field.Color.primary; Attr.Style "max-width" "100px"; Typography.Align.center ]
+          attrs = [
+            NumericField.Variant.outlined
+            NumericField.Color.primary
+            Attr.Style "max-width" "100px"
+            Typography.Align.center
+          ]
         )
 
         div [ Typography.h5; BrandColor.TextColor.primary ] [
@@ -345,10 +349,13 @@ module ShowcaseCharacterSheet =
 
                 NumericField.create (
                   maxHp,
-                  variant = Field.Variant.Outlined,
                   min = 1,
                   max = 999,
-                  attrs = [ Field.Color.primary; Attr.Style "width" "100%" ]
+                  attrs = [
+                    NumericField.Variant.outlined
+                    NumericField.Color.primary
+                    Attr.Style "width" "100%"
+                  ]
                 )
               ],
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]

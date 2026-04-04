@@ -35,10 +35,6 @@ module DisplayExamples =
       yield! extraAttrs
     ] [ text label ]
 
-  // ---------------------------------------------------------------------------
-  // 1. How it works
-  // ---------------------------------------------------------------------------
-
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
@@ -134,10 +130,6 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
 
     Helpers.codeSampleSection "How it works" description content code
 
-  // ---------------------------------------------------------------------------
-  // 2. Basic display
-  // ---------------------------------------------------------------------------
-
   let private basicDisplaySection () =
     let description =
       Helpers.bodyText "Elements in different display modes side by side."
@@ -222,10 +214,6 @@ div [ Display.InlineBlock.always; Attr.Style "width" "120px" ] [
 ]"""
 
     Helpers.codeSampleSection "Basic display" description content code
-
-  // ---------------------------------------------------------------------------
-  // 3. Responsive visibility
-  // ---------------------------------------------------------------------------
 
   let private responsiveVisibilitySection () =
     let description =
@@ -322,10 +310,6 @@ Chip.create(
 
     Helpers.codeSampleSection "Responsive visibility" description content code
 
-  // ---------------------------------------------------------------------------
-  // 4. Visibility utilities
-  // ---------------------------------------------------------------------------
-
   let private visibilitySection () =
     let description =
       Helpers.bodyText
@@ -395,10 +379,6 @@ IconButton.create(
 span [ Visibility.srOnly ] [ text "Toggle menu" ]"""
 
     Helpers.codeSampleSection "Visibility utilities" description content code
-
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
 
   let render () =
     Container.create (

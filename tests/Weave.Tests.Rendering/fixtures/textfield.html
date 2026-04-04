@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TextField Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Standard text field: label not floated (no value) -->
+    <div id="textfield-standard" class="weave-field weave-field--standard weave-typography--body2">
+      <div class="weave-field__control">
+        <label id="label-standard" class="weave-field__label">
+          <span>Standard Label</span>
+        </label>
+        <input type="text" class="weave-field__input" />
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>Standard Label</span></legend>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- Standard text field: label floated (has value) -->
+    <div
+      id="textfield-floated"
+      class="weave-field weave-field--standard weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label id="label-floated" class="weave-field__label weave-field__label--float">
+          <span>Floated Label</span>
+        </label>
+        <input type="text" class="weave-field__input" value="some value" />
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>Floated Label</span></legend>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- Outlined text field -->
+    <div
+      id="textfield-outlined"
+      class="weave-field weave-field--outlined weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>Outlined</span></label>
+        <input type="text" class="weave-field__input" />
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>Outlined</span></legend>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- Full-width text field inside a container -->
+    <div id="full-width-container" style="width: 400px; margin-top: 32px;">
+      <div
+        id="textfield-full-width"
+        class="weave-field weave-field--standard weave-field--full-width weave-typography--body2"
+      >
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Full Width</span></label>
+          <input type="text" class="weave-field__input" />
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend"><span>Full Width</span></legend>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multiline text field (textarea) -->
+    <div
+      id="textfield-multiline"
+      class="weave-field weave-field--standard weave-field--multiline weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>Multiline</span></label>
+        <textarea class="weave-field__input"></textarea>
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>Multiline</span></legend>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- Text field with character counter -->
+    <div
+      id="textfield-with-counter"
+      class="weave-field weave-field--standard weave-typography--body2"
+      style="margin-top: 32px;"
+    >
+      <div class="weave-field__control">
+        <label class="weave-field__label"><span>With Counter</span></label>
+        <input type="text" class="weave-field__input" maxlength="50" />
+        <fieldset class="weave-field__outline">
+          <legend class="weave-field__outline-legend"><span>With Counter</span></legend>
+        </fieldset>
+      </div>
+    </div>
+    <span id="textfield-counter" class="weave-field__counter">0/50</span>
+  </body>
+</html>

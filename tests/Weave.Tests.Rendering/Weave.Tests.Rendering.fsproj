@@ -30,6 +30,7 @@
     <Compile Include="components/DrawerLayoutTests.fs" />
     <Compile Include="components/SpacerLayoutTests.fs" />
     <Compile Include="components/NumericFieldLayoutTests.fs" />
+    <Compile Include="components/TextFieldLayoutTests.fs" />
     <Compile Include="components/SpacingLayoutTests.fs" />
     <Compile Include="components/ChipLayoutTests.fs" />
     <Compile Include="components/ChipSetLayoutTests.fs" />

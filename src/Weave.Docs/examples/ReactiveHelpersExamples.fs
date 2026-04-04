@@ -66,11 +66,11 @@ textView (zipped |> View.Map(fun (a, b) -> sprintf "(%d, %d)" a b))"""
         Grid.create (
           [
             GridItem.create (
-              Field.create (firstName, labelText = View.Const "First Name"),
+              TextField.singleLine (firstName, labelText = View.Const "First Name"),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
             )
             GridItem.create (
-              Field.create (lastName, labelText = View.Const "Last Name"),
+              TextField.singleLine (lastName, labelText = View.Const "Last Name"),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
             )
           ]
@@ -215,7 +215,7 @@ selected.View
       div [] [
         Switch.create (isEnabled, content = text "Enable form")
         div [ Margin.Top.small; Flex.Flex.allSizes; Gap.All.g4 ] [
-          Field.create (Var.Create "", labelText = View.Const "Name", enabled = isEnabled.View) // see here
+          TextField.singleLine (Var.Create "", labelText = View.Const "Name", enabled = isEnabled.View) // see here
           Button.create (text "Submit", onClick = ignore, enabled = isEnabled.View)
         ]
       ]
@@ -225,7 +225,7 @@ selected.View
 
 Switch.create (isEnabled, content = text "Enable form")
 
-Field.create (
+TextField.singleLine (
   Var.Create "",
   labelText = View.Const "Name",
   enabled = isEnabled.View  // see here — disabled when switch is off

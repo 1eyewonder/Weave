@@ -253,6 +253,7 @@ module ExamplesRouter =
               "Spacer", SpacerExamples
               "Switch", SwitchExamples
               "Tabs", TabsExamples
+              "Text Field", TextFieldExamples
               "Tooltip", TooltipExamples
               "Typography", TypographyExamples
             ]
@@ -312,6 +313,7 @@ module ExamplesRouter =
       | DrawerExamples -> DrawerExamples.render ()
       | IconsExamples -> IconsExamples.render ()
       | TabsExamples -> TabsExamples.render ()
+      | TextFieldExamples -> TextFieldExamples.render ()
       | ListExamples -> ListExamples.render ()
       | AlertExamples -> AlertExamples.render ()
       | LinkExamples -> LinkExamples.render ()
@@ -668,6 +670,7 @@ module ExamplesRouter =
           navLeafItem "Spacer"
           navLeafItem "Switch"
           navLeafItem "Tabs"
+          navLeafItem "Text Field"
           navLeafItem "Tooltip"
           navLeafItem "Typography"
         ]

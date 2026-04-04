@@ -12,9 +12,6 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module NumericFieldExamples =
 
-  // ---------------------------------------------------------------------------
-  // Variants
-  // ---------------------------------------------------------------------------
   let private variantsExample () =
     let stdVal = Var.Create 0
     let filledVal = Var.Create 0
@@ -30,9 +27,8 @@ module NumericFieldExamples =
           GridItem.create (
             NumericField.create (
               stdVal,
-              variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
@@ -40,9 +36,8 @@ module NumericFieldExamples =
           GridItem.create (
             NumericField.create (
               filledVal,
-              variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.filled; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
@@ -50,9 +45,8 @@ module NumericFieldExamples =
           GridItem.create (
             NumericField.create (
               outlinedVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
           )
@@ -70,34 +64,30 @@ let outlinedVal = Var.Create 0
 
 NumericField.create(
     stdVal,
-    variant = Field.Variant.Standard,
     labelText = View.Const "Standard"
 )
 
 NumericField.create(
     filledVal,
-    variant = Field.Variant.Filled,
-    labelText = View.Const "Filled"
+    labelText = View.Const "Filled",
+    attrs = [ NumericField.Variant.filled ]
 )
 
 NumericField.create(
     outlinedVal,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined"
+    labelText = View.Const "Outlined",
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Variants" description content code
 
-  // ---------------------------------------------------------------------------
-  // Int vs Float
-  // ---------------------------------------------------------------------------
   let private intVsFloatExample () =
     let intVal = Var.Create 42
     let floatVal = Var.Create 3.14
 
     let description =
       Helpers.bodyText
-        "NumericField has separate overloads for int and float. The int overload uses whole-number stepping while the float overload accepts decimal input."
+        "NumericField has separate overloads for int and float, both named create (camelCase). F# disambiguates by the Var type: Var<int> selects the int overload, Var<float> selects the float overload."
 
     let content =
       Grid.create (
@@ -105,20 +95,18 @@ NumericField.create(
           GridItem.create (
             NumericField.create (
               intVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Integer",
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
 
           GridItem.create (
-            NumericField.Create(
+            NumericField.create (
               floatVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Float",
               step = View.Const 0.1,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -135,25 +123,22 @@ let intVal = Var.Create 42
 
 NumericField.create(
     intVal,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Integer"
+    labelText = View.Const "Integer",
+    attrs = [ NumericField.Variant.outlined ]
 )
 
-// Float field — use NumericField.Create (capital C) for float values
+// Float field — same create name, F# resolves by Var<float>
 let floatVal = Var.Create 3.14
 
-NumericField.Create(  // see here
+NumericField.create(  // see here — Var<float> selects the float overload
     floatVal,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Float",
-    step = View.Const 0.1
+    step = View.Const 0.1,
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Int vs Float" description content code
 
-  // ---------------------------------------------------------------------------
-  // Min, Max & Step
-  // ---------------------------------------------------------------------------
   let private minMaxStepExample () =
     let value = Var.Create 5
 
@@ -168,12 +153,11 @@ NumericField.Create(  // see here
             div [] [
               NumericField.create (
                 value,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Quantity (1–10, step 1)",
                 min = 1,
                 max = 10,
                 step = View.Const 1,
-                attrs = [ Field.Width.full ]
+                attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
               )
 
               value.View
@@ -187,14 +171,13 @@ NumericField.Create(  // see here
             (let floatVal = Var.Create 0.5
 
              div [] [
-               NumericField.Create(
+               NumericField.create (
                  floatVal,
-                 variant = Field.Variant.Outlined,
-                 labelText = View.Const "Opacity (0.0–1.0, step 0.1)",
+                 labelText = View.Const "Opacity (0.0\u20131.0, step 0.1)",
                  min = 0.0,
                  max = 1.0,
                  step = View.Const 0.1,
-                 attrs = [ Field.Width.full ]
+                 attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
                )
 
                floatVal.View
@@ -216,30 +199,27 @@ let quantity = Var.Create 5
 
 NumericField.create(
     quantity,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Quantity (1-10, step 1)",
     min = 1,
     max = 10,
-    step = View.Const 1
+    step = View.Const 1,
+    attrs = [ NumericField.Variant.outlined ]
 )
 
-// Float with min/max — use NumericField.Create (capital C) for float
+// Float with min/max
 let opacity = Var.Create 0.5
 
-NumericField.Create(
+NumericField.create(
     opacity,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Opacity (0.0-1.0, step 0.1)",
     min = 0.0,
     max = 1.0,
-    step = View.Const 0.1
+    step = View.Const 0.1,
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Min, Max & Step" description content code
 
-  // ---------------------------------------------------------------------------
-  // Keyboard & Mouse Wheel
-  // ---------------------------------------------------------------------------
   let private keyboardWheelExample () =
     let enabledVal = Var.Create 50
     let noArrowsVal = Var.Create 50
@@ -256,12 +236,11 @@ NumericField.Create(
           GridItem.create (
             NumericField.create (
               enabledVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Both enabled (default)",
               min = 0,
               max = 100,
               step = View.Const 5,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -269,13 +248,12 @@ NumericField.Create(
           GridItem.create (
             NumericField.create (
               noArrowsVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Arrow keys disabled",
               min = 0,
               max = 100,
               step = View.Const 5,
               enableArrowKeys = View.Const false,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -283,13 +261,12 @@ NumericField.Create(
           GridItem.create (
             NumericField.create (
               noWheelVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Mouse wheel disabled",
               min = 0,
               max = 100,
               step = View.Const 5,
               enableMouseWheel = View.Const false,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -297,14 +274,13 @@ NumericField.Create(
           GridItem.create (
             NumericField.create (
               neitherVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Both disabled",
               min = 0,
               max = 100,
               step = View.Const 5,
               enableArrowKeys = View.Const false,
               enableMouseWheel = View.Const false,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -321,43 +297,40 @@ let value = Var.Create 50
 // Both enabled (default)
 NumericField.create(
     value,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Both enabled (default)",
     min = 0,
     max = 100,
-    step = View.Const 5
+    step = View.Const 5,
+    attrs = [ NumericField.Variant.outlined ]
 )
 
 // Disable arrow key stepping
 NumericField.create(
     value,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Arrow keys disabled",
-    enableArrowKeys = View.Const false  // see here
+    enableArrowKeys = View.Const false,  // see here
+    attrs = [ NumericField.Variant.outlined ]
 )
 
 // Disable mouse wheel stepping
 NumericField.create(
     value,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Mouse wheel disabled",
-    enableMouseWheel = View.Const false  // see here
+    enableMouseWheel = View.Const false,  // see here
+    attrs = [ NumericField.Variant.outlined ]
 )
 
 // Disable both
 NumericField.create(
     value,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Both disabled",
     enableArrowKeys = View.Const false,
-    enableMouseWheel = View.Const false
+    enableMouseWheel = View.Const false,
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Keyboard & Mouse Wheel" description content code
 
-  // ---------------------------------------------------------------------------
-  // Hide spin buttons
-  // ---------------------------------------------------------------------------
   let private hideSpinButtonsExample () =
     let withSpin = Var.Create 10
     let withoutSpin = Var.Create 10
@@ -372,10 +345,9 @@ NumericField.create(
           GridItem.create (
             NumericField.create (
               withSpin,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "With spin buttons",
               showSpinButtons = View.Const true,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -383,10 +355,9 @@ NumericField.create(
           GridItem.create (
             NumericField.create (
               withoutSpin,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Without spin buttons",
               showSpinButtons = View.Const false,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -404,24 +375,21 @@ let withoutSpin = Var.Create 10
 // Default — spin buttons visible
 NumericField.create(
     withSpin,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "With spin buttons",
-    showSpinButtons = View.Const true
+    showSpinButtons = View.Const true,
+    attrs = [ NumericField.Variant.outlined ]
 )
 
 // Hidden spin buttons
 NumericField.create(
     withoutSpin,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Without spin buttons",
-    showSpinButtons = View.Const false  // see here
+    showSpinButtons = View.Const false,  // see here
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Show / Hide Spin Buttons" description content code
 
-  // ---------------------------------------------------------------------------
-  // Custom spin icons
-  // ---------------------------------------------------------------------------
   let private customIconsExample () =
     let value = Var.Create 0
 
@@ -432,13 +400,12 @@ NumericField.create(
     let content =
       NumericField.create (
         value,
-        variant = Field.Variant.Outlined,
         labelText = View.Const "Custom icons",
         upIcon =
           Icon.create (Icon.Hardware Hardware.KeyboardArrowUp, attrs = [ Attr.Style "font-size" "1rem" ]),
         downIcon =
           Icon.create (Icon.Hardware Hardware.KeyboardArrowDown, attrs = [ Attr.Style "font-size" "1rem" ]),
-        attrs = [ Field.Width.full ]
+        attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
       )
 
     let code =
@@ -451,7 +418,6 @@ let value = Var.Create 0
 
 NumericField.create(
     value,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Custom icons",
     upIcon = Icon.create(  // see here
         Icon.Hardware Hardware.KeyboardArrowUp,
@@ -460,14 +426,12 @@ NumericField.create(
     downIcon = Icon.create(
         Icon.Hardware Hardware.KeyboardArrowDown,
         attrs = [ Attr.Style "font-size" "1rem" ]
-    )
+    ),
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Custom Spin Icons" description content code
 
-  // ---------------------------------------------------------------------------
-  // Disabled & ReadOnly
-  // ---------------------------------------------------------------------------
   let private disabledExample () =
     let disabledVal = Var.Create 42
     let readOnlyVal = Var.Create 99
@@ -482,10 +446,9 @@ NumericField.create(
           GridItem.create (
             NumericField.create (
               disabledVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Disabled",
               enabled = View.Const false,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -493,10 +456,9 @@ NumericField.create(
           GridItem.create (
             NumericField.create (
               readOnlyVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Read Only",
               readOnly = View.Const true,
-              attrs = [ Field.Width.full ]
+              attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
           )
@@ -514,36 +476,28 @@ let readOnlyVal = Var.Create 99
 // Disabled — non-interactive and visually dimmed
 NumericField.create(
     disabledVal,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
-    enabled = View.Const false  // see here
+    enabled = View.Const false,  // see here
+    attrs = [ NumericField.Variant.outlined ]
 )
 
 // Read Only — displays value but prevents edits
 NumericField.create(
     readOnlyVal,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true  // see here
+    readOnly = View.Const true,  // see here
+    attrs = [ NumericField.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Disabled & Read Only" description content code
 
-  // ---------------------------------------------------------------------------
-  // API Reference
-  // ---------------------------------------------------------------------------
   let private apiReferenceSection () =
     Helpers.apiSection
       (Helpers.bodyText
-        "Complete API reference for NumericField. Two overloads exist: create (lowercase) for int values and Create (uppercase) for float values.")
+        "Complete API reference for NumericField. Two overloads of create exist, disambiguated by parameter type: Var<int> for integers and Var<float> for floating-point values.")
       [
         Helpers.apiTable "NumericField.create (int)" [
           Helpers.apiParam "value" "Var<int>" "" "Two-way binding for the integer value"
-          Helpers.apiParam
-            "?variant"
-            "Variant"
-            "Standard"
-            "Visual style — Standard, Filled, or Outlined (shared with Field)"
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
           Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
@@ -554,11 +508,6 @@ NumericField.create(
             "View<bool>"
             "View.Const false"
             "Display the value without allowing changes"
-          Helpers.apiParam
-            "?shrinkLabel"
-            "View<bool>"
-            "View.Const false"
-            "Force the label to always float above the input"
           Helpers.apiParam "?startAdornment" "Doc" "" "Content placed before the input (e.g. currency symbol)"
           Helpers.apiParam "?min" "int" "Int32.MinValue" "Minimum allowed value (clamped on blur and spin)"
           Helpers.apiParam "?max" "int" "Int32.MaxValue" "Maximum allowed value (clamped on blur and spin)"
@@ -589,13 +538,8 @@ NumericField.create(
           Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
         ]
 
-        Helpers.apiTable "NumericField.Create (float)" [
+        Helpers.apiTable "NumericField.create (float)" [
           Helpers.apiParam "value" "Var<float>" "" "Two-way binding for the floating-point value"
-          Helpers.apiParam
-            "?variant"
-            "Variant"
-            "Standard"
-            "Visual style — Standard, Filled, or Outlined (shared with Field)"
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
           Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
@@ -606,11 +550,6 @@ NumericField.create(
             "View<bool>"
             "View.Const false"
             "Display the value without allowing changes"
-          Helpers.apiParam
-            "?shrinkLabel"
-            "View<bool>"
-            "View.Const false"
-            "Force the label to always float above the input"
           Helpers.apiParam "?startAdornment" "Doc" "" "Content placed before the input (e.g. currency symbol)"
           Helpers.apiParam "?min" "float" "-infinity" "Minimum allowed value (clamped on blur and spin)"
           Helpers.apiParam "?max" "float" "infinity" "Maximum allowed value (clamped on blur and spin)"
@@ -641,16 +580,13 @@ NumericField.create(
           Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
         ]
 
-        Helpers.styleModuleTable "Field.Variant (shared)" [
+        Helpers.styleModuleTable "NumericField.Variant (shared)" [
           ("standard", "Underline-only input style (default)")
           ("filled", "Filled background with underline")
           ("outlined", "Bordered outline with floating label notch")
         ]
       ]
 
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
   let render () =
     Container.create (
       div [] [

@@ -6,6 +6,10 @@ open Weave.Tests.Rendering.ContainmentAssertions
 type NumericFieldLayoutTests() =
   inherit LayoutTestBase("numericfield")
 
+  static member assertSymmetricPadding (paddingTop: string) (paddingBottom: string) : unit =
+    let condition = paddingTop = paddingBottom
+    Assert.True(condition, "Standard numeric input uses symmetric padding for spin-button alignment")
+
   [<Fact>]
   member this.``numeric field has positive dimensions``() = task {
     do! this.LoadFixture()
@@ -102,4 +106,32 @@ type NumericFieldLayoutTests() =
     let! parentBox = this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
     and! childBox = this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
     assertFillsHeight "field control" "outlined spin buttons" parentBox childBox
+  }
+
+  [<Fact>]
+  member this.``floated label has scale transform applied``() = task {
+    do! this.LoadFixture()
+    let! transform = this.ComputedStyle("#numeric-label", "transform")
+    // scale(0.75) is serialized as a matrix: matrix(0.75, 0, 0, 0.75, tx, ty)
+    Assert.Contains("0.75", transform)
+  }
+
+  [<Fact>]
+  member this.``input font size is inherited from typography class``() = task {
+    do! this.LoadFixture()
+    let! fontSize = this.ComputedStyle("#numeric-standard .weave-field__input", "fontSize")
+
+    Assert.False(
+      fontSize = "" || fontSize = "0px",
+      $"NumericField input font-size ('{fontSize}') should be set via the weave-typography--body2 class"
+    )
+  }
+
+  [<Fact>]
+  member this.``standard numeric input uses symmetric vertical padding for spin-button alignment``() = task {
+    do! this.LoadFixture()
+    let! paddingTop = this.ComputedStyle("#numeric-standard .weave-field__input", "paddingTop")
+    and! paddingBottom = this.ComputedStyle("#numeric-standard .weave-field__input", "paddingBottom")
+
+    NumericFieldLayoutTests.assertSymmetricPadding paddingTop paddingBottom
   }

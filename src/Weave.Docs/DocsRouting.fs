@@ -34,6 +34,7 @@ module DocsRouting =
     | DrawerExamples
     | IconsExamples
     | TabsExamples
+    | TextFieldExamples
     | ListExamples
     | AlertExamples
     | LinkExamples
@@ -82,6 +83,7 @@ module DocsRouting =
     | DrawerExamples -> "Drawer"
     | IconsExamples -> "Icons"
     | TabsExamples -> "Tabs"
+    | TextFieldExamples -> "Text Field"
     | ListExamples -> "List"
     | AlertExamples -> "Alert"
     | LinkExamples -> "Link"
@@ -130,6 +132,7 @@ module DocsRouting =
     | "Drawer" -> Some DrawerExamples
     | "Icons" -> Some IconsExamples
     | "Tabs" -> Some TabsExamples
+    | "Text Field" -> Some TextFieldExamples
     | "List" -> Some ListExamples
     | "Alert" -> Some AlertExamples
     | "Link" -> Some LinkExamples
@@ -179,6 +182,7 @@ module DocsRouting =
     | DrawerExamples -> "#drawer"
     | IconsExamples -> "#icons"
     | TabsExamples -> "#tabs"
+    | TextFieldExamples -> "#text-field"
     | ListExamples -> "#list"
     | AlertExamples -> "#alert"
     | LinkExamples -> "#link"
@@ -228,6 +232,7 @@ module DocsRouting =
     | "#drawer" -> Some DrawerExamples
     | "#icons" -> Some IconsExamples
     | "#tabs" -> Some TabsExamples
+    | "#text-field" -> Some TextFieldExamples
     | "#list" -> Some ListExamples
     | "#alert" -> Some AlertExamples
     | "#link" -> Some LinkExamples

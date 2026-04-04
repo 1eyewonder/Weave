@@ -8,6 +8,26 @@
   position: relative;
   min-width: 0;
   color: var(--palette-text-primary, currentColor);
+
+  // Standard variant is the default — these custom properties and bottom-border
+  // apply unless overridden by .weave-field--filled or .weave-field--outlined.
+  --field-label-x: 0.75em;
+  --field-label-y: 0.25rem;
+  --field-label-float-x: 0.75em;
+  --field-label-float-y: -1.09375em;
+  --field-input-padding: 0.25rem 0.75em 0.4375rem;
+  --field-adorn-pt: 0.25rem;
+  --field-adorn-pb: 0.4375rem;
+  --field-adorn-start-pl: 0.75em;
+  --field-adorn-end-pr: 0.75em;
+  --field-adorn-end-ml: 0em;
+
+  padding-top: 0.875rem;
+
+  .weave-field__control {
+    border-bottom: 1px solid var(--input-border-color, currentColor);
+    margin-bottom: 1px; // reserve space so the 1px→2px focus border doesn't shift layout
+  }
 }
 
 .weave-field__control {
@@ -67,6 +87,23 @@
   }
 }
 
+// Textarea overrides — allow vertical growth and resize.
+textarea.weave-field__input {
+  resize: vertical;
+  min-height: 3em;
+  overflow-y: auto;
+  height: auto;
+}
+
+// Multiline modifier — relax the single-line center alignment so adornments
+// and labels sit at the top of a taller textarea rather than vertically
+// centered.
+.weave-field--multiline {
+  .weave-field__control {
+    align-items: flex-start;
+  }
+}
+
 .weave-field__adornment {
   display: flex;
   align-items: center;
@@ -88,6 +125,9 @@
 }
 
 .weave-field__outline {
+  // Hidden by default — always in the DOM but only shown for the outlined
+  // variant. .weave-field--outlined sets display: block to activate it.
+  display: none;
   text-align: left;
   position: absolute;
   bottom: 0;
@@ -163,27 +203,34 @@
 }
 
 // ===========================================================================
+// CHARACTER COUNTER
+// Sits below the field chrome, right-aligned. Mirrors help-text positioning
+// but always visible when rendered.
+// ===========================================================================
+
+.weave-field__counter {
+  display: block;
+  text-align: right;
+  padding: 0.25rem 0.75rem 0;
+  font-size: var(--typography-caption-size, 0.75rem);
+  font-family: var(--typography-caption-family, inherit);
+  font-weight: var(--typography-caption-weight, 400);
+  line-height: var(--typography-caption-lineheight, 1.66);
+  letter-spacing: var(--typography-caption-letterspacing, normal);
+  color: var(--palette-text-secondary, currentColor);
+}
+
+.weave-field__counter--error {
+  color: var(--palette-error);
+}
+
+// ===========================================================================
 // STANDARD VARIANT
-// Label floats ABOVE the control into the field's padding-top area.
+// Standard is the CSS default (properties live on .weave-field above).
+// The class is kept here so TypedCssClasses can resolve it from the compiled
+// output — no additional rules are needed.
 // ===========================================================================
 .weave-field--standard {
-  --field-label-x: 0.75em;
-  --field-label-y: 0.25rem;
-  --field-label-float-x: 0.75em;
-  --field-label-float-y: -1.09375em;
-  --field-input-padding: 0.25rem 0.75em 0.4375rem;
-  --field-adorn-pt: 0.25rem;
-  --field-adorn-pb: 0.4375rem;
-  --field-adorn-start-pl: 0.75em;
-  --field-adorn-end-pr: 0.75em;
-  --field-adorn-end-ml: 0em;
-
-  padding-top: 0.875rem;
-
-  .weave-field__control {
-    border-bottom: 1px solid var(--input-border-color, currentColor);
-    margin-bottom: 1px; // reserve space so the 1px→2px focus border doesn't shift layout
-  }
 }
 
 // ===========================================================================
@@ -230,6 +277,15 @@
 
   .weave-field__control {
     border-radius: var(--default-borderradius);
+    // Outlined variant uses the <fieldset> outline for its border — cancel the
+    // default bottom border that the standard variant applies.
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  // The outline element is always in the DOM; reveal it only for this variant.
+  .weave-field__outline {
+    display: block;
   }
 
   // Extra outlined-specific float styling
@@ -266,13 +322,10 @@
     color: var(--palette-primary);
   }
 
-  &.weave-field--standard,
-  &.weave-field--filled {
-    .weave-field__control {
-      border-bottom-width: 2px;
-      border-bottom-color: var(--palette-primary);
-      margin-bottom: 0; // 2px border fills the reserved space
-    }
+  &:not(.weave-field--outlined) .weave-field__control {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--palette-primary);
+    margin-bottom: 0; // 2px border fills the reserved space
   }
 
   &.weave-field--outlined .weave-field__outline {
@@ -303,11 +356,8 @@
     }
 
     &.weave-field--focused {
-      &.weave-field--standard,
-      &.weave-field--filled {
-        .weave-field__control {
-          border-bottom-color: var(--palette-#{$color});
-        }
+      &:not(.weave-field--outlined) .weave-field__control {
+        border-bottom-color: var(--palette-#{$color});
       }
 
       &.weave-field--outlined .weave-field__outline {
@@ -351,7 +401,7 @@
     min-width: 4em;
   }
 
-  &.weave-field--standard.weave-field--has-spin {
+  &.weave-field--has-spin:not(.weave-field--filled):not(.weave-field--outlined) {
     --field-input-padding: 0.625rem 0.75em 0.625rem;
   }
 }

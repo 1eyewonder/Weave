@@ -24,6 +24,7 @@
     <Compile Include="accessibility/LinkTests.fs" />
     <Compile Include="accessibility/ListTests.fs" />
     <Compile Include="accessibility/NumericFieldTests.fs" />
+    <Compile Include="accessibility/TextFieldTests.fs" />
     <Compile Include="accessibility/RadioTests.fs" />
     <Compile Include="accessibility/SelectTests.fs" />
     <Compile Include="accessibility/SliderTests.fs" />
@@ -44,6 +45,7 @@
     <Compile Include="interaction/FieldInteractionTests.fs" />
     <Compile Include="interaction/LinkInteractionTests.fs" />
     <Compile Include="interaction/NumericFieldInteractionTests.fs" />
+    <Compile Include="interaction/TextFieldInteractionTests.fs" />
     <Compile Include="interaction/RadioInteractionTests.fs" />
     <Compile Include="interaction/SelectInteractionTests.fs" />
     <Compile Include="interaction/SliderInteractionTests.fs" />

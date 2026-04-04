@@ -278,7 +278,7 @@ module ShowcasePomodoroTimer =
                           labelText = View.Const "Rounds before long break",
                           min = 1,
                           max = 10,
-                          attrs = [ Field.Color.primary; Field.Width.full ]
+                          attrs = [ NumericField.Color.primary; NumericField.Width.full ]
                         ),
                         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
                       )
@@ -453,7 +453,7 @@ Grid.create([
             roundsBeforeLong,
             labelText = View.Const "Rounds before long break",
             min = 1, max = 10,
-            attrs = [ Field.Color.primary; Field.Width.full ]
+            attrs = [ NumericField.Color.primary; NumericField.Width.full ]
         ),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
     )

@@ -228,10 +228,9 @@ div [
               Select.create (
                 animationItems,
                 selectedAnimation,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Animation",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
             )
@@ -239,10 +238,9 @@ div [
               Select.create (
                 durationItems,
                 selectedDuration,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Duration",
                 placeholder = View.Const "Default",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -250,10 +248,9 @@ div [
               Select.create (
                 easingItems,
                 selectedEasing,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Easing",
                 placeholder = View.Const "Default",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -261,10 +258,9 @@ div [
               Select.create (
                 distanceItems,
                 selectedDistance,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Distance",
                 placeholder = View.Const "Default",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.six ]
             )
@@ -272,10 +268,9 @@ div [
               Select.create (
                 scaleItems,
                 selectedScale,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Scale",
                 placeholder = View.Const "Default",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.six ]
             )
@@ -389,10 +384,7 @@ div [ AnimationEntrance.fadeIn ] [
 
     Helpers.codeSampleSection "Playground" description content code
 
-  // ---------------------------------------------------------------------------
   // 2b. Distance & Scale — side-by-side comparison of all 5 levels
-  // ---------------------------------------------------------------------------
-
   let private distanceAndScaleSection () =
     let description =
       Helpers.bodyText
@@ -1372,10 +1364,9 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
               Select.create (
                 easingItems,
                 selectedEasing,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Transition Easing",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
             )

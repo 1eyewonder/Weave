@@ -153,3 +153,84 @@ type SizingConsistencyTests() =
       ("empty-select", emptySelectControl)
     ]
   }
+
+  [<Theory>]
+  [<InlineData("standard")>]
+  [<InlineData("filled")>]
+  [<InlineData("outlined")>]
+  member this.``field controls - textfield control matches field control height``(variant: string) = task {
+    do! this.LoadFixture()
+    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+    and! textFieldControl =
+      this.Page.Locator($"#f5-{variant}-textfield .weave-field__control").BoundingBoxAsync()
+
+    assertHeightsMatch $"field/textfield controls ({variant})" [
+      ("field", fieldControl)
+      ("textfield", textFieldControl)
+    ]
+  }
+
+  [<Theory>]
+  [<InlineData("filled")>]
+  [<InlineData("outlined")>]
+  member this.``field controls - numeric control height matches field control height for filled and outlined``
+    (variant: string)
+    =
+    task {
+      do! this.LoadFixture()
+      let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+      and! numericControl =
+        this.Page.Locator($"#f5-{variant}-numeric .weave-field__control").BoundingBoxAsync()
+
+      assertHeightsMatch $"field/numeric controls ({variant})" [
+        ("field", fieldControl)
+        ("numeric", numericControl)
+      ]
+    }
+
+  [<Fact>]
+  member this.``field controls - standard numeric control is intentionally taller than standard field``() = task {
+    do! this.LoadFixture()
+    let! fieldControl = this.Page.Locator("#f5-standard-field .weave-field__control").BoundingBoxAsync()
+    and! numericControl = this.Page.Locator("#f5-standard-numeric .weave-field__control").BoundingBoxAsync()
+
+    Assert.True(
+      numericControl.Height > fieldControl.Height,
+      $"Standard numeric field control ({numericControl.Height}px) should be taller than standard field control ({fieldControl.Height}px) — symmetric padding override (0.625rem/0.625rem) for spin-button vertical centering"
+    )
+  }
+
+  [<Fact>]
+  member this.``field inputs - all field-family inputs share the same font size``() = task {
+    do! this.LoadFixture()
+    let! fieldFontSize = this.ComputedStyle("#f6-field .weave-field__input", "fontSize")
+    and! textFieldFontSize = this.ComputedStyle("#f6-textfield .weave-field__input", "fontSize")
+    and! numericFontSize = this.ComputedStyle("#f6-numeric .weave-field__input", "fontSize")
+
+    assertComputedValuesMatch "field-family input font-size" "fontSize" [
+      ("field", fieldFontSize)
+      ("textfield", textFieldFontSize)
+      ("numeric", numericFontSize)
+    ]
+  }
+
+  [<Fact>]
+  member this.``field inputs - standard field and textfield input padding matches``() = task {
+    do! this.LoadFixture()
+    let! fieldPaddingTop = this.ComputedStyle("#f6-field .weave-field__input", "paddingTop")
+    and! fieldPaddingBottom = this.ComputedStyle("#f6-field .weave-field__input", "paddingBottom")
+    and! textFieldPaddingTop = this.ComputedStyle("#f6-textfield .weave-field__input", "paddingTop")
+    and! textFieldPaddingBottom = this.ComputedStyle("#f6-textfield .weave-field__input", "paddingBottom")
+
+    assertComputedValuesMatch "standard field/textfield input paddingTop" "paddingTop" [
+      ("field", fieldPaddingTop)
+      ("textfield", textFieldPaddingTop)
+    ]
+
+    assertComputedValuesMatch "standard field/textfield input paddingBottom" "paddingBottom" [
+      ("field", fieldPaddingBottom)
+      ("textfield", textFieldPaddingBottom)
+    ]
+  }

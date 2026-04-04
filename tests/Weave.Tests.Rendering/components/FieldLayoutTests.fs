@@ -5,6 +5,10 @@ open Xunit
 type FieldLayoutTests() =
   inherit LayoutTestBase("field")
 
+  static member assertNonZeroPadding (msg: string) (padding: string) : unit =
+    let condition = padding <> "0px"
+    Assert.True(condition, msg)
+
   [<Fact>]
   member this.``floated label has scale transform applied``() = task {
     do! this.LoadFixture()
@@ -124,4 +128,28 @@ type FieldLayoutTests() =
       outline.Height > 0.0f,
       $"Outlined field should render a visible outline (height={outline.Height}px)"
     )
+  }
+
+  [<Fact>]
+  member this.``input font size is inherited from typography class``() = task {
+    do! this.LoadFixture()
+    let! fontSize = this.ComputedStyle("#field-standard .weave-field__input", "fontSize")
+
+    Assert.False(
+      fontSize = "" || fontSize = "0px",
+      $"Field input font-size ('{fontSize}') should be set via the weave-typography--body2 class"
+    )
+  }
+
+  [<Fact>]
+  member this.``standard input has non-zero vertical padding``() = task {
+    do! this.LoadFixture()
+    let! paddingTop = this.ComputedStyle("#field-standard .weave-field__input", "paddingTop")
+    and! paddingBottom = this.ComputedStyle("#field-standard .weave-field__input", "paddingBottom")
+
+    FieldLayoutTests.assertNonZeroPadding "Standard field input paddingTop should be non-zero" paddingTop
+
+    FieldLayoutTests.assertNonZeroPadding
+      "Standard field input paddingBottom should be non-zero"
+      paddingBottom
   }

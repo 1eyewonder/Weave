@@ -20,6 +20,7 @@
     <Compile Include="examples/SliderExamples.fs" />
     <Compile Include="examples/DropdownMenuExamples.fs" />
     <Compile Include="examples/FieldExamples.fs" />
+    <Compile Include="examples/TextFieldExamples.fs" />
     <Compile Include="examples/NumericFieldExamples.fs" />
     <Compile Include="examples/ContainerExamples.fs" />
     <Compile Include="examples/ExpansionPanelExamples.fs" />

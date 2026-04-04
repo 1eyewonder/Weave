@@ -95,40 +95,37 @@ module Pages =
 
   let private fieldPage () =
     div [] [
-      Field.create (Var.Create "", variant = Field.Variant.Standard, labelText = View.Const "Standard Field")
-      Field.create (
+      TextField.singleLine (Var.Create "", labelText = View.Const "Standard Field")
+      TextField.singleLine (
         Var.Create "some value",
-        variant = Field.Variant.Outlined,
-        labelText = View.Const "Outlined Field"
+        labelText = View.Const "Outlined Field",
+        attrs = [ TextField.Variant.outlined ]
       )
-      Field.create (
+      TextField.singleLine (
         Var.Create "",
-        variant = Field.Variant.Standard,
         labelText = View.Const "Disabled Field",
         enabled = View.Const false
       )
-      Field.create (
+      TextField.singleLine (
         Var.Create "",
-        variant = Field.Variant.Standard,
         labelText = View.Const "With Help",
         showHelpText = View.Const true,
         helpText = text "Help text content"
       )
-      Field.create (
+      TextField.singleLine (
         Var.Create "not-an-email",
-        variant = Field.Variant.Outlined,
         labelText = View.Const "Email",
         showHelpText = View.Const true,
         helpText =
           FieldHelpText.create (
             text "Invalid email address",
-            attrs = [ Attr.Create "id" "email-error"; Field.HelpTextColor.error ]
+            attrs = [ Attr.Create "id" "email-error"; FieldHelpText.Color.error ]
           ),
         inputAttrs = [
           Attr.ariaInvalid (View.Const true)
           Attr.Create "aria-describedby" "email-error"
         ],
-        attrs = [ Field.Color.error ]
+        attrs = [ TextField.Color.error ]
       )
     ]
 
@@ -136,33 +133,63 @@ module Pages =
     div [] [
       NumericField.create (
         Var.Create 5,
-        variant = Field.Variant.Standard,
         labelText = View.Const "Standard Numeric",
         showSpinButtons = View.Const true
       )
       NumericField.create (
         Var.Create 10,
-        variant = Field.Variant.Outlined,
         labelText = View.Const "Outlined Numeric",
-        showSpinButtons = View.Const true
+        showSpinButtons = View.Const true,
+        attrs = [ NumericField.Variant.outlined ]
       )
       NumericField.create (
         Var.Create 150,
-        variant = Field.Variant.Outlined,
         labelText = View.Const "Max 100",
         max = 100,
         showHelpText = View.Const true,
         helpText =
           FieldHelpText.create (
             text "Value exceeds maximum",
-            attrs = [ Attr.Create "id" "numeric-error"; Field.HelpTextColor.error ]
+            attrs = [ Attr.Create "id" "numeric-error"; FieldHelpText.Color.error ]
           ),
         inputAttrs = [
           Attr.ariaInvalid (View.Const true)
           Attr.Create "aria-describedby" "numeric-error"
         ],
-        attrs = [ Field.Color.error ]
+        attrs = [ NumericField.Color.error ]
       )
+    ]
+
+  let private textFieldPage () =
+    div [] [
+      TextField.singleLine (Var.Create "", labelText = View.Const "Standard Text Field")
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Outlined Text Field",
+        attrs = [ TextField.Variant.outlined ]
+      )
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Disabled Text Field",
+        enabled = View.Const false
+      )
+      TextField.singleLine (
+        Var.Create "not-an-email",
+        labelText = View.Const "Email",
+        showHelpText = View.Const true,
+        helpText =
+          FieldHelpText.create (
+            text "Invalid email address",
+            attrs = [ Attr.Create "id" "text-email-error"; FieldHelpText.Color.error ]
+          ),
+        inputAttrs = [
+          Attr.ariaInvalid (View.Const true)
+          Attr.Create "aria-describedby" "text-email-error"
+        ],
+        attrs = [ TextField.Color.error ]
+      )
+      TextField.singleLine (Var.Create "", labelText = View.Const "Max Length", maxLength = 50)
+      TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field")
     ]
 
   let private selectPage () =
@@ -587,6 +614,7 @@ module Pages =
     | "switch" -> switchPage ()
     | "field" -> fieldPage ()
     | "numericfield" -> numericFieldPage ()
+    | "textfield" -> textFieldPage ()
     | "select" -> selectPage ()
     | "animation" -> animationPage ()
     | "button" -> buttonPage ()

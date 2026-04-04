@@ -6,798 +6,123 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 
-open Weave.Icons
-open Weave.Icons.MaterialSymbols
-
 [<JavaScript>]
 module FieldExamples =
 
   let private whenToUseSection () =
     let description =
       div [ Typography.body1 ] [
-        text "Both "
-        Helpers.inlineCode "Field"
-        text " and "
-        Helpers.inlineCode "NumericField"
-        text " handle user input — but they target different value types. Use this to pick the right one."
+        text
+          "Field is the low-level primitive that provides field chrome. Most of the time you should reach for a higher-level wrapper instead."
       ]
 
     let content =
       Helpers.guidanceColumns
-        (Helpers.guidanceCard "Use Field when\u2026" [
+        (Helpers.guidanceCard "Use a wrapper component when\u2026" [
           Helpers.guidanceBullet
-            "Input accepts freeform text"
-            "names, emails, descriptions, and search queries are all string-typed inputs."
+            "TextField for string inputs"
+            "names, emails, search queries, and multiline text areas."
           Helpers.guidanceBullet
-            "You need full control over validation"
-            "custom regex, async validation, or format masking require direct input access."
+            "NumericField for int or float inputs"
+            "quantities, prices, and sliders with spin buttons and min/max clamping."
           Helpers.guidanceBullet
-            "The value type is string"
-            "Field binds a Var<string> and lets you map or parse it yourself."
-          Helpers.guidanceBullet
-            "Custom input elements are needed"
-            "wrap a textarea, contenteditable, or third-party input inside Field."
+            "Select for dropdown selection"
+            "pick one value from a predefined list with search and keyboard navigation."
         ])
-        (Helpers.guidanceCard "Use NumericField when\u2026" [
+        (Helpers.guidanceCard "Use Field directly when\u2026" [
           Helpers.guidanceBullet
-            "The value is an int or float with a range"
-            "quantities, prices, and ratings have well-defined numeric bounds."
+            "You are building a custom input component"
+            "date pickers, color pickers, or third-party inputs that need field chrome."
           Helpers.guidanceBullet
-            "Spin buttons or keyboard stepping is expected"
-            "arrow keys, mouse wheel, and +/\u2212 buttons increment in configurable steps."
+            "You need full control over focus and float logic"
+            "Field requires you to wire isFocused and shouldFloat yourself."
           Helpers.guidanceBullet
-            "Built-in clamping and step-snapping are needed"
-            "values are always valid numbers within [min, max], snapped to the step grid."
-          Helpers.guidanceBullet
-            "The display must always show a valid number"
-            "empty or non-numeric states are prevented by the component."
+            "No existing wrapper fits your use case"
+            "Field gives you the label, adornments, outline, help text, and variant styling with no opinions about the input element."
         ])
 
     Helpers.sectionPlain "When to Use" description content
 
-  let private variantsExample () =
-    let stdVal = Var.Create ""
-    let filledVal = Var.Create ""
-    let outlinedVal = Var.Create ""
-
+  let private customInputExample () =
     let description =
       Helpers.bodyText
-        "Field supports three variants: Standard (bottom border), Filled (background + bottom border), and Outlined (full border)."
+        "Wrap a custom input element by providing it along with isFocused and shouldFloat views. You are responsible for tracking focus state and deciding when the label should float."
 
-    let content =
-      Grid.create (
-        [
-          GridItem.create (
-            Field.create (
-              stdVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Standard,
-              labelText = View.Const "Standard",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
+    let mkField variantAttr label =
+      let value = Var.Create ""
+      let isFocused = Var.Create false
 
-          GridItem.create (
-            Field.create (
-              filledVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Filled,
-              labelText = View.Const "Filled",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
+      let hasValue =
+        value.View |> View.MapCached(fun v -> not (System.String.IsNullOrEmpty v))
 
-          GridItem.create (
-            Field.create (
-              outlinedVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Outlined",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-        ],
-        attrs = [ Grid.Spacing.large ]
-      )
+      let shouldFloat = isFocused.View <||> hasValue
 
-    let code =
-      """open Weave
+      let inputElement =
+        Doc.InputType.Text
+          [
+            Attr.Class "weave-field__input"
+            on.focus (fun _ _ -> isFocused.Value <- true)
+            on.blur (fun _ _ -> isFocused.Value <- false)
+          ]
+          value
 
-let value = Var.Create ""
-
-Field.create(
-    value,
-    variant = Field.Variant.Standard,
-    labelText = View.Const "Standard"
-)
-
-Field.create(
-    value,
-    variant = Field.Variant.Filled,
-    labelText = View.Const "Filled"
-)
-
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined"
-)
-"""
-
-    Helpers.codeSampleSection "Variants" description content code
-
-  let private withContentExample () =
-    let stdVal = Var.Create "Some content here"
-    let filledVal = Var.Create "Some content here"
-    let outlinedVal = Var.Create "Some content here"
-
-    let description =
-      Helpers.bodyText "When the field has a value the label floats up and shrinks automatically."
-
-    let content =
-      Grid.create (
-        [
-          GridItem.create (
-            Field.create (
-              stdVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Standard,
-              labelText = View.Const "Standard",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-
-          GridItem.create (
-            Field.create (
-              filledVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Filled,
-              labelText = View.Const "Filled",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-
-          GridItem.create (
-            Field.create (
-              outlinedVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Outlined",
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-        ],
-        attrs = [ Grid.Spacing.large ]
-      )
-
-    let code =
-      """open Weave
-
-// When the Var has a value, the label automatically floats
-let value = Var.Create "Some content here"
-
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined"
-)
-"""
-
-    Helpers.codeSampleSection "With Content" description content code
-
-  let private adornmentsExample () =
-    // Start adornment row
-    let startStdVal = Var.Create ""
-    let startFilledVal = Var.Create ""
-    let startOutlinedVal = Var.Create ""
-    // End adornment row
-    let endStdVal = Var.Create ""
-    let endFilledVal = Var.Create ""
-    let endOutlinedVal = Var.Create ""
-    // Both adornments row
-    let bothStdVal = Var.Create ""
-    let bothFilledVal = Var.Create ""
-    let bothOutlinedVal = Var.Create ""
-
-    let description =
-      Helpers.bodyText
-        "Icons or other content can be placed at the start, end, or both ends of the field. All three adornment placements are shown across every variant."
-
-    let mkItem variant label (startAdornment: unit -> Doc option) (endAdornment: unit -> Doc option) value =
       GridItem.create (
         Field.create (
-          value,
-          showHelpText = View.Const false,
-          variant = variant,
+          inputElement,
+          isFocused.View,
+          shouldFloat,
           labelText = View.Const label,
-          ?startAdornment = startAdornment (),
-          ?endAdornment = endAdornment (),
-          attrs = [ Field.Width.full ]
+          attrs = [ yield! variantAttr; Field.Width.full ]
         ),
         attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
       )
 
-    let searchIcon () =
-      Some(Icon.create (Icon.UiActions UiActions.Search, attrs = [ BrandColor.TextColor.primary ]))
-
-    let checkIcon () =
-      Some(Icon.create (Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.TextColor.success ]))
-
-    let infoIcon () =
-      Some(Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.TextColor.info ]))
-
-    let warningIcon () =
-      Some(Icon.create (Icon.Action Action.Warning, attrs = [ BrandColor.TextColor.warning ]))
-
-    let noIcon () = None
-
-    let content =
-      div [] [
-        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Start Adornment" ]
-
-        Grid.create (
-          [
-            mkItem Field.Variant.Standard "Standard" searchIcon noIcon startStdVal
-            mkItem Field.Variant.Filled "Filled" searchIcon noIcon startFilledVal
-            mkItem Field.Variant.Outlined "Outlined" searchIcon noIcon startOutlinedVal
-          ],
-          attrs = [ Grid.Spacing.large ]
-        )
-
-        div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "End Adornment" ]
-
-        Grid.create (
-          [
-            mkItem Field.Variant.Standard "Standard" noIcon checkIcon endStdVal
-            mkItem Field.Variant.Filled "Filled" noIcon infoIcon endFilledVal
-            mkItem Field.Variant.Outlined "Outlined" noIcon warningIcon endOutlinedVal
-          ],
-          attrs = [ Grid.Spacing.large ]
-        )
-
-        div [ Typography.body1; Margin.Vertical.extraSmall ] [ text "Both Adornments" ]
-
-        Grid.create (
-          [
-            mkItem Field.Variant.Standard "Standard" searchIcon checkIcon bothStdVal
-            mkItem Field.Variant.Filled "Filled" searchIcon infoIcon bothFilledVal
-            mkItem Field.Variant.Outlined "Outlined" searchIcon warningIcon bothOutlinedVal
-          ],
-          attrs = [ Grid.Spacing.large ]
-        )
-      ]
-
-    let code =
-      """open Weave
-open Weave.Icons
-open Weave.Icons.MaterialSymbols
-
-let value = Var.Create ""
-
-// Start adornment only
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined",
-    startAdornment = Icon.create(
-        Icon.UiActions UiActions.Search,
-        attrs = [ BrandColor.TextColor.primary ]
-    )
-)
-
-// End adornment only
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined",
-    endAdornment = Icon.create(
-        Icon.UiActions UiActions.CheckCircle,
-        attrs = [ BrandColor.TextColor.success ]
-    )
-)
-
-// Both start and end adornments
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined",
-    startAdornment = Icon.create(
-        Icon.UiActions UiActions.Search,
-        attrs = [ BrandColor.TextColor.primary ]
-    ),
-    endAdornment = Icon.create( // and here
-        Icon.UiActions UiActions.CheckCircle,
-        attrs = [ BrandColor.TextColor.success ]
-    )
-)
-"""
-
-    Helpers.codeSampleSection "Adornments" description content code
-
-  let private shrinkLabelExample () =
-    let value = Var.Create ""
-
-    let description =
-      Helpers.bodyText
-        "Use shrinkLabel to force the label into its floated position regardless of focus or value."
-
-    let content =
-      Field.create (
-        value,
-        showHelpText = View.Const false,
-        variant = Field.Variant.Outlined,
-        labelText = View.Const "ShrinkLabel Override",
-        shrinkLabel = View.Const true,
-        endAdornment = Icon.create (Icon.Action Action.Info, attrs = [ BrandColor.TextColor.info ]),
-        attrs = [ Field.Width.full ]
-      )
-
-    let code =
-      """open Weave
-
-let value = Var.Create ""
-
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "ShrinkLabel Override",
-    shrinkLabel = View.Const true
-)
-"""
-
-    Helpers.codeSampleSection "Shrink Label Override" description content code
-
-  let private placeholderExample () =
-    let value = Var.Create ""
-
-    let description =
-      Helpers.bodyText
-        "When an explicit placeholder is provided the label stays floated and the placeholder text is shown in the input area."
-
-    let content =
-      Field.create (
-        value,
-        showHelpText = View.Const false,
-        variant = Field.Variant.Outlined,
-        labelText = View.Const "With Placeholder",
-        placeholder = View.Const "Type something here…",
-        attrs = [ Field.Width.full ]
-      )
-
-    let code =
-      """open Weave
-
-let value = Var.Create ""
-
-Field.create(
-    value,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "With Placeholder",
-    placeholder = View.Const "Type something here…"
-)
-"""
-
-    Helpers.codeSampleSection "Placeholder" description content code
-
-  let private helpTextValidationExample () =
-    let value = Var.Create ""
-
-    let showHelpText =
-      value.View
-      |> View.MapCached(fun v -> not (System.String.IsNullOrEmpty(v)) && v.Length < 3)
-
-    let helpTextContent =
-      showHelpText
-      |> View.MapCached(fun show -> if show then "Must be at least 3 characters" else "")
-
-    let helpText =
-      FieldHelpText.create (Doc.TextView helpTextContent, attrs = [ Field.HelpTextColor.error ])
-
-    let description =
-      Helpers.bodyText
-        "Help text animates in and out based on a View<bool>. Here the help text appears when the value is non-empty but less than 3 characters."
-
-    let content =
-      Field.create (
-        value,
-        variant = Field.Variant.Outlined,
-        labelText = View.Const "Name",
-        showHelpText = showHelpText,
-        helpText = helpText,
-        attrs = [ Field.Width.full; Attr.DynamicClassPred "weave-field--error" showHelpText ]
-      )
-
-    let code =
-      """open Weave
-
-
-let value = Var.Create ""
-
-// Derive visibility from validation logic
-let showHelpText =
-    value.View
-    |> View.MapCached(fun v ->
-        not (System.String.IsNullOrEmpty(v)) && v.Length < 3)
-
-let helpTextContent =
-    showHelpText
-    |> View.MapCached(fun show ->
-        if show then "Must be at least 3 characters" else "")
-
-let helpText =
-    FieldHelpText.create(
-        Doc.TextView helpTextContent,
-        attrs = [ Field.HelpTextColor.error ]
-    )
-
-Field.create(
-    value,
-    showHelpText = showHelpText,
-    labelText = View.Const "Name",
-    helpText = helpText,
-    attrs = [
-        Attr.DynamicClassPred "weave-field--error" showHelpText
-    ]
-)
-"""
-
-    Helpers.codeSampleSection "Help Text (Validation)" description content code
-
-  // ---------------------------------------------------------------------------
-  // Help text color variations
-  // ---------------------------------------------------------------------------
-  let private helpTextColorVariationsExample () =
-    let successVal = Var.Create "Looks good!"
-    let warningVal = Var.Create "password"
-    let errorVal = Var.Create "not-an-email"
-
-    let description =
-      Helpers.bodyText
-        "Help text can be styled with any brand color to convey success, warning, error, or informational states. Apply color classes to both the field and FieldHelpText independently."
-
     let content =
       Grid.create (
         [
-          GridItem.create (
-            Field.create (
-              successVal,
-              showHelpText = View.Const true,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Username",
-              helpText =
-                FieldHelpText.create (text "Username is available", attrs = [ Field.HelpTextColor.success ]),
-              attrs = [ Field.Width.full; Field.Color.success ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-
-          GridItem.create (
-            Field.create (
-              warningVal,
-              showHelpText = View.Const true,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Password",
-              helpText =
-                FieldHelpText.create (
-                  text "Consider a stronger password",
-                  attrs = [ Field.HelpTextColor.warning ]
-                ),
-              attrs = [ Field.Width.full; Field.Color.warning ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-
-          GridItem.create (
-            Field.create (
-              errorVal,
-              showHelpText = View.Const true,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Email",
-              helpText =
-                FieldHelpText.create (text "Invalid email address", attrs = [ Field.HelpTextColor.error ]),
-              attrs = [ Field.Width.full; Field.Color.error ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
+          mkField [] "Standard"
+          mkField [ Field.Variant.filled ] "Filled"
+          mkField [ Field.Variant.outlined ] "Outlined"
         ],
         attrs = [ Grid.Spacing.large ]
       )
 
     let code =
       """open Weave
+open WebSharper.UI
 
+let value = Var.Create ""
+let isFocused = Var.Create false
+let hasValue =
+    value.View |> View.MapCached(fun v ->
+        not (System.String.IsNullOrEmpty v))
+let shouldFloat = isFocused.View <||> hasValue  // see here
 
-let value = Var.Create "Looks good!"
-
-// Success help text
-Field.create(
-    value,
-    showHelpText = View.Const true,
-    labelText = View.Const "Username",
-    helpText =
-        FieldHelpText.create(
-            text "Username is available",
-            attrs = [ Field.HelpTextColor.success ]
-        ),
-    attrs = [ Field.Color.success ]
-)
-
-// Warning help text
-Field.create(
-    value,
-    showHelpText = View.Const true,
-    labelText = View.Const "Password",
-    helpText =
-        FieldHelpText.create(
-            text "Consider a stronger password",
-            attrs = [ Field.HelpTextColor.warning ]
-        ),
-    attrs = [ Field.Color.warning ]
-)
-
-// Error help text
-Field.create(
-    value,
-    showHelpText = View.Const true,
-    labelText = View.Const "Email",
-    helpText =
-        FieldHelpText.create(
-            text "Invalid email address",
-            attrs = [ Field.HelpTextColor.error ]
-        ),
-    attrs = [ Field.Color.error ]
-)
-"""
-
-    Helpers.codeSampleSection "Help Text Color Variations" description content code
-
-  // ---------------------------------------------------------------------------
-  // Disabled & ReadOnly
-  // ---------------------------------------------------------------------------
-  let private disabledExample () =
-    let disabledVal = Var.Create "Cannot edit"
-    let readOnlyVal = Var.Create "Read-only value"
-
-    let description =
-      Helpers.bodyText "Fields can be disabled or set to read-only to prevent user input."
-
-    let content =
-      Grid.create (
+let inputElement =
+    Doc.InputType.Text
         [
-          GridItem.create (
-            Field.create (
-              disabledVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Disabled",
-              enabled = View.Const false,
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-
-          GridItem.create (
-            Field.create (
-              readOnlyVal,
-              showHelpText = View.Const false,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Read Only",
-              readOnly = View.Const true,
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-        ],
-        attrs = [ Grid.Spacing.large ]
-      )
-
-    let code =
-      """open Weave
-
-let disabledVal = Var.Create "Cannot edit"
-let readOnlyVal = Var.Create "Read-only value"
-
-Field.create(
-    disabledVal,
-    labelText = View.Const "Disabled",
-    enabled = View.Const false
-)
-
-Field.create(
-    readOnlyVal,
-    labelText = View.Const "Read Only",
-    readOnly = View.Const true
-)
-"""
-
-    Helpers.codeSampleSection "Disabled & Read Only" description content code
-
-  // ---------------------------------------------------------------------------
-  // Color variants
-  // ---------------------------------------------------------------------------
-  let private colorExample () =
-    let mkField colorAttr label =
-      let v = Var.Create ""
-
-      GridItem.create (
-        Field.create (
-          v,
-          showHelpText = View.Const false,
-          variant = Field.Variant.Outlined,
-          labelText = View.Const label,
-          attrs = [ Field.Width.full; colorAttr ]
-        ),
-        attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
-      )
-
-    let description =
-      Helpers.bodyText "The accent color used when the field is focused can be customised with color classes."
-
-    let content =
-      Grid.create (
-        [
-          mkField Field.Color.primary "Primary"
-          mkField Field.Color.secondary "Secondary"
-          mkField Field.Color.tertiary "Tertiary"
-          mkField Field.Color.success "Success"
-          mkField Field.Color.warning "Warning"
-          mkField Field.Color.error "Error"
-          mkField Field.Color.info "Info"
+            Attr.Class "weave-field__input"
+            on.focus (fun _ _ -> isFocused.Value <- true)
+            on.blur (fun _ _ -> isFocused.Value <- false)
         ]
-      )
+        value
 
-    let code =
-      """open Weave
-
-
-let value = Var.Create ""
-
-Field.create(value, labelText = View.Const "Primary", attrs = [ Field.Color.primary ])
-Field.create(value, labelText = View.Const "Secondary", attrs = [ Field.Color.secondary ])
-Field.create(value, labelText = View.Const "Tertiary", attrs = [ Field.Color.tertiary ])
-Field.create(value, labelText = View.Const "Success", attrs = [ Field.Color.success ])
-Field.create(value, labelText = View.Const "Warning", attrs = [ Field.Color.warning ])
-Field.create(value, labelText = View.Const "Error", attrs = [ Field.Color.error ])
-Field.create(value, labelText = View.Const "Info", attrs = [ Field.Color.info ])
-"""
-
-    Helpers.codeSampleSection "Colors" description content code
-
-  // ---------------------------------------------------------------------------
-  // Typography Configuration
-  // ---------------------------------------------------------------------------
-  let private typographyExample () =
-    let captionVal = Var.Create ""
-    let body1Val = Var.Create ""
-    let subtitle1Val = Var.Create ""
-    let h6Val = Var.Create ""
-    let colorVal = Var.Create ""
-
-    let description =
-      Helpers.bodyText
-        "Use the typoAttrs parameter to configure the field's font styling. Because the component uses em-based sizing, the entire field — label, input, and chrome — scales proportionally with the chosen typography class. You can also mix in color classes."
-
-    let content =
-      Grid.create (
-        [
-          GridItem.create (
-            Field.create (
-              captionVal,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Caption",
-              typoAttrs = [ Typography.caption ],
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-
-          GridItem.create (
-            Field.create (
-              body1Val,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Body1",
-              typoAttrs = [ Typography.body1 ],
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-
-          GridItem.create (
-            Field.create (
-              subtitle1Val,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "Subtitle1",
-              typoAttrs = [ Typography.subtitle1 ],
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-
-          GridItem.create (
-            Field.create (
-              h6Val,
-              variant = Field.Variant.Outlined,
-              labelText = View.Const "H6",
-              typoAttrs = [ Typography.h6 ],
-              attrs = [ Field.Width.full ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.six ]
-          )
-        ],
-        attrs = [ Grid.Spacing.large ]
-      )
-
-    let code =
-      """open Weave
-
-
-let value = Var.Create ""
-
-// Scale down with Caption typography
 Field.create(
-    value,
-    labelText = View.Const "Caption",
-    typoAttrs = [ Typography.caption ]
-)
+    inputElement,
+    isFocused.View,
+    shouldFloat,
+    labelText = View.Const "Custom Input",
+    attrs = [ Field.Variant.outlined ]
+)"""
 
-// Scale up with Subtitle1 typography
-Field.create(
-    value,
-    labelText = View.Const "Subtitle1",
-    typoAttrs = [ Typography.subtitle1 ]
-)
-"""
+    Helpers.codeSampleSection "Custom Input" description content code
 
-    Helpers.codeSampleSection "Typography Configuration" description content code
-
-  // ---------------------------------------------------------------------------
-  // API Reference
-  // ---------------------------------------------------------------------------
   let private apiReferenceSection () =
     Helpers.apiSection
       (Helpers.bodyText
-        "Complete API reference for Field and FieldHelpText. Field has two create overloads: one wrapping a pre-built input element, and a convenience overload for text fields.")
+        "Complete API reference for Field and FieldHelpText. Field exposes a single create overload for wrapping custom input elements with field chrome.")
       [
-        Helpers.apiTable "Field.create (text field)" [
-          Helpers.apiParam "value" "Var<string>" "" "Two-way binding for the text input value"
-          Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
-          Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
-          Helpers.apiParam
-            "?placeholder"
-            "View<string>"
-            "\"\""
-            "Placeholder text shown when the field is empty and label is floating"
-          Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
-          Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
-          Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
-          Helpers.apiParam
-            "?readOnly"
-            "View<bool>"
-            "View.Const false"
-            "Display the value without allowing changes"
-          Helpers.apiParam
-            "?shrinkLabel"
-            "View<bool>"
-            "View.Const false"
-            "Force the label to always float above the input"
-          Helpers.apiParam "?startAdornment" "Doc" "" "Content placed before the input (e.g. icon or prefix)"
-          Helpers.apiParam "?endAdornment" "Doc" "" "Content placed after the input (e.g. icon or suffix)"
-          Helpers.apiParam
-            "?inputAttrs"
-            "Attr list"
-            "[]"
-            "Additional attributes applied to the inner input element"
-          Helpers.apiParam "?typoAttrs" "Attr list" "" "Typography attributes applied to the field wrapper"
-          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
-        ]
-
-        Helpers.apiTable "Field.create (custom input)" [
+        Helpers.apiTable "Field.create" [
           Helpers.apiParam "inputElement" "Doc" "" "Pre-built input element to wrap with field chrome"
           Helpers.apiParam "isFocused" "View<bool>" "" "View tracking whether the input has focus"
           Helpers.apiParam
@@ -805,7 +130,6 @@ Field.create(
             "View<bool>"
             ""
             "View controlling when the label floats above the input"
-          Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam
             "?showHelpText"
@@ -848,7 +172,7 @@ Field.create(
 
         Helpers.styleModuleTable "Field.Width" [ ("full", "Field stretches to fill its container width") ]
 
-        Helpers.styleModuleTable "Field.HelpTextColor" [
+        Helpers.styleModuleTable "FieldHelpText.Color" [
           ("primary", "Primary color for help text")
           ("secondary", "Secondary color for help text")
           ("tertiary", "Tertiary color for help text")
@@ -859,39 +183,18 @@ Field.create(
         ]
       ]
 
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
   let render () =
     Container.create (
       div [] [
         Helpers.pageTitle "Field"
         div [ Typography.body1; Margin.Bottom.extraSmall ] [
           text
-            "Field is the generic base component for all text-based inputs. It supports Standard, Filled, and Outlined variants with floating labels, adornments, and help text."
+            "Field is the base component for wrapping custom input elements with field chrome — floating labels, adornments, help text, and variant styling. For standard text inputs use TextField; for numbers use NumericField."
         ]
         Helpers.divider ()
         whenToUseSection ()
         Helpers.divider ()
-        variantsExample ()
-        Helpers.divider ()
-        colorExample ()
-        Helpers.divider ()
-        withContentExample ()
-        Helpers.divider ()
-        adornmentsExample ()
-        Helpers.divider ()
-        shrinkLabelExample ()
-        Helpers.divider ()
-        placeholderExample ()
-        Helpers.divider ()
-        helpTextValidationExample ()
-        Helpers.divider ()
-        helpTextColorVariationsExample ()
-        Helpers.divider ()
-        disabledExample ()
-        Helpers.divider ()
-        typographyExample ()
+        customInputExample ()
         Helpers.divider ()
         apiReferenceSection ()
       ],

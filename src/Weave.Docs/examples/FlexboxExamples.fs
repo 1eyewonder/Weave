@@ -38,10 +38,6 @@ module FlexboxExamples =
       ]
       children
 
-  // ---------------------------------------------------------------------------
-  // 1. How it works
-  // ---------------------------------------------------------------------------
-
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
@@ -81,10 +77,7 @@ div [
 
     Helpers.codeSampleSection "How it works" description content code
 
-  // ---------------------------------------------------------------------------
   // 2. Playground
-  // ---------------------------------------------------------------------------
-
   let private playgroundSection () =
     let description =
       Helpers.bodyText "Combine direction, justify, align, wrap, and gap to see how flex items rearrange."
@@ -147,10 +140,9 @@ div [
               Select.create (
                 makeItems "Direction" allDirections,
                 selectedDir,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Direction",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -158,10 +150,9 @@ div [
               Select.create (
                 makeItems "Justify" allJustify,
                 selectedJustify,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Justify Content",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -169,10 +160,9 @@ div [
               Select.create (
                 makeItems "Align" allAlign,
                 selectedAlign,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Align Items",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -180,10 +170,9 @@ div [
               Select.create (
                 makeItems "Wrap" allWrap,
                 selectedWrap,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Wrap",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -191,10 +180,9 @@ div [
               Select.create (
                 makeItems "Gap" allGaps,
                 selectedGap,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Gap",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
             )
@@ -261,10 +249,7 @@ div [
 
     Helpers.codeSampleSection "Playground" description content code
 
-  // ---------------------------------------------------------------------------
   // 3. Direction
-  // ---------------------------------------------------------------------------
-
   let private directionSection () =
     let description =
       Helpers.bodyText
@@ -320,10 +305,7 @@ div [
 
     Helpers.codeSampleSection "Direction" description content code
 
-  // ---------------------------------------------------------------------------
   // 4. Justify Content
-  // ---------------------------------------------------------------------------
-
   let private justifyContentSection () =
     let description =
       Helpers.bodyText "JustifyContent distributes items along the main axis."
@@ -360,10 +342,7 @@ div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly ] [ ... ]"""
 
     Helpers.codeSampleSection "Justify Content" description content code
 
-  // ---------------------------------------------------------------------------
   // 5. Align Items
-  // ---------------------------------------------------------------------------
-
   let private alignItemsSection () =
     let description =
       Helpers.bodyText
@@ -450,10 +429,7 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
 
     Helpers.codeSampleSection "Align Items" description content code
 
-  // ---------------------------------------------------------------------------
   // 6. Align Content
-  // ---------------------------------------------------------------------------
-
   let private alignContentSection () =
     let description =
       Helpers.bodyText
@@ -532,10 +508,7 @@ div [
 
     Helpers.codeSampleSection "Align Content" description content code
 
-  // ---------------------------------------------------------------------------
   // 7. Align Self
-  // ---------------------------------------------------------------------------
-
   let private alignSelfSection () =
     let description =
       Helpers.bodyText
@@ -576,10 +549,7 @@ div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
 
     Helpers.codeSampleSection "Align Self" description content code
 
-  // ---------------------------------------------------------------------------
   // 8. Gap
-  // ---------------------------------------------------------------------------
-
   let private gapSection () =
     let description =
       Helpers.bodyText
@@ -636,10 +606,7 @@ div [
 
     Helpers.codeSampleSection "Gap" description content code
 
-  // ---------------------------------------------------------------------------
   // 9. Flex Item
-  // ---------------------------------------------------------------------------
-
   let private flexItemSection () =
     let description =
       Helpers.bodyText
@@ -759,10 +726,7 @@ div [ Flex.Flex.allSizes ] [
 
     Helpers.codeSampleSection "Flex Item" description content code
 
-  // ---------------------------------------------------------------------------
   // 10. Grow Children
-  // ---------------------------------------------------------------------------
-
   let private growChildrenSection () =
     let description =
       Helpers.bodyText
@@ -831,10 +795,7 @@ div [
 
     Helpers.codeSampleSection "Grow Children" description content code
 
-  // ---------------------------------------------------------------------------
   // Render
-  // ---------------------------------------------------------------------------
-
   let render () =
     Container.create (
       div [] [

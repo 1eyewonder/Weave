@@ -96,7 +96,6 @@ Select.create(
             Select.create (
               items,
               standardVal,
-              variant = Field.Variant.Standard,
               labelText = View.Const "Standard",
               attrs = [ Select.Color.primary ]
             ),
@@ -107,9 +106,8 @@ Select.create(
             Select.create (
               items,
               filledVal,
-              variant = Field.Variant.Filled,
               labelText = View.Const "Filled",
-              attrs = [ Select.Color.secondary ]
+              attrs = [ Select.Variant.filled; Select.Color.secondary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
@@ -118,9 +116,8 @@ Select.create(
             Select.create (
               items,
               outlinedVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Outlined",
-              attrs = [ Select.Color.tertiary ]
+              attrs = [ Select.Variant.outlined; Select.Color.tertiary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
@@ -141,20 +138,19 @@ let items =
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Standard,  // see here
-    labelText = View.Const "Standard"
+    labelText = View.Const "Standard"  // see here — standard is the default
 )
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Filled,
-    labelText = View.Const "Filled"
+    labelText = View.Const "Filled",
+    attrs = [ Select.Variant.filled ]
 )
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Outlined"
+    labelText = View.Const "Outlined",
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Variants" description content code
@@ -178,10 +174,9 @@ Select.create(
             Select.create (
               items,
               selected,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "City",
               clearable = View.Const true,
-              attrs = [ Select.Color.primary ]
+              attrs = [ Select.Variant.outlined; Select.Color.primary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -217,9 +212,9 @@ let items =
 Select.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "City",
-    clearable = View.Const true  // see here
+    clearable = View.Const true,  // see here
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Clearable" description content code
@@ -263,11 +258,10 @@ Select.create(
             Select.create (
               items,
               selected,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Country",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.primary ]
+              attrs = [ Select.Variant.outlined; Select.Color.primary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -289,10 +283,10 @@ let items =
 Select.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Country",
     searchable = true,  // see here
-    clearable = View.Const true
+    clearable = View.Const true,
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Searchable" description content code
@@ -317,11 +311,10 @@ Select.create(
               MultiSelect.create (
                 items,
                 selected,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Hobbies",
                 placeholder = View.Const "Select hobbies",
                 clearable = View.Const true,
-                attrs = [ Select.Color.secondary ]
+                attrs = [ Select.Variant.outlined; Select.Color.secondary ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
             )
@@ -362,10 +355,10 @@ let items =
 MultiSelect.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Hobbies",
     placeholder = View.Const "Select hobbies",
-    clearable = View.Const true
+    clearable = View.Const true,
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Multi-Select" description content code
@@ -389,14 +382,13 @@ MultiSelect.create(
             MultiSelect.create (
               items,
               selected,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Roles",
               showSelectAll = true,
               selectAllText = "All Roles",
               searchable = true,
               clearable = View.Const true,
               selectionText = (fun sel -> sprintf "%d role(s) selected" (Set.count sel)),
-              attrs = [ Select.Color.tertiary ]
+              attrs = [ Select.Variant.outlined; Select.Color.tertiary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -418,14 +410,14 @@ let items =
 MultiSelect.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Roles",
     showSelectAll = true,  // see here
     selectAllText = "All Roles",
     searchable = true,
     clearable = View.Const true,
     selectionText = (fun sel ->
-        sprintf "%d role(s) selected" (Set.count sel))
+        sprintf "%d role(s) selected" (Set.count sel)),
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Select All" description content code
@@ -471,11 +463,10 @@ MultiSelect.create(
             Select.create (
               items,
               selected,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Country",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.primary ]
+              attrs = [ Select.Variant.outlined; Select.Color.primary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -511,10 +502,10 @@ let items =
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Country",
     searchable = true,
-    clearable = View.Const true
+    clearable = View.Const true,
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Custom Item Rendering" description content code
@@ -539,10 +530,9 @@ Select.create(
             Select.create (
               items,
               disabledVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Disabled",
               enabled = View.Const false,
-              attrs = [ Select.Color.primary ]
+              attrs = [ Select.Variant.outlined; Select.Color.primary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -551,10 +541,9 @@ Select.create(
             Select.create (
               items,
               readonlyVal,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Read Only",
               readOnly = View.Const true,
-              attrs = [ Select.Color.primary ]
+              attrs = [ Select.Variant.outlined; Select.Color.primary ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -576,9 +565,9 @@ let disabledVal = Var.Create<string option> (Some "Locked")
 
 Select.create(
     items, disabledVal,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Disabled",
-    enabled = View.Const false  // see here
+    enabled = View.Const false,  // see here
+    attrs = [ Select.Variant.outlined ]
 )
 
 // Read Only — shows value but prevents changes
@@ -586,9 +575,9 @@ let readOnlyVal = Var.Create<string option> (Some "Locked")
 
 Select.create(
     items, readOnlyVal,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Read Only",
-    readOnly = View.Const true  // see here
+    readOnly = View.Const true,  // see here
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Disabled & Read Only" description content code
@@ -622,9 +611,8 @@ Select.create(
             Select.create (
               items,
               v,
-              variant = Field.Variant.Outlined,
               labelText = View.Const label,
-              attrs = [ colorAttr ]
+              attrs = [ Select.Variant.outlined; colorAttr ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.four ]
           ))
@@ -642,13 +630,13 @@ let items =
         SelectItem.create (text o, o, o))
     |> View.Const
 
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Primary", attrs = [ Select.Color.primary ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Secondary", attrs = [ Select.Color.secondary ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Tertiary", attrs = [ Select.Color.tertiary ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Error", attrs = [ Select.Color.error ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Warning", attrs = [ Select.Color.warning ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Success", attrs = [ Select.Color.success ])
-Select.create(items, selected, variant = Field.Variant.Outlined, labelText = View.Const "Info", attrs = [ Select.Color.info ])"""
+Select.create(items, selected, labelText = View.Const "Primary", attrs = [ Select.Variant.outlined; Select.Color.primary ])
+Select.create(items, selected, labelText = View.Const "Secondary", attrs = [ Select.Variant.outlined; Select.Color.secondary ])
+Select.create(items, selected, labelText = View.Const "Tertiary", attrs = [ Select.Variant.outlined; Select.Color.tertiary ])
+Select.create(items, selected, labelText = View.Const "Error", attrs = [ Select.Variant.outlined; Select.Color.error ])
+Select.create(items, selected, labelText = View.Const "Warning", attrs = [ Select.Variant.outlined; Select.Color.warning ])
+Select.create(items, selected, labelText = View.Const "Success", attrs = [ Select.Variant.outlined; Select.Color.success ])
+Select.create(items, selected, labelText = View.Const "Info", attrs = [ Select.Variant.outlined; Select.Color.info ])"""
 
     Helpers.codeSampleSection "Colors" description content code
 
@@ -676,9 +664,8 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
               Select.create (
                 items,
                 autoVal,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Auto",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               )
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
@@ -691,9 +678,8 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
               Select.create (
                 items,
                 fullVal,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Full",
-                attrs = [ Select.Color.secondary; Select.Width.full ]
+                attrs = [ Select.Variant.outlined; Select.Color.secondary; Select.Width.full ]
               )
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
@@ -706,9 +692,8 @@ Select.create(items, selected, variant = Field.Variant.Outlined, labelText = Vie
               Select.create (
                 items,
                 fitVal,
-                variant = Field.Variant.Outlined,
                 labelText = View.Const "Fit Content",
-                attrs = [ Select.Color.tertiary; Select.Width.fitContent ]
+                attrs = [ Select.Variant.outlined; Select.Color.tertiary; Select.Width.fitContent ]
               )
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
@@ -731,24 +716,22 @@ let items =
 // Auto (default) — inline, sizes to min-width
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
-    labelText = View.Const "Auto"
+    labelText = View.Const "Auto",
+    attrs = [ Select.Variant.outlined ]
 )
 
 // Full Width — 100% of container
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Full",
-    attrs = [ Select.Width.full ]  // see here
+    attrs = [ Select.Variant.outlined; Select.Width.full ]  // see here
 )
 
 // Fit Content — sizes to content
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Fit Content",
-    attrs = [ Select.Width.fitContent ]  // see here
+    attrs = [ Select.Variant.outlined; Select.Width.fitContent ]  // see here
 )"""
 
     Helpers.codeSampleSection "Width Modes" description content code
@@ -834,9 +817,9 @@ Select.create(
                   Select.create (
                     items,
                     selected,
-                    variant = Field.Variant.Outlined,
                     labelText = View.Const "Fruit",
                     attrs = [
+                      Select.Variant.outlined
                       anchorClassMap |> Attr.classSelection anchorVar.View
                       transformClassMap |> Attr.classSelection transformVar.View
                       Select.Color.primary
@@ -868,9 +851,9 @@ let items =
 Select.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Fruit",
     attrs = [
+        Select.Variant.outlined
         Select.AnchorOrigin.bottomRight
         Select.TransformOrigin.topRight
     ]
@@ -889,9 +872,9 @@ let anchorClassMap =
 Select.create(
     items,
     selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Fruit",
     attrs = [
+        Select.Variant.outlined
         anchorClassMap |> Attr.classSelection anchorVar.View
     ]
 )"""
@@ -957,11 +940,10 @@ Select.create(
             Select.create (
               items,
               selected,
-              variant = Field.Variant.Outlined,
               labelText = View.Const "Language",
               searchable = true,
               clearable = View.Const true,
-              attrs = [ Select.Color.info ]
+              attrs = [ Select.Variant.outlined; Select.Color.info ]
             ),
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
@@ -1010,10 +992,10 @@ let items =
 
 Select.create(
     items, selected,
-    variant = Field.Variant.Outlined,
     labelText = View.Const "Language",
     searchable = true,
-    clearable = View.Const true
+    clearable = View.Const true,
+    attrs = [ Select.Variant.outlined ]
 )"""
 
     Helpers.codeSampleSection "Generic Types" description content code
@@ -1027,7 +1009,6 @@ Select.create(
           "Var<'T option>"
           ""
           "Two-way binding for the selected value; None when nothing is selected"
-        Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
         Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
         Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no value is selected"
         Helpers.apiParam
@@ -1060,7 +1041,6 @@ Select.create(
       Helpers.apiTable "MultiSelect.create" [
         Helpers.apiParam "items" "View<SelectItemDef<'T> list>" "" "Reactive list of selectable items"
         Helpers.apiParam "selectedValues" "Var<Set<'T>>" "" "Two-way binding for the set of selected values"
-        Helpers.apiParam "?variant" "Variant" "Standard" "Visual style — Standard, Filled, or Outlined"
         Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
         Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no values are selected"
         Helpers.apiParam

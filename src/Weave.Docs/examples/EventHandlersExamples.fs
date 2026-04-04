@@ -134,7 +134,7 @@ div [
             text "Focus state: "
             textView (isFocused.View |> View.Map(fun f -> if f then "Focused" else "Not focused"))
           ]
-          Field.create (Var.Create "", labelText = View.Const "Tab into me")
+          TextField.singleLine (Var.Create "", labelText = View.Const "Tab into me")
         ]
       ]
 
@@ -145,7 +145,7 @@ div [
   on.focusIn (fun el ev -> Var.Set isFocused true)   // see here
   on.focusOut (fun el ev -> Var.Set isFocused false)
 ] [
-  Field.create (Var.Create "", labelText = View.Const "Tab into me")
+  TextField.singleLine (Var.Create "", labelText = View.Const "Tab into me")
 ]"""
 
     Helpers.codeSampleSection "on.focusIn / on.focusOut" description content code

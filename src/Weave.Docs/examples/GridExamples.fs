@@ -577,7 +577,6 @@ Grid.create(
           Select.create (
             justifyItems,
             selectedJustify,
-            variant = Select.Variant.Standard,
             labelText = View.Const "Justify",
             attrs = [ Select.Width.full; Select.Color.primary ]
           )
@@ -620,8 +619,7 @@ Grid.create(
                       spanVars.[i],
                       min = 1,
                       max = 12,
-                      variant = Field.Variant.Outlined,
-                      attrs = [ Field.Width.full ]
+                      attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
                     ),
                     attrs = [
                       Flex.Flex.allSizes

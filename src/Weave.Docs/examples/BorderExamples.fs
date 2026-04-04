@@ -25,10 +25,6 @@ module BorderExamples =
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
-  // ---------------------------------------------------------------------------
-  // 1. How it works
-  // ---------------------------------------------------------------------------
-
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
@@ -195,10 +191,7 @@ div [
 
     Helpers.codeSampleSection "How it works" description content code
 
-  // ---------------------------------------------------------------------------
   // 2. Playground — interactive border configurator
-  // ---------------------------------------------------------------------------
-
   let private playgroundSection () =
     let description =
       Helpers.bodyText
@@ -274,10 +267,9 @@ div [
               Select.create (
                 widthItems,
                 selectedWidth,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Width",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
@@ -285,10 +277,9 @@ div [
               Select.create (
                 styleItems,
                 selectedStyle,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Style",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
@@ -296,10 +287,9 @@ div [
               Select.create (
                 colorItems,
                 selectedColor,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Color",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
@@ -307,10 +297,9 @@ div [
               Select.create (
                 radiusItems,
                 selectedRadius,
-                variant = Select.Variant.Outlined,
                 labelText = View.Const "Radius",
                 placeholder = View.Const "Choose...",
-                attrs = [ Select.Color.primary ]
+                attrs = [ Select.Variant.outlined; Select.Color.primary ]
               ),
               attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
             )
@@ -396,10 +385,7 @@ div [
 
     Helpers.codeSampleSection "Playground" description content code
 
-  // ---------------------------------------------------------------------------
   // 3. Border Radius
-  // ---------------------------------------------------------------------------
-
   let private borderRadiusSection () =
     let description =
       Helpers.bodyText
@@ -508,10 +494,7 @@ div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
 
     Helpers.codeSampleSection "Border Radius" description content code
 
-  // ---------------------------------------------------------------------------
   // 4. Border Width
-  // ---------------------------------------------------------------------------
-
   let private borderWidthSection () =
     let description =
       Helpers.bodyText
@@ -630,10 +613,7 @@ div [
 
     Helpers.codeSampleSection "Border Width" description content code
 
-  // ---------------------------------------------------------------------------
   // 5. Border Style
-  // ---------------------------------------------------------------------------
-
   let private borderStyleSection () =
     let description =
       Helpers.bodyText
@@ -709,10 +689,7 @@ div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.erro
 
     Helpers.codeSampleSection "Border Style" description content code
 
-  // ---------------------------------------------------------------------------
   // 6. Border Color
-  // ---------------------------------------------------------------------------
-
   let private borderColorSection () =
     let description =
       Helpers.bodyText
@@ -790,10 +767,7 @@ div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesD
 
     Helpers.codeSampleSection "Border Color" description content code
 
-  // ---------------------------------------------------------------------------
   // 7. Borders on Components
-  // ---------------------------------------------------------------------------
-
   let private bordersOnComponentsSection () =
     let description =
       Helpers.bodyText
@@ -975,10 +949,7 @@ div [
 
     Helpers.codeSampleSection "Borders on Components" description content code
 
-  // ---------------------------------------------------------------------------
   // Render
-  // ---------------------------------------------------------------------------
-
   let render () =
     Container.create (
       div [] [

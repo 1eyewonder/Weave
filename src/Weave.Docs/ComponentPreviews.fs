@@ -1625,4 +1625,29 @@ module ComponentPreviews =
           Attr.Style "border-radius" "3px"
         ] []
       ]
+    | TextFieldExamples ->
+      cp [
+        div [
+          cl "cp-line"
+          Attr.Style "top" "20px"
+          Attr.Style "left" "12%"
+          Attr.Style "right" "50%"
+          Attr.Style "height" "5px"
+          Attr.Style "opacity" "0.3"
+        ] []
+        div [
+          cl "cp-box"
+          Attr.Style "top" "31px"
+          Attr.Style "left" "12%"
+          Attr.Style "right" "12%"
+          Attr.Style "height" "30px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "39px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "50%"
+          Attr.Style "height" "6px"
+        ] []
+      ]
     | _ -> Doc.Empty

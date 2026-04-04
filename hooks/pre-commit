@@ -1,7 +1,19 @@
 #!/bin/sh
 
 echo "Checking code formatting with Fantomas..."
-dotnet fantomas --check .
+
+# Get staged F# files only (Added, Copied, Modified — excludes Deleted)
+STAGED_FS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(fs|fsi|fsx)$')
+
+if [ -n "$STAGED_FS_FILES" ]; then
+  # Fast path: only check what is being committed
+  echo "$STAGED_FS_FILES" | xargs dotnet fantomas --check
+else
+  # Fallback: no explicit staged files (e.g. git commit -a, merge commit)
+  # — check everything so nothing slips through
+  dotnet fantomas --check .
+fi
+
 if [ $? -ne 0 ]; then
   echo ""
   echo "Formatting check failed. Run 'dotnet fantomas .' to fix."

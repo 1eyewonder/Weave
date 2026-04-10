@@ -530,9 +530,6 @@ IconButton.create(
             Helpers.guidanceBullet
               "The action is the primary call-to-action"
               "filled or outlined variants give text buttons the visual weight a CTA needs."
-            Helpers.guidanceBullet
-              "Accessibility requires a visible label"
-              "screen readers and sighted users both benefit from explicit text."
           ])
           (Helpers.guidanceCard "Use IconButton when\u2026" [
             Helpers.guidanceBullet
@@ -544,16 +541,7 @@ IconButton.create(
             Helpers.guidanceBullet
               "The action is secondary or repeated"
               "edit and delete icons in a list row keep the layout clean."
-            Helpers.guidanceBullet
-              "Always pair with aria-label or Tooltip"
-              "a bare icon without a text alternative fails WCAG 2.1 SC 1.1.1."
           ])
-
-        Alert.create (
-          text
-            "IconButton always needs an aria-label or Tooltip so screen readers can announce the action. Use Tooltip.create to provide both a visual hint and accessible name.",
-          attrs = [ Alert.Color.warning; Alert.Variant.outlined; Margin.Top.small ]
-        )
       ]
 
     Helpers.sectionPlain "When to Use" description content
@@ -602,8 +590,6 @@ IconButton.create(
         ]
 
         Helpers.divider ()
-        whenToUseSection ()
-        Helpers.divider ()
         variantExamples ()
         Helpers.divider ()
         colorExamples ()
@@ -613,6 +599,8 @@ IconButton.create(
         fullWidthExample ()
         Helpers.divider ()
         borderRadiusExamples ()
+        Helpers.divider ()
+        whenToUseSection ()
         Helpers.divider ()
         iconButtonExamples ()
         Helpers.divider ()

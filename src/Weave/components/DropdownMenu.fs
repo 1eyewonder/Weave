@@ -33,7 +33,10 @@ module DropdownMenu =
   module Width =
 
     let full = cl Css.``weave-dropdownmenu--full-width``
-    let fitContent = cl Css.``weave-dropdownmenu--fit-content``
+
+  module PopoverWidth =
+
+    let unbound = cl Css.``weave-dropdownmenu--popover-unbound``
 
   module AnchorOrigin =
 

@@ -93,22 +93,22 @@ type SelectLayoutTests() =
   }
 
   [<Fact>]
-  member this.``fit-content sizer is in flow``() = task {
+  member this.``dynamic sizer is out of flow``() = task {
     do! this.LoadFixture()
 
-    let! position = this.ComputedStyle("#select-fit-content .weave-select__sizer", "position")
+    let! position = this.ComputedStyle("#select-dynamic .weave-select__sizer", "position")
 
-    Assert.Equal("relative", position)
+    Assert.Equal("absolute", position)
   }
 
   [<Fact>]
-  member this.``default sizer is out of flow and hidden``() = task {
+  member this.``default sizer is in flow and hidden``() = task {
     do! this.LoadFixture()
 
     let! position = this.ComputedStyle("#select-closed .weave-select__sizer", "position")
     and! visibility = this.ComputedStyle("#select-closed .weave-select__sizer", "visibility")
 
-    Assert.Equal("absolute", position)
+    Assert.Equal("relative", position)
     Assert.Equal("hidden", visibility)
   }
 

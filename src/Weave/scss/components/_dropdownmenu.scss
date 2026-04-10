@@ -77,9 +77,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  min-width: 100%;
-  width: max-content;
-  max-width: none;
+  width: 100%;
   margin-top: 2px;
 
   // Default anchor: below the trigger, aligned left
@@ -362,15 +360,20 @@ $transform-origins: (
   width: 100%;
   min-width: 0;
 
+  > .weave-button {
+    width: 100%;
+    min-width: 0;
+  }
+
   .weave-dropdownmenu__popover {
     width: 100%;
     max-width: none;
   }
 }
 
-.weave-dropdownmenu--fit-content .weave-dropdownmenu__popover {
-  min-width: 100%;
+.weave-dropdownmenu--popover-unbound .weave-dropdownmenu__popover {
   width: max-content;
+  min-width: 100%;
   max-width: min(400px, 90vw);
 }
 

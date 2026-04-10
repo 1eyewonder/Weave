@@ -32,7 +32,11 @@ module Select =
   module Width =
 
     let full = cl Css.``weave-select--full-width``
-    let fitContent = cl Css.``weave-select--fit-content``
+    let dynamic = cl Css.``weave-select--dynamic``
+
+  module PopoverWidth =
+
+    let unbound = cl Css.``weave-select--popover-unbound``
 
   module AnchorOrigin =
 

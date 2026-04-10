@@ -139,11 +139,49 @@ DropdownMenu.create(
     Helpers.codeSampleSection "Colors" description content code
 
   let private widthExample () =
-    let alertVar = Var.Create None
+    let alertVar = Var.Create<string option> None
+    let widthVar = Var.Create "Default"
+    let popoverWidthVar = Var.Create "Default"
+
+    let items =
+      View.Const [
+        DropdownMenuItem.create (text "Edit", onClick = (fun () -> Var.Set alertVar (Some "Edit")))
+        DropdownMenuItem.create (text "Duplicate", onClick = (fun () -> Var.Set alertVar (Some "Duplicate")))
+        DropdownMenuItem.create (
+          text "A much longer menu item text",
+          onClick = (fun () -> Var.Set alertVar (Some "Long item"))
+        )
+        DropdownMenuItem.create (
+          text "Delete all selected items",
+          onClick = (fun () -> Var.Set alertVar (Some "Delete"))
+        )
+      ]
 
     let description =
       Helpers.bodyText
-        "Dropdown supports two width modes: Full (100% of container) and Fit Content (sizes to widest item). Pass width classes via attrs using DropdownMenu.Width.*."
+        "Width controls the component root. PopoverWidth controls the dropdown panel — by default the panel matches the component width. Use PopoverWidth.unbound to let the panel grow freely to fit its content."
+
+    let widthClassMap =
+      Map.ofList [ "Default", ""; "Full", "weave-dropdownmenu--full-width" ]
+
+    let popoverWidthClassMap =
+      Map.ofList [ "Default", ""; "Unbound", "weave-dropdownmenu--popover-unbound" ]
+
+    let radioGroup label options (radioVar: Var<string>) colorAttr =
+      div [] [
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ] [
+          yield!
+            options
+            |> List.map (fun opt ->
+              Radio.create (
+                radioVar,
+                opt,
+                displayText = View.Const opt,
+                attrs = [ colorAttr; Margin.Bottom.extraSmall ]
+              ))
+        ]
+      ]
 
     let content =
       div [] [
@@ -152,48 +190,24 @@ DropdownMenu.create(
           [
             GridItem.create (
               div [] [
-                div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Full Width" ]
-                DropdownMenu.create (
-                  triggerContent = text "Full Width",
-                  items =
-                    View.Const [
-                      DropdownMenuItem.create (
-                        text "Edit",
-                        onClick = (fun () -> Var.Set alertVar (Some "Edit"))
-                      )
-                      DropdownMenuItem.create (
-                        text "Duplicate",
-                        onClick = (fun () -> Var.Set alertVar (Some "Duplicate"))
-                      )
-                    ],
-                  attrs = [ DropdownMenu.Width.full ],
-                  triggerAttrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
-                )
+                radioGroup "Width" [ "Default"; "Full" ] widthVar Radio.Color.primary
+                div [ Margin.Top.small ] [
+                  radioGroup "Popover Width" [ "Default"; "Unbound" ] popoverWidthVar Radio.Color.secondary
+                ]
               ],
-              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
             )
-
             GridItem.create (
-              div [] [
-                div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Fit Content" ]
-                DropdownMenu.create (
-                  triggerContent = text "Fit Content",
-                  items =
-                    View.Const [
-                      DropdownMenuItem.create (
-                        text "A longer menu item",
-                        onClick = (fun () -> Var.Set alertVar (Some "Long item"))
-                      )
-                      DropdownMenuItem.create (
-                        text "Short",
-                        onClick = (fun () -> Var.Set alertVar (Some "Short"))
-                      )
-                    ],
-                  attrs = [ DropdownMenu.Width.fitContent ],
-                  triggerAttrs = [ Button.Variant.filled; Button.Color.secondary ]
-                )
-              ],
-              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+              DropdownMenu.create (
+                triggerContent = text "Open Menu",
+                items = items,
+                attrs = [
+                  widthClassMap |> Attr.classSelection widthVar.View
+                  popoverWidthClassMap |> Attr.classSelection popoverWidthVar.View
+                ],
+                triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
+              ),
+              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.eight ]
             )
           ]
         )
@@ -202,23 +216,39 @@ DropdownMenu.create(
     let code =
       """open Weave
 
-// Full Width — menu stretches to 100% of the container
+// Default — trigger natural width, popover matches trigger
 DropdownMenu.create(
-    triggerContent = text "Full Width",
+    triggerContent = text "Open Menu",
     items = View.Const items,
-    attrs = [ DropdownMenu.Width.full ],  // see here
-    triggerAttrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
+    attrs = [],
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
 )
 
-// Fit Content — menu sizes to the widest item
+// Full — trigger and popover both fill 100% of container
 DropdownMenu.create(
-    triggerContent = text "Fit Content",
+    triggerContent = text "Open Menu",
     items = View.Const items,
-    attrs = [ DropdownMenu.Width.fitContent ],  // see here
-    triggerAttrs = [ Button.Variant.filled; Button.Color.secondary ]
+    attrs = [ DropdownMenu.Width.full ],
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
+)
+
+// Popover Unbound — panel grows to content width, capped at min(400px, 90vw)
+DropdownMenu.create(
+    triggerContent = text "Open Menu",
+    items = View.Const items,
+    attrs = [ DropdownMenu.PopoverWidth.unbound ],
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
+)
+
+// Combinations are additive
+DropdownMenu.create(
+    triggerContent = text "Open Menu",
+    items = View.Const items,
+    attrs = [ DropdownMenu.Width.full; DropdownMenu.PopoverWidth.unbound ],
+    triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
 )"""
 
-    Helpers.codeSampleSection "Width Modes" description content code
+    Helpers.codeSampleSection "Width & Popover Width" description content code
 
   let private placementExample () =
     let alertVar = Var.Create None
@@ -365,8 +395,8 @@ DropdownMenu.create(
         triggerContent = text "Click to Open",
         items = View.Const items,
         openOn = DropdownMenu.OpenOn.Click,
-        attrs = [ Attr.Style "width" "100%" ],
-        triggerAttrs = [ Button.Variant.filled; Button.Color.primary; Button.Width.full ]
+        attrs = [ DropdownMenu.Width.full ],
+        triggerAttrs = [ Button.Variant.filled; Button.Color.primary ]
       )
 
     let hoverDropdown =
@@ -376,8 +406,8 @@ DropdownMenu.create(
         triggerContent = text "Hover to Open",
         items = View.Const items,
         openOn = DropdownMenu.OpenOn.Hover,
-        attrs = [ Attr.Style "width" "100%" ],
-        triggerAttrs = [ Button.Variant.filled; Button.Color.secondary; Button.Width.full ]
+        attrs = [ DropdownMenu.Width.full ],
+        triggerAttrs = [ Button.Variant.filled; Button.Color.secondary ]
       )
 
     let description =
@@ -653,8 +683,12 @@ DropdownMenu.create(
       ]
 
       Helpers.styleModuleTable "DropdownMenu.Width" [
-        ("full", "Menu stretches to 100% of the container")
-        ("fitContent", "Menu sizes to the widest item")
+        ("full", "Component root stretches to 100% of its container")
+      ]
+
+      Helpers.styleModuleTable "DropdownMenu.PopoverWidth" [
+        ("unbound",
+         "Popover panel grows freely to content width, capped at min(400px, 90vw); default is root width")
       ]
 
       Helpers.styleModuleTable "DropdownMenu.AnchorOrigin" [

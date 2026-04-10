@@ -152,15 +152,30 @@
       </div>
     </div>
 
-    <!-- Fit-content select -->
-    <div id="select-fit-content" class="weave-select weave-select--fit-content" style="margin-top: 250px;">
+    <!-- Dynamic select (sizer out of flow — trigger resizes to selected value) -->
+    <div id="select-dynamic" class="weave-select weave-select--dynamic" style="margin-top: 250px;">
       <div class="weave-select__sizer" aria-hidden="true">
-        <div class="weave-select__sizer-item">Fit Content Item One</div>
-        <div class="weave-select__sizer-item">Fit Content Item Two</div>
+        <div class="weave-select__sizer-item">Dynamic Item One</div>
+        <div class="weave-select__sizer-item">Dynamic Item Two</div>
       </div>
       <div class="weave-field weave-field--standard weave-typography--body2">
         <div class="weave-field__control">
-          <label class="weave-field__label"><span>Fit Content</span></label>
+          <label class="weave-field__label"><span>Dynamic</span></label>
+          <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
+            <span class="weave-select__placeholder">Select...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popover-unbound select (popover grows to max-content) -->
+    <div id="select-popover-unbound" class="weave-select weave-select--popover-unbound" style="margin-top: 16px;">
+      <div class="weave-select__sizer" aria-hidden="true">
+        <div class="weave-select__sizer-item">Popover Unbound Item</div>
+      </div>
+      <div class="weave-field weave-field--standard weave-typography--body2">
+        <div class="weave-field__control">
+          <label class="weave-field__label"><span>Popover Unbound</span></label>
           <div class="weave-field__input weave-select__value" tabindex="0" role="combobox">
             <span class="weave-select__placeholder">Select...</span>
           </div>

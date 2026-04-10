@@ -521,11 +521,12 @@
 }
 
 // Hidden sizer element — contains all item texts so the select can pre-size
-// to the widest dropdown option. Out-of-flow by default (position: absolute);
-// fit-content mode puts it back in flow (position: relative) so it
-// contributes to the inline-flex container's cross-axis width.
+// to the widest dropdown option. In-flow by default (position: relative) so it
+// contributes to the inline-flex container's width, giving the trigger a stable
+// width regardless of the selected value. Width.dynamic puts it out of flow
+// (position: absolute) so the trigger resizes to the currently selected value.
 .weave-select__sizer {
-  position: absolute;
+  position: relative;
   height: 0;
   min-height: 0;
   overflow: hidden;
@@ -560,16 +561,15 @@
   }
 }
 
-.weave-select--fit-content {
+.weave-select--dynamic {
   .weave-select__sizer {
-    position: relative;
+    position: absolute;
   }
+}
 
-  .weave-select__popover {
-    min-width: 100%;
-    width: max-content;
-    max-width: min(400px, 90vw);
-  }
+.weave-select--popover-unbound .weave-select__popover {
+  width: max-content;
+  max-width: min(400px, 90vw);
 }
 
 .weave-select--dense {

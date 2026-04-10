@@ -183,7 +183,7 @@ Button.create (text "Increment", onClick = (fun () ->
           selected,
           labelText = View.Const "Pick a fruit",
           clearable = View.Const true,
-          attrs = [ Select.Width.fitContent ]
+          attrs = [ Select.PopoverWidth.unbound ]
         )
         div [ Margin.Top.small ] [
           selected.View

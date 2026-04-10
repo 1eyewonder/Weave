@@ -641,62 +641,69 @@ Select.create(items, selected, labelText = View.Const "Info", attrs = [ Select.V
     Helpers.codeSampleSection "Colors" description content code
 
   let private widthExample () =
-    let autoVal = Var.Create<string option> None
-    let fullVal = Var.Create<string option> None
-    let fitVal = Var.Create<string option> None
+    let selectedVal = Var.Create<string option> None
+    let widthVar = Var.Create "Stable"
+    let popoverWidthVar = Var.Create "Default"
 
     let items =
-      [ "Short"; "Medium Text"; "A Longer Option Here" ]
+      [ "Dog"; "Cat"; "Hippopotamus" ]
       |> List.map (fun o -> SelectItem.create (text o, o, o))
       |> View.Const
 
     let description =
       Helpers.bodyText
-        "Select supports three width modes: Auto (default, inline sizing), Full (100% of container), and Fit Content (sizes to content). Pass width classes via attrs using Select.Width.full or Select.Width.fitContent."
+        "Width controls the component root. Stable (default) pre-sizes the trigger to the widest option — pick different values and the trigger width stays fixed. Dynamic lets the trigger resize with the selected value. PopoverWidth.unbound allows the dropdown panel to grow past the component width."
+
+    let widthClassMap =
+      Map.ofList [
+        "Stable", ""
+        "Full", "weave-select--full-width"
+        "Dynamic", "weave-select--dynamic"
+      ]
+
+    let popoverWidthClassMap =
+      Map.ofList [ "Default", ""; "Unbound", "weave-select--popover-unbound" ]
+
+    let radioGroup label options (radioVar: Var<string>) colorAttr =
+      div [] [
+        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
+        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes ] [
+          yield!
+            options
+            |> List.map (fun opt ->
+              Radio.create (
+                radioVar,
+                opt,
+                displayText = View.Const opt,
+                attrs = [ colorAttr; Margin.Bottom.extraSmall ]
+              ))
+        ]
+      ]
 
     let content =
       Grid.create (
         [
           GridItem.create (
             div [] [
-              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Auto (default)" ]
-
-              Select.create (
-                items,
-                autoVal,
-                labelText = View.Const "Auto",
-                attrs = [ Select.Variant.outlined; Select.Color.primary ]
-              )
+              radioGroup "Width" [ "Stable"; "Full"; "Dynamic" ] widthVar Radio.Color.primary
+              div [ Margin.Top.small ] [
+                radioGroup "Popover Width" [ "Default"; "Unbound" ] popoverWidthVar Radio.Color.secondary
+              ]
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
-
           GridItem.create (
-            div [ Attr.Style "width" "100%" ] [
-              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Full Width" ]
-
-              Select.create (
-                items,
-                fullVal,
-                labelText = View.Const "Full",
-                attrs = [ Select.Variant.outlined; Select.Color.secondary; Select.Width.full ]
-              )
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
-          )
-
-          GridItem.create (
-            div [] [
-              div [ Typography.body2; Margin.Bottom.extraSmall ] [ text "Fit Content" ]
-
-              Select.create (
-                items,
-                fitVal,
-                labelText = View.Const "Fit Content",
-                attrs = [ Select.Variant.outlined; Select.Color.tertiary; Select.Width.fitContent ]
-              )
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+            Select.create (
+              items,
+              selectedVal,
+              labelText = View.Const "Pick one",
+              attrs = [
+                Select.Variant.outlined
+                widthClassMap |> Attr.classSelection widthVar.View
+                popoverWidthClassMap |> Attr.classSelection popoverWidthVar.View
+              ]
+            ),
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.eight; AlignSelf.center ]
           )
         ]
       )
@@ -708,33 +715,30 @@ open WebSharper.UI
 let selected = Var.Create<string option> None
 
 let items =
-    [ "Short"; "Medium Text"; "A Longer Option Here" ]
-    |> List.map (fun o ->
-        SelectItem.create (text o, o, o))
+    [ "Dog"; "Cat"; "Hippopotamus" ]
+    |> List.map (fun o -> SelectItem.create (text o, o, o))
     |> View.Const
 
-// Auto (default) — inline, sizes to min-width
-Select.create(
-    items, selected,
-    labelText = View.Const "Auto",
-    attrs = [ Select.Variant.outlined ]
-)
+// Stable (default) — trigger pre-sizes to widest option; stays fixed when value changes
+Select.create(items, selected, labelText = View.Const "Stable", attrs = [ Select.Variant.outlined ])
 
-// Full Width — 100% of container
-Select.create(
-    items, selected,
-    labelText = View.Const "Full",
-    attrs = [ Select.Variant.outlined; Select.Width.full ]  // see here
-)
+// Full — trigger and popover fill 100% of container
+Select.create(items, selected, labelText = View.Const "Full",
+    attrs = [ Select.Variant.outlined; Select.Width.full ])
 
-// Fit Content — sizes to content
-Select.create(
-    items, selected,
-    labelText = View.Const "Fit Content",
-    attrs = [ Select.Variant.outlined; Select.Width.fitContent ]  // see here
-)"""
+// Dynamic — trigger resizes to the currently selected value
+Select.create(items, selected, labelText = View.Const "Dynamic",
+    attrs = [ Select.Variant.outlined; Select.Width.dynamic ])
 
-    Helpers.codeSampleSection "Width Modes" description content code
+// Popover Unbound — panel grows to content width, capped at min(400px, 90vw)
+Select.create(items, selected, labelText = View.Const "Unbound",
+    attrs = [ Select.Variant.outlined; Select.PopoverWidth.unbound ])
+
+// Combinations are additive
+Select.create(items, selected, labelText = View.Const "Stable + Unbound",
+    attrs = [ Select.Variant.outlined; Select.PopoverWidth.unbound ])"""
+
+    Helpers.codeSampleSection "Width & Popover Width" description content code
 
   let private placementExample () =
     let selected = Var.Create<string option>(Some "Cherry")
@@ -1104,8 +1108,13 @@ Select.create(
       ]
 
       Helpers.styleModuleTable "Select.Width" [
-        ("full", "Select stretches to fill its container width")
-        ("fitContent", "Select shrinks to fit the selected content")
+        ("full", "Component root stretches to fill its container width")
+        ("dynamic", "Trigger resizes to the currently selected value (opt-out of stable default)")
+      ]
+
+      Helpers.styleModuleTable "Select.PopoverWidth" [
+        ("unbound",
+         "Popover panel grows freely to content width, capped at min(400px, 90vw); default is root width")
       ]
 
       Helpers.styleModuleTable "Select.AnchorOrigin" [

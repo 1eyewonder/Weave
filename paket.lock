@@ -50,8 +50,8 @@ NUGET
 GROUP analyzers
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    G-Research.FSharp.Analyzers (0.22)
-    Ionide.Analyzers (0.14.11)
+    G-Research.FSharp.Analyzers (0.26)
+    Ionide.Analyzers (0.20)
 
 GROUP build
 STORAGE: NONE

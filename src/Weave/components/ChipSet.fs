@@ -34,15 +34,14 @@ type ChipItem =
 
   static member create
     (label: Doc, value: string, ?content: Doc, ?closable: bool, ?disabled: View<bool>, ?attrs: Attr list)
-    : ChipSet.ChipDef =
-    {
-      Label = label
-      Value = value
-      Content = content
-      Closable = defaultArg closable false
-      Disabled = defaultArg disabled (View.Const false)
-      Attrs = defaultArg attrs []
-    }
+    : ChipSet.ChipDef = {
+    Label = label
+    Value = value
+    Content = content
+    Closable = defaultArg closable false
+    Disabled = defaultArg disabled (View.Const false)
+    Attrs = defaultArg attrs []
+  }
 
 [<JavaScript>]
 type ChipSet =

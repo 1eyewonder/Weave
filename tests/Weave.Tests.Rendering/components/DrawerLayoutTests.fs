@@ -38,7 +38,9 @@ type DrawerLayoutTests() =
   member this.``drawer is to the left of main content``() = task {
     do! this.LoadFixture()
     let! drawerBox = this.Page.Locator("#drawer-left").BoundingBoxAsync()
-    and! mainBox = this.Page.Locator("#drawer-container .weave-main-content").BoundingBoxAsync()
+
+    and! mainBox =
+      this.Page.Locator("#drawer-container .weave-main-content").BoundingBoxAsync()
 
     Assert.True(
       drawerBox.X < mainBox.X,
@@ -78,7 +80,8 @@ type DrawerLayoutTests() =
   member this.``closed drawer is positioned off-screen``() = task {
     do! this.LoadFixture()
 
-    let! left = this.Page.Locator("#drawer-closed").EvaluateAsync<string>("el => getComputedStyle(el).left")
+    let! left =
+      this.Page.Locator("#drawer-closed").EvaluateAsync<string>("el => getComputedStyle(el).left")
 
     // Closed drawer uses negative left to move off-screen: left: calc(-1 * drawer-width)
     let leftValue = System.Double.Parse(left.Replace("px", ""))

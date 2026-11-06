@@ -88,7 +88,8 @@ type SwitchInteractionTests(fixture: TestFixture) =
     do! this.Expect(input).ToBeFocusedAsync()
     let track = this.Page.Locator(".weave-switch__track").First
 
-    let! outlineStyle = track.EvaluateAsync<string>("el => getComputedStyle(el).outlineStyle")
+    let! outlineStyle =
+      track.EvaluateAsync<string>("el => getComputedStyle(el).outlineStyle")
 
     Assert.NotEqual<string>("none", outlineStyle)
   }

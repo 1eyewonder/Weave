@@ -88,7 +88,8 @@ type SliderLayoutTests() =
     do! this.LoadFixture()
     let! trackContainer = this.Page.Locator("#slider-track-container").BoundingBoxAsync()
 
-    and! track = this.Page.Locator("#slider-basic .weave-slider__track").BoundingBoxAsync()
+    and! track =
+      this.Page.Locator("#slider-basic .weave-slider__track").BoundingBoxAsync()
 
     Assert.True(
       abs (track.Width - trackContainer.Width) <= 1.0f,
@@ -133,7 +134,10 @@ type SliderLayoutTests() =
   [<Fact>]
   member this.``thumb at 0% is at the left edge``() = task {
     do! this.LoadFixture()
-    let! trackContainer = this.Page.Locator("#slider-zero .weave-slider__track-container").BoundingBoxAsync()
+
+    let! trackContainer =
+      this.Page.Locator("#slider-zero .weave-slider__track-container").BoundingBoxAsync()
+
     and! thumb = this.Page.Locator("#slider-thumb-zero").BoundingBoxAsync()
 
     let thumbCenter = thumb.X + thumb.Width / 2.0f
@@ -147,7 +151,10 @@ type SliderLayoutTests() =
   [<Fact>]
   member this.``thumb at 100% is at the right edge``() = task {
     do! this.LoadFixture()
-    let! trackContainer = this.Page.Locator("#slider-full .weave-slider__track-container").BoundingBoxAsync()
+
+    let! trackContainer =
+      this.Page.Locator("#slider-full .weave-slider__track-container").BoundingBoxAsync()
+
     and! thumb = this.Page.Locator("#slider-thumb-full").BoundingBoxAsync()
 
     let thumbCenter = thumb.X + thumb.Width / 2.0f
@@ -219,7 +226,10 @@ type SliderLayoutTests() =
   [<Fact>]
   member this.``tick labels are below the track container``() = task {
     do! this.LoadFixture()
-    let! trackContainer = this.Page.Locator("#slider-ticks .weave-slider__track-container").BoundingBoxAsync()
+
+    let! trackContainer =
+      this.Page.Locator("#slider-ticks .weave-slider__track-container").BoundingBoxAsync()
+
     and! tickLabels = this.Page.Locator("#slider-tick-labels").BoundingBoxAsync()
 
     Assert.True(

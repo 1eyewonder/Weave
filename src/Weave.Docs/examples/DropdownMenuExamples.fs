@@ -17,7 +17,7 @@ module DropdownMenuExamples =
 
   let private alertDialog (messageVar: Var<string option>) =
     messageVar.View
-    |> Doc.BindView (function
+    |> Doc.BindView(function
       | Some message ->
         Dialog.create (
           DialogTitle.create (div [ Typography.h6 ] [ text "Alert" ]),

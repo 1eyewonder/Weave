@@ -172,7 +172,7 @@ Dialog.create(
       Grid.create (
         [
           dialogVisible.View
-          |> Doc.BindView (function
+          |> Doc.BindView(function
             | Some pos ->
               Dialog.create (
                 DialogTitle.create (div [ Typography.h6 ] [ text (sprintf "%A Dialog" pos) ]),

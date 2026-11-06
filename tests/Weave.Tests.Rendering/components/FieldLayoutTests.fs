@@ -91,7 +91,8 @@ type FieldLayoutTests() =
     do! this.LoadFixture()
     do! this.SetTheme(theme)
 
-    let! borderColor = this.ComputedStyle("#field-outlined .weave-field__outline", "borderColor")
+    let! borderColor =
+      this.ComputedStyle("#field-outlined .weave-field__outline", "borderColor")
 
     Assert.False(
       borderColor = "transparent" || borderColor = "rgba(0, 0, 0, 0)",
@@ -117,7 +118,9 @@ type FieldLayoutTests() =
   [<Fact>]
   member this.``outlined field renders a fieldset outline``() = task {
     do! this.LoadFixture()
-    let! outline = this.Page.Locator("#field-outlined .weave-field__outline").BoundingBoxAsync()
+
+    let! outline =
+      this.Page.Locator("#field-outlined .weave-field__outline").BoundingBoxAsync()
 
     Assert.True(
       outline.Width > 0.0f,
@@ -144,8 +147,12 @@ type FieldLayoutTests() =
   [<Fact>]
   member this.``standard input has non-zero vertical padding``() = task {
     do! this.LoadFixture()
-    let! paddingTop = this.ComputedStyle("#field-standard .weave-field__input", "paddingTop")
-    and! paddingBottom = this.ComputedStyle("#field-standard .weave-field__input", "paddingBottom")
+
+    let! paddingTop =
+      this.ComputedStyle("#field-standard .weave-field__input", "paddingTop")
+
+    and! paddingBottom =
+      this.ComputedStyle("#field-standard .weave-field__input", "paddingBottom")
 
     FieldLayoutTests.assertNonZeroPadding "Standard field input paddingTop should be non-zero" paddingTop
 

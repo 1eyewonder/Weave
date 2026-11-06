@@ -158,14 +158,13 @@ type TableColumn =
   /// <param name="attrs">Additional attributes merged onto both the header and body cells of this column, such as alignment or width.</param>
   static member create<'T>
     (key: string, header: Doc, cell: 'T -> Doc, ?sort: Table.ColumnSort<'T>, ?attrs: Attr list)
-    : Table.TableColumnDef<'T> =
-    {
-      Key = key
-      Header = header
-      Cell = cell
-      Sort = sort
-      Attrs = defaultArg attrs List.empty
-    }
+    : Table.TableColumnDef<'T> = {
+    Key = key
+    Header = header
+    Cell = cell
+    Sort = sort
+    Attrs = defaultArg attrs List.empty
+  }
 
 [<JavaScript>]
 module private TableInternal =

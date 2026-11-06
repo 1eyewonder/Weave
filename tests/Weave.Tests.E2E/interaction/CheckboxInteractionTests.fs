@@ -40,7 +40,8 @@ type CheckboxInteractionTests(fixture: TestFixture) =
     do! this.Expect(input).ToBeFocusedAsync()
     let span = this.Page.Locator(".weave-checkbox__span").First
 
-    let! outlineStyle = span.EvaluateAsync<string>("el => getComputedStyle(el).outlineStyle")
+    let! outlineStyle =
+      span.EvaluateAsync<string>("el => getComputedStyle(el).outlineStyle")
 
     Assert.NotEqual<string>("none", outlineStyle)
   }

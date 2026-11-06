@@ -17,7 +17,10 @@ type SizingConsistencyTests() =
     do! this.LoadFixture()
     let! listItem = this.Page.Locator($"#f1-{density}-list-item").BoundingBoxAsync()
     and! selectItem = this.Page.Locator($"#f1-{density}-select-item").BoundingBoxAsync()
-    and! dropdownItem = this.Page.Locator($"#f1-{density}-dropdown-item").BoundingBoxAsync()
+
+    and! dropdownItem =
+      this.Page.Locator($"#f1-{density}-dropdown-item").BoundingBoxAsync()
+
     and! tab = this.Page.Locator($"#f1-{density}-tab").BoundingBoxAsync()
 
     assertHeightsMatch $"menu items ({density})" [
@@ -36,7 +39,9 @@ type SizingConsistencyTests() =
     do! this.LoadFixture()
     let! listItem = this.Page.Locator($"#f1-{density}-list-item").BoundingBoxAsync()
     and! selectItem = this.Page.Locator($"#f1-{density}-select-item").BoundingBoxAsync()
-    and! dropdownItem = this.Page.Locator($"#f1-{density}-dropdown-item").BoundingBoxAsync()
+
+    and! dropdownItem =
+      this.Page.Locator($"#f1-{density}-dropdown-item").BoundingBoxAsync()
 
     for (name, box) in
       [
@@ -89,11 +94,12 @@ type SizingConsistencyTests() =
   [<InlineData("compact", "4px")>]
   [<InlineData("standard", "8px")>]
   [<InlineData("spacious", "12px")>]
-  member this.``form controls - form control padding matches density``(density: string, expected: string) = task {
-    do! this.LoadFixture()
-    let! padding = this.ComputedStyle($"#f2-{density}-checkbox", "padding")
-    Assert.Equal(expected, padding)
-  }
+  member this.``form controls - form control padding matches density``(density: string, expected: string) =
+    task {
+      do! this.LoadFixture()
+      let! padding = this.ComputedStyle($"#f2-{density}-checkbox", "padding")
+      Assert.Equal(expected, padding)
+    }
 
   [<Theory>]
   [<InlineData("compact")>]
@@ -131,8 +137,12 @@ type SizingConsistencyTests() =
   [<InlineData("outlined")>]
   member this.``field controls - select control matches field control height``(variant: string) = task {
     do! this.LoadFixture()
-    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
-    and! selectControl = this.Page.Locator($"#f5-{variant}-select .weave-field__control").BoundingBoxAsync()
+
+    let! fieldControl =
+      this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+    and! selectControl =
+      this.Page.Locator($"#f5-{variant}-select .weave-field__control").BoundingBoxAsync()
 
     assertHeightsMatch $"field controls ({variant})" [ ("field", fieldControl); ("select", selectControl) ]
   }
@@ -143,7 +153,9 @@ type SizingConsistencyTests() =
   [<InlineData("outlined")>]
   member this.``field controls - empty select control matches field control height``(variant: string) = task {
     do! this.LoadFixture()
-    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+    let! fieldControl =
+      this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
 
     and! emptySelectControl =
       this.Page.Locator($"#f5-{variant}-select-empty .weave-field__control").BoundingBoxAsync()
@@ -160,7 +172,9 @@ type SizingConsistencyTests() =
   [<InlineData("outlined")>]
   member this.``field controls - textfield control matches field control height``(variant: string) = task {
     do! this.LoadFixture()
-    let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+
+    let! fieldControl =
+      this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
 
     and! textFieldControl =
       this.Page.Locator($"#f5-{variant}-textfield .weave-field__control").BoundingBoxAsync()
@@ -176,38 +190,48 @@ type SizingConsistencyTests() =
   [<InlineData("outlined")>]
   member this.``field controls - numeric control height matches field control height for filled and outlined``
     (variant: string)
-    =
-    task {
-      do! this.LoadFixture()
-      let! fieldControl = this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
+    = task {
+    do! this.LoadFixture()
 
-      and! numericControl =
-        this.Page.Locator($"#f5-{variant}-numeric .weave-field__control").BoundingBoxAsync()
+    let! fieldControl =
+      this.Page.Locator($"#f5-{variant}-field .weave-field__control").BoundingBoxAsync()
 
-      assertHeightsMatch $"field/numeric controls ({variant})" [
-        ("field", fieldControl)
-        ("numeric", numericControl)
-      ]
-    }
+    and! numericControl =
+      this.Page.Locator($"#f5-{variant}-numeric .weave-field__control").BoundingBoxAsync()
+
+    assertHeightsMatch $"field/numeric controls ({variant})" [
+      ("field", fieldControl)
+      ("numeric", numericControl)
+    ]
+  }
 
   [<Fact>]
-  member this.``field controls - standard numeric control is intentionally taller than standard field``() = task {
-    do! this.LoadFixture()
-    let! fieldControl = this.Page.Locator("#f5-standard-field .weave-field__control").BoundingBoxAsync()
-    and! numericControl = this.Page.Locator("#f5-standard-numeric .weave-field__control").BoundingBoxAsync()
+  member this.``field controls - standard numeric control is intentionally taller than standard field``() =
+    task {
+      do! this.LoadFixture()
 
-    Assert.True(
-      numericControl.Height > fieldControl.Height,
-      $"Standard numeric field control ({numericControl.Height}px) should be taller than standard field control ({fieldControl.Height}px) — symmetric padding override (0.625rem/0.625rem) for spin-button vertical centering"
-    )
-  }
+      let! fieldControl =
+        this.Page.Locator("#f5-standard-field .weave-field__control").BoundingBoxAsync()
+
+      and! numericControl =
+        this.Page.Locator("#f5-standard-numeric .weave-field__control").BoundingBoxAsync()
+
+      Assert.True(
+        numericControl.Height > fieldControl.Height,
+        $"Standard numeric field control ({numericControl.Height}px) should be taller than standard field control ({fieldControl.Height}px) — symmetric padding override (0.625rem/0.625rem) for spin-button vertical centering"
+      )
+    }
 
   [<Fact>]
   member this.``field inputs - all field-family inputs share the same font size``() = task {
     do! this.LoadFixture()
     let! fieldFontSize = this.ComputedStyle("#f6-field .weave-field__input", "fontSize")
-    and! textFieldFontSize = this.ComputedStyle("#f6-textfield .weave-field__input", "fontSize")
-    and! numericFontSize = this.ComputedStyle("#f6-numeric .weave-field__input", "fontSize")
+
+    and! textFieldFontSize =
+      this.ComputedStyle("#f6-textfield .weave-field__input", "fontSize")
+
+    and! numericFontSize =
+      this.ComputedStyle("#f6-numeric .weave-field__input", "fontSize")
 
     assertComputedValuesMatch "field-family input font-size" "fontSize" [
       ("field", fieldFontSize)
@@ -219,10 +243,18 @@ type SizingConsistencyTests() =
   [<Fact>]
   member this.``field inputs - standard field and textfield input padding matches``() = task {
     do! this.LoadFixture()
-    let! fieldPaddingTop = this.ComputedStyle("#f6-field .weave-field__input", "paddingTop")
-    and! fieldPaddingBottom = this.ComputedStyle("#f6-field .weave-field__input", "paddingBottom")
-    and! textFieldPaddingTop = this.ComputedStyle("#f6-textfield .weave-field__input", "paddingTop")
-    and! textFieldPaddingBottom = this.ComputedStyle("#f6-textfield .weave-field__input", "paddingBottom")
+
+    let! fieldPaddingTop =
+      this.ComputedStyle("#f6-field .weave-field__input", "paddingTop")
+
+    and! fieldPaddingBottom =
+      this.ComputedStyle("#f6-field .weave-field__input", "paddingBottom")
+
+    and! textFieldPaddingTop =
+      this.ComputedStyle("#f6-textfield .weave-field__input", "paddingTop")
+
+    and! textFieldPaddingBottom =
+      this.ComputedStyle("#f6-textfield .weave-field__input", "paddingBottom")
 
     assertComputedValuesMatch "standard field/textfield input paddingTop" "paddingTop" [
       ("field", fieldPaddingTop)

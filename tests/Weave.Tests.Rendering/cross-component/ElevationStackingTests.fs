@@ -8,7 +8,8 @@ type ElevationStackingTests() =
   inherit LayoutTestBase("elevation-stacking")
 
   member private this.ZIndexOf(selector: string) = task {
-    let! value = this.Page.Locator(selector).EvaluateAsync<string>("el => window.getComputedStyle(el).zIndex")
+    let! value =
+      this.Page.Locator(selector).EvaluateAsync<string>("el => window.getComputedStyle(el).zIndex")
 
     return
       match System.Int32.TryParse(value) with

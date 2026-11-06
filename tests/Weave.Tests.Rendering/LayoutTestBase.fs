@@ -29,7 +29,9 @@ type LayoutTestBase(fixtureName: string) =
   }
 
   member this.SetTheme(theme: string) = task {
-    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+    let! _ =
+      this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+
     ()
   }
 

@@ -55,7 +55,10 @@ type NumericFieldLayoutTests() =
   [<Fact>]
   member this.``spin buttons are contained within field control``() = task {
     do! this.LoadFixture()
-    let! parentBox = this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+
+    let! parentBox =
+      this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+
     and! childBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
     assertContainedWithin "field control" "spin buttons" parentBox childBox
   }
@@ -79,15 +82,23 @@ type NumericFieldLayoutTests() =
   [<Fact>]
   member this.``outlined spin buttons are contained within field control``() = task {
     do! this.LoadFixture()
-    let! parentBox = this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+
+    let! parentBox =
+      this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+
     assertContainedWithin "field control" "outlined spin buttons" parentBox childBox
   }
 
   [<Fact>]
   member this.``spin buttons fill field control height``() = task {
     do! this.LoadFixture()
-    let! parentBox = this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+
+    let! parentBox =
+      this.Page.Locator("#numeric-standard .weave-field__control").BoundingBoxAsync()
+
     and! childBox = this.Page.Locator("#spin-buttons").BoundingBoxAsync()
     assertFillsHeight "field control" "spin buttons" parentBox childBox
   }
@@ -103,8 +114,13 @@ type NumericFieldLayoutTests() =
   [<Fact>]
   member this.``outlined spin buttons fill field control height``() = task {
     do! this.LoadFixture()
-    let! parentBox = this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+
+    let! parentBox =
+      this.Page.Locator("#numeric-outlined .weave-field__control").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#numeric-outlined .weave-field__spin-buttons").BoundingBoxAsync()
+
     assertFillsHeight "field control" "outlined spin buttons" parentBox childBox
   }
 
@@ -119,7 +135,9 @@ type NumericFieldLayoutTests() =
   [<Fact>]
   member this.``input font size is inherited from typography class``() = task {
     do! this.LoadFixture()
-    let! fontSize = this.ComputedStyle("#numeric-standard .weave-field__input", "fontSize")
+
+    let! fontSize =
+      this.ComputedStyle("#numeric-standard .weave-field__input", "fontSize")
 
     Assert.False(
       fontSize = "" || fontSize = "0px",
@@ -130,8 +148,12 @@ type NumericFieldLayoutTests() =
   [<Fact>]
   member this.``standard numeric input uses symmetric vertical padding for spin-button alignment``() = task {
     do! this.LoadFixture()
-    let! paddingTop = this.ComputedStyle("#numeric-standard .weave-field__input", "paddingTop")
-    and! paddingBottom = this.ComputedStyle("#numeric-standard .weave-field__input", "paddingBottom")
+
+    let! paddingTop =
+      this.ComputedStyle("#numeric-standard .weave-field__input", "paddingTop")
+
+    and! paddingBottom =
+      this.ComputedStyle("#numeric-standard .weave-field__input", "paddingBottom")
 
     NumericFieldLayoutTests.assertSymmetricPadding paddingTop paddingBottom
   }

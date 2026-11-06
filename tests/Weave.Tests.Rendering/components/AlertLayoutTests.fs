@@ -48,8 +48,12 @@ type AlertLayoutTests() =
   [<Fact>]
   member this.``icon is left of content``() = task {
     do! this.LoadFixture()
-    let! icon = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
-    and! content = this.Page.Locator("#alert-with-icon .weave-alert__content").BoundingBoxAsync()
+
+    let! icon =
+      this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+
+    and! content =
+      this.Page.Locator("#alert-with-icon .weave-alert__content").BoundingBoxAsync()
 
     Assert.True(icon.X < content.X, $"Icon (x={icon.X}) should be left of content (x={content.X})")
   }
@@ -88,8 +92,12 @@ type AlertLayoutTests() =
   [<Fact>]
   member this.``close button is right of content``() = task {
     do! this.LoadFixture()
-    let! content = this.Page.Locator("#alert-with-close .weave-alert__content").BoundingBoxAsync()
-    and! close = this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
+
+    let! content =
+      this.Page.Locator("#alert-with-close .weave-alert__content").BoundingBoxAsync()
+
+    and! close =
+      this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
 
     Assert.True(content.X < close.X, $"Content (x={content.X}) should be left of close button (x={close.X})")
   }
@@ -98,7 +106,10 @@ type AlertLayoutTests() =
   member this.``icon is contained within alert``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#alert-with-icon").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+
     assertContainedWithin "alert" "icon" parentBox childBox
   }
 
@@ -106,7 +117,10 @@ type AlertLayoutTests() =
   member this.``close button is contained within alert``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#alert-with-close").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#alert-with-close .weave-alert__close").BoundingBoxAsync()
+
     assertContainedWithin "alert" "close button" parentBox childBox
   }
 
@@ -114,6 +128,9 @@ type AlertLayoutTests() =
   member this.``icon fills alert height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#alert-with-icon").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#alert-with-icon .weave-alert__icon").BoundingBoxAsync()
+
     assertFillsHeight "alert" "icon" parentBox childBox
   }

@@ -246,21 +246,20 @@ type Drawer =
       ?width: int,
       ?header: Doc,
       ?attrs: Attr list
-    ) : Drawer.Config =
-    {
-      Content = content
-      Open = isOpen
-      Variant = defaultArg variant Variant.Temporary
-      Position = defaultArg position Position.Left
-      ClipMode = defaultArg clipMode ClipMode.FullHeight
-      Breakpoint = defaultArg breakpoint (DrawerBreakpoint.At Breakpoint.Medium)
-      OverlayClose = overlayClose
-      IsFixed = defaultArg isFixed true
-      Width = width
-      Header = header
-      ExpandOnHover = defaultArg expandOnHover (View.Const false)
-      Attrs = defaultArg attrs []
-    }
+    ) : Drawer.Config = {
+    Content = content
+    Open = isOpen
+    Variant = defaultArg variant Variant.Temporary
+    Position = defaultArg position Position.Left
+    ClipMode = defaultArg clipMode ClipMode.FullHeight
+    Breakpoint = defaultArg breakpoint (DrawerBreakpoint.At Breakpoint.Medium)
+    OverlayClose = overlayClose
+    IsFixed = defaultArg isFixed true
+    Width = width
+    Header = header
+    ExpandOnHover = defaultArg expandOnHover (View.Const false)
+    Attrs = defaultArg attrs []
+  }
 
   /// <summary>
   /// Internal helper. Builds the drawer panel and backdrop overlay as a

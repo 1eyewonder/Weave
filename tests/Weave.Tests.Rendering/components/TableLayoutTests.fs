@@ -7,7 +7,9 @@ type TableLayoutTests() =
   inherit LayoutTestBase("table")
 
   member private this.RowHeight(id: string) = task {
-    let! box = this.Page.Locator($"#{id} tbody .weave-table__row").First.BoundingBoxAsync()
+    let! box =
+      this.Page.Locator($"#{id} tbody .weave-table__row").First.BoundingBoxAsync()
+
     return box.Height
   }
 
@@ -39,7 +41,9 @@ type TableLayoutTests() =
   member this.``table fills its frame width``() = task {
     do! this.LoadFixture()
     let! frame = this.Page.Locator("#table-standard").BoundingBoxAsync()
-    and! table = this.Page.Locator("#table-standard .weave-table__table").BoundingBoxAsync()
+
+    and! table =
+      this.Page.Locator("#table-standard .weave-table__table").BoundingBoxAsync()
 
     Assert.True(
       table.Width >= frame.Width - 2.0f - tolerance,
@@ -51,7 +55,9 @@ type TableLayoutTests() =
   member this.``narrow frame scrolls instead of growing``() = task {
     do! this.LoadFixture()
     let! frame = this.Page.Locator("#table-narrow").BoundingBoxAsync()
-    let! scrollWidth = this.Page.Locator("#table-narrow").EvaluateAsync<int>("el => el.scrollWidth")
+
+    let! scrollWidth =
+      this.Page.Locator("#table-narrow").EvaluateAsync<int>("el => el.scrollWidth")
 
     Assert.True(
       float32 scrollWidth > frame.Width,
@@ -64,8 +70,12 @@ type TableLayoutTests() =
   [<Fact>]
   member this.``sort indicator sits inside the sort button after the label``() = task {
     do! this.LoadFixture()
-    let! button = this.Page.Locator("#table-sortable .weave-table__sort-button").BoundingBoxAsync()
-    and! indicator = this.Page.Locator("#table-sortable .weave-table__sort-indicator").BoundingBoxAsync()
+
+    let! button =
+      this.Page.Locator("#table-sortable .weave-table__sort-button").BoundingBoxAsync()
+
+    and! indicator =
+      this.Page.Locator("#table-sortable .weave-table__sort-indicator").BoundingBoxAsync()
 
     assertContainedWithin "sort button" "sort indicator" button indicator
 
@@ -79,7 +89,9 @@ type TableLayoutTests() =
   member this.``row action button stays inside its cell``() = task {
     do! this.LoadFixture()
     let! cell = this.Page.Locator("#table-sortable td").First.BoundingBoxAsync()
-    and! action = this.Page.Locator("#table-sortable .weave-table__row-action").BoundingBoxAsync()
+
+    and! action =
+      this.Page.Locator("#table-sortable .weave-table__row-action").BoundingBoxAsync()
 
     assertContainedWithin "cell" "row action" cell action
   }
@@ -88,7 +100,9 @@ type TableLayoutTests() =
   member this.``select column only takes the checkbox width``() = task {
     do! this.LoadFixture()
 
-    let! cell = this.Page.Locator("#table-selectable tbody .weave-table__select-cell").BoundingBoxAsync()
+    let! cell =
+      this.Page.Locator("#table-selectable tbody .weave-table__select-cell").BoundingBoxAsync()
+
     and! box = this.Page.Locator("#select-box").BoundingBoxAsync()
     and! frame = this.Page.Locator("#table-selectable").BoundingBoxAsync()
 

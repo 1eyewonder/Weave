@@ -177,7 +177,10 @@ type ChipLayoutTests() =
   member this.``close button is contained within chip bounds``() = task {
     do! this.LoadFixture()
     let! chipBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
-    and! closeBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+
+    and! closeBox =
+      this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+
     assertContainedWithin "chip" "close button" chipBox closeBox
   }
 
@@ -185,7 +188,10 @@ type ChipLayoutTests() =
   member this.``close button fills chip height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#chip-closable").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#chip-closable .weave-chip__close").BoundingBoxAsync()
+
     assertFillsHeight "chip" "close button" parentBox childBox
   }
 
@@ -242,7 +248,8 @@ type ChipLayoutTests() =
   member this.``non-clickable chip has default cursor``() = task {
     do! this.LoadFixture()
 
-    let! cursor = this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).cursor")
+    let! cursor =
+      this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).cursor")
 
     Assert.Equal("default", cursor)
   }

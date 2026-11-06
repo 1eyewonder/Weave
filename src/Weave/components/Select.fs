@@ -254,15 +254,14 @@ type SelectItem =
 
   static member create<'T when 'T: comparison>
     (content: Doc, text: string, value: 'T, ?selectedContent: Doc, ?disabled: View<bool>, ?attrs: Attr list)
-    : Select.SelectItemDef<'T> =
-    {
-      Content = content
-      Value = value
-      Text = text
-      SelectedContent = selectedContent
-      Disabled = defaultArg disabled (View.Const false)
-      Attrs = defaultArg attrs []
-    }
+    : Select.SelectItemDef<'T> = {
+    Content = content
+    Value = value
+    Text = text
+    SelectedContent = selectedContent
+    Disabled = defaultArg disabled (View.Const false)
+    Attrs = defaultArg attrs []
+  }
 
 [<JavaScript>]
 type Select =

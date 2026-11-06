@@ -32,7 +32,9 @@ type ButtonMenuLayoutTests() =
   member this.``items container is below trigger when direction is bottom``() = task {
     do! this.LoadFixture()
     let! triggerBox = this.Page.Locator("#menu-trigger").BoundingBoxAsync()
-    and! itemsBox = this.Page.Locator("#menu-open .weave-button-menu__items").BoundingBoxAsync()
+
+    and! itemsBox =
+      this.Page.Locator("#menu-open .weave-button-menu__items").BoundingBoxAsync()
 
     Assert.True(
       itemsBox.Y >= triggerBox.Y + triggerBox.Height - 1.0f,

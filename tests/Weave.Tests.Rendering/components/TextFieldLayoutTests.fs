@@ -23,8 +23,12 @@ type TextFieldLayoutTests() =
     do! this.LoadFixture()
     let! standardLabel = this.Page.Locator("#label-standard").BoundingBoxAsync()
     and! floatedLabel = this.Page.Locator("#label-floated").BoundingBoxAsync()
-    and! standardControl = this.Page.Locator("#textfield-standard .weave-field__control").BoundingBoxAsync()
-    and! floatedControl = this.Page.Locator("#textfield-floated .weave-field__control").BoundingBoxAsync()
+
+    and! standardControl =
+      this.Page.Locator("#textfield-standard .weave-field__control").BoundingBoxAsync()
+
+    and! floatedControl =
+      this.Page.Locator("#textfield-floated .weave-field__control").BoundingBoxAsync()
 
     let standardRelY = float standardLabel.Y - float standardControl.Y
     let floatedRelY = float floatedLabel.Y - float floatedControl.Y
@@ -50,7 +54,9 @@ type TextFieldLayoutTests() =
   [<Fact>]
   member this.``multiline field renders a textarea element``() = task {
     do! this.LoadFixture()
-    let! count = this.Page.Locator("#textfield-multiline textarea.weave-field__input").CountAsync()
+
+    let! count =
+      this.Page.Locator("#textfield-multiline textarea.weave-field__input").CountAsync()
 
     Assert.True(count > 0, "Multiline text field should render a textarea element")
   }
@@ -59,7 +65,8 @@ type TextFieldLayoutTests() =
   member this.``multiline textarea has min-height applied``() = task {
     do! this.LoadFixture()
 
-    let! minHeight = this.ComputedStyle("#textfield-multiline textarea.weave-field__input", "minHeight")
+    let! minHeight =
+      this.ComputedStyle("#textfield-multiline textarea.weave-field__input", "minHeight")
 
     Assert.False(
       minHeight = "0px" || minHeight = "none",
@@ -98,7 +105,8 @@ type TextFieldLayoutTests() =
     do! this.LoadFixture()
     do! this.SetTheme(theme)
 
-    let! borderColor = this.ComputedStyle("#textfield-outlined .weave-field__outline", "borderColor")
+    let! borderColor =
+      this.ComputedStyle("#textfield-outlined .weave-field__outline", "borderColor")
 
     Assert.False(
       borderColor = "transparent" || borderColor = "rgba(0, 0, 0, 0)",
@@ -109,7 +117,9 @@ type TextFieldLayoutTests() =
   [<Fact>]
   member this.``input font size is inherited from typography class``() = task {
     do! this.LoadFixture()
-    let! fontSize = this.ComputedStyle("#textfield-standard .weave-field__input", "fontSize")
+
+    let! fontSize =
+      this.ComputedStyle("#textfield-standard .weave-field__input", "fontSize")
 
     Assert.False(
       fontSize = "" || fontSize = "0px",
@@ -120,8 +130,12 @@ type TextFieldLayoutTests() =
   [<Fact>]
   member this.``standard input has non-zero vertical padding``() = task {
     do! this.LoadFixture()
-    let! paddingTop = this.ComputedStyle("#textfield-standard .weave-field__input", "paddingTop")
-    and! paddingBottom = this.ComputedStyle("#textfield-standard .weave-field__input", "paddingBottom")
+
+    let! paddingTop =
+      this.ComputedStyle("#textfield-standard .weave-field__input", "paddingTop")
+
+    and! paddingBottom =
+      this.ComputedStyle("#textfield-standard .weave-field__input", "paddingBottom")
 
     TextFieldLayoutTests.assertNonZeroPadding
       "Standard TextField input paddingTop should be non-zero"

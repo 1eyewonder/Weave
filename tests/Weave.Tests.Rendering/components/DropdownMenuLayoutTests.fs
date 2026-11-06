@@ -55,7 +55,9 @@ type DropdownMenuLayoutTests() =
   [<Fact>]
   member this.``divider has minimal height``() = task {
     do! this.LoadFixture()
-    let! divider = this.Page.Locator("#dropdown-divider-list .weave-dropdownmenu__divider").BoundingBoxAsync()
+
+    let! divider =
+      this.Page.Locator("#dropdown-divider-list .weave-dropdownmenu__divider").BoundingBoxAsync()
 
     Assert.True(divider.Height <= 2.0f, $"Dropdown menu divider height {divider.Height}px should be <= 2px")
   }
@@ -63,7 +65,10 @@ type DropdownMenuLayoutTests() =
   [<Fact>]
   member this.``anchor-origin-top-right positions list at trigger top``() = task {
     do! this.LoadFixture()
-    let! trigger = this.Page.Locator("#dropdown-anchor-top-right > button").BoundingBoxAsync()
+
+    let! trigger =
+      this.Page.Locator("#dropdown-anchor-top-right > button").BoundingBoxAsync()
+
     and! list = this.Page.Locator("#dropdown-list-top-right").BoundingBoxAsync()
 
     // With anchor-origin-top-right + transform-origin-top-right, list aligns to trigger's top-right
@@ -77,7 +82,8 @@ type DropdownMenuLayoutTests() =
   member this.``disabled dropdown menu item has pointer-events none``() = task {
     do! this.LoadFixture()
 
-    let! pointerEvents = this.ComputedStyle(".weave-dropdownmenu__item--disabled", "pointerEvents")
+    let! pointerEvents =
+      this.ComputedStyle(".weave-dropdownmenu__item--disabled", "pointerEvents")
 
     Assert.Equal("none", pointerEvents)
   }

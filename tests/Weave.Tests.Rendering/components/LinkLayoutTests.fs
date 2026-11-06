@@ -26,8 +26,12 @@ type LinkLayoutTests() =
   [<Fact>]
   member this.``start icon is left of text``() = task {
     do! this.LoadFixture()
-    let! icon = this.Page.Locator("#link-with-start-icon .weave-link__start-icon").BoundingBoxAsync()
-    and! text = this.Page.Locator("#link-with-start-icon .weave-link__text").BoundingBoxAsync()
+
+    let! icon =
+      this.Page.Locator("#link-with-start-icon .weave-link__start-icon").BoundingBoxAsync()
+
+    and! text =
+      this.Page.Locator("#link-with-start-icon .weave-link__text").BoundingBoxAsync()
 
     Assert.True(icon.X < text.X, $"Start icon (x={icon.X}) should be left of text (x={text.X})")
   }

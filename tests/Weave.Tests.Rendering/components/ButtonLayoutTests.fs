@@ -83,7 +83,10 @@ type ButtonLayoutTests() =
   member private this.LoadFixtureWithTheme(viewportWidth: int, theme: string) = task {
     do! this.Page.SetViewportSizeAsync(viewportWidth, 800)
     let! _ = this.Page.GotoAsync($"file://%s{this.FixturePath}")
-    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+
+    let! _ =
+      this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+
     ()
   }
 
@@ -108,7 +111,10 @@ type ButtonLayoutTests() =
   member this.``button layout is stable across themes``(theme: string) = task {
     do! this.LoadFixture()
     let! lightBox = this.Page.Locator("#btn-standard").BoundingBoxAsync()
-    let! _ = this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+
+    let! _ =
+      this.Page.EvaluateAsync($"document.documentElement.setAttribute('data-theme', '{theme}')")
+
     ()
     let! themedBox = this.Page.Locator("#btn-standard").BoundingBoxAsync()
 
@@ -148,7 +154,8 @@ type ButtonLayoutTests() =
   member this.``color variant buttons have opaque background``(buttonId: string) = task {
     do! this.LoadFixture()
 
-    let! bg = this.Page.Locator(buttonId).EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
+    let! bg =
+      this.Page.Locator(buttonId).EvaluateAsync<string>("el => getComputedStyle(el).backgroundColor")
 
     Assert.False(
       bg = "transparent" || bg = "rgba(0, 0, 0, 0)",
@@ -220,7 +227,10 @@ type ButtonLayoutTests() =
   member this.``label is contained within filled button``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+
     assertContainedWithin "filled button" "label" parentBox childBox
   }
 
@@ -228,7 +238,10 @@ type ButtonLayoutTests() =
   member this.``label is contained within compact button``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-compact").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#btn-compact .weave-button__label").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#btn-compact .weave-button__label").BoundingBoxAsync()
+
     assertContainedWithin "compact button" "label" parentBox childBox
   }
 
@@ -244,7 +257,10 @@ type ButtonLayoutTests() =
   member this.``label fills button height``() = task {
     do! this.LoadFixture()
     let! parentBox = this.Page.Locator("#btn-filled").BoundingBoxAsync()
-    and! childBox = this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+
+    and! childBox =
+      this.Page.Locator("#btn-filled .weave-button__label").BoundingBoxAsync()
+
     assertFillsHeight "filled button" "label" parentBox childBox
   }
 
@@ -275,14 +291,13 @@ type ButtonLayoutTests() =
   [<InlineData("#btn-multi-4", "#btn-standalone-4")>]
   member this.``button in tight multi-button flex row matches standalone width``
     (flexId: string, standaloneId: string)
-    =
-    task {
-      do! this.LoadFixture()
-      let! flexBox = this.Page.Locator(flexId).BoundingBoxAsync()
-      and! standaloneBox = this.Page.Locator(standaloneId).BoundingBoxAsync()
+    = task {
+    do! this.LoadFixture()
+    let! flexBox = this.Page.Locator(flexId).BoundingBoxAsync()
+    and! standaloneBox = this.Page.Locator(standaloneId).BoundingBoxAsync()
 
-      Assert.True(
-        abs (flexBox.Width - standaloneBox.Width) <= 1.0f,
-        $"{flexId} in flex row ({flexBox.Width}px) should match standalone width ({standaloneBox.Width}px)"
-      )
-    }
+    Assert.True(
+      abs (flexBox.Width - standaloneBox.Width) <= 1.0f,
+      $"{flexId} in flex row ({flexBox.Width}px) should match standalone width ({standaloneBox.Width}px)"
+    )
+  }

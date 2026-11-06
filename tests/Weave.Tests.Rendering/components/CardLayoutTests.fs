@@ -10,8 +10,12 @@ type CardLayoutTests() =
   member this.``header, content and actions stack vertically``() = task {
     do! this.LoadFixture()
     let! header = this.Page.Locator("#card-full .weave-card__header").BoundingBoxAsync()
-    and! content = this.Page.Locator("#card-full .weave-card__content").BoundingBoxAsync()
-    and! actions = this.Page.Locator("#card-full .weave-card__actions").BoundingBoxAsync()
+
+    and! content =
+      this.Page.Locator("#card-full .weave-card__content").BoundingBoxAsync()
+
+    and! actions =
+      this.Page.Locator("#card-full .weave-card__actions").BoundingBoxAsync()
 
     Assert.True(header.Y < content.Y, $"Header (y={header.Y}) should be above content (y={content.Y})")
     Assert.True(content.Y < actions.Y, $"Content (y={content.Y}) should be above actions (y={actions.Y})")
@@ -41,7 +45,10 @@ type CardLayoutTests() =
   [<Fact>]
   member this.``footer button aligns to the trailing edge``() = task {
     do! this.LoadFixture()
-    let! actions = this.Page.Locator("#card-full .weave-card__actions").BoundingBoxAsync()
+
+    let! actions =
+      this.Page.Locator("#card-full .weave-card__actions").BoundingBoxAsync()
+
     and! button = this.Page.Locator("#card-footer-button").BoundingBoxAsync()
 
     Assert.True(

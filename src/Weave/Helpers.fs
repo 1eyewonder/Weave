@@ -184,7 +184,7 @@ module ViewOption =
   [<Inline>]
   let inline mapCachedOrDefault defaultValue ([<InlineIfLambda>] f: 'T -> 'U) view =
     view
-    |> View.MapCached (function
+    |> View.MapCached(function
       | Some v -> f v
       | None -> defaultValue)
 

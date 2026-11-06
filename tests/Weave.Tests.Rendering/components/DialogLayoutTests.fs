@@ -50,7 +50,10 @@ type DialogLayoutTests() =
   [<Fact>]
   member this.``backdrop covers the full viewport``() = task {
     do! this.LoadFixture()
-    let! backdrop = this.Page.Locator("#dialog-open .weave-dialog__backdrop").BoundingBoxAsync()
+
+    let! backdrop =
+      this.Page.Locator("#dialog-open .weave-dialog__backdrop").BoundingBoxAsync()
+
     let viewport = this.Page.ViewportSize
 
     Assert.True(

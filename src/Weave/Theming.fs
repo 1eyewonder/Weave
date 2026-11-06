@@ -164,8 +164,10 @@ module Theming =
       Typography = TypographyConfig.empty
     }
 
+  // The [data-theme] rules on body redefine every palette variable, so values set only on html never reach components
   let private setCssVar (varName: string) (value: string) =
-    JS.Document.DocumentElement?style?setProperty(varName, value)
+    JS.Inline("$0.style.setProperty($1, $2)", JS.Document.DocumentElement, varName, value)
+    JS.Inline("$0.style.setProperty($1, $2)", JS.Document.Body, varName, value)
 
   let private applyPaletteColor (prefix: string) (color: PaletteColor) =
     setCssVar $"--palette-%s{prefix}" color.Main

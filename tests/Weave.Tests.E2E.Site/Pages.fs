@@ -391,6 +391,27 @@ module Pages =
       Alert.create (text "Info alert message", attrs = [ Alert.Color.info ])
     ]
 
+  let private themingPage () =
+    let custom =
+      Theming.PaletteColor.create "#7c3aed" "#ffffff" "#a78bfa" "#5b21b6" "124, 58, 237"
+
+    Theming.initialize
+      (Theming.ThemeBuilder.weaveDesign
+       |> Theming.ThemeBuilder.withPrimary custom custom)
+      Theming.Light
+
+    div [] [
+      Button.create (
+        text "Custom primary",
+        ignore,
+        attrs = [
+          Attr.Create "data-testid" "themed-button"
+          Button.Variant.filled
+          Button.Color.primary
+        ]
+      )
+    ]
+
   let private appbarPage () =
     div [] [
       AppBar.create (div [] [ text "App Bar Title" ], attrs = [ Attr.Create "aria-label" "Static app bar" ])
@@ -625,6 +646,7 @@ module Pages =
     | "dropdown-menu" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "alert" -> alertPage ()
+    | "theming" -> themingPage ()
     | "appbar" -> appbarPage ()
     | "drawer" -> drawerPage ()
     | "link" -> linkPage ()

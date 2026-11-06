@@ -3,8 +3,6 @@ root = true
 [*.{fs,fsx,fsi}]
 max_line_length = 110
 trim_trailing_whitespace = true
-fsharp_multiline_block_brackets_on_same_column = true
-fsharp_multiline_lambda_closing_newline = true
 fsharp_record_multiline_formatter = number_of_items
 fsharp_align_function_signature_to_indentation = true
 fsharp_keep_max_number_of_blank_lines = 1

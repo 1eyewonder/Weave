@@ -251,6 +251,11 @@
 .weave-select__select-all {
   display: flex;
   align-items: center;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
   padding: 8px 16px;
   min-height: density-spacing(38, 10);
   cursor: pointer;
@@ -262,6 +267,11 @@
   color: var(--palette-text-secondary);
   transition: background-color var(--weave-duration-short) $ease-standard;
   box-sizing: border-box;
+
+  &:focus-visible {
+    outline: 2px solid var(--select-brand-color, var(--palette-primary));
+    outline-offset: -2px;
+  }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -350,6 +360,18 @@
 
 .weave-select__item--selected:hover:not(.weave-select__item--disabled) {
   background-color: rgba(var(--select-brand-rgb), var(--weave-alpha-selected-hover));
+}
+
+.weave-select__item--highlighted:not(.weave-select__item--disabled) {
+  outline: 2px solid var(--select-brand-color, var(--palette-primary));
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+@media (forced-colors: active) {
+  .weave-select__item--highlighted:not(.weave-select__item--disabled) {
+    outline-color: Highlight;
+  }
 }
 
 .weave-select__item--disabled {

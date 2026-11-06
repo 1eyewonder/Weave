@@ -71,30 +71,139 @@ module Select =
     Attrs: Attr list
   }
 
+  module internal Keyboard =
+
+    // Keep each option and its disabled state together when the view updates.
+    let withDisabledStates (items: View<SelectItemDef<'T> list>) =
+      items
+      |> View.Bind(fun defs ->
+        (View.Const [], List.rev defs)
+        ||> List.fold (fun acc def ->
+          View.Map2 (fun disabled rest -> (def, disabled) :: rest) def.Disabled acc))
+
+    let resetOnItemChanges
+      (items: View<SelectItemDef<'T> list>)
+      (highlightedIndex: Var<int>)
+      (previous: 'T list option ref)
+      =
+      items
+      |> View.Map(fun defs -> defs |> List.map (fun def -> def.Value))
+      |> Doc.sinkCached (fun values ->
+        match previous.Value with
+        | Some old when old <> values -> Var.Set highlightedIndex -1
+        | _ -> ()
+
+        previous.Value <- Some values)
+
+    let move (items: (SelectItemDef<'T> * bool) list) current step =
+      let indexed = items |> List.mapi (fun index (_, disabled) -> index, disabled)
+      let candidates = if step > 0 then indexed else List.rev indexed
+
+      candidates
+      |> List.tryFind (fun (index, disabled) ->
+        not disabled && if step > 0 then index > current else index < current)
+      |> Option.map fst
+
+    let filteredItems searchable (searchText: Var<string>) (items: View<SelectItemDef<'T> list>) =
+      if searchable then
+        (searchText.View, items)
+        ||> View.Map2(fun query defs ->
+          if String.IsNullOrWhiteSpace query then
+            defs
+          else
+            let q = query.ToLower()
+            defs |> List.filter (fun def -> def.Text.ToLower().Contains(q)))
+      else
+        items
+
+    let activeDescendant selectId (highlightedIndex: Var<int>) (isOpen: Var<bool>) =
+      (highlightedIndex.View, isOpen.View)
+      ||> View.Map2(fun idx opened ->
+        if opened && idx >= 0 then
+          sprintf "%s-item-%d" selectId idx
+        else
+          "")
+
+    let handleKey
+      (isOpen: Var<bool>)
+      (searchText: Var<string>)
+      (highlightedIndex: Var<int>)
+      (select: SelectItemDef<'T> -> unit)
+      (items: (SelectItemDef<'T> * bool) list)
+      (allItems: (SelectItemDef<'T> * bool) list)
+      (ev: Dom.KeyboardEvent)
+      =
+      match ev with
+      | Key.Enter ->
+        if not isOpen.Value then
+          Var.Set isOpen true
+          Var.Set highlightedIndex -1
+          Var.Set searchText ""
+        else
+          let idx = highlightedIndex.Value
+
+          if idx >= 0 && idx < items.Length then
+            let item, disabled = items.[idx]
+
+            if not disabled then
+              select item
+      | Key.Escape
+      | Key.Tab ->
+        if isOpen.Value then
+          Var.Set isOpen false
+      | Key.ArrowDown ->
+        if not isOpen.Value then
+          Var.Set isOpen true
+          Var.Set searchText ""
+          Var.Set highlightedIndex (move allItems -1 1 |> Option.defaultValue -1)
+        else
+          move items highlightedIndex.Value 1 |> Option.iter (Var.Set highlightedIndex)
+      | Key.ArrowUp ->
+        if isOpen.Value then
+          move items highlightedIndex.Value -1 |> Option.iter (Var.Set highlightedIndex)
+      | _ -> ()
+
+    let itemOrderIsCurrent (items: View<SelectItemDef<'T> list>) (previous: 'T list option ref) =
+      match View.TryGet items, previous.Value with
+      | Some current, Some old -> (current |> List.map (fun item -> item.Value)) = old
+      | _ -> false
+
   module Render =
 
     let chevron () =
       span [ cl Css.``weave-select__chevron`` ] [ text "\u25BC" ]
 
-    let clearButton (onClear: unit -> unit) =
+    let clearButtonGuarded (interactable: View<bool>) (onClear: unit -> unit) =
       span [
         cl Css.``weave-select__clear``
         Attr.Create "tabindex" "0"
         Attr.Create "role" "button"
         Attr.Create "aria-label" "Clear selection"
-        on.clickTap (fun _ ev ->
+        on.clickTapView interactable (fun _ ev canInteract ->
           ev?stopPropagation ()
-          onClear ())
-        on.keyDown (fun _ ev ->
+
+          if canInteract then
+            onClear ())
+        on.keyDownView interactable (fun _ ev canInteract ->
           match ev with
-          | Key.Activate ->
+          | Key.Activate when canInteract ->
             ev.PreventDefault()
             ev?stopPropagation ()
             onClear ()
           | _ -> ())
       ] [ text "\u00D7" ]
 
-    let searchInput (searchText: Var<string>) (onKeyDown: Dom.KeyboardEvent -> unit) =
+    let clearButton onClear =
+      clearButtonGuarded (View.Const true) onClear
+
+    let internal searchInputWithState
+      (state: View<'T>)
+      (canInteract: 'T -> bool)
+      (tabToSelectAll: bool)
+      (searchText: Var<string>)
+      (highlightedIndex: Var<int>)
+      (onKeyDown: 'T -> Dom.KeyboardEvent -> unit)
+      =
       div [ cl Css.``weave-select__search`` ] [
         Doc.InputType.Text
           [
@@ -102,19 +211,29 @@ module Select =
             Attr.Create "placeholder" "Search..."
             Attr.Create "aria-label" "Search options"
             on.afterRender (fun el -> el?focus ())
-            on.keyDown (fun _ ev ->
+            on.input (fun _ _ -> Var.Set highlightedIndex -1)
+            on.keyDownView state (fun _ ev current ->
               match ev with
               | Key.ArrowDown
               | Key.ArrowUp
-              | Key.Enter
+              | Key.Enter when canInteract current ->
+                ev.PreventDefault()
+                onKeyDown current ev
               | Key.Escape ->
                 ev.PreventDefault()
-                onKeyDown ev
-              | Key.Tab -> onKeyDown ev
+                onKeyDown current ev
+              | Key.Tab when tabToSelectAll && not ev.ShiftKey && canInteract current -> ()
+              | Key.Tab -> onKeyDown current ev
               | _ -> ())
           ]
           searchText
       ]
+
+    let searchInputGuarded interactable searchText highlightedIndex onKeyDown =
+      searchInputWithState interactable id false searchText highlightedIndex (fun _ ev -> onKeyDown ev)
+
+    let searchInput searchText highlightedIndex onKeyDown =
+      searchInputGuarded (View.Const true) searchText highlightedIndex onKeyDown
 
     let singleItem
       (selectId: string)
@@ -142,11 +261,16 @@ module Select =
         Attr.DynamicClassPred Css.``weave-select__item--disabled`` def.Disabled
         Attr.Create "id" itemId
         Attr.Create "role" "option"
-        Attr.DynamicProp "aria-selected" (isSelected |> View.Map(fun s -> if s then "true" else "false"))
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-selected", value))
+          (isSelected |> View.Map(sprintf "%b"))
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-disabled", value))
+          (def.Disabled |> View.Map(sprintf "%b"))
         on.clickTapViewGuarded itemEnabled (fun () ->
-          selectedValue.Value <- Some def.Value
-          isOpen.Value <- false)
-        on.mouseEnter (fun _ _ -> highlightedIndex.Value <- index)
+          Var.Set selectedValue (Some def.Value)
+          Var.Set isOpen false)
+        on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
         yield! def.Attrs
       ] [ span [ cl Css.``weave-select__item-content`` ] [ def.Content ] ]
 
@@ -168,9 +292,9 @@ module Select =
         let current = selectedValues.Value
 
         if Set.contains def.Value current then
-          selectedValues.Value <- Set.remove def.Value current
+          Var.Set selectedValues (Set.remove def.Value current)
         else
-          selectedValues.Value <- Set.add def.Value current
+          Var.Set selectedValues (Set.add def.Value current)
 
       let itemId = sprintf "%s-item-%d" selectId index
 
@@ -183,9 +307,14 @@ module Select =
         Attr.DynamicClassPred Css.``weave-select__item--disabled`` def.Disabled
         Attr.Create "id" itemId
         Attr.Create "role" "option"
-        Attr.DynamicProp "aria-selected" (isSelected |> View.Map(fun s -> if s then "true" else "false"))
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-selected", value))
+          (isSelected |> View.Map(sprintf "%b"))
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-disabled", value))
+          (def.Disabled |> View.Map(sprintf "%b"))
         on.clickTapViewGuarded itemEnabled toggle
-        on.mouseEnter (fun _ _ -> highlightedIndex.Value <- index)
+        on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
         yield! def.Attrs
       ] [
         span [
@@ -195,42 +324,67 @@ module Select =
         span [ cl Css.``weave-select__item-content`` ] [ def.Content ]
       ]
 
-    let selectAllRow
+    let internal selectAllRowWithAttrs
       (items: View<SelectItemDef<'T> list>)
       (selectedValues: Var<Set<'T>>)
       (enabled: View<bool>)
       (selectAllText: string)
+      (attrs: Attr list)
       =
-      let itemsSnapshot = ref ([]: SelectItemDef<'T> list)
+      let enabledValues =
+        items
+        |> Keyboard.withDisabledStates
+        |> View.Map(fun entries ->
+          entries
+          |> List.choose (fun (item, disabled) -> if disabled then None else Some item.Value))
 
       let allSelected =
-        (items, selectedValues.View)
-        ||> View.Map2(fun defs sel ->
-          itemsSnapshot.Value <- defs
-          let enabledValues = defs |> List.map (fun d -> d.Value)
-
-          not (List.isEmpty enabledValues)
-          && enabledValues |> List.forall (fun v -> Set.contains v sel))
+        (enabledValues, selectedValues.View)
+        ||> View.Map2(fun values sel ->
+          not (List.isEmpty values) && values |> List.forall (fun v -> Set.contains v sel))
 
       let isIndeterminate =
-        (items, selectedValues.View)
-        ||> View.Map2(fun defs sel ->
-          let enabledValues = defs |> List.map (fun d -> d.Value)
-          let anySelected = enabledValues |> List.exists (fun v -> Set.contains v sel)
-          let allSel = enabledValues |> List.forall (fun v -> Set.contains v sel)
+        (enabledValues, selectedValues.View)
+        ||> View.Map2(fun values sel ->
+          let anySelected = values |> List.exists (fun v -> Set.contains v sel)
+          let allSel = values |> List.forall (fun v -> Set.contains v sel)
           anySelected && not allSel)
 
-      let toggle () =
+      let toggle currentItems =
         let current = selectedValues.Value
-        let currentItems = itemsSnapshot.Value |> List.map (fun d -> d.Value)
         let allSel = currentItems |> List.forall (fun v -> Set.contains v current)
 
         if allSel then
-          selectedValues.Value <- currentItems |> List.fold (fun acc v -> Set.remove v acc) current
+          Var.Set selectedValues (currentItems |> List.fold (fun acc v -> Set.remove v acc) current)
         else
-          selectedValues.Value <- currentItems |> List.fold (fun acc v -> Set.add v acc) current
+          Var.Set selectedValues (currentItems |> List.fold (fun acc v -> Set.add v acc) current)
 
-      div [ cl Css.``weave-select__select-all``; on.clickTapViewGuarded enabled toggle ] [
+      button [
+        attr.``type`` "button"
+        cl Css.``weave-select__select-all``
+        Attr.Create "role" "checkbox"
+        Attr.enabled enabled
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-checked", value))
+          (View.Map2
+            (fun all partial ->
+              if partial then "mixed"
+              elif all then "true"
+              else "false")
+            allSelected
+            isIndeterminate)
+        on.clickView enabled (fun _ _ canInteract ->
+          match canInteract, View.TryGet enabled, View.TryGet items with
+          | true, Some true, Some currentItems ->
+            currentItems
+            |> List.choose (fun item ->
+              match View.TryGet item.Disabled with
+              | Some false -> Some item.Value
+              | _ -> None)
+            |> toggle
+          | _ -> ())
+        yield! attrs
+      ] [
         span [
           cl Css.``weave-select__item-checkbox``
           Attr.DynamicClassPred Css.``weave-select__item-checkbox--checked`` allSelected
@@ -238,6 +392,9 @@ module Select =
         ] []
         span [ cl Css.``weave-select__item-content`` ] [ text selectAllText ]
       ]
+
+    let selectAllRow items selectedValues enabled selectAllText =
+      selectAllRowWithAttrs items selectedValues enabled selectAllText []
 
     let sizer (items: View<SelectItemDef<'T> list>) =
       items
@@ -328,25 +485,26 @@ type Select =
         elif String.IsNullOrEmpty ph then ""
         else ph)
 
-    let filteredItems =
-      if searchable then
-        (searchText.View, items)
-        ||> View.Map2(fun query defs ->
-          if String.IsNullOrWhiteSpace query then
-            defs
-          else
-            let q = query.ToLower()
-            defs |> List.filter (fun def -> def.Text.ToLower().Contains(q)))
-      else
-        items
+    let filteredItems = Keyboard.filteredItems searchable searchText items
 
-    let filteredSnapshot = ref ([]: SelectItemDef<'T> list)
+    let filteredOptions = Keyboard.withDisabledStates filteredItems
+    let allOptions = Keyboard.withDisabledStates items
 
-    let filteredItemsTracked =
-      filteredItems
-      |> View.Map(fun defs ->
-        filteredSnapshot.Value <- defs
-        defs)
+    let keyboardState =
+      View.Map2 (fun filtered all -> filtered, all) filteredOptions allOptions
+      |> View.Map2 (fun canInteract (filtered, all) -> canInteract, filtered, all) interactable
+
+    let filteredDisabledStateSink =
+      filteredOptions
+      |> View.Map(fun options -> options |> List.exists (fun (_, disabled) -> not disabled))
+      |> Doc.sinkCached (fun hasEnabled ->
+        if not hasEnabled then
+          Var.Set highlightedIndex -1)
+
+    let previousItemOrder = ref None
+
+    let itemChangesSink =
+      Keyboard.resetOnItemChanges items highlightedIndex previousItemOrder
 
     // Element refs for outside-click detection
     let selectRootRef = ref (JS.Document.CreateElement "div")
@@ -355,46 +513,25 @@ type Select =
     let selectId = WeaveId.create "weave-select"
 
     let activeDescendantView =
-      highlightedIndex.View
-      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "%s-item-%d" selectId idx else "")
+      Keyboard.activeDescendant selectId highlightedIndex openVar
 
-    let handleKeyNav (ev: Dom.KeyboardEvent) =
-      let items = filteredSnapshot.Value
-      let count = List.length items
+    let handleKeyNav (_, filtered, all) ev =
+      let canSelect =
+        match ev with
+        | Key.Enter when openVar.Value -> Keyboard.itemOrderIsCurrent items previousItemOrder
+        | _ -> true
 
-      match ev with
-      | Key.Enter ->
-        if not openVar.Value then
-          openVar.Value <- true
-          highlightedIndex.Value <- -1
-          searchText.Value <- ""
-        else
-          let idx = highlightedIndex.Value
-
-          if idx >= 0 && idx < count then
-            let def = items.[idx]
-            selectedValue.Value <- Some def.Value
-            openVar.Value <- false
-      | Key.Escape ->
-        if openVar.Value then
-          openVar.Value <- false
-      | Key.ArrowDown ->
-        if not openVar.Value then
-          openVar.Value <- true
-          highlightedIndex.Value <- 0
-          searchText.Value <- ""
-        else
-          let next = highlightedIndex.Value + 1
-
-          if next < count then
-            highlightedIndex.Value <- next
-      | Key.ArrowUp ->
-        if openVar.Value && highlightedIndex.Value > 0 then
-          highlightedIndex.Value <- highlightedIndex.Value - 1
-      | Key.Tab ->
-        if openVar.Value then
-          openVar.Value <- false
-      | _ -> ()
+      if canSelect then
+        Keyboard.handleKey
+          openVar
+          searchText
+          highlightedIndex
+          (fun def ->
+            Var.Set selectedValue (Some def.Value)
+            Var.Set openVar false)
+          filtered
+          all
+          ev
 
     let inputElement =
       div [
@@ -412,19 +549,21 @@ type Select =
               el.SetAttribute("aria-label", v))
           labelText
 
-        on.focus (fun _ _ -> isFocused.Value <- true)
-        on.blur (fun _ _ -> isFocused.Value <- false)
+        on.focus (fun _ _ -> Var.Set isFocused true)
+        on.blur (fun _ _ -> Var.Set isFocused false)
 
-        on.keyDown (fun _ ev ->
+        on.keyDownView keyboardState (fun _ ev ((canInteract, _, _) as state) ->
           match ev with
           | Key.Enter
           | Key.Space
-          | Key.Escape
           | Key.ArrowDown
-          | Key.ArrowUp ->
+          | Key.ArrowUp when canInteract ->
             ev.PreventDefault()
-            handleKeyNav ev
-          | Key.Tab -> handleKeyNav ev
+            handleKeyNav state ev
+          | Key.Escape ->
+            ev.PreventDefault()
+            handleKeyNav state ev
+          | Key.Tab -> handleKeyNav state ev
           | _ -> ())
       ] [
         Doc.EmbedView selectedDisplay
@@ -433,7 +572,7 @@ type Select =
 
     let endAdornment =
       div [ cl Css.``weave-select__actions`` ] [
-        Render.clearButton (fun () -> selectedValue.Value <- None)
+        Render.clearButtonGuarded interactable (fun () -> Var.Set selectedValue None)
         Render.chevron ()
       ]
 
@@ -447,17 +586,23 @@ type Select =
             on.clickTap (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
-              Render.searchInput searchText handleKeyNav
+              Render.searchInputWithState
+                keyboardState
+                (fun (canInteract, _, _) -> canInteract)
+                false
+                searchText
+                highlightedIndex
+                handleKeyNav
 
             div [ cl Css.``weave-select__list``; Attr.Create "role" "listbox" ] [
-              filteredItemsTracked
+              filteredItems
               |> Doc.BindView(fun filtered ->
                 if List.isEmpty filtered then
                   div [ cl Css.``weave-select__no-items`` ] [ noItemsContent ]
                 else
                   filtered
                   |> List.mapi (fun i def ->
-                    Render.singleItem selectId i def selectedValue openVar highlightedIndex enabled)
+                    Render.singleItem selectId i def selectedValue openVar highlightedIndex interactable)
                   |> Doc.Concat)
             ]
           ]
@@ -466,10 +611,12 @@ type Select =
 
     let outsideClickWatcher =
       openVar.View
-      |> DocumentEventListener.onMouseDown [ selectRootRef; popoverRef ] (fun () -> openVar.Value <- false)
+      |> DocumentEventListener.onMouseDown [ selectRootRef; popoverRef ] (fun () -> Var.Set openVar false)
 
     [
       outsideClickWatcher
+      filteredDisabledStateSink
+      itemChangesSink
 
       div [
         cl Css.``weave-select``
@@ -480,11 +627,11 @@ type Select =
         Attr.DynamicClassPred Css.``weave-select--has-value`` hasValue
         Attr.DynamicClassPred Css.``weave-select--clearable`` clearable
         on.clickTapViewGuarded interactable (fun () ->
-          openVar.Value <- not openVar.Value
+          Var.Set openVar (not openVar.Value)
 
           if openVar.Value then
-            highlightedIndex.Value <- -1
-            searchText.Value <- "")
+            Var.Set highlightedIndex -1
+            Var.Set searchText "")
         on.afterRender (fun el -> selectRootRef.Value <- el)
         yield! attrs
       ] [
@@ -581,76 +728,71 @@ type MultiSelect =
         elif String.IsNullOrEmpty ph then ""
         else ph)
 
-    let filteredItems =
-      if searchable then
-        (searchText.View, items)
-        ||> View.Map2(fun query defs ->
-          if String.IsNullOrWhiteSpace query then
-            defs
-          else
-            let q = query.ToLower()
-            defs |> List.filter (fun def -> def.Text.ToLower().Contains(q)))
-      else
-        items
+    let filteredItems = Keyboard.filteredItems searchable searchText items
 
-    let filteredSnapshot = ref ([]: SelectItemDef<'T> list)
+    let filteredOptions = Keyboard.withDisabledStates filteredItems
+    let allOptions = Keyboard.withDisabledStates items
 
-    let filteredItemsTracked =
-      filteredItems
-      |> View.Map(fun defs ->
-        filteredSnapshot.Value <- defs
-        defs)
+    let keyboardState =
+      View.Map2 (fun filtered all -> filtered, all) filteredOptions allOptions
+      |> View.Map2 (fun canInteract (filtered, all) -> canInteract, filtered, all) interactable
+
+    let filteredDisabledStateSink =
+      filteredOptions
+      |> View.Map(fun options -> options |> List.exists (fun (_, disabled) -> not disabled))
+      |> Doc.sinkCached (fun hasEnabled ->
+        if not hasEnabled then
+          Var.Set highlightedIndex -1)
+
+    let previousItemOrder = ref None
+
+    let itemChangesSink =
+      Keyboard.resetOnItemChanges items highlightedIndex previousItemOrder
 
     let selectRootRef = ref (JS.Document.CreateElement "div")
     let popoverRef = ref (JS.Document.CreateElement "div")
+    let inputRef = ref (JS.Document.CreateElement "div")
+    let selectAllRef = ref (JS.Document.CreateElement "button")
 
     let selectId = WeaveId.create "weave-select"
 
     let activeDescendantView =
-      highlightedIndex.View
-      |> View.MapCached(fun idx -> if idx >= 0 then sprintf "%s-item-%d" selectId idx else "")
+      Keyboard.activeDescendant selectId highlightedIndex openVar
 
-    let handleKeyNav (ev: Dom.KeyboardEvent) =
-      let items = filteredSnapshot.Value
-      let count = List.length items
+    let handleKeyNav (_, filtered, all) ev =
+      let canSelect =
+        match ev with
+        | Key.Enter when openVar.Value -> Keyboard.itemOrderIsCurrent items previousItemOrder
+        | _ -> true
 
-      match ev with
-      | Key.Enter ->
-        if not openVar.Value then
-          openVar.Value <- true
-          highlightedIndex.Value <- -1
-          searchText.Value <- ""
-        else
-          let idx = highlightedIndex.Value
-
-          if idx >= 0 && idx < count then
-            let def = items.[idx]
+      if canSelect then
+        Keyboard.handleKey
+          openVar
+          searchText
+          highlightedIndex
+          (fun def ->
             let current = selectedValues.Value
 
             if Set.contains def.Value current then
-              selectedValues.Value <- Set.remove def.Value current
+              Var.Set selectedValues (Set.remove def.Value current)
             else
-              selectedValues.Value <- Set.add def.Value current
-      | Key.Escape ->
-        if openVar.Value then
-          openVar.Value <- false
-      | Key.ArrowDown ->
-        if not openVar.Value then
-          openVar.Value <- true
-          highlightedIndex.Value <- 0
-          searchText.Value <- ""
-        else
-          let next = highlightedIndex.Value + 1
+              Var.Set selectedValues (Set.add def.Value current))
+          filtered
+          all
+          ev
 
-          if next < count then
-            highlightedIndex.Value <- next
-      | Key.ArrowUp ->
-        if openVar.Value && highlightedIndex.Value > 0 then
-          highlightedIndex.Value <- highlightedIndex.Value - 1
-      | Key.Tab ->
-        if openVar.Value then
-          openVar.Value <- false
-      | _ -> ()
+    let handleMultiKeyNav ((canInteract, filtered, _) as state) ev =
+      let isBeforeFirstOption =
+        highlightedIndex.Value < 0
+        || Keyboard.move filtered -1 1 = Some highlightedIndex.Value
+
+      match ev with
+      | Key.ArrowDown when showSelectAll && canInteract && openVar.Value && highlightedIndex.Value < 0 ->
+        selectAllRef.Value?focus()
+      | Key.ArrowUp when showSelectAll && canInteract && openVar.Value && isBeforeFirstOption ->
+        Var.Set highlightedIndex -1
+        selectAllRef.Value?focus()
+      | _ -> handleKeyNav state ev
 
     let inputElement =
       div [
@@ -658,6 +800,7 @@ type MultiSelect =
         Attr.Create "tabindex" "0"
         Attr.Create "role" "combobox"
         Attr.Create "aria-haspopup" "listbox"
+        on.afterRender (fun el -> inputRef.Value <- el)
         Attr.DynamicCustom
           (fun el v -> el.SetAttribute("aria-expanded", v))
           (openVar.View |> View.Map(sprintf "%b"))
@@ -668,19 +811,24 @@ type MultiSelect =
               el.SetAttribute("aria-label", v))
           labelText
 
-        on.focus (fun _ _ -> isFocused.Value <- true)
-        on.blur (fun _ _ -> isFocused.Value <- false)
+        on.focus (fun _ _ -> Var.Set isFocused true)
+        on.blur (fun _ _ -> Var.Set isFocused false)
 
-        on.keyDown (fun _ ev ->
+        on.keyDownView keyboardState (fun _ ev ((canInteract, _, _) as state) ->
           match ev with
           | Key.Enter
           | Key.Space
-          | Key.Escape
           | Key.ArrowDown
-          | Key.ArrowUp ->
+          | Key.ArrowUp when canInteract ->
             ev.PreventDefault()
-            handleKeyNav ev
-          | Key.Tab -> handleKeyNav ev
+            handleMultiKeyNav state ev
+          | Key.Escape ->
+            ev.PreventDefault()
+            handleKeyNav state ev
+          | Key.Tab when showSelectAll && openVar.Value && canInteract && not ev.ShiftKey ->
+            ev.PreventDefault()
+            selectAllRef.Value?focus()
+          | Key.Tab -> handleKeyNav state ev
           | _ -> ())
       ] [
         Doc.EmbedView selectedDisplay
@@ -689,7 +837,7 @@ type MultiSelect =
 
     let endAdornment =
       div [ cl Css.``weave-select__actions`` ] [
-        Render.clearButton (fun () -> selectedValues.Value <- Set.empty)
+        Render.clearButtonGuarded interactable (fun () -> Var.Set selectedValues Set.empty)
         Render.chevron ()
       ]
 
@@ -703,10 +851,45 @@ type MultiSelect =
             on.clickTap (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
-              Render.searchInput searchText handleKeyNav
+              Render.searchInputWithState
+                keyboardState
+                (fun (canInteract, _, _) -> canInteract)
+                showSelectAll
+                searchText
+                highlightedIndex
+                handleMultiKeyNav
 
             if showSelectAll then
-              Render.selectAllRow filteredItemsTracked selectedValues enabled selectAllText
+              Render.selectAllRowWithAttrs filteredItems selectedValues interactable selectAllText [
+                on.afterRender (fun el -> selectAllRef.Value <- el)
+                on.keyDownView keyboardState (fun _ ev (canInteract, filtered, _) ->
+                  match ev with
+                  | Key.ArrowDown when canInteract ->
+                    ev.PreventDefault()
+                    let search = popoverRef.Value.QuerySelector(".weave-select__search-input")
+
+                    if isNull search then
+                      inputRef.Value?focus()
+                    else
+                      search?focus ()
+
+                    Var.Set highlightedIndex (Keyboard.move filtered -1 1 |> Option.defaultValue -1)
+                  | Key.ArrowUp when canInteract ->
+                    ev.PreventDefault()
+                    let search = popoverRef.Value.QuerySelector(".weave-select__search-input")
+
+                    if isNull search then
+                      inputRef.Value?focus()
+                    else
+                      search?focus ()
+                  | Key.Escape ->
+                    ev.PreventDefault()
+                    Var.Set openVar false
+                    inputRef.Value?focus()
+                  | Key.Tab when not ev.ShiftKey -> Var.Set openVar false
+                  | _ -> ())
+              ]
+
               div [ cl Css.``weave-select__divider`` ] []
 
             div [
@@ -714,14 +897,14 @@ type MultiSelect =
               Attr.Create "role" "listbox"
               Attr.Create "aria-multiselectable" "true"
             ] [
-              filteredItemsTracked
+              filteredItems
               |> Doc.BindView(fun filtered ->
                 if List.isEmpty filtered then
                   div [ cl Css.``weave-select__no-items`` ] [ noItemsContent ]
                 else
                   filtered
                   |> List.mapi (fun i def ->
-                    Render.multiItem selectId i def selectedValues highlightedIndex enabled)
+                    Render.multiItem selectId i def selectedValues highlightedIndex interactable)
                   |> Doc.Concat)
             ]
           ]
@@ -730,10 +913,12 @@ type MultiSelect =
 
     let outsideClickWatcher =
       openVar.View
-      |> DocumentEventListener.onMouseDown [ selectRootRef; popoverRef ] (fun () -> openVar.Value <- false)
+      |> DocumentEventListener.onMouseDown [ selectRootRef; popoverRef ] (fun () -> Var.Set openVar false)
 
     [
       outsideClickWatcher
+      filteredDisabledStateSink
+      itemChangesSink
 
       div [
         cl Css.``weave-select``
@@ -745,11 +930,11 @@ type MultiSelect =
         Attr.DynamicClassPred Css.``weave-select--has-value`` hasValue
         Attr.DynamicClassPred Css.``weave-select--clearable`` clearable
         on.clickTapViewGuarded interactable (fun () ->
-          openVar.Value <- not openVar.Value
+          Var.Set openVar (not openVar.Value)
 
           if openVar.Value then
-            highlightedIndex.Value <- -1
-            searchText.Value <- "")
+            Var.Set highlightedIndex -1
+            Var.Set searchText "")
         on.afterRender (fun el -> selectRootRef.Value <- el)
         yield! attrs
       ] [

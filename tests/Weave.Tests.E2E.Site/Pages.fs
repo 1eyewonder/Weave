@@ -193,6 +193,19 @@ module Pages =
     ]
 
   let private selectPage () =
+    let dynamicDisabled = Var.Create false
+    let selectEnabled = Var.Create true
+    let selectReadOnly = Var.Create false
+
+    let keyboardItems =
+      [
+        SelectItem.create (text "Blocked", "Blocked", "Blocked", disabled = View.Const true)
+        SelectItem.create (text "Alpha", "Alpha", "Alpha")
+        SelectItem.create (text "Dynamic", "Dynamic", "Dynamic", disabled = dynamicDisabled.View)
+        SelectItem.create (text "Omega", "Omega", "Omega")
+      ]
+      |> Var.Create
+
     let items =
       [ "Apple"; "Banana"; "Cherry" ]
       |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
@@ -232,6 +245,91 @@ module Pages =
         multiItems,
         Var.Create(set [ "Red"; "Blue" ]),
         labelText = View.Const "Multi Select"
+      )
+      div [ Attr.Create "data-testid" "keyboard-single" ] [
+        Select.create (
+          keyboardItems.View,
+          Var.Create<string option> None,
+          searchable = true,
+          clearable = View.Const true,
+          labelText = View.Const "Keyboard single"
+        )
+      ]
+      div [ Attr.Create "data-testid" "keyboard-multi" ] [
+        MultiSelect.create (
+          keyboardItems.View,
+          Var.Create(Set.empty<string>),
+          searchable = true,
+          clearable = View.Const true,
+          labelText = View.Const "Keyboard multi"
+        )
+      ]
+      div [ Attr.Create "data-testid" "restricted-single" ] [
+        Select.create (
+          keyboardItems.View,
+          Var.Create<string option> None,
+          searchable = true,
+          clearable = View.Const true,
+          enabled = selectEnabled.View,
+          readOnly = selectReadOnly.View,
+          labelText = View.Const "Restricted single"
+        )
+      ]
+      div [ Attr.Create "data-testid" "restricted-multi" ] [
+        MultiSelect.create (
+          keyboardItems.View,
+          Var.Create(Set.empty<string>),
+          searchable = true,
+          clearable = View.Const true,
+          enabled = selectEnabled.View,
+          readOnly = selectReadOnly.View,
+          labelText = View.Const "Restricted multi"
+        )
+      ]
+      div [ Attr.Create "data-testid" "select-all-multi" ] [
+        MultiSelect.create (
+          keyboardItems.View,
+          Var.Create(Set.empty<string>),
+          searchable = true,
+          showSelectAll = true,
+          labelText = View.Const "Select all options"
+        )
+      ]
+      div [ Attr.Create "data-testid" "select-all-no-search" ] [
+        MultiSelect.create (
+          keyboardItems.View,
+          Var.Create(Set.empty<string>),
+          showSelectAll = true,
+          labelText = View.Const "Select all without search"
+        )
+      ]
+      Button.create (
+        text "Toggle enabled",
+        (fun () -> Var.Set selectEnabled (not selectEnabled.Value)),
+        attrs = [ Attr.Create "data-testid" "toggle-select-enabled" ]
+      )
+      Button.create (
+        text "Toggle read only",
+        (fun () -> Var.Set selectReadOnly (not selectReadOnly.Value)),
+        attrs = [ Attr.Create "data-testid" "toggle-select-readonly" ]
+      )
+      Button.create (
+        text "Disable dynamic option",
+        (fun () -> Var.Set dynamicDisabled true),
+        attrs = [ Attr.Create "data-testid" "disable-option" ]
+      )
+      Button.create (
+        text "Reorder options",
+        (fun () -> Var.Set keyboardItems (List.rev keyboardItems.Value)),
+        attrs = [ Attr.Create "data-testid" "reorder-options" ]
+      )
+      Button.create (
+        text "Disable all options",
+        (fun () ->
+          keyboardItems.Value
+          |> List.map (fun item -> { item with Disabled = View.Const true })
+          |> Var.Set keyboardItems),
+        attrs = [ Attr.Create "data-testid" "disable-all-options" ]
       )
     ]
 

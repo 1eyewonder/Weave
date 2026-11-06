@@ -373,7 +373,7 @@ MultiSelect.create(
 
     let description =
       Helpers.bodyText
-        "Multi-select with a Select All row. When all items are selected the checkbox shows a checkmark; when some are selected it shows an indeterminate dash. Custom selection text can summarize the selection count."
+        "Multi-select with a Select All row. Use the arrow keys to move between search, Select All, and the options; Space or Enter toggles Select All. The checkbox shows a checkmark when all items are selected and a dash when some are selected. Custom selection text can summarize the selection count."
 
     let content =
       Grid.create (

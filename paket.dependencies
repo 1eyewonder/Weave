@@ -13,6 +13,7 @@ group test
   source https://api.nuget.org/v3/index.json
   storage: none
 
+  nuget FSharp.Core 10.1.403 // setup to match Main to prevent build warnings
   nuget Expecto.FsCheck
   nuget Microsoft.NET.Test.Sdk
   nuget YoloDev.Expecto.TestSdk

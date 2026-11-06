@@ -22,7 +22,7 @@
   --field-adorn-end-pr: 0.75em;
   --field-adorn-end-ml: 0em;
 
-  padding-top: 0.875rem;
+  padding-top: var(--weave-field-label-gutter);
 
   .weave-field__control {
     border-bottom: 1px solid var(--input-border-color, currentColor);

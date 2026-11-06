@@ -132,8 +132,7 @@ module ShowcaseTaskTracker =
                   Button.Color.primary
                   Button.Variant.filled
                   Button.Width.full
-                  Attr.Style "height" "100%"
-                  Attr.Style "min-height" "40px"
+                  Attr.Style "margin-top" "var(--weave-field-label-gutter)"
                 ]
               ),
               attrs = [
@@ -318,11 +317,16 @@ Grid.create ([
         Button.create(
             text "Add",
             onClick = addTask,
-            attrs = [ Button.Color.primary; Button.Variant.filled ]
+            attrs = [
+                Button.Color.primary
+                Button.Variant.filled
+                // Starts the button where the fields' input boxes start, below their labels
+                Attr.Style "margin-top" "var(--weave-field-label-gutter)"
+            ]
         ),
-        attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.three ]
+        attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.three; Flex.Flex.allSizes ]
     )
-])"""
+], attrs = [ AlignItems.stretch ])"""
 
     Helpers.codeSampleSection "Adding Tasks" description content code
 

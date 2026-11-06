@@ -96,6 +96,8 @@ $font-family-mono: "Fira Mono", "Consolas", monospace;
   --default-borderradius: #{map.get($border-radiuses, "sm")};
   --default-button-borderradius: #{map.get($border-radiuses, "md")};
   --grid-item-min-height: 24px;
+  // Space above every field's input box that holds the floating label
+  --weave-field-label-gutter: 0.875rem;
   --palette-border-opacity: 0.8;
   --weave-zindex-dropdown: 100;
   --weave-zindex-buttonmenu: 100;

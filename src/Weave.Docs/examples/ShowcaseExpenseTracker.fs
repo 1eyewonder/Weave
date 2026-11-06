@@ -163,7 +163,11 @@ module ShowcaseExpenseTracker =
                   text "Add"
                 ],
                 onClick = addExpense,
-                attrs = [ Button.Color.primary; Button.Variant.filled; Attr.Style "min-height" "40px" ]
+                attrs = [
+                  Button.Color.primary
+                  Button.Variant.filled
+                  Attr.Style "margin-top" "var(--weave-field-label-gutter)"
+                ]
               ),
               attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.two; Flex.Flex.allSizes ]
             )

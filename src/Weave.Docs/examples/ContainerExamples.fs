@@ -48,6 +48,8 @@ module ContainerExamples =
     let code =
       """open Weave
 
+let content = text "Page content"
+
 Container.create(content, attrs = [ Container.MaxWidth.extraSmall ])
 
 Container.create(content, attrs = [ Container.MaxWidth.small ])
@@ -134,6 +136,8 @@ Container.create(content, attrs = [ Container.MaxWidth.extraExtraLarge ])
 
     let code =
       """open Weave
+
+let content = text "Page content"
 
 // Add gutters only — pass Container.gutters through attrs
 Container.create(content, attrs = [ Container.gutters ])

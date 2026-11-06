@@ -154,6 +154,19 @@ module DrawerExamples =
     let code =
       """let isOpen = Var.Create false
 
+let navList =
+    div [] [
+        div [ Typography.body1 ] [ text "Dashboard" ]
+        div [ Typography.body1 ] [ text "Settings" ]
+    ]
+
+let pageContent = text "Page content"
+
+let toolbar (title: string) (action: Doc) =
+    div [ Flex.Flex.allSizes; AlignItems.center ] [ action; div [ Typography.h6 ] [ text title ] ]
+
+let openButton = Button.create(text "Menu", (fun () -> Var.Set isOpen (not isOpen.Value)))
+
 DrawerContainer.create(
     mainContent = Doc.Concat [
         AppBar.create(toolbar "My App" openButton)
@@ -214,6 +227,19 @@ DrawerContainer.create(
     let code =
       """let isOpen = Var.Create false
 
+let navList =
+    div [] [
+        div [ Typography.body1 ] [ text "Dashboard" ]
+        div [ Typography.body1 ] [ text "Settings" ]
+    ]
+
+let pageContent = text "Page content"
+
+let toolbar (title: string) (action: Doc) =
+    div [ Flex.Flex.allSizes; AlignItems.center ] [ action; div [ Typography.h6 ] [ text title ] ]
+
+let toggleButton = Button.create(text "Menu", (fun () -> Var.Set isOpen (not isOpen.Value)))
+
 DrawerContainer.create(
     mainContent = Doc.Concat [
         AppBar.create(toolbar "My App" toggleButton)
@@ -270,9 +296,22 @@ DrawerContainer.create(
     let code =
       """let isOpen = Var.Create false
 
+let navList =
+    div [] [
+        div [ Typography.body1 ] [ text "Dashboard" ]
+        div [ Typography.body1 ] [ text "Settings" ]
+    ]
+
+let pageContent = text "Page content"
+
+let toolbar (title: string) (action: Doc) =
+    div [ Flex.Flex.allSizes; AlignItems.center ] [ action; div [ Typography.h6 ] [ text title ] ]
+
+let toggleButton = Button.create(text "Menu", (fun () -> Var.Set isOpen (not isOpen.Value)))
+
 DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.create(...)
+        AppBar.create(toolbar "My App" toggleButton)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
@@ -342,17 +381,39 @@ DrawerContainer.create(
       )
 
     let code =
-      """let isOpen = Var.Create false
+      """open Weave.Icons.MaterialSymbols
+
+let isOpen = Var.Create false
 let hoverEnabled = Var.Create false
+
+let miniItem (icon: Icon) (label: string) =
+    div [ Flex.Flex.allSizes; AlignItems.center; Attr.Style "gap" "16px" ] [
+        Icon.create icon
+        // The Mini drawer hides this label while collapsed and reveals it when open or hovered
+        span [ Attr.Class "weave-drawer-mini-label" ] [ text label ]
+    ]
+
+let miniNavList =
+    div [] [
+        miniItem (Icon.Text Text.Dashboard) "Dashboard"
+        miniItem (Icon.UiActions UiActions.Settings) "Settings"
+    ]
+
+let pageContent = text "Page content"
+
+let toolbar (title: string) (action: Doc) =
+    div [ Flex.Flex.allSizes; AlignItems.center ] [ action; div [ Typography.h6 ] [ text title ] ]
+
+let toggleButton = Button.create(text "Menu", (fun () -> Var.Set isOpen (not isOpen.Value)))
 
 DrawerContainer.create(
     mainContent = Doc.Concat [
-        AppBar.create(...)
+        AppBar.create(toolbar "My App" toggleButton)
         div [ cl "weave-main-content" ] [ pageContent ]
     ],
     leftDrawer =
         Drawer.create(
-            miniNavList (),
+            miniNavList,
             isOpen.View,
             variant = Drawer.Variant.Mini,
             position = Drawer.Position.Left,
@@ -367,8 +428,8 @@ DrawerContainer.create(
     let description =
       Helpers.bodyText
         "An optional DrawerHeader renders a toolbar-height row at the top of \
-         the drawer, aligned with the AppBar. Pass dense = true to match a \
-         dense AppBar."
+         the drawer, aligned with the AppBar. Add a Drawer.Density attr to the header \
+         to match the AppBar height."
 
     let isOpen = Var.Create false
 
@@ -403,7 +464,15 @@ DrawerContainer.create(
       )
 
     let code =
-      """Drawer.create(
+      """let isOpen = Var.Create false
+
+let navList =
+    div [] [
+        div [ Typography.body1 ] [ text "Dashboard" ]
+        div [ Typography.body1 ] [ text "Settings" ]
+    ]
+
+Drawer.create(
     navList,
     isOpen.View,
     position = Drawer.Position.Left,
@@ -523,16 +592,33 @@ DrawerContainer.create(
       ]
 
     let code =
-      """// AppBar mode — AppBar spans full width above the DrawerContainer:
-AppBar.create(toolbar ...)
+      """let isOpen = Var.Create true
+
+let navList =
+    div [] [
+        div [ Typography.body1 ] [ text "Dashboard" ]
+        div [ Typography.body1 ] [ text "Settings" ]
+    ]
+
+let pageContent = text "Page content"
+
+let toolbar (title: string) (action: Doc) =
+    div [ Flex.Flex.allSizes; AlignItems.center ] [ action; div [ Typography.h6 ] [ text title ] ]
+
+let toggleButton = Button.create(text "Menu", (fun () -> Var.Set isOpen (not isOpen.Value)))
+
+// AppBar mode — AppBar spans full width above the DrawerContainer:
+AppBar.create(toolbar "My App" toggleButton)
 DrawerContainer.create(
     mainContent = div [ cl "weave-main-content" ] [ pageContent ],
-    leftDrawer = Drawer.create(navList, isOpen.View, variant = Drawer.Variant.Persistent)
+    leftDrawer = Drawer.create(navList, isOpen.View,
+                                         variant = Drawer.Variant.Persistent,
+                                         clipMode = Drawer.ClipMode.AppBar)
 )
 
 // FullHeight mode (default) — AppBar is inside mainContent, drawer covers full height:
 DrawerContainer.create(
-    mainContent = Doc.Concat [ AppBar.create(toolbar ...); div [ cl "weave-main-content" ] [ pageContent ] ],
+    mainContent = Doc.Concat [ AppBar.create(toolbar "My App" toggleButton); div [ cl "weave-main-content" ] [ pageContent ] ],
     leftDrawer = Drawer.create(navList, isOpen.View,
                                          variant = Drawer.Variant.Persistent,
                                          clipMode = Drawer.ClipMode.FullHeight)

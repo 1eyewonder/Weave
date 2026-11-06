@@ -342,7 +342,21 @@ let categoryToColor (c: Category) =
     | Entertainment -> Chip.Color.tertiary
     | Shopping -> Chip.Color.primary
     | Bills -> Chip.Color.error
-    | Other -> Chip.Color.warning"""
+    | Other -> Chip.Color.warning
+
+let allCategories = [ Food; Transport; Entertainment; Shopping; Bills; Other ]
+
+let categoryToString (c: Category) =
+    match c with
+    | Food -> "Food"
+    | Transport -> "Transport"
+    | Entertainment -> "Entertainment"
+    | Shopping -> "Shopping"
+    | Bills -> "Bills"
+    | Other -> "Other"
+
+let stringToCategory (s: string) =
+    allCategories |> List.tryFind (fun c -> categoryToString c = s)"""
 
     Helpers.codeSampleSection "Domain Model" description content code
 
@@ -355,6 +369,7 @@ let categoryToColor (c: Category) =
 
     let code =
       """let expenses: Var<Expense list> = Var.Create []
+let nextId = Var.Create 0
 let newDesc = Var.Create ""
 let newAmount = Var.Create 0
 let newCategory = Var.Create<string option> (Some "Food")
@@ -374,8 +389,16 @@ let addExpense () =
             Category = cat
         }
         Var.Update expenses (fun list -> list @ [ expense ])
+        Var.Set nextId (nextId.Value + 1)
         Var.Set newDesc ""
         Var.Set newAmount 0
+
+let categoryItems =
+    allCategories
+    |> List.map (fun c ->
+        let label = categoryToString c
+        SelectItem.create(text label, label, label))
+    |> View.Const
 
 // Form layout
 Grid.create([
@@ -418,14 +441,15 @@ let filteredExpenses =
             Set.contains (categoryToString e.Category) cats))
 
 // Toggle chips
-for cat in allCategories do
+allCategories
+|> List.map (fun cat ->
     let catName = categoryToString cat
     activeCategories.View
     |> Doc.BindView(fun active ->
         let isActive = Set.contains catName active
         Chip.create(
             text catName,
-            onClick = Some (fun () ->
+            onClick = (fun () ->
                 Var.Update activeCategories (fun s ->
                     if Set.contains catName s
                     then Set.remove catName s
@@ -434,7 +458,8 @@ for cat in allCategories do
                 categoryToColor cat
                 if isActive then Chip.Variant.filled
                 else Chip.Variant.outlined
-            ]))"""
+            ])))
+|> Doc.Concat"""
 
     Helpers.codeSampleSection "Category Filtering" description content code
 

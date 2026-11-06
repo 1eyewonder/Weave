@@ -338,6 +338,8 @@ open Weave.Icons.MaterialSymbols
 open WebSharper.UI
 open WebSharper.UI.Html
 
+let selected = Var.Create<Set<string>> Set.empty
+
 let chips = [
     ChipItem.create (
         text "Saved", "saved",

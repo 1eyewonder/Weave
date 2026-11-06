@@ -121,6 +121,12 @@ DropdownMenu.create(
     let code =
       """open Weave
 
+let items = [
+    DropdownMenuItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+    DropdownMenuItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+    DropdownMenuItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+]
+
 // DropdownMenu.Color.* tints the menu; Button.Color.* styles the trigger
 DropdownMenu.create(
     triggerContent = text "Primary",
@@ -215,6 +221,12 @@ DropdownMenu.create(
 
     let code =
       """open Weave
+
+let items = [
+    DropdownMenuItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+    DropdownMenuItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+    DropdownMenuItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+]
 
 // Default — trigger natural width, popover matches trigger
 DropdownMenu.create(
@@ -353,6 +365,12 @@ DropdownMenu.create(
     let code =
       """open Weave
 
+let items = [
+    DropdownMenuItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+    DropdownMenuItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+    DropdownMenuItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+]
+
 // Static placement — pass style modules directly via attrs
 DropdownMenu.create(
     triggerContent = text "Below Right",
@@ -427,6 +445,12 @@ DropdownMenu.create(
 
     let code =
       """open Weave
+
+let items = [
+    DropdownMenuItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+    DropdownMenuItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+    DropdownMenuItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+]
 
 DropdownMenu.create(
     triggerContent = text "Click to Open",
@@ -560,6 +584,12 @@ DropdownMenu.create(
 
     let code =
       """open Weave
+
+let items = [
+    DropdownMenuItem.create(text "Edit", onClick = (fun () -> printfn "Edit"))
+    DropdownMenuItem.create(text "Duplicate", onClick = (fun () -> printfn "Duplicate"))
+    DropdownMenuItem.create(text "Delete", onClick = (fun () -> printfn "Delete"))
+]
 
 // Per-instance: pass the density class in attrs to set it on the dropdown root
 DropdownMenu.create(

@@ -215,6 +215,7 @@ items.View
             ]
         )
     )
+    |> Doc.Concat
 )"""
 
     Helpers.codeSampleSection "Closable" description content code

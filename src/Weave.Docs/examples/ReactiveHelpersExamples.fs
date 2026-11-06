@@ -274,9 +274,9 @@ Button.create (text "Submit", onClick = ignore, enabled = isEnabled.View)"""
 
 let sizeMap =
   Map.ofList [
-    "small", Css.``weave-rounded-sm``
-    "medium", Css.``weave-rounded``
-    "large", Css.``weave-rounded-lg``
+    "small", "weave-rounded-sm"
+    "medium", "weave-rounded"
+    "large", "weave-rounded-lg"
   ]
 
 div [

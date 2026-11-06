@@ -68,7 +68,7 @@ Divider.create(
   let private orientationExamples () =
     let description =
       Helpers.bodyText
-        "Dividers can be rendered vertically by setting orientation to Vertical. Use them inside flex containers to separate inline content."
+        "Dividers can be rendered vertically by adding Divider.Orientation.vertical to attrs. Use them inside flex containers to separate inline content."
 
     let content =
       div [
@@ -90,10 +90,8 @@ Divider.create(
 
 
 div [
-    cls [
-        Flex.Flex.allSizes
-        AlignItems.center
-    ]
+    Flex.Flex.allSizes
+    AlignItems.center
     Attr.Style "height" "80px"
     Attr.Style "gap" "16px"
 ] [

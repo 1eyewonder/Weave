@@ -599,7 +599,23 @@ let skills = [
     let content = Doc.Empty
 
     let code =
-      """// Pure functions — the heart of the character math
+      """let str = Var.Create 10
+let dex = Var.Create 10
+let con = Var.Create 10
+let int' = Var.Create 10
+let wis = Var.Create 10
+let cha = Var.Create 10
+
+let abilityToString (a: Ability) =
+    match a with
+    | Strength -> "STR"
+    | Dexterity -> "DEX"
+    | Constitution -> "CON"
+    | Intelligence -> "INT"
+    | Wisdom -> "WIS"
+    | Charisma -> "CHA"
+
+// Pure functions — the heart of the character math
 let abilityModifier (score: int) = (score - 10) / 2
 let proficiencyBonus (level: int) = (level - 1) / 4 + 2
 let skillBonus abilityScore level isProficient =
@@ -683,8 +699,20 @@ Button.create(
     let content = Doc.Empty
 
     let code =
-      """// Each skill row: checkbox + name + ability tag + computed bonus
-for skill in skills do
+      """let level = Var.Create 1
+
+let abilityVar (a: Ability) =
+    match a with
+    | Strength -> str
+    | Dexterity -> dex
+    | Constitution -> con
+    | Intelligence -> int'
+    | Wisdom -> wis
+    | Charisma -> cha
+
+// Each skill row: checkbox + name + ability tag + computed bonus
+skills
+|> List.map (fun skill ->
     let abilityScore = abilityVar skill.Ability
 
     div [ Flex.Flex.allSizes; AlignItems.center; Gap.All.g2 ] [
@@ -706,7 +734,8 @@ for skill in skills do
                 |||> View.Map3(fun score lvl prof ->
                     skillBonus score lvl prof |> formatModifier))
         ]
-    ]"""
+    ])
+|> Doc.Concat"""
 
     Helpers.codeSampleSection "Skills & Proficiencies" description content code
 
@@ -718,7 +747,9 @@ for skill in skills do
     let content = Doc.Empty
 
     let code =
-      """let lastRoll = Var.Create<string option> None
+      """open Weave.Icons.MaterialSymbols
+
+let lastRoll = Var.Create<string option> None
 let random = System.Random()
 
 let rollDie (sides: int) =

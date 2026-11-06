@@ -338,8 +338,11 @@ let phaseToBackgroundColor (p: TimerPhase) =
     let content = Doc.Empty
 
     let code =
-      """let remainingSeconds = Var.Create (25 * 60)
-let mutable intervalId: int option = None
+      """open WebSharper.JavaScript
+
+let state = Var.Create Idle
+let remainingSeconds = Var.Create (25 * 60)
+let mutable intervalId: JS.Handle option = None
 
 let formatTime (seconds: int) =
     let m = seconds / 60
@@ -355,20 +358,30 @@ div [
     textView (remainingSeconds.View |> View.MapCached formatTime)
 ]
 
-// Timer tick — one-second interval
+let clearTimer () =
+    intervalId |> Option.iter JS.ClearInterval
+    intervalId <- None
+
+// Timer tick, once per second
+let tick () =
+    if state.Value = Running then
+        let next = remainingSeconds.Value - 1
+        if next <= 0 then
+            // Phase complete, so transition to the next one
+            clearTimer ()
+            Var.Set remainingSeconds 0
+            Var.Set state Idle
+        else
+            Var.Set remainingSeconds next
+
 let startTimer () =
-    let id = JS.SetInterval (fun () ->
-        if state.Value = Running then
-            let next = remainingSeconds.Value - 1
-            if next <= 0 then
-                // Phase complete — transition to next
-                clearTimer ()
-                Var.Set remainingSeconds 0
-                Var.Set state Idle
-            else
-                Var.Set remainingSeconds next
-    ) 1000
-    intervalId <- Some id"""
+    clearTimer ()
+    Var.Set state Running
+    intervalId <- Some (JS.SetInterval tick 1000)
+
+let pauseTimer () =
+    clearTimer ()
+    Var.Set state Paused"""
 
     Helpers.codeSampleSection "Countdown Display" description content code
 
@@ -380,7 +393,9 @@ let startTimer () =
     let content = Doc.Empty
 
     let code =
-      """// Reactive control buttons — switch based on state
+      """open Weave.Icons.MaterialSymbols
+
+// Reactive control buttons — switch based on state
 state.View
 |> Doc.BindView(fun s ->
     match s with

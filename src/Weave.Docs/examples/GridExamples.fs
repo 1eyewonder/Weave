@@ -49,11 +49,15 @@ module GridExamples =
     let code =
       """open Weave
 
+let item1 = text "Item 1"
+let item2 = text "Item 2"
+let item3 = text "Item 3"
+
 Grid.create(
     [
-        GridItem.create(myContent, attrs = [ GridItem.Span.twelve ])
-        GridItem.create(myContent, attrs = [ GridItem.Span.twelve ])
-        GridItem.create(myContent, attrs = [ GridItem.Span.twelve ])
+        GridItem.create(item1, attrs = [ GridItem.Span.twelve ])
+        GridItem.create(item2, attrs = [ GridItem.Span.twelve ])
+        GridItem.create(item3, attrs = [ GridItem.Span.twelve ])
     ]
 )"""
 
@@ -78,12 +82,17 @@ Grid.create(
     let code =
       """open Weave
 
+let item1 = text "1/4"
+let item2 = text "1/4"
+let item3 = text "1/4"
+let item4 = text "1/4"
+
 Grid.create(
     [
-        GridItem.create(myContent, attrs = [ GridItem.Span.three ])
-        GridItem.create(myContent, attrs = [ GridItem.Span.three ])
-        GridItem.create(myContent, attrs = [ GridItem.Span.three ])
-        GridItem.create(myContent, attrs = [ GridItem.Span.three ])
+        GridItem.create(item1, attrs = [ GridItem.Span.three ])
+        GridItem.create(item2, attrs = [ GridItem.Span.three ])
+        GridItem.create(item3, attrs = [ GridItem.Span.three ])
+        GridItem.create(item4, attrs = [ GridItem.Span.three ])
     ]
 )"""
 
@@ -125,6 +134,8 @@ Grid.create(
 
     let code =
       """open Weave
+
+let myContent = text "Item"
 
 GridItem.create(
     myContent,
@@ -206,6 +217,10 @@ GridItem.create(
 
     let code =
       """open Weave
+
+let item1 = text "Item 1"
+let item2 = text "Item 2"
+let item3 = text "Item 3"
 
 Grid.create(
     [
@@ -319,6 +334,11 @@ Grid.create(
     let code =
       """open Weave
 
+let item1 = text "Item 1"
+let item2 = text "Item 2"
+let item3 = text "Item 3"
+let item4 = text "Item 4"
+
 Grid.create(
     [
         GridItem.create(item1, attrs = [ GridItem.Span.three ])
@@ -329,8 +349,8 @@ Grid.create(
 
 Grid.create(
     [
-        GridItem.create(item1, attrs = [ GridItem.Span.three ])
-        GridItem.create(item2, attrs = [ GridItem.Span.three ])
+        GridItem.create(item3, attrs = [ GridItem.Span.three ])
+        GridItem.create(item4, attrs = [ GridItem.Span.three ])
     ],
     attrs = [ JustifyContent.spaceBetween ]
 )"""
@@ -368,6 +388,11 @@ Grid.create(
 
     let code =
       """open Weave
+
+let item1 = text "Item 1"
+let item2 = text "Item 2"
+let item3 = text "Item 3"
+let item4 = text "Item 4"
 
 Grid.create(
     [
@@ -439,6 +464,11 @@ Grid.create(
 
     let code =
       """open Weave
+
+let nested1 = text "Nested 1"
+let nested2 = text "Nested 2"
+let nested3 = text "Nested 3"
+let sidebarContent = text "Sidebar"
 
 Grid.create(
     [
@@ -538,23 +568,28 @@ Grid.create(
               |> Option.map (fun (_, _, c) -> c))
             |> Option.defaultValue "JustifyContent.flexStart"
 
+          let itemDefinitions =
+            spans
+            |> List.mapi (fun i _ -> sprintf "let item%d = text \"Item %d\"" (i + 1) (i + 1))
+
           let itemLines =
             spans
             |> List.mapi (fun i s ->
               sprintf "        GridItem.create(item%d, attrs = [ GridItem.Span.%s ])" (i + 1) (spanToName s))
-            |> String.concat "\n"
 
-          sprintf
-            """open Weave
-
-Grid.create(
-    [
-%s
-    ],
-    attrs = [ %s ]
-)"""
-            itemLines
-            justifyCodeName)
+          [
+            yield "open Weave"
+            yield ""
+            yield! itemDefinitions
+            yield ""
+            yield "Grid.create("
+            yield "    ["
+            yield! itemLines
+            yield "    ],"
+            yield sprintf "    attrs = [ %s ]" justifyCodeName
+            yield ")"
+          ]
+          |> String.concat "\n")
         itemCount.View
         selectedJustify.View
         combinedSpans

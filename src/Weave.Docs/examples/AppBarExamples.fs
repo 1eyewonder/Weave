@@ -15,7 +15,7 @@ module AppBarExamples =
       Helpers.bodyText
         "A minimal AppBar wrapping a title. The background and text colour are \
          driven by theme variables, but you can pass any BrandColor as an attr \
-         to override them. The default position is Position.Fixed."
+         to override them. By default the bar stays in normal document flow."
 
     let preview =
       AppBar.create (
@@ -38,14 +38,14 @@ module AppBarExamples =
     ] [ div [ Typography.h6 ] [ text "My Application" ] ],
     attrs = [ BrandColor.BackgroundColor.primary ]
 )
-// Default position is Position.Fixed — sticks to the top of the viewport."""
+// Without an AppBar.Position attr the bar stays in normal document flow"""
 
     Helpers.codeSampleSection "Basic" description preview code
 
   let private positionExample () =
     let description =
       Helpers.bodyText
-        "The `position` parameter controls how the AppBar interacts with scroll. \
+        "AppBar.Position attrs control how the AppBar interacts with scroll. \
          Static and Sticky previews below are scrollable — try it! Fixed and \
          Bottom are simulated inside clipped containers so they don't escape the page."
 
@@ -147,17 +147,19 @@ module AppBarExamples =
       )
 
     let code =
-      """// Static — scrolls away with content
+      """let content = div [ Typography.h6 ] [ text "My Application" ]
+
+// Static — scrolls away with content
 AppBar.create(content)
 
 // Sticky — sticks to the top once the page scrolls past it
-AppBar.create(content, position = AppBar.Position.sticky)
+AppBar.create(content, attrs = [ AppBar.Position.sticky ])
 
-// Fixed (default) — always pinned to the top of the viewport
-AppBar.create(content)
+// Fixed pins the bar to the top of the viewport
+AppBar.create(content, attrs = [ AppBar.Position.fixedTop ])
 
 // Bottom — always pinned to the bottom of the viewport
-AppBar.create(content, position = AppBar.Position.fixedBottom)"""
+AppBar.create(content, attrs = [ AppBar.Position.fixedBottom ])"""
 
     Helpers.codeSampleSection "Position" description content code
 
@@ -189,7 +191,9 @@ AppBar.create(content, position = AppBar.Position.fixedBottom)"""
       )
 
     let code =
-      """AppBar.create(
+      """open Weave.Icons.MaterialSymbols
+
+AppBar.create(
     div [
         Flex.Flex.allSizes
         AlignItems.center

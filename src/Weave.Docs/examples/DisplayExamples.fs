@@ -362,6 +362,7 @@ Chip.create(
 
     let code =
       """open Weave
+open Weave.Icons.MaterialSymbols
 
 // Invisible — hidden but keeps its layout space
 div [ Visibility.invisible ] [ text "Takes space but invisible" ]

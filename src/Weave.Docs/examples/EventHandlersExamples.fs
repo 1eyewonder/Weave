@@ -28,13 +28,15 @@ module EventHandlersExamples =
       ]
 
     let code =
-      """div [
+      """let log = Var.Create "Click or tap the box"
+
+div [
   on.clickTap (fun el ev ->  // see here
     // Fires on mouse click AND touch tap
     // Only primary pointer interactions (left-click, touch, pen)
     Var.Set log "Clicked/tapped!"
   )
-] [ text "Click or tap me" ]"""
+] [ textView log.View ]"""
 
     Helpers.codeSampleSection "on.clickTap" description content code
 
@@ -62,14 +64,19 @@ module EventHandlersExamples =
       ]
 
     let code =
-      """div [
+      """let count = Var.Create 0
+
+div [
   attr.tabindex "0"
-  attr.role "button"
+  Attr.Create "role" "button"
   on.clickTapKey (fun el ev ->  // see here
     // Fires on click, tap, Enter, and Space
     Var.Update count (fun n -> n + 1)
   )
-] [ text "Activate me" ]"""
+] [
+  text "Activate me. Count: "
+  textView (count.View |> View.Map string)
+]"""
 
     Helpers.codeSampleSection "on.clickTapKey" description content code
 
@@ -98,6 +105,7 @@ module EventHandlersExamples =
 
     let code =
       """let isEnabled = Var.Create true
+let message = Var.Create "Toggle the switch and click"
 
 Switch.create (isEnabled, content = text "Enabled")
 
@@ -106,7 +114,7 @@ div [
     // Only fires when isEnabled is true
     Var.Set message "Action fired!"
   )
-] [ text "Guarded element" ]"""
+] [ textView message.View ]"""
 
     Helpers.codeSampleSection "Guarded Click Handlers" description content code
 
@@ -269,25 +277,27 @@ Bounded.snapToStep 0.0 100.0 5.0 37.0  // returns 35.0"""
       ]
 
     let code =
-      """// Internal to Weave components:
-on.keyDown (fun el ev ->
-  match ev with
-  | Key.Activate _ ->
-    ev.PreventDefault()
-    // Handle Enter or Space
-  | Key.Escape _ ->
-    // Close menu/dialog
-  | Key.ArrowDown _ ->
-    ev.PreventDefault()
-    // Move focus to next item
-  | _ -> ()
-)
+      """// Weave's internal Key patterns match on ev.Key. Your own handlers can do the same:
+let menuKeys =
+  on.keyDown (fun el ev ->
+    match ev.Key with
+    | "Enter" | " " ->
+      ev.PreventDefault()
+      // Handle Enter or Space
+    | "Escape" ->
+      // Close menu/dialog
+      ()
+    | "ArrowDown" ->
+      ev.PreventDefault()
+      // Move focus to next item
+    | _ -> ()
+  )
 
 // For your own interactive elements, use on.clickTapKey instead:
 div [
   attr.tabindex "0"
-  attr.role "button"
-  on.clickTapKey (fun el ev -> (* handles click, tap, Enter, Space *))
+  Attr.Create "role" "button"
+  on.clickTapKey (fun el ev -> () (* handles click, tap, Enter, Space *))
 ] [ text "Accessible custom button" ]"""
 
     Helpers.codeSampleSection "Keyboard Active Patterns" description content code

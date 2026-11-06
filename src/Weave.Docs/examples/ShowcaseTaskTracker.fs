@@ -256,7 +256,20 @@ let priorityToColor (p: Priority) =
     match p with
     | Low -> Chip.Color.success
     | Medium -> Chip.Color.warning
-    | High -> Chip.Color.error"""
+    | High -> Chip.Color.error
+
+let priorityToString (p: Priority) =
+    match p with
+    | Low -> "Low"
+    | Medium -> "Medium"
+    | High -> "High"
+
+let stringToPriority (s: string) =
+    match s with
+    | "Low" -> Some Low
+    | "Medium" -> Some Medium
+    | "High" -> Some High
+    | _ -> None"""
 
     Helpers.codeSampleSection "Domain Model" description content code
 
@@ -292,6 +305,11 @@ let addTask () =
         Var.Update items (fun list -> list @ [ item ])
         Var.Set nextId (nextId.Value + 1)
         Var.Set newText ""
+
+let priorityItems =
+    [ "Low"; "Medium"; "High" ]
+    |> List.map (fun label -> SelectItem.create(text label, label, label))
+    |> View.Const
 
 // The form
 Grid.create ([
@@ -338,8 +356,13 @@ Grid.create ([
     let content = Doc.Empty
 
     let code =
-      """// Reactive task list rendering
-filteredItems
+      """open Weave.Icons.MaterialSymbols
+
+let removeTask (id: int) =
+    Var.Update items (List.filter (fun t -> t.Id <> id))
+
+// Reactive task list rendering
+items.View
 |> Doc.BindView(fun list ->
     if List.isEmpty list then
         Alert.create(
@@ -392,7 +415,8 @@ filteredItems
     let code =
       """let showCompleted = Var.Create true
 
-// Derived filtered list — recomputes whenever items or filter changes
+// Derived filtered list, recomputed whenever items or the filter changes.
+// Bind the task list to filteredItems instead of items.View to apply it.
 let filteredItems =
     (items.View, showCompleted.View)
     ||> View.Map2(fun list show ->

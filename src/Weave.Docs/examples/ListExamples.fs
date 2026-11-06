@@ -39,6 +39,7 @@ module ListExamples =
         "WeaveList displays a collection of items. Icons, avatars, or other content can be included directly in the item's content. Use ListChild.Content to include arbitrary elements like dividers.")
       content
       """open Weave
+open WeaveList
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 
@@ -112,6 +113,7 @@ WeaveList.create(
         "To create a nested list use the nestedChildren parameter of ListItem. The expansion state can be controlled via the expanded parameter. You can bind it externally to control sub-list expansion.")
       content
       """open Weave
+open WeaveList
 open WebSharper.UI
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
@@ -301,13 +303,13 @@ selectionMode.View
             ListItem.create(
                 text "Teas",
                 nestedChildren =
-                    teaGroup |> List.map (fun t -> ListItem.create(text t, value = t))
+                    (teaGroup |> List.map (fun t -> ListItem.create(text t, value = t)))
             )
 
             ListItem.create(
                 text "Coffees",
                 nestedChildren =
-                    coffeeGroup |> List.map (fun c -> ListItem.create(text c, value = c))
+                    (coffeeGroup |> List.map (fun c -> ListItem.create(text c, value = c)))
             )
         ],
         selectedValue = selectedDrink,  // see here
@@ -423,13 +425,13 @@ WeaveList.create(
         ListItem.create(
             text "Teas",
             nestedChildren =
-                teaGroup |> List.map (fun t -> ListItem.create(text t, value = t))
+                (teaGroup |> List.map (fun t -> ListItem.create(text t, value = t)))
         )
 
         ListItem.create(
             text "Coffees",
             nestedChildren =
-                coffeeGroup |> List.map (fun c -> ListItem.create(text c, value = c))
+                (coffeeGroup |> List.map (fun c -> ListItem.create(text c, value = c)))
         )
     ],
     selectedValues = selectedDrinks,  // see here

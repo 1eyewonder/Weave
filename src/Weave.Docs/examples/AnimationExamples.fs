@@ -904,6 +904,9 @@ Button.create(
       """open Weave
 open Weave.CssHelpers.Animation
 
+let isExpanded = Var.Create true
+let isVisible = Var.Create true
+let content = text "Expandable content"
 
 // Use a predefined pair
 let pair = AnimationPair.fadeInOut
@@ -1056,6 +1059,8 @@ open Weave.CssHelpers.Animation
 
 let alerts = ListModel.Create (fun (id, _, _, _) -> id) []
 
+let nextId = Var.Create 0
+
 let alertConfigs = [
     Alert.Color.success, "Operation completed successfully!", AnimationPair.slideRightInOut
     Alert.Color.error, "Something went wrong.", AnimationPair.slideLeftInOut
@@ -1065,9 +1070,11 @@ let alertConfigs = [
 
 // Add alert — each gets its own isVisible for exit animation
 let addAlert () =
-    let idx = nextId % alertConfigs.Length
+    let idx = nextId.Value % alertConfigs.Length
     let colorAttr, msg, pair = alertConfigs.[idx]
-    alerts.Add(nextId, colorAttr, msg, pair)
+    let id = nextId.Value
+    nextId.Value <- id + 1
+    alerts.Add(id, colorAttr, msg, pair)
 
 // Render with Doc.BindSeqCachedBy so only new items animate
 alerts.View
@@ -1142,26 +1149,32 @@ alerts.View
 open Weave.CssHelpers.Animation
 
 
-let isVisible = Var.Create true
+let chips = ListModel.Create (fun (id, _) -> id) [ (0, "WebSharper") ]
 
 // Scale a chip in when added, scale out when removed.
 // showWith puts duration/easing on the wrapper and calls removeChip
 // after the exit animation completes — no hardcoded timeout needed.
-Animate.showWith
-    AnimationPair.scaleInOut
-    isVisible.View
-    (fun () ->
-        Chip.create(
-            text "WebSharper",
-            onClose = (fun () -> isVisible.Value <- false),
-            attrs = [
-                Chip.Variant.filled
-                Chip.Color.primary
-            ]
-        ))
-    [ AnimationDuration.short
-      AnimationEasing.decelerate ]
-    (Some (fun () -> chips.RemoveByKey id))"""
+chips.View
+|> Doc.BindSeqCachedBy
+    (fun (id, _) -> id)
+    (fun (id, label) ->
+        let isVisible = Var.Create true
+
+        Animate.showWith
+            AnimationPair.scaleInOut
+            isVisible.View
+            (fun () ->
+                Chip.create(
+                    text label,
+                    onClose = (fun () -> isVisible.Value <- false),
+                    attrs = [
+                        Chip.Variant.filled
+                        Chip.Color.primary
+                    ]
+                ))
+            [ AnimationDuration.short
+              AnimationEasing.decelerate ]
+            (Some (fun () -> chips.RemoveByKey id)))"""
 
     Helpers.codeSampleSection "Animated chips" description content code
 
@@ -1443,6 +1456,10 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
       """open Weave
 open Weave.CssHelpers.Animation
 
+let dashboardContent = text "Dashboard content"
+let settingsContent = text "Settings content"
+let profileContent = text "Profile content"
+let isEnabled = Var.Create false
 
 // Add spring easing to Tabs — the indicator bounces between tabs
 Tabs.create(

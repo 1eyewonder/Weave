@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .table-stack > * + * {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="table-stack">
+      <div id="table-compact" class="weave-table weave-table--compact">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell" scope="col">Name</th>
+              <th class="weave-table__header-cell" scope="col">Count</th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row">
+              <td class="weave-table__cell">Alpha</td>
+              <td class="weave-table__cell">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="table-standard" class="weave-table weave-table--standard">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell" scope="col">Name</th>
+              <th class="weave-table__header-cell" scope="col">Count</th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row">
+              <td class="weave-table__cell">Alpha</td>
+              <td class="weave-table__cell">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="table-spacious" class="weave-table weave-table--spacious">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell" scope="col">Name</th>
+              <th class="weave-table__header-cell" scope="col">Count</th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row">
+              <td class="weave-table__cell">Alpha</td>
+              <td class="weave-table__cell">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="table-narrow" class="weave-table" style="width: 160px">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell" scope="col">A wide column header</th>
+              <th class="weave-table__header-cell" scope="col">Another wide column header</th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row">
+              <td class="weave-table__cell">Alpha</td>
+              <td class="weave-table__cell">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="table-sortable" class="weave-table">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell" scope="col" aria-sort="ascending">
+                <button type="button" class="weave-table__sort-button">
+                  Name
+                  <span
+                    class="weave-table__sort-indicator weave-table__sort-indicator--active"
+                    aria-hidden="true"
+                    >&#9650;</span
+                  >
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row weave-table__row--clickable">
+              <td class="weave-table__cell">
+                <button type="button" class="weave-table__row-action">Alpha</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="table-selectable" class="weave-table" style="width: 400px">
+        <table class="weave-table__table">
+          <thead class="weave-table__head">
+            <tr>
+              <th class="weave-table__header-cell weave-table__select-cell" scope="col">
+                <label class="weave-checkbox weave-table__select">
+                  <input type="checkbox" class="weave-checkbox__input" aria-label="Select all rows" />
+                  <span class="weave-checkbox__span"></span>
+                </label>
+              </th>
+              <th class="weave-table__header-cell" scope="col">Name</th>
+            </tr>
+          </thead>
+          <tbody class="weave-table__body">
+            <tr class="weave-table__row">
+              <td class="weave-table__cell weave-table__select-cell">
+                <label class="weave-checkbox weave-table__select">
+                  <input type="checkbox" class="weave-checkbox__input" aria-labelledby="row-alpha" />
+                  <span id="select-box" class="weave-checkbox__span"></span>
+                </label>
+              </td>
+              <th id="row-alpha" class="weave-table__cell weave-table__row-header" scope="row">Alpha</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

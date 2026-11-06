@@ -14,6 +14,7 @@
     <Compile Include="accessibility/ButtonMenuTests.fs" />
     <Compile Include="accessibility/ButtonTests.fs" />
     <Compile Include="accessibility/CheckboxTests.fs" />
+    <Compile Include="accessibility/CardTests.fs" />
     <Compile Include="accessibility/ChipSetTests.fs" />
     <Compile Include="accessibility/ChipTests.fs" />
     <Compile Include="accessibility/DialogTests.fs" />
@@ -29,12 +30,14 @@
     <Compile Include="accessibility/SelectTests.fs" />
     <Compile Include="accessibility/SliderTests.fs" />
     <Compile Include="accessibility/SwitchTests.fs" />
+    <Compile Include="accessibility/TableTests.fs" />
     <Compile Include="accessibility/TabsTests.fs" />
     <Compile Include="accessibility/TooltipTests.fs" />
     <Compile Include="interaction/AlertInteractionTests.fs" />
     <Compile Include="interaction/AnimationInteractionTests.fs" />
     <Compile Include="interaction/ButtonInteractionTests.fs" />
     <Compile Include="interaction/ButtonMenuInteractionTests.fs" />
+    <Compile Include="interaction/CardInteractionTests.fs" />
     <Compile Include="interaction/CheckboxInteractionTests.fs" />
     <Compile Include="interaction/ChipInteractionTests.fs" />
     <Compile Include="interaction/ChipSetInteractionTests.fs" />
@@ -50,6 +53,7 @@
     <Compile Include="interaction/SelectInteractionTests.fs" />
     <Compile Include="interaction/SliderInteractionTests.fs" />
     <Compile Include="interaction/SwitchInteractionTests.fs" />
+    <Compile Include="interaction/TableInteractionTests.fs" />
     <Compile Include="interaction/TabsInteractionTests.fs" />
     <Compile Include="interaction/ThemingInteractionTests.fs" />
     <Compile Include="interaction/TooltipInteractionTests.fs" />

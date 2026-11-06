@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .card-row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .card-row > * {
+        width: 280px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card-row">
+      <div id="card-full" class="weave-card">
+        <div class="weave-card__header">
+          <div id="card-leading" class="weave-card__header-leading">
+            <span style="display: inline-block; width: 40px; height: 40px"></span>
+          </div>
+          <div class="weave-card__header-text">
+            <div class="weave-card__title">A card title long enough to need truncating in the header</div>
+            <div class="weave-card__subtitle">Subtitle</div>
+          </div>
+          <div class="weave-card__header-actions">
+            <button id="card-action" type="button" style="width: 32px; height: 32px">x</button>
+          </div>
+        </div>
+        <div class="weave-card__content">Card content</div>
+        <div class="weave-card__actions">
+          <button id="card-footer-button" type="button">Save</button>
+        </div>
+      </div>
+
+      <div id="card-media" class="weave-card">
+      <div class="weave-card__media" style="height: 80px">
+        <img id="card-media-image" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+      </div>
+      <div class="weave-card__content">Media content</div>
+    </div>
+    <div id="card-elevated" class="weave-card weave-card--elevated">
+        <div class="weave-card__content">Elevated content</div>
+      </div>
+    </div>
+  </body>
+</html>

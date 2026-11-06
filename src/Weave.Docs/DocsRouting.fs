@@ -19,6 +19,7 @@ module DocsRouting =
     | TooltipExamples
     | GridExamples
     | CheckboxExamples
+    | CardExamples
     | ChipExamples
     | ChipSetExamples
     | RadioButtonExamples
@@ -33,6 +34,7 @@ module DocsRouting =
     | DialogExamples
     | DrawerExamples
     | IconsExamples
+    | TableExamples
     | TabsExamples
     | TextFieldExamples
     | ListExamples
@@ -68,6 +70,7 @@ module DocsRouting =
     | TooltipExamples -> "Tooltip"
     | GridExamples -> "Grid"
     | CheckboxExamples -> "Checkbox"
+    | CardExamples -> "Card"
     | ChipExamples -> "Chip"
     | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
@@ -82,6 +85,7 @@ module DocsRouting =
     | DialogExamples -> "Dialog"
     | DrawerExamples -> "Drawer"
     | IconsExamples -> "Icons"
+    | TableExamples -> "Table"
     | TabsExamples -> "Tabs"
     | TextFieldExamples -> "Text Field"
     | ListExamples -> "List"
@@ -117,6 +121,7 @@ module DocsRouting =
     | "Tooltip" -> Some TooltipExamples
     | "Grid" -> Some GridExamples
     | "Checkbox" -> Some CheckboxExamples
+    | "Card" -> Some CardExamples
     | "Chip" -> Some ChipExamples
     | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
@@ -131,6 +136,7 @@ module DocsRouting =
     | "Dialog" -> Some DialogExamples
     | "Drawer" -> Some DrawerExamples
     | "Icons" -> Some IconsExamples
+    | "Table" -> Some TableExamples
     | "Tabs" -> Some TabsExamples
     | "Text Field" -> Some TextFieldExamples
     | "List" -> Some ListExamples
@@ -167,6 +173,7 @@ module DocsRouting =
     | TooltipExamples -> "#tooltip"
     | GridExamples -> "#grid"
     | CheckboxExamples -> "#checkbox"
+    | CardExamples -> "#card"
     | ChipExamples -> "#chip"
     | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
@@ -181,6 +188,7 @@ module DocsRouting =
     | DialogExamples -> "#dialog"
     | DrawerExamples -> "#drawer"
     | IconsExamples -> "#icons"
+    | TableExamples -> "#table"
     | TabsExamples -> "#tabs"
     | TextFieldExamples -> "#text-field"
     | ListExamples -> "#list"
@@ -217,6 +225,7 @@ module DocsRouting =
     | "#tooltip" -> Some TooltipExamples
     | "#grid" -> Some GridExamples
     | "#checkbox" -> Some CheckboxExamples
+    | "#card" -> Some CardExamples
     | "#chip" -> Some ChipExamples
     | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples
@@ -231,6 +240,7 @@ module DocsRouting =
     | "#dialog" -> Some DialogExamples
     | "#drawer" -> Some DrawerExamples
     | "#icons" -> Some IconsExamples
+    | "#table" -> Some TableExamples
     | "#tabs" -> Some TabsExamples
     | "#text-field" -> Some TextFieldExamples
     | "#list" -> Some ListExamples

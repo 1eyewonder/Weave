@@ -1030,6 +1030,80 @@ module ComponentPreviews =
           Attr.Style "border-radius" "2px"
         ] []
       ]
+    | CardExamples ->
+      cp [
+        div [
+          Attr.Style "position" "absolute"
+          Attr.Style "top" "12px"
+          Attr.Style "left" "14%"
+          Attr.Style "right" "14%"
+          Attr.Style "bottom" "12px"
+          Attr.Style "border" "1px solid rgba(var(--palette-text-primary-rgb), 0.18)"
+          Attr.Style "border-radius" "6px"
+          Attr.Style "box-sizing" "border-box"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "24px"
+          Attr.Style "left" "20%"
+          Attr.Style "right" "44%"
+          Attr.Style "height" "8px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "42px"
+          Attr.Style "left" "20%"
+          Attr.Style "right" "20%"
+          Attr.Style "height" "6px"
+        ] []
+        div [
+          cl "cp-bar"
+          Attr.Style "top" "66px"
+          Attr.Style "right" "20%"
+          Attr.Style "width" "22%"
+          Attr.Style "height" "10px"
+          Attr.Style "border-radius" "3px"
+        ] []
+      ]
+    | TableExamples ->
+      cp [
+        div [
+          cl "cp-line"
+          Attr.Style "top" "16px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "8px"
+        ] []
+        div [
+          Attr.Style "position" "absolute"
+          Attr.Style "top" "32px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "10%"
+          Attr.Style "height" "1px"
+          Attr.Style "background" "var(--palette-divider)"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "42px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "30%"
+          Attr.Style "height" "6px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "58px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "22%"
+          Attr.Style "height" "6px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "74px"
+          Attr.Style "left" "10%"
+          Attr.Style "right" "38%"
+          Attr.Style "height" "6px"
+        ] []
+      ]
     | AlertExamples ->
       cp [
         div [

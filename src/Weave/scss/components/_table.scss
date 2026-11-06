@@ -1,0 +1,171 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-table {
+  --table-cell-padding-block: #{density-spacing(6, 4)};
+  --table-cell-padding-inline: #{density-spacing(12, 4)};
+
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: auto;
+  background: var(--palette-surface);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+  border-radius: var(--default-borderradius);
+}
+
+.weave-table--standard {
+  --table-cell-padding-block: #{density-spacing(6, 4)};
+  --table-cell-padding-inline: #{density-spacing(12, 4)};
+}
+
+.weave-table--compact {
+  --table-cell-padding-block: #{density-spacing(2, 2)};
+  --table-cell-padding-inline: #{density-spacing(8, 2)};
+}
+
+.weave-table--spacious {
+  --table-cell-padding-block: #{density-spacing(10, 4)};
+  --table-cell-padding-inline: #{density-spacing(16, 4)};
+}
+
+.weave-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--palette-text-primary);
+  font-family: var(--typography-body2-family);
+  font-size: var(--typography-body2-size);
+  font-weight: var(--typography-body2-weight);
+  line-height: var(--typography-body2-lineheight);
+  letter-spacing: var(--typography-body2-letterspacing);
+}
+
+.weave-table__head {
+  background: var(--palette-surface);
+}
+
+.weave-table__body {
+  background: inherit;
+}
+
+.weave-table__header-cell,
+.weave-table__cell {
+  padding: var(--table-cell-padding-block) var(--table-cell-padding-inline);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.weave-table__caption {
+  padding: var(--table-cell-padding-block) var(--table-cell-padding-inline);
+  text-align: start;
+  caption-side: top;
+  color: var(--palette-text-secondary);
+}
+
+.weave-table--hidden-caption .weave-table__caption {
+  @include visually-hidden;
+}
+
+.weave-table__row-header {
+  font-weight: inherit;
+}
+
+.weave-table__select-cell {
+  width: 1%;
+  padding-inline-end: 0;
+}
+
+.weave-table__select {
+  padding: 0;
+}
+
+.weave-table__header-cell {
+  font-weight: var(--weave-weight-bold);
+  color: var(--palette-text-secondary);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--palette-divider);
+}
+
+.weave-table--sticky-header .weave-table__header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--palette-surface);
+}
+
+.weave-table__sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.weave-table__sort-button:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: 2px;
+}
+
+.weave-table__sort-indicator {
+  font-size: 0.75em;
+  opacity: 0;
+  @include transition(opacity, short);
+}
+
+.weave-table__sort-button:hover .weave-table__sort-indicator {
+  opacity: var(--weave-opacity-secondary);
+}
+
+.weave-table__sort-indicator--active,
+.weave-table__sort-button:hover .weave-table__sort-indicator--active {
+  opacity: 1;
+}
+
+.weave-table__row + .weave-table__row .weave-table__cell {
+  border-top: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+}
+
+.weave-table--striped .weave-table__row:nth-child(even) {
+  background-color: var(
+    --table-stripe-color,
+    rgba(var(--palette-text-primary-rgb), var(--weave-alpha-subtle))
+  );
+}
+
+.weave-table--hoverable .weave-table__row:hover,
+.weave-table__row--clickable:hover {
+  background-color: var(--table-hover-color, var(--palette-action-default-hover));
+}
+
+.weave-table__row--clickable {
+  cursor: pointer;
+  @include transition(background-color, short);
+}
+
+.weave-table__row--selected {
+  background-color: rgba(var(--palette-primary-rgb), var(--weave-alpha-selected));
+}
+
+.weave-table__row-action {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.weave-table__row-action:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: 2px;
+}
+
+.weave-table__empty {
+  text-align: center;
+  color: var(--palette-text-secondary);
+}

@@ -391,6 +391,197 @@ module Pages =
       Alert.create (text "Info alert message", attrs = [ Alert.Color.info ])
     ]
 
+  let private cardPage () =
+    let opened = Var.Create "none"
+
+    div [] [
+      Card.create (
+        Doc.Concat [
+          CardHeader.create (
+            h2 [] [ text "Bordered card" ],
+            subtitle = text "Card subtitle",
+            leading = Icon.create (Icon.UiActions UiActions.Home),
+            actions =
+              IconButton.create (
+                Icon.create (Icon.UiActions UiActions.Home),
+                (fun () -> ()),
+                attrs = [ Attr.Create "aria-label" "home" ]
+              )
+          )
+          CardContent.create (div [ Typography.body1 ] [ text "Card body content" ])
+          CardActions.create (Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.text ]))
+        ],
+        attrs = [ Attr.Create "data-testid" "bordered-card" ]
+      )
+      Card.create (
+        Doc.Concat [
+          CardHeader.create (text "Elevated card")
+          CardContent.create (div [ Typography.body1 ] [ text "Elevated content" ])
+        ],
+        attrs = [ Card.Variant.elevated ]
+      )
+      Card.create (
+        CardContent.create (div [ Typography.body1 ] [ text "Filled content" ]),
+        attrs = [ Card.Variant.filled; Attr.Create "data-testid" "filled-card" ]
+      )
+      Card.create (
+        Doc.Concat [
+          CardActionArea.create (
+            Doc.Concat [
+              CardMedia.create (div [ Attr.Style "height" "80px" ] [])
+              CardHeader.create (h2 [] [ text "Clickable card" ])
+              CardContent.create (div [ Typography.body1 ] [ text "Opens the card" ])
+            ],
+            onClick = (fun () -> Var.Set opened "clickable")
+          )
+          CardActions.create (
+            Button.create (
+              text "Secondary",
+              (fun () -> Var.Set opened "secondary"),
+              attrs = [ Button.Variant.text ]
+            )
+          )
+        ],
+        attrs = [ Attr.Create "data-testid" "action-card" ]
+      )
+      Card.create (
+        CardActionArea.create (CardContent.create (text "Linked card"), href = "#card"),
+        attrs = [ Attr.Create "data-testid" "link-card" ]
+      )
+      div [ Attr.Create "data-testid" "opened-card" ] [ textView opened.View ]
+    ]
+
+  let private tablePage () =
+    let clicked = Var.Create "none"
+    let selected = Var.Create(None: string option)
+    let checkedRows = Var.Create(Set.ofList [ "Alpha" ])
+
+    let externalSort =
+      Var.Create(
+        Some {
+          Column = "count"
+          Direction = Table.SortDirection.Descending
+        }
+        : Table.SortState option
+      )
+
+    let rows = [ "Beta", 2; "Alpha", 3; "Gamma", 1 ]
+
+    let columns () = [
+      TableColumn.create (
+        "name",
+        text "Name",
+        (fun (name: string, _: int) -> text name),
+        sort = Table.ColumnSort.by fst
+      )
+      TableColumn.create ("count", text "Count", (fun (_: string, count: int) -> text (string<int> count)))
+    ]
+
+    let externalColumns = [
+      TableColumn.create ("name", text "Name", (fun (name: string, _: int) -> text name))
+      TableColumn.create (
+        "count",
+        text "Count",
+        (fun (_: string, count: int) -> text (string<int> count)),
+        sort = Table.ColumnSort.External
+      )
+    ]
+
+    let externallySorted =
+      externalSort.View
+      |> View.Map(fun state ->
+        match state with
+        | Some { Direction = Table.SortDirection.Ascending } -> List.sortBy snd rows
+        | Some { Direction = Table.SortDirection.Descending } -> List.sortByDescending snd rows
+        | None -> rows)
+
+    let describeSort (state: Table.SortState option) =
+      match state with
+      | Some {
+               Column = column
+               Direction = Table.SortDirection.Ascending
+             } -> column + " ascending"
+      | Some {
+               Column = column
+               Direction = Table.SortDirection.Descending
+             } -> column + " descending"
+      | None -> "unsorted"
+
+    div [] [
+      Table.create (
+        columns (),
+        View.Const rows,
+        fst,
+        onRowClick = (fun (name, _) -> Var.Set clicked name),
+        selectedKey = selected,
+        caption = text "Clickable rows",
+        attrs = [
+          Attr.Create "data-testid" "clickable-table"
+          Table.striped
+          Table.StripeColor.custom "rgb(255, 0, 0)"
+          Table.HoverColor.custom "rgb(0, 0, 255)"
+        ]
+      )
+      div [ Attr.Create "data-testid" "clicked-row" ] [ textView clicked.View ]
+      Table.create (
+        columns (),
+        View.Const [],
+        fst,
+        emptyContent = text "No rows",
+        caption = text "Empty rows",
+        attrs = [
+          Attr.Create "data-testid" "empty-table"
+          Table.Density.compact
+          Table.hiddenCaption
+        ]
+      )
+      Table.create (
+        columns (),
+        View.Const rows,
+        fst,
+        caption = text "Sticky rows",
+        attrs = [
+          Attr.Create "data-testid" "sticky-table"
+          Table.stickyHeader
+          Table.Density.spacious
+          Table.hiddenCaption
+          Attr.Style "max-height" "120px"
+        ]
+      )
+      Table.create (
+        columns (),
+        View.Const rows,
+        fst,
+        selectedKeys = checkedRows,
+        rowHeader = "name",
+        caption = text "Selectable rows",
+        attrs = [ Attr.Create "data-testid" "select-table"; Table.hiddenCaption ]
+      )
+      Table.create (
+        columns (),
+        View.Const rows,
+        fst,
+        selectedKey = Var.Create(None: string option),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        caption = text "Current and checked rows",
+        attrs = [ Attr.Create "data-testid" "current-and-checked-table"; Table.hiddenCaption ]
+      )
+      div [ Attr.Create "data-testid" "checked-rows" ] [
+        textView (checkedRows.View |> View.Map(Set.toList >> String.concat ","))
+      ]
+      Table.create (
+        externalColumns,
+        externallySorted,
+        fst,
+        sort = externalSort,
+        caption = text "Externally sorted rows",
+        attrs = [ Attr.Create "data-testid" "external-table"; Table.hiddenCaption ]
+      )
+      div [ Attr.Create "data-testid" "external-sort" ] [
+        textView (externalSort.View |> View.Map describeSort)
+      ]
+    ]
+
   let private themingPage () =
     let custom =
       Theming.PaletteColor.create "#7c3aed" "#ffffff" "#a78bfa" "#5b21b6" "124, 58, 237"
@@ -646,6 +837,8 @@ module Pages =
     | "dropdown-menu" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "alert" -> alertPage ()
+    | "card" -> cardPage ()
+    | "table" -> tablePage ()
     | "theming" -> themingPage ()
     | "appbar" -> appbarPage ()
     | "drawer" -> drawerPage ()

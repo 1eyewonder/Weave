@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
     <Compile Include="components/ChipSetTests.fs" />
+    <Compile Include="components/TableTests.fs" />
     <Compile Include="utilities/AnimationTests.fs" />
     <Compile Include="utilities/BoundedTests.fs" />
   </ItemGroup>

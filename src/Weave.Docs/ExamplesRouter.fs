@@ -232,6 +232,7 @@ module ExamplesRouter =
               "Button", ButtonExamples
               "Button Group", ButtonGroupExamples
               "Button Menu", ButtonMenuExamples
+              "Card", CardExamples
               "Checkbox", CheckboxExamples
               "Chip", ChipExamples
               "Chip Set", ChipSetExamples
@@ -252,6 +253,7 @@ module ExamplesRouter =
               "Slider", SliderExamples
               "Spacer", SpacerExamples
               "Switch", SwitchExamples
+              "Table", TableExamples
               "Tabs", TabsExamples
               "Text Field", TextFieldExamples
               "Tooltip", TooltipExamples
@@ -298,6 +300,7 @@ module ExamplesRouter =
       | TooltipExamples -> TooltipExamples.render ()
       | GridExamples -> GridExamples.render ()
       | CheckboxExamples -> CheckboxExamples.render ()
+      | CardExamples -> CardExamples.render ()
       | ChipExamples -> ChipExamples.render ()
       | ChipSetExamples -> ChipSetExamples.render ()
       | RadioButtonExamples -> RadioButtonExamples.render ()
@@ -312,6 +315,7 @@ module ExamplesRouter =
       | DialogExamples -> DialogExamples.render ()
       | DrawerExamples -> DrawerExamples.render ()
       | IconsExamples -> IconsExamples.render ()
+      | TableExamples -> TableExamples.render ()
       | TabsExamples -> TabsExamples.render ()
       | TextFieldExamples -> TextFieldExamples.render ()
       | ListExamples -> ListExamples.render ()
@@ -649,6 +653,7 @@ module ExamplesRouter =
           navLeafItem "Button"
           navLeafItem "Button Group"
           navLeafItem "Button Menu"
+          navLeafItem "Card"
           navLeafItem "Checkbox"
           navLeafItem "Chip"
           navLeafItem "Chip Set"
@@ -669,6 +674,7 @@ module ExamplesRouter =
           navLeafItem "Slider"
           navLeafItem "Spacer"
           navLeafItem "Switch"
+          navLeafItem "Table"
           navLeafItem "Tabs"
           navLeafItem "Text Field"
           navLeafItem "Tooltip"

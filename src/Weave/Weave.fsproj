@@ -19,6 +19,7 @@
     <Compile Include="components/Container.fs" />
     <Compile Include="components/Button.fs" />
     <Compile Include="components/Alert.fs" />
+    <Compile Include="components/Card.fs" />
     <Compile Include="components/ButtonGroup.fs" />
     <Compile Include="components/ButtonMenu.fs" />
     <Compile Include="components/Chip.fs" />
@@ -39,6 +40,7 @@
     <Compile Include="components/Link.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />
+    <Compile Include="components/Table.fs" />
     <Compile Include="components/Dialog.fs" />
     <Compile Include="components/Spacer.fs" />
     <Compile Include="components/AppBar.fs" />

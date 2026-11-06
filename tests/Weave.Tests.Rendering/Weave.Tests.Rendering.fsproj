@@ -8,6 +8,8 @@
     <Compile Include="ContainmentAssertions.fs" />
     <Compile Include="LayoutTestBase.fs" />
     <Compile Include="components/AlertLayoutTests.fs" />
+    <Compile Include="components/CardLayoutTests.fs" />
+    <Compile Include="components/TableLayoutTests.fs" />
     <Compile Include="components/ButtonLayoutTests.fs" />
     <Compile Include="components/ButtonGroupLayoutTests.fs" />
     <Compile Include="components/DividerLayoutTests.fs" />

@@ -1,0 +1,184 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--palette-surface);
+  color: var(--palette-text-primary);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+  border-radius: var(--default-borderradius);
+  @include transition((box-shadow, border-color), short);
+}
+
+.weave-card--elevated {
+  border-color: transparent;
+  box-shadow: var(--elevation-2);
+}
+
+.weave-card--filled {
+  border-color: transparent;
+  background-color: var(--palette-background-paper);
+}
+
+.weave-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: density-spacing(8, 4) density-spacing(12, 4);
+}
+
+.weave-card__header-leading {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.weave-card__header-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.weave-card__title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weave-card__title > :is(h1, h2, h3, h4, h5, h6) {
+  display: inline;
+  margin: 0;
+  font: inherit;
+}
+
+.weave-card__subtitle {
+  margin-top: 2px;
+  color: var(--palette-text-secondary);
+}
+
+.weave-card__header-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.weave-card__media {
+  display: block;
+  overflow: hidden;
+}
+
+.weave-card__media > img,
+.weave-card__media > video,
+.weave-card__media > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.weave-card__action-area {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.weave-card__action-area::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--palette-action-default-hover);
+  opacity: 0;
+  @include transition(opacity, short);
+}
+
+.weave-card__action-area:hover::after {
+  opacity: 1;
+}
+
+.weave-card__action-area:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: -2px;
+}
+
+.weave-card__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: density-spacing(8, 4) density-spacing(12, 4);
+}
+
+.weave-card__header + .weave-card__media {
+  display: block;
+  overflow: hidden;
+}
+
+.weave-card__media > img,
+.weave-card__media > video,
+.weave-card__media > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.weave-card__action-area {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.weave-card__action-area::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--palette-action-default-hover);
+  opacity: 0;
+  @include transition(opacity, short);
+}
+
+.weave-card__action-area:hover::after {
+  opacity: 1;
+}
+
+.weave-card__action-area:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: -2px;
+}
+
+.weave-card__content {
+  padding-top: 0;
+}
+
+.weave-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: density-spacing(6, 2) density-spacing(12, 4);
+  border-top: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+}

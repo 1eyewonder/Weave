@@ -31,3 +31,16 @@ type CheckboxInteractionTests(fixture: TestFixture) =
     do! disabledInput.FocusAsync()
     do! this.Expect(disabledInput).Not.ToBeFocusedAsync()
   }
+
+  [<Fact>]
+  member this.``focus-visible outline appears on the span when input is focused``() = task {
+    do! this.NavigateTo("checkbox")
+    let input = this.Page.Locator(".weave-checkbox__input").First
+    do! input.FocusAsync()
+    do! this.Expect(input).ToBeFocusedAsync()
+    let span = this.Page.Locator(".weave-checkbox__span").First
+
+    let! outlineStyle = span.EvaluateAsync<string>("el => getComputedStyle(el).outlineStyle")
+
+    Assert.NotEqual<string>("none", outlineStyle)
+  }

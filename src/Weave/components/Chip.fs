@@ -24,6 +24,10 @@ module Chip =
     let standard = cl Css.``weave-chip--standard``
     let spacious = cl Css.``weave-chip--spacious``
 
+  module Shape =
+
+    let label = cl Css.``weave-chip--label``
+
   module Color =
 
     let primary = cl Css.``weave-chip--primary``

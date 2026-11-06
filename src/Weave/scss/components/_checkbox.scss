@@ -54,6 +54,11 @@ $checkmark-height: 12px;
   opacity: 0;
   cursor: inherit;
   z-index: 1;
+
+  &:focus-visible + .weave-checkbox__span {
+    outline: 2px solid var(--checkbox-brand-color, var(--palette-primary));
+    outline-offset: 2px;
+  }
 }
 
 // Checked state — decelerate into resting position
@@ -66,6 +71,19 @@ $checkmark-height: 12px;
   opacity: 1;
   transition-timing-function: $ease-decelerate;
   border-color: var(--palette-background);
+}
+
+.weave-checkbox__input:indeterminate + .weave-checkbox__span {
+  background: var(--checkbox-brand-color, var(--palette-action-default));
+  border-color: var(--checkbox-brand-color, var(--palette-action-default));
+}
+
+.weave-checkbox__input:indeterminate + .weave-checkbox__span::after {
+  width: 50%;
+  height: 0;
+  border-width: 0 0 2px;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
 
 .weave-checkbox__input:disabled + .weave-checkbox__span {

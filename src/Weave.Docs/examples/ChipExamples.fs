@@ -505,6 +505,54 @@ Chip.create(
 
     Helpers.codeSampleSection "Selected" description content code
 
+  let private shapeExample () =
+    let description =
+      Helpers.bodyText
+        "Chips are fully rounded by default. Use Chip.Shape.label for a rounded rectangle that uses the theme's default border radius."
+
+    let content =
+      Grid.create (
+        [
+          GridItem.create (
+            div [] [
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Default" ]
+              Chip.create (text "Default", attrs = [ Chip.Variant.filled; Chip.Color.primary ])
+            ]
+          )
+          GridItem.create (
+            div [] [
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Label" ]
+              Chip.create (
+                text "Label",
+                attrs = [ Chip.Shape.label; Chip.Variant.filled; Chip.Color.primary ]
+              )
+            ]
+          )
+        ]
+      )
+
+    let code =
+      """open Weave
+
+Chip.create(
+    text "Default",
+    attrs = [
+        Chip.Variant.filled
+        Chip.Color.primary
+    ]
+)
+
+Chip.create(
+    text "Label",
+    attrs = [
+        Chip.Shape.label // see here
+        Chip.Variant.filled
+        Chip.Color.primary
+    ]
+)"""
+
+    Helpers.codeSampleSection "Shape" description content code
+
   let private borderRadiusExample () =
     let description =
       Helpers.bodyText
@@ -591,7 +639,11 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
           "View.Const false"
           "Reactive selected state for visual highlighting"
         Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the chip is interactive"
-        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes (variant, density, color, etc.)"
+        Helpers.apiParam
+          "?attrs"
+          "Attr list"
+          "[]"
+          "Additional attributes (variant, density, shape, color, etc.)"
       ]
 
       Helpers.styleModuleTable "Chip.Variant" [
@@ -604,6 +656,10 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
         ("compact", "Compact chip height")
         ("standard", "Standard chip height (default)")
         ("spacious", "Spacious chip height")
+      ]
+
+      Helpers.styleModuleTable "Chip.Shape" [
+        ("label", "Rounded rectangle using the theme's default border radius")
       ]
 
       Helpers.styleModuleTable "Chip.Color" [
@@ -658,6 +714,8 @@ Chip.create(text "None", attrs = [ Chip.Variant.filled; Chip.Color.error; Border
         linkChipExample ()
         Helpers.divider ()
         densityExample ()
+        Helpers.divider ()
+        shapeExample ()
         Helpers.divider ()
         borderRadiusExample ()
         Helpers.divider ()

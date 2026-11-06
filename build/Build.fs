@@ -26,7 +26,7 @@ let isCI = lazy (environVarAsBoolOrDefault "CI" false)
 let project = "Weave"
 let summary = "A component library for front ends using F# and WebSharper"
 let configuration = Environment.environVarOrDefault "BUILD_CONFIGURATION" "Debug"
-let solutionFile = "Weave.sln"
+let solutionFile = "Weave.slnx"
 
 let rootDir = __SOURCE_DIRECTORY__ </> ".."
 

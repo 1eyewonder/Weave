@@ -1,0 +1,20 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/build/">
+    <Project Path="build/Weave.Build.fsproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Weave.Docs/Weave.Docs.fsproj" />
+    <Project Path="src/Weave/Weave.fsproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj" />
+    <Project Path="tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj" />
+    <Project Path="tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj" />
+    <Project Path="tests/Weave.Tests.Unit/Weave.Tests.Unit.fsproj" />
+  </Folder>
+</Solution>

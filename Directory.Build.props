@@ -2,17 +2,7 @@
   <PropertyGroup>
     <NoWarn>NU1510</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WebSharperStandalone>true</WebSharperStandalone>
+    <WebSharperParallelCompilation>false</WebSharperParallelCompilation>
   </PropertyGroup>
-
-  <!-- Kill WebSharper Booster Service before build. This is just to help iterate when using dotnet watch -->
-  <Target Name="KillWebSharperBooster" BeforeTargets="BeforeBuild;BeforeRebuild;BeforeClean">
-    <Exec Condition="'$(OS)' == 'Windows_NT'"
-          Command="taskkill /F /IM wsfscservice.exe 2&gt;nul || exit /b 0"
-          ContinueOnError="true"
-          IgnoreExitCode="true" />
-    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))"
-          Command="pkill -f wsfscservice || true"
-          ContinueOnError="true"
-          IgnoreExitCode="true" />
-  </Target>
 </Project>

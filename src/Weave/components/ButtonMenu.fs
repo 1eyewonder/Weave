@@ -62,6 +62,17 @@ module private ButtonMenuInternal =
           cl Css.``weave-button-menu__item``
           Attr.Create "role" "menuitem"
           Attr.Create "tabindex" "-1"
+          on.keyDown (fun el ev ->
+            match ev with
+            | Key.Enter
+            | Key.Space when ev.Target = el ->
+              let target =
+                el.QuerySelector("button:not([disabled]), a[href], input:not([disabled])")
+
+              if not (isNull target) then
+                ev.PreventDefault()
+                target?click ()
+            | _ -> ())
           isOpen.View
           |> View.Map(fun opened ->
             if opened then

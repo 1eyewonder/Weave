@@ -80,3 +80,13 @@ type DialogInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("Escape")
     do! this.Expect(triggerButton).ToBeFocusedAsync()
   }
+
+  [<Fact>]
+  member this.``plain title gives the dialog an accessible name``() = task {
+    do! this.NavigateTo("dialog-plain")
+
+    do!
+      this
+        .Expect(this.Page.GetByRole(Microsoft.Playwright.AriaRole.Dialog))
+        .ToHaveAccessibleNameAsync("Plain dialog title")
+  }

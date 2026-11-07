@@ -169,63 +169,70 @@ module Theming =
     JS.Inline("$0.style.setProperty($1, $2)", JS.Document.DocumentElement, varName, value)
     JS.Inline("$0.style.setProperty($1, $2)", JS.Document.Body, varName, value)
 
-  let private applyPaletteColor (prefix: string) (color: PaletteColor) =
+  let private applyOptionalCssVar name value =
+    match value with
+    | Some value -> setCssVar name value
+    | None ->
+      JS.Inline("$0.style.removeProperty($1)", JS.Document.DocumentElement, name)
+      JS.Inline("$0.style.removeProperty($1)", JS.Document.Body, name)
+
+  let private applyPaletteColorValues (prefix: string) (color: PaletteColor) =
     setCssVar $"--palette-%s{prefix}" color.Main
     setCssVar $"--palette-%s{prefix}-text" color.ContrastText
     setCssVar $"--palette-%s{prefix}-lighten" color.Lighten
     setCssVar $"--palette-%s{prefix}-darken" color.Darken
     setCssVar $"--palette-%s{prefix}-rgb" color.Rgb
 
+  let private applyPaletteColor prefix color =
+    match color with
+    | Some value -> applyPaletteColorValues prefix value
+    | None ->
+      [ ""; "-text"; "-lighten"; "-darken"; "-rgb" ]
+      |> List.iter (fun suffix -> applyOptionalCssVar $"--palette-%s{prefix}%s{suffix}" None)
+
   let private applyPalette (palette: ThemePalette) =
-    palette.Background |> Option.iter (setCssVar "--palette-background")
-    palette.BackgroundPaper |> Option.iter (setCssVar "--palette-background-paper")
+    applyOptionalCssVar "--palette-background" palette.Background
+    applyOptionalCssVar "--palette-background-paper" palette.BackgroundPaper
 
-    palette.BackgroundDarken
-    |> Option.iter (setCssVar "--palette-background-darken")
+    applyOptionalCssVar "--palette-background-darken" palette.BackgroundDarken
 
-    palette.TextPrimary |> Option.iter (setCssVar "--palette-text-primary")
-    palette.TextSecondary |> Option.iter (setCssVar "--palette-text-secondary")
-    palette.TextDisabled |> Option.iter (setCssVar "--palette-text-disabled")
-    palette.Divider |> Option.iter (setCssVar "--palette-divider")
-    palette.Primary |> Option.iter (applyPaletteColor "primary")
-    palette.Secondary |> Option.iter (applyPaletteColor "secondary")
-    palette.Tertiary |> Option.iter (applyPaletteColor "tertiary")
-    palette.Success |> Option.iter (applyPaletteColor "success")
-    palette.Error |> Option.iter (applyPaletteColor "error")
-    palette.Warning |> Option.iter (applyPaletteColor "warning")
-    palette.Info |> Option.iter (applyPaletteColor "info")
-    palette.Dark |> Option.iter (applyPaletteColor "dark")
+    applyOptionalCssVar "--palette-text-primary" palette.TextPrimary
+    applyOptionalCssVar "--palette-text-secondary" palette.TextSecondary
+    applyOptionalCssVar "--palette-text-disabled" palette.TextDisabled
+    applyOptionalCssVar "--palette-divider" palette.Divider
+    applyPaletteColor "primary" palette.Primary
+    applyPaletteColor "secondary" palette.Secondary
+    applyPaletteColor "tertiary" palette.Tertiary
+    applyPaletteColor "success" palette.Success
+    applyPaletteColor "error" palette.Error
+    applyPaletteColor "warning" palette.Warning
+    applyPaletteColor "info" palette.Info
+    applyPaletteColor "dark" palette.Dark
 
-    palette.AppBarBackground
-    |> Option.iter (setCssVar "--palette-appbar-background")
+    applyOptionalCssVar "--palette-appbar-background" palette.AppBarBackground
 
-    palette.AppBarText |> Option.iter (setCssVar "--palette-appbar-text")
+    applyOptionalCssVar "--palette-appbar-text" palette.AppBarText
 
-    palette.DrawerBackground
-    |> Option.iter (setCssVar "--palette-drawer-background")
+    applyOptionalCssVar "--palette-drawer-background" palette.DrawerBackground
 
-    palette.DrawerText |> Option.iter (setCssVar "--palette-drawer-text")
-    palette.Background |> Option.iter (setCssVar "--input-label-background")
+    applyOptionalCssVar "--palette-drawer-text" palette.DrawerText
+    applyOptionalCssVar "--input-label-background" palette.Background
 
   let private applyTypography (typography: TypographyConfig) =
-    typography.DisplayFamily
-    |> Option.iter (setCssVar "--weave-font-family-display")
+    applyOptionalCssVar "--weave-font-family-display" typography.DisplayFamily
 
-    typography.BodyFamily |> Option.iter (setCssVar "--weave-font-family-body")
-    typography.MonoFamily |> Option.iter (setCssVar "--weave-font-family-mono")
-    typography.WeightLight |> Option.iter (setCssVar "--weave-weight-light")
-    typography.WeightRegular |> Option.iter (setCssVar "--weave-weight-regular")
-    typography.WeightBold |> Option.iter (setCssVar "--weave-weight-bold")
-    typography.DefaultSize |> Option.iter (setCssVar "--typography-default-size")
+    applyOptionalCssVar "--weave-font-family-body" typography.BodyFamily
+    applyOptionalCssVar "--weave-font-family-mono" typography.MonoFamily
+    applyOptionalCssVar "--weave-weight-light" typography.WeightLight
+    applyOptionalCssVar "--weave-weight-regular" typography.WeightRegular
+    applyOptionalCssVar "--weave-weight-bold" typography.WeightBold
+    applyOptionalCssVar "--typography-default-size" typography.DefaultSize
 
-    typography.DefaultWeight
-    |> Option.iter (setCssVar "--typography-default-weight")
+    applyOptionalCssVar "--typography-default-weight" typography.DefaultWeight
 
-    typography.DefaultLineHeight
-    |> Option.iter (setCssVar "--typography-default-lineheight")
+    applyOptionalCssVar "--typography-default-lineheight" typography.DefaultLineHeight
 
-    typography.DefaultLetterSpacing
-    |> Option.iter (setCssVar "--typography-default-letterspacing")
+    applyOptionalCssVar "--typography-default-letterspacing" typography.DefaultLetterSpacing
 
   let setMode (mode: ThemeMode) =
     let modeStr =

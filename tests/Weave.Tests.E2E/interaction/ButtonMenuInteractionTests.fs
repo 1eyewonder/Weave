@@ -178,3 +178,19 @@ type ButtonMenuInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("ArrowLeft")
     do! this.Expect(items.First).ToBeFocusedAsync()
   }
+
+  [<Theory>]
+  [<InlineData("Enter")>]
+  [<InlineData("Space")>]
+  member this.``keyboard activates the focused menu item``(key: string) = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let trigger = container.Locator(".weave-button-menu__trigger")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(container.Locator(".weave-button-menu__item").First).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync(key)
+    do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("Action 1")
+  }

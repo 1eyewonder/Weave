@@ -148,11 +148,6 @@ type Dialog =
             else
               None
 
-          let titleEl = el.QuerySelector("." + Css.``weave-dialog__title``)
-
-          if not (isNull titleEl) then
-            titleEl?id <- titleId
-
           el?focus ()
 
           removalListener.Watch(el, restoreFocus))
@@ -168,5 +163,8 @@ type Dialog =
             | Interaction.Force -> ()
           | Key.Tab -> trapFocus el ev
           | _ -> ()
-      ] [ title; content ]
+      ] [
+        div [ Attr.Create "id" titleId; Attr.Style "display" "contents" ] [ title ]
+        content
+      ]
     ]

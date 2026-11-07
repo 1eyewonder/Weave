@@ -722,6 +722,160 @@ module Pages =
       ]
     ]
 
+  let private themeSwitchPage () =
+    let color =
+      Theming.PaletteColor.create "#123456" "#ffffff" "#234567" "#012345" "18, 52, 86"
+
+    let light = {
+      Theming.ThemePalette.empty with
+          Primary = Some color
+          Background = Some "#abcdef"
+    }
+
+    let config = { Theming.ThemeConfig.empty with LightPalette = light }
+    Theming.initialize config Theming.Light
+
+    div [] [
+      Button.create (
+        text "Swatch",
+        ignore,
+        attrs = [
+          Attr.Create "data-testid" "fallback-swatch"
+          Button.Variant.filled
+          Button.Color.primary
+        ]
+      )
+      Button.create (
+        text "Dark",
+        (fun () -> Theming.applyTheme config Theming.Dark),
+        attrs = [ Attr.Create "data-testid" "theme-dark" ]
+      )
+      Button.create (
+        text "Light",
+        (fun () -> Theming.applyTheme config Theming.Light),
+        attrs = [ Attr.Create "data-testid" "theme-light" ]
+      )
+    ]
+
+  let private themeCoveragePage useSystemPreference =
+    let lightColor =
+      Theming.PaletteColor.create "#123456" "#fefefe" "#234567" "#012345" "18, 52, 86"
+
+    let darkColor =
+      Theming.PaletteColor.create "#876543" "#101010" "#987654" "#765432" "135, 101, 67"
+
+    let secondary =
+      Theming.PaletteColor.create "#aabbcc" "#111111" "#bbccee" "#8899aa" "170, 187, 204"
+
+    let light = {
+      Theming.ThemePalette.empty with
+          Primary = Some lightColor
+          Secondary = Some secondary
+          Background = Some "#abcdef"
+    }
+
+    let dark = {
+      Theming.ThemePalette.empty with
+          Primary = Some darkColor
+          TextPrimary = Some "#ddeeff"
+    }
+
+    let typography = { Theming.TypographyConfig.empty with BodyFamily = Some "Georgia" }
+
+    let config = {
+      Theming.ThemeConfig.empty with
+          LightPalette = light
+          DarkPalette = dark
+          Typography = typography
+    }
+
+    if useSystemPreference then
+      Theming.initializeWithSystemPreference config |> ignore
+    else
+      Theming.initialize config Theming.Light
+
+    div [] [
+      Button.create (
+        text "Swatch",
+        ignore,
+        attrs = [
+          Attr.Create "data-testid" "theme-swatch"
+          Button.Variant.filled
+          Button.Color.primary
+        ]
+      )
+      div [
+        Attr.Create "data-testid" "theme-secondary"
+        Attr.Style "color" "var(--palette-secondary)"
+      ] [ text "Secondary" ]
+      Button.create (
+        text "Dark",
+        (fun () -> Theming.applyTheme config Theming.Dark),
+        attrs = [ Attr.Create "data-testid" "coverage-dark" ]
+      )
+      Button.create (
+        text "Light",
+        (fun () -> Theming.applyTheme config Theming.Light),
+        attrs = [ Attr.Create "data-testid" "coverage-light" ]
+      )
+      Button.create (
+        text "Toggle mode",
+        (fun () -> Theming.toggleMode () |> ignore),
+        attrs = [ Attr.Create "data-testid" "coverage-toggle" ]
+      )
+      Button.create (
+        text "Empty theme",
+        (fun () -> Theming.applyTheme Theming.ThemeConfig.empty Theming.Light),
+        attrs = [ Attr.Create "data-testid" "coverage-empty" ]
+      )
+    ]
+
+  let private typographyCoveragePage () =
+    let themeA =
+      Theming.ThemeBuilder.empty
+      |> Theming.ThemeBuilder.withBodyFont "Georgia"
+      |> Theming.ThemeBuilder.withDisplayFont "Verdana"
+      |> Theming.ThemeBuilder.withWeightBold "600"
+
+    let themeB =
+      Theming.ThemeBuilder.empty
+      |> Theming.ThemeBuilder.withBodyFont "Arial"
+      |> Theming.ThemeBuilder.withDisplayFont "Tahoma"
+      |> Theming.ThemeBuilder.withWeightBold "800"
+
+    let partial =
+      Theming.ThemeBuilder.empty |> Theming.ThemeBuilder.withBodyFont "Arial"
+
+    Theming.initialize Theming.ThemeBuilder.empty Theming.Light
+
+    div [] [
+      div [ Typography.body1; Attr.Create "data-testid" "typography-body" ] [ text "Body sample" ]
+      div [ Typography.h6; Attr.Create "data-testid" "typography-heading" ] [ text "Heading sample" ]
+      Button.create (
+        text "Theme A",
+        (fun () -> Theming.applyTheme themeA Theming.Light),
+        attrs = [ Attr.Create "data-testid" "typography-a" ]
+      )
+      Button.create (
+        text "Theme B",
+        (fun () -> Theming.applyTheme themeB Theming.Light),
+        attrs = [ Attr.Create "data-testid" "typography-b" ]
+      )
+      Button.create (
+        text "Partial",
+        (fun () -> Theming.applyTheme partial Theming.Light),
+        attrs = [ Attr.Create "data-testid" "typography-partial" ]
+      )
+      Button.create (
+        text "Default",
+        (fun () -> Theming.applyTheme Theming.ThemeBuilder.empty Theming.Light),
+        attrs = [ Attr.Create "data-testid" "typography-default" ]
+      )
+    ]
+
+  let private plainDialogPage () =
+    Dialog.create (text "Plain dialog title", text "Dialog content")
+
   let private themingPage () =
     let custom =
       Theming.PaletteColor.create "#7c3aed" "#ffffff" "#a78bfa" "#5b21b6" "124, 58, 237"
@@ -960,10 +1114,12 @@ module Pages =
     ]
 
   let private buttonmenuPage () =
+    let action = Var.Create "none"
+
     let menuItem label =
       Button.create (
         text label,
-        (fun () -> ()),
+        (fun () -> action.Set label),
         attrs = [ Button.Variant.text; Button.Width.full; BorderRadius.All.none ]
       )
 
@@ -975,6 +1131,7 @@ module Pages =
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
       )
+      div [ Attr.Create "data-testid" "menu-action" ] [ textView action.View ]
       Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
@@ -1090,6 +1247,7 @@ module Pages =
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()
     | "button" -> buttonPage ()
+    | "dialog-plain" -> plainDialogPage ()
     | "dialog" -> dialogPage ()
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
@@ -1099,6 +1257,10 @@ module Pages =
     | "alert" -> alertPage ()
     | "card" -> cardPage ()
     | "table" -> tablePage ()
+    | "typography-coverage" -> typographyCoveragePage ()
+    | "theme-coverage" -> themeCoveragePage false
+    | "theme-system" -> themeCoveragePage true
+    | "theme-switch" -> themeSwitchPage ()
     | "theming" -> themingPage ()
     | "appbar" -> appbarPage ()
     | "drawer" -> drawerPage ()

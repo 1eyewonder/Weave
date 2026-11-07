@@ -94,19 +94,28 @@ Weave includes built-in theming with support for light and dark modes, runtime t
     ./build.cmd init    # Windows
     ```
 
-4. Start the documentation site:
+4. Start the docs development server from the repository root:
 
     ```bash
+    yarn dev:docs
+    ```
+
+    Open the URL printed by Vite (normally `http://localhost:5173`). The command builds the site, then starts the Sass and .NET watchers and Vite together. Sass changes update the styles; F# changes rebuild WebSharper output and reload the page, which may reset page state. Press Ctrl+C to stop them all. This workflow serves the client-side docs; use the ASP.NET host below if server-side functionality is needed.
+
+    Alternatively, build the styles and start the documentation site with ASP.NET:
+
+    ```bash
+    yarn build:css
     dotnet run --project src/Weave.Docs/Weave.Docs.fsproj
     ```
 
-5. Navigate to `http://localhost:5000` to view the documentation and interactive examples.
+    Navigate to the URL printed by ASP.NET to view the documentation and interactive examples.
 
 ## Testing
 
 ### Without Docker
 
-**Dependencies:** .NET 10 SDK, Node.js 22+
+**Dependencies:** .NET 10 SDK, Node.js 22.12+
 
 ```bash
 ./build.sh RunTests    # Linux/macOS

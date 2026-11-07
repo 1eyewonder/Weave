@@ -5,10 +5,15 @@
   "packageManager": "yarn@4.5.3",
   "scripts": {
     "build:css": "yarn sass src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map",
-    "watch:css": "yarn sass --watch src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map"
+    "watch:css": "yarn sass --watch src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map",
+    "watch:docs:css": "yarn watch:css & yarn sass --watch src/Weave/scss/main.scss:src/Weave.Docs/wwwroot/Scripts/styles.css --no-source-map",
+    "dev:docs:vite": "vite --config src/Weave.Docs/vite.config.mjs",
+    "dev:docs": "yarn build:css && dotnet build src/Weave.Docs/Weave.Docs.fsproj && concurrently --kill-others --names library-css,docs-css,dotnet,vite \"yarn watch:css\" \"yarn sass --watch src/Weave/scss/main.scss:src/Weave.Docs/wwwroot/Scripts/styles.css --no-source-map\" \"cd src/Weave.Docs && dotnet watch build\" \"yarn dev:docs:vite\""
   },
   "devDependencies": {
+    "concurrently": "^10.0.7",
     "esbuild": "^0.27.3",
-    "sass": "^1.96.0"
+    "sass": "^1.96.0",
+    "vite": "^8"
   }
 }

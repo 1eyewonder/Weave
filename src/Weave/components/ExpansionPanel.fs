@@ -119,7 +119,7 @@ type ExpansionPanelHeader =
 
         let clickable = View.zipCached expanded.View enabled
 
-        on.clickTapView clickable
+        on.clickView clickable
         <| fun _ _ (isExpanded, isEnabled) ->
           if isEnabled then
             Var.Set expanded (not isExpanded)

@@ -426,7 +426,7 @@ type Tabs =
         tabDef.Disabled |> Attr.DynamicClassPred Css.``weave-tabs__tab--disabled``
         Attr.enabled (View.not tabDef.Disabled)
 
-        on.clickTapView tabDef.Disabled (fun _ _ disabled ->
+        on.clickView tabDef.Disabled (fun _ _ disabled ->
           if not disabled then
             selectTab index)
 
@@ -444,9 +444,6 @@ type Tabs =
           | Key.End ->
             ev.PreventDefault()
             navigateTo TabsInternal.findLastEnabledTabIndex
-          | Key.Activate ->
-            ev.PreventDefault()
-            selectTab index
           | _ -> ())
       ] [ tabDef.Header ]
 
@@ -488,7 +485,7 @@ type Tabs =
         attr.``type`` "button"
         Attr.Create "tabindex" "-1"
         Attr.Create "aria-label" "Scroll tabs backward"
-        on.clickTap (fun _ _ -> scrollBack ())
+        on.click (fun _ _ -> scrollBack ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``weave-d-none``
       ] [ scrollBackIcon ]
 
@@ -498,7 +495,7 @@ type Tabs =
         attr.``type`` "button"
         Attr.Create "tabindex" "-1"
         Attr.Create "aria-label" "Scroll tabs forward"
-        on.clickTap (fun _ _ -> scrollForward ())
+        on.click (fun _ _ -> scrollForward ())
         View.not showScrollButtons.View |> Attr.DynamicClassPred Css.``weave-d-none``
       ] [ scrollForwardIcon ]
 

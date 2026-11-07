@@ -53,7 +53,7 @@ type Button =
 
       Disabled.disabledClass Css.``weave-button--disabled`` enabled
       Disabled.nativeAttr enabled
-      on.clickTapKeyViewGuarded enabled onClick
+      on.clickViewGuarded enabled onClick
     ] [ content ]
 
   /// <summary>Creates a primary-colored button. Shorthand for <c>Button.create</c> with <c>Button.Color.primary</c>.</summary>
@@ -170,7 +170,7 @@ type IconButton =
 
       Disabled.disabledClass Css.``weave-button--disabled`` enabled
       Disabled.nativeAttr enabled
-      on.clickTapKeyViewGuarded enabled onClick
+      on.clickViewGuarded enabled onClick
     ] [ icon ]
 
   /// <summary>Creates a primary-colored icon button. Shorthand for <c>IconButton.create</c> with <c>Button.Color.primary</c>.</summary>

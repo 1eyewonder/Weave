@@ -189,7 +189,7 @@ type WeaveList =
           Attr.DynamicClassPred Css.``weave-list-item--disabled`` def.Disabled
           Attr.DynamicClassPred Css.``weave-list-item--readonly`` readOnly
           Attr.DynamicClassPred Css.``weave-list-item--selected`` isSelected
-          on.clickTapViewGuarded interactable handleRowClick
+          on.clickViewGuarded interactable handleRowClick
           yield! def.Attrs
         ] [
           if isMultiSelect then
@@ -198,7 +198,7 @@ type WeaveList =
               Attr.DynamicClassPred Css.``weave-list-item__checkbox--checked`` isSelected
               Attr.DynamicClassPred Css.``weave-list-item__checkbox--indeterminate`` isIndeterminate
               if hasNestedLeafValues then
-                on.clickTapView interactable (fun _ ev isInteractable ->
+                on.clickView interactable (fun _ ev isInteractable ->
                   ev.StopPropagation()
 
                   if isInteractable then

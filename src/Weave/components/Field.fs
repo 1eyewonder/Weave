@@ -145,7 +145,7 @@ type Field =
       div [
         Css.``weave-field__control`` |> cl
 
-        on.clickTap (fun el _ ->
+        on.click (fun el _ ->
           let inp = el.QuerySelector("input")
 
           if not (isNull inp) then

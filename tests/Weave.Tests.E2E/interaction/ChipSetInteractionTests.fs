@@ -8,6 +8,16 @@ type ChipSetInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``closable chipset arrow navigation skips disabled action``() = task {
+    do! this.NavigateTo("chipset")
+    let group = this.Page.GetByTestId("closable-chipset")
+    let actions = group.Locator(".weave-chip__action[role='button']")
+    do! actions.First.FocusAsync()
+    do! actions.First.PressAsync("ArrowRight")
+    do! this.Expect(actions.Nth(2)).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``chipset container has role group``() = task {
     do! this.NavigateTo("chipset")
     let chipset = this.Page.Locator(".weave-chipset").First

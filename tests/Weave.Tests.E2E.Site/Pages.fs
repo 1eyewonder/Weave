@@ -131,6 +131,12 @@ module Pages =
 
   let private numericFieldPage () =
     div [] [
+      div [ Attr.Create "data-testid" "numeric-int" ] [
+        NumericField.create (Var.Create 5, labelText = View.Const "Integer spin")
+      ]
+      div [ Attr.Create "data-testid" "numeric-float" ] [
+        NumericField.create (Var.Create 5.0, labelText = View.Const "Float spin")
+      ]
       NumericField.create (
         Var.Create 5,
         labelText = View.Const "Standard Numeric",
@@ -334,6 +340,8 @@ module Pages =
     ]
 
   let private buttonPage () =
+    let activations = Var.Create 0
+
     div [] [
       Button.create (text "Filled Button", (fun () -> ()), attrs = [ Button.Variant.filled ])
       Button.create (text "Outlined Button", (fun () -> ()), attrs = [ Button.Variant.outlined ])
@@ -347,6 +355,37 @@ module Pages =
         Icon.create (Icon.UiActions UiActions.Home),
         (fun () -> ()),
         attrs = [ Attr.Create "aria-label" "home"; Button.Variant.filled ]
+      )
+      div [ Attr.Create "data-testid" "activation-count" ] [
+        Doc.TextView(activations.View |> View.Map string)
+      ]
+      Button.create (
+        text "Count activation",
+        (fun () -> Var.Set activations (activations.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "activation-button" ]
+      )
+      IconButton.create (
+        text "Icon",
+        (fun () -> Var.Set activations (activations.Value + 1)),
+        attrs = [
+          Attr.Create "data-testid" "activation-icon"
+          Attr.Create "aria-label" "Count icon"
+        ]
+      )
+      Button.create (
+        text "Disabled count",
+        (fun () -> Var.Set activations (activations.Value + 1)),
+        enabled = View.Const false,
+        attrs = [ Attr.Create "data-testid" "activation-disabled" ]
+      )
+      IconButton.create (
+        text "Disabled icon",
+        (fun () -> Var.Set activations (activations.Value + 1)),
+        enabled = View.Const false,
+        attrs = [
+          Attr.Create "data-testid" "activation-disabled-icon"
+          Attr.Create "aria-label" "Disabled count icon"
+        ]
       )
       Button.primary (text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled ])
       Button.error (text "Error", (fun () -> ()), attrs = [ Button.Variant.filled ])
@@ -431,11 +470,14 @@ module Pages =
     Tabs.create (tabs)
 
   let private dropdownPage () =
+    let selectedAction = Var.Create "none"
+
     div [] [
+      div [ Attr.Create "data-testid" "dropdown-action" ] [ Doc.TextView selectedAction.View ]
       DropdownMenu.create (
         text "Open Menu",
         View.Const [
-          DropdownMenuItem.create (text "Item 1", (fun () -> ()))
+          DropdownMenuItem.create (text "Item 1", (fun () -> Var.Set selectedAction "item 1"))
           DropdownMenuItem.create (text "Item 2", (fun () -> ()))
           DropdownMenuItem.create (text "Disabled Item", (fun () -> ()), disabled = View.Const true)
         ]
@@ -743,7 +785,32 @@ module Pages =
     ]
 
   let private linkPage () =
+    let activations = Var.Create 0
+
     div [] [
+      div [ Attr.Create "data-testid" "link-count" ] [ Doc.TextView(activations.View |> View.Map string) ]
+      Link.create (
+        text "Count link",
+        href = "#link",
+        onClick = (fun () -> Var.Set activations (activations.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "count-link" ]
+      )
+      IconLink.create (
+        text "Icon",
+        href = "#link",
+        onClick = (fun () -> Var.Set activations (activations.Value + 1)),
+        attrs = [
+          Attr.Create "data-testid" "count-icon-link"
+          Attr.Create "aria-label" "Count icon link"
+        ]
+      )
+      Link.create (
+        text "Disabled count link",
+        href = "#other",
+        enabled = View.Const false,
+        onClick = (fun () -> Var.Set activations (activations.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "disabled-count-link" ]
+      )
       Link.create (text "Default Link", href = "#")
       Link.create (text "Disabled Link", href = "#", enabled = View.Const false)
       Link.create (text "Always Underline", href = "#", attrs = [ Link.Underline.always ])
@@ -751,6 +818,8 @@ module Pages =
 
   let private listPage () =
     let selected = Var.Create<string option> None
+    let nestedSelected = Var.Create(Set.empty<string>)
+    let nestedExpanded = Var.Create false
 
     div [] [
       selected.View
@@ -773,10 +842,34 @@ module Pages =
         selectedValue = selected,
         attrs = [ Attr.Create "aria-label" "Test items" ]
       )
+      div [ Attr.Create "data-testid" "nested-selected" ] [
+        Doc.TextView(
+          nestedSelected.View
+          |> View.Map(fun values -> values |> Set.toList |> String.concat ",")
+        )
+      ]
+      div [ Attr.Create "data-testid" "nested-list" ] [
+        WeaveList.create (
+          [
+            ListItem.create (
+              text "Group",
+              expanded = nestedExpanded,
+              nestedChildren = [
+                ListItem.create (text "A", value = "a")
+                ListItem.create (text "B", value = "b")
+              ]
+            )
+          ],
+          selectedValues = nestedSelected,
+          selectionMode = WeaveList.SelectionMode.MultiSelection
+        )
+      ]
     ]
 
   let private chipPage () =
     let clicked = Var.Create "none"
+    let chipActions = Var.Create 0
+    let chipCloses = Var.Create 0
 
     div [] [
       clicked.View
@@ -795,6 +888,33 @@ module Pages =
         attrs = [ Chip.Variant.filled; Attr.Create "data-testid" "disabled-chip" ]
       )
       Chip.create (text "Deletable Chip", onClose = (fun () -> ()), attrs = [ Chip.Variant.outlined ])
+      div [ Attr.Create "data-testid" "chip-actions" ] [ Doc.TextView(chipActions.View |> View.Map string) ]
+      div [ Attr.Create "data-testid" "chip-closes" ] [ Doc.TextView(chipCloses.View |> View.Map string) ]
+      Chip.create (
+        text "Both",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "chip-both" ]
+      )
+      Chip.create (
+        text "Disabled close",
+        onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
+        enabled = View.Const false,
+        attrs = [ Attr.Create "data-testid" "chip-disabled-close" ]
+      )
+      Chip.create (
+        text "Chip link",
+        href = "#chip",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "chip-link" ]
+      )
+      Chip.create (
+        text "Closable link",
+        href = "#other",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
+        attrs = [ Attr.Create "data-testid" "closable-chip-link" ]
+      )
     ]
 
   let private chipsetPage () =
@@ -826,6 +946,17 @@ module Pages =
         selectedValue = selected,
         selectionMode = ChipSet.SelectionMode.Toggle
       )
+      div [ Attr.Create "data-testid" "closable-chipset" ] [
+        ChipSet.create (
+          [
+            ChipItem.create (text "One", "one", closable = true)
+            ChipItem.create (text "Disabled", "disabled", closable = true, disabled = View.Const true)
+            ChipItem.create (text "Three", "three", closable = true)
+          ],
+          selectedValue = Var.Create None,
+          onClose = (fun _ -> ())
+        )
+      ]
     ]
 
   let private buttonmenuPage () =

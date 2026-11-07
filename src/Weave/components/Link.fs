@@ -71,8 +71,7 @@ type Link =
       Disabled.disabledClass Css.``weave-link--disabled`` enabled
 
       // Prevent default navigation when disabled; fire onClick only when enabled
-      on.clickTapView enabled (fun _ ev isEnabled ->
-        if not isEnabled then ev.PreventDefault() else onClick ())
+      on.clickView enabled (fun _ ev isEnabled -> if not isEnabled then ev.PreventDefault() else onClick ())
 
       yield! attrs
     ] [ startIconDoc; textLabel; endIconDoc ]
@@ -99,8 +98,7 @@ type IconLink =
 
       Disabled.disabledClass Css.``weave-link--disabled`` enabled
 
-      on.clickTapView enabled (fun _ ev isEnabled ->
-        if not isEnabled then ev.PreventDefault() else onClick ())
+      on.clickView enabled (fun _ ev isEnabled -> if not isEnabled then ev.PreventDefault() else onClick ())
 
       yield! attrs
     ] [ icon ]

@@ -8,6 +8,24 @@ type FieldInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``clicking field control focuses its input``() = task {
+    do! this.NavigateTo("field")
+    let control = this.Page.Locator(".weave-field__control").First
+    let! _ = control.EvaluateAsync("el => el.click()")
+    do! this.Expect(control.Locator("input")).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member _.``touching field control focuses its input``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#field")
+    let control = page.Locator(".weave-field__control").First
+    do! control.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(control.Locator("input")).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {
     do! this.NavigateTo("field")
     let input = this.Page.Locator("input[aria-invalid='true']").First

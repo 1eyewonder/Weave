@@ -179,7 +179,7 @@ module Select =
         Attr.Create "tabindex" "0"
         Attr.Create "role" "button"
         Attr.Create "aria-label" "Clear selection"
-        on.clickTapView interactable (fun _ ev canInteract ->
+        on.clickView interactable (fun _ ev canInteract ->
           ev?stopPropagation ()
 
           if canInteract then
@@ -267,7 +267,7 @@ module Select =
         Attr.DynamicCustom
           (fun el value -> el.SetAttribute("aria-disabled", value))
           (def.Disabled |> View.Map(sprintf "%b"))
-        on.clickTapViewGuarded itemEnabled (fun () ->
+        on.clickViewGuarded itemEnabled (fun () ->
           Var.Set selectedValue (Some def.Value)
           Var.Set isOpen false)
         on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
@@ -313,7 +313,7 @@ module Select =
         Attr.DynamicCustom
           (fun el value -> el.SetAttribute("aria-disabled", value))
           (def.Disabled |> View.Map(sprintf "%b"))
-        on.clickTapViewGuarded itemEnabled toggle
+        on.clickViewGuarded itemEnabled toggle
         on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
         yield! def.Attrs
       ] [
@@ -583,7 +583,7 @@ type Select =
           div [
             cl Css.``weave-select__popover``
             on.afterRender (fun el -> popoverRef.Value <- el)
-            on.clickTap (fun _ ev -> ev?stopPropagation ())
+            on.click (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
               Render.searchInputWithState
@@ -626,7 +626,7 @@ type Select =
         Attr.DynamicClassPred Css.``weave-select--readonly`` readOnly
         Attr.DynamicClassPred Css.``weave-select--has-value`` hasValue
         Attr.DynamicClassPred Css.``weave-select--clearable`` clearable
-        on.clickTapViewGuarded interactable (fun () ->
+        on.clickViewGuarded interactable (fun () ->
           Var.Set openVar (not openVar.Value)
 
           if openVar.Value then
@@ -848,7 +848,7 @@ type MultiSelect =
           div [
             cl Css.``weave-select__popover``
             on.afterRender (fun el -> popoverRef.Value <- el)
-            on.clickTap (fun _ ev -> ev?stopPropagation ())
+            on.click (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
               Render.searchInputWithState
@@ -929,7 +929,7 @@ type MultiSelect =
         Attr.DynamicClassPred Css.``weave-select--readonly`` readOnly
         Attr.DynamicClassPred Css.``weave-select--has-value`` hasValue
         Attr.DynamicClassPred Css.``weave-select--clearable`` clearable
-        on.clickTapViewGuarded interactable (fun () ->
+        on.clickViewGuarded interactable (fun () ->
           Var.Set openVar (not openVar.Value)
 
           if openVar.Value then

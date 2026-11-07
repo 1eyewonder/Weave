@@ -72,14 +72,25 @@ type Chip =
 
         span [
           cl Css.``weave-chip__close``
-          Attr.Create "tabindex" "0"
+          Attr.Create "role" "button"
+          enabled
+          |> View.Map(fun value -> if value then "0" else "-1")
+          |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
           Attr.Create "aria-label" "remove"
-          on.clickTapViewGuarded enabled callback
-          on.keyDown (fun _ ev ->
+          on.clickView enabled (fun _ ev isEnabled ->
+            ev.StopPropagation()
+            ev.PreventDefault()
+
+            if isEnabled then
+              callback ())
+          on.keyDownView enabled (fun _ ev isEnabled ->
             match ev with
             | Key.Activate ->
               ev.PreventDefault()
-              callback ()
+              ev.StopPropagation()
+
+              if isEnabled then
+                callback ()
             | _ -> ())
         ] [ closeIconDoc ]
       | None -> Doc.Empty
@@ -98,6 +109,21 @@ type Chip =
     let children = [ leadingDoc; labelDoc; closeDoc ]
 
     match href with
+    | Some url when Option.isSome onClose ->
+      let onClickHandler = defaultArg onClick (fun () -> ())
+
+      span [ yield! commonAttrs ] [
+        a [
+          cl "weave-chip__action"
+          attr.href url
+          on.clickView enabled (fun _ ev isEnabled ->
+            if not isEnabled then
+              ev.PreventDefault()
+            else
+              onClickHandler ())
+        ] [ leadingDoc; labelDoc ]
+        closeDoc
+      ]
     | Some url ->
       let onClickHandler = defaultArg onClick (fun () -> ())
 
@@ -105,7 +131,7 @@ type Chip =
         [
           attr.href url
           yield! commonAttrs
-          on.clickTapView enabled (fun _ ev isEnabled ->
+          on.clickView enabled (fun _ ev isEnabled ->
             if not isEnabled then
               ev.PreventDefault()
             else
@@ -114,6 +140,26 @@ type Chip =
         children
     | None ->
       match onClick with
+      | Some handler when Option.isSome onClose ->
+        span [ yield! commonAttrs ] [
+          span [
+            cl "weave-chip__action"
+            Attr.Create "role" "button"
+            enabled
+            |> View.Map(fun value -> if value then "0" else "-1")
+            |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
+            on.clickViewGuarded enabled handler
+            on.keyDownView enabled (fun _ ev isEnabled ->
+              match ev with
+              | Key.Activate ->
+                ev.PreventDefault()
+
+                if isEnabled then
+                  handler ()
+              | _ -> ())
+          ] [ leadingDoc; labelDoc ]
+          closeDoc
+        ]
       | Some handler ->
         let enabledRef: bool ref = ref true
 
@@ -127,7 +173,7 @@ type Chip =
             |> View.Map(fun e -> if e then "0" else "-1")
             |> Attr.DynamicCustom(fun el v -> el.SetAttribute("tabindex", v))
 
-            on.clickTapViewGuarded enabled handler
+            on.clickViewGuarded enabled handler
 
             on.keyDown (fun _ ev ->
               match ev with

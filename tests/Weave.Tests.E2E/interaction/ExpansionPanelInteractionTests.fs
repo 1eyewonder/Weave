@@ -9,6 +9,24 @@ type ExpansionPanelInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``programmatic click toggles expansion``() = task {
+    do! this.NavigateTo("expansion-panel")
+    let header = this.Page.Locator(".weave-expansion-panel__header").Nth(1)
+    let! _ = header.EvaluateAsync("el => el.click()")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")
+  }
+
+  [<Fact>]
+  member _.``touch tap toggles expansion``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#expansion-panel")
+    let header = page.Locator(".weave-expansion-panel__header").Nth(1)
+    do! header.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")
+  }
+
+  [<Fact>]
   member this.``expansion panel header is reachable by Tab``() = task {
     do! this.NavigateTo("expansion-panel")
     do! this.Page.Keyboard.PressAsync("Tab")

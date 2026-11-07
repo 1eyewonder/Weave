@@ -9,114 +9,32 @@ open Weave
 [<JavaScript>]
 module EventHandlersExamples =
 
-  let private clickTapSection () =
+  let private nativeButtonSection () =
+    let count = Var.Create 0
+    let enabled = Var.Create true
+
     let description =
       Helpers.bodyText
-        "on.clickTap handles both mouse clicks and touch taps via the pointerup event. It fires only for primary pointer interactions (left-click, touch, pen) — right-clicks and secondary buttons are ignored."
+        "Use a native button for actions. It supports mouse, touch, keyboard, and programmatic activation; enabled controls its disabled state."
 
     let content =
-      let log = Var.Create "Click or tap the box"
-
       div [] [
-        div [
-          SurfaceColor.BackgroundColor.surface
-          BorderRadius.All.small
-          Padding.All.medium
-          Cursor.pointer
-          on.clickTap (fun _ _ -> Var.Set log "Clicked/tapped!") // see here
-        ] [ textView log.View ]
-      ]
-
-    let code =
-      """let log = Var.Create "Click or tap the box"
-
-div [
-  on.clickTap (fun el ev ->  // see here
-    // Fires on mouse click AND touch tap
-    // Only primary pointer interactions (left-click, touch, pen)
-    Var.Set log "Clicked/tapped!"
-  )
-] [ textView log.View ]"""
-
-    Helpers.codeSampleSection "on.clickTap" description content code
-
-  let private clickTapKeySection () =
-    let description =
-      Helpers.bodyText
-        "on.clickTapKey extends clickTap to also fire on Enter and Space key presses. Use this on non-button elements that need to be keyboard accessible."
-
-    let content =
-      let count = Var.Create 0
-
-      div [] [
-        div [
-          SurfaceColor.BackgroundColor.surface
-          BorderRadius.All.small
-          Padding.All.medium
-          Cursor.pointer
-          attr.tabindex "0"
-          Attr.Create "role" "button"
-          on.clickTapKey (fun _ _ -> Var.Update count (fun n -> n + 1)) // see here
-        ] [
-          text "Activate me (click, tap, or press Enter/Space) — Count: "
-          textView (count.View |> View.Map string)
-        ]
+        Switch.create (enabled, content = text "Enabled")
+        Button.create (text "Activate", (fun () -> Var.Update count (fun n -> n + 1)), enabled = enabled.View)
+        div [] [ text "Count: "; textView (count.View |> View.Map string) ]
       ]
 
     let code =
       """let count = Var.Create 0
+let enabled = Var.Create true
 
-div [
-  attr.tabindex "0"
-  Attr.Create "role" "button"
-  on.clickTapKey (fun el ev ->  // see here
-    // Fires on click, tap, Enter, and Space
-    Var.Update count (fun n -> n + 1)
-  )
-] [
-  text "Activate me. Count: "
-  textView (count.View |> View.Map string)
-]"""
+Button.create (
+  text "Activate",
+  (fun () -> Var.Update count (fun n -> n + 1)),
+  enabled = enabled.View
+)"""
 
-    Helpers.codeSampleSection "on.clickTapKey" description content code
-
-  let private clickTapViewGuardedSection () =
-    let description =
-      Helpers.bodyText
-        "on.clickTapViewGuarded and on.clickTapKeyViewGuarded fire the callback only when an enabled View is true. This is useful for custom elements that need guarded click handling without the native disabled attribute."
-
-    let content =
-      let isEnabled = Var.Create true
-      let message = Var.Create "Toggle the switch and click"
-
-      div [] [
-        Switch.create (isEnabled, content = text "Enabled")
-        div [
-          Margin.Top.small
-          SurfaceColor.BackgroundColor.surface
-          BorderRadius.All.small
-          Padding.All.medium
-          Cursor.pointer
-          attr.tabindex "0"
-          Attr.Create "role" "button"
-          on.clickTapKeyViewGuarded isEnabled.View (fun () -> Var.Set message "Action fired!") // see here
-        ] [ textView message.View ]
-      ]
-
-    let code =
-      """let isEnabled = Var.Create true
-let message = Var.Create "Toggle the switch and click"
-
-Switch.create (isEnabled, content = text "Enabled")
-
-div [
-  on.clickTapKeyViewGuarded isEnabled.View (fun () ->  // see here
-    // Only fires when isEnabled is true
-    Var.Set message "Action fired!"
-  )
-] [ textView message.View ]"""
-
-    Helpers.codeSampleSection "Guarded Click Handlers" description content code
+    Helpers.codeSampleSection "Native button activation" description content code
 
   let private focusSection () =
     let description =
@@ -243,7 +161,7 @@ Bounded.snapToStep 0.0 100.0 5.0 37.0  // returns 35.0"""
   let private keyboardPatternsSection () =
     let description =
       Helpers.bodyText
-        "Weave provides internal active patterns for keyboard event handling. These are used by components like Dropdown, Select, and ButtonMenu for keyboard navigation. You can use on.clickTapKey and on.clickTapKeyViewGuarded to get Enter/Space handling on custom interactive elements."
+        "Weave uses internal active patterns for component keyboard navigation. For an action, prefer a native button and its built-in activation behavior."
 
     let content =
       div [ Typography.body2 ] [
@@ -272,7 +190,7 @@ Bounded.snapToStep 0.0 100.0 5.0 37.0  // returns 35.0"""
         ]
         p [] [
           text
-            "These patterns are internal to Weave and used by components. For custom interactive elements, use on.clickTapKey or on.clickTapKeyViewGuarded which handle the Enter/Space pattern for you."
+            "These patterns are internal to Weave and used by components. Prefer a native button for actions so the browser handles activation."
         ]
       ]
 
@@ -293,12 +211,8 @@ let menuKeys =
     | _ -> ()
   )
 
-// For your own interactive elements, use on.clickTapKey instead:
-div [
-  attr.tabindex "0"
-  Attr.Create "role" "button"
-  on.clickTapKey (fun el ev -> () (* handles click, tap, Enter, Space *))
-] [ text "Accessible custom button" ]"""
+// For an action, use a native button:
+Button.create (text "Activate", (fun () -> ()))"""
 
     Helpers.codeSampleSection "Keyboard Active Patterns" description content code
 
@@ -309,11 +223,7 @@ div [
         Helpers.bodyText
           "Weave provides accessible event handlers, numeric utilities, and keyboard active patterns for building interactive components beyond the standard library."
         Helpers.divider ()
-        clickTapSection ()
-        Helpers.divider ()
-        clickTapKeySection ()
-        Helpers.divider ()
-        clickTapViewGuardedSection ()
+        nativeButtonSection ()
         Helpers.divider ()
         focusSection ()
         Helpers.divider ()

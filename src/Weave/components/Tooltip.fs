@@ -111,7 +111,7 @@ type Tooltip =
               on.focusIn (fun _ _ -> Var.Set isVisible true)
               on.focusOut (fun _ _ -> Var.Set isVisible false)
             ]
-          | Tooltip.Activation.Click -> [ on.clickTap (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
+          | Tooltip.Activation.Click -> [ on.click (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
     ] [
       innerContent
 

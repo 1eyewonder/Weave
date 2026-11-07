@@ -20,6 +20,20 @@
   border: 1px solid transparent;
   color: var(--palette-text-primary);
 
+  &__action {
+    display: inline-flex;
+    align-items: center;
+    align-self: stretch;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--palette-primary);
+      outline-offset: 2px;
+    }
+  }
+
   &__content {
     display: inline-flex;
     align-items: center;

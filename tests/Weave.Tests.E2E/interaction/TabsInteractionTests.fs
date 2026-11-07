@@ -9,6 +9,24 @@ type TabsInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``programmatic click activates a tab``() = task {
+    do! this.NavigateTo("tabs")
+    let secondTab = this.Page.Locator(".weave-tabs__tab").Nth(1)
+    let! _ = secondTab.EvaluateAsync("el => el.click()")
+    do! this.Expect(secondTab).ToHaveAttributeAsync("aria-selected", "true")
+  }
+
+  [<Fact>]
+  member _.``touch tap activates a tab``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#tabs")
+    let secondTab = page.Locator(".weave-tabs__tab").Nth(1)
+    do! secondTab.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(secondTab).ToHaveAttributeAsync("aria-selected", "true")
+  }
+
+  [<Fact>]
   member this.``tab header has role tablist``() = task {
     do! this.NavigateTo("tabs")
     let tablist = this.Page.Locator(".weave-tabs__header[role='tablist']").First

@@ -9,6 +9,38 @@ type SelectInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Theory>]
+  [<InlineData("keyboard-single")>]
+  [<InlineData("keyboard-multi")>]
+  member this.``programmatic option click selects without toggling parent``(testId: string) = task {
+    do! this.NavigateTo("select")
+    let root = this.Page.GetByTestId(testId)
+    let combobox = root.Locator("[role='combobox']")
+    do! combobox.PressAsync("Enter")
+    let item = root.Locator("[role='option']").Nth(1)
+    do! this.Expect(item).ToBeVisibleAsync()
+    let! _ = item.EvaluateAsync("el => el.click()")
+    do! this.Expect(combobox).ToContainTextAsync("Alpha")
+    let expected = if testId = "keyboard-multi" then "true" else "false"
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-expanded", expected)
+  }
+
+  [<Theory>]
+  [<InlineData("keyboard-single")>]
+  [<InlineData("keyboard-multi")>]
+  member _.``touch tap selects option without toggling parent``(testId: string) = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#select")
+    let root = page.GetByTestId(testId)
+    let combobox = root.Locator("[role='combobox']")
+    do! combobox.TapAsync()
+    do! root.Locator("[role='option']").Nth(1).TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(combobox).ToContainTextAsync("Alpha")
+    let expected = if testId = "keyboard-multi" then "true" else "false"
+    do! Microsoft.Playwright.Assertions.Expect(combobox).ToHaveAttributeAsync("aria-expanded", expected)
+  }
+
+  [<Theory>]
   [<InlineData("restricted-single", "toggle-select-enabled", "weave-select--disabled")>]
   [<InlineData("restricted-multi", "toggle-select-enabled", "weave-select--disabled")>]
   [<InlineData("restricted-single", "toggle-select-readonly", "weave-select--readonly")>]
@@ -39,10 +71,7 @@ type SelectInteractionTests(fixture: TestFixture) =
         .Expect(root.Locator("[role='option']").Nth(1))
         .ToHaveClassAsync(Regex("weave-select__item--highlighted"))
 
-    let! _ =
-      toggle.EvaluateAsync(
-        "el => el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true }))"
-      )
+    let! _ = toggle.EvaluateAsync("el => el.click()")
 
     do! this.Expect(root.Locator(".weave-select")).ToHaveClassAsync(Regex(stateClass))
 
@@ -108,12 +137,7 @@ type SelectInteractionTests(fixture: TestFixture) =
     do! this.Expect(options.Nth(0)).ToHaveAttributeAsync("aria-selected", "false")
     do! this.Expect(checkbox).ToHaveClassAsync(Regex("weave-select__item-checkbox--checked"))
 
-    let! _ =
-      this.Page
-        .GetByTestId("disable-option")
-        .EvaluateAsync(
-          "el => el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true }))"
-        )
+    let! _ = this.Page.GetByTestId("disable-option").EvaluateAsync("el => el.click()")
 
     do! this.Expect(options.Nth(2)).ToHaveAttributeAsync("aria-disabled", "true")
     do! selectAll.ClickAsync()
@@ -142,7 +166,7 @@ type SelectInteractionTests(fixture: TestFixture) =
 
     let! _ =
       selectAll.EvaluateAsync(
-        "el => { document.querySelector('[data-testid=disable-option]').dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true })); el.click(); }"
+        "el => { document.querySelector('[data-testid=disable-option]').click(); el.click(); }"
       )
 
     let options = root.Locator("[role='option']")
@@ -450,12 +474,7 @@ type SelectInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("ArrowDown")
     do! this.Expect(options.Nth(2)).ToHaveClassAsync(Regex("weave-select__item--highlighted"))
     // Change the reactive value without clicking outside the open select.
-    let! _ =
-      this.Page
-        .GetByTestId("disable-option")
-        .EvaluateAsync(
-          "el => el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true }))"
-        )
+    let! _ = this.Page.GetByTestId("disable-option").EvaluateAsync("el => el.click()")
 
     do! this.Expect(options.Nth(2)).ToHaveClassAsync(Regex("weave-select__item--disabled"))
     do! this.Expect(options.Nth(2)).ToHaveAttributeAsync("aria-disabled", "true")
@@ -491,7 +510,7 @@ type SelectInteractionTests(fixture: TestFixture) =
 
       let! _ =
         search.EvaluateAsync(
-          "el => { document.querySelector('[data-testid=disable-option]').dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true })); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
+          "el => { document.querySelector('[data-testid=disable-option]').click(); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
         )
 
       do! this.Expect(combobox).Not.ToContainTextAsync("Dynamic")
@@ -567,12 +586,7 @@ type SelectInteractionTests(fixture: TestFixture) =
     let options = root.Locator("[role='option']")
     do! this.Expect(options.Nth(1)).ToHaveClassAsync(Regex("weave-select__item--highlighted"))
 
-    let! _ =
-      this.Page
-        .GetByTestId("reorder-options")
-        .EvaluateAsync(
-          "el => el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true }))"
-        )
+    let! _ = this.Page.GetByTestId("reorder-options").EvaluateAsync("el => el.click()")
 
     do! this.Expect(options.First).ToContainTextAsync("Omega")
     do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", "")
@@ -600,7 +614,7 @@ type SelectInteractionTests(fixture: TestFixture) =
         root
           .GetByLabel("Search options")
           .EvaluateAsync(
-            "el => { document.querySelector('[data-testid=reorder-options]').dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true })); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
+            "el => { document.querySelector('[data-testid=reorder-options]').click(); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
           )
 
       do! this.Expect(options.First).ToContainTextAsync("Omega")
@@ -626,11 +640,7 @@ type SelectInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("Escape")
 
     let! _ =
-      this.Page
-        .GetByTestId("disable-all-options")
-        .EvaluateAsync(
-          "el => el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, isPrimary: true }))"
-        )
+      this.Page.GetByTestId("disable-all-options").EvaluateAsync("el => el.click()")
 
     do! combobox.PressAsync("ArrowDown")
     do! this.Expect(root.Locator("[role='option'][aria-disabled='true']")).ToHaveCountAsync(4)

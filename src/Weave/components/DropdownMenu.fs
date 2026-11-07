@@ -114,7 +114,7 @@ module DropdownMenu =
           (fun el v -> el.SetAttribute("aria-disabled", v))
           (def.Disabled |> View.Map(fun d -> if d then "true" else "false"))
 
-        on.clickTapViewGuarded itemEnabled (fun () ->
+        on.clickViewGuarded itemEnabled (fun () ->
           def.OnClick()
           openVar.Value <- false)
 
@@ -267,8 +267,8 @@ type DropdownMenu =
       triggerRef.Value?focus()
 
     /// Handle keyboard events on the trigger button.
-    /// Enter/Space are NOT handled here — Button's built-in clickTapKeyViewGuarded
-    /// already fires onClick, which toggles the menu. Handling them here would
+    /// Enter/Space are not handled here: the native button click already invokes
+    /// onClick, which toggles the menu. Handling them here would
     /// cause a double-toggle.
     let handleTriggerKeyDown (ev: Dom.KeyboardEvent) =
       match ev with
@@ -420,7 +420,7 @@ type DropdownMenu =
           div [
             cl Css.``weave-dropdownmenu__popover``
             on.afterRender (fun el -> popoverRef.Value <- el)
-            on.clickTap (fun _ ev -> ev?stopPropagation ())
+            on.click (fun _ ev -> ev?stopPropagation ())
           ] [
             div [
               cl Css.``weave-dropdownmenu__list``

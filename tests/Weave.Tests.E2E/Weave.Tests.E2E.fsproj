@@ -47,6 +47,7 @@
     <Compile Include="interaction/ExpansionPanelInteractionTests.fs" />
     <Compile Include="interaction/FieldInteractionTests.fs" />
     <Compile Include="interaction/LinkInteractionTests.fs" />
+    <Compile Include="interaction/ListInteractionTests.fs" />
     <Compile Include="interaction/NumericFieldInteractionTests.fs" />
     <Compile Include="interaction/TextFieldInteractionTests.fs" />
     <Compile Include="interaction/RadioInteractionTests.fs" />

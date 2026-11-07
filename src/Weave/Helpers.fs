@@ -255,17 +255,6 @@ module Attr =
     let skip = Attr.Create "tabindex" "0"
 
 /// <summary>
-/// Active patterns for pointer event handling.
-/// </summary>
-[<JavaScript; RequireQualifiedAccess>]
-module internal Pointer =
-
-  /// Matches primary button interactions (left mouse click, touch tap, pen contact).
-  [<return: Struct>]
-  let (|Primary|_|) (ev: Dom.MouseEvent) =
-    if ev.Button = 0 then ValueSome() else ValueNone
-
-/// <summary>
 /// Active patterns for keyboard event handling. Provides a consistent,
 /// type-safe vocabulary for matching key presses across all components.
 /// </summary>

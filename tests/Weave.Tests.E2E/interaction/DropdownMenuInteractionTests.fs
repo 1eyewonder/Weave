@@ -8,6 +8,40 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``programmatic click activates menu item and closes menu``() = task {
+    do! this.NavigateTo("dropdown-menu")
+    do! this.Page.Locator(".weave-dropdownmenu .weave-button").First.ClickAsync()
+    let item = this.Page.Locator(".weave-dropdownmenu__item").First
+    do! this.Expect(item).ToBeVisibleAsync()
+    let! _ = item.EvaluateAsync("el => el.click()")
+    do! this.Expect(this.Page.GetByTestId("dropdown-action")).ToHaveTextAsync("item 1")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToHaveCountAsync(0)
+  }
+
+  [<Fact>]
+  member this.``keyboard activation calls the menu action``() = task {
+    do! this.NavigateTo("dropdown-menu")
+    let trigger = this.Page.Locator(".weave-dropdownmenu .weave-button").First
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToBeVisibleAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__item").First).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("dropdown-action")).ToHaveTextAsync("item 1")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToHaveCountAsync(0)
+  }
+
+  [<Fact>]
+  member _.``touch tap activates a dropdown item``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#dropdown-menu")
+    do! page.Locator(".weave-dropdownmenu .weave-button").First.TapAsync()
+    do! page.Locator(".weave-dropdownmenu__item").First.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("dropdown-action")).ToHaveTextAsync("item 1")
+  }
+
+  [<Fact>]
   member this.``dropdown menu trigger is focusable``() = task {
     do! this.NavigateTo("dropdown-menu")
     let trigger = this.Page.Locator(".weave-dropdownmenu .weave-button").First

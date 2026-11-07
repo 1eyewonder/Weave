@@ -9,6 +9,30 @@ type TooltipInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``keyboard activation toggles a click tooltip``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.GetByTestId("tooltip-click")
+    let button = wrapper.Locator("button")
+    do! button.PressAsync("Enter")
+    do! this.Expect(wrapper.Locator("[role='tooltip']")).ToBeVisibleAsync()
+    do! button.PressAsync("Space")
+    do! this.Expect(wrapper.Locator("[role='tooltip']")).ToBeHiddenAsync()
+  }
+
+  [<Fact>]
+  member _.``touch tap toggles a click tooltip``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#tooltip")
+    let wrapper = page.GetByTestId("tooltip-click")
+    let button = wrapper.Locator("button")
+    do! button.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(wrapper.Locator("[role='tooltip']")).ToBeVisibleAsync()
+    do! button.TapAsync()
+    do! Microsoft.Playwright.Assertions.Expect(wrapper.Locator("[role='tooltip']")).ToBeHiddenAsync()
+  }
+
+  [<Fact>]
   member this.``every tooltip wrapper contains a role tooltip element``() = task {
     do! this.NavigateTo("tooltip")
     let! wrapperCount = this.Page.Locator(".weave-tooltip-root").CountAsync()

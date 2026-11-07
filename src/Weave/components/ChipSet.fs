@@ -123,7 +123,7 @@ type ChipSet =
         attrs = def.Attrs
       )
 
-    let chipSelector = ".weave-chip[role='button']"
+    let chipSelector = ".weave-chip[role='button'], .weave-chip__action[role='button']"
 
     let setRovingTabindex (container: Dom.Element) (focusedIndex: int) =
       let items = container.QuerySelectorAll(chipSelector)
@@ -162,8 +162,11 @@ type ChipSet =
         let mutable i = (fromIndex + direction + count) % count
         let mutable iterations = 0
 
-        while iterations < count
-              && As<Dom.Element>(items.Item(i)).ClassList.Contains(Css.``weave-chip--disabled``) do
+        let isDisabled index =
+          let item = As<Dom.Element>(items.Item(index))
+          not (isNull (item?closest ("." + Css.``weave-chip--disabled``)))
+
+        while iterations < count && isDisabled i do
           i <- (i + direction + count) % count
           iterations <- iterations + 1
 

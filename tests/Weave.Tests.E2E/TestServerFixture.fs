@@ -94,6 +94,15 @@ type TestFixture() =
     return context, page
   }
 
+  member _.NewTouchContextAsync() =
+    browser.NewContextAsync(
+      BrowserNewContextOptions(
+        HasTouch = true,
+        IsMobile = true,
+        ViewportSize = ViewportSize(Width = 390, Height = 844)
+      )
+    )
+
   interface IAsyncLifetime with
     member _.InitializeAsync() =
       task {

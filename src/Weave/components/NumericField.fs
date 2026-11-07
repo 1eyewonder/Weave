@@ -202,7 +202,7 @@ type NumericField =
               attr.``type`` "button"
               Attr.Tab.natural
               Attr.Create "aria-label" "Increment"
-              on.clickTapView clickState (fun _ _ (step, canEdit) ->
+              on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
                   increment step)
             ] [ upIcon ]
@@ -212,7 +212,7 @@ type NumericField =
               attr.``type`` "button"
               Attr.Tab.natural
               Attr.Create "aria-label" "Decrement"
-              on.clickTapView clickState (fun _ _ (step, canEdit) ->
+              on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
                   decrement step)
             ] [ downIcon ]
@@ -428,7 +428,7 @@ type NumericField =
               attr.``type`` "button"
               Attr.Tab.natural
               Attr.Create "aria-label" "Increment"
-              on.clickTapView clickState (fun _ _ (step, canEdit) ->
+              on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
                   increment step)
             ] [ upIcon ]
@@ -438,7 +438,7 @@ type NumericField =
               attr.``type`` "button"
               Attr.Tab.natural
               Attr.Create "aria-label" "Decrement"
-              on.clickTapView clickState (fun _ _ (step, canEdit) ->
+              on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
                   decrement step)
             ] [ downIcon ]

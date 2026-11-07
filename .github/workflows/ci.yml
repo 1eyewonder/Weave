@@ -31,12 +31,25 @@ jobs:
       - name: Check Format
         run: docker compose run --rm playwright-tests sh -c "./build.sh CheckFormat"
 
-      - name: Run Tests
-        run: docker compose run --rm playwright-tests
+      - name: Run unit and rendering tests
+        run: docker compose run --rm playwright-tests sh -c "./build.sh RunNonBrowserTests"
+
+  browser-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build Test Image
+        run: docker compose build
+      - name: Run browser suite
+        run: docker compose run --rm -e WEAVE_E2E_BROWSER=${{ matrix.browser }} playwright-tests sh -c "./build.sh RunBrowserTests"
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, browser-tests]
     if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages

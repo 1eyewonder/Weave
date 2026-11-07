@@ -16,6 +16,7 @@ type FieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touching field control focuses its input``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

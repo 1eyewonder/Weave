@@ -27,6 +27,7 @@ type SelectInteractionTests(fixture: TestFixture) =
   [<Theory>]
   [<InlineData("keyboard-single")>]
   [<InlineData("keyboard-multi")>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap selects option without toggling parent``(testId: string) = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

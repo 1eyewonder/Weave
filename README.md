@@ -124,6 +124,16 @@ docker compose run --rm playwright-tests
 
 The Docker path runs Playwright rendering tests in a pre-configured browser environment. Use this if you don't have .NET 10 or Node.js 22 installed locally, or to match CI behavior exactly.
 
+To run the full browser interaction suite across Chromium, Firefox and WebKit locally, first install the matching Playwright browsers, then run the dedicated build target:
+
+```powershell
+pwsh tests/Weave.Tests.E2E/bin/Debug/net10.0/playwright.ps1 install chromium firefox webkit
+./build.cmd RunBrowserTests
+```
+
+The normal `RunTests` target still uses Chromium by default. The all-browser target runs mobile-emulation tests in Chromium and WebKit; Firefox runs the other interactions because Playwright does not document Firefox mobile emulation as supported. The CI browser matrix runs these same suites in parallel.
+
+
 ## Contributing
 
 Community interest will shape the future of Weave.

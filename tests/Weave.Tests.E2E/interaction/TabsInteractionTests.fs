@@ -17,6 +17,7 @@ type TabsInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap activates a tab``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

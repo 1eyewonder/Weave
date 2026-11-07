@@ -26,6 +26,7 @@ type NumericFieldInteractionTests(fixture: TestFixture) =
   [<Theory>]
   [<InlineData("numeric-int")>]
   [<InlineData("numeric-float")>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap increments numeric field once``(testId: string) = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

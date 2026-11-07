@@ -33,6 +33,7 @@ type LinkInteractionTests(fixture: TestFixture) =
   [<Theory>]
   [<InlineData("count-link")>]
   [<InlineData("count-icon-link")>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap activates a link``(testId: string) = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

@@ -143,7 +143,7 @@ let (==>!) = hardDependency
 let softDependency x y = x ?=> y |> ignore
 let (?=>!) = softDependency
 
-let runTests _ =
+let runTestProjects projects =
   let runsettings = rootDir </> "tests" </> "playwright.runsettings"
 
   let setParams (defaults: DotNet.TestOptions) = {
@@ -154,7 +154,41 @@ let runTests _ =
         Settings = Some runsettings
   }
 
-  !!testsGlob |> Seq.iter (DotNet.test setParams)
+  projects |> Seq.iter (DotNet.test setParams)
+
+let runTests _ = runTestProjects (!!testsGlob)
+
+let runNonBrowserTests _ =
+  !!testsGlob
+  |> Seq.filter (fun project -> Path.GetFileName(project) <> "Weave.Tests.E2E.fsproj")
+  |> runTestProjects
+
+let runBrowserTests _ =
+  let configured = System.Environment.GetEnvironmentVariable "WEAVE_E2E_BROWSER"
+
+  let browsers =
+    if System.String.IsNullOrWhiteSpace configured then
+      [ "chromium"; "firefox"; "webkit" ]
+    else
+      [ configured ]
+
+  let project = rootDir </> "tests" </> "Weave.Tests.E2E" </> "Weave.Tests.E2E.fsproj"
+
+  try
+    for browser in browsers do
+      System.Environment.SetEnvironmentVariable("WEAVE_E2E_BROWSER", browser)
+      Trace.tracefn "Running browser tests in %s" browser
+
+      let filter =
+        if browser = "firefox" then
+          " --filter \"Capability!=MobileEmulation\""
+        else
+          ""
+
+      let args = $"\"%s{project}\" --no-build --no-restore -c %s{configuration}%s{filter}"
+      DotNet.exec id "test" args |> failOnBadExitAndPrint
+  finally
+    System.Environment.SetEnvironmentVariable("WEAVE_E2E_BROWSER", configured)
 
 let buildDocs _ =
   Yarn.exec "build:css" id
@@ -181,6 +215,8 @@ let initTargets () =
   Target.create "CheckFormat" checkFormatCode
   Target.create "Analyze" analyze
   Target.create "RunTests" runTests
+  Target.create "RunNonBrowserTests" runNonBrowserTests
+  Target.create "RunBrowserTests" runBrowserTests
   Target.create "BuildDocs" buildDocs
   Target.create "Init" ignore
 
@@ -190,6 +226,8 @@ let initTargets () =
   "Restore" ==>! "Build"
   "YarnInstall" ==>! "Build"
   "Build" ==>! "RunTests"
+  "Build" ==>! "RunNonBrowserTests"
+  "Build" ==>! "RunBrowserTests"
 
   "RunTests" ?=>! "BuildDocs"
   "Restore" ==>! "BuildDocs"

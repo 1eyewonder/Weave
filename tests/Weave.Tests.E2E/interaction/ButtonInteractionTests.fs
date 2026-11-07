@@ -11,6 +11,7 @@ type ButtonInteractionTests(fixture: TestFixture) =
   [<Theory>]
   [<InlineData("activation-button", "activation-disabled")>]
   [<InlineData("activation-icon", "activation-disabled-icon")>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch taps activate once and disabled buttons remain inactive``
     (enabledId: string, disabledId: string)
     = task {

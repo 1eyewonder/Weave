@@ -22,6 +22,7 @@ type ListInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap selects a list item``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

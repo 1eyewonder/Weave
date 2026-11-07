@@ -57,6 +57,7 @@ type ChipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap activates a chip once``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

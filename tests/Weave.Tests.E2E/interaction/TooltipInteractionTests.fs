@@ -20,6 +20,7 @@ type TooltipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap toggles a click tooltip``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

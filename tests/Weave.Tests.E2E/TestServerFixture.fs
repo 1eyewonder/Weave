@@ -25,7 +25,7 @@ module private ServerHelpers =
     | cfg -> cfg
 
 /// Shared fixture for the E2E test collection.
-/// Hosts the test server process and a single Chromium browser instance.
+/// Hosts the test server process and a single browser instance (Chromium by default).
 /// Each test creates a fresh BrowserContext + Page for isolation.
 type TestFixture() =
   let port = ServerHelpers.findFreePort ()
@@ -108,7 +108,17 @@ type TestFixture() =
       task {
         let! pw = Playwright.CreateAsync()
         playwright <- pw
-        let! b = pw.Chromium.LaunchAsync(BrowserTypeLaunchOptions(Headless = true))
+
+        let browserType =
+          match Environment.GetEnvironmentVariable("WEAVE_E2E_BROWSER") with
+          | null
+          | ""
+          | "chromium" -> pw.Chromium
+          | "firefox" -> pw.Firefox
+          | "webkit" -> pw.Webkit
+          | value -> invalidArg "WEAVE_E2E_BROWSER" $"Unknown browser: %s{value}"
+
+        let! b = browserType.LaunchAsync(BrowserTypeLaunchOptions(Headless = true))
         browser <- b
       }
       :> Task

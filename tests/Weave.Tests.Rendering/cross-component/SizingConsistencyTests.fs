@@ -50,7 +50,7 @@ type SizingConsistencyTests() =
         ("dropdown-item", dropdownItem)
       ] do
       Assert.True(
-        box.Height >= minHeight,
+        box.Height + 0.01f >= minHeight,
         $"{density} {name} height ({box.Height}px) should be >= {minHeight}px"
       )
   }

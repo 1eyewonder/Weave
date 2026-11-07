@@ -17,6 +17,7 @@ type ExpansionPanelInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap toggles expansion``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()

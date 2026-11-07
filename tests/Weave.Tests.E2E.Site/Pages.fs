@@ -81,9 +81,60 @@ module Pages =
     let selected = Var.Create "A"
 
     div [] [
-      Radio.create (selected, "A", displayText = View.Const "Option A")
-      Radio.create (selected, "B", displayText = View.Const "Option B")
-      Radio.create (selected, "C", displayText = View.Const "Disabled Option", enabled = View.Const false)
+      Radio.create (
+        selected,
+        "A",
+        displayText = View.Const "Option A",
+        inputAttrs = [ Attr.Create "name" "test-options" ]
+      )
+      Radio.create (
+        selected,
+        "B",
+        displayText = View.Const "Option B",
+        inputAttrs = [ Attr.Create "name" "test-options" ]
+      )
+      Radio.create (
+        selected,
+        "C",
+        displayText = View.Const "Disabled Option",
+        enabled = View.Const false,
+        inputAttrs = [ Attr.Create "name" "test-options" ]
+      )
+    ]
+
+  let private radioFormGroupsPage () =
+    let first = Var.Create "A"
+    let second = Var.Create "A"
+
+    div [] [
+      form [ Attr.Create "data-testid" "first-radio-form" ] [
+        Radio.create (
+          first,
+          "A",
+          displayText = View.Const "First A",
+          inputAttrs = [ Attr.Create "name" "choice" ]
+        )
+        Radio.create (
+          first,
+          "B",
+          displayText = View.Const "First B",
+          inputAttrs = [ Attr.Create "name" "choice" ]
+        )
+      ]
+      form [ Attr.Create "data-testid" "second-radio-form" ] [
+        Radio.create (
+          second,
+          "A",
+          displayText = View.Const "Second A",
+          inputAttrs = [ Attr.Create "name" "choice" ]
+        )
+        Radio.create (
+          second,
+          "B",
+          displayText = View.Const "Second B",
+          inputAttrs = [ Attr.Create "name" "choice" ]
+        )
+      ]
     ]
 
   let private switchPage () =
@@ -902,8 +953,39 @@ module Pages =
       AppBar.create (div [] [ text "App Bar Title" ], attrs = [ Attr.Create "aria-label" "Static app bar" ])
     ]
 
-  let private drawerPage () =
-    let isOpen = Var.Create true
+  let private listenerRemovalPage () =
+    let mounted = Var.Create true
+    let active = Var.Create true
+    let calls = Var.Create 0
+    let target = ref (JS.Document.CreateElement "div")
+
+    div [] [
+      Button.create (
+        text "Toggle listener",
+        (fun () -> Var.Set mounted (not mounted.Value)),
+        attrs = [ Attr.Create "data-testid" "remove-listener" ]
+      )
+      Button.create (text "Outside", ignore, attrs = [ Attr.Create "data-testid" "listener-outside" ])
+      div [ Attr.Create "data-testid" "listener-calls" ] [ textView (calls.View |> View.Map string) ]
+      mounted.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          div [
+            Attr.Create "data-testid" "listener-owner"
+            on.afterRender (fun el -> target.Value <- el)
+          ] [
+            DocumentEventListener.onMouseDown
+              [ target ]
+              (fun () -> Var.Set calls (calls.Value + 1))
+              active.View
+            text "Owner"
+          ]
+        else
+          Doc.Empty)
+    ]
+
+  let private drawerPage variant initiallyOpen =
+    let isOpen = Var.Create initiallyOpen
 
     div [] [
       Button.create (
@@ -931,7 +1013,7 @@ module Pages =
               )
             ],
             isOpen.View,
-            variant = Drawer.Variant.Temporary,
+            variant = variant,
             overlayClose = (fun () -> Var.Set isOpen false),
             attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
           )
@@ -1131,8 +1213,29 @@ module Pages =
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
       )
+      ButtonMenu.create (
+        text "Edge cases",
+        [
+          Button.create (text "Unavailable", (fun () -> action.Set "disabled"), enabled = View.Const false)
+          div [] [
+            Link.create (
+              text "Wrapped link",
+              href = "#menu-link-target",
+              onClick = (fun () -> action.Set "link")
+            )
+          ]
+        ],
+        attrs = [ Attr.Create "data-testid" "edge-menu" ]
+      )
       div [ Attr.Create "data-testid" "menu-action" ] [ textView action.View ]
-      Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
+      Button.create (
+        text "After",
+        (fun () -> ()),
+        attrs = [
+          Attr.Create "data-testid" "focus-target"
+          Attr.Create "id" "menu-link-target"
+        ]
+      )
     ]
 
   let private buttongroupPage () =
@@ -1238,6 +1341,7 @@ module Pages =
   let private renderPage (hash: string) =
     match hash with
     | "checkbox" -> checkboxPage ()
+    | "radio-groups" -> radioFormGroupsPage ()
     | "radio" -> radioPage ()
     | "switch" -> switchPage ()
     | "field" -> fieldPage ()
@@ -1263,7 +1367,10 @@ module Pages =
     | "theme-switch" -> themeSwitchPage ()
     | "theming" -> themingPage ()
     | "appbar" -> appbarPage ()
-    | "drawer" -> drawerPage ()
+    | "listener-removal" -> listenerRemovalPage ()
+    | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false
+    | "drawer-responsive" -> drawerPage Drawer.Variant.Responsive true
+    | "drawer" -> drawerPage Drawer.Variant.Temporary true
     | "link" -> linkPage ()
     | "list" -> listPage ()
     | "chip" -> chipPage ()

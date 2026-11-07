@@ -75,3 +75,16 @@ type RadioInteractionTests(fixture: TestFixture) =
 
     Assert.NotEqual<string>("none", outlineStyle)
   }
+
+  [<Fact>]
+  member this.``radio navigation keeps same-named groups in separate forms isolated``() = task {
+    do! this.NavigateTo("radio-groups")
+    let first = this.Page.GetByTestId("first-radio-form").Locator("input")
+    let second = this.Page.GetByTestId("second-radio-form").Locator("input")
+    do! first.Nth(0).FocusAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(first.Nth(1)).ToBeFocusedAsync()
+    do! this.Expect(first.Nth(1)).ToBeCheckedAsync()
+    do! this.Expect(second.Nth(0)).ToBeCheckedAsync()
+    do! this.Expect(second.Nth(1)).Not.ToBeCheckedAsync()
+  }

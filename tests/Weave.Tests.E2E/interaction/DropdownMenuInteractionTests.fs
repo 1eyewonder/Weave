@@ -32,6 +32,7 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
   member _.``touch tap activates a dropdown item``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
@@ -182,4 +183,25 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("ArrowDown")
     do! this.Page.Keyboard.PressAsync("ArrowUp")
     do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToBeVisibleAsync()
+  }
+
+  [<Fact>]
+  member this.``rapid navigation and dismissal keeps focus on the trigger``() = task {
+    do! this.NavigateTo("dropdown-menu")
+    let trigger = this.Page.Locator(".weave-dropdownmenu .weave-button").First
+    do! trigger.FocusAsync()
+
+    let! _ =
+      trigger.EvaluateAsync(
+        "el => { el.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowDown', bubbles:true})); el.dispatchEvent(new KeyboardEvent('keydown', {key:'Escape', bubbles:true})); }"
+      )
+
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToHaveCountAsync(0)
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        "() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))"
+      )
+
+    do! this.Expect(trigger).ToBeFocusedAsync()
   }

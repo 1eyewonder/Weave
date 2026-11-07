@@ -31,7 +31,7 @@
       @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
         z-index: calc(var(--weave-zindex-appbar) + 2);
 
-        &.weave-drawer--initial:not(.weave-drawer--mini) {
+        &.weave-drawer--initial.weave-drawer--closed:not(.weave-drawer--mini) {
           display: none !important;
         }
       }
@@ -290,9 +290,6 @@
           @media (max-width: (map.get($breakpoints, $breakpoint) - 1px)) {
             display: block;
 
-            &.weave-drawer--initial {
-              display: none;
-            }
           }
         }
 

@@ -41,7 +41,7 @@ module private ButtonMenuInternal =
     let mutable containerEl = ref (JS.Document.CreateElement "div")
     let triggerEl = ref (JS.Document.CreateElement "button")
     let currentHover = Var.Create false
-    let hoverSync = openOnHover |> Doc.sinkCached (fun v -> currentHover.Value <- v)
+    let hoverSync = openOnHover |> Doc.sinkCached (fun v -> Var.Set currentHover v)
 
     let nextKey, prevKey =
       match direction with
@@ -89,7 +89,7 @@ module private ButtonMenuInternal =
 
     let outsideClickWatcher =
       isOpen.View
-      |> DocumentEventListener.onClick [ containerEl ] (fun () -> isOpen.Value <- false)
+      |> DocumentEventListener.onClick [ containerEl ] (fun () -> Var.Set isOpen false)
 
     div [
       cl Css.``weave-button-menu``
@@ -109,10 +109,10 @@ module private ButtonMenuInternal =
 
       on.mouseEnter (fun _ _ ->
         if currentHover.Value then
-          isOpen.Value <- true)
+          Var.Set isOpen true)
       on.mouseLeave (fun _ _ ->
         if currentHover.Value then
-          isOpen.Value <- false)
+          Var.Set isOpen false)
 
       yield! attrs
     ] [
@@ -159,7 +159,7 @@ type ButtonMenu =
     let triggerButton =
       Button.create (
         triggerContent,
-        onClick = (fun () -> isOpen.Value <- not isOpen.Value),
+        onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
         attrs = [
           cl Css.``weave-button-menu__trigger``
           Attr.Create "aria-haspopup" "true"
@@ -221,7 +221,7 @@ type IconButtonMenu =
     let triggerButton =
       IconButton.create (
         triggerIcon,
-        onClick = (fun () -> isOpen.Value <- not isOpen.Value),
+        onClick = (fun () -> Var.Set isOpen (not isOpen.Value)),
         attrs = [
           Attr.Create "aria-label" "Menu"
           cl Css.``weave-button-menu__trigger``

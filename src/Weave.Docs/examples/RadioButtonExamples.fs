@@ -13,7 +13,7 @@ module RadioButtonExamples =
   let private basicRadioExample () =
     let description =
       Helpers.bodyText
-        "Create a radio group by passing the same Var to multiple Radio.create calls. Only one option can be selected at a time."
+        "Pass the same selection Var and input name to each option. The shared name gives the browser a native radio group with arrow-key navigation. Use a different name for each independent group."
 
     let content =
       let selected = Var.Create "Option 1"
@@ -23,7 +23,14 @@ module RadioButtonExamples =
         [
           options
           |> List.map (fun opt ->
-            GridItem.create (Radio.create (selected, opt, displayText = View.Const opt)))
+            GridItem.create (
+              Radio.create (
+                selected,
+                opt,
+                displayText = View.Const opt,
+                inputAttrs = [ Attr.Create "name" "basic-options" ]
+              )
+            ))
           |> Doc.Concat
         ]
       )
@@ -34,9 +41,9 @@ open WebSharper.UI
 
 let selected = Var.Create "Option 1"
 
-Radio.create(selected, "Option 1", displayText = View.Const "Option 1")
-Radio.create(selected, "Option 2", displayText = View.Const "Option 2")
-Radio.create(selected, "Option 3", displayText = View.Const "Option 3")"""
+Radio.create(selected, "Option 1", displayText = View.Const "Option 1", inputAttrs = [ Attr.Create "name" "basic-options" ])
+Radio.create(selected, "Option 2", displayText = View.Const "Option 2", inputAttrs = [ Attr.Create "name" "basic-options" ])
+Radio.create(selected, "Option 3", displayText = View.Const "Option 3", inputAttrs = [ Attr.Create "name" "basic-options" ])"""
 
     Helpers.codeSampleSection "Basic Radio" description content code
 
@@ -324,6 +331,11 @@ div [ Density.spacious ] [
           ""
           "Reactive label text displayed next to the radio button"
         Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether this radio button is interactive"
+        Helpers.apiParam
+          "?inputAttrs"
+          "Attr list"
+          "[]"
+          "Attributes for the native input, including its radio group name"
         Helpers.apiParam
           "?attrs"
           "Attr list"

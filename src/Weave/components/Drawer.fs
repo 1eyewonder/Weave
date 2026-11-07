@@ -274,6 +274,20 @@ type Drawer =
     // It is cleared after the first open/close interaction.
     let isInitial = Var.Create true
     let mutable firstEventSeen = false
+    let previousFocus = Var.Create(None: Dom.Element option)
+
+    let trackFocus =
+      config.Open
+      |> Doc.sinkCached (fun opened ->
+        if opened then
+          let active = JS.Document?activeElement
+
+          Var.Set
+            previousFocus
+            (if not (isNull active) && active <> JS.Undefined then
+               Some(As<Dom.Element> active)
+             else
+               None))
 
     let trackInitial =
       Doc.sink
@@ -328,11 +342,29 @@ type Drawer =
         widthAttr
         Attr.DynamicClassPred Css.``weave-drawer--open`` config.Open
         Attr.DynamicClassPred Css.``weave-drawer--closed`` (config.Open |> View.Map not)
+        if config.Variant <> Variant.Mini then
+          config.Open
+          |> Attr.DynamicCustom(fun el opened ->
+            if opened then
+              el.RemoveAttribute("inert")
+            else
+              el.SetAttribute("inert", ""))
         Attr.DynamicClassPred Css.``weave-drawer--initial`` isInitial.View
         Attr.DynamicClassPred Css.``weave-drawer--hover-expand`` config.ExpandOnHover
+        on.keyDown (fun _ ev ->
+          match ev, config.Variant, config.OverlayClose with
+          | Key.Escape, (Variant.Temporary | Variant.Responsive), Some close when
+            not (As<bool>(ev?defaultPrevented))
+            ->
+            ev.PreventDefault()
+            ev.StopPropagation()
+            close ()
+            previousFocus.Value |> Option.iter (fun el -> el?focus ())
+          | _ -> ())
         yield! config.Attrs
       ] [
         trackInitial
+        trackFocus
         config.Header |> Option.defaultWith (fun () -> Doc.Empty)
         div [ cl Css.``weave-drawer__content`` ] [ config.Content ]
       ]

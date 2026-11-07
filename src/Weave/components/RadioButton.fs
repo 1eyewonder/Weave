@@ -38,10 +38,19 @@ module Radio =
 [<JavaScript; RequireQualifiedAccess>]
 type Radio =
 
+  /// Pass the same name via inputAttrs for radios in the same native group.
+  /// Use distinct names for independent groups in the same form.
   static member create<'T when 'T: equality>
-    (userSelection: Var<'T>, value: 'T, ?displayText: View<string>, ?enabled: View<bool>, ?attrs: Attr list)
-    =
+    (
+      userSelection: Var<'T>,
+      value: 'T,
+      ?displayText: View<string>,
+      ?enabled: View<bool>,
+      ?inputAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
     let attrs = defaultArg attrs []
+    let inputAttrs = defaultArg inputAttrs []
     let enabled = defaultArg enabled (View.Const true)
 
     let isSelected = Var.Create false
@@ -70,6 +79,7 @@ type Radio =
             Var.Set userSelection value
           | _ -> ())
 
+        yield! inputAttrs
         cl Css.``weave-radio__input``
       ] [
         userSelection.View

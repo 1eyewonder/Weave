@@ -116,9 +116,9 @@ module DropdownMenu =
 
         on.clickViewGuarded itemEnabled (fun () ->
           def.OnClick()
-          openVar.Value <- false)
+          Var.Set openVar false)
 
-        on.mouseEnter (fun _ _ -> highlightedIndex.Value <- itemIndex)
+        on.mouseEnter (fun _ _ -> Var.Set highlightedIndex itemIndex)
         yield! def.Attrs
       ] [
         match def.Icon with
@@ -258,12 +258,12 @@ type DropdownMenu =
       let itemEl = container.QuerySelector(sprintf "#%s-item-%d" dropdownMenuId index)
 
       if not (isNull itemEl) then
-        highlightedIndex.Value <- index
+        Var.Set highlightedIndex index
         JS.Window.SetTimeout((fun () -> itemEl?focus ()), 0) |> ignore
 
     let closeAndRefocusTrigger () =
-      openVar.Value <- false
-      highlightedIndex.Value <- -1
+      Var.Set openVar false
+      Var.Set highlightedIndex -1
       triggerRef.Value?focus()
 
     /// Handle keyboard events on the trigger button.
@@ -276,9 +276,9 @@ type DropdownMenu =
         ev.PreventDefault()
 
         if not openVar.Value then
-          openVar.Value <- true
+          Var.Set openVar true
 
-        highlightedIndex.Value <- -1
+        Var.Set highlightedIndex -1
 
         // Deferred — popover needs to render before we can query items
         JS.Window.SetTimeout(
@@ -294,9 +294,9 @@ type DropdownMenu =
         ev.PreventDefault()
 
         if not openVar.Value then
-          openVar.Value <- true
+          Var.Set openVar true
 
-        highlightedIndex.Value <- -1
+        Var.Set highlightedIndex -1
 
         JS.Window.SetTimeout(
           (fun () ->
@@ -316,8 +316,8 @@ type DropdownMenu =
 
       | Key.Tab ->
         if openVar.Value then
-          openVar.Value <- false
-          highlightedIndex.Value <- -1
+          Var.Set openVar false
+          Var.Set highlightedIndex -1
       | _ -> ()
 
     /// Handle keyboard events when focus is on a menu item.
@@ -380,8 +380,8 @@ type DropdownMenu =
           | None -> ()
 
       | Key.Tab ->
-        openVar.Value <- false
-        highlightedIndex.Value <- -1
+        Var.Set openVar false
+        Var.Set highlightedIndex -1
       | _ -> ()
 
     let triggerButton =
@@ -391,10 +391,10 @@ type DropdownMenu =
         match openOn with
         | OpenOn.Click ->
           fun () ->
-            openVar.Value <- not openVar.Value
+            Var.Set openVar (not openVar.Value)
 
             if openVar.Value then
-              highlightedIndex.Value <- -1
+              Var.Set highlightedIndex -1
         | OpenOn.Hover -> fun () -> ()
 
       Button.create (
@@ -443,8 +443,8 @@ type DropdownMenu =
       if closeOnOutsideClick then
         openVar.View
         |> DocumentEventListener.onMouseDown [ rootRef; popoverRef ] (fun () ->
-          openVar.Value <- false
-          highlightedIndex.Value <- -1)
+          Var.Set openVar false
+          Var.Set highlightedIndex -1)
       else
         Doc.Empty
 
@@ -453,12 +453,12 @@ type DropdownMenu =
       | OpenOn.Hover -> [
           on.mouseEnter (fun _ _ ->
             if not openVar.Value then
-              openVar.Value <- true
-              highlightedIndex.Value <- -1)
+              Var.Set openVar true
+              Var.Set highlightedIndex -1)
           on.mouseLeave (fun _ _ ->
             if openVar.Value then
-              openVar.Value <- false
-              highlightedIndex.Value <- -1)
+              Var.Set openVar false
+              Var.Set highlightedIndex -1)
         ]
       | OpenOn.Click -> []
 

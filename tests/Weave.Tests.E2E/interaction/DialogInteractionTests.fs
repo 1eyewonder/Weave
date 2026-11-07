@@ -74,7 +74,9 @@ type DialogInteractionTests(fixture: TestFixture) =
   member this.``focus returns to trigger element after dialog closes``() = task {
     do! this.NavigateTo("dialog-triggered")
     let triggerButton = this.Page.Locator("#open-dialog-btn")
-    do! triggerButton.ClickAsync()
+    do! triggerButton.FocusAsync()
+    do! this.Expect(triggerButton).ToBeFocusedAsync()
+    do! triggerButton.PressAsync("Enter")
     let dialogWindow = this.Page.Locator(".weave-dialog__window")
     do! this.Expect(dialogWindow).ToBeFocusedAsync()
     do! this.Page.Keyboard.PressAsync("Escape")

@@ -194,3 +194,25 @@ type ButtonMenuInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync(key)
     do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("Action 1")
   }
+
+  [<Fact>]
+  member this.``disabled menu button cannot activate and wrapped link can``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let menu = this.Page.GetByTestId("edge-menu")
+    let trigger = menu.Locator(".weave-button-menu__trigger")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(menu).ToHaveClassAsync(Regex("weave-button-menu--open"))
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    let disabled = menu.Locator("[role=menuitem]").First
+    do! this.Expect(disabled).ToBeFocusedAsync()
+    do! this.Expect(disabled).ToHaveAccessibleNameAsync("Unavailable")
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("none")
+    do! this.Page.Keyboard.PressAsync("ArrowUp")
+    let link = menu.Locator("[role=menuitem]").Last
+    do! this.Expect(link).ToBeFocusedAsync()
+    do! this.Expect(link).ToHaveAccessibleNameAsync("Wrapped link")
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("link")
+  }

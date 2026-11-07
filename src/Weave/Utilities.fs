@@ -9,6 +9,45 @@ open Weave.CssHelpers
 open Weave.CssHelpers.Core
 
 /// <summary>
+/// Watches a DOM element and invokes a callback when it is removed from the
+/// document. Uses a MutationObserver on <c>document.body</c> with subtree
+/// observation. Call <c>Disconnect</c> to stop observing early.
+/// </summary>
+[<JavaScript>]
+module DomRemovalListener =
+
+  [<Inline "new MutationObserver($0)">]
+  let private createObserver (callback: unit -> unit) : obj = X<obj>
+
+  [<Inline "$0.observe($1, $2)">]
+  let private observe (obs: obj) (target: obj) (options: obj) : unit = X<unit>
+
+  type Listener = {
+    mutable Observer: obj option
+  } with
+
+    member this.Watch(el: Dom.Element, onRemoved: unit -> unit) =
+      this.Disconnect()
+
+      let obs =
+        createObserver (fun () ->
+          if not (As<bool>(el?isConnected)) then
+            this.Disconnect()
+            onRemoved ())
+
+      this.Observer <- Some obs
+      observe obs JS.Document?body (New [ "childList" => true; "subtree" => true ])
+
+    member this.Disconnect() =
+      match this.Observer with
+      | Some obs ->
+        obs?disconnect ()
+        this.Observer <- None
+      | None -> ()
+
+  let create () = { Observer = None }
+
+/// <summary>
 /// Listens for events on the document and invokes a callback when the event
 /// target is outside all of the tracked element refs.
 /// </summary>
@@ -54,13 +93,45 @@ module DocumentEventListener =
   /// </summary>
   let watch (eventName: string) (refs: Dom.Element ref list) (onEvent: unit -> unit) (isActive: View<bool>) =
     let listener = create ()
+    let removal = DomRemovalListener.create ()
+    let currentActive = Var.Create false
+    let owner = Var.Create<Dom.Element option> None
 
-    isActive
-    |> Doc.sinkCached (fun active ->
-      if active then
-        listener.Attach(eventName, refs, onEvent)
-      else
-        listener.Detach eventName)
+    let synchronize () =
+      match owner.Value with
+      | Some el when currentActive.Value ->
+        listener.Attach(
+          eventName,
+          refs,
+          fun () ->
+            if As<bool>(el?isConnected) then
+              onEvent ()
+            else
+              listener.Detach eventName
+        )
+
+        removal.Watch(
+          el,
+          fun () ->
+            Var.Set owner None
+            listener.Detach eventName
+        )
+      | _ ->
+        listener.Detach eventName
+        removal.Disconnect()
+
+    let watcher =
+      isActive
+      |> Doc.sinkCached (fun active ->
+        Var.Set currentActive active
+        synchronize ())
+
+    span [
+      Attr.Style "display" "none"
+      on.afterRender (fun el ->
+        Var.Set owner (Some el)
+        synchronize ())
+    ] [ watcher ]
 
   let onClick = watch "click"
 
@@ -177,45 +248,6 @@ module MenuKeyboardNav =
         let fh = fun (e: Dom.Event) -> handleFocusOut e
         containerRef.Value.AddEventListener("focusout", fh)
         focusOutHandler.Value <- Some fh)
-
-/// <summary>
-/// Watches a DOM element and invokes a callback when it is removed from the
-/// document. Uses a MutationObserver on <c>document.body</c> with subtree
-/// observation. Call <c>Disconnect</c> to stop observing early.
-/// </summary>
-[<JavaScript>]
-module DomRemovalListener =
-
-  [<Inline "new MutationObserver($0)">]
-  let private createObserver (callback: unit -> unit) : obj = X<obj>
-
-  [<Inline "$0.observe($1, $2)">]
-  let private observe (obs: obj) (target: obj) (options: obj) : unit = X<unit>
-
-  type Listener = {
-    mutable Observer: obj option
-  } with
-
-    member this.Watch(el: Dom.Element, onRemoved: unit -> unit) =
-      this.Disconnect()
-
-      let obs =
-        createObserver (fun () ->
-          if not (As<bool>(el?isConnected)) then
-            this.Disconnect()
-            onRemoved ())
-
-      this.Observer <- Some obs
-      observe obs JS.Document?body (New [ "childList" => true; "subtree" => true ])
-
-    member this.Disconnect() =
-      match this.Observer with
-      | Some obs ->
-        obs?disconnect ()
-        this.Observer <- None
-      | None -> ()
-
-  let create () = { Observer = None }
 
 /// <summary>
 /// Tracks the size of a DOM element on window resize and exposes reactive

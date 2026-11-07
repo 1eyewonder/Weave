@@ -132,6 +132,83 @@ module Client =
         "Use a URL matching where your app serves the copied file. Your existing WebSharper SPA entry point should render a Doc into an element in your page, as in the example above. WebSharper's own setup determines your script and host configuration."
     ]
 
+  let private templatePreview name description slug command =
+    let image mode =
+      let path = sprintf "assets/templates/%s-%s.jpg" slug mode
+      let label = sprintf "%s template in %s mode" name mode
+
+      a [
+        Attr.Class("docs-template-preview__image docs-template-preview__image--" + mode)
+        attr.href path
+        Attr.Create "aria-label" (label + "; open full-size screenshot")
+      ] [
+        img [
+          attr.src path
+          attr.alt label
+          Attr.Create "loading" "lazy"
+          Attr.Create "width" "1440"
+          Attr.Create "height" "900"
+        ] []
+      ]
+
+    figure [ Attr.Class "docs-template-preview" ] [
+      image "light"
+      image "dark"
+      figcaption [ Attr.Class "docs-template-preview__caption" ] [
+        strong [] [ text name ]
+        span [] [ text description ]
+        Helpers.inlineCode command
+      ]
+    ]
+
+  let private templateGallery () =
+    div [ Attr.Class "docs-template-gallery" ] [
+      templatePreview "Minimal app" "A small starting point for a custom app." "app" "weave-app"
+      templatePreview
+        "Project workspace"
+        "A project tracker with list and board views."
+        "projects"
+        "weave-projects"
+      templatePreview
+        "Repository workspace"
+        "Browse sample code, branches, and issues."
+        "repository"
+        "weave-repository"
+      templatePreview
+        "Business dashboard"
+        "Explore metrics and a transactions table."
+        "dashboard"
+        "weave-dashboard"
+    ]
+
+  let private starterTemplates () =
+    Helpers.textSection "4. Start from a template (optional)" [
+      Helpers.bodyText
+        "Start with an editable F# application and customize it for your project. The NuGet workflow below is planned for the template release; the template and Weave packages are not yet published."
+      Helpers.bodyText
+        "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
+      templateGallery ()
+      Helpers.bodyText "Once the packages are available, install the template package with the .NET 10 SDK:"
+      codeBlock "bash" "dotnet new install Weave.Templates"
+      Helpers.bodyText
+        "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
+      codeBlock
+        "bash"
+        """dotnet new weave-app -n MyApp
+dotnet new weave-projects -n MyProjects
+dotnet new weave-repository -n MyRepository
+dotnet new weave-dashboard -n MyDashboard"""
+      Helpers.bodyText "For example, after creating MyProjects, run it with:"
+      codeBlock
+        "bash"
+        """cd MyProjects
+dotnet run --urls http://localhost:5000"""
+      Helpers.bodyText
+        "Open http://localhost:5000. Build and deploy the generated project you chose using your preferred hosting setup. Deployment configuration is not included, and the sample data is not persisted. The planned NuGet packages will supply Weave and its styles without a local repository checkout."
+      Helpers.bodyText
+        "In the generated project, start with README.md; the workspace starters separate sample data (Domain.fs), state (State.fs), page components (Views.fs), and CSS. Use the light/dark toggle and edit the stylesheet's body theme variables to make the starter yours. To uninstall the templates, run dotnet new uninstall Weave.Templates."
+    ]
+
   let private nextSteps () =
     Helpers.textSection "Where to go next" [
       Helpers.bodyText "Continue exploring with live examples, styling guides, and a complete application."
@@ -159,6 +236,7 @@ module Client =
             "03"
             "Use in your app"
             "Connect an existing project"
+          stepLink "4.-start-from-a-template-optional" "04" "Try a template" "Start with a complete workspace"
         ]
         Helpers.divider ()
         introduction ()
@@ -168,6 +246,8 @@ module Client =
         firstPage ()
         Helpers.divider ()
         existingProject ()
+        Helpers.divider ()
+        starterTemplates ()
         Helpers.divider ()
         nextSteps ()
       ],

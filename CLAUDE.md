@@ -76,7 +76,7 @@ dotnet fantomas .              # format all files
 src/
   Weave/                  # Core library (netstandard2.0)
     Helpers.fs            # View/Doc/Attr combinators
-    Theming.fs            # Light/Dark theme system, PaletteColor
+    Theming.fs            # Light/Dark mode helpers
     components/Core.fs    # TypedCssClasses (Css), CssHelpers (cl, cls), HTML aliases
     components/Utilities.fs  # DocumentEventListener, ResizeListener, Disabled
     components/*.fs       # ~30 UI components
@@ -147,4 +147,4 @@ Detailed patterns and code templates live in the agent/skill definitions. Quick 
 - `Helpers.fs`: `View` extensions (`mapCached`, `zip`, `not`), `ViewOption` monad, `Attr.bindOption`, `Attr.classSelection`
 - `CssHelpers` (in `Core.fs`): `cl`, `cls`, `Css` (TypedCssClasses), `Palette` module (CSS var refs), `Attr.toggleStyleOrDefault`
 - `Utilities.fs`: `DocumentEventListener` (click-outside detection), `ResizeListener` (ResizeObserver), `Disabled` class helper
-- `Theming.fs`: `ThemeMode` (Light/Dark), `ThemePalette`, `PaletteColor`
+- `Theming.fs`: `ThemeMode` (Light/Dark), mode helpers; CSS custom properties define palettes

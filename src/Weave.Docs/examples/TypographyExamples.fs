@@ -443,20 +443,8 @@ div [ Typography.caption ] [ text "Last updated: December 20, 2025" ]
     --weave-weight-bold: 700;
 }
 
-/* 3. Or override programmatically in F#: */
-open Weave.Theming
-
-let theme =
-    ThemeBuilder.empty
-    |> ThemeBuilder.withDisplayFont "\"Playfair Display\", serif"
-    |> ThemeBuilder.withBodyFont "\"Inter\", sans-serif"
-    |> ThemeBuilder.withWeightLight "400"
-    |> ThemeBuilder.withWeightBold "700"
-
-Theming.initialize theme Light
-
-(* Per-variant escape hatch — override a single variant: *)
-(* :root { --typography-h6-weight: 500; } *)
+/* Per-variant escape hatch — override a single variant: */
+:root { --typography-h6-weight: 500; }
 """
 
     Helpers.codeSampleSection "Customizing Fonts" description content code

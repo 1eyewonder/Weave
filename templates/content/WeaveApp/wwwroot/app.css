@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  background: var(--palette-background);
+  color: var(--palette-text-primary);
+  font-family: var(--weave-font-family-body);
+}
+
+.theme-toggle {
+  margin: 24px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--palette-lines-default);
+  border-radius: 6px;
+  background: var(--palette-surface);
+  color: var(--palette-text-primary);
+  cursor: pointer;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--palette-primary);
+  outline-offset: 2px;
+}

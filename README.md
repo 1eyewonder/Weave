@@ -71,7 +71,50 @@ This approach improves IntelliSense discoverability, reduces invalid style combi
 
 ## Theming
 
-Weave includes built-in theming with support for light and dark modes, runtime theme switching, and centralized theme configuration through `Theming.fs`.
+Weave's CSS custom properties define its light and dark palettes. Load application CSS after Weave and override tokens on the body that holds `data-theme`:
+
+```css
+:root { --weave-font-family-body: Arial, sans-serif; }
+
+body:not([data-theme]), body[data-theme="light"] {
+  --palette-primary: #6200ea;
+  --palette-primary-text: #fff;
+  --palette-primary-lighten: #7c4dff;
+  --palette-primary-darken: #4a00b8;
+  --palette-primary-rgb: 98, 0, 234;
+  --palette-surface: #fff;
+  --palette-text-primary: #21243a;
+  --palette-text-primary-rgb: 33, 36, 58;
+}
+
+body[data-theme="dark"] {
+  --palette-primary: #b388ff;
+  --palette-primary-text: #201b2e;
+  --palette-primary-lighten: #d1b3ff;
+  --palette-primary-darken: #8e5fff;
+  --palette-primary-rgb: 179, 136, 255;
+  --palette-surface: #202333;
+  --palette-text-primary: #e6ebf5;
+  --palette-text-primary-rgb: 230, 235, 245;
+}
+```
+
+Common customization tokens include `--palette-background`, `--palette-background-paper`, `--palette-surface`, `--palette-text-primary`, `--palette-text-secondary`, `--palette-divider`, `--palette-divider-light`, `--palette-lines-default`, `--palette-lines-inputs`, and `--weave-font-family-display`, `--weave-font-family-body`, and `--weave-font-family-mono`. Primary, secondary, tertiary, success, error, warning, and info colors each have a main token and `-text`, `-lighten`, `-darken`, and `-rgb` companions. RGB companions contain comma-separated channels, not an `rgb()` function. Override matching companions together where components use them for contrast, hover, or transparency. Set shared font-role tokens on `:root`, where typography variants resolve them. To change a specific variant by mode, set a token such as `--typography-body1-family` on the mode selector. The complete defaults are in [the theme stylesheet](src/Weave/scss/core/_themes.scss) and [the typography variables](src/Weave/scss/core/_variables.scss).
+
+The documentation site’s **Theming** page includes a grouped color and typography variable reference, light/dark defaults, and examples.
+
+Use F# to select the CSS mode:
+
+```fsharp
+open Weave.Theming
+
+setMode (detectSystemPreference ()) // reads the current OS preference once
+let newMode = toggleMode ()         // returns the selected mode
+```
+
+`setMode` writes `data-theme` to `body`; `getMode` returns `Light` when it is absent or not `dark`. The helpers do not persist preferences or watch for OS changes. Set the initial mode as early as practical to minimize a flash of the wrong mode.
+
+**Migration:** The F# palette/configuration APIs (`PaletteColor`, `ThemePalette`, `TypographyConfig`, `ThemeConfig`, `ThemeBuilder`, `ThemeController`, `applyTheme`, and initialization helpers taking a configuration) have been removed. Move their colors and typography to CSS rules like those above, replace initialization with `setMode` (or `setMode (detectSystemPreference ())`), and use `toggleMode` for switching. This is a breaking API change.
 
 ### Dark Theme
 

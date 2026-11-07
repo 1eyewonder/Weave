@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Weave",
+  "classifications": ["Web", "F#", "WebSharper", "Repository"],
+  "identity": "Weave.Templates.Repository",
+  "name": "Weave Repository Workspace (development preview)",
+  "shortName": "weave-repository",
+  "sourceName": "WeaveStarter",
+  "preferNameDirectory": true,
+  "tags": { "language": "F#", "type": "project" },
+  "sources": [{ "exclude": ["**/bin/**", "**/obj/**", ".template.config/**"] }]
+}

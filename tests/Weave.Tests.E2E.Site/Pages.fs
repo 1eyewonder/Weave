@@ -773,81 +773,22 @@ module Pages =
       ]
     ]
 
-  let private themeSwitchPage () =
-    let color =
-      Theming.PaletteColor.create "#123456" "#ffffff" "#234567" "#012345" "18, 52, 86"
+  let private themePage useSystemPreference =
+    let initialMode =
+      if useSystemPreference then
+        Theming.detectSystemPreference ()
+      else
+        Theming.Light
 
-    let light = {
-      Theming.ThemePalette.empty with
-          Primary = Some color
-          Background = Some "#abcdef"
-    }
+    Theming.setMode initialMode
 
-    let config = { Theming.ThemeConfig.empty with LightPalette = light }
-    Theming.initialize config Theming.Light
-
-    div [] [
-      Button.create (
-        text "Swatch",
-        ignore,
-        attrs = [
-          Attr.Create "data-testid" "fallback-swatch"
-          Button.Variant.filled
-          Button.Color.primary
-        ]
-      )
-      Button.create (
-        text "Dark",
-        (fun () -> Theming.applyTheme config Theming.Dark),
-        attrs = [ Attr.Create "data-testid" "theme-dark" ]
-      )
-      Button.create (
-        text "Light",
-        (fun () -> Theming.applyTheme config Theming.Light),
-        attrs = [ Attr.Create "data-testid" "theme-light" ]
-      )
-    ]
-
-  let private themeCoveragePage useSystemPreference =
-    let lightColor =
-      Theming.PaletteColor.create "#123456" "#fefefe" "#234567" "#012345" "18, 52, 86"
-
-    let darkColor =
-      Theming.PaletteColor.create "#876543" "#101010" "#987654" "#765432" "135, 101, 67"
-
-    let secondary =
-      Theming.PaletteColor.create "#aabbcc" "#111111" "#bbccee" "#8899aa" "170, 187, 204"
-
-    let light = {
-      Theming.ThemePalette.empty with
-          Primary = Some lightColor
-          Secondary = Some secondary
-          Background = Some "#abcdef"
-    }
-
-    let dark = {
-      Theming.ThemePalette.empty with
-          Primary = Some darkColor
-          TextPrimary = Some "#ddeeff"
-    }
-
-    let typography = { Theming.TypographyConfig.empty with BodyFamily = Some "Georgia" }
-
-    let config = {
-      Theming.ThemeConfig.empty with
-          LightPalette = light
-          DarkPalette = dark
-          Typography = typography
-    }
-
-    if useSystemPreference then
-      Theming.initializeWithSystemPreference config |> ignore
-    else
-      Theming.initialize config Theming.Light
+    let recordMode mode =
+      let value = if mode = Theming.Dark then "dark" else "light"
+      JS.Document.Body.SetAttribute("data-observed-mode", value)
 
     div [] [
       Button.create (
-        text "Swatch",
+        text "Primary",
         ignore,
         attrs = [
           Attr.Create "data-testid" "theme-swatch"
@@ -855,98 +796,31 @@ module Pages =
           Button.Color.primary
         ]
       )
-      div [
-        Attr.Create "data-testid" "theme-secondary"
-        Attr.Style "color" "var(--palette-secondary)"
-      ] [ text "Secondary" ]
+      div [ Attr.Class "weave-card"; Attr.Create "data-testid" "theme-card" ] [ text "Card" ]
+      div [ Typography.body1; Attr.Create "data-testid" "theme-body" ] [ text "Body" ]
       Button.create (
-        text "Dark",
-        (fun () -> Theming.applyTheme config Theming.Dark),
-        attrs = [ Attr.Create "data-testid" "coverage-dark" ]
+        text "Toggle",
+        (fun () -> Theming.toggleMode () |> recordMode),
+        attrs = [ Attr.Create "data-testid" "theme-toggle" ]
       )
       Button.create (
         text "Light",
-        (fun () -> Theming.applyTheme config Theming.Light),
-        attrs = [ Attr.Create "data-testid" "coverage-light" ]
+        (fun () ->
+          Theming.setMode Theming.Light
+          Theming.getMode () |> recordMode),
+        attrs = [ Attr.Create "data-testid" "theme-light" ]
       )
       Button.create (
-        text "Toggle mode",
-        (fun () -> Theming.toggleMode () |> ignore),
-        attrs = [ Attr.Create "data-testid" "coverage-toggle" ]
-      )
-      Button.create (
-        text "Empty theme",
-        (fun () -> Theming.applyTheme Theming.ThemeConfig.empty Theming.Light),
-        attrs = [ Attr.Create "data-testid" "coverage-empty" ]
-      )
-    ]
-
-  let private typographyCoveragePage () =
-    let themeA =
-      Theming.ThemeBuilder.empty
-      |> Theming.ThemeBuilder.withBodyFont "Georgia"
-      |> Theming.ThemeBuilder.withDisplayFont "Verdana"
-      |> Theming.ThemeBuilder.withWeightBold "600"
-
-    let themeB =
-      Theming.ThemeBuilder.empty
-      |> Theming.ThemeBuilder.withBodyFont "Arial"
-      |> Theming.ThemeBuilder.withDisplayFont "Tahoma"
-      |> Theming.ThemeBuilder.withWeightBold "800"
-
-    let partial =
-      Theming.ThemeBuilder.empty |> Theming.ThemeBuilder.withBodyFont "Arial"
-
-    Theming.initialize Theming.ThemeBuilder.empty Theming.Light
-
-    div [] [
-      div [ Typography.body1; Attr.Create "data-testid" "typography-body" ] [ text "Body sample" ]
-      div [ Typography.h6; Attr.Create "data-testid" "typography-heading" ] [ text "Heading sample" ]
-      Button.create (
-        text "Theme A",
-        (fun () -> Theming.applyTheme themeA Theming.Light),
-        attrs = [ Attr.Create "data-testid" "typography-a" ]
-      )
-      Button.create (
-        text "Theme B",
-        (fun () -> Theming.applyTheme themeB Theming.Light),
-        attrs = [ Attr.Create "data-testid" "typography-b" ]
-      )
-      Button.create (
-        text "Partial",
-        (fun () -> Theming.applyTheme partial Theming.Light),
-        attrs = [ Attr.Create "data-testid" "typography-partial" ]
-      )
-      Button.create (
-        text "Default",
-        (fun () -> Theming.applyTheme Theming.ThemeBuilder.empty Theming.Light),
-        attrs = [ Attr.Create "data-testid" "typography-default" ]
+        text "Dark",
+        (fun () ->
+          Theming.setMode Theming.Dark
+          Theming.getMode () |> recordMode),
+        attrs = [ Attr.Create "data-testid" "theme-dark" ]
       )
     ]
 
   let private plainDialogPage () =
     Dialog.create (text "Plain dialog title", text "Dialog content")
-
-  let private themingPage () =
-    let custom =
-      Theming.PaletteColor.create "#7c3aed" "#ffffff" "#a78bfa" "#5b21b6" "124, 58, 237"
-
-    Theming.initialize
-      (Theming.ThemeBuilder.weaveDesign
-       |> Theming.ThemeBuilder.withPrimary custom custom)
-      Theming.Light
-
-    div [] [
-      Button.create (
-        text "Custom primary",
-        ignore,
-        attrs = [
-          Attr.Create "data-testid" "themed-button"
-          Button.Variant.filled
-          Button.Color.primary
-        ]
-      )
-    ]
 
   let private appbarPage () =
     div [] [
@@ -1361,11 +1235,8 @@ module Pages =
     | "alert" -> alertPage ()
     | "card" -> cardPage ()
     | "table" -> tablePage ()
-    | "typography-coverage" -> typographyCoveragePage ()
-    | "theme-coverage" -> themeCoveragePage false
-    | "theme-system" -> themeCoveragePage true
-    | "theme-switch" -> themeSwitchPage ()
-    | "theming" -> themingPage ()
+    | "theme" -> themePage false
+    | "theme-system" -> themePage true
     | "appbar" -> appbarPage ()
     | "listener-removal" -> listenerRemovalPage ()
     | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false

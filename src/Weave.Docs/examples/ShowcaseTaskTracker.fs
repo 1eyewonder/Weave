@@ -78,19 +78,27 @@ module ShowcaseTaskTracker =
       |> List.map (fun label -> SelectItem.create (text label, label, label))
       |> View.Const
 
-    let filteredItems =
-      (items.View, showCompleted.View)
-      ||> View.Map2(fun list show ->
-        if show then
-          list
-        else
-          list |> List.filter (fun t -> not t.IsCompleted.Value))
-
-    let totalCount = items.View |> View.Map List.length
-
-    let completedCount =
+    // Subscribe to each nested completion Var as well as changes to the list.
+    let itemStates =
       items.View
-      |> View.Map(List.filter (fun t -> t.IsCompleted.Value) >> List.length)
+      |> View.Bind(fun list ->
+        (list, View.Const [])
+        ||> List.foldBack (fun item acc ->
+          View.Map2 (fun completed rest -> (item, completed) :: rest) item.IsCompleted.View acc))
+
+    let filteredItems =
+      showCompleted.View
+      |> View.Bind(fun show ->
+        if show then
+          items.View
+        else
+          itemStates
+          |> View.Map(fun states ->
+            states
+            |> List.choose (fun (item, completed) -> if completed then None else Some item)))
+
+    let totalCount = items.View |> View.MapCached List.length
+    let completedCount = itemStates |> View.Map(List.filter snd >> List.length)
 
     let description =
       Helpers.bodyText
@@ -174,13 +182,19 @@ module ShowcaseTaskTracker =
         ]
 
         // Task list
-        filteredItems
-        |> Doc.BindView(fun list ->
+        (filteredItems, totalCount)
+        ||> View.Map2(fun list total -> list, total)
+        |> Doc.BindView(fun (list, total) ->
           if List.isEmpty list then
             Alert.create (
               div [ Flex.Flex.allSizes; AlignItems.center; Gap.All.g2 ] [
                 Icon.create (Icon.Text Text.Checklist)
-                text "No tasks yet — add one above!"
+                text (
+                  if total = 0 then
+                    "No tasks yet — add one above!"
+                  else
+                    "No active tasks — show completed tasks to see them."
+                )
               ],
               attrs = [ Alert.Color.info; Alert.Variant.outlined; Margin.Top.extraSmall ]
             )
@@ -198,12 +212,6 @@ module ShowcaseTaskTracker =
                   Margin.Bottom.extraSmall
                   Elevation.e1
                 ] [
-                  Checkbox.create (
-                    item.IsCompleted,
-                    View.Const "",
-                    attrs = [ Checkbox.Color.primary; Density.compact ]
-                  )
-
                   div [
                     FlexItem.Flex.allSizes
                     Typography.body1
@@ -213,7 +221,13 @@ module ShowcaseTaskTracker =
                     Attr.DynamicStyle
                       "opacity"
                       (item.IsCompleted.View |> View.Map(fun c -> if c then "0.5" else "1"))
-                  ] [ text item.Text ]
+                  ] [
+                    Checkbox.create (
+                      item.IsCompleted,
+                      View.Const item.Text,
+                      attrs = [ Checkbox.Color.primary; Density.compact ]
+                    )
+                  ]
 
                   Chip.create (
                     text (priorityToString item.Priority),
@@ -223,7 +237,7 @@ module ShowcaseTaskTracker =
                   IconButton.create (
                     Icon.create (Icon.UiActions UiActions.Delete, attrs = [ Attr.Style "font-size" "18px" ]),
                     onClick = (fun () -> removeTask item.Id),
-                    attrs = [ Density.compact ]
+                    attrs = [ Density.compact; Attr.Create "aria-label" ("Delete " + item.Text) ]
                   )
                 ]
             ])
@@ -361,7 +375,7 @@ Grid.create ([
 let removeTask (id: int) =
     Var.Update items (List.filter (fun t -> t.Id <> id))
 
-// Reactive task list rendering
+// Start with all tasks; the Filtering & Stats section derives filteredItems.
 items.View
 |> Doc.BindView(fun list ->
     if List.isEmpty list then
@@ -373,21 +387,20 @@ items.View
         div [] [
             for item in list do
                 div [ Flex.Flex.allSizes; AlignItems.center; Gap.All.g2 ] [
-                    // Two-way bound checkbox
-                    Checkbox.create(
-                        item.IsCompleted,
-                        View.Const "",
-                        attrs = [ Checkbox.Color.primary ]
-                    )
-
-                    // Reactive strikethrough when completed
+                    // Label the checkbox with the task text and style it reactively
                     div [
                         FlexItem.Flex.allSizes
                         Attr.DynamicStyle "text-decoration"
                             (item.IsCompleted.View
                              |> View.Map(fun c ->
                                  if c then "line-through" else "none"))
-                    ] [ text item.Text ]
+                    ] [
+                        Checkbox.create(
+                            item.IsCompleted,
+                            View.Const item.Text,
+                            attrs = [ Checkbox.Color.primary ]
+                        )
+                    ]
 
                     // Priority chip — color from pattern match
                     Chip.create(
@@ -398,7 +411,8 @@ items.View
                     // Delete button
                     IconButton.create(
                         Icon.create(Icon.UiActions UiActions.Delete),
-                        onClick = (fun () -> removeTask item.Id)
+                        onClick = (fun () -> removeTask item.Id),
+                        attrs = [ Attr.Create "aria-label" ("Delete " + item.Text) ]
                     )
                 ]
         ])"""
@@ -408,26 +422,40 @@ items.View
   let private filteringSection () =
     let description =
       Helpers.bodyText
-        "A Switch toggles the 'show completed' filter. The completed/total count is a computed View — no imperative counters needed. View.Map2 combines the list and filter state into a single derived view."
+        "A Switch toggles the 'show completed' filter. Each task has its own completion Var, so View.Bind and View.Map2 combine those nested views with the changing task list. Both the filter and count then update when a checkbox changes."
 
     let content = Doc.Empty
 
     let code =
       """let showCompleted = Var.Create true
 
-// Derived filtered list, recomputed whenever items or the filter changes.
-// Bind the task list to filteredItems instead of items.View to apply it.
-let filteredItems =
-    (items.View, showCompleted.View)
-    ||> View.Map2(fun list show ->
-        if show then list
-        else list |> List.filter (fun t -> not t.IsCompleted.Value))
-
-// Computed stats — no manual counter, just View.Map
-let totalCount = items.View |> View.Map List.length
-let completedCount =
+// Subscribe to the current list and to every task's completion state.
+// View.Bind rebuilds the combined view when tasks are added or removed.
+let itemStates =
     items.View
-    |> View.Map (List.filter (fun t -> t.IsCompleted.Value) >> List.length)
+    |> View.Bind(fun list ->
+        (list, View.Const [])
+        ||> List.foldBack (fun item acc ->
+            View.Map2 (fun completed rest -> (item, completed) :: rest)
+                item.IsCompleted.View acc))
+
+// When showing all tasks, listen to the list directly so toggling a checkbox
+// does not rebuild its row and remove keyboard focus.
+let filteredItems =
+    showCompleted.View
+    |> View.Bind(fun show ->
+        if show then items.View
+        else
+            itemStates
+            |> View.Map(fun states ->
+                states |> List.choose (fun (item, completed) ->
+                    if completed then None else Some item)))
+
+let totalCount = items.View |> View.MapCached List.length
+let completedCount = itemStates |> View.Map (List.filter snd >> List.length)
+
+// Bind the task list to filteredItems. When it is empty, use totalCount
+// to distinguish no tasks from tasks hidden by the filter.
 
 // The filter bar
 Switch.create(

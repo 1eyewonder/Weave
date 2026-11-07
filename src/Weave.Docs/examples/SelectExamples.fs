@@ -512,7 +512,7 @@ Select.create(
 
   let private disabledReadonlyExample () =
     let disabledVal = Var.Create<string option>(Some "Locked")
-    let readonlyVal = Var.Create<string option>(Some "Read Only")
+    let readonlyVal = Var.Create<string option>(Some "Locked")
 
     let items =
       [ "Locked"; "Open"; "Pending" ]

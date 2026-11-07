@@ -716,13 +716,16 @@ Grid.create(
         let codeContent =
           codeView
           |> Doc.BindView(fun codeStr ->
-            pre [] [
-              code [
-                SurfaceColor.BackgroundColor.background
-                Attr.Class "language-fsharp"
-                on.afterRender Helpers.highlightCodeElement
-                Typography.Family.mono
-              ] [ text codeStr ]
+            div [ Attr.Class "docs-copy-code-wrapper" ] [
+              Helpers.copyButton codeStr
+              pre [] [
+                code [
+                  SurfaceColor.BackgroundColor.background
+                  Attr.Class "language-fsharp"
+                  on.afterRender Helpers.highlightCodeElement
+                  Typography.Family.mono
+                ] [ text codeStr ]
+              ]
             ])
 
         ExpansionPanelContainer.create (

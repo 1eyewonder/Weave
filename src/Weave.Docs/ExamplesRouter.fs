@@ -26,44 +26,72 @@ module ExamplesRouter =
         // Above-fold hero — full-bleed, no max-width cap
         div [ Attr.Class "docs-home-above-fold docs-weave-pattern" ] [
           div [ Attr.Class "docs-hero" ] [
+            div [ Attr.Class "docs-hero__content" ] [
+              div [ Attr.Class "docs-hero__brand" ] [
+                img [
+                  attr.src "assets/weave-logo.png"
+                  attr.alt "Weave Logo"
+                  Attr.Class "docs-hero__logo"
+                ] []
+                div [] [
+                  h1 [ Attr.Class "docs-hero__name" ] [ text "Weave" ]
+                  div [ Attr.Class "docs-hero__tagline" ] [ text "Threading Logic. Fabricating UI." ]
+                ]
+              ]
+              div [ Attr.Class "docs-hero__eyebrow" ] [ text "F#  ·  WEBSHARPER  ·  UI" ]
+              h2 [ Attr.Class "docs-hero__promise" ] [ text "From idea to interface, in F#." ]
+              p [ Attr.Class "docs-hero__intro" ] [
+                text "Bring your UI to life with reactive, reusable building blocks for WebSharper."
+              ]
+              div [ Attr.Class "docs-hero-cta" ] [
+                Button.create (
+                  div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
+                    text "Get Started"
+                    Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
+                  ],
+                  onClick = (fun () -> navigate GettingStartedExamples),
+                  attrs = [ Button.Variant.outlined; Button.Color.primary ]
+                )
 
-            div [
-              Flex.Flex.allSizes
-              FlexDirection.Column.allSizes
-              AlignItems.center
-              Margin.Bottom.medium
-            ] [
-              img [
-                attr.src "assets/weave-logo.png"
-                attr.alt "Weave Logo"
-                Attr.Style "height" "80px"
-                Attr.Style "object-fit" "contain"
-                Margin.Bottom.extraSmall
-              ] []
-              div [ Typography.h2; Margin.Bottom.extraSmall ] [ text "Weave" ]
-              div [
-                Typography.body1
-                Attr.Style "font-style" "italic"
-                Attr.Style "opacity" "0.7"
-              ] [ text "Threading Logic. Fabricating UI." ]
+                Button.create (
+                  text "Explore a showcase",
+                  onClick = (fun () -> navigate ShowcaseTaskTracker),
+                  attrs = [ Button.Variant.outlined ]
+                )
+              ]
             ]
+            div [ Attr.Class "docs-hero__preview" ] [
+              div [ Attr.Class "docs-hero__preview-top" ] [
+                span [ Attr.Class "docs-hero__dots"; Attr.Create "aria-hidden" "true" ] [
+                  span [] []
+                  span [] []
+                  span [] []
+                ]
+                span [] [ text "A LITTLE WEAVE IN ACTION" ]
+              ]
+              div [ Attr.Class "docs-hero__preview-body" ] [
+                div [ Attr.Class "docs-hero__preview-label" ] [ text "LIVE EXAMPLE" ]
+                div [ Attr.Class "docs-hero__preview-title" ] [ text "Make it yours." ]
+                p [] [ text "A little state, a little style, and your interface comes to life." ]
+                let count = Var.Create 0
 
-            div [ Attr.Class "docs-hero-cta" ] [
-              Button.create (
-                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
-                  text "Get Started"
-                  Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
-                ],
-                onClick = (fun () -> navigate GettingStartedExamples),
-                attrs = [ Button.Variant.outlined; Button.Color.primary ]
-              )
+                div [ Attr.Class "docs-hero__demo" ] [
+                  div [] [
+                    div [ Attr.Class "docs-hero__demo-caption" ] [ text "BUTTON CLICKS" ]
+                    div [ Attr.Class "docs-hero__demo-count" ] [ textView (count.View |> View.Map string) ]
+                  ]
+                  Button.primary (
+                    text "Click me",
+                    onClick = (fun () -> Var.Update count ((+) 1)),
+                    attrs = [ Button.Variant.filled ]
+                  )
+                ]
 
-              Button.create (
-                div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [ githubSvg (); text "GitHub" ],
-                onClick =
-                  (fun () -> JS.Window.Open("https://github.com/1eyewonder/Weave", "_blank") |> ignore),
-                attrs = [ Button.Variant.outlined ]
-              )
+                div [ Attr.Class "docs-hero__preview-foot" ] [
+                  text "REACTIVE STATE"
+                  span [] [ text "Var  →  View  →  UI" ]
+                ]
+              ]
             ]
           ]
 
@@ -164,25 +192,25 @@ module ExamplesRouter =
 
               Grid.create (
                 [
-                  "Type-Safe by Default",
+                  "Guided by Types",
                   Icon.Action Action.Verified,
-                  "Styled through DUs and typed helpers — with full access to WebSharper's raw functionality when you need flexibility."
+                  "F# types and Weave's typed helpers make intent clear and help catch mistakes as you build. Use native WebSharper attributes when you need more control."
 
-                  "Functional-First API",
+                  "Readable F#",
                   Icon.Action Action.Code,
-                  "Clean, composable APIs designed for F#, not ported from another ecosystem."
+                  "Express UI and behavior concisely in one language. Clear, composable code is easier for teammates and coding agents to navigate and extend."
 
                   "Built-In Theming",
                   Icon.Images Images.Palette,
                   "Light and dark mode with CSS custom properties. One-line toggle, no config."
 
-                  "Seamless WebSharper Integration",
+                  "Built for WebSharper",
                   Icon.Action Action.Extension,
-                  "Built on WebSharper's reactive model. Var/View bindings, native Attr/Doc — everything composes naturally."
+                  "Use WebSharper's reactive Var and View model alongside native Attr and Doc values to connect state and UI."
 
-                  "Less Boilerplate",
+                  "Composable Building Blocks",
                   Icon.UiActions UiActions.Bolt,
-                  "Sensible defaults out of the box. Customize through ?attrs only when you actually need to."
+                  "Combine components, layouts, and styling helpers to build larger interfaces, with sensible defaults and customization through attributes."
 
                   "Structured Styling",
                   Icon.Maps Maps.Layers,

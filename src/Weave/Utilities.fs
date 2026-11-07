@@ -179,68 +179,6 @@ module MenuKeyboardNav =
         focusOutHandler.Value <- Some fh)
 
 /// <summary>
-/// Observes the size of a DOM element using the browser ResizeObserver API
-/// and exposes reactive Width and Height views.
-/// </summary>
-[<JavaScript>]
-module ResizeListener =
-
-  type ElementSize = {
-    Width: Var<float>
-    Height: Var<float>
-  } with
-
-    member this.WidthView = this.Width.View
-
-    member this.HeightView = this.Height.View
-
-  type private Listener = {
-    mutable Handler: Option<Dom.Event -> unit>
-  } with
-
-    member this.Attach(el: Dom.Element, size: ElementSize) =
-      this.Detach()
-
-      let handler (_: Dom.Event) =
-        size.Width.Value <- float el?offsetWidth
-        size.Height.Value <- float el?offsetHeight
-
-      JS.Window.AddEventListener("resize", handler)
-      this.Handler <- Some handler
-
-    member this.Detach() =
-      match this.Handler with
-      | Some handler ->
-        JS.Window.RemoveEventListener("resize", handler)
-        this.Handler <- None
-      | None -> ()
-
-  /// <summary>
-  /// Creates an ElementSize tracker and begins listening for window resize events.
-  /// Returns (elementSize, disposeFn) where disposeFn removes the listener.
-  /// </summary>
-  let observe (el: Dom.Element) : ElementSize * (unit -> unit) =
-    let size = {
-      Width = Var.Create(float el?offsetWidth)
-      Height = Var.Create(float el?offsetHeight)
-    }
-
-    let listener = { Handler = None }
-    listener.Attach(el, size)
-
-    let dispose () = listener.Detach()
-    size, dispose
-
-  /// <summary>
-  /// Creates an Attr that starts observing the element after render and
-  /// stores the resulting ElementSize in the provided Var.
-  /// </summary>
-  let track (sizeVar: Var<ElementSize option>) =
-    on.afterRender (fun el ->
-      let size, _ = observe el
-      sizeVar.Value <- Some size)
-
-/// <summary>
 /// Watches a DOM element and invokes a callback when it is removed from the
 /// document. Uses a MutationObserver on <c>document.body</c> with subtree
 /// observation. Call <c>Disconnect</c> to stop observing early.
@@ -278,6 +216,71 @@ module DomRemovalListener =
       | None -> ()
 
   let create () = { Observer = None }
+
+/// <summary>
+/// Tracks the size of a DOM element on window resize and exposes reactive
+/// Width and Height views.
+/// </summary>
+[<JavaScript>]
+module ResizeListener =
+
+  type ElementSize = {
+    Width: Var<float>
+    Height: Var<float>
+  } with
+
+    member this.WidthView = this.Width.View
+
+    member this.HeightView = this.Height.View
+
+  type private Listener = {
+    mutable Handler: Option<Dom.Event -> unit>
+  } with
+
+    member this.Attach(el: Dom.Element, size: ElementSize) =
+      this.Detach()
+
+      let handler (_: Dom.Event) =
+        Var.Set size.Width (float el?offsetWidth)
+        Var.Set size.Height (float el?offsetHeight)
+
+      JS.Window.AddEventListener("resize", handler)
+      this.Handler <- Some handler
+
+    member this.Detach() =
+      match this.Handler with
+      | Some handler ->
+        JS.Window.RemoveEventListener("resize", handler)
+        this.Handler <- None
+      | None -> ()
+
+  /// <summary>
+  /// Creates an ElementSize tracker and begins listening for window resize events.
+  /// Returns (elementSize, disposeFn) where disposeFn removes the listener.
+  /// </summary>
+  let observe (el: Dom.Element) : ElementSize * (unit -> unit) =
+    let size = {
+      Width = Var.Create(float el?offsetWidth)
+      Height = Var.Create(float el?offsetHeight)
+    }
+
+    let listener = { Handler = None }
+    listener.Attach(el, size)
+
+    let dispose () = listener.Detach()
+    size, dispose
+
+  /// <summary>
+  /// Creates an Attr that starts observing the element after render and
+  /// stores the resulting ElementSize in the provided Var. The window listener
+  /// is removed when the element leaves the document.
+  /// </summary>
+  let track (sizeVar: Var<ElementSize option>) =
+    on.afterRender (fun el ->
+      let size, dispose = observe el
+      let removalListener = DomRemovalListener.create ()
+      removalListener.Watch(el, dispose)
+      Var.Set sizeVar (Some size))
 
 [<JavaScript>]
 module Disabled =

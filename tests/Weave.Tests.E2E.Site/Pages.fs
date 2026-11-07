@@ -917,6 +917,36 @@ module Pages =
       Slider.primary (Var.Create 75, labelText = View.Const "Primary Slider")
     ]
 
+  let private resizeListenerPage () =
+    let mounted = Var.Create true
+    let size = Var.Create<ResizeListener.ElementSize option> None
+
+    div [] [
+      Button.create (
+        text "Toggle tracked element",
+        (fun () -> Var.Set mounted (not mounted.Value)),
+        attrs = [ Attr.Create "data-testid" "resize-toggle" ]
+      )
+      size.View
+      |> Doc.BindView(fun current ->
+        div [ Attr.Create "data-testid" "tracked-width" ] [
+          match current with
+          | Some measured -> Doc.TextView(measured.WidthView |> View.Map(sprintf "%.0f"))
+          | None -> text "not mounted"
+        ])
+      mounted.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          div [
+            Attr.Create "data-testid" "resize-target"
+            Attr.Style "width" "120px"
+            Attr.Style "height" "20px"
+            ResizeListener.track size
+          ] []
+        else
+          Doc.Empty)
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | "checkbox" -> checkboxPage ()
@@ -926,6 +956,7 @@ module Pages =
     | "numericfield" -> numericFieldPage ()
     | "textfield" -> textFieldPage ()
     | "select" -> selectPage ()
+    | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()
     | "button" -> buttonPage ()
     | "dialog" -> dialogPage ()

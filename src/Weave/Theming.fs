@@ -234,6 +234,7 @@ module Theming =
 
     applyOptionalCssVar "--typography-default-letterspacing" typography.DefaultLetterSpacing
 
+  /// Sets the CSS mode only; use applyTheme to switch a custom palette as well.
   let setMode (mode: ThemeMode) =
     let modeStr =
       match mode with
@@ -246,6 +247,7 @@ module Theming =
     let currentMode = JS.Document.Body.GetAttribute("data-theme")
     if currentMode = "dark" then Dark else Light
 
+  /// Toggles the CSS mode only and returns it; custom palettes require applyTheme.
   let toggleMode () =
     let newMode =
       match getMode () with
@@ -255,6 +257,7 @@ module Theming =
     setMode newMode
     newMode
 
+  /// Applies the selected mode and its palette and typography overrides.
   let applyTheme (config: ThemeConfig) (mode: ThemeMode) =
     setMode mode
 

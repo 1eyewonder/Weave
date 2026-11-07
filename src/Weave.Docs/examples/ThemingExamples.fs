@@ -20,7 +20,7 @@ module ThemingExamples =
   // =============================================================================
 
   let private simpleToggle () =
-    let currentMode = Var.Create Light
+    let currentMode = Var.Create(getMode ())
 
     let toggle () =
       let newMode = toggleMode ()
@@ -238,7 +238,8 @@ module ThemingExamples =
 
     initialize customTheme initialMode
 
-    let themeToggle = simpleToggle ()
+    let themeToggle =
+      button [ on.click (fun _ _ -> applyTheme customTheme (toggleMode ())) ] [ text "Toggle theme" ]
 
     div [] [ themeToggle; text "Your app content here..." ] |> Doc.RunById "main"
 
@@ -249,14 +250,14 @@ module ThemingExamples =
   let private lightDarkToggleSection () =
     let description =
       Helpers.bodyText
-        "Toggle between light and dark mode at runtime. The toggle calls toggleMode() which switches the active theme and returns the new mode."
+        "Toggle the CSS light or dark mode with toggleMode(). For custom palettes, call applyTheme config newMode as well so the selected palette changes."
 
     let content = simpleToggle ()
 
     let code =
       """open Weave.Theming
 
-let currentMode = Var.Create Light
+let currentMode = Var.Create (getMode ())
 
 let toggle () =
     let newMode = toggleMode ()

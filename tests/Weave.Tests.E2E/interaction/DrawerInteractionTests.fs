@@ -61,7 +61,7 @@ type DrawerInteractionTests(fixture: TestFixture) =
   [<Fact>]
   member this.``initially open responsive drawer is visible on mobile``() = task {
     do! this.Page.SetViewportSizeAsync(390, 844)
-    let! _ = this.Page.GotoAsync($"%s{fixture.BaseUrl}/#drawer-responsive")
+    do! this.NavigatePage(this.Page, "drawer-responsive")
     do! this.Expect(this.Page.GetByTestId("drawer-button")).ToBeVisibleAsync()
   }
 

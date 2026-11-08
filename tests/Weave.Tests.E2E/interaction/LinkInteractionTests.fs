@@ -32,10 +32,10 @@ type LinkInteractionTests(fixture: TestFixture) =
   [<InlineData("count-link")>]
   [<InlineData("count-icon-link")>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap activates a link``(testId: string) = task {
+  member this.``touch tap activates a link``(testId: string) = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#link")
+    do! this.NavigatePage(page, "link")
     do! page.GetByTestId(testId).TapAsync()
 
     let! _ =

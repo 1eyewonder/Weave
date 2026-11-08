@@ -15,10 +15,10 @@ type FieldInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touching field control focuses its input``() = task {
+  member this.``touching field control focuses its input``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#field")
+    do! this.NavigatePage(page, "field")
     let control = page.Locator(".weave-field__control").First
     do! control.TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(control.Locator("input")).ToBeFocusedAsync()

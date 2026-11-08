@@ -1259,5 +1259,8 @@ module Pages =
   let Main () =
     let hash = getHash ()
     let page = renderPage hash
-    let wrapper = div [ Attr.Create "data-e2e-ready" "true" ] [ page ]
+    // WebSharper runs the parent afterRender callback after synchronizing its descendants.
+    let wrapper =
+      div [ on.afterRender (fun el -> el.SetAttribute("data-e2e-ready", "true")) ] [ page ]
+
     wrapper |> Doc.RunById "main"

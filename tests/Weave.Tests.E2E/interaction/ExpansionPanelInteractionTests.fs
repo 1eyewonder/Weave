@@ -16,10 +16,10 @@ type ExpansionPanelInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap toggles expansion``() = task {
+  member this.``touch tap toggles expansion``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#expansion-panel")
+    do! this.NavigatePage(page, "expansion-panel")
     let header = page.Locator(".weave-expansion-panel__header").Nth(1)
     do! header.TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")

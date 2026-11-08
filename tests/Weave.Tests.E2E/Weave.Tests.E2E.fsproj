@@ -11,6 +11,7 @@
     <Compile Include="TestServerFixture.fs" />
     <Compile Include="AssemblyFixture.fs" />
     <Compile Include="TestBase.fs" />
+    <Compile Include="PageReadinessTests.fs" />
     <Compile Include="accessibility/AlertTests.fs" />
     <Compile Include="accessibility/AnimationTests.fs" />
     <Compile Include="accessibility/AppBarTests.fs" />

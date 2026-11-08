@@ -33,17 +33,21 @@ type E2ETestBase(fixture: TestFixture) =
         :> Task
       )
 
-  member this.NavigateTo(pageName: string) = task {
-    do! this.Page.SetViewportSizeAsync(1280, 800)
-    let! _ = this.Page.GotoAsync($"%s{fixture.BaseUrl}/#%s{pageName}")
+  member _.NavigatePage(page: IPage, pageName: string) = task {
+    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#%s{pageName}")
 
     let! _ =
-      this.Page.WaitForSelectorAsync(
+      page.WaitForSelectorAsync(
         "[data-e2e-ready]",
         PageWaitForSelectorOptions(State = WaitForSelectorState.Attached)
       )
 
     ()
+  }
+
+  member this.NavigateTo(pageName: string) = task {
+    do! this.Page.SetViewportSizeAsync(1280, 800)
+    do! this.NavigatePage(this.Page, pageName)
   }
 
   member _.Expect(locator: ILocator) = Assertions.Expect(locator)

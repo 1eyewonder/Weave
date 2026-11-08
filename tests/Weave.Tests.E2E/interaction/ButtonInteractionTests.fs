@@ -10,12 +10,12 @@ type ButtonInteractionTests(fixture: TestFixture) =
   [<InlineData("activation-button", "activation-disabled")>]
   [<InlineData("activation-icon", "activation-disabled-icon")>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch taps activate once and disabled buttons remain inactive``
+  member this.``touch taps activate once and disabled buttons remain inactive``
     (enabledId: string, disabledId: string)
     = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#button")
+    do! this.NavigatePage(page, "button")
     let button = page.GetByTestId(enabledId)
     let disabled = page.GetByTestId(disabledId)
     let count = page.GetByTestId("activation-count")

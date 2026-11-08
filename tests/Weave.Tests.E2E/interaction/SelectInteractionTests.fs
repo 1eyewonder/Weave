@@ -26,10 +26,10 @@ type SelectInteractionTests(fixture: TestFixture) =
   [<InlineData("keyboard-single")>]
   [<InlineData("keyboard-multi")>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap selects option without toggling parent``(testId: string) = task {
+  member this.``touch tap selects option without toggling parent``(testId: string) = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#select")
+    do! this.NavigatePage(page, "select")
     let root = page.GetByTestId(testId)
     let combobox = root.Locator("[role='combobox']")
     do! combobox.TapAsync()

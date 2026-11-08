@@ -56,10 +56,10 @@ type ChipInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap activates a chip once``() = task {
+  member this.``touch tap activates a chip once``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#chip")
+    do! this.NavigatePage(page, "chip")
     do! page.GetByTestId("chip-both").Locator(".weave-chip__action").TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("chip-actions")).ToHaveTextAsync("1")
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("chip-closes")).ToHaveTextAsync("0")
@@ -72,6 +72,7 @@ type ChipInteractionTests(fixture: TestFixture) =
   member this.``clickable chip is focusable``() = task {
     do! this.NavigateTo("chip")
     let chip = this.Page.Locator("[data-testid='clickable-chip']")
+    do! this.Expect(chip).ToHaveAttributeAsync("tabindex", "0")
     do! chip.FocusAsync()
     do! this.Expect(chip).ToBeFocusedAsync()
   }
@@ -114,6 +115,7 @@ type ChipInteractionTests(fixture: TestFixture) =
   member this.``close button is focusable and has aria-label``() = task {
     do! this.NavigateTo("chip")
     let close = this.Page.Locator(".weave-chip__close").First
+    do! this.Expect(close).ToHaveAttributeAsync("tabindex", "0")
     do! close.FocusAsync()
     do! this.Expect(close).ToBeFocusedAsync()
     do! this.Expect(close).ToHaveAttributeAsync("aria-label", "remove")

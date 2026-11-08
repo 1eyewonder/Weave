@@ -22,10 +22,10 @@ type ListInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap selects a list item``() = task {
+  member this.``touch tap selects a list item``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#list")
+    do! this.NavigatePage(page, "list")
     do! page.Locator("[aria-label='Test items'] .weave-list-item").First.TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("list-selection")).ToHaveTextAsync("1")
     let group = page.GetByTestId("nested-list")

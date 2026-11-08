@@ -31,10 +31,10 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap activates a dropdown item``() = task {
+  member this.``touch tap activates a dropdown item``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#dropdown-menu")
+    do! this.NavigatePage(page, "dropdown-menu")
     do! page.Locator(".weave-dropdownmenu .weave-button").First.TapAsync()
     do! page.Locator(".weave-dropdownmenu__item").First.TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("dropdown-action")).ToHaveTextAsync("item 1")

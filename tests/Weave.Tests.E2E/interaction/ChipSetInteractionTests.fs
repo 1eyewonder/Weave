@@ -55,8 +55,8 @@ type ChipSetInteractionTests(fixture: TestFixture) =
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! secondChip.FocusAsync()
-    // Sync roving tabindex so currentIndex can find us
-    do! this.Page.WaitForTimeoutAsync(50.0f)
+    do! this.Expect(secondChip).ToBeFocusedAsync()
+    do! this.Expect(secondChip).ToHaveAttributeAsync("tabindex", "0")
     do! this.Page.Keyboard.PressAsync("ArrowLeft")
     do! this.Expect(firstChip).ToBeFocusedAsync()
   }
@@ -71,7 +71,8 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! lastEnabled.FocusAsync()
-    do! this.Page.WaitForTimeoutAsync(50.0f)
+    do! this.Expect(lastEnabled).ToBeFocusedAsync()
+    do! this.Expect(lastEnabled).ToHaveAttributeAsync("tabindex", "0")
     do! this.Page.Keyboard.PressAsync("ArrowRight")
     do! this.Expect(firstChip).ToBeFocusedAsync()
   }
@@ -82,7 +83,8 @@ type ChipSetInteractionTests(fixture: TestFixture) =
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! secondChip.FocusAsync()
-    do! this.Page.WaitForTimeoutAsync(50.0f)
+    do! this.Expect(secondChip).ToBeFocusedAsync()
+    do! this.Expect(secondChip).ToHaveAttributeAsync("tabindex", "0")
     do! this.Page.Keyboard.PressAsync("Home")
     do! this.Expect(firstChip).ToBeFocusedAsync()
   }
@@ -96,7 +98,8 @@ type ChipSetInteractionTests(fixture: TestFixture) =
       this.Page.Locator(".weave-chip[role='button']:not(.weave-chip--disabled)").Nth(2)
 
     do! firstChip.FocusAsync()
-    do! this.Page.WaitForTimeoutAsync(50.0f)
+    do! this.Expect(firstChip).ToBeFocusedAsync()
+    do! this.Expect(firstChip).ToHaveAttributeAsync("tabindex", "0")
     do! this.Page.Keyboard.PressAsync("End")
     do! this.Expect(lastEnabled).ToBeFocusedAsync()
   }
@@ -124,8 +127,6 @@ type ChipSetInteractionTests(fixture: TestFixture) =
   [<Fact>]
   member this.``roving tabindex sets first chip to 0 and others to -1``() = task {
     do! this.NavigateToChipSet()
-    // Allow deferred roving tabindex setup to complete
-    do! this.Page.WaitForTimeoutAsync(100.0f)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     do! this.Expect(firstChip).ToHaveAttributeAsync("tabindex", "0")

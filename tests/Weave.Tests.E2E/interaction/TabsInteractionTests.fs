@@ -16,10 +16,10 @@ type TabsInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap activates a tab``() = task {
+  member this.``touch tap activates a tab``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#tabs")
+    do! this.NavigatePage(page, "tabs")
     let secondTab = page.Locator(".weave-tabs__tab").Nth(1)
     do! secondTab.TapAsync()
     do! Microsoft.Playwright.Assertions.Expect(secondTab).ToHaveAttributeAsync("aria-selected", "true")

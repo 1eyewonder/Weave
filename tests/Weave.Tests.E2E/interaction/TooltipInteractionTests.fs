@@ -19,10 +19,10 @@ type TooltipInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   [<Trait("Capability", "MobileEmulation")>]
-  member _.``touch tap toggles a click tooltip``() = task {
+  member this.``touch tap toggles a click tooltip``() = task {
     use! context = fixture.NewTouchContextAsync()
     let! page = context.NewPageAsync()
-    let! _ = page.GotoAsync($"%s{fixture.BaseUrl}/#tooltip")
+    do! this.NavigatePage(page, "tooltip")
     let wrapper = page.GetByTestId("tooltip-click")
     let button = wrapper.Locator("button")
     do! button.TapAsync()
@@ -35,6 +35,7 @@ type TooltipInteractionTests(fixture: TestFixture) =
   member this.``every tooltip wrapper contains a role tooltip element``() = task {
     do! this.NavigateTo("tooltip")
     let! wrapperCount = this.Page.Locator(".weave-tooltip-root").CountAsync()
+    Assert.True(wrapperCount > 0, "Expected at least one tooltip wrapper")
     let tooltips = this.Page.Locator("[role='tooltip']")
     do! this.Expect(tooltips).ToHaveCountAsync(wrapperCount)
   }

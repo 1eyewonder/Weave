@@ -76,6 +76,7 @@ jobs:
     environment: nuget
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -84,11 +85,16 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.x'
+      - name: Log in to NuGet
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: 1eyewonder
       - name: Publish to NuGet
         env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          NUGET_TOKEN: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
-          test -n "$NUGET_TOKEN" || { echo "NUGET_TOKEN is not configured" >&2; exit 1; }
+          test -n "$NUGET_TOKEN" || { echo "NuGet login did not return an API key" >&2; exit 1; }
           dotnet nuget push artifacts/templates/*.nupkg --api-key "$NUGET_TOKEN" --source https://api.nuget.org/v3/index.json
       - name: Publish GitHub release
         env:

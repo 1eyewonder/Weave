@@ -71,6 +71,7 @@ jobs:
     environment: nuget
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -92,11 +93,16 @@ jobs:
           dotnet run --project build/Weave.Build.fsproj -c Release -- -t ReleaseNotes
           dotnet pack src/Weave/Weave.fsproj -c Release -o artifacts/package -p:PackageVersion="${RELEASE_TAG#v}"
           dotnet run --project build/Weave.Build.fsproj -c Release -- -t VerifyReleasePackage
+      - name: Log in to NuGet
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: 1eyewonder
       - name: Publish to NuGet
         env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          NUGET_TOKEN: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
-          test -n "$NUGET_TOKEN" || { echo "NUGET_TOKEN is not configured" >&2; exit 1; }
+          test -n "$NUGET_TOKEN" || { echo "NuGet login did not return an API key" >&2; exit 1; }
           dotnet nuget push artifacts/package/*.nupkg --api-key "$NUGET_TOKEN" --source https://api.nuget.org/v3/index.json
       - name: Publish GitHub release
         env:

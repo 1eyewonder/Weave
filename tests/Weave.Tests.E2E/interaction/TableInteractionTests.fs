@@ -181,8 +181,7 @@ type TableInteractionTests(fixture: TestFixture) =
         .GetByTestId("select-table")
         .GetByRole(AriaRole.Checkbox, LocatorGetByRoleOptions(Name = "Select all rows"))
 
-    let! isIndeterminate = selectAll.EvaluateAsync<bool>("el => el.indeterminate")
-    Assert.True(isIndeterminate, "Select all should be indeterminate while only some rows are selected")
+    do! this.Expect(selectAll).ToHaveJSPropertyAsync("indeterminate", true)
   }
 
   [<Fact>]

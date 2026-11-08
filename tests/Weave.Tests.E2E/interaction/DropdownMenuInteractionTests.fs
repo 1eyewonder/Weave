@@ -121,7 +121,9 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
     let trigger = this.Page.Locator(".weave-dropdownmenu .weave-button").First
     do! trigger.FocusAsync()
     do! trigger.PressAsync("Enter")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToBeVisibleAsync()
     do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__item").First).ToBeFocusedAsync()
     do! this.Page.Keyboard.PressAsync("Escape")
     do! this.Expect(trigger).ToBeFocusedAsync()
   }

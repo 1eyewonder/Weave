@@ -34,6 +34,7 @@ jobs:
         with:
           global-json-file: global.json
       - run: dotnet tool restore
+      - run: dotnet paket restore
       - name: Validate tag and release notes
         id: release
         env:
@@ -82,6 +83,7 @@ jobs:
           node-version: '22'
       - run: corepack enable
       - run: dotnet tool restore
+      - run: dotnet paket restore
       - run: yarn install --immutable
       - name: Pack
         env:

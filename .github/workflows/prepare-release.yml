@@ -19,6 +19,7 @@ jobs:
         with:
           global-json-file: global.json
       - run: dotnet tool restore
+      - run: dotnet paket restore
       - name: Check ShipIt baseline
         run: dotnet run --project build/Weave.Build.fsproj -c Release -- -t CheckReleaseBaseline
       - name: Prepare release pull request

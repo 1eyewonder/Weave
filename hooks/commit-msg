@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+# ShipIt skips Git's generated merge commits as well.
+merge_head=$(git rev-parse --git-path MERGE_HEAD)
+if [ -f "$merge_head" ] && head -n 1 "$1" | grep -q '^Merge '; then
+  exit 0
+fi
+
+if ! dotnet commit-linter "$1"; then
+  echo >&2
+  echo 'Commit message must follow EasyBuild conventions, for example:' >&2
+  echo '  feat: add a component' >&2
+  echo '  fix(button): correct focus behavior' >&2
+  echo 'If the tool is missing, run: dotnet tool restore' >&2
+  exit 1
+fi

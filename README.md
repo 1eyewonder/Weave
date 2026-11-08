@@ -12,11 +12,11 @@
 
 Weave is opinionated where it matters — consistent theming, ergonomic APIs, and structured styling — while remaining flexible enough to work seamlessly with native WebSharper constructs.
 
-> **Note:** Weave is currently in active development and serves as an experimental playground. Release candidates are being prepared. Breaking changes are expected as design patterns mature.
+> **Note:** Weave is currently in active development and serves as an experimental playground. Release candidates are available; breaking changes are expected as design patterns mature.
 
 ## Releases and WebSharper compatibility
 
-The first planned package is `Weave.WebSharper` version `0.1.0-rc.1`. The currently tested baseline is WebSharper and WebSharper.FSharp **10.1.9.686** with WebSharper.UI **10.1.7.686**, as locked in `paket.lock`. NuGet dependencies express minimum versions; other versions are not yet verified.
+The first release candidate, [`Weave.WebSharper` 0.1.0-rc.1](https://www.nuget.org/packages/Weave.WebSharper/0.1.0-rc.1), is available on NuGet. [Starter templates](templates/README.md) are also available. The currently tested baseline is WebSharper and WebSharper.FSharp **10.1.9.686** with WebSharper.UI **10.1.7.686**, as locked in `paket.lock`. NuGet dependencies express minimum versions; other versions are not yet verified.
 
 ## Why Weave?
 
@@ -162,7 +162,14 @@ let newMode = toggleMode ()         // returns the selected mode
 
 ### Without Docker
 
-**Dependencies:** .NET 10 SDK, Node.js 22.12+
+**Dependencies:** .NET SDK 10.0.403 or a newer .NET 10 feature band, Node.js 22.12+, and PowerShell (`pwsh`) for the Playwright installer. After running the initialization step above, build the E2E project and install Chromium:
+
+```bash
+dotnet build tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj
+pwsh tests/Weave.Tests.E2E/bin/Debug/net10.0/playwright.ps1 install chromium
+```
+
+Then run the tests:
 
 ```bash
 ./build.sh RunTests    # Linux/macOS
@@ -178,13 +185,14 @@ docker compose build
 docker compose run --rm playwright-tests
 ```
 
-The Docker path runs Playwright rendering tests in a pre-configured browser environment. Use this if you don't have .NET 10 or Node.js 22 installed locally, or to match CI behavior exactly.
+The Docker path runs the normal test target, including unit, rendering, and Chromium E2E tests, in a pre-configured browser environment. CI uses the same image but runs non-browser tests separately from its Chromium, Firefox, and WebKit E2E matrix.
 
-To run the full browser interaction suite across Chromium, Firefox and WebKit locally, first install the matching Playwright browsers, then run the dedicated build target:
+To run the full browser interaction suite across Chromium, Firefox and WebKit locally, install the remaining Playwright browsers using the installer generated above, then run the dedicated build target:
 
 ```powershell
 pwsh tests/Weave.Tests.E2E/bin/Debug/net10.0/playwright.ps1 install chromium firefox webkit
-./build.cmd RunBrowserTests
+./build.sh RunBrowserTests    # Linux/macOS
+./build.cmd RunBrowserTests   # Windows
 ```
 
 The normal `RunTests` target still uses Chromium by default. The all-browser target runs mobile-emulation tests in Chromium and WebKit; Firefox runs the other interactions because Playwright does not document Firefox mobile emulation as supported. The CI browser matrix runs these same suites in parallel.

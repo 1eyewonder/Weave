@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is Weave
 
-Weave is a component library for building web UIs in F# using [WebSharper](https://websharper.com/). It provides reactive UI components, layout primitives, and a theming system (light/dark). Status: experimental, no NuGet packages yet.
+Weave is a component library for building web UIs in F# using [WebSharper](https://websharper.com/). It provides reactive UI components, layout primitives, and a theming system (light/dark). Status: experimental; release-candidate library and template packages are available on NuGet.
 
 ## Build & Development Commands
 
@@ -15,9 +15,10 @@ Weave is a component library for building web UIs in F# using [WebSharper](https
 ./build.cmd init       # Windows
 ```
 
-**Start the docs site** (view components interactively at `http://localhost:5000`):
+**Start the docs site** (open the URL printed by ASP.NET):
 
 ```bash
+yarn build:css
 dotnet run --project src/Weave.Docs/Weave.Docs.fsproj
 ```
 
@@ -34,7 +35,7 @@ yarn watch:css         # watch mode
 ./build.sh RunTests    # Linux/macOS (requires .NET 10, Node 22)
 ./build.cmd RunTests   # Windows
 
-# Or via Docker (matches CI exactly):
+# Or run the normal test target in Docker (CI uses separate browser jobs):
 docker compose build && docker compose run --rm playwright-tests
 ```
 
@@ -53,8 +54,11 @@ dotnet test tests/Weave.Tests.Rendering/Weave.Tests.Rendering.fsproj
 **Run E2E accessibility tests:**
 
 ```bash
+dotnet build tests/Weave.Tests.E2E.Site/Weave.Tests.E2E.Site.fsproj
 dotnet test tests/Weave.Tests.E2E/Weave.Tests.E2E.fsproj
 ```
+
+Rendering and E2E tests require Playwright browsers. See the browser installation steps in [README.md](README.md#testing). The E2E fixture runs the separately built site with `--no-build`.
 
 **Build the E2E site** (must be verified separately — the E2E test project compiles independently of the site it hosts):
 

@@ -48,7 +48,10 @@ module GettingStartedExamples =
           div [ Attr.Class "docs-getting-started__requirements-label" ] [ text "What you’ll need" ]
           ul [ Attr.Class "docs-getting-started__requirements-list" ] [
             li [] [ strong [] [ text "Git" ]; span [] [ text "Source control" ] ]
-            li [] [ strong [] [ text ".NET SDK" ]; span [] [ text "Version 10" ] ]
+            li [] [
+              strong [] [ text ".NET SDK" ]
+              span [] [ text "10.0.403 or a newer .NET 10 feature band" ]
+            ]
             li [] [ strong [] [ text "Node.js" ]; span [] [ text "22.12 or later" ] ]
             li [] [ strong [] [ text "Yarn" ]; span [] [ text "Version 4.5.3" ] ]
           ]
@@ -119,17 +122,13 @@ module Client =
   let private existingProject () =
     Helpers.textSection "3. Use Weave in an existing WebSharper app" [
       Helpers.bodyText
-        "Add a project reference to your checkout of src/Weave/Weave.fsproj. Adjust the path relative to your own .fsproj. The referenced project uses the repository's Paket and Yarn build setup, so keep the checkout and its initialized dependencies together."
-      codeBlock
-        "xml"
-        """<ItemGroup>
-  <ProjectReference Include="../Weave/src/Weave/Weave.fsproj" />
-</ItemGroup>"""
+        "From your existing WebSharper project directory, add the Weave release candidate from NuGet:"
+      codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.1.0-rc.1"
       Helpers.bodyText
-        "Weave's styles are separate from the F# reference. Run yarn build:css from the Weave repository root, copy src/Weave/styles.css into your app's static files, and link it from your HTML. Copy it again after rebuilding styles. The docs project demonstrates this with its CopyWeaveStyles build target."
-      codeBlock "html" """<link rel="stylesheet" href="styles.css" />"""
+        "Weave's styles must be linked from your HTML. In a WebSharper standalone SPA that extracts resources to wwwroot/Scripts, link the generated stylesheet as shown below. Otherwise, copy styles.css from the NuGet package's contentFiles/any/any directory to your app's static files and link it there."
+      codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
       Helpers.bodyText
-        "Use a URL matching where your app serves the copied file. Your existing WebSharper SPA entry point should render a Doc into an element in your page, as in the example above. WebSharper's own setup determines your script and host configuration."
+        "Use a URL matching where your app serves the stylesheet. Your existing WebSharper SPA entry point should render a Doc into an element in your page, as in the example above. WebSharper's own setup determines your script and host configuration."
     ]
 
   let private templatePreview name description slug command =
@@ -184,12 +183,12 @@ module Client =
   let private starterTemplates () =
     Helpers.textSection "4. Start from a template (optional)" [
       Helpers.bodyText
-        "Start with an editable F# application and customize it for your project. The NuGet workflow below is planned for the template release; the template and Weave packages are not yet published."
+        "Start with an editable F# application and customize it for your project. The template and Weave packages are available as release candidates on NuGet."
       Helpers.bodyText
         "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
       templateGallery ()
-      Helpers.bodyText "Once the packages are available, install the template package with the .NET 10 SDK:"
-      codeBlock "bash" "dotnet new install Weave.Templates"
+      Helpers.bodyText "Install the release-candidate template package with the .NET 10 SDK:"
+      codeBlock "bash" "dotnet new install Weave.WebSharper.Templates@0.1.0-rc.1"
       Helpers.bodyText
         "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
       codeBlock
@@ -204,9 +203,9 @@ dotnet new weave-dashboard -n MyDashboard"""
         """cd MyProjects
 dotnet run --urls http://localhost:5000"""
       Helpers.bodyText
-        "Open http://localhost:5000. Build and deploy the generated project you chose using your preferred hosting setup. Deployment configuration is not included, and the sample data is not persisted. The planned NuGet packages will supply Weave and its styles without a local repository checkout."
+        "Open http://localhost:5000. Build and deploy the generated project you chose using your preferred hosting setup. Deployment configuration is not included, and the sample data is not persisted. The NuGet packages supply Weave and its styles without a local repository checkout."
       Helpers.bodyText
-        "In the generated project, start with README.md; the workspace starters separate sample data (Domain.fs), state (State.fs), page components (Views.fs), and CSS. Use the light/dark toggle and edit the stylesheet's body theme variables to make the starter yours. To uninstall the templates, run dotnet new uninstall Weave.Templates."
+        "In the generated project, start with README.md; the workspace starters separate sample data (Domain.fs), state (State.fs), page components (Views.fs), and CSS. Use the light/dark toggle and edit the stylesheet's body theme variables to make the starter yours. To uninstall the templates, run dotnet new uninstall Weave.WebSharper.Templates."
     ]
 
   let private nextSteps () =

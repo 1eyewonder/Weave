@@ -53,6 +53,7 @@ type TooltipInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``tooltip is hidden by default``() = task {
+    do! this.Page.Mouse.MoveAsync(1200.0f, 700.0f)
     do! this.NavigateTo("tooltip")
     let tooltip = this.Page.Locator("[data-testid='tooltip-default'] [role='tooltip']")
     do! this.Expect(tooltip).ToBeHiddenAsync()

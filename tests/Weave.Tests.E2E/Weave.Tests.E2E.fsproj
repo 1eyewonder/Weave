@@ -3,9 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <!-- Keep dotnet test on VSTest; xUnit also brings in Microsoft Testing Platform. -->
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TestServerFixture.fs" />
+    <Compile Include="AssemblyFixture.fs" />
     <Compile Include="TestBase.fs" />
     <Compile Include="accessibility/AlertTests.fs" />
     <Compile Include="accessibility/AnimationTests.fs" />

@@ -1,10 +1,8 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
-open Microsoft.Playwright.Xunit
 open Xunit
 
-[<Collection("E2E")>]
 type AnimationClassTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -36,7 +34,6 @@ type AnimationClassTests(fixture: TestFixture) =
     do! this.Expect(el).ToHaveClassAsync(Regex("weave-animation-on--hover"))
   }
 
-[<Collection("E2E")>]
 type AnimationComputedStyleTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -67,7 +64,6 @@ type AnimationComputedStyleTests(fixture: TestFixture) =
     Assert.Equal("weave-fade-in", name)
   }
 
-[<Collection("E2E")>]
 type AnimationSuppressTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -90,7 +86,6 @@ type AnimationSuppressTests(fixture: TestFixture) =
     Assert.Equal("0s", duration)
   }
 
-[<Collection("E2E")>]
 type AnimationShowTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -128,7 +123,6 @@ type AnimationShowTests(fixture: TestFixture) =
     do! this.Expect(wrapper).ToHaveCountAsync(0)
   }
 
-[<Collection("E2E")>]
 type AnimationToggleClassTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -159,7 +153,6 @@ type AnimationToggleClassTests(fixture: TestFixture) =
     do! this.Expect(el).Not.ToHaveClassAsync(Regex("weave-animation--fade-in"))
   }
 
-[<Collection("E2E")>]
 type AnimationReducedMotionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -207,7 +200,6 @@ type AnimationReducedMotionTests(fixture: TestFixture) =
     Assert.Equal("0ms", value)
   }
 
-[<Collection("E2E")>]
 type AnimationStaggerTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

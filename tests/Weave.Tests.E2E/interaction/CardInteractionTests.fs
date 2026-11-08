@@ -1,10 +1,8 @@
 namespace Weave.Tests.E2E
 
 open Xunit
-open Microsoft.Playwright.Xunit
 open Microsoft.Playwright
 
-[<Collection("E2E")>]
 type CardInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

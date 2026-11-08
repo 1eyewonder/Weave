@@ -17,9 +17,12 @@ group test
   nuget Expecto.FsCheck
   nuget Microsoft.NET.Test.Sdk
   nuget YoloDev.Expecto.TestSdk
+  nuget Microsoft.Playwright
   nuget Microsoft.Playwright.Xunit
   nuget Deque.AxeCore.Playwright
   nuget xunit
+  nuget xunit.v3.core
+  nuget xunit.v3.assert
   nuget xunit.runner.visualstudio
   nuget OpenTelemetry.Api >= 1.15.3 // https://github.com/advisories/GHSA-g94r-2vxg-569j
 

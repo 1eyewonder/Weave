@@ -1,15 +1,20 @@
 namespace Weave.Tests.E2E
 
-open Microsoft.Playwright.Xunit
 open Xunit
 
-[<Collection("E2E")>]
 type ChipSetInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  member private this.NavigateToChipSet() = task {
+    do! this.NavigateTo("chipset")
+    // Enabled chips start with tabindex 0; -1 shows the deferred roving setup ran.
+    let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
+    do! this.Expect(secondChip).ToHaveAttributeAsync("tabindex", "-1")
+  }
+
   [<Fact>]
   member this.``closable chipset arrow navigation skips disabled action``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let group = this.Page.GetByTestId("closable-chipset")
     let actions = group.Locator(".weave-chip__action[role='button']")
     do! actions.First.FocusAsync()
@@ -19,14 +24,14 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``chipset container has role group``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let chipset = this.Page.Locator(".weave-chipset").First
     do! this.Expect(chipset).ToHaveAttributeAsync("role", "group")
   }
 
   [<Fact>]
   member this.``first chip is focusable via Tab``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! this.Page.Keyboard.PressAsync("Tab")
     // May need multiple tabs to reach chipset depending on page structure
@@ -36,7 +41,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``ArrowRight moves focus to next chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     do! firstChip.FocusAsync()
@@ -46,7 +51,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``ArrowLeft moves focus to previous chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! secondChip.FocusAsync()
@@ -58,7 +63,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``ArrowRight wraps from last to first``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     // There are 4 chips (A, B, C, Disabled). The selector excludes disabled,
     // so 3 enabled chips at indices 0, 1, 2.
     let lastEnabled =
@@ -73,7 +78,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``Home moves focus to first chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! secondChip.FocusAsync()
@@ -84,7 +89,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``End moves focus to last enabled chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
 
     let lastEnabled =
@@ -98,7 +103,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``Enter selects a chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First
     do! firstChip.FocusAsync()
     do! firstChip.PressAsync("Enter")
@@ -108,7 +113,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``Space selects a chip``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     let secondChip = this.Page.Locator(".weave-chip[role='button']").Nth(1)
     do! secondChip.FocusAsync()
     do! secondChip.PressAsync(" ")
@@ -118,7 +123,7 @@ type ChipSetInteractionTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``roving tabindex sets first chip to 0 and others to -1``() = task {
-    do! this.NavigateTo("chipset")
+    do! this.NavigateToChipSet()
     // Allow deferred roving tabindex setup to complete
     do! this.Page.WaitForTimeoutAsync(100.0f)
     let firstChip = this.Page.Locator(".weave-chip[role='button']").First

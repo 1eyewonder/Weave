@@ -1,9 +1,7 @@
 namespace Weave.Tests.E2E
 
-open Microsoft.Playwright.Xunit
 open Xunit
 
-[<Collection("E2E")>]
 type DropdownMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

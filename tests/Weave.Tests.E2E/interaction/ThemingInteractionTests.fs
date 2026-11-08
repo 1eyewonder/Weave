@@ -3,7 +3,6 @@ namespace Weave.Tests.E2E
 open Microsoft.Playwright
 open global.Xunit
 
-[<Collection("E2E")>]
 type ThemingInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

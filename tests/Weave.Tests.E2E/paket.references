@@ -3,7 +3,8 @@ group Main
 
 group test
   Microsoft.NET.Test.Sdk
-  Microsoft.Playwright.Xunit
+  Microsoft.Playwright
   Deque.AxeCore.Playwright
-  xunit
+  xunit.v3.core
+  xunit.v3.assert
   xunit.runner.visualstudio

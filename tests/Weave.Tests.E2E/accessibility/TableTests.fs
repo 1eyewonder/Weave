@@ -2,7 +2,6 @@ namespace Weave.Tests.E2E
 
 open Xunit
 
-[<Collection("E2E")>]
 type TableTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

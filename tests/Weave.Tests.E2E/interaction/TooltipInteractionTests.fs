@@ -1,10 +1,8 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
-open Microsoft.Playwright.Xunit
 open Xunit
 
-[<Collection("E2E")>]
 type TooltipInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

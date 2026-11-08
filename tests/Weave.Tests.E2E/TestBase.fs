@@ -14,16 +14,24 @@ type E2ETestBase(fixture: TestFixture) =
   member _.Page = page
 
   interface IAsyncLifetime with
-    member _.InitializeAsync() = task {
-      let! ctx, p = fixture.NewPageAsync()
-      context <- ctx
-      page <- p
-    }
+    member _.InitializeAsync() =
+      ValueTask(
+        task {
+          let! ctx, p = fixture.NewPageAsync()
+          context <- ctx
+          page <- p
+        }
+        :> Task
+      )
 
-    member _.DisposeAsync() = task {
-      if not (isNull context) then
-        do! context.CloseAsync()
-    }
+    member _.DisposeAsync() =
+      ValueTask(
+        task {
+          if not (isNull context) then
+            do! context.CloseAsync()
+        }
+        :> Task
+      )
 
   member this.NavigateTo(pageName: string) = task {
     do! this.Page.SetViewportSizeAsync(1280, 800)

@@ -4,23 +4,13 @@ A sample project tracker with shared list and board views. Search issue titles, 
 
 ## Run locally
 
-Prerequisites: .NET 10 SDK, Node.js and Yarn, plus a Weave checkout with its dependencies installed. Weave is not yet published as a NuGet package, so this preview requires a local project reference.
+Requires .NET SDK 10.0.403 or a newer .NET 10 feature band. From the generated project:
 
-From the Weave checkout, restore its tools and dependencies:
-
-```powershell
-dotnet tool restore
-dotnet paket restore
-yarn install --immutable
+```sh
+dotnet run --urls http://localhost:5000
 ```
 
-Then, from this generated project's directory, supply the absolute path to the checkout's `Weave.fsproj`:
-
-```powershell
-dotnet run --project ./WeaveStarter.fsproj -p:WeaveProjectPath="C:/path/to/Weave/src/Weave/Weave.fsproj" --urls http://localhost:5000
-```
-
-Open http://localhost:5000. Edit `Domain.fs` for the sample issues, `State.fs` for shared state and filtering, and `Views.fs` for Weave components and page sections. `Client.fs` starts the app; `wwwroot/workspace.css` controls its appearance. The build compiles Weave's SCSS in the checkout and copies the stylesheet into this app.
+Open http://localhost:5000. Edit `Domain.fs` for the sample issues, `State.fs` for shared state and filtering, and `Views.fs` for Weave components and page sections. `Client.fs` starts the app; `wwwroot/workspace.css` controls its appearance.
 
 The header's Dark mode / Light mode button uses Weave's theme API. The preview starts in light mode; the choice is not persisted across page reloads. Primary, secondary, tertiary, and dark-mode colors can be customized in the template stylesheet.
 

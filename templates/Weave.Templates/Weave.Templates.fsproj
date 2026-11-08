@@ -1,9 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <PackageId>Weave.Templates</PackageId>
-    <Version>0.1.0-preview.1</Version>
-    <Authors>Weave</Authors>
+    <PackageId>Weave.WebSharper.Templates</PackageId>
+    <Version>0.1.0-rc.1</Version>
+    <Authors>Weave contributors</Authors>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/1eyewonder/Weave</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/1eyewonder/Weave</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <Description>Project templates for Weave and WebSharper.</Description>
     <PackageType>Template</PackageType>
     <IncludeContentInPack>true</IncludeContentInPack>
@@ -13,7 +18,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="../content/**/*" Exclude="../content/**/bin/**;../content/**/obj/**" Pack="true" PackagePath="content/" />
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
     <Compile Include="Package.fs" />
   </ItemGroup>
+  <Target Name="CheckTemplateVersions" BeforeTargets="GenerateNuspec">
+    <Exec Command="dotnet fsi &quot;$(MSBuildProjectDirectory)/../SyncWeaveVersion.fsx&quot; --check" />
+  </Target>
 </Project>
-

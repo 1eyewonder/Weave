@@ -1,56 +1,17 @@
-# Weave template package
+# Weave templates
 
-## Planned NuGet experience
+After publication, install the release candidate:
 
-Once the template package and its Weave dependency have been published, users will be able to install a template and create an application without a repository checkout:
-
-```bash
-dotnet new install Weave.Templates
+```sh
+dotnet new install Weave.WebSharper.Templates --prerelease
 ```
 
-Choose one starter; each command creates an independent application with only that starter:
+Create a starter with `dotnet new weave-app`, `weave-dashboard`, `weave-projects`, or `weave-repository`. The generated app references `Weave.WebSharper` and requires the .NET 10.0.403 SDK or a newer .NET 10 feature band. The library package must be available on the configured NuGet feed.
 
-```bash
-dotnet new weave-app -n MyApp
-dotnet new weave-projects -n MyProjects
-dotnet new weave-repository -n MyRepository
-dotnet new weave-dashboard -n MyDashboard
-```
+For local testing before publication, pack both projects and install the template `.nupkg` from `artifacts`. Restore generated apps using a feed containing the Weave library package.
 
-For example, run the project workspace with:
+## Releasing templates
 
-```bash
-cd MyProjects
-dotnet run --urls http://localhost:5000
-```
+Template releases use their own `templates-v` tags and versions. Set the library version in `templates/WeaveVersion.props`, then run `dotnet fsi templates/SyncWeaveVersion.fsx` to update all starters. Set the template package version in `templates/Weave.Templates/Weave.Templates.fsproj`, then merge to `main`. Packing checks that the starter versions match. Publish the library first and wait until that version is available on NuGet before pushing the template tag, for example `templates-v0.1.0-rc.1`. The **Release templates** workflow installs the package, restores and builds all four generated apps, checks their stylesheets, and publishes the template package and GitHub release. `NUGET_TOKEN` must permit publishing `Weave.WebSharper.Templates` as well as the library.
 
-Deploy the generated project with your preferred hosting setup. Deployment configuration is not included; workspace sample data is fictional and resets on refresh. The published packages and this installation flow are not available yet.
-
-## Development preview
-
-This package generates editable F# WebSharper apps. It currently requires a local Weave checkout: the component library and its static assets have not yet been published as a standalone package. Do not publish this preview to NuGet as a production-ready template.
-
-From the repository root, restore the worktree dependencies, pack, and install locally:
-
-```powershell
-dotnet tool restore
-dotnet paket restore
-yarn install --immutable
-dotnet pack templates/Weave.Templates/Weave.Templates.fsproj -o ./artifacts/templates
-dotnet new install ./artifacts/templates/Weave.Templates.0.1.0-preview.1.nupkg
-```
-
-Generate a starter outside the checkout:
-
-```powershell
-dotnet new weave-dashboard -n MyDashboard -o ../MyDashboard
-dotnet new weave-repository -n MyRepository -o ../MyRepository
-dotnet new weave-projects -n MyProjects -o ../MyProjects
-dotnet new weave-app -n MyApp -o ../MyApp
-```
-
-Follow the generated README to supply `WeaveProjectPath` and run the app. The workspace's sample data is in-memory and resets on refresh. To remove the local installation, run `dotnet new uninstall Weave.Templates`.
-
-Before a public release, replace the project reference and stylesheet copy with a versioned Weave package and verify its WebSharper and static asset behavior from a clean generated app. See [TEMPLATE-CONCEPTS.md](TEMPLATE-CONCEPTS.md) for the other proposed starters.
-
-
+If a run fails before NuGet publication, retry **Release templates** manually with the existing tag. If NuGet succeeded but GitHub release creation failed, create the GitHub release manually; published package versions cannot be replaced.

@@ -87,6 +87,16 @@ let verifyPackage _ =
   then
     failwith "Package ID or version does not match the release tag"
 
+  if
+    metadata.Descendants(ns + "dependency")
+    |> Seq.exists (fun dependency ->
+      let id = dependency.Attribute(XName.Get "id")
+
+      not (isNull id)
+      && String.Equals(id.Value, "Zanaptak.TypedCssClasses", StringComparison.OrdinalIgnoreCase))
+  then
+    failwith "The CSS type provider must not be a package dependency"
+
   let assembly = Assembly.Load assemblyBytes
   use embedded = assembly.GetManifestResourceStream "styles.css"
 

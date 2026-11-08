@@ -4,12 +4,10 @@ A fictional repository workspace with sample branches, folders, files, and issue
 
 ## Run locally
 
-Requires .NET 10 SDK, Node.js, Yarn, and a Weave checkout with its dependencies installed. Weave has not yet been published as a NuGet package.
+Requires .NET SDK 10.0.403 or a newer .NET 10 feature band. From the generated project:
 
-From the Weave checkout, run `dotnet tool restore`, `dotnet paket restore`, and `yarn install --immutable`. Then, from the generated project:
-
-```powershell
-dotnet run --project ./WeaveStarter.fsproj -p:WeaveProjectPath="C:/path/to/Weave/src/Weave/Weave.fsproj" --urls http://localhost:5000
+```sh
+dotnet run --urls http://localhost:5000
 ```
 
 Open http://localhost:5000. Edit `Domain.fs` to replace the fictional repository data, `State.fs` for navigation and filter state, and `Views.fs` for Weave components and page sections. `Client.fs` starts the app. Customize the palette in `wwwroot/repository.css`.

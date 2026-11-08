@@ -3,7 +3,6 @@ storage: none
 
 nuget FSharp.Core
 nuget FsToolkit.ErrorHandling
-nuget Zanaptak.TypedCssClasses
 nuget WebSharper
 nuget WebSharper.UI
 nuget WebSharper.FSharp

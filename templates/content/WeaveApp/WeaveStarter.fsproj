@@ -1,23 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+
     <WebSharperStandalone>true</WebSharperStandalone>
-    <WebSharperParallelCompilation>false</WebSharperParallelCompilation>
-  </PropertyGroup>
+</PropertyGroup>
   <ItemGroup>
     <Compile Include="Client.fs" />
     <Compile Include="Startup.fs" />
     <PackageReference Include="WebSharper.FSharp" Version="10.1.9.686" />
     <PackageReference Include="WebSharper.UI" Version="10.1.7.686" />
     <PackageReference Include="WebSharper.AspNetCore" Version="10.1.9.686" />
-    <ProjectReference Include="$(WeaveProjectPath)" />
+    <PackageReference Include="Weave.WebSharper" Version="0.1.0-rc.1" />
   </ItemGroup>
-  <Target Name="RequireWeaveProject" BeforeTargets="PrepareForBuild" Condition="'$(WeaveProjectPath)' == '' Or !Exists('$(WeaveProjectPath)')">
-    <Error Text="Set WeaveProjectPath to the full path of a local Weave.fsproj. See README.md." />
-  </Target>
-  <Target Name="CopyWeaveStyles" AfterTargets="Build">
-    <Copy SourceFiles="$([System.IO.Path]::GetDirectoryName('$(WeaveProjectPath)'))/styles.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" />
-  </Target>
 </Project>
-
-

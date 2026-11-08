@@ -44,8 +44,6 @@ NUGET
     WebSharper.UI (10.1.7.686)
       HtmlAgilityPack (>= 1.12.4) - restriction: >= netstandard2.0
       WebSharper (>= 10.1.9.686 < 10.1.10) - restriction: >= netstandard2.0
-    Zanaptak.TypedCssClasses (1.0)
-      FSharp.Core (>= 4.3.4) - restriction: >= netstandard2.0
 
 GROUP analyzers
 NUGET

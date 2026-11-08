@@ -1,0 +1,101 @@
+name: Release templates
+
+on:
+  push:
+    tags: ['templates-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing template release tag to retry
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: templates-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+      - name: Validate tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          [[ "$RELEASE_TAG" =~ ^templates-v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.[1-9][0-9]*)?$ ]]
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          git merge-base --is-ancestor HEAD origin/main
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Pack templates
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          version="${RELEASE_TAG#templates-v}"
+          project_version=$(dotnet msbuild templates/Weave.Templates/Weave.Templates.fsproj -getProperty:Version)
+          test "$project_version" = "$version"
+          dotnet pack templates/Weave.Templates/Weave.Templates.fsproj -c Release -o artifacts/templates
+      - name: Build generated projects
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          version="${RELEASE_TAG#templates-v}"
+          hive="$RUNNER_TEMP/weave-template-hive"
+          weave_version=$(dotnet msbuild templates/WeaveVersion.props -getProperty:WeaveLibraryVersion)
+          dotnet new install "$GITHUB_WORKSPACE/artifacts/templates/Weave.WebSharper.Templates.$version.nupkg" --debug:custom-hive "$hive"
+          for name in app dashboard projects repository; do
+            project="Example$name"
+            dir="$RUNNER_TEMP/weave-template-test/$name"
+            dotnet new "weave-$name" -n "$project" -o "$dir" --debug:custom-hive "$hive"
+            grep -F "Include=\"Weave.WebSharper\" Version=\"$weave_version\"" "$dir/$project.fsproj"
+            dotnet restore "$dir/$project.fsproj"
+            if grep -qi '"Zanaptak.TypedCssClasses/' "$dir/obj/project.assets.json"; then
+              echo "The CSS type provider must not be a consumer dependency" >&2
+              exit 1
+            fi
+            dotnet build "$dir/$project.fsproj" -c Release --no-restore
+            test -s "$dir/wwwroot/Scripts/Weave/styles.css"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weave-templates-package
+          path: artifacts/templates/*.nupkg
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: weave-templates-package
+          path: artifacts/templates
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.x'
+      - name: Publish to NuGet
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+        run: |
+          test -n "$NUGET_TOKEN" || { echo "NUGET_TOKEN is not configured" >&2; exit 1; }
+          dotnet nuget push artifacts/templates/*.nupkg --api-key "$NUGET_TOKEN" --source https://api.nuget.org/v3/index.json
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          flags=()
+          if [[ "$RELEASE_TAG" == *-rc.* ]]; then flags+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" artifacts/templates/*.nupkg --title "Weave templates ${RELEASE_TAG#templates-v}" --generate-notes "${flags[@]}"

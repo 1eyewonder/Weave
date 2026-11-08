@@ -1,4 +1,4 @@
-﻿open Fake.Api
+open Fake.Api
 open Fake.Core
 open Fake.IO
 open Fake.DotNet
@@ -218,6 +218,9 @@ let initTargets () =
   Target.create "RunNonBrowserTests" runNonBrowserTests
   Target.create "RunBrowserTests" runBrowserTests
   Target.create "BuildDocs" buildDocs
+  Target.create "CheckReleaseBaseline" Release.checkBaseline
+  Target.create "ReleaseNotes" Release.writeNotes
+  Target.create "VerifyReleasePackage" Release.verifyPackage
   Target.create "Init" ignore
 
   "Clean" ?=>! "Restore"

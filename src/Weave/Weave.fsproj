@@ -51,5 +51,6 @@
   <Target Name="CompileScss" BeforeTargets="BeforeBuild">
     <Exec Command="yarn build:css" WorkingDirectory="$(ProjectDir)../.." />
   </Target>
+  <Import Project="Package.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

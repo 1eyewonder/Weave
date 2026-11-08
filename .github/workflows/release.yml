@@ -1,0 +1,106 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to retry
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  BUILD_CONFIGURATION: Release
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - run: dotnet tool restore
+      - name: Validate tag and release notes
+        id: release
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          dotnet run --project build/Weave.Build.fsproj -c Release -- -t ReleaseNotes
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          git merge-base --is-ancestor HEAD origin/main
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+      - name: Build test image
+        run: docker compose build
+      - name: Check format and run unit and rendering tests
+        run: |
+          docker compose run --rm playwright-tests sh -c "./build.sh CheckFormat"
+          docker compose run --rm playwright-tests sh -c "./build.sh RunNonBrowserTests"
+
+  browser-tests:
+    runs-on: ubuntu-latest
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
+      - run: docker compose build
+      - run: docker compose run --rm -e WEAVE_E2E_BROWSER=${{ matrix.browser }} playwright-tests sh -c "./build.sh RunBrowserTests"
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [validate, browser-tests]
+    environment: nuget
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.x'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: corepack enable
+      - run: dotnet tool restore
+      - run: yarn install --immutable
+      - name: Pack
+        env:
+          RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+        run: |
+          dotnet run --project build/Weave.Build.fsproj -c Release -- -t ReleaseNotes
+          dotnet pack src/Weave/Weave.fsproj -c Release -o artifacts/package -p:PackageVersion="${RELEASE_TAG#v}"
+          dotnet run --project build/Weave.Build.fsproj -c Release -- -t VerifyReleasePackage
+      - name: Publish to NuGet
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+        run: |
+          test -n "$NUGET_TOKEN" || { echo "NUGET_TOKEN is not configured" >&2; exit 1; }
+          dotnet nuget push artifacts/package/*.nupkg --api-key "$NUGET_TOKEN" --source https://api.nuget.org/v3/index.json
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+        run: |
+          flags=()
+          if [[ "$RELEASE_TAG" == *-rc* ]]; then flags+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" artifacts/package/*.nupkg --title "$RELEASE_TAG" --notes-file release-body.md "${flags[@]}"

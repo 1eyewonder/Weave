@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <PackageId>Weave.WebSharper</PackageId>
+    <Authors>Weave contributors</Authors>
+    <Description>A component library for building F# web applications with WebSharper.</Description>
+    <PackageProjectUrl>https://github.com/1eyewonder/Weave</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/1eyewonder/Weave</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
+    <PackageTags>FSharp;WebSharper;UI;components</PackageTags>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../PACKAGE.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="styles.css" Pack="true" PackagePath="contentFiles/any/any/" PackageCopyToOutput="true" />
+  </ItemGroup>
+</Project>

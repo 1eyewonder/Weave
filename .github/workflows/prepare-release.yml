@@ -1,0 +1,27 @@
+name: Prepare release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  shipit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - run: dotnet tool restore
+      - name: Check ShipIt baseline
+        run: dotnet run --project build/Weave.Build.fsproj -c Release -- -t CheckReleaseBaseline
+      - name: Prepare release pull request
+        run: dotnet shipit --skip-merge-commit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

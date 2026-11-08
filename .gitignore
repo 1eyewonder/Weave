@@ -384,3 +384,6 @@ src/Weave.Docs/wwwroot/assets/weave-logo.png
 .yarn/
 .claude/
 reliability/
+
+artifacts/
+release-body.md

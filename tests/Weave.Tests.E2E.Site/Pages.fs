@@ -1122,7 +1122,7 @@ module Pages =
     )
 
   let private tooltipPage () =
-    div [] [
+    div [ Attr.Create "style" "padding: 16px" ] [
       Tooltip.create (
         Button.create (text "Hover me", (fun () -> ()), attrs = [ Button.Variant.filled ]),
         text "Tooltip text",

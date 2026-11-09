@@ -53,7 +53,7 @@ module GettingStartedExamples =
             ]
             li [] [
               strong [] [ text "Package feed" ]
-              span [] [ text "Weave release candidate packages" ]
+              span [] [ text "Weave packages from NuGet" ]
             ]
             li [] [ strong [] [ text "F# and WebSharper" ]; span [] [ text "Basic familiarity" ] ]
           ]
@@ -64,11 +64,11 @@ module GettingStartedExamples =
   let private installPackage () =
     Helpers.textSection "1. Create a starter application" [
       Helpers.bodyText
-        "The published release candidate packages are available on NuGet. The starter template references the matching Weave library version."
+        "The stable packages are available on NuGet. The starter template references the matching Weave library version."
       Helpers.bodyText "Install the template, create the minimal app, and run it:"
       codeBlock
         "bash"
-        """dotnet new install Weave.WebSharper.Templates@0.1.0-rc.1
+        """dotnet new install Weave.WebSharper.Templates@0.1.0
 dotnet new weave-app -n MyApp
 cd MyApp
 dotnet run"""
@@ -110,8 +110,8 @@ module Client =
 
   let private existingProject () =
     Helpers.textSection "3. Add Weave to an existing app" [
-      Helpers.bodyText "Add the published release candidate to an existing F# WebSharper project:"
-      codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.1.0-rc.1"
+      Helpers.bodyText "Add Weave to an existing F# WebSharper project:"
+      codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.1.0"
       Helpers.bodyText
         "The package includes styles.css as a WebSharper resource and a NuGet content file. Link the extracted stylesheet, or copy the content file into your app's static files and link it at the URL your host serves. Your existing WebSharper setup determines the script and host configuration."
       codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
@@ -199,12 +199,12 @@ yarn dev:docs"""
   let private starterTemplates () =
     Helpers.textSection "4. Explore the workspace templates" [
       Helpers.bodyText
-        "Start with an editable F# application and customize it for your project. The template and Weave packages are available as release candidates on NuGet."
+        "Start with an editable F# application and customize it for your project. The template and Weave packages are available on NuGet."
       Helpers.bodyText
         "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
       templateGallery ()
-      Helpers.bodyText "Install the release-candidate template package with the .NET 10 SDK:"
-      codeBlock "bash" "dotnet new install Weave.WebSharper.Templates@0.1.0-rc.1"
+      Helpers.bodyText "Install the template package with the .NET 10 SDK:"
+      codeBlock "bash" "dotnet new install Weave.WebSharper.Templates@0.1.0"
       Helpers.bodyText
         "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
       codeBlock

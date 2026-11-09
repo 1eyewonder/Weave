@@ -12,11 +12,11 @@
 
 Weave is opinionated where it matters — consistent theming, ergonomic APIs, and structured styling — while remaining flexible enough to work seamlessly with native WebSharper constructs.
 
-> **Note:** Weave is currently in active development and serves as an experimental playground. Release candidates are available; breaking changes are expected as design patterns mature.
+> **Note:** Weave is in active development. The first stable release is available on NuGet.
 
 ## Releases and WebSharper compatibility
 
-The first release candidate, [`Weave.WebSharper` 0.1.0-rc.1](https://www.nuget.org/packages/Weave.WebSharper/0.1.0-rc.1), is available on NuGet. [Starter templates](templates/README.md) are also available. The currently tested baseline is WebSharper and WebSharper.FSharp **10.1.9.686** with WebSharper.UI **10.1.7.686**, as locked in `paket.lock`. NuGet dependencies express minimum versions; other versions are not yet verified.
+[`Weave.WebSharper` 0.1.0](https://www.nuget.org/packages/Weave.WebSharper/0.1.0) is available on NuGet. [Starter templates](templates/README.md) are also available. The currently tested baseline is WebSharper and WebSharper.FSharp **10.1.9.686** with WebSharper.UI **10.1.7.686**, as locked in `paket.lock`. NuGet dependencies express minimum versions; other versions are not yet verified.
 
 ## Why Weave?
 

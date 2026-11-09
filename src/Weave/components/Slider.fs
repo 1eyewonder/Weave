@@ -62,17 +62,19 @@ type Slider =
         valueAsFloat.Value <- snapped
 
     let isDragging = Var.Create false
+    let enabledRef = ref true
 
     let onPointerDown =
       on.pointerDown (fun el ev ->
-        ev.PreventDefault()
-        el?setPointerCapture (ev?pointerId)
-        isDragging.Value <- true
-        updateFromPointer el (float ev.ClientX))
+        if enabledRef.Value then
+          ev.PreventDefault()
+          el?setPointerCapture (ev?pointerId)
+          isDragging.Value <- true
+          updateFromPointer el (float ev.ClientX))
 
     let onPointerMove =
       on.pointerMove (fun el ev ->
-        if isDragging.Value then
+        if enabledRef.Value && isDragging.Value then
           updateFromPointer el (float ev.ClientX))
 
     let onPointerUp = on.pointerUp (fun _ _ -> isDragging.Value <- false)
@@ -132,8 +134,20 @@ type Slider =
     let trackContainer =
       div [
         cl Css.``weave-slider__track-container``
+        on.afterRender (fun _ ->
+          enabled
+          |> View.Sink(fun isEnabled ->
+            enabledRef.Value <- isEnabled
+
+            if not isEnabled then
+              isDragging.Value <- false))
         Attr.Create "role" "slider"
-        Attr.Create "tabindex" "0"
+        enabled
+        |> View.Map(fun isEnabled -> if isEnabled then "0" else "-1")
+        |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
+        enabled
+        |> View.Map(fun isEnabled -> if isEnabled then "false" else "true")
+        |> Attr.DynamicCustom(fun el value -> el.SetAttribute("aria-disabled", value))
         valueAsFloat.View
         |> View.Map(sprintf "%.2f")
         |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-valuenow", v))
@@ -153,8 +167,9 @@ type Slider =
         onPointerUp
         onPointerCancel
 
-        on.keyDown (fun _ ev ->
+        on.keyDownView enabled (fun _ ev isEnabled ->
           match ev with
+          | _ when not isEnabled -> ()
           | Key.ArrowRight
           | Key.ArrowUp ->
             ev.PreventDefault()

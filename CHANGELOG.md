@@ -1,8 +1,16 @@
 ---
-pre_release: rc
+last_commit_released: 76c67c18ecd2e6bb14b157baa5968abf9f778150
 ---
 
 # Changelog
+
+## v0.1.0
+
+- Refresh component styling, theme colors, documentation navigation, and getting-started guidance.
+- Improve keyboard focus, accessible colors and interaction states across components in light and dark themes.
+- Refine dialogs, tables, form controls, code examples, and responsive documentation layouts.
+- Expand browser interaction, accessibility, and rendering coverage for the refreshed components.
+- Built and tested against WebSharper 10.1.9.686 and WebSharper.UI 10.1.7.686.
 
 ## v0.1.0-rc.1
 

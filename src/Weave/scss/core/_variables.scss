@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "../utilities/borders/border-radius" as *;
+@use "../abstracts/border-radius" as *;
 
 $font-family-body: "Fira Sans", sans-serif;
 $font-family-display: "Lato", sans-serif;
@@ -93,7 +93,7 @@ $font-family-mono: "Fira Mono", "Consolas", monospace;
   --weave-alpha-overlay:   0.4;
   --weave-alpha-scrim:     0.5;
 
-  --default-borderradius: #{map.get($border-radiuses, "sm")};
+  --default-borderradius: #{map.get($border-radiuses, "md")};
   --default-button-borderradius: #{map.get($border-radiuses, "md")};
   --grid-item-min-height: 24px;
   // Space above every field's input box that holds the floating label
@@ -101,7 +101,7 @@ $font-family-mono: "Fira Mono", "Consolas", monospace;
   --palette-border-opacity: 0.8;
   --weave-zindex-dropdown: 100;
   --weave-zindex-buttonmenu: 100;
-  --weave-zindex-dialog: 200;
+  --weave-zindex-dialog: calc(var(--weave-zindex-tooltip) + 1);
   --weave-zindex-scroll-to-top: 300;
 
   --appbar-height: 64px;
@@ -204,10 +204,10 @@ $font-family-mono: "Fira Mono", "Consolas", monospace;
 
   --typography-button-size: 0.875rem;
   --typography-button-family: var(--weave-font-family-body);
-  --typography-button-weight: var(--weave-weight-bold);
+  --typography-button-weight: var(--weave-weight-regular);
   --typography-button-lineheight: 1.75;
-  --typography-button-letterspacing: 0.03em;
-  --typography-button-text-transform: uppercase;
+  --typography-button-letterspacing: 0.005em;
+  --typography-button-text-transform: none;
 
   --typography-caption-size: 0.75rem;
   --typography-caption-family: var(--weave-font-family-body);

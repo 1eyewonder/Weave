@@ -155,6 +155,47 @@ Select.create(
 
     Helpers.codeSampleSection "Variants" description content code
 
+  let private persistentLabelExample () =
+    let selected = Var.Create<string option> None
+
+    let items =
+      [ "Apple"; "Banana"; "Cherry" ]
+      |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
+      |> View.Const
+
+    let content =
+      Select.create (
+        items,
+        selected,
+        labelText = View.Const "Fruit",
+        placeholder = View.Const "Choose a fruit",
+        attrs = [ Select.Variant.outlined; Select.Label.above ]
+      )
+
+    let code =
+      """open Weave
+open WebSharper.UI
+open WebSharper.UI.Html
+
+let selected = Var.Create<string option> None
+let items =
+    [ "Apple"; "Banana"; "Cherry" ]
+    |> List.map (fun fruit -> SelectItem.create (text fruit, fruit, fruit))
+    |> View.Const
+
+Select.create(
+    items, selected,
+    labelText = View.Const "Fruit",
+    placeholder = View.Const "Choose a fruit",
+    attrs = [ Select.Variant.outlined; Select.Label.above ]
+)"""
+
+    Helpers.codeSampleSection
+      "Persistent Label"
+      (Helpers.bodyText "Keep the label visible above an outlined select.")
+      content
+      code
+
   let private clearableExample () =
     let selected = Var.Create<string option>(Some "Tokyo")
 
@@ -1107,6 +1148,8 @@ Select.create(
         ("info", "Light blue accent color")
       ]
 
+      Helpers.styleModuleTable "Select.Label" [ ("above", "Keep the label above an outlined select") ]
+
       Helpers.styleModuleTable "Select.Width" [
         ("full", "Component root stretches to fill its container width")
         ("dynamic", "Trigger resizes to the currently selected value (opt-out of stable default)")
@@ -1155,6 +1198,8 @@ Select.create(
         basicExample ()
         Helpers.divider ()
         variantsExample ()
+
+        persistentLabelExample ()
         Helpers.divider ()
         widthExample ()
         Helpers.divider ()

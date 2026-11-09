@@ -35,7 +35,7 @@ module FieldExamples =
             "date pickers, color pickers, or third-party inputs that need field chrome."
           Helpers.guidanceBullet
             "You need full control over focus and float logic"
-            "Field requires you to wire isFocused and shouldFloat yourself."
+            "Field requires you to wire isFocused and shouldFloat yourself; use Field.Label.above with the outlined variant for a persistent label."
           Helpers.guidanceBullet
             "No existing wrapper fits your use case"
             "Field gives you the label, adornments, outline, help text, and variant styling with no opinions about the input element."
@@ -159,6 +159,8 @@ Field.create(
           ("filled", "Filled background with underline")
           ("outlined", "Bordered outline with floating label notch")
         ]
+
+        Helpers.styleModuleTable "Field.Label" [ ("above", "Keep the label above an outlined field") ]
 
         Helpers.styleModuleTable "Field.Color" [
           ("primary", "Primary brand color accent")

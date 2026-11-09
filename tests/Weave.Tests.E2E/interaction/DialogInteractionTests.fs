@@ -90,3 +90,44 @@ type DialogInteractionTests(fixture: TestFixture) =
         .Expect(this.Page.GetByRole(Microsoft.Playwright.AriaRole.Dialog))
         .ToHaveAccessibleNameAsync("Plain dialog title")
   }
+
+  [<Fact>]
+  member this.``dialog with no actions keeps keyboard focus inside``() = task {
+    do! this.NavigateTo("dialog-empty")
+    let dialog = this.Page.Locator(".weave-dialog__window")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Shift+Tab")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``dialog actions remain within a narrow viewport``() = task {
+    do! this.NavigateTo("dialog")
+    do! this.Page.SetViewportSizeAsync(320, 640)
+    let window = this.Page.Locator(".weave-dialog__window")
+    let actions = this.Page.Locator(".weave-dialog__actions")
+    do! this.Expect(actions).ToBeVisibleAsync()
+    let! bounds = window.BoundingBoxAsync()
+    Assert.NotNull(bounds)
+    Assert.True(bounds.X >= 0.0f && bounds.X + bounds.Width <= 320.0f, "Dialog should fit the viewport")
+  }
+
+  [<Fact>]
+  member this.``dialog backdrop blocks an open drawer``() = task {
+    do! this.NavigateTo("dialog-with-drawer")
+    let drawer = this.Page.GetByTestId("dialog-test-drawer")
+    do! this.Expect(drawer).ToBeVisibleAsync()
+
+    let! blocked =
+      drawer.EvaluateAsync<bool>(
+        """el => {
+      const r = el.getBoundingClientRect();
+      const target = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return !!target && target.classList.contains('weave-dialog__backdrop');
+    }"""
+      )
+
+    Assert.True(blocked, "The dialog backdrop should cover the open drawer")
+  }

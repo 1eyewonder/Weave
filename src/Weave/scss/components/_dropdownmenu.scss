@@ -55,7 +55,6 @@
   margin-inline-start: 8px;
   font-size: 12px;
   line-height: 1;
-  color: var(--palette-action-default);
   transition: transform var(--weave-duration-standard) $ease-standard;
 }
 
@@ -258,11 +257,6 @@
   }
 }
 
-// Chevron picks up brand color when dropdown is open
-.weave-dropdownmenu--open .weave-dropdownmenu__chevron {
-  color: var(--_dropdownmenu-brand-color);
-}
-
 // Brand-aware hover on highlighted items (subtle brand tint)
 @media (hover: hover) and (pointer: fine) {
   .weave-dropdownmenu__item--highlighted:hover:not(.weave-dropdownmenu__item--disabled) {
@@ -345,10 +339,6 @@ $transform-origins: (
   opacity: var(--weave-opacity-disabled-container);
   pointer-events: none;
   cursor: default;
-
-  .weave-dropdownmenu__chevron {
-    color: var(--palette-action-disabled);
-  }
 }
 
 // ---------------------------------------------------------------------------

@@ -12,6 +12,15 @@ open Weave.Operators
 [<JavaScript; RequireQualifiedAccess>]
 module ExpansionPanel =
 
+  // Both the header and its containing panel can independently disable activation.
+  let internal syncHeaderAvailability (el: Dom.Element) =
+    let disabled =
+      el.GetAttribute("data-weave-header-disabled") = "true"
+      || el.GetAttribute("data-weave-panel-disabled") = "true"
+
+    el.SetAttribute("aria-disabled", if disabled then "true" else "false")
+    el.SetAttribute("tabindex", if disabled then "-1" else "0")
+
   [<RequireQualifiedAccess; Struct>]
   type ExpansionSelection =
     | Single
@@ -110,7 +119,10 @@ type ExpansionPanelHeader =
         AlignContent.spaceBetween
         JustifyContent.spaceBetween
         Attr.Style "width" "100%"
-        Attr.Create "tabindex" "0"
+        enabled
+        |> Attr.DynamicCustom(fun el isEnabled ->
+          el.SetAttribute("data-weave-header-disabled", if isEnabled then "false" else "true")
+          ExpansionPanel.syncHeaderAvailability el)
         Attr.Create "role" "button"
         on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
         expanded.View
@@ -120,16 +132,16 @@ type ExpansionPanelHeader =
         let clickable = View.zipCached expanded.View enabled
 
         on.clickView clickable
-        <| fun _ _ (isExpanded, isEnabled) ->
-          if isEnabled then
+        <| fun el _ (isExpanded, isEnabled) ->
+          if isEnabled && el.GetAttribute("aria-disabled") <> "true" then
             Var.Set expanded (not isExpanded)
 
-        on.keyDown (fun _ ev ->
+        on.keyDown (fun el ev ->
           match ev with
           | Key.Activate ->
             ev.PreventDefault()
 
-            if enabledRef.Value then
+            if enabledRef.Value && el.GetAttribute("aria-disabled") <> "true" then
               Var.Set expanded (not expanded.Value)
           | _ -> ())
 
@@ -158,6 +170,7 @@ type ExpansionPanel =
     (header: Doc, content: Doc, ?expanded: Var<bool>, ?enabled: View<bool>, ?attrs: Attr list)
     =
     let expanded = defaultArg expanded (Var.Create false)
+    let enabled = defaultArg enabled (View.Const true)
     let attrs = defaultArg attrs []
     let headerId = WeaveId.create "weave-expansion-panel-header"
     let panelId = WeaveId.create "weave-expansion-panel-content"
@@ -175,7 +188,12 @@ type ExpansionPanel =
 
         if not (isNull headerEl) then
           headerEl.SetAttribute("aria-controls", panelId)
-          headerEl.SetAttribute("id", headerId))
+          headerEl.SetAttribute("id", headerId)
+
+          enabled
+          |> View.Sink(fun isEnabled ->
+            headerEl.SetAttribute("data-weave-panel-disabled", if isEnabled then "false" else "true")
+            ExpansionPanel.syncHeaderAvailability headerEl))
 
       yield! attrs
     ] [
@@ -185,5 +203,11 @@ type ExpansionPanel =
         Attr.Create "id" panelId
         Attr.Create "role" "region"
         Attr.Create "aria-labelledby" headerId
+        expanded.View
+        |> Attr.DynamicCustom(fun el isExpanded ->
+          if isExpanded then
+            el.RemoveAttribute("inert")
+          else
+            el.SetAttribute("inert", ""))
       ] [ content ]
     ]

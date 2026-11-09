@@ -5,6 +5,12 @@
     background-color: var(--palette-#{$color});
   }
 
+  // Paired foreground and fill for content-bearing brand surfaces.
+  .weave-fill-#{$color} {
+    background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+    color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+  }
+
   .weave-#{$color}-text {
     color: var(--palette-#{$color});
     --ripple-color: var(--palette-#{$color});

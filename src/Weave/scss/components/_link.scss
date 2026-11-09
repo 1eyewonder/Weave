@@ -27,7 +27,7 @@
   @include transition((color, opacity), medium);
 
   &.weave-link--disabled {
-    color: var(--palette-action-disabled);
+    color: var(--palette-text-disabled);
     cursor: default;
     pointer-events: none;
   }

@@ -90,7 +90,7 @@ DropdownMenu.create(
 
     let description =
       Helpers.bodyText
-        "Dropdown supports all brand colors. Pass DropdownMenu.Color.* via attrs to tint the menu (chevron, highlighted items, focus outline), and the matching Button.Color.* via triggerAttrs for the trigger button."
+        "Dropdown supports all brand colors. Pass DropdownMenu.Color.* via attrs to tint the menu (highlighted items and focus outline), and the matching Button.Color.* via triggerAttrs for the trigger button."
 
     let content =
       div [] [

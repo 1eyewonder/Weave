@@ -204,15 +204,16 @@ type SliderLayoutTests() =
   }
 
   [<Fact>]
-  member this.``disabled slider has reduced opacity``() = task {
+  member this.``disabled slider uses a distinct muted fill``() = task {
     do! this.LoadFixture()
 
-    let! opacity =
-      this.Page.Locator("#slider-disabled").EvaluateAsync<string>("el => getComputedStyle(el).opacity")
+    let! enabled =
+      this.ComputedStyle("#slider-basic .weave-slider__fill", "backgroundColor")
 
-    let opacityValue = System.Double.Parse(opacity)
+    and! disabled =
+      this.ComputedStyle("#slider-disabled .weave-slider__fill", "backgroundColor")
 
-    Assert.True(opacityValue < 1.0, $"Disabled slider opacity ({opacity}) should be less than 1")
+    Assert.True(enabled <> disabled, $"Enabled and disabled colors should differ, but both were {enabled}")
   }
 
   [<Fact>]

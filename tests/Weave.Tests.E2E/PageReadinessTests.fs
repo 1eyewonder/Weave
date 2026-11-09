@@ -7,8 +7,8 @@ type PageReadinessTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Theory>]
-  [<InlineData("slider", "[role='slider']", "aria-valuenow", 4)>]
-  [<InlineData("slider", "[role='slider']", "aria-label", 4)>]
+  [<InlineData("slider", "[role='slider']", "aria-valuenow", 11)>]
+  [<InlineData("slider", "[role='slider']", "aria-label", 11)>]
   [<InlineData("chip", "[data-testid='clickable-chip']", "tabindex", 1)>]
   [<InlineData("dropdown-menu", ".weave-dropdownmenu .weave-button", "aria-expanded", 1)>]
   member this.``ready marker follows initial dynamic bindings``

@@ -18,6 +18,11 @@ module TextField =
     let filled = cl Css.``weave-field--filled``
     let outlined = cl Css.``weave-field--outlined``
 
+  /// Use with the outlined variant for a persistent label above the control.
+  module Label =
+
+    let above = cl Css.``weave-field--label-above``
+
   module Color =
 
     let primary = cl Css.``weave-field--primary``

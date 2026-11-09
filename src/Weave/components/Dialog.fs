@@ -43,12 +43,17 @@ module private DialogInternal =
   let focusableSelector =
     "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex=\"-1\"])"
 
-  let trapFocus (container: Dom.Element) (ev: Dom.KeyboardEvent) =
-    let focusable = container.QuerySelectorAll(focusableSelector)
+  [<Inline "Array.from($container.querySelectorAll($selector)).filter(e => e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden' && !e.closest('[inert]'))">]
+  let visibleFocusable (container: Dom.Element) (selector: string) : Dom.Element[] = X<_>
 
-    if focusable.Length > 0 then
-      let first = As<Dom.Element>(focusable.Item 0)
-      let last = As<Dom.Element>(focusable.Item(focusable.Length - 1))
+  let trapFocus (container: Dom.Element) (ev: Dom.KeyboardEvent) =
+    let focusable = visibleFocusable container focusableSelector
+
+    if focusable.Length = 0 then
+      ev.PreventDefault()
+    else
+      let first = focusable.[0]
+      let last = focusable.[focusable.Length - 1]
       let active = As<Dom.Element>(JS.Document?activeElement)
 
       if ev.ShiftKey then
@@ -75,6 +80,13 @@ type DialogContent =
   static member create(content: Doc, ?attrs: Attr list) =
     let attrs = defaultArg attrs []
     div [ cls [ Css.``weave-dialog__content`` ]; yield! attrs ] [ content ]
+
+[<JavaScript>]
+type DialogActions =
+
+  static member create(content: Doc, ?attrs: Attr list) =
+    let attrs = defaultArg attrs []
+    div [ cls [ Css.``weave-dialog__actions`` ]; yield! attrs ] [ content ]
 
 [<JavaScript>]
 type Dialog =

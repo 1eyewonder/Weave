@@ -103,3 +103,58 @@ type ExpansionPanelInteractionTests(fixture: TestFixture) =
     let header = this.Page.Locator(".weave-expansion-panel__header").Nth(2)
     do! this.Expect(header).ToHaveClassAsync(Regex("weave-expansion-panel__header--focus-error"))
   }
+
+  [<Fact>]
+  member this.``collapsed content is removed from keyboard navigation until expanded``() = task {
+    do! this.NavigateTo("expansion-panel")
+    let header = this.Page.Locator(".weave-expansion-panel__header").Nth(1)
+    let action = this.Page.GetByTestId("collapsed-panel-action")
+    do! header.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(action).Not.ToBeFocusedAsync()
+    do! header.PressAsync("Enter")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(action).ToBeFocusedAsync()
+    do! header.PressAsync("Enter")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "false")
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(action).Not.ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``disabled expansion header is not tabbable or activatable``() = task {
+    do! this.NavigateTo("expansion-panel")
+    let header = this.Page.GetByTestId("disabled-expansion-header")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Expect(header).ToHaveAttributeAsync("tabindex", "-1")
+
+    let! _ =
+      header.EvaluateAsync(
+        "el => { el.click(); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
+      )
+
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "false")
+  }
+
+  [<Fact>]
+  member this.``panel and header enabled states combine reactively``() = task {
+    do! this.NavigateTo("expansion-panel-dynamic")
+    let header = this.Page.GetByTestId("dynamic-expansion-header")
+    let panelToggle = this.Page.GetByTestId("toggle-panel-enabled")
+    let headerToggle = this.Page.GetByTestId("toggle-header-enabled")
+    do! panelToggle.ClickAsync()
+    do! this.Expect(header).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Expect(header).ToHaveAttributeAsync("tabindex", "-1")
+    let! _ = header.EvaluateAsync("el => el.click()")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "false")
+    do! headerToggle.ClickAsync()
+    do! panelToggle.ClickAsync()
+    do! this.Expect(header).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Expect(header).ToHaveAttributeAsync("tabindex", "-1")
+    do! headerToggle.ClickAsync()
+    do! this.Expect(header).ToHaveAttributeAsync("aria-disabled", "false")
+    do! this.Expect(header).ToHaveAttributeAsync("tabindex", "0")
+    do! header.PressAsync("Enter")
+    do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")
+  }

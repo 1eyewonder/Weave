@@ -40,7 +40,7 @@
 }
 
 .weave-table__head {
-  background: var(--palette-surface);
+  background: var(--palette-background-paper);
 }
 
 .weave-table__body {
@@ -89,7 +89,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: var(--palette-surface);
+  background: var(--palette-background-paper);
 }
 
 .weave-table__sort-button {
@@ -116,7 +116,8 @@
   @include transition(opacity, short);
 }
 
-.weave-table__sort-button:hover .weave-table__sort-indicator {
+.weave-table__sort-button:hover .weave-table__sort-indicator,
+.weave-table__sort-button:focus-visible .weave-table__sort-indicator {
   opacity: var(--weave-opacity-secondary);
 }
 
@@ -125,7 +126,8 @@
   opacity: 1;
 }
 
-.weave-table__row + .weave-table__row .weave-table__cell {
+.weave-table__row + .weave-table__row .weave-table__cell,
+.weave-table__row + .weave-table__row .weave-table__row-header {
   border-top: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
 }
 
@@ -148,6 +150,11 @@
 
 .weave-table__row--selected {
   background-color: rgba(var(--palette-primary-rgb), var(--weave-alpha-selected));
+}
+
+.weave-table--hoverable .weave-table__row--selected:hover,
+.weave-table__row--clickable.weave-table__row--selected:hover {
+  background-color: rgba(var(--palette-primary-rgb), var(--weave-alpha-selected-hover));
 }
 
 .weave-table__row-action {

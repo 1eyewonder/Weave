@@ -73,8 +73,29 @@ module Pages =
       Checkbox.create (Var.Create false, View.Const "Default Checkbox")
       Checkbox.create (Var.Create true, View.Const "Checked Checkbox")
       Checkbox.create (Var.Create false, View.Const "Disabled Checkbox", enabled = View.Const false)
+      Checkbox.create (
+        Var.Create true,
+        View.Const "Disabled checked",
+        enabled = View.Const false,
+        attrs = [ Attr.Create "data-testid" "disabled-checked-checkbox" ]
+      )
       Checkbox.create (Var.Create false, View.Const "Small", attrs = [ Checkbox.Size.small ])
       Checkbox.create (Var.Create false, View.Const "Large", attrs = [ Checkbox.Size.large ])
+      for name, color in
+        [
+          "primary", Checkbox.Color.primary
+          "secondary", Checkbox.Color.secondary
+          "tertiary", Checkbox.Color.tertiary
+          "error", Checkbox.Color.error
+          "warning", Checkbox.Color.warning
+          "success", Checkbox.Color.success
+          "info", Checkbox.Color.info
+        ] do
+        Checkbox.create (
+          Var.Create true,
+          View.Const name,
+          attrs = [ color; Attr.Create "data-testid" ("checkbox-color-" + name) ]
+        )
     ]
 
   let private radioPage () =
@@ -100,6 +121,32 @@ module Pages =
         enabled = View.Const false,
         inputAttrs = [ Attr.Create "name" "test-options" ]
       )
+      Radio.create (
+        Var.Create "selected",
+        "selected",
+        displayText = View.Const "Disabled selected",
+        enabled = View.Const false,
+        inputAttrs = [ Attr.Create "name" "disabled-selected" ],
+        attrs = [ Attr.Create "data-testid" "disabled-selected-radio" ]
+      )
+      for name, color in
+        [
+          "primary", Radio.Color.primary
+          "secondary", Radio.Color.secondary
+          "tertiary", Radio.Color.tertiary
+          "error", Radio.Color.error
+          "warning", Radio.Color.warning
+          "success", Radio.Color.success
+          "info", Radio.Color.info
+        ] do
+        Radio.create (
+          Var.Create "selected",
+          "selected",
+          displayText = View.Const name,
+          inputAttrs = [ Attr.Create "name" ("radio-" + name) ],
+          attrs = [ color; Attr.Create "data-testid" ("radio-color-" + name) ]
+        )
+
     ]
 
   let private radioFormGroupsPage () =
@@ -142,6 +189,28 @@ module Pages =
       Switch.create (Var.Create false, content = text "Off Switch")
       Switch.create (Var.Create true, content = text "On Switch")
       Switch.create (Var.Create false, content = text "Disabled Switch", enabled = View.Const false)
+      Switch.create (
+        Var.Create true,
+        content = text "Disabled On",
+        enabled = View.Const false,
+        attrs = [ Attr.Create "data-testid" "disabled-on-switch" ]
+      )
+      for name, color in
+        [
+          "primary", Switch.Color.primary
+          "secondary", Switch.Color.secondary
+          "tertiary", Switch.Color.tertiary
+          "error", Switch.Color.error
+          "warning", Switch.Color.warning
+          "success", Switch.Color.success
+          "info", Switch.Color.info
+        ] do
+        Switch.create (
+          Var.Create true,
+          content = text name,
+          attrs = [ color; Attr.Create "data-testid" ("switch-color-" + name) ]
+        )
+
     ]
 
   let private fieldPage () =
@@ -244,6 +313,13 @@ module Pages =
           Attr.Create "aria-describedby" "text-email-error"
         ],
         attrs = [ TextField.Color.error ]
+      )
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Persistent label",
+        placeholder = View.Const "Type here",
+        startAdornment = text "@",
+        attrs = [ TextField.Variant.outlined; TextField.Label.above ]
       )
       TextField.singleLine (Var.Create "", labelText = View.Const "Max Length", maxLength = 50)
       TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field")
@@ -360,6 +436,24 @@ module Pages =
           labelText = View.Const "Select all without search"
         )
       ]
+      div [ Attr.Create "data-testid" "select-palette" ] [
+        for name, color in
+          [
+            "primary", Select.Color.primary
+            "secondary", Select.Color.secondary
+            "tertiary", Select.Color.tertiary
+            "error", Select.Color.error
+            "warning", Select.Color.warning
+            "success", Select.Color.success
+            "info", Select.Color.info
+          ] do
+          Select.create (
+            items,
+            Var.Create<string option>(Some "Apple"),
+            labelText = View.Const(name + " select"),
+            attrs = [ color; Attr.Create "data-testid" ("select-color-" + name) ]
+          )
+      ]
       Button.create (
         text "Toggle enabled",
         (fun () -> Var.Set selectEnabled (not selectEnabled.Value)),
@@ -439,7 +533,42 @@ module Pages =
         ]
       )
       Button.primary (text "Primary", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.secondary (text "Secondary", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.tertiary (text "Tertiary", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.success (text "Success", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.warning (text "Warning", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      Button.info (text "Info", (fun () -> ()), attrs = [ Button.Variant.filled ])
       Button.error (text "Error", (fun () -> ()), attrs = [ Button.Variant.filled ])
+      div [
+        SurfaceColor.BackgroundColor.surface
+        Attr.Create "data-testid" "button-palette"
+      ] [
+        for name, color in
+          [
+            "primary", Button.Color.primary
+            "secondary", Button.Color.secondary
+            "tertiary", Button.Color.tertiary
+            "error", Button.Color.error
+            "warning", Button.Color.warning
+            "success", Button.Color.success
+            "info", Button.Color.info
+          ] do
+          for variantName, variant in
+            [
+              "filled", Button.Variant.filled
+              "outlined", Button.Variant.outlined
+              "text", Button.Variant.text
+            ] do
+            Button.create (
+              text (name + " " + variantName),
+              (fun () -> ()),
+              attrs = [
+                color
+                variant
+                Attr.Create "data-testid" ("button-contrast-" + name + "-" + variantName)
+              ]
+            )
+      ]
     ]
 
   let private dialogPage () =
@@ -450,18 +579,30 @@ module Pages =
       if visible then
         Dialog.create (
           DialogTitle.create (text "Dialog Title"),
-          DialogContent.create (
-            div [] [
-              div [ Typography.body1 ] [ text "Dialog content goes here." ]
-              div [] [
-                Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
-              ]
-            ]
-          ),
+          Doc.Concat [
+            DialogContent.create (div [ Typography.body1 ] [ text "Dialog content goes here." ])
+            DialogActions.create (
+              Button.create (text "Action", (fun () -> ()), attrs = [ Button.Variant.filled ])
+            )
+          ],
           dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> isOpen.Value <- false))
         )
       else
         Doc.Empty)
+
+  let private dialogWithDrawerPage () =
+    DrawerContainer.create (
+      mainContent = Dialog.create (DialogTitle.create (text "Dialog"), DialogContent.create (text "Content")),
+      leftDrawer =
+        Drawer.create (
+          div [] [ text "Navigation" ],
+          View.Const true,
+          variant = Drawer.Variant.Responsive,
+          isFixed = false,
+          attrs = [ Attr.Create "data-testid" "dialog-test-drawer" ]
+        ),
+      attrs = [ Attr.Style "height" "100vh" ]
+    )
 
   let private dialogForcePage () =
     Dialog.create (
@@ -540,6 +681,7 @@ module Pages =
     let expanded1 = Var.Create true
     let expanded2 = Var.Create false
     let expanded3 = Var.Create false
+    let disabledExpanded = Var.Create false
 
     ExpansionPanelContainer.create (
       [
@@ -558,7 +700,16 @@ module Pages =
             expanded2,
             icon = ExpansionPanelHeader.defaultIcon expanded2
           ),
-          ExpansionPanelContent.create (div [ Typography.body1 ] [ text "Collapsed content" ]),
+          ExpansionPanelContent.create (
+            div [ Typography.body1 ] [
+              text "Collapsed content"
+              Button.create (
+                text "Panel action",
+                ignore,
+                attrs = [ Attr.Create "data-testid" "collapsed-panel-action" ]
+              )
+            ]
+          ),
           expanded = expanded2
         )
         ExpansionPanel.create (
@@ -571,8 +722,49 @@ module Pages =
           ExpansionPanelContent.create (div [ Typography.body1 ] [ text "Focus color content" ]),
           expanded = expanded3
         )
+        ExpansionPanel.create (
+          ExpansionPanelHeader.create (
+            text "Disabled Panel",
+            disabledExpanded,
+            enabled = View.Const false,
+            attrs = [ Attr.Create "data-testid" "disabled-expansion-header" ]
+          ),
+          ExpansionPanelContent.create (text "Disabled panel content"),
+          expanded = disabledExpanded
+        )
       ]
     )
+
+  let private dynamicExpansionPanelPage () =
+    let expanded = Var.Create false
+    let panelEnabled = Var.Create true
+    let headerEnabled = Var.Create true
+
+    div [] [
+      ExpansionPanelContainer.create [
+        ExpansionPanel.create (
+          ExpansionPanelHeader.create (
+            text "Dynamic header",
+            expanded,
+            enabled = headerEnabled.View,
+            attrs = [ Attr.Create "data-testid" "dynamic-expansion-header" ]
+          ),
+          ExpansionPanelContent.create (text "Panel content"),
+          expanded = expanded,
+          enabled = panelEnabled.View
+        )
+      ]
+      Button.create (
+        text "Toggle panel",
+        (fun () -> panelEnabled.Value <- not panelEnabled.Value),
+        attrs = [ Attr.Create "data-testid" "toggle-panel-enabled" ]
+      )
+      Button.create (
+        text "Toggle header",
+        (fun () -> headerEnabled.Value <- not headerEnabled.Value),
+        attrs = [ Attr.Create "data-testid" "toggle-header-enabled" ]
+      )
+    ]
 
   let private alertPage () =
     div [] [
@@ -580,6 +772,45 @@ module Pages =
       Alert.create (text "Error alert message", attrs = [ Alert.Color.error ])
       Alert.create (text "Warning alert message", attrs = [ Alert.Color.warning ])
       Alert.create (text "Info alert message", attrs = [ Alert.Color.info ])
+      for name, color in
+        [
+          "primary", Alert.Color.primary
+          "secondary", Alert.Color.secondary
+          "tertiary", Alert.Color.tertiary
+          "error", Alert.Color.error
+          "warning", Alert.Color.warning
+          "success", Alert.Color.success
+          "info", Alert.Color.info
+        ] do
+        Alert.create (
+          text (name + " standard"),
+          onClose = (fun () -> ()),
+          attrs = [
+            color
+            Alert.Variant.standard
+            Attr.Create "data-testid" ("alert-" + name + "-standard")
+          ]
+        )
+
+        Alert.create (
+          text (name + " outlined"),
+          onClose = (fun () -> ()),
+          attrs = [
+            color
+            Alert.Variant.outlined
+            Attr.Create "data-testid" ("alert-" + name + "-outlined")
+          ]
+        )
+
+        Alert.create (
+          text (name + " filled"),
+          onClose = (fun () -> ()),
+          attrs = [
+            color
+            Alert.Variant.filled
+            Attr.Create "data-testid" ("alert-" + name + "-filled")
+          ]
+        )
     ]
 
   let private cardPage () =
@@ -773,6 +1004,20 @@ module Pages =
       ]
     ]
 
+  let private defaultTablePage () =
+    let rows = [ "Alpha"; "Beta" ]
+    let selected = Var.Create(Some "Alpha")
+    let columns = [ TableColumn.create ("name", text "Name", (fun (row: string) -> text row)) ]
+
+    Table.create (
+      columns,
+      View.Const rows,
+      id,
+      selectedKey = selected,
+      caption = text "Default rows",
+      attrs = [ Table.hoverable ]
+    )
+
   let private themePage useSystemPreference =
     let initialMode =
       if useSystemPreference then
@@ -796,6 +1041,27 @@ module Pages =
           Button.Color.primary
         ]
       )
+      for name, fill, color in
+        [
+          "primary", BrandColor.Fill.primary, Button.Color.primary
+          "secondary", BrandColor.Fill.secondary, Button.Color.secondary
+          "tertiary", BrandColor.Fill.tertiary, Button.Color.tertiary
+          "error", BrandColor.Fill.error, Button.Color.error
+          "warning", BrandColor.Fill.warning, Button.Color.warning
+          "success", BrandColor.Fill.success, Button.Color.success
+          "info", BrandColor.Fill.info, Button.Color.info
+        ] do
+        div [ fill; Attr.Create "data-testid" ("theme-fill-" + name) ] [ text name ]
+
+        Button.create (
+          text name,
+          ignore,
+          attrs = [
+            color
+            Button.Variant.filled
+            Attr.Create "data-testid" ("theme-button-" + name)
+          ]
+        )
       div [ Attr.Class "weave-card"; Attr.Create "data-testid" "theme-card" ] [ text "Card" ]
       div [ Typography.body1; Attr.Create "data-testid" "theme-body" ] [ text "Body" ]
       Button.create (
@@ -958,6 +1224,29 @@ module Pages =
           |> View.Map(fun values -> values |> Set.toList |> String.concat ",")
         )
       ]
+      div [ Attr.Create "data-testid" "selected-palette" ] [
+        for name, color in
+          [
+            "primary", WeaveList.Color.primary
+            "secondary", WeaveList.Color.secondary
+            "tertiary", WeaveList.Color.tertiary
+            "error", WeaveList.Color.error
+            "warning", WeaveList.Color.warning
+            "success", WeaveList.Color.success
+            "info", WeaveList.Color.info
+          ] do
+          WeaveList.create (
+            [
+              ListItem.create (
+                text (name + " item"),
+                value = name,
+                secondaryContent = text "Secondary detail",
+                attrs = [ color ]
+              )
+            ],
+            selectedValue = Var.Create(Some name)
+          )
+      ]
       div [ Attr.Create "data-testid" "nested-list" ] [
         WeaveList.create (
           [
@@ -991,6 +1280,32 @@ module Pages =
         attrs = [ Chip.Variant.filled; Attr.Create "data-testid" "clickable-chip" ]
       )
       Chip.create (text "Default Chip", attrs = [ Chip.Variant.filled ])
+      for name, color in
+        [
+          "primary", Chip.Color.primary
+          "secondary", Chip.Color.secondary
+          "tertiary", Chip.Color.tertiary
+          "error", Chip.Color.error
+          "warning", Chip.Color.warning
+          "success", Chip.Color.success
+          "info", Chip.Color.info
+        ] do
+        for variantName, variant in
+          [
+            "filled", Chip.Variant.filled
+            "outlined", Chip.Variant.outlined
+            "text", Chip.Variant.text
+          ] do
+          Chip.create (
+            text (name + " " + variantName),
+            onClick = ignore,
+            attrs = [
+              color
+              variant
+              Attr.Create "data-testid" ("chip-color-" + name + "-" + variantName)
+            ]
+          )
+
       Chip.create (
         text "Disabled Chip",
         onClick = (fun () -> ()),
@@ -1180,6 +1495,40 @@ module Pages =
       )
       Slider.create (Var.Create 30, labelText = View.Const "Disabled Slider", enabled = View.Const false)
       Slider.primary (Var.Create 75, labelText = View.Const "Primary Slider")
+      for name, color in
+        [
+          "primary", Slider.Color.primary
+          "secondary", Slider.Color.secondary
+          "tertiary", Slider.Color.tertiary
+          "error", Slider.Color.error
+          "warning", Slider.Color.warning
+          "success", Slider.Color.success
+          "info", Slider.Color.info
+        ] do
+        Slider.create (
+          Var.Create 50,
+          labelText = View.Const name,
+          attrs = [ color; Attr.Create "data-testid" ("slider-color-" + name) ]
+        )
+
+    ]
+
+  let private dynamicSliderPage () =
+    let enabled = Var.Create true
+
+    div [] [
+      Slider.create (
+        Var.Create 50,
+        min = 0,
+        max = 100,
+        labelText = View.Const "Adjust",
+        enabled = enabled.View
+      )
+      Button.create (
+        text "Toggle slider",
+        (fun () -> enabled.Value <- not enabled.Value),
+        attrs = [ Attr.Create "data-testid" "toggle-slider-enabled" ]
+      )
     ]
 
   let private resizeListenerPage () =
@@ -1225,16 +1574,26 @@ module Pages =
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()
     | "button" -> buttonPage ()
+    | "dialog-empty" ->
+      Dialog.create (
+        DialogTitle.create (text "No actions"),
+        DialogContent.create (
+          div [] [ text "Message"; button [ Attr.Style "display" "none" ] [ text "Hidden" ] ]
+        )
+      )
     | "dialog-plain" -> plainDialogPage ()
     | "dialog" -> dialogPage ()
+    | "dialog-with-drawer" -> dialogWithDrawerPage ()
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
     | "dropdown-menu" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
+    | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()
     | "card" -> cardPage ()
     | "table" -> tablePage ()
+    | "table-default" -> defaultTablePage ()
     | "theme" -> themePage false
     | "theme-system" -> themePage true
     | "appbar" -> appbarPage ()
@@ -1250,6 +1609,7 @@ module Pages =
     | "buttongroup" -> buttongroupPage ()
     | "tooltip" -> tooltipPage ()
     | "slider" -> sliderPage ()
+    | "slider-dynamic" -> dynamicSliderPage ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 
   [<Inline "window.location.hash.replace('#', '')">]

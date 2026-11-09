@@ -52,8 +52,28 @@ type E2ETestBase(fixture: TestFixture) =
 
   member _.Expect(locator: ILocator) = Assertions.Expect(locator)
 
-  member this.RunAxeScan(pageName: string) = task {
+  member this.RunAxeScan(pageName: string, ?contrast: bool, ?dark: bool) = task {
     do! this.NavigateTo(pageName)
+
+    let checkContrast =
+      defaultArg contrast (System.Environment.GetEnvironmentVariable("WEAVE_AUDIT_CONTRAST") = "1")
+
+    // Measure the settled state, not a transient frame during an entrance or theme transition.
+    if checkContrast then
+      let! _ =
+        this.Page.AddStyleTagAsync(
+          PageAddStyleTagOptions(
+            Content = "*, *::before, *::after { transition: none !important; animation: none !important; }"
+          )
+        )
+
+      ()
+
+    if defaultArg dark (System.Environment.GetEnvironmentVariable("WEAVE_AUDIT_DARK") = "1") then
+      let! _ =
+        this.Page.EvaluateAsync<obj>("() => document.body.setAttribute('data-theme', 'dark')")
+
+      ()
 
     let options = AxeRunOptions()
 
@@ -63,8 +83,8 @@ type E2ETestBase(fixture: TestFixture) =
         "region", RuleOptions(Enabled = false)
         "landmark-one-main", RuleOptions(Enabled = false)
         "page-has-heading-one", RuleOptions(Enabled = false)
-        // Disabled/placeholder elements intentionally have reduced contrast (WCAG 2.1 SC 1.4.3 exemption)
-        "color-contrast", RuleOptions(Enabled = false)
+        // Opt in to contrast review: fixtures include deliberately disabled, animated, and custom-colored examples.
+        "color-contrast", RuleOptions(Enabled = checkContrast)
       ]
       |> System.Collections.Generic.Dictionary
 

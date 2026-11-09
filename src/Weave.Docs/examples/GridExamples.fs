@@ -32,15 +32,15 @@ module GridExamples =
       Grid.create (
         [
           GridItem.create (
-            demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+            demoBox (View.Const "Item 1") BrandColor.Fill.primary,
             attrs = [ GridItem.Span.twelve ]
           )
           GridItem.create (
-            demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+            demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
             attrs = [ GridItem.Span.twelve ]
           )
           GridItem.create (
-            demoBox (View.Const "Item 3") BrandColor.BackgroundColor.tertiary,
+            demoBox (View.Const "Item 3") BrandColor.Fill.tertiary,
             attrs = [ GridItem.Span.twelve ]
           )
         ]
@@ -73,7 +73,7 @@ Grid.create(
             [ 0..3 ]
             |> List.map (fun _ ->
               GridItem.create (
-                demoBox (View.Const "1/4") BrandColor.BackgroundColor.primary,
+                demoBox (View.Const "1/4") BrandColor.Fill.primary,
                 attrs = [ GridItem.Span.three ]
               ))
         ]
@@ -117,18 +117,18 @@ Grid.create(
               ]
             )
 
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.primary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.secondary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.tertiary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.primary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.secondary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.tertiary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.primary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.secondary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.tertiary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.primary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.secondary
-          item Breakpoint.browserAsText BrandColor.BackgroundColor.tertiary
+          item Breakpoint.browserAsText BrandColor.Fill.primary
+          item Breakpoint.browserAsText BrandColor.Fill.secondary
+          item Breakpoint.browserAsText BrandColor.Fill.tertiary
+          item Breakpoint.browserAsText BrandColor.Fill.primary
+          item Breakpoint.browserAsText BrandColor.Fill.secondary
+          item Breakpoint.browserAsText BrandColor.Fill.tertiary
+          item Breakpoint.browserAsText BrandColor.Fill.primary
+          item Breakpoint.browserAsText BrandColor.Fill.secondary
+          item Breakpoint.browserAsText BrandColor.Fill.tertiary
+          item Breakpoint.browserAsText BrandColor.Fill.primary
+          item Breakpoint.browserAsText BrandColor.Fill.secondary
+          item Breakpoint.browserAsText BrandColor.Fill.tertiary
         ]
       )
 
@@ -163,9 +163,9 @@ GridItem.create(
 
         Grid.create (
           [
-            item BrandColor.BackgroundColor.primary
-            item BrandColor.BackgroundColor.secondary
-            item BrandColor.BackgroundColor.tertiary
+            item BrandColor.Fill.primary
+            item BrandColor.Fill.secondary
+            item BrandColor.Fill.tertiary
           ],
           attrs = [ Grid.Spacing.extraSmall ]
         )
@@ -174,9 +174,9 @@ GridItem.create(
 
         Grid.create (
           [
-            item BrandColor.BackgroundColor.primary
-            item BrandColor.BackgroundColor.secondary
-            item BrandColor.BackgroundColor.tertiary
+            item BrandColor.Fill.primary
+            item BrandColor.Fill.secondary
+            item BrandColor.Fill.tertiary
           ],
           attrs = [ Grid.Spacing.small ]
         )
@@ -185,9 +185,9 @@ GridItem.create(
 
         Grid.create (
           [
-            item BrandColor.BackgroundColor.primary
-            item BrandColor.BackgroundColor.secondary
-            item BrandColor.BackgroundColor.tertiary
+            item BrandColor.Fill.primary
+            item BrandColor.Fill.secondary
+            item BrandColor.Fill.tertiary
           ],
           attrs = [ Grid.Spacing.medium ]
         )
@@ -196,9 +196,9 @@ GridItem.create(
 
         Grid.create (
           [
-            item BrandColor.BackgroundColor.primary
-            item BrandColor.BackgroundColor.secondary
-            item BrandColor.BackgroundColor.tertiary
+            item BrandColor.Fill.primary
+            item BrandColor.Fill.secondary
+            item BrandColor.Fill.tertiary
           ],
           attrs = [ Grid.Spacing.large ]
         )
@@ -207,9 +207,9 @@ GridItem.create(
 
         Grid.create (
           [
-            item BrandColor.BackgroundColor.primary
-            item BrandColor.BackgroundColor.secondary
-            item BrandColor.BackgroundColor.tertiary
+            item BrandColor.Fill.primary
+            item BrandColor.Fill.secondary
+            item BrandColor.Fill.tertiary
           ],
           attrs = [ Grid.Spacing.extraLarge ]
         )
@@ -243,11 +243,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ],
@@ -258,11 +258,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ],
@@ -273,11 +273,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ],
@@ -290,11 +290,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ],
@@ -305,11 +305,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ]
@@ -319,11 +319,11 @@ Grid.create(
         Grid.create (
           [
             GridItem.create (
-              demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+              demoBox (View.Const "Item 1") BrandColor.Fill.primary,
               attrs = [ GridItem.Span.three ]
             )
             GridItem.create (
-              demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+              demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
               attrs = [ GridItem.Span.three ]
             )
           ],
@@ -365,22 +365,22 @@ Grid.create(
       Grid.create (
         [
           GridItem.create (
-            demoBox (View.Const "Item 1") BrandColor.BackgroundColor.primary,
+            demoBox (View.Const "Item 1") BrandColor.Fill.primary,
             attrs = [ GridItem.Span.four ]
           )
 
           FlexBreak.create ()
 
           GridItem.create (
-            demoBox (View.Const "Item 2") BrandColor.BackgroundColor.secondary,
+            demoBox (View.Const "Item 2") BrandColor.Fill.secondary,
             attrs = [ GridItem.Span.four ]
           )
           GridItem.create (
-            demoBox (View.Const "Item 3") BrandColor.BackgroundColor.tertiary,
+            demoBox (View.Const "Item 3") BrandColor.Fill.tertiary,
             attrs = [ GridItem.Span.four ]
           )
           GridItem.create (
-            demoBox (View.Const "Item 4") BrandColor.BackgroundColor.primary,
+            demoBox (View.Const "Item 4") BrandColor.Fill.primary,
             attrs = [ GridItem.Span.four ]
           )
         ]
@@ -426,15 +426,15 @@ Grid.create(
                 Grid.create (
                   [
                     GridItem.create (
-                      demoBox (View.Const "Nested 1") BrandColor.BackgroundColor.primary,
+                      demoBox (View.Const "Nested 1") BrandColor.Fill.primary,
                       attrs = [ GridItem.Span.six ]
                     )
                     GridItem.create (
-                      demoBox (View.Const "Nested 2") BrandColor.BackgroundColor.secondary,
+                      demoBox (View.Const "Nested 2") BrandColor.Fill.secondary,
                       attrs = [ GridItem.Span.six ]
                     )
                     GridItem.create (
-                      demoBox (View.Const "Nested 3") BrandColor.BackgroundColor.tertiary,
+                      demoBox (View.Const "Nested 3") BrandColor.Fill.tertiary,
                       attrs = [ GridItem.Span.twelve ]
                     )
                   ]
@@ -453,7 +453,7 @@ Grid.create(
                   Margin.Bottom.extraSmall
                   Attr.Style "color" "var(--palette-text-primary)"
                 ] [ text "Outer Grid - Right Column" ]
-                demoBox (View.Const "Full Height Item") BrandColor.BackgroundColor.primary
+                demoBox (View.Const "Full Height Item") BrandColor.Fill.primary
               ]
               |> Doc.Concat
             ),
@@ -654,6 +654,7 @@ Grid.create(
                       spanVars.[i],
                       min = 1,
                       max = 12,
+                      inputAttrs = [ Attr.Create "aria-label" (sprintf "Column span for item %d" (i + 1)) ],
                       attrs = [ NumericField.Variant.outlined; NumericField.Width.full ]
                     ),
                     attrs = [

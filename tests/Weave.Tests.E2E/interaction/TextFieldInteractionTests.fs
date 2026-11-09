@@ -27,3 +27,23 @@ type TextFieldInteractionTests(fixture: TestFixture) =
     let textarea = this.Page.Locator("textarea.weave-field__input").Last
     do! this.Expect(textarea).ToBeVisibleAsync()
   }
+
+  [<Fact>]
+  member this.``persistent label stays above its control while typing``() = task {
+    do! this.NavigateTo("textfield")
+    let field = this.Page.Locator(".weave-field--label-above")
+    let input = field.Locator("input")
+    let label = field.Locator("label")
+    do! this.Expect(label).ToBeVisibleAsync()
+    do! input.FillAsync("Hello")
+    do! this.Expect(input).ToHaveValueAsync("Hello")
+    let! labelBox = label.BoundingBoxAsync()
+    let! inputBox = input.BoundingBoxAsync()
+    Assert.NotNull(labelBox)
+    Assert.NotNull(inputBox)
+
+    Assert.True(
+      labelBox.Y + labelBox.Height <= inputBox.Y,
+      "The label should remain above the input after typing"
+    )
+  }

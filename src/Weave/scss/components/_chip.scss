@@ -88,8 +88,9 @@
 
   @each $color in $palette-colors {
     &.weave-chip--#{$color} {
-      background-color: var(--palette-#{$color});
-      color: var(--palette-#{$color}-text);
+      background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+      box-shadow: inset 0 0 0 1px var(--palette-#{$color}-fill-border, transparent);
+      color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
     }
   }
 }
@@ -110,13 +111,13 @@
     &.weave-chip--#{$color} {
       @media (hover: hover) and (pointer: fine) {
         &:hover {
-          background-color: var(--palette-#{$color}-darken);
+          background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
         }
       }
 
       &:focus-visible,
       &:active {
-        background-color: var(--palette-#{$color}-darken);
+        background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
       }
     }
   }
@@ -161,13 +162,15 @@
     &.weave-chip--#{$color} {
       @media (hover: hover) and (pointer: fine) {
         &:hover {
-          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-hover));
+          color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
+          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
         }
       }
 
       &:focus-visible,
       &:active {
-        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-focus));
+        color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
+        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
       }
     }
   }
@@ -183,7 +186,6 @@
 }
 
 .weave-chip--disabled {
-  opacity: var(--weave-opacity-disabled);
   pointer-events: none;
   cursor: default;
 }
@@ -194,8 +196,9 @@
 
   @each $color in $palette-colors {
     &.weave-chip--#{$color} {
-      background-color: var(--palette-#{$color});
-      color: var(--palette-#{$color}-text);
+      background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+      box-shadow: inset 0 0 0 1px var(--palette-#{$color}-fill-border, transparent);
+      color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
     }
   }
 }
@@ -204,7 +207,7 @@
 .weave-chip--filled.weave-chip--selected {
   @each $color in $palette-colors {
     &.weave-chip--#{$color} {
-      background-color: var(--palette-#{$color}-darken);
+      background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
     }
   }
 }
@@ -217,4 +220,12 @@
 
 .weave-chip--label {
   border-radius: var(--default-borderradius);
+}
+
+// Disabled chips remain readable and do not retain an active semantic fill.
+.weave-chip.weave-chip--disabled {
+  color: var(--palette-text-disabled);
+  background-color: transparent;
+  border-color: var(--palette-action-disabled);
+  box-shadow: none;
 }

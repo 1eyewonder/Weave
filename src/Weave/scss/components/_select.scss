@@ -30,8 +30,8 @@
 }
 
 .weave-select__placeholder {
-  color: var(--input-label-color, var(--palette-text-primary, currentColor));
-  opacity: var(--weave-opacity-placeholder);
+  color: var(--palette-text-secondary, currentColor);
+  opacity: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -244,7 +244,7 @@
 
   @include inputplaceholder {
     color: var(--palette-text-secondary, currentColor);
-    opacity: var(--weave-opacity-disabled-container);
+    opacity: 1;
   }
 }
 
@@ -395,7 +395,7 @@
   width: 18px;
   height: 18px;
   border: 2px solid var(--palette-action-default);
-  border-radius: var(--default-borderradius);
+  border-radius: min(var(--default-borderradius), 25%);
   flex-shrink: 0;
   box-sizing: border-box;
   position: relative;
@@ -414,7 +414,7 @@
   top: 50%;
   width: 4px;
   height: 8px;
-  border: solid var(--palette-background);
+  border: solid var(--palette-indicator-mark, var(--palette-background));
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -60%) rotate(45deg);
 }
@@ -431,7 +431,7 @@
   top: 50%;
   width: 8px;
   height: 2px;
-  background: var(--palette-background);
+  background: var(--palette-indicator-mark, var(--palette-background));
   transform: translate(-50%, -50%);
 }
 
@@ -465,7 +465,7 @@
       --select-brand-color: var(--palette-#{$color});
       --select-brand-rgb: var(--palette-#{$color}-rgb);
       background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
-      color: var(--palette-#{$color});
+      color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
     }
 
     .weave-select__item--selected:hover:not(.weave-select__item--disabled) {
@@ -474,7 +474,7 @@
 
     .weave-select__item-checkbox--checked,
     .weave-select__item-checkbox--indeterminate {
-      background-color: var(--palette-#{$color});
+      background-color: var(--palette-#{$color}-indicator, var(--palette-#{$color}));
       border-color: var(--palette-#{$color});
     }
 

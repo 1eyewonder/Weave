@@ -348,11 +348,31 @@ Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [ TextField.singleLine (query, labelText = View.Const "Filter by name") ]
+        div [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          AlignItems.end'
+          Gap.All.g3
+          Margin.Bottom.small
+        ] [
+          TextField.singleLine (
+            query,
+            labelText = View.Const "Filter by name",
+            placeholder = View.Const "Search by fruit",
+            attrs = [ TextField.Variant.outlined; TextField.Label.above ]
+          )
+          Button.create (
+            text "Clear filter",
+            onClick = (fun () -> Var.Set query ""),
+            attrs = [ Button.Variant.outlined ]
+          )
+        ]
         Table.create (
           columns (),
           filtered,
           fruitName,
+          rowHeader = "name",
+          caption = text "Fruit stock",
           emptyContent = text "No fruit matches the filter",
           attrs = [ Table.hoverable ]
         )
@@ -361,6 +381,8 @@ Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
     let code =
       """open Weave
 open WebSharper.UI
+open WebSharper.UI.Client
+open WebSharper.UI.Html
 
 type Fruit = { Name: string; Color: string; Stock: int }
 
@@ -374,7 +396,7 @@ let fruits = [
 let columns = [
     TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
     TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)))
+    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)), attrs = [ Attr.Style "text-align" "end" ])
 ]
 
 let query = Var.Create ""
@@ -383,20 +405,30 @@ let filtered =
     query.View
     |> View.Map (fun q -> fruits |> List.filter (fun f -> f.Name.ToLower().Contains(q.Trim().ToLower())))
 
-Table.create(
-    columns,
-    filtered,
-    (fun f -> f.Name),
-    emptyContent = text "No fruit matches the filter",
-    attrs = [ Table.hoverable ]
-)"""
+div [] [
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; AlignItems.end'; Gap.All.g3; Margin.Bottom.small ] [
+        TextField.singleLine(
+            query,
+            labelText = View.Const "Filter by name",
+            placeholder = View.Const "Search by fruit",
+            attrs = [ TextField.Variant.outlined; TextField.Label.above ]
+        )
+        Button.create(text "Clear filter", onClick = (fun () -> Var.Set query ""), attrs = [ Button.Variant.outlined ])
+    ]
+    Table.create(
+        columns, filtered, (fun f -> f.Name),
+        rowHeader = "name", caption = text "Fruit stock",
+        emptyContent = text "No fruit matches the filter",
+        attrs = [ Table.hoverable ]
+    )
+]"""
 
     Helpers.codeSampleSection "Filtering and Empty State" description content code
 
   let private stylingExample () =
     let description =
       Helpers.bodyText
-        "Combine Table.Density with Table.striped and Table.hoverable to adjust the look. Table.StripeColor and Table.HoverColor tint those rows with a palette color, or with any CSS color through custom."
+        "Combine Table.Density with Table.striped and Table.hoverable to adjust the look. Table.StripeColor and Table.HoverColor tint rows with a palette color or a custom CSS color. Check custom colors against the row text in both themes."
 
     let content =
       Grid.create (
@@ -459,8 +491,8 @@ Table.create(
     attrs = [ Table.Density.standard; Table.hoverable; Table.HoverColor.success ]
 )
 
-// Any CSS color
-Table.create(columns, View.Const fruits, (fun f -> f.Name), attrs = [ Table.striped; Table.StripeColor.custom "#fdf6e3" ])
+// A theme-aware custom tint
+Table.create(columns, View.Const fruits, (fun f -> f.Name), attrs = [ Table.striped; Table.StripeColor.custom "rgba(var(--palette-primary-rgb), var(--weave-alpha-selected))" ])
 
 Table.create(columns, View.Const fruits, (fun f -> f.Name), attrs = [ Table.Density.spacious ])"""
 

@@ -86,3 +86,23 @@ type RadioInteractionTests(fixture: TestFixture) =
     do! this.Expect(second.Nth(0)).ToBeCheckedAsync()
     do! this.Expect(second.Nth(1)).Not.ToBeCheckedAsync()
   }
+
+  [<Fact>]
+  member this.``disabled selected radio retains a visible dot``() = task {
+    do! this.NavigateTo("radio")
+    let root = this.Page.GetByTestId("disabled-selected-radio")
+    do! this.Expect(root.Locator("input")).ToBeCheckedAsync()
+    do! this.Expect(root.Locator("input")).ToBeDisabledAsync()
+
+    let! visible =
+      root
+        .Locator(".weave-radio__span")
+        .EvaluateAsync<bool>(
+          """el => {
+      const dot = getComputedStyle(el, '::after');
+      return Number(dot.opacity) > 0 && new DOMMatrix(dot.transform).a !== 0;
+    }"""
+        )
+
+    Assert.True(visible, "A disabled selected radio must retain its dot")
+  }

@@ -247,6 +247,7 @@ module Helpers =
 
       div [
         SurfaceColor.BackgroundColor.surface
+        Attr.Class "docs-example"
         Flex.Flex.allSizes
         FlexDirection.Column.allSizes
         Padding.All.small

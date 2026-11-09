@@ -42,58 +42,47 @@ module GettingStartedExamples =
       div [ Attr.Class "docs-getting-started__orientation-body" ] [
         p [ Attr.Class "docs-getting-started__orientation-copy" ] [
           text
-            "In this guide, you’ll run the included WebSharper app, build a reactive component, and see how to add Weave to your own project. Basic familiarity with F# will help."
+            "Start a WebSharper application with Weave, render an interactive button, and explore the component library."
         ]
         div [ Attr.Class "docs-getting-started__requirements" ] [
           div [ Attr.Class "docs-getting-started__requirements-label" ] [ text "What you’ll need" ]
           ul [ Attr.Class "docs-getting-started__requirements-list" ] [
-            li [] [ strong [] [ text "Git" ]; span [] [ text "Source control" ] ]
             li [] [
               strong [] [ text ".NET SDK" ]
-              span [] [ text "10.0.403 or a newer .NET 10 feature band" ]
+              span [] [ text "10.0.403 or newer .NET 10 feature band" ]
             ]
-            li [] [ strong [] [ text "Node.js" ]; span [] [ text "22.12 or later" ] ]
-            li [] [ strong [] [ text "Yarn" ]; span [] [ text "Version 4.5.3" ] ]
+            li [] [
+              strong [] [ text "Package feed" ]
+              span [] [ text "Weave release candidate packages" ]
+            ]
+            li [] [ strong [] [ text "F# and WebSharper" ]; span [] [ text "Basic familiarity" ] ]
           ]
         ]
       ]
     ]
 
-  let private runDocs () =
-    Helpers.textSection "1. Get the source and run the site" [
+  let private installPackage () =
+    Helpers.textSection "1. Create a starter application" [
       Helpers.bodyText
-        "Clone the repository, initialize its dependencies, and start the docs from the repository root. Use build.cmd on Windows or build.sh on macOS/Linux."
+        "The published release candidate packages are available on NuGet. The starter template references the matching Weave library version."
+      Helpers.bodyText "Install the template, create the minimal app, and run it:"
       codeBlock
         "bash"
-        """git clone https://github.com/1eyewonder/Weave.git
-cd Weave"""
-      div [ Attr.Class "docs-getting-started__platforms" ] [
-        div [] [
-          div [ Attr.Class "docs-getting-started__label" ] [ text "macOS / Linux" ]
-          codeBlock
-            "bash"
-            """./build.sh init
-yarn dev:docs"""
-        ]
-        div [] [
-          div [ Attr.Class "docs-getting-started__label" ] [ text "Windows PowerShell" ]
-          codeBlock
-            "powershell"
-            """.\build.cmd init
-yarn dev:docs"""
-        ]
-      ]
+        """dotnet new install Weave.WebSharper.Templates@0.1.0-rc.1
+dotnet new weave-app -n MyApp
+cd MyApp
+dotnet run"""
       Helpers.bodyText
-        "Open the URL printed by Vite (normally http://localhost:5173). You should see the Weave docs. Leave the command running while editing; F# changes rebuild the client and may reset page state. Stop it with Ctrl+C."
+        "Open the address printed by the app. The starter already references Weave and includes its styles. Its README explains the project layout and theme toggle."
     ]
 
   let private firstPage () =
-    Helpers.textSection "2. Render your first component" [
+    Helpers.textSection "2. Build an interactive component" [
       Helpers.bodyText
-        "Keep these instructions open elsewhere: the next step temporarily replaces the docs UI. Replace src/Weave.Docs/Client.fs with the code below, save it, and return to the Vite URL. The button should display a count and increment each time it is clicked. Restore the file afterward to return to the docs."
+        "In the generated app, replace the contents of Client.fs with the example below. Run the app again and click the button to update the count. This changes your new starter, not the documentation site."
       codeBlock
         "fsharp"
-        """namespace Weave.Docs
+        """namespace WeaveStarter
 
 open WebSharper
 open WebSharper.UI
@@ -116,19 +105,46 @@ module Client =
         ] |> Doc.RunById "main"
 """
       Helpers.bodyText
-        "Var holds changing state; its View lets the text update when that state changes. Doc is rendered UI, and attrs customize the component using WebSharper attributes. The existing index.html supplies the main element and loads the compiled client and stylesheet."
+        "Var holds changing state and its View updates the displayed text. The starter's index.html supplies the main element and loads the app and stylesheet."
     ]
 
   let private existingProject () =
-    Helpers.textSection "3. Use Weave in an existing WebSharper app" [
-      Helpers.bodyText
-        "From your existing WebSharper project directory, add the Weave release candidate from NuGet:"
+    Helpers.textSection "3. Add Weave to an existing app" [
+      Helpers.bodyText "Add the published release candidate to an existing F# WebSharper project:"
       codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.1.0-rc.1"
       Helpers.bodyText
-        "Weave's styles must be linked from your HTML. In a WebSharper standalone SPA that extracts resources to wwwroot/Scripts, link the generated stylesheet as shown below. Otherwise, copy styles.css from the NuGet package's contentFiles/any/any directory to your app's static files and link it there."
+        "The package includes styles.css as a WebSharper resource and a NuGet content file. Link the extracted stylesheet, or copy the content file into your app's static files and link it at the URL your host serves. Your existing WebSharper setup determines the script and host configuration."
       codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
       Helpers.bodyText
-        "Use a URL matching where your app serves the stylesheet. Your existing WebSharper SPA entry point should render a Doc into an element in your page, as in the example above. WebSharper's own setup determines your script and host configuration."
+        "For the tested WebSharper baseline and a local source checkout workflow, see the repository README."
+    ]
+
+  let private contributing () =
+    Helpers.textSection "Work on the documentation" [
+      Helpers.bodyText
+        "To contribute to Weave itself, clone the repository and initialize its dependencies from the repository root:"
+      codeBlock
+        "bash"
+        """git clone https://github.com/1eyewonder/Weave.git
+cd Weave"""
+      div [ Attr.Class "docs-getting-started__platforms" ] [
+        div [] [
+          div [ Attr.Class "docs-getting-started__label" ] [ text "macOS / Linux" ]
+          codeBlock
+            "bash"
+            """./build.sh init
+yarn dev:docs"""
+        ]
+        div [] [
+          div [ Attr.Class "docs-getting-started__label" ] [ text "Windows PowerShell" ]
+          codeBlock
+            "powershell"
+            """.\build.cmd init
+yarn dev:docs"""
+        ]
+      ]
+      Helpers.bodyText
+        "Open the URL printed by Vite. F# edits rebuild the client; stop the development processes with Ctrl+C."
     ]
 
   let private templatePreview name description slug command =
@@ -181,7 +197,7 @@ module Client =
     ]
 
   let private starterTemplates () =
-    Helpers.textSection "4. Start from a template (optional)" [
+    Helpers.textSection "4. Explore the workspace templates" [
       Helpers.bodyText
         "Start with an editable F# application and customize it for your project. The template and Weave packages are available as release candidates on NuGet."
       Helpers.bodyText
@@ -225,28 +241,26 @@ dotnet run --urls http://localhost:5000"""
       div [ Attr.Class "docs-getting-started" ] [
         Helpers.pageTitle "Getting Started"
         div [ Attr.Class "docs-getting-started__lead" ] [
-          text "From a local checkout to your first interactive component."
+          text "From a starter app to your first interactive component."
         ]
         div [ Attr.Class "docs-getting-started__path" ] [
-          stepLink "1.-get-the-source-and-run-the-site" "01" "Run the docs" "Set up your workspace"
-          stepLink "2.-render-your-first-component" "02" "Try a component" "See reactivity in action"
-          stepLink
-            "3.-use-weave-in-an-existing-websharper-app"
-            "03"
-            "Use in your app"
-            "Connect an existing project"
-          stepLink "4.-start-from-a-template-optional" "04" "Try a template" "Start with a complete workspace"
+          stepLink "1.-create-a-starter-application" "01" "Create an app" "Install the starter"
+          stepLink "2.-build-an-interactive-component" "02" "Try a component" "See reactivity in action"
+          stepLink "3.-add-weave-to-an-existing-app" "03" "Use in your app" "Connect an existing project"
+          stepLink "4.-explore-the-workspace-templates" "04" "Explore starters" "See complete workspaces"
         ]
         Helpers.divider ()
         introduction ()
         Helpers.divider ()
-        runDocs ()
+        installPackage ()
         Helpers.divider ()
         firstPage ()
         Helpers.divider ()
         existingProject ()
         Helpers.divider ()
         starterTemplates ()
+        Helpers.divider ()
+        contributing ()
         Helpers.divider ()
         nextSteps ()
       ],

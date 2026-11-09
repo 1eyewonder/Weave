@@ -7,3 +7,9 @@ type SelectTests(fixture: TestFixture) =
 
   [<Fact>]
   member this.``passes axe-core accessibility scan``() = this.RunAxeScan("select")
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``default colors pass contrast checks in both themes``(dark: bool) =
+    this.RunAxeScan("select", contrast = true, dark = dark)

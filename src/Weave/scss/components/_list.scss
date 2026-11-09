@@ -63,14 +63,14 @@
 .weave-list-item--selectable:hover:not(.weave-list-item--disabled):not(
     .weave-list-item--readonly
   ) {
-  color: var(--list-item-selected-color);
+  color: var(--list-item-state-color, var(--list-item-selected-color));
 }
 
 .weave-list-item--selectable:hover:not(.weave-list-item--disabled):not(
     .weave-list-item--readonly
   )
   .weave-list-item__secondary-content {
-  color: rgba(var(--list-item-selected-rgb), var(--weave-opacity-secondary-hover));
+  color: var(--list-item-state-color, var(--list-item-selected-color));
 }
 
 .weave-list-item--disabled {
@@ -89,41 +89,54 @@
 
 .weave-list-item {
   --list-item-selected-color: var(--palette-primary);
+  --list-item-state-color: var(--palette-primary-darken, var(--palette-primary));
   --list-item-selected-rgb: var(--palette-primary-rgb);
 }
 
 .weave-list-item--primary {
   --list-item-selected-color: var(--palette-primary);
+  --list-item-state-color: var(--palette-primary-darken, var(--palette-primary));
   --list-item-selected-rgb: var(--palette-primary-rgb);
 }
 .weave-list-item--secondary {
   --list-item-selected-color: var(--palette-secondary);
+  --list-item-state-color: var(--palette-secondary-darken, var(--palette-secondary));
   --list-item-selected-rgb: var(--palette-secondary-rgb);
 }
 .weave-list-item--tertiary {
   --list-item-selected-color: var(--palette-tertiary);
+  --list-item-state-color: var(--palette-tertiary-darken, var(--palette-tertiary));
+  --list-item-indicator-color: var(--palette-tertiary-indicator, var(--palette-tertiary));
   --list-item-selected-rgb: var(--palette-tertiary-rgb);
 }
 .weave-list-item--error {
   --list-item-selected-color: var(--palette-error);
+  --list-item-state-color: var(--palette-error-darken, var(--palette-error));
+  --list-item-indicator-color: var(--palette-error-indicator, var(--palette-error));
   --list-item-selected-rgb: var(--palette-error-rgb);
 }
 .weave-list-item--warning {
   --list-item-selected-color: var(--palette-warning);
+  --list-item-state-color: var(--palette-warning-darken, var(--palette-warning));
+  --list-item-indicator-color: var(--palette-warning-indicator, var(--palette-warning));
   --list-item-selected-rgb: var(--palette-warning-rgb);
 }
 .weave-list-item--success {
   --list-item-selected-color: var(--palette-success);
+  --list-item-state-color: var(--palette-success-darken, var(--palette-success));
+  --list-item-indicator-color: var(--palette-success-indicator, var(--palette-success));
   --list-item-selected-rgb: var(--palette-success-rgb);
 }
 .weave-list-item--info {
   --list-item-selected-color: var(--palette-info);
+  --list-item-state-color: var(--palette-info-darken, var(--palette-info));
+  --list-item-indicator-color: var(--palette-info-indicator, var(--palette-info));
   --list-item-selected-rgb: var(--palette-info-rgb);
 }
 
 .weave-list-item--selected {
   background-color: rgba(var(--list-item-selected-rgb), var(--weave-alpha-border));
-  color: var(--list-item-selected-color);
+  color: var(--list-item-state-color, var(--list-item-selected-color));
 }
 
 .weave-list-item--selected .weave-list-item__icon {
@@ -152,7 +165,7 @@
 }
 
 .weave-list-item--selected .weave-list-item__secondary-content {
-  color: rgba(var(--list-item-selected-rgb), var(--weave-opacity-secondary-hover));
+  color: var(--list-item-state-color, var(--list-item-selected-color));
 }
 
 .weave-list-item__checkbox {
@@ -162,7 +175,7 @@
   width: 18px;
   height: 18px;
   border: 2px solid var(--palette-action-default);
-  border-radius: var(--default-borderradius);
+  border-radius: min(var(--default-borderradius), 25%);
   flex-shrink: 0;
   @include transition((background-color, border-color), short);
   box-sizing: border-box;
@@ -170,7 +183,7 @@
 }
 
 .weave-list-item__checkbox--checked {
-  background-color: var(--list-item-selected-color);
+  background-color: var(--list-item-indicator-color, var(--list-item-selected-color));
   border-color: var(--list-item-selected-color);
 }
 
@@ -181,13 +194,13 @@
   top: 50%;
   width: 4px;
   height: 8px;
-  border: solid var(--palette-background);
+  border: solid var(--palette-indicator-mark, var(--palette-background));
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -60%) rotate(45deg);
 }
 
 .weave-list-item__checkbox--indeterminate {
-  background-color: var(--list-item-selected-color);
+  background-color: var(--list-item-indicator-color, var(--list-item-selected-color));
   border-color: var(--list-item-selected-color);
 }
 
@@ -198,7 +211,7 @@
   top: 50%;
   width: 8px;
   height: 2px;
-  background: var(--palette-background);
+  background: var(--palette-indicator-mark, var(--palette-background));
   transform: translate(-50%, -50%);
 }
 

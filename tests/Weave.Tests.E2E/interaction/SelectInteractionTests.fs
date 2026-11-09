@@ -647,3 +647,54 @@ type SelectInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(root.Locator(".weave-select__item--selected")).ToHaveCountAsync(0)
   }
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``selected option remains readable across colors``(dark: bool) = task {
+    do! this.NavigateTo("select")
+
+    if dark then
+      let! _ =
+        this.Page.EvaluateAsync<obj>("() => document.body.setAttribute('data-theme', 'dark')")
+
+      ()
+
+    let! _ =
+      this.Page.AddStyleTagAsync(
+        Microsoft.Playwright.PageAddStyleTagOptions(
+          Content = "*, *::before, *::after { transition: none !important; animation: none !important; }"
+        )
+      )
+
+    for color in [ "primary"; "secondary"; "tertiary"; "error"; "warning"; "success"; "info" ] do
+      let root = this.Page.GetByTestId("select-color-" + color)
+      let combo = root.Locator("[role='combobox']")
+      do! combo.PressAsync("Enter")
+      let option = root.Locator("[role='option'][aria-selected='true']")
+      do! this.Expect(option).ToBeVisibleAsync()
+
+      for hover in [ false; true ] do
+        if hover then
+          do! option.HoverAsync()
+
+        let! contrast =
+          option.EvaluateAsync<float>(
+            """el => {
+          const rgb = s => s.match(/[\d.]+/g).map(Number);
+          const lum = c => c.slice(0, 3).map(v => v / 255).map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+            .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+          const fg = rgb(getComputedStyle(el).color), tint = rgb(getComputedStyle(el).backgroundColor);
+          const surface = rgb(getComputedStyle(el.closest('.weave-select__popover')).backgroundColor);
+          const bg = tint.slice(0, 3).map((v, i) => v * (tint[3] ?? 1) + surface[i] * (1 - (tint[3] ?? 1)));
+          const a = lum(fg), b = lum(bg); return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+        }"""
+          )
+
+        Assert.True(
+          contrast >= 4.5,
+          $"{color} selected option, hover={hover}, dark={dark}, contrast={contrast:F2}:1"
+        )
+
+      do! combo.PressAsync("Escape")
+  }

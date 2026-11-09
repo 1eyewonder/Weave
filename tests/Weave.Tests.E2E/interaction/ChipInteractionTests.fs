@@ -120,3 +120,49 @@ type ChipInteractionTests(fixture: TestFixture) =
     do! this.Expect(close).ToBeFocusedAsync()
     do! this.Expect(close).ToHaveAttributeAsync("aria-label", "remove")
   }
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``chip labels contrast across variants and interaction states``(dark: bool) = task {
+    do! this.NavigateTo("chip")
+
+    if dark then
+      let! _ =
+        this.Page.EvaluateAsync<obj>("() => document.body.setAttribute('data-theme', 'dark')")
+
+      ()
+
+    let! _ =
+      this.Page.AddStyleTagAsync(
+        Microsoft.Playwright.PageAddStyleTagOptions(
+          Content = "*, *::before, *::after { transition: none !important; animation: none !important; }"
+        )
+      )
+
+    for color in [ "primary"; "secondary"; "tertiary"; "error"; "warning"; "success"; "info" ] do
+      for variant in [ "filled"; "outlined"; "text" ] do
+        let chip = this.Page.GetByTestId("chip-color-" + color + "-" + variant)
+
+        for state in [ "rest"; "hover"; "focus" ] do
+          do! this.Page.Mouse.MoveAsync(0.0f, 0.0f)
+          let! _ = this.Page.EvaluateAsync<obj>("() => document.activeElement.blur()")
+
+          if state = "hover" then
+            do! chip.HoverAsync()
+          elif state = "focus" then
+            do! chip.FocusAsync()
+
+          let! contrast =
+            chip.EvaluateAsync<float>(
+              """el => {
+            const rgb = s => s.match(/[\d.]+/g).map(Number);
+            const lum = c => c.slice(0,3).map(v => v/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((s,v,i) => s+v*[.2126,.7152,.0722][i],0);
+            const fg = rgb(getComputedStyle(el).color), tint = rgb(getComputedStyle(el).backgroundColor), surface = rgb(getComputedStyle(document.body).backgroundColor);
+            const bg = tint.slice(0,3).map((v,i) => v*(tint[3] ?? 1)+surface[i]*(1-(tint[3] ?? 1)));
+            const a=lum(fg), b=lum(bg); return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+          }"""
+            )
+
+          Assert.True(contrast >= 4.5, $"{color} {variant} {state}, dark={dark}, contrast={contrast:F2}:1")
+  }

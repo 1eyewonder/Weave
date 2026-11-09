@@ -355,7 +355,7 @@ ExpansionPanelContainer.create(
           "Var<bool>"
           "Var.Create false"
           "Two-way binding controlling whether the panel is open"
-        Helpers.apiParam "?enabled" "View<bool>" "" "Whether the panel header is clickable"
+        Helpers.apiParam "?enabled" "View<bool>" "" "Whether the panel header responds to interaction"
         Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the panel root element"
       ]
 

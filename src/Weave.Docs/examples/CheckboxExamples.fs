@@ -110,7 +110,7 @@ Checkbox.create(isChecked, label)
 open WebSharper.UI
 
 let smallChecked = Var.Create false
-let mediumChecked = Var.Create false
+let mediumChecked = Var.Create true
 let largeChecked = Var.Create false
 
 Checkbox.create(
@@ -149,7 +149,7 @@ Checkbox.create(
           Checkbox.Color.success, "Success"
           Checkbox.Color.info, "Info"
         ]
-        |> List.map (fun (colorAttr, label) -> Var.Create false, colorAttr, label)
+        |> List.map (fun (colorAttr, label) -> Var.Create true, colorAttr, label)
 
       Grid.create (
         checkboxes
@@ -164,15 +164,17 @@ Checkbox.create(
       """open Weave
 open WebSharper.UI
 
-let isChecked = Var.Create false
+let checkbox color label =
+    Checkbox.create(Var.Create true, View.Const label, attrs = [ color ])
 
-Checkbox.create(isChecked, View.Const "Primary", attrs = [ Checkbox.Color.primary ])
-Checkbox.create(isChecked, View.Const "Secondary", attrs = [ Checkbox.Color.secondary ])
-Checkbox.create(isChecked, View.Const "Tertiary", attrs = [ Checkbox.Color.tertiary ])
-Checkbox.create(isChecked, View.Const "Error", attrs = [ Checkbox.Color.error ])
-Checkbox.create(isChecked, View.Const "Warning", attrs = [ Checkbox.Color.warning ])
-Checkbox.create(isChecked, View.Const "Success", attrs = [ Checkbox.Color.success ])
-Checkbox.create(isChecked, View.Const "Info", attrs = [ Checkbox.Color.info ])"""
+checkbox Checkbox.Color.primary "Primary"
+checkbox Checkbox.Color.secondary "Secondary"
+checkbox Checkbox.Color.tertiary "Tertiary"
+checkbox Checkbox.Color.error "Error"
+checkbox Checkbox.Color.warning "Warning"
+checkbox Checkbox.Color.success "Success"
+checkbox Checkbox.Color.info "Info"
+"""
 
     Helpers.codeSampleSection "Colors" description content code
 

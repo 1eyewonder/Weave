@@ -124,13 +124,14 @@
   }
 }
 
-// Disabled state: hide thumb, style track
+// Keep the thumb visible so disabled on and off states remain distinguishable.
 .weave-switch__input:disabled ~ .weave-switch__thumb {
-  display: none;
+  background: var(--palette-action-default);
+  box-shadow: none;
 }
 .weave-switch__input:disabled ~ .weave-switch__track {
-  background: var(--palette-action-disabled);
-  border-color: transparent;
+  background: var(--palette-action-disabled-background);
+  border-color: var(--palette-action-disabled);
   opacity: 1;
 }
 
@@ -221,5 +222,29 @@
     padding: 17px;
     width: 72px;
     height: 52px;
+  }
+}
+
+@media (forced-colors: active) {
+  .weave-switch__track,
+  .weave-switch__input:checked ~ .weave-switch__track {
+    forced-color-adjust: none;
+    background: Canvas;
+    border-color: CanvasText;
+    opacity: 1;
+  }
+
+  .weave-switch__thumb,
+  .weave-switch__input:checked ~ .weave-switch__thumb {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .weave-switch__input:disabled ~ .weave-switch__track {
+    border-color: GrayText;
+  }
+
+  .weave-switch__input:disabled ~ .weave-switch__thumb {
+    background: GrayText;
   }
 }

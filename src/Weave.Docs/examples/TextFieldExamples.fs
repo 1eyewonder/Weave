@@ -55,6 +55,36 @@ module TextFieldExamples =
 
     Helpers.sectionPlain "When to Use" description content
 
+  let private persistentLabelExample () =
+    let value = Var.Create ""
+
+    let content =
+      TextField.singleLine (
+        value,
+        labelText = View.Const "Email address",
+        placeholder = View.Const "you@example.com",
+        attrs = [ TextField.Variant.outlined; TextField.Label.above ]
+      )
+
+    let code =
+      """open Weave
+open WebSharper.UI
+
+let value = Var.Create ""
+
+TextField.singleLine(
+    value,
+    labelText = View.Const "Email address",
+    placeholder = View.Const "you@example.com",
+    attrs = [ TextField.Variant.outlined; TextField.Label.above ]
+)"""
+
+    Helpers.codeSampleSection
+      "Persistent labels"
+      (Helpers.bodyText "Keep labels visible above outlined fields, with room for a useful placeholder.")
+      content
+      code
+
   let private variantsExample () =
     let stdVal = Var.Create ""
     let filledVal = Var.Create ""
@@ -944,6 +974,8 @@ TextField.multiLine(
           ("info", "Info/blue accent")
         ]
 
+        Helpers.styleModuleTable "TextField.Label" [ ("above", "Keep the label above an outlined field") ]
+
         Helpers.styleModuleTable "TextField.Width (shared)" [
           ("full", "Field stretches to fill its container width")
         ]
@@ -971,6 +1003,8 @@ TextField.multiLine(
         whenToUseSection ()
         Helpers.divider ()
         variantsExample ()
+        Helpers.divider ()
+        persistentLabelExample ()
         Helpers.divider ()
         withContentExample ()
         Helpers.divider ()

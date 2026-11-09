@@ -39,6 +39,7 @@
     // density 0 (Compact): 12px | density 1 (Standard): 16px | density 2 (Spacious): 20px
     padding: density-spacing(12, 4);
     background: var(--palette-background);
+    border-radius: inherit;
     @include transition((color, background));
     font-family: var(--typography-h6-family);
     font-size: var(--typography-h6-size);
@@ -83,6 +84,11 @@
       margin-bottom: 0;
     }
 
+    .weave-expansion-panel__header {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
     .weave-expansion-panel__content-wrapper {
       grid-template-rows: 1fr;
     }
@@ -93,8 +99,8 @@
     }
     @each $color in $palette-colors {
       .weave-expansion-panel__header--filled.weave-expansion-panel__header--#{$color} {
-        background-color: var(--palette-#{$color});
-        color: var(--palette-#{$color}-text);
+        background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+        color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
       }
     }
   }

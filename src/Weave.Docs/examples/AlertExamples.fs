@@ -315,7 +315,7 @@ Alert.create(
       Helpers.styleModuleTable "Alert.Variant" [
         ("standard", "Default style with colored left border")
         ("outlined", "Bordered alert with transparent background")
-        ("filled", "Solid background alert with white text")
+        ("filled", "Solid background alert with a contrasting foreground")
       ]
 
       Helpers.styleModuleTable "Alert.Color" [

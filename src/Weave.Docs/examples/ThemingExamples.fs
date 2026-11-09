@@ -39,7 +39,7 @@ setMode Dark"""
   let private cssSection () =
     let description =
       Helpers.bodyText
-        "Load your CSS after Weave. Target the body that carries data-theme so the mode rules do not shadow your overrides. Set matching RGB channels for colors used with transparency. Set shared font roles on :root; override individual typography variant tokens on the mode selector if needed."
+        "Load your CSS after Weave. Target the body that carries data-theme so the mode rules do not shadow your overrides. Set matching fill and foreground tokens and RGB channels for colors used with transparency. Set shared font roles on :root; override individual typography variant tokens on the mode selector if needed."
 
     let code =
       """/* app.css, loaded after Weave */
@@ -52,6 +52,10 @@ body[data-theme="light"] {
   --palette-primary-lighten: #7c4dff;
   --palette-primary-darken: #4a00b8;
   --palette-primary-rgb: 98, 0, 234;
+  --palette-primary-fill: var(--palette-primary);
+  --palette-primary-fill-text: var(--palette-primary-text);
+  --palette-primary-fill-hover: var(--palette-primary-darken);
+  --palette-primary-fill-border: transparent;
   --palette-surface: #fff;
   --palette-text-primary: #21243a;
   --palette-text-primary-rgb: 33, 36, 58;
@@ -61,8 +65,12 @@ body[data-theme="dark"] {
   --palette-primary: #b388ff;
   --palette-primary-text: #201b2e;
   --palette-primary-lighten: #d1b3ff;
-  --palette-primary-darken: #8e5fff;
+  --palette-primary-darken: #9970ff;
   --palette-primary-rgb: 179, 136, 255;
+  --palette-primary-fill: var(--palette-primary);
+  --palette-primary-fill-text: var(--palette-primary-text);
+  --palette-primary-fill-hover: var(--palette-primary-darken);
+  --palette-primary-fill-border: transparent;
   --palette-surface: #202333;
   --palette-text-primary: #e6ebf5;
   --palette-text-primary-rgb: 230, 235, 245;
@@ -89,43 +97,106 @@ body[data-theme="dark"] {
       div [ Margin.Bottom.small ] [
         h3 [ Typography.h6 ] [ text "Brand and status colors" ]
         Helpers.bodyText
-          "Each family has a main color, foreground (-text), lighter and darker variants, and comma-separated RGB channels used for alpha. Change the companions together when replacing a color."
+          "Each family has a main color, foreground (-text), interaction variants, and comma-separated RGB channels used for alpha. All seven colors also have filled-surface tokens; override -fill, -fill-hover, -fill-text, and -fill-border when changing filled surfaces on a nested theme selector. Tertiary and status colors also provide -indicator and -subtle-text tokens. Check contrast for custom combinations. Interaction colors may be lighter in dark mode."
         referenceTable [ "Variable"; "Light default"; "Dark default" ] [
+          [ "--palette-indicator-mark"; "#ffffff"; "var(--palette-background)" ]
           [ "--palette-primary"; "#0164fc"; "#088ffd" ]
-          [ "--palette-primary-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-primary-lighten"; "#0187f1"; "#35d7ff" ]
-          [ "--palette-primary-darken"; "#002fc6"; "#0054d1" ]
+          [ "--palette-primary-text"; "#ffffff"; "#081b30" ]
+          [ "--palette-primary-fill"; "#168bff"; "var(--palette-primary)" ]
+          [ "--palette-primary-fill-hover"; "#1385f5"; "var(--palette-primary-darken)" ]
+          [ "--palette-primary-fill-text"; "#111827"; "var(--palette-primary-text)" ]
+          [ "--palette-primary-fill-border"; "var(--palette-primary)"; "transparent" ]
+          [ "--palette-primary-lighten"; "#0187f1"; "#7ac6ff" ]
+          [ "--palette-primary-darken"; "#002fc6"; "#64b8ff" ]
           [ "--palette-primary-rgb"; "1, 100, 252"; "8, 143, 253" ]
-          [ "--palette-secondary"; "#594ae2"; "#594ae2" ]
-          [ "--palette-secondary-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-secondary-lighten"; "#7d6ff0"; "#7569e0" ]
-          [ "--palette-secondary-darken"; "#3d2eb4"; "#4236ad" ]
-          [ "--palette-secondary-rgb"; "89, 74, 226"; "89, 74, 226" ]
-          [ "--palette-tertiary"; "#ff4081"; "#ff4081" ]
-          [ "--palette-tertiary-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-tertiary-lighten"; "#ff6699"; "#ff6699" ]
-          [ "--palette-tertiary-darken"; "#d91d63"; "#c71959" ]
-          [ "--palette-tertiary-rgb"; "255, 64, 129"; "255, 64, 129" ]
-          [ "--palette-success"; "#00aa47"; "#0bba83" ]
-          [ "--palette-success-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-success-lighten"; "#21ca62"; "#3dc99a" ]
-          [ "--palette-success-darken"; "#009638"; "#089a6b" ]
-          [ "--palette-success-rgb"; "0, 170, 71"; "11, 186, 131" ]
-          [ "--palette-error"; "#f44336"; "#f64e62" ]
-          [ "--palette-error-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-error-lighten"; "#f6685e"; "#f77381" ]
-          [ "--palette-error-darken"; "#d32f2f"; "#b53746" ]
-          [ "--palette-error-rgb"; "244, 67, 54"; "246, 78, 98" ]
-          [ "--palette-warning"; "#f19306"; "#ffa800" ]
-          [ "--palette-warning-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-warning-lighten"; "#ff9800"; "#ffb933" ]
-          [ "--palette-warning-darken"; "#d4840b"; "#cc8600" ]
-          [ "--palette-warning-rgb"; "241, 147, 6"; "255, 168, 0" ]
-          [ "--palette-info"; "#15b9be"; "#17cdd3" ]
-          [ "--palette-info-text"; "#ffffff"; "#ffffff" ]
-          [ "--palette-info-lighten"; "#12dde4"; "#63f8fd" ]
-          [ "--palette-info-darken"; "#119397"; "#09b2b8" ]
-          [ "--palette-info-rgb"; "21, 185, 190"; "23, 205, 211" ]
+          [ "--palette-secondary"; "#594ae2"; "#a99fff" ]
+          [ "--palette-secondary-text"; "#ffffff"; "#111827" ]
+          [ "--palette-secondary-fill"; "#a294ff"; "var(--palette-secondary)" ]
+          [
+            "--palette-secondary-fill-hover"
+            "#9385f4"
+            "var(--palette-secondary-darken)"
+          ]
+          [ "--palette-secondary-fill-text"; "#111827"; "var(--palette-secondary-text)" ]
+          [ "--palette-secondary-fill-border"; "var(--palette-secondary)"; "transparent" ]
+          [ "--palette-secondary-lighten"; "#7d6ff0"; "#d0caff" ]
+          [ "--palette-secondary-darken"; "#3d2eb4"; "#c2baff" ]
+          [ "--palette-secondary-rgb"; "89, 74, 226"; "169, 159, 255" ]
+          [ "--palette-tertiary"; "#d60069"; "#ff4081" ]
+          [ "--palette-tertiary-text"; "#ffffff"; "#111827" ]
+          [ "--palette-tertiary-fill"; "#ff4081"; "var(--palette-tertiary)" ]
+          [ "--palette-tertiary-fill-hover"; "#f33577"; "var(--palette-tertiary-darken)" ]
+          [ "--palette-tertiary-fill-text"; "#111827"; "var(--palette-tertiary-text)" ]
+          [ "--palette-tertiary-fill-border"; "var(--palette-tertiary)"; "transparent" ]
+          [ "--palette-tertiary-indicator"; "#ff4081"; "var(--palette-tertiary-fill)" ]
+          [
+            "--palette-tertiary-subtle-text"
+            "var(--palette-tertiary-darken)"
+            "var(--palette-tertiary-darken)"
+          ]
+          [ "--palette-tertiary-lighten"; "#df4d96"; "#ffa2c0" ]
+          [ "--palette-tertiary-darken"; "#9d0e5f"; "#ff7fa7" ]
+          [ "--palette-tertiary-rgb"; "214, 0, 105"; "255, 64, 129" ]
+          [ "--palette-success"; "#007e38"; "#0bba83" ]
+          [ "--palette-success-text"; "#ffffff"; "#111827" ]
+          [ "--palette-success-fill"; "#0bba83"; "var(--palette-success)" ]
+          [ "--palette-success-fill-hover"; "#00a46e"; "var(--palette-success-darken)" ]
+          [ "--palette-success-fill-text"; "#111827"; "var(--palette-success-text)" ]
+          [ "--palette-success-fill-border"; "var(--palette-success)"; "transparent" ]
+          [ "--palette-success-indicator"; "#009e68"; "var(--palette-success-fill)" ]
+          [
+            "--palette-success-subtle-text"
+            "var(--palette-success-darken)"
+            "var(--palette-success-darken)"
+          ]
+          [ "--palette-success-lighten"; "#27a96c"; "#70ddb8" ]
+          [ "--palette-success-darken"; "#006139"; "#36cd9b" ]
+          [ "--palette-success-rgb"; "0, 126, 56"; "11, 186, 131" ]
+          [ "--palette-error"; "#d91122"; "#ff5060" ]
+          [ "--palette-error-text"; "#ffffff"; "#111827" ]
+          [ "--palette-error-fill"; "#ff2d42"; "#ff2d42" ]
+          [ "--palette-error-fill-hover"; "#fa3245"; "var(--palette-error-darken)" ]
+          [ "--palette-error-fill-text"; "#111827"; "var(--palette-error-text)" ]
+          [ "--palette-error-fill-border"; "var(--palette-error)"; "transparent" ]
+          [ "--palette-error-indicator"; "#fa3245"; "var(--palette-error-fill)" ]
+          [
+            "--palette-error-subtle-text"
+            "var(--palette-error-darken)"
+            "var(--palette-error-darken)"
+          ]
+          [ "--palette-error-lighten"; "#e45665"; "#ff90a0" ]
+          [ "--palette-error-darken"; "#a91f2c"; "#ff7988" ]
+          [ "--palette-error-rgb"; "217, 17, 34"; "255, 80, 96" ]
+          [ "--palette-warning"; "#ab5400"; "#ffa800" ]
+          [ "--palette-warning-text"; "#ffffff"; "#111827" ]
+          [ "--palette-warning-fill"; "#ffa800"; "var(--palette-warning)" ]
+          [ "--palette-warning-fill-hover"; "#e59400"; "var(--palette-warning-darken)" ]
+          [ "--palette-warning-fill-text"; "#111827"; "var(--palette-warning-text)" ]
+          [ "--palette-warning-fill-border"; "var(--palette-warning)"; "transparent" ]
+          [ "--palette-warning-indicator"; "#c67800"; "var(--palette-warning-fill)" ]
+          [
+            "--palette-warning-subtle-text"
+            "var(--palette-warning-darken)"
+            "var(--palette-warning-darken)"
+          ]
+          [ "--palette-warning-lighten"; "#c97922"; "#ffcf70" ]
+          [ "--palette-warning-darken"; "#814300"; "#ffb933" ]
+          [ "--palette-warning-rgb"; "171, 84, 0"; "255, 168, 0" ]
+          [ "--palette-info"; "#0072aa"; "#17cdd3" ]
+          [ "--palette-info-text"; "#ffffff"; "#111827" ]
+          [ "--palette-info-fill"; "#17cdd3"; "var(--palette-info)" ]
+          [ "--palette-info-fill-hover"; "#00b6bd"; "var(--palette-info-darken)" ]
+          [ "--palette-info-fill-text"; "#111827"; "var(--palette-info-text)" ]
+          [ "--palette-info-fill-border"; "var(--palette-info)"; "transparent" ]
+          [ "--palette-info-indicator"; "#008fbd"; "var(--palette-info-fill)" ]
+          [
+            "--palette-info-subtle-text"
+            "var(--palette-info-darken)"
+            "var(--palette-info-darken)"
+          ]
+          [ "--palette-info-lighten"; "#318fc0"; "#9bf0f2" ]
+          [ "--palette-info-darken"; "#005487"; "#64e6e9" ]
+          [ "--palette-info-rgb"; "0, 114, 170"; "23, 205, 211" ]
         ]
       ]
       div [ Margin.Bottom.small ] [
@@ -133,18 +204,22 @@ body[data-theme="dark"] {
         Helpers.bodyText
           "Surface tokens fill backgrounds; text and action tokens cover the default, hover, active and disabled states. Primary text RGB also controls translucent component borders."
         referenceTable [ "Variable"; "Light default"; "Dark default" ] [
-          [ "--palette-background"; "#ebebeb"; "#1b1c25" ]
-          [ "--palette-background-paper"; "#d5d5d5"; "#43454f" ]
-          [ "--palette-background-darken"; "#bfbfbf"; "#13141b" ]
-          [ "--palette-surface"; "#ffffff"; "#32343e" ]
-          [ "--palette-text-primary"; "rgba(66, 66, 66, 1)"; "rgba(255, 255, 255)" ]
-          [ "--palette-text-primary-rgb"; "66, 66, 66"; "255, 255, 255" ]
+          [ "--palette-background"; "#f5f7fa"; "#151922" ]
+          [ "--palette-background-paper"; "#edf1f6"; "#252d3a" ]
+          [ "--palette-background-darken"; "#e8edf3"; "#10141b" ]
+          [ "--palette-surface"; "#ffffff"; "#202733" ]
+          [ "--palette-text-primary"; "rgba(31, 41, 55, 1)"; "rgba(255, 255, 255)" ]
+          [ "--palette-text-primary-rgb"; "31, 41, 55"; "255, 255, 255" ]
           [
             "--palette-text-secondary"
             "rgba(0, 0, 0, 0.64)"
-            "rgba(255, 255, 255, 0.5)"
+            "rgba(255, 255, 255, 0.72)"
           ]
-          [ "--palette-text-disabled"; "rgba(0, 0, 0, 0.38)"; "rgba(255, 255, 255, 0.2)" ]
+          [
+            "--palette-text-disabled"
+            "rgba(0, 0, 0, 0.58)"
+            "rgba(255, 255, 255, 0.55)"
+          ]
           [ "--palette-divider"; "rgba(0, 0, 0, 0.24)"; "rgba(255, 255, 255, 0.24)" ]
           [
             "--palette-divider-light"
@@ -161,7 +236,7 @@ body[data-theme="dark"] {
           [
             "--palette-action-default-hover"
             "rgba(0, 0, 0, 0.10)"
-            "rgba(173, 173, 177, 0.3)"
+            "rgba(255, 255, 255, 0.08)"
           ]
           [
             "--palette-action-default-active"
@@ -188,8 +263,8 @@ body[data-theme="dark"] {
           [ "--palette-appbar-background"; "#594ae2"; "#27272f" ]
           [ "--palette-appbar-text"; "#ffffff"; "#ffffff" ]
           [ "--palette-drawer-background"; "#f5f5f5"; "#27272f" ]
-          [ "--palette-drawer-text"; "#424242"; "rgba(255, 255, 255, 0.5)" ]
-          [ "--palette-drawer-icon"; "#616161"; "rgba(255, 255, 255, 0.5)" ]
+          [ "--palette-drawer-text"; "#424242"; "rgba(255, 255, 255, 0.78)" ]
+          [ "--palette-drawer-icon"; "#616161"; "rgba(255, 255, 255, 0.72)" ]
           [
             "--switch-thumb-idle"
             "var(--palette-action-default)"

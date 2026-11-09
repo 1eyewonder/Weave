@@ -140,6 +140,17 @@ module Core =
       let success = Attr.Style Style.backgroundColor Palette.success
       let info = Attr.Style Style.backgroundColor Palette.info
 
+    /// A filled brand surface with its matching accessible foreground.
+    module Fill =
+
+      let primary = cl Css.``weave-fill-primary``
+      let secondary = cl Css.``weave-fill-secondary``
+      let tertiary = cl Css.``weave-fill-tertiary``
+      let error = cl Css.``weave-fill-error``
+      let warning = cl Css.``weave-fill-warning``
+      let success = cl Css.``weave-fill-success``
+      let info = cl Css.``weave-fill-info``
+
     module TextColor =
 
       let primary = Attr.Style Style.color Palette.primary

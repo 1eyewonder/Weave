@@ -17,7 +17,7 @@ type ElevationStackingTests() =
       | _ -> 0
   }
 
-  // Full hierarchy ordering: dropdown < dialog < scroll-to-top < appbar < tooltip
+  // Modal dialogs must cover page controls, app bars, and page-level tooltips.
   [<Fact>]
   member this.``full z-index hierarchy is correctly ordered``() = task {
     do! this.LoadFixture()
@@ -30,11 +30,11 @@ type ElevationStackingTests() =
 
     let hierarchy = [
       ("dropdown", dropdownZ)
-      ("dialog-backdrop", dialogBackdropZ)
-      ("dialog-window", dialogWindowZ)
       ("scroll-to-top", scrollZ)
       ("appbar", appbarZ)
       ("tooltip", tooltipZ)
+      ("dialog-backdrop", dialogBackdropZ)
+      ("dialog-window", dialogWindowZ)
     ]
 
     hierarchy

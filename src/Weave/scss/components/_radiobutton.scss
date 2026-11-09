@@ -69,13 +69,13 @@ $dot-size: 10px;
   background: var(--radio-brand-color, var(--palette-action-default));
 }
 
-// Disabled state: filled background and border, no dot, no transition
+// Keep the selected state visible even when the control is disabled.
 .weave-radio__input:disabled + .weave-radio__span {
   background: var(--palette-action-disabled);
   border: none;
 }
 .weave-radio__input:disabled + .weave-radio__span::after {
-  transform: translate(-50%, -50%) scale(0);
+  background: var(--palette-text-primary);
   transition: none;
 }
 
@@ -143,5 +143,16 @@ $dot-size: 10px;
   }
   .weave-radio--large & {
     font-size: 1.25em;
+  }
+}
+
+@media (forced-colors: active) {
+  .weave-radio__input:checked + .weave-radio__span::after {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .weave-radio__input:disabled:checked + .weave-radio__span::after {
+    background: GrayText;
   }
 }

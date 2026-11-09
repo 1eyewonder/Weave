@@ -86,6 +86,10 @@ body:not([data-theme]), body[data-theme="light"] {
   --palette-primary-lighten: #7c4dff;
   --palette-primary-darken: #4a00b8;
   --palette-primary-rgb: 98, 0, 234;
+  --palette-primary-fill: var(--palette-primary);
+  --palette-primary-fill-text: var(--palette-primary-text);
+  --palette-primary-fill-hover: var(--palette-primary-darken);
+  --palette-primary-fill-border: transparent;
   --palette-surface: #fff;
   --palette-text-primary: #21243a;
   --palette-text-primary-rgb: 33, 36, 58;
@@ -95,15 +99,19 @@ body[data-theme="dark"] {
   --palette-primary: #b388ff;
   --palette-primary-text: #201b2e;
   --palette-primary-lighten: #d1b3ff;
-  --palette-primary-darken: #8e5fff;
+  --palette-primary-darken: #9970ff;
   --palette-primary-rgb: 179, 136, 255;
+  --palette-primary-fill: var(--palette-primary);
+  --palette-primary-fill-text: var(--palette-primary-text);
+  --palette-primary-fill-hover: var(--palette-primary-darken);
+  --palette-primary-fill-border: transparent;
   --palette-surface: #202333;
   --palette-text-primary: #e6ebf5;
   --palette-text-primary-rgb: 230, 235, 245;
 }
 ```
 
-Common customization tokens include `--palette-background`, `--palette-background-paper`, `--palette-surface`, `--palette-text-primary`, `--palette-text-secondary`, `--palette-divider`, `--palette-divider-light`, `--palette-lines-default`, `--palette-lines-inputs`, and `--weave-font-family-display`, `--weave-font-family-body`, and `--weave-font-family-mono`. Primary, secondary, tertiary, success, error, warning, and info colors each have a main token and `-text`, `-lighten`, `-darken`, and `-rgb` companions. RGB companions contain comma-separated channels, not an `rgb()` function. Override matching companions together where components use them for contrast, hover, or transparency. Set shared font-role tokens on `:root`, where typography variants resolve them. To change a specific variant by mode, set a token such as `--typography-body1-family` on the mode selector. The complete defaults are in [the theme stylesheet](src/Weave/scss/core/_themes.scss) and [the typography variables](src/Weave/scss/core/_variables.scss).
+Common customization tokens include `--palette-background`, `--palette-background-paper`, `--palette-surface`, `--palette-text-primary`, `--palette-text-secondary`, `--palette-divider`, `--palette-divider-light`, `--palette-lines-default`, `--palette-lines-inputs`, and `--weave-font-family-display`, `--weave-font-family-body`, and `--weave-font-family-mono`. Primary, secondary, tertiary, success, error, warning, and info colors each have a main token and `-text`, `-lighten`, `-darken`, and `-rgb` companions. RGB companions contain comma-separated channels, not an `rgb()` function. Filled components also use `-fill`, `-fill-text`, `-fill-hover`, and `-fill-border` companions; override these on each theme selector when you customize a color, as shown above. Override matching companions together where components use them for contrast, hover, or transparency. Set shared font-role tokens on `:root`, where typography variants resolve them. To change a specific variant by mode, set a token such as `--typography-body1-family` on the mode selector. The complete defaults are in [the theme stylesheet](src/Weave/scss/core/_themes.scss) and [the typography variables](src/Weave/scss/core/_variables.scss).
 
 The documentation site’s **Theming** page includes a grouped color and typography variable reference, light/dark defaults, and examples.
 

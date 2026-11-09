@@ -41,6 +41,8 @@ $checkmark-height: 12px;
 @each $color in $palette-colors {
   .weave-checkbox--#{$color} {
     --checkbox-brand-color: var(--palette-#{$color});
+    --checkbox-fill-color: var(--palette-#{$color}-indicator, var(--palette-#{$color}));
+    --checkbox-mark-color: var(--palette-indicator-mark, var(--palette-background));
   }
 }
 
@@ -63,18 +65,18 @@ $checkmark-height: 12px;
 
 // Checked state — decelerate into resting position
 .weave-checkbox__input:checked + .weave-checkbox__span {
-  background: var(--checkbox-brand-color, var(--palette-action-default));
+  background: var(--checkbox-fill-color, var(--checkbox-brand-color, var(--palette-action-default)));
   border-color: var(--checkbox-brand-color, var(--palette-action-default));
 }
 .weave-checkbox__input:checked + .weave-checkbox__span::after {
   transform: translate(-50%, -60%) rotate(45deg) scale(1);
   opacity: 1;
   transition-timing-function: $ease-decelerate;
-  border-color: var(--palette-background);
+  border-color: var(--checkbox-mark-color, var(--palette-indicator-mark, var(--palette-background)));
 }
 
 .weave-checkbox__input:indeterminate + .weave-checkbox__span {
-  background: var(--checkbox-brand-color, var(--palette-action-default));
+  background: var(--checkbox-fill-color, var(--checkbox-brand-color, var(--palette-action-default)));
   border-color: var(--checkbox-brand-color, var(--palette-action-default));
 }
 
@@ -92,7 +94,7 @@ $checkmark-height: 12px;
   cursor: default;
 }
 .weave-checkbox__input:disabled + .weave-checkbox__span::after {
-  transform: translate(-50%, -60%) rotate(45deg) scale(0);
+  border-color: var(--palette-text-primary);
   transition: none;
 }
 
@@ -101,7 +103,7 @@ $checkmark-height: 12px;
   display: inline-block;
   width: var(--checkbox-size, 20px);
   height: var(--checkbox-size, 20px);
-  border-radius: var(--default-borderradius);
+  border-radius: min(var(--default-borderradius), calc(var(--checkbox-size, 20px) / 4));
   border: 2px solid var(--checkbox-brand-color, var(--palette-action-default));
   background: var(--palette-background);
   cursor: pointer;
@@ -120,7 +122,7 @@ $checkmark-height: 12px;
   top: 50%;
   width: var(--checkmark-width, 6px);
   height: var(--checkmark-height, 12px);
-  border: solid var(--palette-background);
+  border: solid var(--checkbox-mark-color, var(--palette-indicator-mark, var(--palette-background)));
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -60%) rotate(45deg) scale(0);
   opacity: 0;

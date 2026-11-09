@@ -119,15 +119,16 @@ type ChipLayoutTests() =
   }
 
   [<Fact>]
-  member this.``disabled chip has reduced opacity``() = task {
+  member this.``disabled chip uses a distinct muted appearance``() = task {
     do! this.LoadFixture()
 
-    let! opacity =
-      this.Page.Locator("#chip-disabled").EvaluateAsync<string>("el => getComputedStyle(el).opacity")
+    let! enabled =
+      this.Page.Locator("#chip-basic").EvaluateAsync<string>("el => getComputedStyle(el).color")
 
-    let opacityValue = System.Double.Parse(opacity)
+    and! disabled =
+      this.Page.Locator("#chip-disabled").EvaluateAsync<string>("el => getComputedStyle(el).color")
 
-    Assert.True(opacityValue < 1.0, $"Disabled chip opacity ({opacity}) should be less than 1")
+    Assert.True(enabled <> disabled, $"Enabled and disabled colors should differ, but both were {enabled}")
   }
 
   [<Fact>]

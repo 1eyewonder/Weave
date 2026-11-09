@@ -1,9 +1,4 @@
-$border-radiuses: (
-  "none": 0,
-  "sm": 4px,
-  "md": 8px,
-  "lg": 12px,
-);
+@use '../../abstracts/border-radius' as *;
 
 @each $size, $value in $border-radiuses {
   .weave-rounded-#{$size} {

@@ -13,7 +13,7 @@ type ThemingInteractionTests(fixture: TestFixture) =
 
     do! this.Expect(this.Page.Locator("body")).ToHaveAttributeAsync("data-theme", "light")
 
-    do! this.Expect(swatch).ToHaveCSSAsync("background-color", "rgb(1, 100, 252)")
+    do! this.Expect(swatch).ToHaveCSSAsync("background-color", "rgb(22, 139, 255)")
     do! this.Page.GetByTestId("theme-toggle").ClickAsync()
 
     do! this.Expect(this.Page.Locator("body")).ToHaveAttributeAsync("data-theme", "dark")
@@ -25,7 +25,7 @@ type ThemingInteractionTests(fixture: TestFixture) =
 
     do! this.Expect(this.Page.Locator("body")).ToHaveAttributeAsync("data-observed-mode", "light")
 
-    do! this.Expect(swatch).ToHaveCSSAsync("background-color", "rgb(1, 100, 252)")
+    do! this.Expect(swatch).ToHaveCSSAsync("background-color", "rgb(22, 139, 255)")
     do! this.Page.GetByTestId("theme-dark").ClickAsync()
 
     do! this.Expect(this.Page.Locator("body")).ToHaveAttributeAsync("data-observed-mode", "dark")
@@ -40,10 +40,12 @@ type ThemingInteractionTests(fixture: TestFixture) =
       :root { --weave-font-family-body: Georgia; }
       body[data-theme=light] {
         --palette-primary: #123456; --palette-primary-rgb: 18, 52, 86;
+        --palette-primary-fill: #123456; --palette-primary-fill-text: #ffffff;
         --palette-surface: #ddeeff; --palette-text-primary-rgb: 18, 52, 86;
       }
       body[data-theme=dark] {
         --palette-primary: #654321; --palette-primary-rgb: 101, 67, 33;
+        --palette-primary-fill: #654321; --palette-primary-fill-text: #ffffff;
         --palette-surface: #202333; --palette-text-primary-rgb: 230, 235, 245;
         --typography-body1-family: Arial;
       }
@@ -112,4 +114,37 @@ type ThemingInteractionTests(fixture: TestFixture) =
     do! this.Page.EmulateMediaAsync(PageEmulateMediaOptions(ColorScheme = scheme))
     do! this.NavigateTo("theme-system")
     do! this.Expect(this.Page.Locator("body")).ToHaveAttributeAsync("data-theme", mode)
+  }
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``brand fills match filled buttons in both themes``(dark: bool) = task {
+    do! this.NavigateTo("theme")
+
+    if dark then
+      do! this.Page.GetByTestId("theme-dark").ClickAsync()
+
+    let! _ =
+      this.Page.AddStyleTagAsync(
+        PageAddStyleTagOptions(
+          Content = "*, *::before, *::after { transition: none !important; animation: none !important; }"
+        )
+      )
+
+    for color in [ "primary"; "secondary"; "tertiary"; "error"; "warning"; "success"; "info" ] do
+      let fill = this.Page.GetByTestId("theme-fill-" + color)
+      let button = this.Page.GetByTestId("theme-button-" + color)
+
+      let! fillStyles =
+        fill.EvaluateAsync<string[]>(
+          "el => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color]"
+        )
+
+      let! buttonStyles =
+        button.EvaluateAsync<string[]>(
+          "el => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color]"
+        )
+
+      Assert.Equal<string[]>(buttonStyles, fillStyles)
   }

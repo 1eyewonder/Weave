@@ -27,9 +27,24 @@ module DialogExamples =
     let dialogVisible = Var.Create false
 
     let dialogContent dialog =
-      div [] [
-        div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ]
-        div [ Margin.Top.small ] [ confirm dialog; cancel dialog ]
+      Doc.Concat [
+        DialogContent.create (
+          div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ]
+        )
+        DialogActions.create (
+          Doc.Concat [
+            Button.create (
+              text "Cancel",
+              onClick = (fun () -> Var.Set dialog false),
+              attrs = [ Button.Variant.outlined ]
+            )
+            Button.primary (
+              text "Confirm",
+              onClick = (fun () -> Var.Set dialog false),
+              attrs = [ Button.Variant.filled ]
+            )
+          ]
+        )
       ]
 
     let description =
@@ -48,7 +63,7 @@ module DialogExamples =
           if isOpen then
             Dialog.create (
               DialogTitle.create (div [ Typography.h6 ] [ text "Dialog Title" ]),
-              DialogContent.create (dialogContent dialogVisible)
+              dialogContent dialogVisible
             )
           else
             Doc.Empty)
@@ -57,27 +72,31 @@ module DialogExamples =
     let code =
       """open Weave
 open WebSharper.UI
+open WebSharper.UI.Client
+open WebSharper.UI.Html
 
 let dialogVisible = Var.Create false
 
-dialogVisible.View
-|> Doc.BindView(fun isOpen ->
-    if isOpen then
-        Dialog.create(
-            DialogTitle.create(div [ Typography.h6 ] [ text "Dialog Title" ]),
-            DialogContent.create(
-                div [] [
-                    div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ]
-                    Button.create(
-                        text "Close",
-                        onClick = (fun () -> Var.Set dialogVisible false)
-                    )
+div [] [
+    Button.primary(
+        text "Open Dialog",
+        onClick = (fun () -> Var.Set dialogVisible true),
+        attrs = [ Button.Variant.filled ]
+    )
+    dialogVisible.View |> Doc.BindView(fun isOpen ->
+        if isOpen then
+            Dialog.create(
+                DialogTitle.create(div [ Typography.h6 ] [ text "Dialog Title" ]),
+                Doc.Concat [
+                    DialogContent.create(div [ Typography.body1 ] [ text "This is a basic dialog with title and content." ])
+                    DialogActions.create(Doc.Concat [
+                        Button.create(text "Cancel", onClick = (fun () -> Var.Set dialogVisible false), attrs = [ Button.Variant.outlined ])
+                        Button.primary(text "Confirm", onClick = (fun () -> Var.Set dialogVisible false), attrs = [ Button.Variant.filled ])
+                    ])
                 ]
             )
-        )
-    else
-        Doc.Empty)
-"""
+        else Doc.Empty)
+]"""
 
     Helpers.codeSampleSection "Basic Dialog" description content code
 
@@ -253,51 +272,63 @@ Dialog.create(
     Helpers.sectionPlain "When to Use" description content
 
   let private apiReferenceSection () =
-    Helpers.apiSection (Helpers.bodyText "Complete API reference for Dialog, DialogTitle, and DialogContent.") [
-      Helpers.apiTable "Dialog.create" [
-        Helpers.apiParam "title" "Doc" "" "Title content — typically built with DialogTitle.create"
-        Helpers.apiParam "content" "Doc" "" "Body content — typically built with DialogContent.create"
-        Helpers.apiParam
-          "?blurBackground"
-          "View<bool>"
-          "View.Const true"
-          "Whether the backdrop uses a blur filter"
-        Helpers.apiParam
-          "?dialogPosition"
-          "View<DialogPosition>"
-          "View.Const Center"
-          "Where the dialog is positioned on screen"
-        Helpers.apiParam
-          "?dialogInteraction"
-          "View<Interaction>"
-          "View.Const Force"
-          "Whether the dialog can be dismissed by clicking the backdrop or pressing Escape"
-        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
-      ]
+    Helpers.apiSection
+      (Helpers.bodyText "Complete API reference for Dialog, DialogTitle, DialogContent, and DialogActions.")
+      [
+        Helpers.apiTable "Dialog.create" [
+          Helpers.apiParam "title" "Doc" "" "Title content — typically built with DialogTitle.create"
+          Helpers.apiParam "content" "Doc" "" "Body content — typically built with DialogContent.create"
+          Helpers.apiParam
+            "?blurBackground"
+            "View<bool>"
+            "View.Const true"
+            "Whether the backdrop uses a blur filter"
+          Helpers.apiParam
+            "?dialogPosition"
+            "View<DialogPosition>"
+            "View.Const Center"
+            "Where the dialog is positioned on screen"
+          Helpers.apiParam
+            "?dialogInteraction"
+            "View<Interaction>"
+            "View.Const Force"
+            "Whether the dialog can be dismissed by clicking the backdrop or pressing Escape"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+        ]
 
-      Helpers.apiTable "DialogTitle.create" [
-        Helpers.apiParam "content" "Doc" "" "Title content rendered inside the dialog header"
-        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the title element"
-      ]
+        Helpers.apiTable "DialogTitle.create" [
+          Helpers.apiParam "content" "Doc" "" "Title content rendered inside the dialog header"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the title element"
+        ]
 
-      Helpers.apiTable "DialogContent.create" [
-        Helpers.apiParam "content" "Doc" "" "Body content rendered inside the dialog"
-        Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the content element"
-      ]
+        Helpers.apiTable "DialogContent.create" [
+          Helpers.apiParam "content" "Doc" "" "Body content rendered inside the dialog"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the content element"
+        ]
 
-      Helpers.styleModuleTable "Dialog.DialogPosition (DU)" [
-        ("Center", "Centered on screen (default)")
-        ("TopCenter", "Centered horizontally, near the top")
-        ("BottomCenter", "Centered horizontally, near the bottom")
-        ("CenterRight", "Centered vertically, on the right")
-        ("CenterLeft", "Centered vertically, on the left")
-      ]
+        Helpers.apiTable "DialogActions.create" [
+          Helpers.apiParam
+            "content"
+            "Doc"
+            ""
+            "Actions aligned at the bottom of the dialog; use Doc.Concat for multiple actions"
+          Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the actions element"
+        ]
 
-      Helpers.styleModuleTable "Dialog.Interaction (DU)" [
-        ("Force", "User cannot dismiss the dialog — must interact with its content (default)")
-        ("Optional of closeDialog", "User can dismiss via backdrop click or Escape; provide a close callback")
+        Helpers.styleModuleTable "Dialog.DialogPosition (DU)" [
+          ("Center", "Centered on screen (default)")
+          ("TopCenter", "Centered horizontally, near the top")
+          ("BottomCenter", "Centered horizontally, near the bottom")
+          ("CenterRight", "Centered vertically, on the right")
+          ("CenterLeft", "Centered vertically, on the left")
+        ]
+
+        Helpers.styleModuleTable "Dialog.Interaction (DU)" [
+          ("Force", "User cannot dismiss the dialog — must interact with its content (default)")
+          ("Optional of closeDialog",
+           "User can dismiss via backdrop click or Escape; provide a close callback")
+        ]
       ]
-    ]
 
   let render () =
     Container.create (

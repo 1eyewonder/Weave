@@ -47,7 +47,10 @@ module ExamplesRouter =
                 Button.create (
                   div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
                     text "Get Started"
-                    Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
+                    Icon.create (
+                      Icon.Social Social.RocketLaunch,
+                      attrs = [ Attr.Style "font-size" "18px"; Attr.Create "aria-hidden" "true" ]
+                    )
                   ],
                   onClick = (fun () -> navigate GettingStartedExamples),
                   attrs = [ Button.Variant.outlined; Button.Color.primary ]
@@ -412,7 +415,8 @@ module ExamplesRouter =
     let mutable pendingSection: string option = initialSection
 
     let selectedNav = Var.Create<string option>(Some(pageToString initialPage))
-    let drawerOpen = Var.Create false
+    let drawerOpen = Var.Create(BrowserUtils.windowWidth.Value >= 960)
+    let navSearch = Var.Create ""
 
     let navigateTo (page: Page) =
       setLocationHash (pageToHash page)
@@ -485,7 +489,8 @@ module ExamplesRouter =
             |> Doc.BindView(fun sections ->
               Doc.Concat [
                 for id, title in sections do
-                  div [
+                  button [
+                    attr.``type`` "button"
                     Attr.Class "docs-toc__item"
 
                     Attr.DynamicClassPred
@@ -562,7 +567,8 @@ module ExamplesRouter =
     let showcasesExpanded = Var.Create false
 
     let navLeafItem (label: string) =
-      div [
+      button [
+        attr.``type`` "button"
         Flex.Flex.allSizes
         AlignItems.center
         Padding.Vertical.extraSmall
@@ -571,168 +577,235 @@ module ExamplesRouter =
         BorderRadius.All.large
         Margin.All.extraSmall
         Attr.Class "weave-nav-leaf"
-        Attr.Create "role" "treeitem"
-        Attr.Create "tabindex" "0"
+        Attr.DynamicStyle
+          "display"
+          (navSearch.View
+           |> View.Map(fun query ->
+             if label.ToLower().Contains(query.Trim().ToLower()) then
+               ""
+             else
+               "none"))
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
+        Attr.DynamicPred
+          "aria-current"
+          (selectedNav.View |> View.Map(fun s -> s = Some label))
+          (View.Const "page")
         on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
-        on.keyDown (fun _ ev ->
-          if ev?key = "Enter" || ev?key = " " then
-            ev.PreventDefault()
-            stringToPage label |> Option.iter navigateTo)
-      ] [ div [ Typography.body2 ] [ text label ] ]
+      ] [ span [ Typography.body2 ] [ text label ] ]
 
-    let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) items =
-      div [ Attr.Create "role" "treeitem" ] [
-        div [
-          Flex.Flex.allSizes
-          AlignItems.center
-          Padding.Vertical.extraSmall
-          Padding.Horizontal.small
-          Cursor.pointer
-          Gap.All.g2
-          Attr.Class "weave-nav-group-header"
-          Attr.Create "tabindex" "0"
-          Attr.DynamicCustom
-            (fun el v -> el.SetAttribute("aria-expanded", v))
-            (isExpanded.View |> View.Map string)
-          on.click (fun _ _ -> Var.Update isExpanded not)
-          on.keyDown (fun _ ev ->
-            if ev?key = "Enter" || ev?key = " " then
-              ev.PreventDefault()
-              Var.Update isExpanded not)
-        ] [
-          Icon.create (categoryIcon, attrs = [ Attr.Style "font-size" "18px" ])
-          div [ Typography.overline; FlexItem.Flex.allSizes; Attr.Style "opacity" "0.7" ] [ text label ]
-          isExpanded.View
-          |> Doc.BindView(fun exp ->
-            Icon.create (
-              (if exp then
-                 Icon.Hardware Hardware.KeyboardArrowDown
-               else
-                 Icon.Hardware Hardware.KeyboardArrowRight),
-              attrs = [ Attr.Style "font-size" "16px"; Attr.Style "opacity" "0.6" ]
-            ))
-        ]
-        isExpanded.View
-        |> Doc.BindView(fun exp ->
-          if exp then
-            div [ Attr.Create "role" "group" ] items
-          else
-            Doc.Empty)
-      ]
+    let matches (query: string) (label: string) =
+      label.ToLower().Contains(query.Trim().ToLower())
+
+    let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) (labels: string list) =
+      navSearch.View
+      |> Doc.BindView(fun query ->
+        let searching = query.Trim() <> ""
+        let matching = labels |> List.filter (matches query)
+
+        if searching && List.isEmpty matching then
+          Doc.Empty
+        else
+          div [] [
+            if searching then
+              div [ Attr.Class "docs-nav-results-heading" ] [ text label ]
+              div [] (matching |> List.map navLeafItem)
+            else
+              button [
+                attr.``type`` "button"
+                Flex.Flex.allSizes
+                AlignItems.center
+                Padding.Vertical.extraSmall
+                Padding.Horizontal.small
+                Cursor.pointer
+                Gap.All.g2
+                Attr.Class "weave-nav-group-header"
+                Attr.DynamicCustom
+                  (fun el v -> el.SetAttribute("aria-expanded", v))
+                  (isExpanded.View |> View.Map string)
+                on.click (fun _ _ -> Var.Update isExpanded not)
+              ] [
+                Icon.create (
+                  categoryIcon,
+                  attrs = [ Attr.Style "font-size" "18px"; Attr.Create "aria-hidden" "true" ]
+                )
+                span [ Typography.overline; FlexItem.Flex.allSizes; Attr.Style "opacity" "0.7" ] [
+                  text label
+                ]
+                isExpanded.View
+                |> Doc.BindView(fun exp ->
+                  Icon.create (
+                    (if exp then
+                       Icon.Hardware Hardware.KeyboardArrowDown
+                     else
+                       Icon.Hardware Hardware.KeyboardArrowRight),
+                    attrs = [
+                      Attr.Style "font-size" "16px"
+                      Attr.Style "opacity" "0.6"
+                      Attr.Create "aria-hidden" "true"
+                    ]
+                  ))
+              ]
+
+              isExpanded.View
+              |> Doc.BindView(fun exp ->
+                if exp then
+                  div [] (labels |> List.map navLeafItem)
+                else
+                  Doc.Empty)
+          ])
+
+    let componentsLabels = [
+      "Alert"
+      "App Bar"
+      "Button"
+      "Button Group"
+      "Button Menu"
+      "Card"
+      "Checkbox"
+      "Chip"
+      "Chip Set"
+      "Container"
+      "Dialog"
+      "Divider"
+      "Drawer"
+      "Dropdown Menu"
+      "Expansion Panel"
+      "Field"
+      "Grid"
+      "Icons"
+      "Link"
+      "List"
+      "Numeric Field"
+      "Radio Button"
+      "Select"
+      "Slider"
+      "Spacer"
+      "Switch"
+      "Table"
+      "Tabs"
+      "Text Field"
+      "Tooltip"
+      "Typography"
+    ]
+
+    let stylingLabels = [
+      "Spacing"
+      "Opacity"
+      "Borders"
+      "Display"
+      "Elevation"
+      "Flexbox"
+      "Transitions"
+      "Animations"
+      "Theming"
+    ]
+
+    let utilitiesLabels = [ "Reactive Helpers"; "Event Handlers" ]
+    let showcasesLabels = [ "Task Tracker"; "Pomodoro Timer"; "Expense Tracker"; "Character Sheet" ]
+
+    let allNavLabels =
+      componentsLabels @ stylingLabels @ utilitiesLabels @ showcasesLabels
 
     let navList =
-      div [ Padding.Vertical.extraSmall; Attr.Create "role" "tree" ] [
-        div [
-          Flex.Flex.allSizes
-          AlignItems.center
-          Padding.Vertical.extraSmall
-          Padding.Horizontal.small
-          Cursor.pointer
-          BorderRadius.All.large
-          Margin.All.extraSmall
-          Gap.All.g2
-          Attr.Class "weave-nav-leaf"
-          Attr.Create "role" "treeitem"
-          Attr.Create "tabindex" "0"
-          Attr.DynamicClassPred
-            "weave-nav-item--active"
-            (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
-          on.click (fun _ _ -> navigateTo Home)
-          on.keyDown (fun _ ev ->
-            if ev?key = "Enter" || ev?key = " " then
-              ev.PreventDefault()
-              navigateTo Home)
-        ] [
-          Icon.create (Icon.UiActions UiActions.Home, attrs = [ Attr.Style "font-size" "18px" ])
-          div [ Typography.body2 ] [ text "Home" ]
+      div [ Padding.Vertical.extraSmall ] [
+        div [ Attr.Class "docs-nav-search" ] [
+          TextField.singleLine (
+            navSearch,
+            labelText = View.Const "Find a component",
+            placeholder = View.Const "Search components",
+            endAdornment =
+              (navSearch.View
+               |> Doc.BindView(fun query ->
+                 if System.String.IsNullOrEmpty query then
+                   Doc.Empty
+                 else
+                   Button.create (
+                     text "Clear",
+                     onClick = (fun () -> Var.Set navSearch ""),
+                     attrs = [
+                       Button.Variant.text
+                       Attr.Class "docs-nav-search__clear"
+                       Attr.Create "aria-label" "Clear component search"
+                     ]
+                   ))),
+            attrs = [ TextField.Variant.outlined; TextField.Label.above; TextField.Width.full ]
+          )
         ]
+        nav [ Attr.Create "aria-label" "Documentation navigation" ] [
+          button [
+            attr.``type`` "button"
+            Flex.Flex.allSizes
+            AlignItems.center
+            Padding.Vertical.extraSmall
+            Padding.Horizontal.small
+            Cursor.pointer
+            BorderRadius.All.large
+            Margin.All.extraSmall
+            Gap.All.g2
+            Attr.Class "weave-nav-leaf"
+            Attr.DynamicClassPred
+              "weave-nav-item--active"
+              (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
+            Attr.DynamicPred
+              "aria-current"
+              (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
+              (View.Const "page")
+            on.click (fun _ _ -> navigateTo Home)
+          ] [
+            Icon.create (
+              Icon.UiActions UiActions.Home,
+              attrs = [ Attr.Style "font-size" "18px"; Attr.Create "aria-hidden" "true" ]
+            )
+            span [ Typography.body2 ] [ text "Home" ]
+          ]
 
-        div [
-          Flex.Flex.allSizes
-          AlignItems.center
-          Padding.Vertical.extraSmall
-          Padding.Horizontal.small
-          Cursor.pointer
-          BorderRadius.All.large
-          Margin.All.extraSmall
-          Gap.All.g2
-          Attr.Class "weave-nav-leaf"
-          Attr.Create "role" "treeitem"
-          Attr.Create "tabindex" "0"
-          Attr.DynamicClassPred
-            "weave-nav-item--active"
-            (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
-          on.click (fun _ _ -> navigateTo GettingStartedExamples)
-          on.keyDown (fun _ ev ->
-            if ev?key = "Enter" || ev?key = " " then
-              ev.PreventDefault()
-              navigateTo GettingStartedExamples)
-        ] [
-          Icon.create (Icon.Social Social.RocketLaunch, attrs = [ Attr.Style "font-size" "18px" ])
-          div [ Typography.body2 ] [ text "Getting Started" ]
-        ]
+          button [
+            attr.``type`` "button"
+            Flex.Flex.allSizes
+            AlignItems.center
+            Padding.Vertical.extraSmall
+            Padding.Horizontal.small
+            Cursor.pointer
+            BorderRadius.All.large
+            Margin.All.extraSmall
+            Gap.All.g2
+            Attr.Class "weave-nav-leaf"
+            Attr.DynamicClassPred
+              "weave-nav-item--active"
+              (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
+            Attr.DynamicPred
+              "aria-current"
+              (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
+              (View.Const "page")
+            on.click (fun _ _ -> navigateTo GettingStartedExamples)
+          ] [
+            Icon.create (
+              Icon.Social Social.RocketLaunch,
+              attrs = [ Attr.Style "font-size" "18px"; Attr.Create "aria-hidden" "true" ]
+            )
+            span [ Typography.body2 ] [ text "Getting Started" ]
+          ]
 
-        Divider.create (attrs = [ Margin.Vertical.extraSmall ])
+          Divider.create (attrs = [ Margin.Vertical.extraSmall ])
 
-        navGroup (Icon.Android Android.Widgets) "Components" componentsExpanded [
-          navLeafItem "Alert"
-          navLeafItem "App Bar"
-          navLeafItem "Button"
-          navLeafItem "Button Group"
-          navLeafItem "Button Menu"
-          navLeafItem "Card"
-          navLeafItem "Checkbox"
-          navLeafItem "Chip"
-          navLeafItem "Chip Set"
-          navLeafItem "Container"
-          navLeafItem "Dialog"
-          navLeafItem "Divider"
-          navLeafItem "Drawer"
-          navLeafItem "Dropdown Menu"
-          navLeafItem "Expansion Panel"
-          navLeafItem "Field"
-          navLeafItem "Grid"
-          navLeafItem "Icons"
-          navLeafItem "Link"
-          navLeafItem "List"
-          navLeafItem "Numeric Field"
-          navLeafItem "Radio Button"
-          navLeafItem "Select"
-          navLeafItem "Slider"
-          navLeafItem "Spacer"
-          navLeafItem "Switch"
-          navLeafItem "Table"
-          navLeafItem "Tabs"
-          navLeafItem "Text Field"
-          navLeafItem "Tooltip"
-          navLeafItem "Typography"
-        ]
+          navSearch.View
+          |> Doc.BindView(fun query ->
+            if query.Trim() <> "" && not (allNavLabels |> List.exists (matches query)) then
+              div [ Attr.Class "docs-nav-no-results"; Attr.Create "role" "status" ] [
+                text "No matching pages."
+              ]
+            else
+              Doc.Empty)
 
-        navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded [
-          navLeafItem "Spacing"
-          navLeafItem "Opacity"
-          navLeafItem "Borders"
-          navLeafItem "Display"
-          navLeafItem "Elevation"
-          navLeafItem "Flexbox"
-          navLeafItem "Transitions"
-          navLeafItem "Animations"
-          navLeafItem "Theming"
-        ]
+          navGroup (Icon.Android Android.Widgets) "Components" componentsExpanded componentsLabels
 
-        navGroup (Icon.Action Action.Code) "Utilities" utilitiesExpanded [
-          navLeafItem "Reactive Helpers"
-          navLeafItem "Event Handlers"
-        ]
+          navGroup (Icon.Images Images.Palette) "Styling" stylingExpanded stylingLabels
 
-        Divider.create (attrs = [ Margin.Vertical.extraSmall ])
+          navGroup (Icon.Action Action.Code) "Utilities" utilitiesExpanded utilitiesLabels
 
-        navGroup (Icon.UiActions UiActions.Apps) "Showcases" showcasesExpanded [
-          navLeafItem "Task Tracker"
-          navLeafItem "Pomodoro Timer"
-          navLeafItem "Expense Tracker"
-          navLeafItem "Character Sheet"
+          Divider.create (attrs = [ Margin.Vertical.extraSmall ])
+
+          navGroup (Icon.UiActions UiActions.Apps) "Showcases" showcasesExpanded showcasesLabels
         ]
       ]
 
@@ -746,7 +819,7 @@ module ExamplesRouter =
         IconButton.create (
           Icon.create (Icon.UiActions UiActions.Menu),
           onClick = (fun () -> Var.Set drawerOpen (not drawerOpen.Value)),
-          attrs = [ Margin.Right.extraSmall ]
+          attrs = [ Margin.Right.extraSmall; Attr.Create "aria-label" "Toggle navigation" ]
         )
 
         div [
@@ -777,7 +850,8 @@ module ExamplesRouter =
           onClick =
             (fun () ->
               let newMode = Theming.toggleMode ()
-              Var.Set Theme.current newMode)
+              Var.Set Theme.current newMode),
+          attrs = [ Attr.Create "aria-label" "Toggle light and dark theme" ]
         )
       ]
 
@@ -790,12 +864,13 @@ module ExamplesRouter =
     ] [
       navEffects
 
-      AppBar.create (appBarContent, attrs = [ BrandColor.BackgroundColor.primary ])
+      AppBar.create (appBarContent, attrs = [ Attr.Class "docs-appbar" ])
 
       DrawerContainer.create (
         mainContent =
           div [
             cl "weave-main-content"
+            Attr.Class "docs-main-content"
             Overflow.yAuto
             Attr.Style "scroll-behavior" "smooth"
             Attr.Style "height" "100%"
@@ -841,7 +916,7 @@ module ExamplesRouter =
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set drawerOpen false),
             isFixed = false,
-            attrs = [ Overflow.yAuto ]
+            attrs = [ Overflow.yAuto; Attr.Class "docs-navigation-drawer" ]
           ),
         attrs = [
           FlexItem.Flex.allSizes

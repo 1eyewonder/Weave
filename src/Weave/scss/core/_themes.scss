@@ -4,16 +4,16 @@
 :root,
 [data-theme="light"] {
   // --- Surface Colors ---
-  --palette-background: #ebebeb;
-  --palette-background-paper: #d5d5d5;
-  --palette-background-darken: #bfbfbf;
+  --palette-background: #f5f7fa;
+  --palette-background-paper: #edf1f6;
+  --palette-background-darken: #e8edf3;
   --palette-surface: #ffffff;
 
   // --- Text Colors ---
-  --palette-text-primary: rgba(66, 66, 66, 1);
-  --palette-text-primary-rgb: 66, 66, 66;
+  --palette-text-primary: rgba(31, 41, 55, 1);
+  --palette-text-primary-rgb: 31, 41, 55;
   --palette-text-secondary: rgba(0, 0, 0, 0.64);
-  --palette-text-disabled: rgba(0, 0, 0, 0.38);
+  --palette-text-disabled: rgba(0, 0, 0, 0.58);
 
   // --- Divider & Border Colors ---
   --palette-divider: rgba(0, 0, 0, 0.24);
@@ -41,35 +41,78 @@
   --palette-secondary-darken: #3d2eb4;
   --palette-secondary-rgb: 89, 74, 226;
 
-  --palette-tertiary: #ff4081;
+  --palette-tertiary: #d60069;
   --palette-tertiary-text: #ffffff;
-  --palette-tertiary-lighten: #ff6699;
-  --palette-tertiary-darken: #d91d63;
-  --palette-tertiary-rgb: 255, 64, 129;
+  --palette-tertiary-lighten: #df4d96;
+  --palette-tertiary-darken: #9d0e5f;
+  --palette-tertiary-rgb: 214, 0, 105;
 
-  --palette-success: #00aa47;
+  --palette-success: #007e38;
   --palette-success-text: #ffffff;
-  --palette-success-lighten: #21ca62;
-  --palette-success-darken: #009638;
-  --palette-success-rgb: 0, 170, 71;
+  --palette-success-lighten: #27a96c;
+  --palette-success-darken: #006139;
+  --palette-success-rgb: 0, 126, 56;
 
-  --palette-error: #f44336;
+  --palette-error: #d91122;
   --palette-error-text: #ffffff;
-  --palette-error-lighten: #f6685e;
-  --palette-error-darken: #d32f2f;
-  --palette-error-rgb: 244, 67, 54;
+  --palette-error-lighten: #e45665;
+  --palette-error-darken: #a91f2c;
+  --palette-error-rgb: 217, 17, 34;
 
-  --palette-warning: #f19306;
+  --palette-warning: #ab5400;
   --palette-warning-text: #ffffff;
-  --palette-warning-lighten: #ff9800;
-  --palette-warning-darken: #d4840b;
-  --palette-warning-rgb: 241, 147, 6;
+  --palette-warning-lighten: #c97922;
+  --palette-warning-darken: #814300;
+  --palette-warning-rgb: 171, 84, 0;
 
-  --palette-info: #15b9be;
+  --palette-info: #0072aa;
   --palette-info-text: #ffffff;
-  --palette-info-lighten: #12dde4;
-  --palette-info-darken: #119397;
-  --palette-info-rgb: 21, 185, 190;
+  --palette-info-lighten: #318fc0;
+  --palette-info-darken: #005487;
+  --palette-info-rgb: 0, 114, 170;
+
+  --palette-indicator-mark: #ffffff;
+
+  // Light filled surfaces use vivid colors while semantic text and outlines
+  // retain the base color. Override fill tokens alongside custom scoped palettes.
+  --palette-primary-fill: #168bff;
+  --palette-primary-fill-hover: #1385f5;
+  --palette-primary-fill-text: #111827;
+  --palette-primary-fill-border: var(--palette-primary);
+  --palette-secondary-fill: #a294ff;
+  --palette-secondary-fill-hover: #9385f4;
+  --palette-secondary-fill-text: #111827;
+  --palette-secondary-fill-border: var(--palette-secondary);
+  --palette-tertiary-fill: #ff4081;
+  --palette-tertiary-fill-hover: #f33577;
+  --palette-tertiary-fill-text: #111827;
+  --palette-tertiary-fill-border: var(--palette-tertiary);
+  --palette-tertiary-indicator: #ff4081;
+  --palette-tertiary-subtle-text: var(--palette-tertiary-darken);
+  --palette-error-fill: #ff2d42;
+  --palette-error-fill-hover: #fa3245;
+  --palette-error-fill-text: #111827;
+  --palette-error-fill-border: var(--palette-error);
+  --palette-error-indicator: #fa3245;
+  --palette-error-subtle-text: var(--palette-error-darken);
+  --palette-warning-fill: #ffa800;
+  --palette-warning-fill-hover: #e59400;
+  --palette-warning-fill-text: #111827;
+  --palette-warning-fill-border: var(--palette-warning);
+  --palette-warning-indicator: #c67800;
+  --palette-warning-subtle-text: var(--palette-warning-darken);
+  --palette-success-fill: #0bba83;
+  --palette-success-fill-hover: #00a46e;
+  --palette-success-fill-text: #111827;
+  --palette-success-fill-border: var(--palette-success);
+  --palette-success-indicator: #009e68;
+  --palette-success-subtle-text: var(--palette-success-darken);
+  --palette-info-fill: #17cdd3;
+  --palette-info-fill-hover: #00b6bd;
+  --palette-info-fill-text: #111827;
+  --palette-info-fill-border: var(--palette-info);
+  --palette-info-indicator: #008fbd;
+  --palette-info-subtle-text: var(--palette-info-darken);
 
   // --- Component-Specific Colors ---
   --palette-appbar-background: #594ae2;
@@ -148,15 +191,15 @@
 // DARK THEME
 // =============================================================================
 [data-theme="dark"] {
-  --palette-background: #1b1c25;
-  --palette-background-paper: #43454f;
-  --palette-background-darken: #13141b;
-  --palette-surface: #32343e;
+  --palette-background: #151922;
+  --palette-background-paper: #252d3a;
+  --palette-background-darken: #10141b;
+  --palette-surface: #202733;
 
   --palette-text-primary: rgba(255, 255, 255);
   --palette-text-primary-rgb: 255, 255, 255;
-  --palette-text-secondary: rgba(255, 255, 255, 0.5);
-  --palette-text-disabled: rgba(255, 255, 255, 0.2);
+  --palette-text-secondary: rgba(255, 255, 255, 0.72);
+  --palette-text-disabled: rgba(255, 255, 255, 0.55);
 
   --palette-divider: rgba(255, 255, 255, 0.24);
   --palette-divider-light: rgba(255, 255, 255, 0.12);
@@ -164,59 +207,101 @@
   --palette-lines-inputs: rgba(255, 255, 255, 0.3);
 
   --palette-action-default: #adadb1;
-  --palette-action-default-hover: rgba(173, 173, 177, 0.3);
+  --palette-action-default-hover: rgba(255, 255, 255, 0.08);
   --palette-action-disabled: rgba(255, 255, 255, 0.26);
   --palette-action-disabled-background: rgba(255, 255, 255, 0.12);
 
   --palette-primary: #088ffd;
-  --palette-primary-text: #ffffff;
-  --palette-primary-lighten: #35d7ff;
-  --palette-primary-darken: #0054d1;
+  --palette-primary-text: #081b30;
+  --palette-primary-lighten: #7ac6ff;
+  --palette-primary-darken: #64b8ff;
   --palette-primary-rgb: 8, 143, 253;
 
-  --palette-secondary: #594ae2;
-  --palette-secondary-text: #ffffff;
-  --palette-secondary-lighten: #7569e0;
-  --palette-secondary-darken: #4236ad;
-  --palette-secondary-rgb: 89, 74, 226;
+  --palette-secondary: #a99fff;
+  --palette-secondary-text: #111827;
+  --palette-secondary-lighten: #d0caff;
+  --palette-secondary-darken: #c2baff;
+  --palette-secondary-rgb: 169, 159, 255;
 
   --palette-tertiary: #ff4081;
-  --palette-tertiary-text: #ffffff;
-  --palette-tertiary-lighten: #ff6699;
-  --palette-tertiary-darken: #c71959;
+  --palette-tertiary-text: #111827;
+  --palette-tertiary-lighten: #ffa2c0;
+  --palette-tertiary-darken: #ff7fa7;
   --palette-tertiary-rgb: 255, 64, 129;
 
   --palette-success: #0bba83;
-  --palette-success-text: #ffffff;
-  --palette-success-lighten: #3dc99a;
-  --palette-success-darken: #089a6b;
+  --palette-success-text: #111827;
+  --palette-success-lighten: #70ddb8;
+  --palette-success-darken: #36cd9b;
   --palette-success-rgb: 11, 186, 131;
 
-  --palette-error: #f64e62;
-  --palette-error-text: #ffffff;
-  --palette-error-lighten: #f77381;
-  --palette-error-darken: #b53746;
-  --palette-error-rgb: 246, 78, 98;
+  --palette-error: #ff5060;
+  --palette-error-text: #111827;
+  --palette-error-lighten: #ff90a0;
+  --palette-error-darken: #ff7988;
+  --palette-error-rgb: 255, 80, 96;
 
   --palette-warning: #ffa800;
-  --palette-warning-text: #ffffff;
-  --palette-warning-lighten: #ffb933;
-  --palette-warning-darken: #cc8600;
+  --palette-warning-text: #111827;
+  --palette-warning-lighten: #ffcf70;
+  --palette-warning-darken: #ffb933;
   --palette-warning-rgb: 255, 168, 0;
 
   --palette-info: #17cdd3;
-  --palette-info-text: #ffffff;
-  --palette-info-lighten: #63f8fd;
-  --palette-info-darken: #09b2b8;
+  --palette-info-text: #111827;
+  --palette-info-lighten: #9bf0f2;
+  --palette-info-darken: #64e6e9;
   --palette-info-rgb: 23, 205, 211;
+
+  --palette-indicator-mark: var(--palette-background);
+
+  // Dark mode keeps its existing saturated filled treatments.
+  --palette-primary-fill: var(--palette-primary);
+  --palette-primary-fill-hover: var(--palette-primary-darken);
+  --palette-primary-fill-text: var(--palette-primary-text);
+  --palette-primary-fill-border: transparent;
+  --palette-secondary-fill: var(--palette-secondary);
+  --palette-secondary-fill-hover: var(--palette-secondary-darken);
+  --palette-secondary-fill-text: var(--palette-secondary-text);
+  --palette-secondary-fill-border: transparent;
+  --palette-tertiary-fill: var(--palette-tertiary);
+  --palette-tertiary-fill-hover: var(--palette-tertiary-darken);
+  --palette-tertiary-fill-text: var(--palette-tertiary-text);
+  --palette-tertiary-fill-border: transparent;
+  --palette-tertiary-indicator: var(--palette-tertiary-fill);
+  --palette-tertiary-subtle-text: var(--palette-tertiary-darken);
+  --palette-error-fill: #ff2d42;
+  --palette-error-fill-hover: var(--palette-error-darken);
+  --palette-error-fill-text: var(--palette-error-text);
+  --palette-error-fill-border: transparent;
+  --palette-error-indicator: var(--palette-error-fill);
+  --palette-error-subtle-text: var(--palette-error-darken);
+  --palette-warning-fill: var(--palette-warning);
+  --palette-warning-fill-hover: var(--palette-warning-darken);
+  --palette-warning-fill-text: var(--palette-warning-text);
+  --palette-warning-fill-border: transparent;
+  --palette-warning-indicator: var(--palette-warning-fill);
+  --palette-warning-subtle-text: var(--palette-warning-darken);
+  --palette-success-fill: var(--palette-success);
+  --palette-success-fill-hover: var(--palette-success-darken);
+  --palette-success-fill-text: var(--palette-success-text);
+  --palette-success-fill-border: transparent;
+  --palette-success-indicator: var(--palette-success-fill);
+  --palette-success-subtle-text: var(--palette-success-darken);
+  --palette-info-fill: var(--palette-info);
+  --palette-info-fill-hover: var(--palette-info-darken);
+  --palette-info-fill-text: var(--palette-info-text);
+  --palette-info-fill-border: transparent;
+  --palette-info-indicator: var(--palette-info-fill);
+  --palette-info-subtle-text: var(--palette-info-darken);
 
   // --- Component-Specific Colors ---
   --palette-appbar-background: #27272f;
   --palette-appbar-text: #ffffff;
 
   --palette-drawer-background: #27272f;
-  --palette-drawer-text: rgba(255, 255, 255, 0.5);
-  --palette-drawer-icon: rgba(255, 255, 255, 0.5);
+  --palette-drawer-text: rgba(255, 255, 255, 0.78);
+  --palette-drawer-icon: rgba(255, 255, 255, 0.72);
 
   // --- Switch Component Colors ---
   --switch-thumb-idle: var(--palette-action-default);

@@ -47,6 +47,11 @@
     <Compile Include="components/Link.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />
+    <Compile Include="components/colorpicker/PickerColor.fs" />
+    <Compile Include="components/colorpicker/State.fs" />
+    <Compile Include="components/colorpicker/Render.fs" />
+    <Compile Include="components/colorpicker/Popover.fs" />
+    <Compile Include="components/colorpicker/ColorPicker.fs" />
     <Compile Include="components/Table.fs" />
     <Compile Include="components/Dialog.fs" />
     <Compile Include="components/Spacer.fs" />

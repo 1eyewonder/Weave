@@ -2385,6 +2385,7 @@ module Pages =
     | "progress" -> progressPage ()
     | "slider" -> sliderPage ()
     | "slider-dynamic" -> dynamicSliderPage ()
+    | "color-picker" -> ColorPickerPage.render ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 
   [<Inline "window.location.hash.replace('#', '')">]

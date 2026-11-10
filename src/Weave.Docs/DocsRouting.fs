@@ -29,6 +29,7 @@ module DocsRouting =
     | SwitchExamples
     | ProgressExamples
     | SliderExamples
+    | ColorPickerExamples
     | ContainerExamples
     | FieldExamples
     | FormExamples
@@ -87,6 +88,7 @@ module DocsRouting =
     | SwitchExamples -> "Switch"
     | ProgressExamples -> "Progress"
     | SliderExamples -> "Slider"
+    | ColorPickerExamples -> "Color Picker"
     | ContainerExamples -> "Container"
     | FormExamples -> "Forms & Validation"
     | FieldExamples -> "Field"
@@ -145,6 +147,7 @@ module DocsRouting =
     | "Switch" -> Some SwitchExamples
     | "Progress" -> Some ProgressExamples
     | "Slider" -> Some SliderExamples
+    | "Color Picker" -> Some ColorPickerExamples
     | "Container" -> Some ContainerExamples
     | "Forms & Validation" -> Some FormExamples
     | "Field" -> Some FieldExamples
@@ -204,6 +207,7 @@ module DocsRouting =
     | SwitchExamples -> "#switch"
     | ProgressExamples -> "#progress"
     | SliderExamples -> "#slider"
+    | ColorPickerExamples -> "#color-picker"
     | ContainerExamples -> "#container"
     | FormExamples -> "#forms"
     | FieldExamples -> "#field"
@@ -263,6 +267,7 @@ module DocsRouting =
     | "#switch" -> Some SwitchExamples
     | "#progress" -> Some ProgressExamples
     | "#slider" -> Some SliderExamples
+    | "#color-picker" -> Some ColorPickerExamples
     | "#container" -> Some ContainerExamples
     | "#forms" -> Some FormExamples
     | "#field" -> Some FieldExamples

@@ -268,6 +268,7 @@ module ExamplesRouter =
               "Checkbox", CheckboxExamples
               "Chip", ChipExamples
               "Chip Set", ChipSetExamples
+              "Color Picker", ColorPickerExamples
               "Container", ContainerExamples
               "Dialog", DialogExamples
               "Divider", DividerExamples
@@ -348,6 +349,7 @@ module ExamplesRouter =
       | SwitchExamples -> SwitchExamples.render ()
       | ProgressExamples -> ProgressExamples.render ()
       | SliderExamples -> SliderExamples.render ()
+      | ColorPickerExamples -> ColorPickerExamples.render ()
       | ContainerExamples -> ContainerExamples.render ()
       | FormExamples -> FormExamples.render ()
       | FieldExamples -> FieldExamples.render ()
@@ -679,6 +681,7 @@ module ExamplesRouter =
       "Checkbox"
       "Chip"
       "Chip Set"
+      "Color Picker"
       "Container"
       "Dialog"
       "Divider"

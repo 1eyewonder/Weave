@@ -53,6 +53,17 @@ module ComponentPreviews =
             Attr.Style "border-radius" "4px"
           ] []
       ]
+    | ColorPickerExamples ->
+      cp [
+        div [
+          Attr.Style "position" "absolute"
+          Attr.Style "inset" "12px 20%"
+          Attr.Style "border-radius" "var(--default-borderradius)"
+          Attr.Style
+            "background"
+            "linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, #6200ea)"
+        ] []
+      ]
     | CarouselExamples ->
       cp [
         div [ cl "cp-box"; Attr.Style "inset" "12px 12px 26px" ] []

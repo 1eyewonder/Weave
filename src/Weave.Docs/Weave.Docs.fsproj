@@ -19,6 +19,7 @@
     <Compile Include="examples/SwitchExamples.fs" />
     <Compile Include="examples/ProgressExamples.fs" />
     <Compile Include="examples/SliderExamples.fs" />
+    <Compile Include="examples/ColorPickerExamples.fs" />
     <Compile Include="examples/DropdownMenuExamples.fs" />
     <Compile Include="examples/FieldExamples.fs" />
     <Compile Include="examples/TextFieldExamples.fs" />

@@ -26,6 +26,7 @@ module DocsRouting =
     | ChipSetExamples
     | RadioButtonExamples
     | SwitchExamples
+    | ProgressExamples
     | SliderExamples
     | ContainerExamples
     | FieldExamples
@@ -81,6 +82,7 @@ module DocsRouting =
     | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
     | SwitchExamples -> "Switch"
+    | ProgressExamples -> "Progress"
     | SliderExamples -> "Slider"
     | ContainerExamples -> "Container"
     | FormExamples -> "Forms & Validation"
@@ -136,6 +138,7 @@ module DocsRouting =
     | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
     | "Switch" -> Some SwitchExamples
+    | "Progress" -> Some ProgressExamples
     | "Slider" -> Some SliderExamples
     | "Container" -> Some ContainerExamples
     | "Forms & Validation" -> Some FormExamples
@@ -192,6 +195,7 @@ module DocsRouting =
     | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
     | SwitchExamples -> "#switch"
+    | ProgressExamples -> "#progress"
     | SliderExamples -> "#slider"
     | ContainerExamples -> "#container"
     | FormExamples -> "#forms"
@@ -248,6 +252,7 @@ module DocsRouting =
     | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples
     | "#switch" -> Some SwitchExamples
+    | "#progress" -> Some ProgressExamples
     | "#slider" -> Some SliderExamples
     | "#container" -> Some ContainerExamples
     | "#forms" -> Some FormExamples

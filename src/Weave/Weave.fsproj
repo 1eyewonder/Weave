@@ -37,6 +37,7 @@
     <Compile Include="components/Checkbox.fs" />
     <Compile Include="components/RadioButton.fs" />
     <Compile Include="components/Switch.fs" />
+    <Compile Include="components/Progress.fs" />
     <Compile Include="components/Slider.fs" />
     <Compile Include="components/DropdownMenu.fs" />
     <Compile Include="components/List.fs" />

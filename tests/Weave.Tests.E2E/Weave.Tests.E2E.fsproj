@@ -62,6 +62,7 @@
     <Compile Include="interaction/ResizeListenerInteractionTests.fs" />
     <Compile Include="interaction/ScrollToTopInteractionTests.fs" />
     <Compile Include="interaction/SelectInteractionTests.fs" />
+    <Compile Include="interaction/ProgressTests.fs" />
     <Compile Include="interaction/SliderInteractionTests.fs" />
     <Compile Include="interaction/SwitchInteractionTests.fs" />
     <Compile Include="interaction/TableInteractionTests.fs" />

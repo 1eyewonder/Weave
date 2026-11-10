@@ -1,0 +1,114 @@
+@use "../abstracts/variables" as *;
+
+.weave-progress {
+  --progress-color: var(--palette-primary);
+  color: var(--progress-color);
+}
+
+@each $color in $palette-colors {
+  .weave-progress--#{$color} { --progress-color: var(--palette-#{$color}); }
+}
+
+.weave-progress-linear {
+  --progress-thickness: 4px;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: var(--progress-thickness);
+  overflow: hidden;
+  isolation: isolate;
+
+  &--small { --progress-thickness: 2px; }
+  &--medium { --progress-thickness: 4px; }
+  &--large { --progress-thickness: 8px; }
+  &--rounded { border-radius: var(--default-borderradius); }
+
+  &__track, &__buffer, &__fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    background-color: currentColor;
+  }
+  &__track { width: 100%; opacity: 0.12; }
+  &__buffer { opacity: 0.3; }
+  &__fill { width: calc(var(--progress-value, 0) * 1%); }
+
+  &--striped &__fill {
+    background-color: transparent;
+    background-image: repeating-linear-gradient(45deg, currentColor, currentColor 6px, transparent 6px, transparent 8px);
+  }
+
+  &.weave-progress--indeterminate &__buffer { display: none; }
+  &.weave-progress--indeterminate &__fill {
+    width: 35%;
+    animation: weave-progress-linear 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes weave-progress-linear {
+  from { inset-inline-start: -35%; }
+  to { inset-inline-start: 100%; }
+}
+
+.weave-progress-circular {
+  --progress-size: 40px;
+  --progress-thickness: 4px;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--progress-size);
+  height: var(--progress-size);
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  &--small { --progress-size: 24px; }
+  &--medium { --progress-size: 40px; }
+  &--large { --progress-size: 56px; }
+
+  &__svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+  &__track, &__fill {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--progress-thickness);
+  }
+  &__track { opacity: 0.12; }
+  &__fill {
+    stroke-dasharray: 100 100;
+    stroke-dashoffset: calc(100px - var(--progress-value, 0) * 1px);
+  }
+  &__content {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--palette-text-primary);
+    font-size: 0.75rem;
+  }
+  &.weave-progress--indeterminate &__svg {
+    animation: weave-progress-circular 1.2s linear infinite;
+  }
+  &.weave-progress--indeterminate &__fill {
+    stroke-dasharray: 25 75;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes weave-progress-circular {
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(270deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-progress-linear.weave-progress--indeterminate .weave-progress-linear__fill {
+    animation: none;
+    inset-inline-start: 32.5%;
+  }
+  .weave-progress-circular.weave-progress--indeterminate .weave-progress-circular__svg {
+    animation: none;
+  }
+}

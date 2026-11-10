@@ -30,6 +30,16 @@ module ComponentPreviews =
           Padding.All.extraSmall
         ] [ text "↑" ]
       ]
+    | ProgressExamples ->
+      cp [
+        div [ Attr.Style "padding" "12px" ] [
+          Progress.Linear.create (value = View.Const 65.0)
+          Progress.Circular.create (
+            value = View.Const 65.0,
+            attrs = [ Margin.Top.extraSmall; Progress.Circular.Size.small ]
+          )
+        ]
+      ]
     | CarouselExamples ->
       cp [
         div [ cl "cp-box"; Attr.Style "inset" "12px 12px 26px" ] []

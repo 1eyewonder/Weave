@@ -2026,6 +2026,71 @@ module Pages =
       div [ Attr.Style "height" "1800px" ] [ text "Page content" ]
     ]
 
+  let private progressPage () =
+    let value = Var.Create 35.0
+    let buffer = Var.Create 85.0
+    let busy = Var.Create false
+    let testId id = Attr.Create "data-testid" id
+
+    div [ Attr.Style "padding" "16px" ] [
+      Progress.Linear.create (
+        value = value.View,
+        bufferValue = buffer.View,
+        indeterminate = busy.View,
+        min = 10.0,
+        max = 110.0,
+        attrs = [
+          Attr.Create "aria-label" "Download"
+          testId "linear"
+          Progress.Linear.Size.large
+          Progress.Linear.Variant.rounded
+        ]
+      )
+      Progress.Circular.create (
+        value = value.View,
+        indeterminate = busy.View,
+        min = 10.0,
+        max = 110.0,
+        content = text "Done",
+        attrs = [
+          Attr.Create "aria-label" "Download circle"
+          testId "circular"
+          Progress.Circular.Size.large
+        ]
+      )
+      Progress.Linear.create (attrs = [ Attr.Create "aria-label" "Loading"; testId "unknown-linear" ])
+      Progress.Circular.create (
+        attrs = [ Attr.Create "aria-label" "Loading circle"; testId "unknown-circular" ]
+      )
+      Progress.Linear.create (
+        value = View.Const 50.0,
+        min = 5.0,
+        max = 5.0,
+        attrs = [ testId "invalid-range" ]
+      )
+      div [ Attr.Create "dir" "rtl" ] [
+        Progress.Linear.create (value = View.Const 25.0, attrs = [ testId "rtl-linear" ])
+      ]
+      for size in
+        [
+          Progress.Circular.Size.small
+          Progress.Circular.Size.medium
+          Progress.Circular.Size.large
+        ] do
+        Progress.Circular.create (value = View.Const 50.0, attrs = [ size ])
+      Button.create (text "Advance", (fun () -> value.Value <- 60.0), attrs = [ testId "advance" ])
+      Button.create (text "Upper", (fun () -> value.Value <- 200.0), attrs = [ testId "upper" ])
+      Button.create (text "Lower", (fun () -> value.Value <- -10.0), attrs = [ testId "lower" ])
+      Button.create (text "NaN", (fun () -> value.Value <- nan), attrs = [ testId "nan" ])
+      Button.create (text "Infinity", (fun () -> value.Value <- infinity), attrs = [ testId "infinity" ])
+      Button.create (text "Buffer", (fun () -> buffer.Value <- 20.0), attrs = [ testId "buffer" ])
+      Button.create (
+        text "Toggle mode",
+        (fun () -> busy.Value <- not busy.Value),
+        attrs = [ testId "toggle-mode" ]
+      )
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | "scroll-to-top" -> scrollToTopPage 300 false
@@ -2088,6 +2153,7 @@ module Pages =
     | "buttonmenu" -> buttonmenuPage ()
     | "buttongroup" -> buttongroupPage ()
     | "tooltip" -> tooltipPage ()
+    | "progress" -> progressPage ()
     | "slider" -> sliderPage ()
     | "slider-dynamic" -> dynamicSliderPage ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]

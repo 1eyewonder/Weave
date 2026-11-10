@@ -15,6 +15,17 @@ module ComponentPreviews =
     let cp children = div [ cl "cp" ] children
 
     match page with
+    | CarouselExamples ->
+      cp [
+        div [ cl "cp-box"; Attr.Style "inset" "12px 12px 26px" ] []
+        div [ cl "cp-line"; Attr.Style "inset" "32px 30% auto"; Attr.Style "height" "6px" ] []
+        div [
+          Attr.Style "position" "absolute"
+          Attr.Style "bottom" "4px"
+          Attr.Style "width" "100%"
+          Attr.Style "text-align" "center"
+        ] [ text "‹  ● ○ ○  ›" ]
+      ]
     | AppBarExamples ->
       cp [
         div [

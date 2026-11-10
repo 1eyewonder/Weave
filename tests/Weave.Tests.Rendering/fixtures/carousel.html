@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carousel fixture</title>
+    <link rel="stylesheet" href="../../../src/Weave/styles.css" />
+    <style>body { margin: 0; padding: 16px; } .slide-content { padding: 24px; } .tall { height: 200px; }</style>
+  </head>
+  <body>
+    <div class="weave-carousel" id="carousel">
+      <div class="weave-carousel__viewport">
+        <div class="weave-carousel__item weave-carousel__item--active" id="first"><div class="slide-content">Short slide</div></div>
+        <div class="weave-carousel__item" inert aria-hidden="true" id="second"><div class="slide-content tall">Tall slide</div></div>
+      </div>
+      <div class="weave-carousel__controls">
+        <button class="weave-button weave-button--icon" aria-label="Previous slide">‹</button>
+        <div class="weave-carousel__indicators">
+          <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 1" aria-current="true"></button>
+          <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 2" aria-current="false"></button>
+        </div>
+        <button class="weave-button weave-button--icon" aria-label="Next slide">›</button>
+      </div>
+    </div>
+  </body>
+</html>

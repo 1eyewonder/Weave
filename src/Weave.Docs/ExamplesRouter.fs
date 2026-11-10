@@ -264,6 +264,7 @@ module ExamplesRouter =
               "Button Group", ButtonGroupExamples
               "Button Menu", ButtonMenuExamples
               "Card", CardExamples
+              "Carousel", CarouselExamples
               "Checkbox", CheckboxExamples
               "Chip", ChipExamples
               "Chip Set", ChipSetExamples
@@ -333,6 +334,7 @@ module ExamplesRouter =
       | GridExamples -> GridExamples.render ()
       | CheckboxExamples -> CheckboxExamples.render ()
       | CardExamples -> CardExamples.render ()
+      | CarouselExamples -> CarouselExamples.render ()
       | ChipExamples -> ChipExamples.render ()
       | ChipSetExamples -> ChipSetExamples.render ()
       | RadioButtonExamples -> RadioButtonExamples.render ()
@@ -663,6 +665,7 @@ module ExamplesRouter =
       "Button Group"
       "Button Menu"
       "Card"
+      "Carousel"
       "Checkbox"
       "Chip"
       "Chip Set"

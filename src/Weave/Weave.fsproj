@@ -20,6 +20,7 @@
     <Compile Include="components/Button.fs" />
     <Compile Include="components/Alert.fs" />
     <Compile Include="components/Card.fs" />
+    <Compile Include="components/Carousel.fs" />
     <Compile Include="components/ButtonGroup.fs" />
     <Compile Include="components/ButtonMenu.fs" />
     <Compile Include="components/Chip.fs" />

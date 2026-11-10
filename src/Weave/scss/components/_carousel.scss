@@ -1,0 +1,110 @@
+@use "../abstracts/mixins" as *;
+
+.weave-carousel {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--palette-text-primary);
+  background: var(--palette-surface);
+  border: 1px solid var(--palette-divider);
+  border-radius: var(--default-borderradius);
+
+  &__viewport {
+    display: grid;
+    min-width: 0;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  &__item {
+    grid-area: 1 / 1;
+    min-width: 0;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    // Keep the outgoing slide painted until its fade has finished.
+    transition:
+      opacity var(--weave-duration-long) ease-in-out,
+      visibility 0s linear var(--weave-duration-long);
+
+    &--active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 1;
+      transition-delay: 0s;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+  }
+
+  &__controls,
+  &__navigation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  &__controls {
+    padding: 8px;
+    border-top: 1px solid var(--palette-divider);
+  }
+
+  &__indicators {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  &__indicator {
+    &::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      @include transition(background-color, long);
+    }
+
+    &[aria-current="true"]::before {
+      background: currentColor;
+    }
+  }
+
+  &__arrow {
+    // Override IconButton's stretched first child without changing other icon buttons.
+    > svg:first-child {
+      width: 22px;
+      height: 22px;
+      align-self: center;
+    }
+  }
+
+  &--no-transition &__item {
+    transition: none;
+  }
+
+  &--no-transition &__indicator::before { transition: none; }
+
+  &--hide-arrows &__arrow,
+  &--hide-indicators &__indicators { display: none; }
+}
+
+.weave-carousel--hide-arrows.weave-carousel--hide-indicators {
+  .weave-carousel__navigation,
+  .weave-carousel__controls:not(:has(.weave-carousel__rotation)) { display: none; }
+}
+
+@media (max-width: 600px) {
+  .weave-carousel__rotation { flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weave-carousel__item,
+  .weave-carousel__indicator::before { transition: none; }
+}

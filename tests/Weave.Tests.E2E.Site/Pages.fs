@@ -261,6 +261,100 @@ module Pages =
       ]
     )
 
+  let private carouselPage autoCycle hiddenControls =
+    let index = Var.Create 0
+    let arrows = Var.Create true
+    let indicators = Var.Create true
+
+    let slides = [
+      CarouselItem.create (
+        div [ Attr.Style "padding" "24px" ] [
+          text "First slide"
+          input [ attr.placeholder "Slide input" ] []
+        ],
+        label = "First"
+      )
+      CarouselItem.create (
+        div [ Attr.Style "padding" "24px" ] [
+          text "Second slide"
+          Button.create (text "Slide action", (fun () -> ()))
+        ],
+        label = "Second"
+      )
+      CarouselItem.create (
+        div [ Attr.Style "padding" "24px"; Attr.Style "height" "180px" ] [ text "Third slide" ],
+        label = "Third"
+      )
+    ]
+
+    let items = Var.Create slides
+    let mounted = Var.Create true
+
+    div [] [
+      mounted.View
+      |> Doc.BindView(fun show ->
+        if show then
+          Carousel.create (
+            items.View,
+            activeIndex = index,
+            ?autoCycleInterval = (if autoCycle then Some 1000 else None),
+            label = "Test highlights",
+            attrs = [
+              if hiddenControls then
+                Carousel.Controls.hideArrows
+                Carousel.Controls.hideIndicators
+              else
+                View.not arrows.View |> Attr.DynamicClassPred "weave-carousel--hide-arrows"
+
+                View.not indicators.View
+                |> Attr.DynamicClassPred "weave-carousel--hide-indicators"
+            ]
+          )
+        else
+          Doc.Empty)
+      span [ Attr.Create "id" "carousel-index" ] [ textView (index.View |> View.Map string<int>) ]
+      Button.create (text "Select last", (fun () -> index.Set 2))
+      Button.create (text "Invalid selection", (fun () -> index.Set 99))
+      Button.create (text "Negative selection", (fun () -> index.Set -5))
+      Button.create (text "Single slide", (fun () -> items.Set [ slides.Head ]))
+      Button.create (text "Empty slides", (fun () -> items.Set []))
+      Button.create (text "Restore slides", (fun () -> items.Set slides))
+      Button.create (text "Hide arrows", (fun () -> arrows.Set false))
+      Button.create (text "Hide indicators", (fun () -> indicators.Set false))
+      Button.create (text "Remove carousel", (fun () -> mounted.Set false))
+      Button.create (text "Restore carousel", (fun () -> mounted.Set true))
+    ]
+
+  let private carouselPairPage () =
+    let firstIndex = Var.Create 0
+    let secondIndex = Var.Create 0
+    let mounted = Var.Create true
+
+    let slides () =
+      View.Const [ CarouselItem.create (text "Alpha"); CarouselItem.create (text "Beta") ]
+
+    div [] [
+      mounted.View
+      |> Doc.BindView(fun show ->
+        if show then
+          Carousel.create (
+            slides (),
+            activeIndex = firstIndex,
+            autoCycleInterval = 1000,
+            label = "First carousel"
+          )
+        else
+          Doc.Empty)
+      Carousel.create (
+        slides (),
+        activeIndex = secondIndex,
+        autoCycleInterval = 1000,
+        label = "Second carousel"
+      )
+      span [ attr.id "first-index" ] [ textView (firstIndex.View |> View.Map string<int>) ]
+      Button.create (text "Remove first carousel", fun () -> mounted.Set false)
+    ]
+
   let private animationPage () =
     let isVisible = Var.Create false
     let isActive = Var.Create false
@@ -1840,6 +1934,11 @@ module Pages =
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
+    | "carousel" -> carouselPage false false
+    | "carousel-autoplay" -> carouselPage true false
+    | "carousel-custom-controls" -> carouselPage false true
+    | "carousel-autoplay-custom-controls" -> carouselPage true true
+    | "carousel-pair" -> carouselPairPage ()
     | "dropdown-menu" -> dropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()

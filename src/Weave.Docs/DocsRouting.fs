@@ -20,6 +20,7 @@ module DocsRouting =
     | GridExamples
     | CheckboxExamples
     | CardExamples
+    | CarouselExamples
     | ChipExamples
     | ChipSetExamples
     | RadioButtonExamples
@@ -72,6 +73,7 @@ module DocsRouting =
     | GridExamples -> "Grid"
     | CheckboxExamples -> "Checkbox"
     | CardExamples -> "Card"
+    | CarouselExamples -> "Carousel"
     | ChipExamples -> "Chip"
     | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
@@ -124,6 +126,7 @@ module DocsRouting =
     | "Grid" -> Some GridExamples
     | "Checkbox" -> Some CheckboxExamples
     | "Card" -> Some CardExamples
+    | "Carousel" -> Some CarouselExamples
     | "Chip" -> Some ChipExamples
     | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
@@ -177,6 +180,7 @@ module DocsRouting =
     | GridExamples -> "#grid"
     | CheckboxExamples -> "#checkbox"
     | CardExamples -> "#card"
+    | CarouselExamples -> "#carousel"
     | ChipExamples -> "#chip"
     | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
@@ -230,6 +234,7 @@ module DocsRouting =
     | "#grid" -> Some GridExamples
     | "#checkbox" -> Some CheckboxExamples
     | "#card" -> Some CardExamples
+    | "#carousel" -> Some CarouselExamples
     | "#chip" -> Some ChipExamples
     | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples

@@ -43,6 +43,7 @@
     <Compile Include="interaction/ButtonInteractionTests.fs" />
     <Compile Include="interaction/ButtonMenuInteractionTests.fs" />
     <Compile Include="interaction/CardInteractionTests.fs" />
+    <Compile Include="interaction/CarouselInteractionTests.fs" />
     <Compile Include="interaction/CheckboxInteractionTests.fs" />
     <Compile Include="interaction/ChipInteractionTests.fs" />
     <Compile Include="interaction/ChipSetInteractionTests.fs" />

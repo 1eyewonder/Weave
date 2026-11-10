@@ -1,0 +1,82 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-snackbar-host {
+  position: fixed;
+  z-index: var(--weave-zindex-snackbar);
+  right: max(8px, env(safe-area-inset-right));
+  bottom: max(8px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  // Leave space for message elevation inside the scrollable stack.
+  box-sizing: border-box;
+  padding: 8px;
+  width: min(436px, calc(100% - 16px));
+  max-height: calc(100dvh - 16px);
+  overflow: auto;
+  pointer-events: none;
+
+  &--top-left, &--top-center, &--top-right {
+    top: max(8px, env(safe-area-inset-top));
+    bottom: auto;
+  }
+
+  &--bottom-left, &--bottom-center, &--bottom-right { top: auto; }
+  &--top-left, &--bottom-left {
+    left: max(8px, env(safe-area-inset-left));
+    right: auto;
+  }
+  &--top-right, &--bottom-right { left: auto; }
+  &--top-center, &--bottom-center {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+}
+
+.weave-snackbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: density-spacing(8, 4) 12px;
+  border: 1px solid transparent;
+  border-radius: var(--default-borderradius);
+  background: var(--palette-background-paper);
+  color: var(--palette-text-primary);
+  box-shadow: var(--weave-snackbar-shadow, var(--elevation-4));
+  pointer-events: auto;
+
+  &__icon { display: flex; flex-shrink: 0; }
+  &__content { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  &__action, &__close {
+    &.weave-button {
+      flex-shrink: 0;
+      @include inherited-button-feedback(var(--_snackbar-control-hover, var(--palette-action-default-hover)));
+    }
+  }
+
+  @each $color in $palette-colors {
+    &--#{$color} {
+      background: var(--palette-surface);
+      color: var(--palette-#{$color}-subtle-text, var(--palette-#{$color}-darken));
+    }
+    &--outlined.weave-snackbar--#{$color} {
+      border-color: var(--palette-#{$color});
+      background: var(--palette-background-paper);
+      color: var(--palette-#{$color}-subtle-text, var(--palette-#{$color}-darken));
+    }
+    &--filled.weave-snackbar--#{$color} {
+      background: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+      color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+      --_snackbar-control-hover: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+      border-color: var(--palette-#{$color}-fill-border, transparent);
+    }
+  }
+
+  &--standard { border-color: transparent; }
+  &--outlined { border-color: var(--palette-divider); }
+  &--filled { border-color: transparent; }
+}

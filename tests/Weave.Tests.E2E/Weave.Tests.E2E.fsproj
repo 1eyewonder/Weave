@@ -13,6 +13,8 @@
     <Compile Include="TestBase.fs" />
     <Compile Include="PageReadinessTests.fs" />
     <Compile Include="accessibility/AlertTests.fs" />
+    <Compile Include="accessibility/FilledFeedbackTests.fs" />
+    <Compile Include="accessibility/SnackbarTests.fs" />
     <Compile Include="accessibility/AnimationTests.fs" />
     <Compile Include="accessibility/AppBarTests.fs" />
     <Compile Include="accessibility/ButtonGroupTests.fs" />
@@ -39,6 +41,7 @@
     <Compile Include="accessibility/TabsTests.fs" />
     <Compile Include="accessibility/TooltipTests.fs" />
     <Compile Include="interaction/AlertInteractionTests.fs" />
+    <Compile Include="interaction/SnackbarInteractionTests.fs" />
     <Compile Include="interaction/AnimationInteractionTests.fs" />
     <Compile Include="interaction/ButtonInteractionTests.fs" />
     <Compile Include="interaction/ButtonMenuInteractionTests.fs" />

@@ -7,6 +7,7 @@ open WebSharper.UI.Html
 
 open Weave
 open Weave.Docs.Examples.DocsRouting
+open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
 module ComponentPreviews =
@@ -1157,6 +1158,70 @@ module ComponentPreviews =
           Attr.Style "right" "38%"
           Attr.Style "height" "6px"
         ] []
+      ]
+    | SnackbarExamples ->
+      div [ cl "cp"; Attr.Create "aria-hidden" "true" ] [
+        // A page beneath a floating stack, with a trailing notification action.
+        div [
+          Attr.Style "inset" "8px 12%"
+          Attr.Style "border" "1px solid var(--palette-divider)"
+          Attr.Style "border-radius" "4px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "18px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "45%"
+          Attr.Style "height" "4px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "26px"
+          Attr.Style "left" "18%"
+          Attr.Style "right" "57%"
+          Attr.Style "height" "3px"
+        ] []
+        for top in [ 32; 58 ] do
+          div [
+            cl "cp-fill"
+            Attr.Style "top" (sprintf "%dpx" top)
+            Attr.Style "left" "24%"
+            Attr.Style "right" "8%"
+            Attr.Style "height" "22px"
+            Attr.Style "border" "1px solid var(--palette-divider)"
+            Attr.Style "border-radius" "4px"
+            Attr.Style "box-shadow" "var(--elevation-4)"
+          ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "41px"
+          Attr.Style "left" "30%"
+          Attr.Style "right" "24%"
+          Attr.Style "height" "4px"
+        ] []
+        div [
+          cl "cp-line"
+          Attr.Style "top" "67px"
+          Attr.Style "left" "30%"
+          Attr.Style "right" "41%"
+          Attr.Style "height" "4px"
+        ] []
+        span [
+          Attr.Style "top" "65px"
+          Attr.Style "right" "19%"
+          Attr.Style "font-size" "9px"
+          Attr.Style "font-weight" "600"
+          Attr.Style "color" "var(--palette-primary)"
+        ] [ text "UNDO" ]
+        Icon.create (
+          Icon.UiActions UiActions.Close,
+          attrs = [
+            Attr.Style "top" "62px"
+            Attr.Style "right" "10%"
+            Attr.Style "font-size" "14px"
+            Attr.Style "color" "var(--palette-text-secondary)"
+          ]
+        )
       ]
     | AlertExamples ->
       cp [

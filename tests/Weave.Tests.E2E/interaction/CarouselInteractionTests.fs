@@ -213,11 +213,14 @@ type CarouselInteractionTests(fixture: TestFixture) =
   [<Fact>]
   member this.``pause control stops rotation and hover temporarily suspends it``() = task {
     do! this.NavigateTo "carousel-autoplay"
-    do! this.Page.Locator(".weave-carousel__viewport").HoverAsync()
+    let viewport = this.Page.Locator(".weave-carousel__viewport")
+    let index = this.Page.Locator("#carousel-index")
+    do! viewport.HoverAsync()
+    let! hoveredIndex = index.TextContentAsync()
     do! Task.Delay 1200
-    do! this.Expect(this.VisibleSlide).ToContainTextAsync "First slide"
+    do! this.Expect(index).ToHaveTextAsync hoveredIndex
     do! this.Page.Mouse.MoveAsync(1279.f, 799.f)
-    do! this.Expect(this.VisibleSlide).ToContainTextAsync "Second slide"
+    do! this.Expect(index).Not.ToHaveTextAsync hoveredIndex
     do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Pause slides")).ClickAsync()
     do! this.Page.Mouse.MoveAsync(1279.f, 799.f)
 
@@ -290,16 +293,20 @@ type CarouselInteractionTests(fixture: TestFixture) =
     do!
       this.Expect(this.Page.Locator(".weave-carousel__viewport")).ToHaveAttributeAsync("aria-live", "polite")
 
+    // Autoplay can advance again before the click collapses the list. Preserve that selection.
+    let index = this.Page.Locator("#carousel-index")
+    let! pausedIndex = index.TextContentAsync()
     do! Task.Delay 1200
-    do! this.Expect(this.Page.Locator("#carousel-index")).ToHaveTextAsync "1"
+    do! this.Expect(index).ToHaveTextAsync pausedIndex
     do! this.Page.GetByText("Empty slides", PageGetByTextOptions(Exact = true)).ClickAsync()
     do! this.Expect(this.Page.Locator(".weave-carousel__item")).ToHaveCountAsync 0
     do! Task.Delay 1200
-    do! this.Expect(this.Page.Locator("#carousel-index")).ToHaveTextAsync "1"
+    do! this.Expect(index).ToHaveTextAsync pausedIndex
     do! this.Page.GetByText("Restore slides", PageGetByTextOptions(Exact = true)).ClickAsync()
+    do! this.Expect(this.Page.Locator(".weave-carousel__item")).ToHaveCountAsync 3
     // Restoring the taller content can put it under the pointer; move away to allow cycling.
     do! this.Page.Mouse.MoveAsync(1279.f, 799.f)
-    do! this.Expect(this.VisibleSlide).ToContainTextAsync "Third slide"
+    do! this.Expect(index).Not.ToHaveTextAsync pausedIndex
   }
 
   [<Fact>]

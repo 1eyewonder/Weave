@@ -288,6 +288,7 @@ module ExamplesRouter =
               "Scroll to Top", ScrollToTopExamples
               "Select", SelectExamples
               "Slider", SliderExamples
+              "Snackbar", SnackbarExamples
               "Spacer", SpacerExamples
               "Switch", SwitchExamples
               "Table", TableExamples
@@ -363,6 +364,7 @@ module ExamplesRouter =
       | ListExamples -> ListExamples.render ()
       | AlertExamples -> AlertExamples.render ()
       | HighlighterExamples -> HighlighterExamples.render ()
+      | SnackbarExamples -> SnackbarExamples.render ()
       | LinkExamples -> LinkExamples.render ()
       | DividerExamples -> DividerExamples.render ()
       | SpacingExamples -> SpacingExamples.render ()
@@ -697,6 +699,7 @@ module ExamplesRouter =
       "Scroll to Top"
       "Select"
       "Slider"
+      "Snackbar"
       "Spacer"
       "Switch"
       "Table"

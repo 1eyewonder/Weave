@@ -108,6 +108,7 @@ $font-family-mono: "Fira Mono", "Consolas", monospace;
   --weave-zindex-appbar: 1100;
   --weave-zindex-drawer: 1200;
   --weave-zindex-tooltip: 1300;
+  --weave-zindex-snackbar: calc(var(--weave-zindex-dialog) + 1);
 
   --drawer-width-left: 256px;
   --drawer-width-right: 256px;

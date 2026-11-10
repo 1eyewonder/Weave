@@ -97,13 +97,13 @@ body[data-theme="dark"] {
       div [ Margin.Bottom.small ] [
         h3 [ Typography.h6 ] [ text "Brand and status colors" ]
         Helpers.bodyText
-          "Each family has a main color, foreground (-text), interaction variants, and comma-separated RGB channels used for alpha. All seven colors also have filled-surface tokens; override -fill, -fill-hover, -fill-text, and -fill-border when changing filled surfaces on a nested theme selector. Tertiary and status colors also provide -indicator and -subtle-text tokens. Check contrast for custom combinations. Interaction colors may be lighter in dark mode."
+          "Each family has a main color, foreground (-text), interaction variants, and comma-separated RGB channels used for alpha. All seven colors also have filled-surface tokens; override -fill, -fill-hover, -fill-text, and -fill-border when changing filled surfaces on a nested theme selector. Tertiary and status colors also provide -indicator and -subtle-text tokens. Check contrast for custom combinations. Filled interaction colors can lighten or darken the surface to keep the foreground readable in either theme. Snackbar and Alert controls use the same filled hover tokens as buttons and chips."
         referenceTable [ "Variable"; "Light default"; "Dark default" ] [
           [ "--palette-indicator-mark"; "#ffffff"; "var(--palette-background)" ]
           [ "--palette-primary"; "#0164fc"; "#088ffd" ]
           [ "--palette-primary-text"; "#ffffff"; "#081b30" ]
           [ "--palette-primary-fill"; "#168bff"; "var(--palette-primary)" ]
-          [ "--palette-primary-fill-hover"; "#1385f5"; "var(--palette-primary-darken)" ]
+          [ "--palette-primary-fill-hover"; "#64b8ff"; "var(--palette-primary-darken)" ]
           [ "--palette-primary-fill-text"; "#111827"; "var(--palette-primary-text)" ]
           [ "--palette-primary-fill-border"; "var(--palette-primary)"; "transparent" ]
           [ "--palette-primary-lighten"; "#0187f1"; "#7ac6ff" ]
@@ -114,7 +114,7 @@ body[data-theme="dark"] {
           [ "--palette-secondary-fill"; "#a294ff"; "var(--palette-secondary)" ]
           [
             "--palette-secondary-fill-hover"
-            "#9385f4"
+            "#c2baff"
             "var(--palette-secondary-darken)"
           ]
           [ "--palette-secondary-fill-text"; "#111827"; "var(--palette-secondary-text)" ]
@@ -125,7 +125,7 @@ body[data-theme="dark"] {
           [ "--palette-tertiary"; "#d60069"; "#ff4081" ]
           [ "--palette-tertiary-text"; "#ffffff"; "#111827" ]
           [ "--palette-tertiary-fill"; "#ff4081"; "var(--palette-tertiary)" ]
-          [ "--palette-tertiary-fill-hover"; "#f33577"; "var(--palette-tertiary-darken)" ]
+          [ "--palette-tertiary-fill-hover"; "#ff7fa7"; "var(--palette-tertiary-darken)" ]
           [ "--palette-tertiary-fill-text"; "#111827"; "var(--palette-tertiary-text)" ]
           [ "--palette-tertiary-fill-border"; "var(--palette-tertiary)"; "transparent" ]
           [ "--palette-tertiary-indicator"; "#ff4081"; "var(--palette-tertiary-fill)" ]
@@ -155,7 +155,7 @@ body[data-theme="dark"] {
           [ "--palette-error"; "#d91122"; "#ff5060" ]
           [ "--palette-error-text"; "#ffffff"; "#111827" ]
           [ "--palette-error-fill"; "#ff2d42"; "#ff2d42" ]
-          [ "--palette-error-fill-hover"; "#fa3245"; "var(--palette-error-darken)" ]
+          [ "--palette-error-fill-hover"; "#ff7988"; "var(--palette-error-darken)" ]
           [ "--palette-error-fill-text"; "#111827"; "var(--palette-error-text)" ]
           [ "--palette-error-fill-border"; "var(--palette-error)"; "transparent" ]
           [ "--palette-error-indicator"; "#fa3245"; "var(--palette-error-fill)" ]
@@ -170,7 +170,7 @@ body[data-theme="dark"] {
           [ "--palette-warning"; "#ab5400"; "#ffa800" ]
           [ "--palette-warning-text"; "#ffffff"; "#111827" ]
           [ "--palette-warning-fill"; "#ffa800"; "var(--palette-warning)" ]
-          [ "--palette-warning-fill-hover"; "#e59400"; "var(--palette-warning-darken)" ]
+          [ "--palette-warning-fill-hover"; "#e59400"; "var(--palette-warning-lighten)" ]
           [ "--palette-warning-fill-text"; "#111827"; "var(--palette-warning-text)" ]
           [ "--palette-warning-fill-border"; "var(--palette-warning)"; "transparent" ]
           [ "--palette-warning-indicator"; "#c67800"; "var(--palette-warning-fill)" ]

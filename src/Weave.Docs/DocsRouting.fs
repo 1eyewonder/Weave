@@ -44,6 +44,7 @@ module DocsRouting =
     | TextFieldExamples
     | ListExamples
     | AlertExamples
+    | SnackbarExamples
     | LinkExamples
     | HighlighterExamples
     | DividerExamples
@@ -102,6 +103,7 @@ module DocsRouting =
     | ListExamples -> "List"
     | AlertExamples -> "Alert"
     | HighlighterExamples -> "Highlighter"
+    | SnackbarExamples -> "Snackbar"
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
     | SpacingExamples -> "Spacing"
@@ -159,6 +161,7 @@ module DocsRouting =
     | "List" -> Some ListExamples
     | "Alert" -> Some AlertExamples
     | "Highlighter" -> Some HighlighterExamples
+    | "Snackbar" -> Some SnackbarExamples
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
     | "Spacing" -> Some SpacingExamples
@@ -217,6 +220,7 @@ module DocsRouting =
     | ListExamples -> "#list"
     | AlertExamples -> "#alert"
     | HighlighterExamples -> "#highlighter"
+    | SnackbarExamples -> "#snackbar"
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
     | SpacingExamples -> "#spacing"
@@ -275,6 +279,7 @@ module DocsRouting =
     | "#list" -> Some ListExamples
     | "#alert" -> Some AlertExamples
     | "#highlighter" -> Some HighlighterExamples
+    | "#snackbar" -> Some SnackbarExamples
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
     | "#spacing" -> Some SpacingExamples

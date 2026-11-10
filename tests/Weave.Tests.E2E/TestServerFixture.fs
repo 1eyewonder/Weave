@@ -14,6 +14,10 @@ module private ServerHelpers =
     | cfg when String.IsNullOrEmpty cfg -> "Debug"
     | cfg -> cfg
 
+// Tests that hold hover or depend on keyboard modality must not compete with other pages.
+[<CollectionDefinition("Browser input", DisableParallelization = true)>]
+type BrowserInputCollection() = class end
+
 /// Shared fixture for the E2E test assembly.
 /// Hosts the test server process and a single browser instance (Chromium by default).
 /// Each test creates a fresh BrowserContext + Page for isolation.
@@ -115,7 +119,15 @@ type TestFixture() =
             | "webkit" -> pw.Webkit
             | value -> invalidArg "WEAVE_E2E_BROWSER" $"Unknown browser: %s{value}"
 
-          let! b = browserType.LaunchAsync(BrowserTypeLaunchOptions(Headless = true))
+          let launchOptions = BrowserTypeLaunchOptions(Headless = true)
+
+          if browserType.Name = "firefox" then
+            // Keep desktop pointer media queries independent of the host's detected input devices.
+            // Gecko flags: Fine = 2, Hover = 4. Firefox mobile emulation is excluded in CI.
+            launchOptions.FirefoxUserPrefs <-
+              dict [ "ui.primaryPointerCapabilities", box 6; "ui.allPointerCapabilities", box 6 ]
+
+          let! b = browserType.LaunchAsync(launchOptions)
           browser <- b
         }
         :> Task

@@ -98,8 +98,11 @@ type ButtonMenuInteractionTests(fixture: TestFixture) =
     let button = container.Locator(".weave-button-menu__trigger")
     do! button.FocusAsync()
     do! button.PressAsync("Enter")
+    do! this.Expect(container).ToHaveClassAsync(Regex("weave-button-menu--open"))
     do! this.Page.Keyboard.PressAsync("ArrowUp")
+    do! this.Expect(container.Locator(".weave-button-menu__item").First).ToBeFocusedAsync()
     do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(container).Not.ToHaveClassAsync(Regex("weave-button-menu--open"))
     do! this.Expect(button).ToBeFocusedAsync()
   }
 

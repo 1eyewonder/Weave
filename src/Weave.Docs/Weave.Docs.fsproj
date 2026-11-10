@@ -36,6 +36,7 @@
     <Compile Include="examples/LinkExamples.fs" />
     <Compile Include="examples/HighlighterExamples.fs" />
     <Compile Include="examples/AlertExamples.fs" />
+    <Compile Include="examples/SnackbarExamples.fs" />
     <Compile Include="examples/CardExamples.fs" />
     <Compile Include="examples/CarouselExamples.fs" />
     <Compile Include="examples/PaginationExamples.fs" />

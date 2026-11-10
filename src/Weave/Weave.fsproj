@@ -22,6 +22,7 @@
     <Compile Include="components/Pagination.fs" />
     <Compile Include="components/ScrollToTop.fs" />
     <Compile Include="components/Alert.fs" />
+    <Compile Include="components/Snackbar.fs" />
     <Compile Include="components/Card.fs" />
     <Compile Include="components/Carousel.fs" />
     <Compile Include="components/ButtonGroup.fs" />

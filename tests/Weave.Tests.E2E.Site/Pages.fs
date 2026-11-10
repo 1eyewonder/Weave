@@ -1779,6 +1779,32 @@ module Pages =
       ]
     )
 
+  let private filledButtonGroupPalettePage () =
+    div [] [
+      Button.create (text "Before palette", onClick = ignore)
+      for name, color in
+        [
+          "primary", ButtonGroup.Color.primary
+          "secondary", ButtonGroup.Color.secondary
+          "tertiary", ButtonGroup.Color.tertiary
+          "error", ButtonGroup.Color.error
+          "warning", ButtonGroup.Color.warning
+          "success", ButtonGroup.Color.success
+          "info", ButtonGroup.Color.info
+        ] do
+        ButtonGroup.create (
+          [
+            Button.create (text "First", onClick = ignore)
+            Button.create (text "Second", onClick = ignore)
+          ],
+          attrs = [
+            ButtonGroup.Variant.filled
+            color
+            Attr.Create "data-testid" ("group-color-" + name + "-filled")
+          ]
+        )
+    ]
+
   let private tooltipPage () =
     div [ Attr.Create "style" "padding: 16px" ] [
       Tooltip.create (
@@ -2191,6 +2217,102 @@ module Pages =
         Button.create (text "After pager", (fun () -> ()), attrs = [ Attr.Create "id" ("after-" + name) ])
     ]
 
+  let private snackbarPage () =
+    let notifications = SnackbarController.create (duration = 1000, maxVisible = 1)
+    let other = SnackbarController.create (maxVisible = 1)
+    let mounted = Var.Create true
+    let last = Var.Create ""
+    let result = Var.Create 0
+    let position = Var.Create false
+
+    let send message =
+      Var.Set last (notifications.show (message, dismissal = Snackbar.Dismissal.Manual))
+
+    let control label callback =
+      Button.create (text label, onClick = callback)
+
+    div [ Attr.Style "padding" "120px 16px" ] [
+      control "Persistent" (fun () -> send "Persistent message")
+      control "Duplicate" (fun () -> send "Persistent message")
+      control "Timed" (fun () -> Var.Set last (notifications.show ("Timed message")))
+      control "Timed override" (fun () ->
+        notifications.show ("Short message", dismissal = Snackbar.Dismissal.After 250)
+        |> ignore)
+      control "Queue timed" (fun () -> Var.Set last (notifications.show ("Queued message")))
+      control "Action" (fun () ->
+        Var.Set
+          last
+          (notifications.show (
+            "Item deleted",
+            action = SnackbarAction.create ("Undo", fun () -> Var.Set result (result.Value + 1))
+          )))
+      control "Timed action" (fun () ->
+        notifications.show (
+          "Timed action",
+          action = SnackbarAction.create ("Retry", ignore),
+          dismissal = Snackbar.Dismissal.After 1000
+        )
+        |> ignore)
+      control "Custom" (fun () ->
+        notifications.add (
+          strong [] [ text "Custom content" ],
+          key = "custom",
+          dismissal = Snackbar.Dismissal.Manual,
+          attrs = [ Snackbar.Variant.filled; Snackbar.Color.success ]
+        )
+        |> ignore)
+      control "Remove last" (fun () -> notifications.remove last.Value)
+      control "Clear" notifications.clear
+      control "Toggle host" (fun () -> Var.Set mounted (not mounted.Value))
+      control "Toggle position" (fun () -> Var.Set position (not position.Value))
+      control "Other" (fun () ->
+        other.show ("Other message", dismissal = Snackbar.Dismissal.Manual) |> ignore)
+      div [ Attr.Create "data-testid" "last-id" ] [ Doc.TextView last.View ]
+      div [ Attr.Create "data-testid" "action-result" ] [ Doc.TextView(result.View |> View.Map string) ]
+      mounted.View
+      |> Doc.BindView(fun show ->
+        if show then
+          Snackbar.create (
+            notifications,
+            attrs = [
+              Attr.Create "data-testid" "primary-host"
+              Attr.DynamicClassPred "weave-snackbar-host--top-center" position.View
+            ]
+          )
+        else
+          Doc.Empty)
+      Snackbar.create (other, attrs = [ Attr.Create "data-testid" "other-host"; Snackbar.Position.topLeft ])
+    ]
+
+  let private snackbarPalettePage () =
+    let notifications = SnackbarController.create (maxVisible = 24)
+
+    for color in
+      [
+        Snackbar.Color.primary
+        Snackbar.Color.secondary
+        Snackbar.Color.tertiary
+        Snackbar.Color.success
+        Snackbar.Color.error
+        Snackbar.Color.warning
+        Snackbar.Color.info
+      ] do
+      for variant in
+        [
+          Snackbar.Variant.standard
+          Snackbar.Variant.outlined
+          Snackbar.Variant.filled
+        ] do
+        notifications.add (
+          text "Changes saved",
+          dismissal = Snackbar.Dismissal.Manual,
+          action = SnackbarAction.create ("Undo", ignore),
+          attrs = [ color; variant ]
+        )
+        |> ignore
+
+    Snackbar.create (notifications)
+
   let private renderPage (hash: string) =
     match hash with
     | "scroll-to-top" -> scrollToTopPage 300 false
@@ -2238,6 +2360,9 @@ module Pages =
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()
+    | "snackbar" -> snackbarPage ()
+    | "snackbar-example" -> Weave.Docs.Examples.SnackbarExamples.render ()
+    | "snackbar-palette" -> snackbarPalettePage ()
     | "card" -> cardPage ()
     | "table" -> tablePage ()
     | "table-default" -> defaultTablePage ()
@@ -2255,6 +2380,7 @@ module Pages =
     | "chipset" -> chipsetPage ()
     | "buttonmenu" -> buttonmenuPage ()
     | "buttongroup" -> buttongroupPage ()
+    | "buttongroup-palette" -> filledButtonGroupPalettePage ()
     | "tooltip" -> tooltipPage ()
     | "progress" -> progressPage ()
     | "slider" -> sliderPage ()

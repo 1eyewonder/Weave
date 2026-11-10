@@ -4,6 +4,14 @@ last_commit_released: 9c8ea4b7c2e642ff7d83446c6d7399cc30c880a7
 
 # Changelog
 
+## v0.2.0
+
+- Add a typed form validation DSL and reactive components for carousels, Unicode-aware text highlighting, pagination, progress indicators, scroll-to-top navigation, queued snackbars, and color picking.
+- Add recent components to starter templates and improve documentation examples and F# syntax highlighting.
+- Improve keyboard interaction, resize-aware tabs, numeric inputs, button-menu hover states, and feedback actions on colored surfaces.
+- Lower the minimum FSharp.Core dependency.
+- Built and tested against WebSharper 10.1.9.686 and WebSharper.UI 10.1.7.686.
+
 ## v0.1.0
 
 - Refresh component styling, theme colors, documentation navigation, and getting-started guidance.

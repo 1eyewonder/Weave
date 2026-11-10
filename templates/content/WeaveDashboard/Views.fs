@@ -36,7 +36,7 @@ module Views =
     |> List.map (fun value -> SelectItem.create (text value, value, value))
     |> View.Const
 
-  let private select label values selected =
+  let private select label values (selected: Var<string option>) =
     Select.create (
       options values,
       selected,

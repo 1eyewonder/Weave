@@ -1976,8 +1976,63 @@ module Pages =
         )
     ]
 
+  let private scrollToTopPage (offset: int) (initial: bool) =
+    let mounted = Var.Create true
+
+    div [] [
+      Button.create (
+        text "Toggle page button",
+        (fun () -> mounted.Set(not mounted.Value)),
+        attrs = [ Attr.Create "data-testid" "scroll-toggle" ]
+      )
+      div [ Attr.Style "position" "relative" ] [
+        div [
+          attr.id "scroll-target"
+          attr.tabindex "0"
+          Attr.Create "role" "region"
+          Attr.Create "aria-label" "Scrollable panel"
+          Attr.Style "height" "200px"
+          Attr.Style "overflow" "auto"
+          if initial then
+            on.afterRender (fun el -> el?scrollTop <- 450)
+        ] [
+          div [ Attr.Style "height" "1400px"; Attr.Style "width" "1600px" ] [ text "Panel content" ]
+        ]
+        ScrollToTop.create (
+          selector = "#scroll-target",
+          topOffset = 80,
+          attrs = [
+            Attr.Create "data-testid" "scroll-panel"
+            ScrollToTop.Behavior.instant
+            Attr.Create "aria-label" "Back to panel top"
+            Attr.Style "position" "absolute"
+            Button.Color.secondary
+          ]
+        )
+      ]
+      mounted.View
+      |> Doc.BindView(fun show ->
+        if show then
+          ScrollToTop.create (
+            topOffset = offset,
+            attrs = [ Attr.Create "data-testid" "scroll-page"; Button.Color.primary ]
+          )
+        else
+          Doc.Empty)
+      ScrollToTop.create (
+        selector = "#missing-target",
+        attrs = [ Attr.Create "data-testid" "scroll-missing" ]
+      )
+      div [ Attr.Style "height" "1800px" ] [ text "Page content" ]
+    ]
+
   let private renderPage (hash: string) =
     match hash with
+    | "scroll-to-top" -> scrollToTopPage 300 false
+    | "scroll-to-top-zero" -> scrollToTopPage 0 false
+    | "scroll-to-top-negative" -> scrollToTopPage -20 false
+    | "scroll-to-top-initial" -> scrollToTopPage 300 true
+    | "scroll-to-top-accessible" -> scrollToTopPage 0 true
     | "checkbox" -> checkboxPage ()
     | "radio-groups" -> radioFormGroupsPage ()
     | "radio" -> radioPage ()

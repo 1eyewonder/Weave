@@ -15,6 +15,21 @@ module ComponentPreviews =
     let cp children = div [ cl "cp" ] children
 
     match page with
+    | ScrollToTopExamples ->
+      cp [
+        div [ cl "cp-box"; Attr.Style "inset" "10px" ] []
+        div [ cl "cp-line"; Attr.Style "inset" "24px 30px auto"; Attr.Style "height" "5px" ] []
+        div [
+          cl "cp-line"
+          Attr.Style "inset" "36px 40px auto 30px"
+          Attr.Style "height" "5px"
+        ] []
+        div [
+          cl "cp-pill"
+          Attr.Style "inset" "auto 18px 18px auto"
+          Padding.All.extraSmall
+        ] [ text "↑" ]
+      ]
     | CarouselExamples ->
       cp [
         div [ cl "cp-box"; Attr.Style "inset" "12px 12px 26px" ] []

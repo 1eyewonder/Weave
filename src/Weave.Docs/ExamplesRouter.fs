@@ -283,6 +283,7 @@ module ExamplesRouter =
               "List", ListExamples
               "Numeric Field", NumericFieldExamples
               "Radio Button", RadioButtonExamples
+              "Scroll to Top", ScrollToTopExamples
               "Select", SelectExamples
               "Slider", SliderExamples
               "Spacer", SpacerExamples
@@ -327,6 +328,7 @@ module ExamplesRouter =
       | GettingStartedExamples -> GettingStartedExamples.render ()
       | AppBarExamples -> AppBarExamples.render ()
       | SpacerExamples -> SpacerExamples.render ()
+      | ScrollToTopExamples -> ScrollToTopExamples.render ()
       | ButtonExamples -> ButtonExamples.render ()
       | ButtonGroupExamples -> ButtonGroupExamples.render ()
       | ButtonMenuExamples -> ButtonMenuExamples.render ()
@@ -686,6 +688,7 @@ module ExamplesRouter =
       "List"
       "Numeric Field"
       "Radio Button"
+      "Scroll to Top"
       "Select"
       "Slider"
       "Spacer"

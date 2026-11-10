@@ -12,6 +12,7 @@ module DocsRouting =
     | GettingStartedExamples
     | AppBarExamples
     | SpacerExamples
+    | ScrollToTopExamples
     | ButtonExamples
     | ButtonGroupExamples
     | ButtonMenuExamples
@@ -66,6 +67,7 @@ module DocsRouting =
     | GettingStartedExamples -> "Getting Started"
     | AppBarExamples -> "App Bar"
     | SpacerExamples -> "Spacer"
+    | ScrollToTopExamples -> "Scroll to Top"
     | ButtonExamples -> "Button"
     | ButtonGroupExamples -> "Button Group"
     | ButtonMenuExamples -> "Button Menu"
@@ -120,6 +122,7 @@ module DocsRouting =
     | "Getting Started" -> Some GettingStartedExamples
     | "App Bar" -> Some AppBarExamples
     | "Spacer" -> Some SpacerExamples
+    | "Scroll to Top" -> Some ScrollToTopExamples
     | "Button" -> Some ButtonExamples
     | "Button Group" -> Some ButtonGroupExamples
     | "Button Menu" -> Some ButtonMenuExamples
@@ -175,6 +178,7 @@ module DocsRouting =
     | GettingStartedExamples -> "#getting-started"
     | AppBarExamples -> "#app-bar"
     | SpacerExamples -> "#spacer"
+    | ScrollToTopExamples -> "#scroll-to-top"
     | ButtonExamples -> "#button"
     | ButtonGroupExamples -> "#button-group"
     | ButtonMenuExamples -> "#button-menu"
@@ -230,6 +234,7 @@ module DocsRouting =
     | "#getting-started" -> Some GettingStartedExamples
     | "#app-bar" -> Some AppBarExamples
     | "#spacer" -> Some SpacerExamples
+    | "#scroll-to-top" -> Some ScrollToTopExamples
     | "#button" -> Some ButtonExamples
     | "#button-group" -> Some ButtonGroupExamples
     | "#button-menu" -> Some ButtonMenuExamples

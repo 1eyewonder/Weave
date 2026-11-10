@@ -449,26 +449,21 @@ type Tabs =
 
     let indicator = div [ cl Css.``weave-tabs__indicator`` ] []
 
+    let initializeHeader (element: Dom.Element) =
+      headerRef.Value <- Some element
+
+      let updateLayout () =
+        updateOverflow ()
+        updateIndicator ()
+
+      let _ = element |> ResizeListener.watch updateLayout
+      ()
+
     let header =
       div [
         cl Css.``weave-tabs__header``
         Attr.Create "role" "tablist"
-        on.afterRender (fun el ->
-          Var.Set headerRef (Some el)
-
-          JS.SetTimeout
-            (fun () ->
-              updateOverflow ()
-              updateIndicator ()
-
-              JS.Window.AddEventListener(
-                "resize",
-                System.Action<Dom.Event>(fun _ ->
-                  updateOverflow ()
-                  updateIndicator ())
-              ))
-            0
-          |> ignore)
+        on.afterRender initializeHeader
 
         on.scroll (fun _ _ -> updateOverflow ())
       ] [

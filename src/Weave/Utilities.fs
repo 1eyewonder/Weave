@@ -250,7 +250,7 @@ module MenuKeyboardNav =
         focusOutHandler.Value <- Some fh)
 
 /// <summary>
-/// Tracks the size of a DOM element on window resize and exposes reactive
+/// Tracks the size of a DOM element on element or window resize and exposes reactive
 /// Width and Height views.
 /// </summary>
 [<JavaScript>]
@@ -265,30 +265,33 @@ module ResizeListener =
 
     member this.HeightView = this.Height.View
 
-  type private Listener = {
-    mutable Handler: Option<Dom.Event -> unit>
-  } with
+  [<Inline "(function(el, callback) { var observer = new ResizeObserver(callback); observer.observe(el, { box: 'border-box' }); return observer; })($element, $callback)">]
+  let private observeSize (element: Dom.Element) (callback: unit -> unit) : obj = X<obj>
 
-    member this.Attach(el: Dom.Element, size: ElementSize) =
-      this.Detach()
+  /// Invokes onResize when the element's border-box size or the viewport changes.
+  /// Automatically disconnects on removal; the returned function also permits early disposal.
+  let watch (onResize: unit -> unit) (element: Dom.Element) =
+    let removal = DomRemovalListener.create ()
 
-      let handler (_: Dom.Event) =
-        Var.Set size.Width (float el?offsetWidth)
-        Var.Set size.Height (float el?offsetHeight)
+    let update () =
+      if As<bool>(element?isConnected) then
+        onResize ()
 
-      JS.Window.AddEventListener("resize", handler)
-      this.Handler <- Some handler
+    let handler = System.Action<Dom.Event>(fun _ -> update ())
+    let observer = observeSize element update
 
-    member this.Detach() =
-      match this.Handler with
-      | Some handler ->
-        JS.Window.RemoveEventListener("resize", handler)
-        this.Handler <- None
-      | None -> ()
+    let dispose () =
+      JS.Window.RemoveEventListener("resize", handler)
+      observer?disconnect ()
+      removal.Disconnect()
+
+    JS.Window.AddEventListener("resize", handler)
+    removal.Watch(element, dispose)
+    dispose
 
   /// <summary>
-  /// Creates an ElementSize tracker and begins listening for window resize events.
-  /// Returns (elementSize, disposeFn) where disposeFn removes the listener.
+  /// Creates an ElementSize tracker for element and window resize events.
+  /// Returns (elementSize, disposeFn); tracking also stops on element removal.
   /// </summary>
   let observe (el: Dom.Element) : ElementSize * (unit -> unit) =
     let size = {
@@ -296,10 +299,11 @@ module ResizeListener =
       Height = Var.Create(float el?offsetHeight)
     }
 
-    let listener = { Handler = None }
-    listener.Attach(el, size)
+    let updateSize () =
+      Var.Set size.Width (float el?offsetWidth)
+      Var.Set size.Height (float el?offsetHeight)
 
-    let dispose () = listener.Detach()
+    let dispose = el |> watch updateSize
     size, dispose
 
   /// <summary>
@@ -309,9 +313,7 @@ module ResizeListener =
   /// </summary>
   let track (sizeVar: Var<ElementSize option>) =
     on.afterRender (fun el ->
-      let size, dispose = observe el
-      let removalListener = DomRemovalListener.create ()
-      removalListener.Watch(el, dispose)
+      let size, _ = observe el
       Var.Set sizeVar (Some size))
 
 [<JavaScript>]

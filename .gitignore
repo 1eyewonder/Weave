@@ -387,3 +387,6 @@ reliability/
 
 artifacts/
 release-body.md
+
+# Generated docs highlighter (source and license are tracked)
+src/Weave.Docs/wwwroot/vendor/highlightjs/weave-highlight.min.js

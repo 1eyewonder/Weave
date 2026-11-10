@@ -1,0 +1,49 @@
+/* Resolve aliases on the code element so scoped palettes and theme changes apply.
+   Light mode separates token families by hue, not just shade. The darken
+   tokens provide readable foreground colors on the light code surface. */
+code.hljs {
+  --code-text: var(--palette-text-primary);
+  --code-keyword: var(--palette-tertiary-darken);
+  --code-type: var(--palette-success-darken);
+  --code-function: var(--palette-primary-darken);
+  --code-variable: var(--palette-text-primary);
+  --code-string: var(--palette-warning-darken);
+  --code-number: var(--palette-secondary-darken);
+  --code-comment: var(--palette-text-secondary);
+  --code-operator: var(--palette-text-secondary);
+  --code-meta: var(--palette-info-darken);
+
+  display: block;
+  overflow-x: auto;
+  color: var(--code-text);
+  background: transparent;
+  font-family: var(--weave-font-family-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.7;
+  tab-size: 4;
+  font-variant-ligatures: none;
+}
+body[data-theme="dark"] code.hljs {
+  --code-keyword: var(--palette-secondary-darken);
+  --code-type: var(--palette-info-darken);
+  --code-string: var(--palette-success-darken);
+  --code-number: var(--palette-warning-darken);
+  --code-meta: var(--palette-tertiary-darken);
+  font-weight: 400;
+}
+.hljs-keyword { color: var(--code-keyword); }
+.hljs-title.class_, .hljs-type, .hljs-symbol { color: var(--code-type); }
+.hljs-title.function_, .hljs-built_in { color: var(--code-function); }
+.hljs-variable, .hljs-subst { color: var(--code-variable); }
+.hljs-string, .hljs-char { color: var(--code-string); }
+.hljs-number, .hljs-literal { color: var(--code-number); }
+.hljs-comment { color: var(--code-comment); font-style: italic; }
+.hljs-operator, .hljs-punctuation { color: var(--code-operator); }
+.hljs-meta, .hljs-attr, .hljs-attribute { color: var(--code-meta); }
+.hljs-tag, .hljs-name, .hljs-selector-tag { color: var(--code-keyword); }
+.hljs-section, .hljs-title { color: var(--code-type); }
+.hljs-params { color: var(--code-variable); }
+@media (forced-colors: active) {
+  code.hljs, code.hljs span { color: CanvasText; }
+}

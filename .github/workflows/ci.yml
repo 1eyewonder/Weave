@@ -31,7 +31,7 @@ jobs:
       - name: Check Format
         run: docker compose run --rm playwright-tests sh -c "./build.sh CheckFormat"
 
-      - name: Run unit and rendering tests
+      - name: Run unit, rendering, and docs highlighting tests
         run: docker compose run --rm playwright-tests sh -c "./build.sh RunNonBrowserTests"
 
   browser-tests:

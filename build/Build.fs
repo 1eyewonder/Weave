@@ -156,9 +156,16 @@ let runTestProjects projects =
 
   projects |> Seq.iter (DotNet.test setParams)
 
-let runTests _ = runTestProjects (!!testsGlob)
+let runDocsHighlightingTests () =
+  Yarn.exec "test:docs:highlighting" (fun options -> { options with WorkingDirectory = rootDir })
+
+let runTests _ =
+  runDocsHighlightingTests ()
+  runTestProjects (!!testsGlob)
 
 let runNonBrowserTests _ =
+  runDocsHighlightingTests ()
+
   !!testsGlob
   |> Seq.filter (fun project -> Path.GetFileName(project) <> "Weave.Tests.E2E.fsproj")
   |> runTestProjects

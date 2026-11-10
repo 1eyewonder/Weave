@@ -66,6 +66,14 @@
   <ItemGroup>
     <ProjectReference Include="../Weave/Weave.fsproj" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Include the generated asset even when it does not exist at project evaluation. -->
+    <Content Remove="wwwroot/vendor/highlightjs/weave-highlight.min.js" />
+    <Content Include="wwwroot/vendor/highlightjs/weave-highlight.min.js" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="BuildCodeHighlighting" BeforeTargets="BeforeBuild">
+    <Exec Command="node build-highlighting.mjs" WorkingDirectory="$(ProjectDir)" />
+  </Target>
   <Target Name="CopyWeaveStyles" BeforeTargets="Build">
     <Copy SourceFiles="../Weave/styles.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
   </Target>

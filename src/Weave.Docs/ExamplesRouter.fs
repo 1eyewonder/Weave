@@ -282,6 +282,7 @@ module ExamplesRouter =
               "Link", LinkExamples
               "List", ListExamples
               "Numeric Field", NumericFieldExamples
+              "Pagination", PaginationExamples
               "Progress", ProgressExamples
               "Radio Button", RadioButtonExamples
               "Scroll to Top", ScrollToTopExamples
@@ -339,6 +340,7 @@ module ExamplesRouter =
       | CheckboxExamples -> CheckboxExamples.render ()
       | CardExamples -> CardExamples.render ()
       | CarouselExamples -> CarouselExamples.render ()
+      | PaginationExamples -> PaginationExamples.render ()
       | ChipExamples -> ChipExamples.render ()
       | ChipSetExamples -> ChipSetExamples.render ()
       | RadioButtonExamples -> RadioButtonExamples.render ()
@@ -689,6 +691,7 @@ module ExamplesRouter =
       "Link"
       "List"
       "Numeric Field"
+      "Pagination"
       "Progress"
       "Radio Button"
       "Scroll to Top"

@@ -2091,6 +2091,106 @@ module Pages =
       )
     ]
 
+  let private paginationPage () =
+    let count = Var.Create 20
+    let page = Var.Create 1
+    let enabled = Var.Create true
+    let command name action = Button.create (text name, action)
+
+    div [] [
+      Pagination.create (
+        count.View,
+        selectedPage = page,
+        enabled = enabled.View,
+        attrs = [ Pagination.Controls.showFirstLast; Attr.Create "id" "pager" ]
+      )
+      div [ Attr.Create "id" "page-value" ] [ textView (page.View |> View.Map string) ]
+      command "Select ten" (fun () -> page.Set 10)
+      command "Select below range" (fun () -> page.Set -5)
+      command "Select above range" (fun () -> page.Set 100)
+      command "Shrink count" (fun () -> count.Set 3)
+      command "Empty count" (fun () -> count.Set 0)
+      command "Negative count" (fun () -> count.Set -10)
+      command "Restore count" (fun () -> count.Set 20)
+      command "Toggle enabled" (fun () -> enabled.Set(not enabled.Value))
+    ]
+
+  let private paginationRangesPage () =
+    div [] [
+      for name, count, page, boundary, siblings in
+        [
+          "single", 1, 1, 1, 1
+          "small", 3, 2, 1, 1
+          "seven", 7, 4, 1, 1
+          "start", 20, 1, 1, 1
+          "middle", 20, 10, 1, 1
+          "end", 20, 20, 1, 1
+          "single-gap", 8, 4, 1, 1
+          "custom", 20, 10, 2, 2
+          "zero-window", 20, 10, 0, 0
+          "negative-window", 20, 10, -1, -2
+          "overlap", 3, 2, 10, 10
+          "huge", System.Int32.MaxValue, System.Int32.MaxValue, 1, 1
+        ] do
+        Pagination.create (
+          View.Const count,
+          selectedPage = Var.Create page,
+          boundaryCount = boundary,
+          siblingCount = siblings,
+          attrs = [
+            Pagination.Controls.hidePreviousNext
+            Attr.Create "aria-label" name
+            Attr.Create "id" ("range-" + name)
+          ]
+        )
+      for variantName, variant in
+        [
+          "text", Pagination.Variant.text
+          "filled", Pagination.Variant.filled
+          "outlined", Pagination.Variant.outlined
+        ] do
+        for colorName, color in
+          [
+            "primary", Pagination.Color.primary
+            "secondary", Pagination.Color.secondary
+            "tertiary", Pagination.Color.tertiary
+            "error", Pagination.Color.error
+            "warning", Pagination.Color.warning
+            "success", Pagination.Color.success
+            "info", Pagination.Color.info
+          ] do
+          Pagination.create (
+            View.Const 5,
+            selectedPage = Var.Create 2,
+            attrs = [ variant; color; Attr.Create "aria-label" (variantName + " " + colorName) ]
+          )
+    ]
+
+  let private paginationControlsPage () =
+    div [] [
+      for name, controls in
+        [
+          "default", []
+          "boundaries", [ Pagination.Controls.showFirstLast ]
+          "numbers-only", [ Pagination.Controls.hidePreviousNext ]
+          "boundaries-only", [ Pagination.Controls.showFirstLast; Pagination.Controls.hidePreviousNext ]
+        ] do
+        Button.create (text "Before pager", (fun () -> ()), attrs = [ Attr.Create "id" ("before-" + name) ])
+
+        Pagination.create (
+          View.Const 5,
+          selectedPage = Var.Create 3,
+          attrs = [
+            yield! controls
+            Attr.Create "id" ("controls-" + name)
+            if name <> "default" then
+              Attr.Create "aria-label" (name + " pages")
+          ]
+        )
+
+        Button.create (text "After pager", (fun () -> ()), attrs = [ Attr.Create "id" ("after-" + name) ])
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | "scroll-to-top" -> scrollToTopPage 300 false
@@ -2098,6 +2198,9 @@ module Pages =
     | "scroll-to-top-negative" -> scrollToTopPage -20 false
     | "scroll-to-top-initial" -> scrollToTopPage 300 true
     | "scroll-to-top-accessible" -> scrollToTopPage 0 true
+    | "pagination" -> paginationPage ()
+    | "pagination-controls" -> paginationControlsPage ()
+    | "pagination-ranges" -> paginationRangesPage ()
     | "checkbox" -> checkboxPage ()
     | "radio-groups" -> radioFormGroupsPage ()
     | "radio" -> radioPage ()

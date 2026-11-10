@@ -19,6 +19,7 @@
     <Compile Include="components/Highlighter.fs" />
     <Compile Include="components/Container.fs" />
     <Compile Include="components/Button.fs" />
+    <Compile Include="components/Pagination.fs" />
     <Compile Include="components/ScrollToTop.fs" />
     <Compile Include="components/Alert.fs" />
     <Compile Include="components/Card.fs" />

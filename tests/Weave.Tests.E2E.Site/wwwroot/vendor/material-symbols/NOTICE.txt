@@ -1,0 +1,11 @@
+Material Symbols Outlined — Google
+Source project: https://github.com/google/material-design-icons
+Licensed under the Apache License, Version 2.0 (see LICENSE.txt).
+
+This test-only font contains chevron_left, chevron_right, first_page and last_page.
+The subset was produced by Google Fonts using:
+https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=chevron_left,chevron_right,first_page,last_page
+
+It is served locally so pagination layout tests exercise real icon ligatures
+without depending on external font requests. Applications load the standard
+Material Symbols Outlined font as documented by Weave's Icons examples.

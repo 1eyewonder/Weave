@@ -38,6 +38,7 @@
     <Compile Include="examples/AlertExamples.fs" />
     <Compile Include="examples/CardExamples.fs" />
     <Compile Include="examples/CarouselExamples.fs" />
+    <Compile Include="examples/PaginationExamples.fs" />
     <Compile Include="examples/TableExamples.fs" />
     <Compile Include="examples/DividerExamples.fs" />
     <Compile Include="examples/SpacingExamples.fs" />

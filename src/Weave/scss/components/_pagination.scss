@@ -1,0 +1,105 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.weave-pagination {
+  --pagination-color: var(--palette-primary);
+  --pagination-selected-text: var(--palette-primary-darken);
+  --pagination-selected: rgba(var(--palette-primary-rgb), var(--weave-alpha-selected));
+  --pagination-fill: var(--palette-primary-fill);
+  --pagination-fill-text: var(--palette-primary-fill-text);
+  --pagination-fill-border: var(--palette-primary-fill-border);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: density-spacing(4, 2);
+  padding: 4px;
+
+  &__page,
+  &__control,
+  &__ellipsis {
+    min-width: density-spacing(30, 10);
+    min-height: density-spacing(30, 10);
+    box-sizing: border-box;
+  }
+
+  &__page,
+  &__control {
+    padding: 0 density-spacing(4, 2);
+    font-variant-numeric: tabular-nums;
+
+    .weave-button__label {
+      padding: 0;
+    }
+  }
+
+  &__boundary {
+    display: none;
+  }
+
+  &--show-first-last &__boundary {
+    display: inline-flex;
+  }
+
+  &--hide-previous-next &__step {
+    display: none;
+  }
+
+  &__control.weave-button--icon > &__icon {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    align-self: center;
+    font-size: 20px;
+    line-height: 1;
+    overflow: hidden;
+  }
+
+  &:dir(rtl) &__icon {
+    transform: scaleX(-1);
+  }
+
+  &__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--palette-text-secondary);
+  }
+
+  &__page[aria-current="page"],
+  &--text &__page[aria-current="page"] {
+    color: var(--pagination-selected-text);
+    background-color: var(--pagination-selected);
+  }
+
+  &--outlined &__page,
+  &--outlined &__control {
+    border: 1px solid var(--palette-lines-default);
+  }
+
+  &--outlined &__page[aria-current="page"] {
+    border-color: var(--pagination-color);
+  }
+
+  &--filled &__page[aria-current="page"]:not(:disabled) {
+    color: var(--pagination-fill-text);
+    background-color: var(--pagination-fill);
+    box-shadow: inset 0 0 0 1px var(--pagination-fill-border);
+  }
+
+  &__page:focus-visible,
+  &__control:focus-visible {
+    outline-color: var(--pagination-color);
+  }
+
+  @each $color in $palette-colors {
+    &--#{$color} {
+      --pagination-color: var(--palette-#{$color});
+      --pagination-selected-text: var(--palette-#{$color}-darken);
+      --pagination-selected: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
+      --pagination-fill: var(--palette-#{$color}-fill);
+      --pagination-fill-text: var(--palette-#{$color}-fill-text);
+      --pagination-fill-border: var(--palette-#{$color}-fill-border);
+    }
+  }
+}

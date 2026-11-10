@@ -22,6 +22,7 @@ module DocsRouting =
     | CheckboxExamples
     | CardExamples
     | CarouselExamples
+    | PaginationExamples
     | ChipExamples
     | ChipSetExamples
     | RadioButtonExamples
@@ -78,6 +79,7 @@ module DocsRouting =
     | CheckboxExamples -> "Checkbox"
     | CardExamples -> "Card"
     | CarouselExamples -> "Carousel"
+    | PaginationExamples -> "Pagination"
     | ChipExamples -> "Chip"
     | ChipSetExamples -> "Chip Set"
     | RadioButtonExamples -> "Radio Button"
@@ -134,6 +136,7 @@ module DocsRouting =
     | "Checkbox" -> Some CheckboxExamples
     | "Card" -> Some CardExamples
     | "Carousel" -> Some CarouselExamples
+    | "Pagination" -> Some PaginationExamples
     | "Chip" -> Some ChipExamples
     | "Chip Set" -> Some ChipSetExamples
     | "Radio Button" -> Some RadioButtonExamples
@@ -191,6 +194,7 @@ module DocsRouting =
     | CheckboxExamples -> "#checkbox"
     | CardExamples -> "#card"
     | CarouselExamples -> "#carousel"
+    | PaginationExamples -> "#pagination"
     | ChipExamples -> "#chip"
     | ChipSetExamples -> "#chip-set"
     | RadioButtonExamples -> "#radio-button"
@@ -248,6 +252,7 @@ module DocsRouting =
     | "#checkbox" -> Some CheckboxExamples
     | "#card" -> Some CardExamples
     | "#carousel" -> Some CarouselExamples
+    | "#pagination" -> Some PaginationExamples
     | "#chip" -> Some ChipExamples
     | "#chip-set" -> Some ChipSetExamples
     | "#radio-button" -> Some RadioButtonExamples

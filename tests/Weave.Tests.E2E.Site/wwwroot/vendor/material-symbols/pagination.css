@@ -1,0 +1,18 @@
+/* Test-only four-icon subset; see NOTICE.txt and LICENSE.txt. */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400;
+  src: url("pagination.ttf") format("truetype");
+}
+
+.weave-pagination__icon {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-feature-settings: "liga";
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+}

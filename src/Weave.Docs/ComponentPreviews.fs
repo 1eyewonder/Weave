@@ -40,6 +40,18 @@ module ComponentPreviews =
           )
         ]
       ]
+    | PaginationExamples ->
+      cp [
+        for i in 0..4 do
+          div [
+            cl (if i = 1 then "cp-fill" else "cp-box")
+            Attr.Style "top" "30px"
+            Attr.Style "left" (sprintf "%dpx" (12 + i * 28))
+            Attr.Style "width" "22px"
+            Attr.Style "height" "22px"
+            Attr.Style "border-radius" "4px"
+          ] []
+      ]
     | CarouselExamples ->
       cp [
         div [ cl "cp-box"; Attr.Style "inset" "12px 12px 26px" ] []

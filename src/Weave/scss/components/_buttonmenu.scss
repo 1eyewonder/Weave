@@ -111,6 +111,20 @@
   pointer-events: none;
 }
 
+// ButtonGroup split-menu actions need an opaque surface like DropdownMenu.
+.weave-button-group .weave-button-menu__item {
+  background: var(--palette-surface);
+  border: 1px solid rgba(var(--palette-text-primary-rgb), var(--weave-alpha-border));
+  border-radius: var(--default-borderradius);
+  box-shadow: var(--palette-shadow-2);
+}
+
+// The default filled button uses a translucent hover surface. Keep split-menu
+// actions opaque so underlying content cannot show through them.
+.weave-button-group .weave-button-menu__item > .weave-button--filled:not(.weave-button--primary):not(.weave-button--secondary):not(.weave-button--tertiary):not(.weave-button--info):not(.weave-button--success):not(.weave-button--warning):not(.weave-button--error):not(:hover):not(:focus-visible):not(:active) {
+  background-color: var(--palette-surface);
+}
+
 .weave-button-menu--top > .weave-button-menu__items > .weave-button-menu__item {
   margin-bottom: 8px;
   transform-origin: bottom center;

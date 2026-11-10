@@ -1771,13 +1771,41 @@ module Pages =
     ]
 
   let private buttongroupPage () =
-    ButtonGroup.create (
-      [
-        Button.create (text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-        Button.create (text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-        Button.create (text "Right", (fun () -> ()), attrs = [ Button.Variant.outlined ])
-      ]
-    )
+    div [] [
+      ButtonGroup.create (
+        [
+          Button.create (text "Left", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+          Button.create (text "Center", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+          Button.create (text "Right", (fun () -> ()), attrs = [ Button.Variant.outlined ])
+        ]
+      )
+      ButtonGroup.create (
+        [
+          Button.create (text "Reply", ignore)
+          ButtonMenu.create (
+            text "Menu",
+            [
+              Button.create (
+                text "Reply All",
+                ignore,
+                attrs = [
+                  Button.Variant.filled
+                  Button.Width.full
+                  Attr.Create "data-testid" "grouped-split-action"
+                ]
+              )
+            ],
+            direction = ButtonMenu.Direction.Bottom,
+            attrs = [ Attr.Create "data-testid" "grouped-split-menu" ]
+          )
+        ],
+        attrs = [
+          ButtonGroup.Variant.outlined
+          ButtonGroup.Color.primary
+          Attr.Create "data-testid" "grouped-split-button"
+        ]
+      )
+    ]
 
   let private filledButtonGroupPalettePage () =
     div [] [

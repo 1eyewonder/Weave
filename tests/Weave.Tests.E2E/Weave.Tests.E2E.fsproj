@@ -44,6 +44,7 @@
     <Compile Include="interaction/SnackbarInteractionTests.fs" />
     <Compile Include="interaction/AnimationInteractionTests.fs" />
     <Compile Include="interaction/ButtonInteractionTests.fs" />
+    <Compile Include="interaction/ButtonGroupInteractionTests.fs" />
     <Compile Include="interaction/ButtonMenuInteractionTests.fs" />
     <Compile Include="interaction/CardInteractionTests.fs" />
     <Compile Include="interaction/CarouselInteractionTests.fs" />

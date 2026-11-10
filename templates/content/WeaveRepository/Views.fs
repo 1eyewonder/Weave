@@ -402,7 +402,13 @@ module Views =
                       Attr.Create "aria-hidden" "true"
                     ] [ text (if issue.State = "Open" then "◉" else "✓") ]
                     span [ Attr.Class "issue-copy" ] [
-                      span [ Attr.Class "issue-title" ] [ text issue.Title ]
+                      span [ Attr.Class "issue-title" ] [
+                        Highlighter.create (
+                          View.Const issue.Title,
+                          View.Const(search.Trim()),
+                          attrs = [ Highlighter.Color.primary ]
+                        )
+                      ]
                       span [ Attr.Class "issue-subtitle" ] [
                         text (sprintf "#%d · %s · %s" issue.Id issue.State issue.Author)
                       ]

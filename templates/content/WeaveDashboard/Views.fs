@@ -110,6 +110,10 @@ module Views =
               ]
             ]
             strong [ Attr.Class "metric-value" ] [ text (sprintf "%d%%" rate) ]
+            Progress.Linear.create (
+              value = View.Const(float rate),
+              attrs = [ Attr.Create "aria-label" "Payment success rate" ]
+            )
             div [ Attr.Class "metric-note" ] [
               text (sprintf "%d of %d payments succeeded" (List.length succeeded) count)
             ]
@@ -161,6 +165,7 @@ module Views =
     let selected = state.Selected
     let visible = state.Visible
     let sort = state.Sort
+    let query = state.Search.View |> View.Map(fun value -> value.Trim())
 
     let columns = [
       TableColumn.create (
@@ -172,7 +177,9 @@ module Views =
               text (item.Customer.Substring(0, 1))
             ]
             span [ Attr.Class "customer-copy" ] [
-              strong [] [ text item.Customer ]
+              strong [] [
+                Highlighter.create (View.Const item.Customer, query, attrs = [ Highlighter.Color.primary ])
+              ]
               span [] [ text item.Email ]
             ]
           ]),
@@ -188,7 +195,10 @@ module Views =
       TableColumn.create (
         "reference",
         text "Reference",
-        (fun (item: Transaction) -> span [ Attr.Class "reference" ] [ text item.Reference ])
+        (fun (item: Transaction) ->
+          span [ Attr.Class "reference" ] [
+            Highlighter.create (View.Const item.Reference, query, attrs = [ Highlighter.Color.primary ])
+          ])
       )
       TableColumn.create (
         "date",
@@ -198,10 +208,22 @@ module Views =
       )
     ]
 
+    let sorted =
+      (visible, sort.View)
+      ||> View.Map2(fun items currentSort -> Table.sortRows columns currentSort items)
+
+    let pageItems =
+      (sorted, state.Page.View)
+      ||> View.Map2(fun items currentPage ->
+        let start = min items.Length ((max 1 currentPage - 1) * State.pageSize)
+        items |> List.skip start |> List.truncate State.pageSize)
+
+    sort.View |> View.Sink(fun _ -> Var.Set state.Page 1)
+
     let transactionTable =
       Table.create (
         columns,
-        visible,
+        pageItems,
         (fun item -> item.Reference),
         onRowClick = (fun item -> Var.Set selected (Some item)),
         sort = sort,
@@ -343,7 +365,21 @@ module Views =
           ]
           p [ Attr.Class "table-scroll-hint" ] [ text "Scroll horizontally to see more columns." ]
           div [ Attr.Class "results-layout" ] [
-            div [ Attr.Class "table-panel" ] [ transactionTable ]
+            div [ Attr.Class "table-panel" ] [
+              transactionTable
+              state.PageCount
+              |> Doc.BindView(fun count ->
+                if count <= 1 then
+                  Doc.Empty
+                else
+                  div [ Attr.Class "table-pagination" ] [
+                    Pagination.create (
+                      View.Const count,
+                      selectedPage = state.Page,
+                      attrs = [ Attr.Create "aria-label" "Transaction pages" ]
+                    )
+                  ])
+            ]
             details
           ]
 

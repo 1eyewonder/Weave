@@ -1,6 +1,6 @@
 # Project workspace starter
 
-A sample project tracker with shared list and board views. Search issue titles, filter by status or assignee, open issue details, change status, and add issues. All data is fictional and held in memory: refreshing the page resets your changes. No account or backend is required.
+A sample project tracker with shared list and board views. Search issue titles, filter by status or assignee, open issue details, change status, and add issues. Search matches are highlighted in issue titles. The add form uses typed validation, project completion uses Weave's progress component, and a snackbar confirms new issues. All data is fictional and held in memory: refreshing the page resets your changes. No account or backend is required.
 
 ## Run locally
 

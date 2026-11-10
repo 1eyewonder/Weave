@@ -6,4 +6,4 @@ Requires .NET SDK 10.0.403 or a newer .NET 10 feature band. From the generated p
 dotnet run --urls http://localhost:5000
 ```
 
-Open http://localhost:5000. Edit `Client.fs` to build your UI. The mode toggle uses Weave's theme helpers; customize the page and toggle in `wwwroot/app.css`.
+Open http://localhost:5000. Edit `Client.fs` to build your UI. The starter includes a theme toggle and a small snackbar example: the “Say hello” button sends a notification through a `SnackbarController`, mounted once near the app root. The mode toggle uses Weave's theme helpers; customize the page and toggle in `wwwroot/app.css`.

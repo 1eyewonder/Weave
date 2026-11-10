@@ -567,6 +567,13 @@ p {
   box-shadow: 0 8px 24px rgba(55, 49, 84, 0.031372549);
 }
 
+.table-pagination {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--dash-border);
+  padding: 10px 14px 14px;
+}
+
 .table-panel .weave-table {
   width: 100%;
   overflow-x: auto;

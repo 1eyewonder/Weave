@@ -13,6 +13,10 @@ module Client =
   let Main () =
     setMode Light
     let mode = Var.Create Light
+    let snackbars = SnackbarController.create ()
+
+    let sayHello () =
+      snackbars.show "Hello from Weave!" |> ignore
 
     Container.create (
       div [] [
@@ -27,7 +31,8 @@ module Client =
         ]
         h1 [] [ text "Welcome to Weave" ]
         p [] [ text "Your WebSharper application is ready to customize." ]
-        Button.primary (text "Say hello", onClick = (fun () -> JavaScript.JS.Alert "Hello from Weave!"))
+        Button.primary (text "Say hello", onClick = sayHello)
+        Snackbar.create snackbars
       ],
       attrs = [ Container.MaxWidth.medium ]
     )

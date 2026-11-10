@@ -310,21 +310,6 @@ p {
   font-size: 11px;
 }
 
-.progress-track {
-  height: 6px;
-  margin-top: 9px;
-  overflow: hidden;
-  border-radius: 6px;
-  background: #e8e3f2;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: inherit;
-  transition: width 0.2s ease;
-  background: linear-gradient(90deg, var(--palette-secondary), #77aaa3);
-}
-
 .section-head {
   margin-top: 38px;
   border-bottom: 1px solid #efedf4;
@@ -609,7 +594,7 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .issue, .progress-fill {
+  .issue {
     transition: none;
   }
 
@@ -748,10 +733,6 @@ body[data-theme=dark] .progress-label, body[data-theme=dark] .group-heading {
 
 body[data-theme=dark] .progress-copy strong {
   color: #f0eefa;
-}
-
-body[data-theme=dark] .progress-track {
-  background: #514a61;
 }
 
 body[data-theme=dark] .section-head {

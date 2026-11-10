@@ -1,6 +1,6 @@
 # Repository workspace starter
 
-A fictional repository workspace with sample branches, folders, files, and issues. Switch between Code and Issues, choose a branch, open folders and files, use the breadcrumb to navigate, or search and filter issues and open their details. All content is local sample data; this starter does not access a Git repository, GitHub, or a backend.
+A fictional repository workspace with sample branches, folders, files, and issues. Switch between Code and Issues, choose a branch, open folders and files, use the breadcrumb to navigate, or search and filter issues and open their details. Search matches are highlighted in issue titles. All content is local sample data; this starter does not access a Git repository, GitHub, or a backend.
 
 ## Run locally
 

@@ -54,6 +54,7 @@ module Views =
     let viewMode = state.ViewMode
     let selectedIssue = state.SelectedIssue
     let visible = state.Visible
+    let query = state.Search.View |> View.Map(fun value -> value.Trim())
 
     let issueCard issue =
       div [ Attr.Class "issue" ] [
@@ -63,7 +64,9 @@ module Views =
           on.click (fun _ _ -> Var.Set selectedIssue (Some issue.Id))
         ] [
           span [ Attr.Class "issue-id" ] [ text (sprintf "ORB-%d" issue.Id) ]
-          span [ Attr.Class "issue-title" ] [ text issue.Title ]
+          span [ Attr.Class "issue-title" ] [
+            Highlighter.create (View.Const issue.Title, query, attrs = [ Highlighter.Color.primary ])
+          ]
         ]
 
         div [ Attr.Class "issue-meta" ] [
@@ -156,11 +159,8 @@ module Views =
 
   let addForm (state: State.Model) =
     let adding = state.Adding
-    let newTitle = state.NewTitle
-    let titleError = state.TitleError
     let newAssignee = state.NewAssignee
     let newStatus = state.NewStatus
-    let addIssue = State.addIssue state
 
     let addForm =
       adding.View
@@ -168,32 +168,42 @@ module Views =
         if not openForm then
           Doc.Empty
         else
-          div [ Attr.Class "new-issue" ] [
-            h2 [] [ text "New issue" ]
-            TextField.singleLine (
-              newTitle,
-              labelText = View.Const "Issue title",
-              placeholder = View.Const "What needs to be done?",
-              attrs = [ TextField.Variant.outlined; TextField.Width.full ]
-            )
-            titleError.View
-            |> Doc.BindView(fun invalid ->
-              if invalid then
-                div [ Attr.Class "form-error"; Attr.Create "role" "alert" ] [ text "Enter an issue title." ]
-              else
-                Doc.Empty)
-            div [ Attr.Class "new-fields" ] [
-              select "Status" statuses newStatus
-              select "Assignee" people newAssignee
-            ]
+          let title =
+            FormField.create ("", rules = [ Validate.required "Enter an issue title." ])
 
-            div [ Attr.Class "actions" ] [
-              Button.primary (text "Add issue", onClick = addIssue, attrs = [ Button.Variant.filled ])
-              actionButton "Cancel" (fun () ->
-                Var.Set titleError false
-                Var.Set adding false)
-            ]
-          ])
+          let issueTitle = Form.model {
+            let! value = title
+            return value.Trim()
+          }
+
+          Form.create (
+            issueTitle,
+            State.addIssue state,
+            [
+              h2 [] [ text "New issue" ]
+              TextField.singleLine (
+                title,
+                labelText = View.Const "Issue title",
+                placeholder = View.Const "What needs to be done?",
+                attrs = [ TextField.Variant.outlined; TextField.Width.full ]
+              )
+              div [ Attr.Class "new-fields" ] [
+                select "Status" statuses newStatus
+                select "Assignee" people newAssignee
+              ]
+              div [ Attr.Class "actions" ] [
+                button [
+                  Attr.Create "type" "submit"
+                  Attr.Class "weave-button"
+                  Button.Color.primary
+                  Button.Variant.filled
+                  Typography.button
+                ] [ span [ Attr.Class "weave-button__label" ] [ text "Add issue" ] ]
+                actionButton "Cancel" (fun () -> Var.Set adding false)
+              ]
+            ],
+            attrs = [ Attr.Class "new-issue" ]
+          ))
 
     addForm
 
@@ -274,16 +284,10 @@ module Views =
                   ]
                 ]
 
-                div [
-                  Attr.Class "progress-track"
-                  Attr.Create "role" "progressbar"
-                  Attr.Create "aria-label" "Project progress"
-                  Attr.Create "aria-valuemin" "0"
-                  Attr.Create "aria-valuemax" "100"
-                  Attr.Create "aria-valuenow" (string percent)
-                ] [
-                  div [ Attr.Class "progress-fill"; Attr.Style "width" (sprintf "%d%%" percent) ] []
-                ]
+                Progress.Linear.create (
+                  value = View.Const(float percent),
+                  attrs = [ Attr.Create "aria-label" "Project progress" ]
+                )
               ])
           ]
 
@@ -322,4 +326,5 @@ module Views =
           div [ Attr.Class "workspace-body" ] [ div [ Attr.Class "issue-area" ] [ issueViews ]; details ]
         ]
       ]
+      Snackbar.create state.Snackbars
     ]

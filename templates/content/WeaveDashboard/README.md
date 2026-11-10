@@ -1,6 +1,6 @@
 # Business dashboard starter
 
-A fictional dashboard with a time-period selector, derived overview metrics and activity breakdown, and a searchable, filterable, sortable transaction table. Select a row to see sample details. The period affects metrics and table; search and status affect the table only. All amounts, customers and transactions are fictional and relative to the current day. No payments are processed and no backend is connected.
+A fictional dashboard with a time-period selector, derived overview metrics and activity breakdown, and a searchable, filterable, sortable, paginated transaction table. Search matches are highlighted in customer names and references, and the success-rate metric uses Weave's progress component. Select a row to see sample details. The period affects metrics and table; search and status affect the table only. All amounts, customers and transactions are fictional and relative to the current day. No payments are processed and no backend is connected.
 
 ## Run locally
 

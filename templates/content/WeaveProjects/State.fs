@@ -19,8 +19,7 @@ module State =
     AssigneeFilter: Var<string option>
     SelectedIssue: Var<int option>
     Adding: Var<bool>
-    NewTitle: Var<string>
-    TitleError: Var<bool>
+    Snackbars: SnackbarController
     NewAssignee: Var<string option>
     NewStatus: Var<string option>
     NextId: Var<int>
@@ -60,8 +59,7 @@ module State =
       AssigneeFilter = assigneeFilter
       SelectedIssue = Var.Create None
       Adding = Var.Create false
-      NewTitle = Var.Create ""
-      TitleError = Var.Create false
+      Snackbars = SnackbarController.create ()
       NewAssignee = Var.Create(Some "Unassigned")
       NewStatus = Var.Create(Some "Backlog")
       NextId = Var.Create 106
@@ -77,23 +75,16 @@ module State =
         else
           issue))
 
-  let addIssue (state: Model) () =
-    let title = state.NewTitle.Value.Trim()
+  let addIssue (state: Model) title =
+    let issue = {
+      Id = state.NextId.Value
+      Title = title
+      Status = Option.defaultValue "Backlog" state.NewStatus.Value
+      Assignee = Option.defaultValue "Unassigned" state.NewAssignee.Value
+      Description = "No description yet."
+    }
 
-    if title = "" then
-      Var.Set state.TitleError true
-    else
-      Var.Set state.TitleError false
-
-      let issue = {
-        Id = state.NextId.Value
-        Title = title
-        Status = Option.defaultValue "Backlog" state.NewStatus.Value
-        Assignee = Option.defaultValue "Unassigned" state.NewAssignee.Value
-        Description = "No description yet."
-      }
-
-      Var.Update state.Issues (fun current -> current @ [ issue ])
-      Var.Update state.NextId ((+) 1)
-      Var.Set state.NewTitle ""
-      Var.Set state.Adding false
+    Var.Update state.Issues (fun current -> current @ [ issue ])
+    Var.Update state.NextId ((+) 1)
+    Var.Set state.Adding false
+    state.Snackbars.show "Issue added." |> ignore

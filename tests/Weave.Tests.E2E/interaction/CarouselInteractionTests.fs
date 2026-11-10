@@ -89,12 +89,16 @@ type CarouselInteractionTests(fixture: TestFixture) =
     do! viewport.PressAsync "ArrowRight"
     do! this.Expect(this.VisibleSlide).ToContainTextAsync "First slide"
     let input = this.Page.GetByPlaceholder "Slide input"
+    do! this.Expect(this.Page.Locator(".weave-carousel__item").First).Not.ToHaveAttributeAsync("inert", "")
     do! input.FillAsync "Preserved"
+    do! this.Expect(input).ToBeFocusedAsync()
     do! input.PressAsync "ArrowLeft"
     do! this.Expect(this.VisibleSlide).ToContainTextAsync "First slide"
     do! viewport.FocusAsync()
     do! viewport.PressAsync "ArrowLeft"
+    do! this.Expect(this.VisibleSlide).ToContainTextAsync "Third slide"
     do! viewport.PressAsync "Home"
+    do! this.Expect(this.VisibleSlide).ToContainTextAsync "First slide"
     do! this.Expect(input).ToHaveValueAsync "Preserved"
   }
 

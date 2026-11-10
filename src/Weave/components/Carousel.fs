@@ -136,7 +136,7 @@ type Carousel =
         stopOnFocus
         on.keyDownView state (fun el ev (n, i) ->
           // Preserve arrow-key behavior inside inputs and other slide controls.
-          if ev.Target = el then
+          if obj.ReferenceEquals(ev.Target, el) then
             match ev.Key with
             | "ArrowLeft" ->
               ev.PreventDefault()

@@ -68,7 +68,7 @@ module GettingStartedExamples =
       Helpers.bodyText "Install the template, create the minimal app, and run it:"
       codeBlock
         "bash"
-        """dotnet new install Weave.WebSharper.Templates@0.1.0
+        """dotnet new install Weave.WebSharper.Templates@0.2.1
 dotnet new weave-app -n MyApp
 cd MyApp
 dotnet run"""
@@ -111,7 +111,7 @@ module Client =
   let private existingProject () =
     Helpers.textSection "3. Add Weave to an existing app" [
       Helpers.bodyText "Add Weave to an existing F# WebSharper project:"
-      codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.1.0"
+      codeBlock "bash" "dotnet add package Weave.WebSharper --version 0.2.0"
       Helpers.bodyText
         "The package includes styles.css as a WebSharper resource and a NuGet content file. Link the extracted stylesheet, or copy the content file into your app's static files and link it at the URL your host serves. Your existing WebSharper setup determines the script and host configuration."
       codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
@@ -204,7 +204,7 @@ yarn dev:docs"""
         "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
       templateGallery ()
       Helpers.bodyText "Install the template package with the .NET 10 SDK:"
-      codeBlock "bash" "dotnet new install Weave.WebSharper.Templates@0.1.0"
+      codeBlock "bash" "dotnet new install Weave.WebSharper.Templates@0.2.1"
       Helpers.bodyText
         "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
       codeBlock

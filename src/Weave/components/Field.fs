@@ -74,6 +74,7 @@ type Field =
       ?labelText: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?enabled: View<bool>,
       ?startAdornment: Doc,
       ?endAdornment: Doc,
@@ -85,6 +86,14 @@ type Field =
     let labelText = defaultArg labelText (View.Const "")
     let showHelpText = defaultArg showHelpText (View.Const false)
     let helpText = defaultArg helpText Doc.Empty
+
+    let errors =
+      validation
+      |> Option.map (fun state -> state.VisibleErrors)
+      |> Option.defaultValue (View.Const [])
+
+    let hasErrors = errors |> View.Map(List.isEmpty >> not)
+    let showHelpText = showHelpText <||> hasErrors
     let enabled = defaultArg enabled (View.Const true)
 
     let typoAttrs = defaultArg typoAttrs [ Typography.body2 ]
@@ -133,7 +142,23 @@ type Field =
       ]
       :> Doc
 
-    let helpTextDoc = helpText
+    let errorDoc =
+      match validation with
+      | None -> Doc.Empty
+      | Some state ->
+        FieldHelpText.create (
+          Doc.TextView(errors |> View.Map(String.concat " ")),
+          attrs = [
+            Attr.Create "id" state.ErrorId
+            Attr.Create "aria-live" "polite"
+            Attr.DynamicStyle "display" (hasErrors |> View.Map(fun invalid -> if invalid then "" else "none"))
+            FieldHelpText.Color.error
+          ]
+        )
+
+    let helpTextDoc =
+      hasErrors
+      |> Doc.BindView(fun invalid -> if invalid then Doc.Empty else helpText)
 
     let hasStartAdornment = startAdornment.IsSome
 
@@ -143,6 +168,8 @@ type Field =
       if hasStartAdornment then
         Css.``weave-field--has-start-adornment`` |> cl
       Attr.DynamicClassPred Css.``weave-field--focused`` isFocused
+      if validation.IsSome then
+        Attr.DynamicClassPred Css.``weave-field--error`` hasErrors
       Attr.DynamicClassPred Css.``weave-field--show-help-text`` showHelpText
       Disabled.disabledClass Css.``weave-field--disabled`` enabled
       yield! attrs
@@ -163,4 +190,5 @@ type Field =
       ] [ label; startAdornmentDoc; inputElement; endAdornmentDoc; outlineDoc ]
 
       helpTextDoc
+      errorDoc
     ]

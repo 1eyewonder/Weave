@@ -436,6 +436,7 @@ type Select =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?clearable: View<bool>,
       ?searchable: bool,
       ?isOpen: Var<bool>,
@@ -554,6 +555,9 @@ type Select =
               el.SetAttribute("aria-label", v))
           labelText
 
+        match validation with
+        | Some state -> yield! ValidationInput.attrs state
+        | None -> ()
         on.focus (fun _ _ -> Var.Set isFocused true)
         on.blur (fun _ _ -> Var.Set isFocused false)
 
@@ -648,6 +652,7 @@ type Select =
           labelText = labelText,
           ?showHelpText = showHelpText,
           ?helpText = helpText,
+          ?validation = validation,
           enabled = enabled,
           endAdornment = endAdornment,
           attrs = attrs
@@ -656,6 +661,40 @@ type Select =
       ]
     ]
     |> Doc.Concat
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member create<'T when 'T: comparison>
+    (
+      items: View<SelectItemDef<'T> list>,
+      field: FormField<'T option>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?clearable: View<bool>,
+      ?searchable: bool,
+      ?isOpen: Var<bool>,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?noItemsContent: Doc,
+      ?attrs: Attr list
+    ) =
+    Select.create (
+      items,
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?clearable = clearable,
+      ?searchable = searchable,
+      ?isOpen = isOpen,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?noItemsContent = noItemsContent,
+      ?attrs = attrs
+    )
 
 [<JavaScript>]
 type MultiSelect =
@@ -668,6 +707,7 @@ type MultiSelect =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?selectionText: Set<'T> -> string,
       ?clearable: View<bool>,
       ?searchable: bool,
@@ -816,6 +856,9 @@ type MultiSelect =
               el.SetAttribute("aria-label", v))
           labelText
 
+        match validation with
+        | Some state -> yield! ValidationInput.attrs state
+        | None -> ()
         on.focus (fun _ _ -> Var.Set isFocused true)
         on.blur (fun _ _ -> Var.Set isFocused false)
 
@@ -951,6 +994,7 @@ type MultiSelect =
           labelText = labelText,
           ?showHelpText = showHelpText,
           ?helpText = helpText,
+          ?validation = validation,
           enabled = enabled,
           endAdornment = endAdornment,
           attrs = attrs
@@ -959,3 +1003,43 @@ type MultiSelect =
       ]
     ]
     |> Doc.Concat
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member create<'T when 'T: comparison>
+    (
+      items: View<SelectItemDef<'T> list>,
+      field: FormField<Set<'T>>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?selectionText: Set<'T> -> string,
+      ?clearable: View<bool>,
+      ?searchable: bool,
+      ?showSelectAll: bool,
+      ?selectAllText: string,
+      ?isOpen: Var<bool>,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?noItemsContent: Doc,
+      ?attrs: Attr list
+    ) =
+    MultiSelect.create (
+      items,
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?selectionText = selectionText,
+      ?clearable = clearable,
+      ?searchable = searchable,
+      ?showSelectAll = showSelectAll,
+      ?selectAllText = selectAllText,
+      ?isOpen = isOpen,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?noItemsContent = noItemsContent,
+      ?attrs = attrs
+    )

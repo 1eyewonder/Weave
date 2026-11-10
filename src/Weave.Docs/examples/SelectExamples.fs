@@ -1051,9 +1051,9 @@ Select.create(
         Helpers.apiParam "items" "View<SelectItemDef<'T> list>" "" "Reactive list of selectable items"
         Helpers.apiParam
           "selectedValue"
-          "Var<'T option>"
+          "Var<'T option> or FormField<'T option>"
           ""
-          "Two-way binding for the selected value; None when nothing is selected"
+          "Selected value; a FormField automatically wires its validation"
         Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
         Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no value is selected"
         Helpers.apiParam
@@ -1061,6 +1061,11 @@ Select.create(
           "View<bool>"
           "View.Const false"
           "Whether to display the help text area"
+        Helpers.apiParam
+          "?validation"
+          "FieldValidation"
+          ""
+          "FormField.Validation: errors, styling, blur tracking, and ARIA (on the combobox)"
         Helpers.apiParam
           "?helpText"
           "Doc"
@@ -1085,7 +1090,11 @@ Select.create(
 
       Helpers.apiTable "MultiSelect.create" [
         Helpers.apiParam "items" "View<SelectItemDef<'T> list>" "" "Reactive list of selectable items"
-        Helpers.apiParam "selectedValues" "Var<Set<'T>>" "" "Two-way binding for the set of selected values"
+        Helpers.apiParam
+          "selectedValues"
+          "Var<Set<'T>> or FormField<Set<'T>>"
+          ""
+          "Two-way binding for the set of selected values"
         Helpers.apiParam "?labelText" "View<string>" "" "Floating label displayed above the input"
         Helpers.apiParam "?placeholder" "View<string>" "" "Placeholder text shown when no values are selected"
         Helpers.apiParam
@@ -1093,6 +1102,11 @@ Select.create(
           "View<bool>"
           "View.Const false"
           "Whether to display the help text area"
+        Helpers.apiParam
+          "?validation"
+          "FieldValidation"
+          ""
+          "FormField.Validation: errors, styling, blur tracking, and ARIA (on the combobox)"
         Helpers.apiParam
           "?helpText"
           "Doc"

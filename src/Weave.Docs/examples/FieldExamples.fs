@@ -137,6 +137,11 @@ Field.create(
             "View.Const false"
             "Whether to display the help text area"
           Helpers.apiParam
+            "?validation"
+            "FieldValidation"
+            ""
+            "Error presentation; apply ValidationInput.attrs to the custom input for ARIA and blur tracking"
+          Helpers.apiParam
             "?helpText"
             "Doc"
             "Doc.Empty"

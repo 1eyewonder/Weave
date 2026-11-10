@@ -55,7 +55,9 @@ This provides:
 - A manageable API surface
 - Extensibility as components grow in complexity
 
-Future iterations may explore Computation Expressions (CEs) to provide a more idiomatic F# feel without sacrificing usability.
+### Forms and validation
+
+Use `Form.model` to compose validated fields into typed values and bind them directly to Weave controls. See [Forms & Validation](https://1eyewonder.github.io/Weave/#forms) for live examples and the API reference.
 
 ### Strongly-Typed Styling
 

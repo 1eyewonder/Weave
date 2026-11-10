@@ -220,7 +220,7 @@ TextField.singleLine(
       label
       (startAdornment: unit -> Doc option)
       (endAdornment: unit -> Doc option)
-      value
+      (value: Var<string>)
       =
       GridItem.create (
         TextField.singleLine (
@@ -903,8 +903,14 @@ TextField.multiLine(
       (Helpers.bodyText
         "Complete API reference for TextField and FieldHelpText. TextField provides two constructors — singleLine for standard text inputs and multiLine for textarea inputs. Both share the same parameter set and wrap Field's structural chrome.")
       [
+        Helpers.returnTypeNote
+          "TextField.singleLine / multiLine also accept FormField directly in place of the bound Var, with the same optional parameters except validation, which is wired automatically. The explicit validation parameter below applies to Var bindings."
         Helpers.apiTable "TextField.singleLine" [
-          Helpers.apiParam "value" "Var<string>" "" "Two-way binding for the text input value"
+          Helpers.apiParam
+            "value"
+            "Var<string> or FormField<string>"
+            ""
+            "Bind a Var, or pass a form field to wire its value and validation automatically"
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam
             "?placeholder"
@@ -912,6 +918,11 @@ TextField.multiLine(
             "\"\""
             "Placeholder text shown when the field is empty and label is floating"
           Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
+          Helpers.apiParam
+            "?validation"
+            "FieldValidation"
+            ""
+            "FormField.Validation: show errors after blur or submit; overrides help text while invalid"
           Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
           Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
           Helpers.apiParam

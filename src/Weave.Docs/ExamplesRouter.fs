@@ -273,6 +273,7 @@ module ExamplesRouter =
               "Drawer", DrawerExamples
               "Dropdown Menu", DropdownMenuExamples
               "Expansion Panel", ExpansionPanelExamples
+              "Forms & Validation", FormExamples
               "Field", FieldExamples
               "Grid", GridExamples
               "Icons", IconsExamples
@@ -338,6 +339,7 @@ module ExamplesRouter =
       | SwitchExamples -> SwitchExamples.render ()
       | SliderExamples -> SliderExamples.render ()
       | ContainerExamples -> ContainerExamples.render ()
+      | FormExamples -> FormExamples.render ()
       | FieldExamples -> FieldExamples.render ()
       | NumericFieldExamples -> NumericFieldExamples.render ()
       | DropdownMenuExamples -> DropdownMenuExamples.render ()
@@ -671,6 +673,7 @@ module ExamplesRouter =
       "Dropdown Menu"
       "Expansion Panel"
       "Field"
+      "Forms & Validation"
       "Grid"
       "Icons"
       "Link"

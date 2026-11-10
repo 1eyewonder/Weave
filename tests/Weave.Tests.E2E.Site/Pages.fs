@@ -12,6 +12,255 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module Pages =
 
+  let private formArithmeticPage () =
+    let price =
+      FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
+
+    let quantity =
+      FormField.create (
+        4,
+        rulesView =
+          (price.Value.View
+           |> View.Map(fun unitPrice -> [
+             Validate.between 1 10 "Choose between 1 and 10."
+             Validate.on (fun count -> unitPrice * float count) (Validate.atMost 100.0 "Over budget.")
+           ]))
+      )
+
+    let order = Form.model {
+      let! price = price
+      and! quantity = quantity
+      return price, quantity
+    }
+
+    let saved = Var.Create ""
+
+    Form.create (
+      order,
+      (fun (price, quantity) -> saved.Value <- sprintf "%s x %d" (string price) quantity),
+      [
+        NumericField.create (price, labelText = View.Const "Price")
+        NumericField.create (quantity, labelText = View.Const "Quantity")
+        p [ attr.id "nan-bounds" ] [
+          text (
+            [
+              Validate.atLeast 0.0 "Invalid"
+              Validate.atMost 1.0 "Invalid"
+              Validate.greaterThan 0.0 "Invalid"
+              Validate.lessThan 1.0 "Invalid"
+              Validate.between 0.0 1.0 "Invalid"
+            ]
+            |> List.forall (fun rule -> rule System.Double.NaN = [ "Invalid" ])
+            |> fun valid -> if valid then "true" else "false"
+          )
+        ]
+        button [ attr.``type`` "submit" ] [ text "Save" ]
+        p [ attr.id "saved" ] [ Doc.TextView saved.View ]
+      ]
+    )
+
+  let private formSizingPage () =
+    div [] [
+      for variant, attrs in
+        [
+          "standard", []
+          "filled", [ Field.Variant.filled ]
+          "outlined", [ Field.Variant.outlined ]
+        ] do
+        let name = FormField.create ""
+        let age = FormField.create 18
+
+        let person = Form.model {
+          let! name = name
+          and! age = age
+          return name, age
+        }
+
+        Form.create (
+          person,
+          ignore,
+          [
+            TextField.singleLine (name, labelText = View.Const "Name", attrs = attrs)
+            NumericField.create (age, labelText = View.Const "Age", attrs = attrs)
+          ],
+          attrs = [ Attr.Create "data-variant" variant ]
+        )
+    ]
+
+  let private formGridValidationPage () =
+    div [] [
+      for variant, variantAttrs in
+        [
+          "standard", []
+          "filled", [ Field.Variant.filled ]
+          "outlined", [ Field.Variant.outlined; Field.Label.above ]
+        ] do
+        let name = FormField.create "Ada"
+
+        let quantity =
+          FormField.create (2, rules = [ Validate.custom (fun value -> value % 2 = 0) "Order in pairs." ])
+
+        let model = Form.model {
+          let! name = name
+          and! quantity = quantity
+          return name, quantity
+        }
+
+        let attrs = Field.Width.full :: variantAttrs
+
+        Form.create (
+          model,
+          ignore,
+          [
+            Grid.create (
+              [
+                GridItem.create (
+                  TextField.singleLine (name, labelText = View.Const "Name", attrs = attrs),
+                  attrs = [ GridItem.Span.six ]
+                )
+                GridItem.create (
+                  NumericField.create (quantity, labelText = View.Const "Quantity", attrs = attrs),
+                  attrs = [ GridItem.Span.six ]
+                )
+              ],
+              attrs = [ Grid.Spacing.large; AlignItems.start ]
+            )
+            button [ attr.``type`` "submit" ] [ text "Save" ]
+          ],
+          attrs = [ Attr.Create "data-variant" variant ]
+        )
+    ]
+
+  let private formPage () =
+    let name =
+      FormField.create (
+        "",
+        rules = [ Validate.required "Name required."; Validate.minLength 3 "Name too short." ]
+      )
+
+    let password =
+      FormField.create ("", rules = [ Validate.minLength 8 "Password too short." ])
+
+    let confirmation =
+      FormField.create (
+        "",
+        rulesView =
+          (password.Value.View
+           |> View.Map(fun expected -> [
+             Validate.required "Confirm password."
+             |> Validate.andThen (Validate.equalTo expected "Passwords must match.")
+           ]))
+      )
+
+    let age = FormField.create (17, rules = [ Validate.atLeast 18 "Adults only." ])
+
+    let country =
+      FormField.create (None, rules = [ Validate.isSome "Choose a country." ])
+
+    let interests =
+      FormField.create (Set.empty<string>, rules = [ Validate.minLengthBy Set.count 1 "Choose an interest." ])
+
+    let credentials = Form.model {
+      let! password = password
+      and! _ = confirmation
+      return password
+    }
+
+    let person = Form.model {
+      let! name = name
+      and! password = credentials
+      and! age = age
+      and! country = country
+      and! interests = interests
+      return name, password, age, country, interests
+    }
+
+    let submitted = Var.Create 0
+    let result = Var.Create ""
+
+    let save (name, _, age, country, interests) =
+      submitted.Value <- submitted.Value + 1
+
+      result.Value <-
+        sprintf
+          "%s|%d|%s|%s"
+          name
+          age
+          (Option.defaultValue "" country)
+          (String.concat "," (Set.toList interests))
+
+    Form.create (
+      person,
+      save,
+      [
+        TextField.singleLine (
+          name,
+          labelText = View.Const "Name",
+          showHelpText = View.Const true,
+          helpText = FieldHelpText.create (text "Your full name")
+        )
+        TextField.singleLine (
+          password,
+          labelText = View.Const "Password",
+          inputAttrs = [ attr.``type`` "password" ]
+        )
+        TextField.multiLine (
+          confirmation.Value,
+          labelText = View.Const "Confirm password",
+          validation = confirmation.Validation
+        )
+        NumericField.create (age, labelText = View.Const "Age")
+        Select.create (
+          View.Const [ SelectItem.create (text "Canada", "Canada", "Canada") ],
+          country,
+          labelText = View.Const "Country"
+        )
+        MultiSelect.create (
+          View.Const [ SelectItem.create (text "Music", "Music", "Music") ],
+          interests,
+          labelText = View.Const "Interests"
+        )
+        button [ attr.``type`` "submit" ] [ text "Save" ]
+        button [ attr.``type`` "reset" ] [ text "Reset" ]
+        Button.create (
+          text "Fill and submit",
+          (fun () ->
+            name.Value.Value <- "Same turn"
+            password.Value.Value <- "password123"
+            confirmation.Value.Value <- "password123"
+            age.Value.Value <- 25
+            country.Value.Value <- Some "Canada"
+            interests.Value.Value <- Set.singleton "Music"
+            person.Submit save)
+        )
+        Button.create (
+          text "Invalidate and submit",
+          (fun () ->
+            password.Value.Value <- "changed123"
+            person.Submit save)
+        )
+        p [ attr.id "submitted" ] [ Doc.TextView(submitted.View |> View.Map string) ]
+        p [ attr.id "result" ] [ Doc.TextView result.View ]
+        p [ attr.id "valid" ] [
+          Doc.TextView(person.IsValid |> View.Map(fun value -> if value then "true" else "false"))
+        ]
+        p [ attr.id "error-count" ] [
+          Doc.TextView(
+            person.Result
+            |> View.Map(function
+              | Ok _ -> "0"
+              | Error errors -> string errors.Length)
+          )
+        ]
+        p [ attr.id "dirty" ] [
+          Doc.TextView(name.IsDirty |> View.Map(fun value -> if value then "true" else "false"))
+        ]
+        p [ attr.id "touched" ] [
+          Doc.TextView(name.IsTouched |> View.Map(fun value -> if value then "true" else "false"))
+        ]
+      ]
+    )
+
   let private animationPage () =
     let isVisible = Var.Create false
     let isActive = Var.Create false
@@ -1570,6 +1819,10 @@ module Pages =
     | "field" -> fieldPage ()
     | "numericfield" -> numericFieldPage ()
     | "textfield" -> textFieldPage ()
+    | "form" -> formPage ()
+    | "form-sizing" -> formSizingPage ()
+    | "form-grid-validation" -> formGridValidationPage ()
+    | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()

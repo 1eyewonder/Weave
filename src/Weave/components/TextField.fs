@@ -48,6 +48,7 @@ type TextField =
       labelText: View<string>,
       showHelpText: View<bool> option,
       helpText: Doc option,
+      validation: FieldValidation option,
       enabled: View<bool>,
       startAdornment: Doc option,
       endAdornment: Doc option,
@@ -94,6 +95,7 @@ type TextField =
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,
+        ?validation = validation,
         enabled = enabled,
         ?startAdornment = startAdornment,
         ?endAdornment = endAdornment,
@@ -115,6 +117,7 @@ type TextField =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
       ?shrinkLabel: View<bool>,
@@ -174,6 +177,9 @@ type TextField =
             el?scrollLeft <- 0
             isFocused.Value <- false)
 
+          match validation with
+          | Some state -> yield! ValidationInput.attrs state
+          | None -> ()
           yield! inputAttrs
         ]
         value
@@ -185,6 +191,7 @@ type TextField =
       labelText,
       showHelpText,
       helpText,
+      validation,
       enabled,
       startAdornment,
       endAdornment,
@@ -205,6 +212,7 @@ type TextField =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
       ?shrinkLabel: View<bool>,
@@ -261,6 +269,9 @@ type TextField =
         on.input (fun el _ -> value.Value <- el?value)
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)
+        match validation with
+        | Some state -> yield! ValidationInput.attrs state
+        | None -> ()
         yield! inputAttrs
       ] []
       :> Doc
@@ -272,6 +283,7 @@ type TextField =
       labelText,
       showHelpText,
       helpText,
+      validation,
       enabled,
       startAdornment,
       endAdornment,
@@ -283,4 +295,84 @@ type TextField =
       typoAttrs,
       inputId,
       attrs
+    )
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member singleLine
+    (
+      field: FormField<string>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?shrinkLabel: View<bool>,
+      ?startAdornment: Doc,
+      ?endAdornment: Doc,
+      ?maxLength: int,
+      ?debounce: int,
+      ?onChange: string -> unit,
+      ?inputAttrs: Attr list,
+      ?typoAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+    TextField.singleLine (
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?shrinkLabel = shrinkLabel,
+      ?startAdornment = startAdornment,
+      ?endAdornment = endAdornment,
+      ?maxLength = maxLength,
+      ?debounce = debounce,
+      ?onChange = onChange,
+      ?inputAttrs = inputAttrs,
+      ?typoAttrs = typoAttrs,
+      ?attrs = attrs
+    )
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member multiLine
+    (
+      field: FormField<string>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?shrinkLabel: View<bool>,
+      ?startAdornment: Doc,
+      ?endAdornment: Doc,
+      ?maxLength: int,
+      ?debounce: int,
+      ?onChange: string -> unit,
+      ?inputAttrs: Attr list,
+      ?typoAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+    TextField.multiLine (
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?shrinkLabel = shrinkLabel,
+      ?startAdornment = startAdornment,
+      ?endAdornment = endAdornment,
+      ?maxLength = maxLength,
+      ?debounce = debounce,
+      ?onChange = onChange,
+      ?inputAttrs = inputAttrs,
+      ?typoAttrs = typoAttrs,
+      ?attrs = attrs
     )

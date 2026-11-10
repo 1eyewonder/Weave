@@ -10,6 +10,7 @@
     <Compile Include="components/TableTests.fs" />
     <Compile Include="utilities/AnimationTests.fs" />
     <Compile Include="utilities/BoundedTests.fs" />
+    <Compile Include="utilities/ValidationTests.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

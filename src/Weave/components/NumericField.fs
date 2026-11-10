@@ -46,6 +46,7 @@ type NumericField =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
       ?startAdornment: Doc,
@@ -144,6 +145,9 @@ type NumericField =
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
 
+          match validation with
+          | Some state -> yield! ValidationInput.attrs state
+          | None -> ()
           yield! inputAttrs
 
           on.focus (fun _ _ -> isFocused.Value <- true)
@@ -234,6 +238,7 @@ type NumericField =
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,
+        ?validation = validation,
         enabled = enabled,
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
@@ -258,6 +263,7 @@ type NumericField =
       ?placeholder: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
+      ?validation: FieldValidation,
       ?enabled: View<bool>,
       ?readOnly: View<bool>,
       ?startAdornment: Doc,
@@ -371,6 +377,9 @@ type NumericField =
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
 
+          match validation with
+          | Some state -> yield! ValidationInput.attrs state
+          | None -> ()
           yield! inputAttrs
 
           on.focus (fun _ _ -> isFocused.Value <- true)
@@ -460,6 +469,7 @@ type NumericField =
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,
+        ?validation = validation,
         enabled = enabled,
         endAdornment = spinButtonsDoc,
         ?startAdornment = startAdornment,
@@ -473,3 +483,95 @@ type NumericField =
       )
     ]
     |> Doc.Concat
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member create
+    (
+      field: FormField<int>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?startAdornment: Doc,
+      ?min: int,
+      ?max: int,
+      ?step: View<int>,
+      ?showSpinButtons: View<bool>,
+      ?enableArrowKeys: View<bool>,
+      ?enableMouseWheel: View<bool>,
+      ?upIcon: Doc,
+      ?downIcon: Doc,
+      ?inputAttrs: Attr list,
+      ?typoAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+    NumericField.create (
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?startAdornment = startAdornment,
+      ?min = min,
+      ?max = max,
+      ?step = step,
+      ?showSpinButtons = showSpinButtons,
+      ?enableArrowKeys = enableArrowKeys,
+      ?enableMouseWheel = enableMouseWheel,
+      ?upIcon = upIcon,
+      ?downIcon = downIcon,
+      ?inputAttrs = inputAttrs,
+      ?typoAttrs = typoAttrs,
+      ?attrs = attrs
+    )
+
+  /// Bind a validated form field, including its value, errors, and blur state.
+  static member create
+    (
+      field: FormField<float>,
+      ?labelText: View<string>,
+      ?placeholder: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?enabled: View<bool>,
+      ?readOnly: View<bool>,
+      ?startAdornment: Doc,
+      ?min: float,
+      ?max: float,
+      ?step: View<float>,
+      ?showSpinButtons: View<bool>,
+      ?enableArrowKeys: View<bool>,
+      ?enableMouseWheel: View<bool>,
+      ?upIcon: Doc,
+      ?downIcon: Doc,
+      ?inputAttrs: Attr list,
+      ?typoAttrs: Attr list,
+      ?attrs: Attr list
+    ) =
+    NumericField.create (
+      field.Value,
+      validation = field.Validation,
+      ?labelText = labelText,
+      ?placeholder = placeholder,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?enabled = enabled,
+      ?readOnly = readOnly,
+      ?startAdornment = startAdornment,
+      ?min = min,
+      ?max = max,
+      ?step = step,
+      ?showSpinButtons = showSpinButtons,
+      ?enableArrowKeys = enableArrowKeys,
+      ?enableMouseWheel = enableMouseWheel,
+      ?upIcon = upIcon,
+      ?downIcon = downIcon,
+      ?inputAttrs = inputAttrs,
+      ?typoAttrs = typoAttrs,
+      ?attrs = attrs
+    )

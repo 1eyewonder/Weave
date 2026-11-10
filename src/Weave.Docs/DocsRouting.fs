@@ -27,6 +27,7 @@ module DocsRouting =
     | SliderExamples
     | ContainerExamples
     | FieldExamples
+    | FormExamples
     | NumericFieldExamples
     | DropdownMenuExamples
     | SelectExamples
@@ -77,6 +78,7 @@ module DocsRouting =
     | SwitchExamples -> "Switch"
     | SliderExamples -> "Slider"
     | ContainerExamples -> "Container"
+    | FormExamples -> "Forms & Validation"
     | FieldExamples -> "Field"
     | NumericFieldExamples -> "Numeric Field"
     | DropdownMenuExamples -> "Dropdown Menu"
@@ -128,6 +130,7 @@ module DocsRouting =
     | "Switch" -> Some SwitchExamples
     | "Slider" -> Some SliderExamples
     | "Container" -> Some ContainerExamples
+    | "Forms & Validation" -> Some FormExamples
     | "Field" -> Some FieldExamples
     | "Numeric Field" -> Some NumericFieldExamples
     | "Dropdown Menu" -> Some DropdownMenuExamples
@@ -180,6 +183,7 @@ module DocsRouting =
     | SwitchExamples -> "#switch"
     | SliderExamples -> "#slider"
     | ContainerExamples -> "#container"
+    | FormExamples -> "#forms"
     | FieldExamples -> "#field"
     | NumericFieldExamples -> "#numeric-field"
     | DropdownMenuExamples -> "#dropdown-menu"
@@ -232,6 +236,7 @@ module DocsRouting =
     | "#switch" -> Some SwitchExamples
     | "#slider" -> Some SliderExamples
     | "#container" -> Some ContainerExamples
+    | "#forms" -> Some FormExamples
     | "#field" -> Some FieldExamples
     | "#numeric-field" -> Some NumericFieldExamples
     | "#dropdown-menu" -> Some DropdownMenuExamples

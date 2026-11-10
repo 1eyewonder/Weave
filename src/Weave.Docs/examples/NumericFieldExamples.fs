@@ -494,13 +494,20 @@ NumericField.create(
   let private apiReferenceSection () =
     Helpers.apiSection
       (Helpers.bodyText
-        "Complete API reference for NumericField. Two overloads of create exist, disambiguated by parameter type: Var<int> for integers and Var<float> for floating-point values.")
+        "Complete API reference for NumericField. The create overloads accept integer or floating-point values, bound through Var or FormField.")
       [
+        Helpers.returnTypeNote
+          "NumericField.create also accepts FormField directly in place of the bound Var, with the same optional parameters except validation, which is wired automatically. The explicit validation parameter below applies to Var bindings."
         Helpers.apiTable "NumericField.create (int)" [
-          Helpers.apiParam "value" "Var<int>" "" "Two-way binding for the integer value"
+          Helpers.apiParam "value" "Var<int> or FormField<int>" "" "Bind a Var or a validated form field"
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
           Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
+          Helpers.apiParam
+            "?validation"
+            "FieldValidation"
+            ""
+            "FormField.Validation: show errors after blur or submit; overrides help text while invalid"
           Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
           Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
           Helpers.apiParam
@@ -543,6 +550,11 @@ NumericField.create(
           Helpers.apiParam "?labelText" "View<string>" "\"\"" "Floating label displayed above the input"
           Helpers.apiParam "?placeholder" "View<string>" "\"\"" "Placeholder text when the field is empty"
           Helpers.apiParam "?showHelpText" "View<bool>" "" "Whether to display the help text area"
+          Helpers.apiParam
+            "?validation"
+            "FieldValidation"
+            ""
+            "FormField.Validation: show errors after blur or submit; overrides help text while invalid"
           Helpers.apiParam "?helpText" "Doc" "" "Content shown below the field when showHelpText is true"
           Helpers.apiParam "?enabled" "View<bool>" "View.Const true" "Whether the field is interactive"
           Helpers.apiParam

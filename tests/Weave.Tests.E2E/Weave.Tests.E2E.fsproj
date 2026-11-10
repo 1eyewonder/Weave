@@ -51,6 +51,7 @@
     <Compile Include="interaction/DropdownMenuInteractionTests.fs" />
     <Compile Include="interaction/ExpansionPanelInteractionTests.fs" />
     <Compile Include="interaction/FieldInteractionTests.fs" />
+    <Compile Include="interaction/FormInteractionTests.fs" />
     <Compile Include="interaction/LinkInteractionTests.fs" />
     <Compile Include="interaction/ListInteractionTests.fs" />
     <Compile Include="interaction/NumericFieldInteractionTests.fs" />

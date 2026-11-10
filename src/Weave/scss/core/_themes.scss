@@ -76,21 +76,21 @@
   // Light filled surfaces use vivid colors while semantic text and outlines
   // retain the base color. Override fill tokens alongside custom scoped palettes.
   --palette-primary-fill: #168bff;
-  --palette-primary-fill-hover: #1385f5;
+  --palette-primary-fill-hover: #64b8ff;
   --palette-primary-fill-text: #111827;
   --palette-primary-fill-border: var(--palette-primary);
   --palette-secondary-fill: #a294ff;
-  --palette-secondary-fill-hover: #9385f4;
+  --palette-secondary-fill-hover: #c2baff;
   --palette-secondary-fill-text: #111827;
   --palette-secondary-fill-border: var(--palette-secondary);
   --palette-tertiary-fill: #ff4081;
-  --palette-tertiary-fill-hover: #f33577;
+  --palette-tertiary-fill-hover: #ff7fa7;
   --palette-tertiary-fill-text: #111827;
   --palette-tertiary-fill-border: var(--palette-tertiary);
   --palette-tertiary-indicator: #ff4081;
   --palette-tertiary-subtle-text: var(--palette-tertiary-darken);
   --palette-error-fill: #ff2d42;
-  --palette-error-fill-hover: #fa3245;
+  --palette-error-fill-hover: #ff7988;
   --palette-error-fill-text: #111827;
   --palette-error-fill-border: var(--palette-error);
   --palette-error-indicator: #fa3245;
@@ -277,7 +277,7 @@
   --palette-error-indicator: var(--palette-error-fill);
   --palette-error-subtle-text: var(--palette-error-darken);
   --palette-warning-fill: var(--palette-warning);
-  --palette-warning-fill-hover: var(--palette-warning-darken);
+  --palette-warning-fill-hover: var(--palette-warning-lighten);
   --palette-warning-fill-text: var(--palette-warning-text);
   --palette-warning-fill-border: transparent;
   --palette-warning-indicator: var(--palette-warning-fill);

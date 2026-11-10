@@ -35,6 +35,23 @@
   transition: $value;
 }
 
+// Controls embedded in a colored surface inherit its foreground and feedback palette.
+@mixin inherited-button-feedback($background) {
+  color: inherit;
+  --ripple-color: currentColor;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover { background-color: $background; }
+  }
+
+  &:focus-visible {
+    outline-color: currentColor;
+    background-color: $background;
+  }
+
+  &:active { background-color: $background; }
+}
+
 @mixin visually-hidden {
   position: absolute;
   width: 1px;

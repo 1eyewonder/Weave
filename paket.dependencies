@@ -1,7 +1,7 @@
 source https://api.nuget.org/v3/index.json
 storage: none
 
-nuget FSharp.Core
+nuget FSharp.Core >= 10.0.100 lowest_matching: true
 nuget FsToolkit.ErrorHandling
 nuget WebSharper
 nuget WebSharper.UI
@@ -12,7 +12,7 @@ group test
   source https://api.nuget.org/v3/index.json
   storage: none
 
-  nuget FSharp.Core 10.1.403 // setup to match Main to prevent build warnings
+  nuget FSharp.Core >= 10.0.100 lowest_matching: true // Keep aligned with Main.
   nuget Expecto.FsCheck
   nuget Microsoft.NET.Test.Sdk
   nuget YoloDev.Expecto.TestSdk

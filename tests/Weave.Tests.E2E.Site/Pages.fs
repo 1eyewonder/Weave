@@ -1904,6 +1904,78 @@ module Pages =
           Doc.Empty)
     ]
 
+  let private highlighterPage () =
+    let source = Var.Create "Weave weave WEAVE; C++ [a]. <b>weave</b>"
+    let search = Var.Create "weave"
+    let sensitive = Var.Create false
+    let terms = Var.Create "we\nweave\n\nC++\n[a].\nweave"
+
+    let multiple =
+      terms.View |> View.Map(fun value -> value.Split('\n') |> Array.toList)
+
+    div [ Typography.body1 ] [
+      TextField.multiLine (
+        source,
+        labelText = View.Const "Source text",
+        inputAttrs = [ Attr.Create "data-testid" "highlight-source" ]
+      )
+      TextField.multiLine (
+        search,
+        labelText = View.Const "Search text",
+        inputAttrs = [ Attr.Create "data-testid" "highlight-search" ]
+      )
+      TextField.multiLine (
+        terms,
+        labelText = View.Const "Search terms, one per line",
+        inputAttrs = [ Attr.Create "data-testid" "highlight-terms" ]
+      )
+      Switch.create (sensitive, content = text "Case sensitive")
+      Highlighter.create (
+        source.View,
+        search.View,
+        caseSensitive = sensitive.View,
+        attrs = [ Attr.Create "data-testid" "single-highlight" ]
+      )
+      Highlighter.createMany (
+        source.View,
+        multiple,
+        caseSensitive = sensitive.View,
+        attrs = [ Attr.Create "data-testid" "multi-highlight" ]
+      )
+      Button.create (
+        text "Change terms",
+        (fun () -> terms.Value <- "<b>\nweave"),
+        attrs = [ Attr.Create "data-testid" "change-terms" ]
+      )
+      Highlighter.create (
+        View.Const null,
+        View.Const null,
+        attrs = [ Attr.Create "data-testid" "null-highlight" ]
+      )
+      for id, terms in
+        [
+          "empty-terms", []
+          "null-terms", [ null; ""; null ]
+          "mixed-terms", [ null; ""; "weave"; "weave" ]
+        ] do
+        Highlighter.createMany (source.View, View.Const terms, attrs = [ Attr.Create "data-testid" id ])
+      for label, color in
+        [
+          "primary", Highlighter.Color.primary
+          "secondary", Highlighter.Color.secondary
+          "tertiary", Highlighter.Color.tertiary
+          "warning", Highlighter.Color.warning
+          "success", Highlighter.Color.success
+          "error", Highlighter.Color.error
+          "info", Highlighter.Color.info
+        ] do
+        Highlighter.create (
+          View.Const label,
+          View.Const label,
+          attrs = [ color; Attr.Create "data-testid" ("highlight-" + label) ]
+        )
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | "checkbox" -> checkboxPage ()
@@ -1953,6 +2025,7 @@ module Pages =
     | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false
     | "drawer-responsive" -> drawerPage Drawer.Variant.Responsive true
     | "drawer" -> drawerPage Drawer.Variant.Temporary true
+    | "highlighter" -> highlighterPage ()
     | "link" -> linkPage ()
     | "list" -> listPage ()
     | "chip" -> chipPage ()

@@ -1,0 +1,20 @@
+@use "../abstracts/variables" as *;
+
+.weave-highlighter {
+  --weave-highlighter-background: var(--palette-warning-fill, var(--palette-warning));
+  --weave-highlighter-color: var(--palette-warning-fill-text, var(--palette-warning-text));
+
+  &__match {
+    background-color: var(--weave-highlighter-background);
+    color: var(--weave-highlighter-color);
+    font: inherit;
+    padding: 0;
+  }
+
+  @each $color in $palette-colors {
+    &--#{$color} {
+      --weave-highlighter-background: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+      --weave-highlighter-color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+    }
+  }
+}

@@ -42,6 +42,7 @@ module DocsRouting =
     | ListExamples
     | AlertExamples
     | LinkExamples
+    | HighlighterExamples
     | DividerExamples
     | SpacingExamples
     | OpacityExamples
@@ -94,6 +95,7 @@ module DocsRouting =
     | TextFieldExamples -> "Text Field"
     | ListExamples -> "List"
     | AlertExamples -> "Alert"
+    | HighlighterExamples -> "Highlighter"
     | LinkExamples -> "Link"
     | DividerExamples -> "Divider"
     | SpacingExamples -> "Spacing"
@@ -147,6 +149,7 @@ module DocsRouting =
     | "Text Field" -> Some TextFieldExamples
     | "List" -> Some ListExamples
     | "Alert" -> Some AlertExamples
+    | "Highlighter" -> Some HighlighterExamples
     | "Link" -> Some LinkExamples
     | "Divider" -> Some DividerExamples
     | "Spacing" -> Some SpacingExamples
@@ -201,6 +204,7 @@ module DocsRouting =
     | TextFieldExamples -> "#text-field"
     | ListExamples -> "#list"
     | AlertExamples -> "#alert"
+    | HighlighterExamples -> "#highlighter"
     | LinkExamples -> "#link"
     | DividerExamples -> "#divider"
     | SpacingExamples -> "#spacing"
@@ -255,6 +259,7 @@ module DocsRouting =
     | "#text-field" -> Some TextFieldExamples
     | "#list" -> Some ListExamples
     | "#alert" -> Some AlertExamples
+    | "#highlighter" -> Some HighlighterExamples
     | "#link" -> Some LinkExamples
     | "#divider" -> Some DividerExamples
     | "#spacing" -> Some SpacingExamples

@@ -54,6 +54,7 @@
     <Compile Include="interaction/FieldInteractionTests.fs" />
     <Compile Include="interaction/FormInteractionTests.fs" />
     <Compile Include="interaction/LinkInteractionTests.fs" />
+    <Compile Include="interaction/HighlighterInteractionTests.fs" />
     <Compile Include="interaction/ListInteractionTests.fs" />
     <Compile Include="interaction/NumericFieldInteractionTests.fs" />
     <Compile Include="interaction/TextFieldInteractionTests.fs" />

@@ -277,6 +277,7 @@ module ExamplesRouter =
               "Forms & Validation", FormExamples
               "Field", FieldExamples
               "Grid", GridExamples
+              "Highlighter", HighlighterExamples
               "Icons", IconsExamples
               "Link", LinkExamples
               "List", ListExamples
@@ -355,6 +356,7 @@ module ExamplesRouter =
       | TextFieldExamples -> TextFieldExamples.render ()
       | ListExamples -> ListExamples.render ()
       | AlertExamples -> AlertExamples.render ()
+      | HighlighterExamples -> HighlighterExamples.render ()
       | LinkExamples -> LinkExamples.render ()
       | DividerExamples -> DividerExamples.render ()
       | SpacingExamples -> SpacingExamples.render ()
@@ -678,6 +680,7 @@ module ExamplesRouter =
       "Field"
       "Forms & Validation"
       "Grid"
+      "Highlighter"
       "Icons"
       "Link"
       "List"

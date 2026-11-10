@@ -246,6 +246,12 @@ module ComponentPreviews =
           Attr.Style "opacity" "0.25"
         ] []
       ]
+    | HighlighterExamples ->
+      cp [
+        div [ Attr.Style "top" "40%"; Attr.Style "left" "15%"; Typography.body1 ] [
+          Highlighter.create (View.Const "Find a match", View.Const "match")
+        ]
+      ]
     | LinkExamples ->
       cp [
         span [

@@ -3,10 +3,10 @@
 Install the stable release with the .NET 10 SDK:
 
 ```sh
-dotnet new install Weave.WebSharper.Templates@0.1.0
+dotnet new install Weave.WebSharper.Templates@0.2.1
 ```
 
-Create a starter with `dotnet new weave-app -n MyApp`, `dotnet new weave-dashboard -n MyDashboard`, `dotnet new weave-projects -n MyProjects`, or `dotnet new weave-repository -n MyRepository`. In the generated directory, run `dotnet run --urls http://localhost:5000` and open that URL. The generated app references `Weave.WebSharper` and requires the .NET 10.0.403 SDK or a newer .NET 10 feature band. The library package must be available on the configured NuGet feed. To uninstall, run `dotnet new uninstall Weave.WebSharper.Templates`.
+Create a starter with `dotnet new weave-app -n MyApp`, `dotnet new weave-dashboard -n MyDashboard`, `dotnet new weave-projects -n MyProjects`, or `dotnet new weave-repository -n MyRepository`. In the generated directory, run `dotnet run --urls http://localhost:5000` and open that URL. The generated app references `Weave.WebSharper` 0.2.0 and requires the .NET 10.0.403 SDK or a newer .NET 10 feature band. The library package must be available on the configured NuGet feed. To uninstall, run `dotnet new uninstall Weave.WebSharper.Templates`.
 
 For local testing before publication, pack both projects and install the template `.nupkg` from `artifacts`. Restore generated apps using a feed containing the Weave library package.
 

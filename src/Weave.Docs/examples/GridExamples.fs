@@ -491,22 +491,6 @@ Grid.create(
 
     Helpers.codeSampleSection "Nested Grids" description content code
 
-  let private spanToAttr (n: int) =
-    match n with
-    | 1 -> GridItem.Span.one
-    | 2 -> GridItem.Span.two
-    | 3 -> GridItem.Span.three
-    | 4 -> GridItem.Span.four
-    | 5 -> GridItem.Span.five
-    | 6 -> GridItem.Span.six
-    | 7 -> GridItem.Span.seven
-    | 8 -> GridItem.Span.eight
-    | 9 -> GridItem.Span.nine
-    | 10 -> GridItem.Span.ten
-    | 11 -> GridItem.Span.eleven
-    | 12 -> GridItem.Span.twelve
-    | _ -> GridItem.Span.three
-
   let private spanToName (n: int) =
     match n with
     | 1 -> "one"
@@ -617,22 +601,11 @@ Grid.create(
           )
         ]
 
-        // Reactive grid preview
-        let combined =
-          let spanViews = spanVars |> Array.map (fun v -> v.View) |> Array.toList
-
-          let combinedSpans =
-            spanViews
-            |> List.fold (fun acc sv -> (acc, sv) ||> View.Map2(fun items s -> items @ [ s ])) (View.Const [])
-
-          View.Map3
-            (fun count justOpt allSpans -> count, justOpt, allSpans)
-            itemCount.View
-            selectedJustify.View
-            combinedSpans
-
-        combined
-        |> Doc.BindView(fun (count, justOpt, allSpans) ->
+        // Keep each numeric field mounted while its span changes. Rebinding the
+        // whole grid on every value update replaces the clicked spin button before
+        // the browser can complete the interaction.
+        selectedJustify.View
+        |> Doc.BindView(fun justOpt ->
           let justAttr =
             justOpt
             |> Option.bind (fun label ->
@@ -641,13 +614,9 @@ Grid.create(
               |> Option.map (fun (_, a, _) -> a))
             |> Option.defaultValue JustifyContent.flexStart
 
-          let spans = allSpans |> List.take (min count (List.length allSpans))
-
           Grid.create (
             [
-              for i in 0 .. (List.length spans - 1) do
-                let spanVal = spans.[i]
-
+              for i in 0 .. (spanVars.Length - 1) do
                 GridItem.create (
                   Container.create (
                     NumericField.create (
@@ -668,7 +637,17 @@ Grid.create(
                       Padding.All.small
                     ]
                   ),
-                  attrs = [ spanToAttr spanVal ]
+                  attrs = [
+                    for span in 1..12 do
+                      let isSelected = spanVars.[i].View |> View.Map(fun value -> value = span)
+                      Attr.DynamicClassPred (sprintf "weave-grid__item--xs-%d" span) isSelected
+
+                    let isVisible = itemCount.View |> View.Map(fun count -> i < count)
+
+                    Attr.DynamicStyle
+                      "display"
+                      (isVisible |> View.Map(fun visible -> if visible then "flex" else "none"))
+                  ]
                 )
             ],
             attrs = [ justAttr; Grid.Spacing.medium ]

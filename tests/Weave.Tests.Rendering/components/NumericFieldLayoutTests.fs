@@ -6,10 +6,6 @@ open Weave.Tests.Rendering.ContainmentAssertions
 type NumericFieldLayoutTests() =
   inherit LayoutTestBase("numericfield")
 
-  static member assertSymmetricPadding (paddingTop: string) (paddingBottom: string) : unit =
-    let condition = paddingTop = paddingBottom
-    Assert.True(condition, "Standard numeric input uses symmetric padding for spin-button alignment")
-
   [<Fact>]
   member this.``numeric field has positive dimensions``() = task {
     do! this.LoadFixture()
@@ -143,17 +139,4 @@ type NumericFieldLayoutTests() =
       fontSize = "" || fontSize = "0px",
       $"NumericField input font-size ('{fontSize}') should be set via the weave-typography--body2 class"
     )
-  }
-
-  [<Fact>]
-  member this.``standard numeric input uses symmetric vertical padding for spin-button alignment``() = task {
-    do! this.LoadFixture()
-
-    let! paddingTop =
-      this.ComputedStyle("#numeric-standard .weave-field__input", "paddingTop")
-
-    and! paddingBottom =
-      this.ComputedStyle("#numeric-standard .weave-field__input", "paddingBottom")
-
-    NumericFieldLayoutTests.assertSymmetricPadding paddingTop paddingBottom
   }

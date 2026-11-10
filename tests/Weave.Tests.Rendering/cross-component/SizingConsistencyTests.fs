@@ -186,11 +186,10 @@ type SizingConsistencyTests() =
   }
 
   [<Theory>]
+  [<InlineData("standard")>]
   [<InlineData("filled")>]
   [<InlineData("outlined")>]
-  member this.``field controls - numeric control height matches field control height for filled and outlined``
-    (variant: string)
-    = task {
+  member this.``field controls - numeric control height matches field control height``(variant: string) = task {
     do! this.LoadFixture()
 
     let! fieldControl =
@@ -204,23 +203,6 @@ type SizingConsistencyTests() =
       ("numeric", numericControl)
     ]
   }
-
-  [<Fact>]
-  member this.``field controls - standard numeric control is intentionally taller than standard field``() =
-    task {
-      do! this.LoadFixture()
-
-      let! fieldControl =
-        this.Page.Locator("#f5-standard-field .weave-field__control").BoundingBoxAsync()
-
-      and! numericControl =
-        this.Page.Locator("#f5-standard-numeric .weave-field__control").BoundingBoxAsync()
-
-      Assert.True(
-        numericControl.Height > fieldControl.Height,
-        $"Standard numeric field control ({numericControl.Height}px) should be taller than standard field control ({fieldControl.Height}px) — symmetric padding override (0.625rem/0.625rem) for spin-button vertical centering"
-      )
-    }
 
   [<Fact>]
   member this.``field inputs - all field-family inputs share the same font size``() = task {

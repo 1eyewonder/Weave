@@ -419,10 +419,6 @@ textarea.weave-field__input {
   &.weave-field--has-spin {
     min-width: 4em;
   }
-
-  &.weave-field--has-spin:not(.weave-field--filled):not(.weave-field--outlined) {
-    --field-input-padding: 0.625rem 0.75em 0.625rem;
-  }
 }
 
 .weave-field__spin-buttons {

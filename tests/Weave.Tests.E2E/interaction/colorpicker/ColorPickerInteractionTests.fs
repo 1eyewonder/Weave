@@ -82,17 +82,6 @@ type ColorPickerInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``Given a captured spectrum pointer when dragged outside then selection is clamped``() = task {
-    do! this.NavigateTo("color-picker")
-    let! bounds = this.Spectrum.BoundingBoxAsync()
-    do! this.Page.Mouse.MoveAsync(bounds.X + bounds.Width / 2.f, bounds.Y + bounds.Height / 2.f)
-    do! this.Page.Mouse.DownAsync()
-    do! this.Page.Mouse.MoveAsync(bounds.X + bounds.Width + 30.f, bounds.Y - 20.f)
-    do! this.Page.Mouse.UpAsync()
-    do! this.Expect(this.Value).ToHaveTextAsync("#FF0000")
-  }
-
-  [<Fact>]
   member this.``Given an external color change then hex reflects it``() = task {
     do! this.NavigateTo("color-picker")
     do! this.Page.GetByTestId("external").ClickAsync()
@@ -315,4 +304,44 @@ type ColorPickerInteractionTests(fixture: TestFixture) =
 
     do! tab.TapAsync()
     do! Assertions.Expect(tab).ToHaveAttributeAsync("aria-selected", "true")
+  }
+
+// Pointer capture can route input from sibling Firefox pages to this spectrum.
+// Keep the held-button sequence exclusive while other ColorPicker tests stay parallel.
+[<Collection("Browser input")>]
+type ColorPickerPointerInteractionTests(fixture: TestFixture) =
+  inherit ColorPickerTestBase(fixture)
+
+  [<Fact>]
+  member this.``Given a captured spectrum pointer when dragged outside then selection is clamped``() = task {
+    do! this.NavigateTo("color-picker")
+
+    let! _ =
+      this.Spectrum.EvaluateAsync(
+        """el => el.addEventListener('pointerdown', event => {
+          el.dataset.testPointerId = String(event.pointerId);
+        }, { once: true })"""
+      )
+
+    let! bounds = this.Spectrum.BoundingBoxAsync()
+    do! this.Page.Mouse.MoveAsync(bounds.X + bounds.Width / 2.f, bounds.Y + bounds.Height / 2.f)
+    do! this.Page.Mouse.DownAsync()
+
+    try
+      do! this.Expect(this.Value).ToHaveTextAsync("#804040")
+      let! pointerId = this.Spectrum.GetAttributeAsync("data-test-pointer-id")
+      Assert.False(System.String.IsNullOrEmpty pointerId, "The spectrum must receive pointerdown")
+
+      let! captured =
+        this.Spectrum.EvaluateAsync<bool>("el => el.hasPointerCapture(Number(el.dataset.testPointerId))")
+
+      Assert.True(captured, "The spectrum must capture the active pointer")
+      do! this.Page.Mouse.MoveAsync(bounds.X + bounds.Width + 30.f, bounds.Y - 20.f)
+      do! this.Expect(this.Value).ToHaveTextAsync("#FF0000")
+    with ex ->
+      do! this.Page.Mouse.UpAsync()
+      return raise ex
+
+    do! this.Page.Mouse.UpAsync()
+    do! this.Expect(this.Value).ToHaveTextAsync("#FF0000")
   }

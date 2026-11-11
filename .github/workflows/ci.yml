@@ -8,13 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  pages: write
-  id-token: write
   contents: read
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 env:
   BUILD_CONFIGURATION: Release
@@ -24,6 +18,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Compile release scripts
+        env:
+          PACKAGE_SPECS: Check.Package@1.0.0
+          WAIT_MINUTES: '1'
+          POLL_SECONDS: '1'
+        run: |
+          dotnet fsi --exec build/DocsPackageVersions.fsx
+          dotnet fsi --exec .github/actions/wait-for-nuget-packages/WaitForNuGet.fsx --check
 
       - name: Build Test Image
         run: docker compose build
@@ -51,6 +58,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, browser-tests]
     if: github.ref == 'refs/heads/main'
+    concurrency:
+      group: pages
+      queue: max
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -69,13 +84,39 @@ jobs:
       - name: Restore Tools
         run: dotnet tool restore
 
+      - name: Read documented package versions
+        id: documented-packages
+        run: dotnet fsi build/DocsPackageVersions.fsx
+
+      - name: Wait for documented packages on NuGet
+        uses: ./.github/actions/wait-for-nuget-packages
+        with:
+          packages: |
+            Weave.WebSharper@${{ steps.documented-packages.outputs.library }}
+            Weave.WebSharper.Templates@${{ steps.documented-packages.outputs.templates }}
+          timeout-minutes: '45'
+
       - name: Build Pipeline
         run: ./build.sh BuildDocs
 
+      - name: Check current main commit
+        id: current_main
+        run: |
+          current_sha=$(git ls-remote origin refs/heads/main | cut -f1)
+          test -n "$current_sha"
+          if [[ "$current_sha" == "$GITHUB_SHA" ]]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping stale Pages deployment: $GITHUB_SHA is no longer main ($current_sha)"
+            echo "current=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/upload-pages-artifact@v3
+        if: steps.current_main.outputs.current == 'true'
         with:
           path: src/Weave.Docs/wwwroot
 
       - name: Deploy to GitHub Pages
         id: deployment
+        if: steps.current_main.outputs.current == 'true'
         uses: actions/deploy-pages@v4

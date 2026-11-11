@@ -1,0 +1,27 @@
+name: Wait for NuGet packages
+description: Wait until every requested package version appears in the NuGet version index.
+
+inputs:
+  packages:
+    description: One Package.Id@version per line.
+    required: true
+  timeout-minutes:
+    description: Total elapsed time allowed for all packages.
+    required: false
+    default: '45'
+  poll-seconds:
+    description: Delay between checks.
+    required: false
+    default: '60'
+
+runs:
+  using: composite
+  steps:
+    - name: Check NuGet package versions
+      shell: bash
+      env:
+        PACKAGE_SPECS: ${{ inputs.packages }}
+        WAIT_MINUTES: ${{ inputs.timeout-minutes }}
+        POLL_SECONDS: ${{ inputs.poll-seconds }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: dotnet fsi --exec "$ACTION_PATH/WaitForNuGet.fsx"

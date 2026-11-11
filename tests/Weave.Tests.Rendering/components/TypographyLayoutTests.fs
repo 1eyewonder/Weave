@@ -12,9 +12,12 @@ type TypographyLayoutTests() =
       )
   }
 
-  [<Fact>]
-  member this.``heading sizes decrease from h1 to h6``() = task {
-    do! this.LoadFixture()
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(768)>]
+  [<InlineData(1440)>]
+  member this.``heading sizes decrease from h1 to h6``(viewportWidth: int) = task {
+    do! this.LoadFixture(viewportWidth)
     let! h1 = this.GetFontSizePx "#h1"
     and! h2 = this.GetFontSizePx "#h2"
     and! h3 = this.GetFontSizePx "#h3"
@@ -27,6 +30,24 @@ type TypographyLayoutTests() =
     Assert.True(h3 > h4, $"h3 ({h3}px) should be larger than h4 ({h4}px)")
     Assert.True(h4 > h5, $"h4 ({h4}px) should be larger than h5 ({h5}px)")
     Assert.True(h5 > h6, $"h5 ({h5}px) should be larger than h6 ({h6}px)")
+  }
+
+  [<Theory>]
+  [<InlineData(1440)>]
+  [<InlineData(1920)>]
+  member this.``desktop heading steps follow the Major Third ratio``(viewportWidth: int) = task {
+    do! this.LoadFixture(viewportWidth)
+
+    let! sizes =
+      this.Page
+        .Locator("#h1, #h2, #h3, #h4, #h5, #h6")
+        .EvaluateAllAsync<float array>(
+          "elements => elements.map(el => parseFloat(getComputedStyle(el).fontSize))"
+        )
+
+    for pair in sizes |> Array.pairwise do
+      let larger, smaller = pair
+      Assert.InRange(larger / smaller, 1.2499, 1.2501)
   }
 
   [<Fact>]

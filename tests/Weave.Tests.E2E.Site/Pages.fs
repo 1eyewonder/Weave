@@ -424,6 +424,21 @@ module Pages =
       )
       Checkbox.create (Var.Create false, View.Const "Small", attrs = [ Checkbox.Size.small ])
       Checkbox.create (Var.Create false, View.Const "Large", attrs = [ Checkbox.Size.large ])
+      for id, labelText, labelAttrs in
+        [
+          "long-label-checkbox", "Keep every word of this checkbox label available in a narrow form.", []
+          "unbroken-label-checkbox", "AnUnbrokenTaskIdentifierThatMustRemainFullyReadableInANarrowForm", []
+          "nowrap-label-checkbox",
+          "Keep this deliberately single-line label on one line.",
+          [ Typography.noWrap ]
+        ] do
+        div [ Attr.Style "width" "220px" ] [
+          Checkbox.create (
+            Var.Create false,
+            displayText = View.Const labelText,
+            attrs = [ Attr.Create "data-testid" id; yield! labelAttrs ]
+          )
+        ]
       for name, color in
         [
           "primary", Checkbox.Color.primary

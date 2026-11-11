@@ -71,7 +71,6 @@ type Checkbox =
       | Some v ->
         div [
           Typography.body1
-          Typography.noWrap
           cls [ Css.``weave-checkbox__label`` ]
           View.not enabled |> Attr.toggleColor Palette.textDisabled
         ] [ textView v ]

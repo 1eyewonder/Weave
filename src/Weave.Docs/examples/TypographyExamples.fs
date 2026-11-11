@@ -13,7 +13,8 @@ module TypographyExamples =
 
   let private variantExamples () =
     let description =
-      Helpers.bodyText "All available typography styles with their respective sizing and weights"
+      Helpers.bodyText
+        "Desktop headings follow a Major Third scale: each level is 1.25 times the next smaller level. Sizes compress fluidly on smaller screens; all headings use the bold weight role."
 
     let content =
       div [] [
@@ -69,11 +70,11 @@ div [ Typography.overline ] [ text "OVERLINE TEXT" ]
   let private weightExamples () =
     let description =
       Helpers.bodyText
-        "Override the default font weight of any typography variant using the Weight module. Each variant has a default weight (e.g., H1 defaults to light/300), but you can change it via attrs."
+        "Override the default font weight of any typography variant using the Weight module. Each variant has a default weight (e.g., headings default to bold/700), but you can change it via attrs."
 
     let content =
       div [] [
-        div [ Typography.h4; Margin.Bottom.extraSmall ] [ text "Default H4 (weight 400)" ]
+        div [ Typography.h4; Margin.Bottom.extraSmall ] [ text "Default H4 (weight 700)" ]
         div [ Typography.h4; Typography.Weight.light; Margin.Bottom.extraSmall ] [
           text "Light H4 (weight 300)"
         ]
@@ -103,7 +104,7 @@ div [ Typography.overline ] [ text "OVERLINE TEXT" ]
 
 
 // Override any variant's default weight via attrs
-div [ Typography.h4 ] [ text "Default H4 (weight 400)" ]
+div [ Typography.h4 ] [ text "Default H4 (weight 700)" ]
 div [ Typography.h4; Typography.Weight.light ] [ text "Light H4 (weight 300)" ]
 div [ Typography.h4; Typography.Weight.medium ] [ text "Medium H4 (weight 500)" ]
 div [ Typography.h4; Typography.Weight.bold ] [ text "Bold H4 (weight 700)" ]
@@ -172,10 +173,10 @@ div [ Typography.body1 ] [
 
     let content =
       div [] [
-        div [ Typography.h3; Margin.Bottom.extraSmall ] [ text "Default H3 (weight 400)" ]
+        div [ Typography.h3; Margin.Bottom.extraSmall ] [ text "Default H3 (weight 700)" ]
 
-        div [ Attr.Style "--typography-h3-weight" "700" ] [
-          div [ Typography.h3; Margin.Bottom.extraSmall ] [ text "H3 with --typography-h3-weight: 700" ]
+        div [ Attr.Style "--typography-h3-weight" "400" ] [
+          div [ Typography.h3; Margin.Bottom.extraSmall ] [ text "H3 with --typography-h3-weight: 400" ]
         ]
 
         Divider.create (attrs = [ Margin.Bottom.small; Margin.Top.small ])
@@ -190,13 +191,13 @@ div [ Typography.body1 ] [
     let code =
       """/* In your app's CSS, override the custom property: */
 :root {
-    --typography-h1-weight: 400;   /* make H1 regular instead of light */
-    --typography-h3-weight: 700;   /* make H3 bold instead of regular */
+    --typography-h1-weight: 400;   /* make H1 regular instead of bold */
+    --typography-h3-weight: 400;   /* make H3 regular instead of bold */
 }
 
 /* Or scope it to a container: */
 .my-hero-section {
-    --typography-h1-weight: 700;   /* bold H1 only in hero */
+    --typography-h1-weight: 700;   /* restore bold H1 inside this hero */
 }
 
 /* Available custom properties per variant:
@@ -410,13 +411,13 @@ div [ Typography.caption ] [ text "Last updated: December 20, 2025" ]
         div [ Margin.Bottom.small ] [
           div [ Typography.body2; Typography.Weight.bold; Margin.Bottom.extraSmall ] [ text "Font weights:" ]
           div [ Typography.body2; Margin.Bottom.extraSmall ] [
-            text "--weave-weight-light — display headings (h1, h2)"
+            text "--weave-weight-light — optional light text"
           ]
           div [ Typography.body2; Margin.Bottom.extraSmall ] [
             text "--weave-weight-regular — body text, subtitles, captions"
           ]
           div [ Typography.body2; Margin.Bottom.extraSmall ] [
-            text "--weave-weight-bold — emphasized UI text (h6, button, overline)"
+            text "--weave-weight-bold — headings and emphasized UI text"
           ]
         ]
 

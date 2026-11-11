@@ -43,7 +43,18 @@ jobs:
           dotnet run --project build/Weave.Build.fsproj -c Release -- -t ReleaseNotes
           test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
           git merge-base --is-ancestor HEAD origin/main
+          if [[ -f build/DocsPackageVersions.fsx ]]; then
+            dotnet fsi --exec build/DocsPackageVersions.fsx --verify-library "$RELEASE_TAG"
+          fi
           echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
+  non-browser-tests:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
       - name: Build test image
         run: docker compose build
       - name: Check format and run unit and rendering tests
@@ -67,7 +78,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [validate, browser-tests]
+    needs: [validate, non-browser-tests, browser-tests]
     environment: nuget
     permissions:
       contents: write

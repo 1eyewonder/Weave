@@ -35,6 +35,13 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
+      - name: Verify documented template version
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if [[ -f build/DocsPackageVersions.fsx ]]; then
+            dotnet fsi --exec build/DocsPackageVersions.fsx --verify-templates "$RELEASE_TAG"
+          fi
       - name: Pack templates
         env:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
@@ -43,6 +50,21 @@ jobs:
           project_version=$(dotnet msbuild templates/Weave.Templates/Weave.Templates.fsproj -getProperty:Version)
           test "$project_version" = "$version"
           dotnet pack templates/Weave.Templates/Weave.Templates.fsproj -c Release -o artifacts/templates
+      - name: Read referenced Weave version
+        id: weave-version
+        run: |
+          weave_version=$(dotnet msbuild templates/WeaveVersion.props -getProperty:WeaveLibraryVersion)
+          echo "version=$weave_version" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'main' || github.ref }}
+          path: .release-actions
+          persist-credentials: false
+      - name: Wait for referenced Weave package on NuGet
+        uses: ./.release-actions/.github/actions/wait-for-nuget-packages
+        with:
+          packages: Weave.WebSharper@${{ steps.weave-version.outputs.version }}
+          timeout-minutes: '45'
       - name: Build generated projects
         env:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}

@@ -2,6 +2,7 @@ namespace Weave.Tests.E2E
 
 open Xunit
 
+[<Collection("Browser input")>]
 type LinkInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
@@ -52,4 +53,30 @@ type LinkInteractionTests(fixture: TestFixture) =
     let link = this.Page.Locator(".weave-link").First
     do! link.FocusAsync()
     do! this.Expect(link).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``no underline link keeps its dimensions through hover and focus``() = task {
+    do! this.NavigateTo("link")
+
+    let link =
+      this.Page.GetByRole(
+        Microsoft.Playwright.AriaRole.Link,
+        Microsoft.Playwright.PageGetByRoleOptions(Name = "No Underline", Exact = true)
+      )
+
+    let label = link.Locator(".weave-link__text")
+    do! this.Page.Mouse.MoveAsync(1.0f, 1.0f)
+    let! normal = link.BoundingBoxAsync()
+    do! link.HoverAsync()
+    let! hovered = link.BoundingBoxAsync()
+
+    let! border =
+      label.EvaluateAsync<string>("el => getComputedStyle(el).borderBottomWidth")
+
+    Assert.Equal("0px", border)
+    Assert.InRange(abs (hovered.Height - normal.Height), 0.0f, 0.1f)
+    do! link.FocusAsync()
+    let! focused = link.BoundingBoxAsync()
+    Assert.InRange(abs (focused.Height - normal.Height), 0.0f, 0.1f)
   }

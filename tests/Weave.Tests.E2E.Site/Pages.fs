@@ -1533,6 +1533,7 @@ module Pages =
       Link.create (text "Default Link", href = "#")
       Link.create (text "Disabled Link", href = "#", enabled = View.Const false)
       Link.create (text "Always Underline", href = "#", attrs = [ Link.Underline.always ])
+      Link.create (text "No Underline", href = "#", attrs = [ Link.Underline.none ])
       div [ SurfaceColor.BackgroundColor.paper; Padding.All.small ] [
         for name, colorAttrs in
           [

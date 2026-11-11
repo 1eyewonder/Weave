@@ -35,7 +35,7 @@
 
   // Hover — gate behind media query to avoid sticky hover on touch devices
   @media (hover: hover) and (pointer: fine) {
-    &:hover .weave-link__text {
+    &:not(.weave-link--underline-none):hover .weave-link__text {
       border-bottom: 1px solid currentColor;
       padding-bottom: 1px;
     }

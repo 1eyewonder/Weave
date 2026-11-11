@@ -1533,6 +1533,24 @@ module Pages =
       Link.create (text "Default Link", href = "#")
       Link.create (text "Disabled Link", href = "#", enabled = View.Const false)
       Link.create (text "Always Underline", href = "#", attrs = [ Link.Underline.always ])
+      div [ SurfaceColor.BackgroundColor.paper; Padding.All.small ] [
+        for name, colorAttrs in
+          [
+            "default", []
+            "primary", [ Link.Color.primary ]
+            "secondary", [ Link.Color.secondary ]
+            "tertiary", [ Link.Color.tertiary ]
+            "success", [ Link.Color.success ]
+            "error", [ Link.Color.error ]
+            "warning", [ Link.Color.warning ]
+            "info", [ Link.Color.info ]
+          ] do
+          Link.create (
+            text ("Readable " + name + " link"),
+            href = "#button",
+            attrs = [ Attr.Create "data-testid" ("paper-link-" + name); yield! colorAttrs ]
+          )
+      ]
     ]
 
   let private listPage () =

@@ -22,9 +22,10 @@
     text-decoration: none;
   }
 
-  color: var(--palette-primary);
+  // Foreground companions stay readable on both surface and paper backgrounds.
+  color: var(--palette-primary-darken);
 
-  @include transition((color, opacity), medium);
+  @include transition(color, medium);
 
   &.weave-link--disabled {
     color: var(--palette-text-disabled);
@@ -34,8 +35,9 @@
 
   // Hover — gate behind media query to avoid sticky hover on touch devices
   @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      opacity: var(--weave-opacity-muted);
+    &:hover .weave-link__text {
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
     }
   }
 
@@ -103,6 +105,6 @@
 // Override the default primary color via BrandColor.toClass.
 @each $color in $palette-colors {
   .weave-link--#{$color} {
-    color: var(--palette-#{$color});
+    color: var(--palette-#{$color}-darken);
   }
 }

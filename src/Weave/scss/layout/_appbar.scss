@@ -45,11 +45,27 @@
     left: 0;
     z-index: var(--weave-zindex-appbar);
   }
+}
 
-  // Buttons inside the AppBar should use the AppBar's text color (--palette-appbar-text),
-  // not --palette-text-primary, so they remain legible on any AppBar background.
-  .weave-button {
-    color: inherit;
-    --ripple-color: currentColor;
+// Uncolored navigation controls inherit the bar's foreground. Keep specificity
+// below explicit button variants so filled actions retain their paired text color.
+:where(.weave-appbar) .weave-button {
+  color: inherit;
+  --ripple-color: currentColor;
+}
+
+// Text and outlined palettes that work on paper can fail against the bar's
+// branded surface. Keep their distinct fill/border treatments while using
+// the AppBar's contrast-paired foreground for labels and icons.
+.weave-appbar .weave-button:is(.weave-button--text, .weave-button--outlined) {
+  color: var(--palette-appbar-text);
+  --ripple-color: currentColor;
+
+  &.weave-button--outlined {
+    border-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline-color: currentColor;
   }
 }

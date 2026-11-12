@@ -358,7 +358,8 @@
       // Active tab text contrasts against the colored pill; inactive tabs keep default text color
       .weave-tabs__indicator {
         background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
-        box-shadow: inset 0 0 0 1px var(--tabs-header-foreground, var(--palette-#{$color}-fill-border, transparent));
+        box-shadow: inset 0 0 0 1px var(--tabs-header-foreground, var(--palette-#{$color}-fill-border, transparent)),
+          inset 0 0 0 2px var(--palette-#{$color}-fill-border, transparent);
       }
       .weave-tabs__tab--active {
         color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));

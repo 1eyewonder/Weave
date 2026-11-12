@@ -131,3 +131,86 @@ type DialogInteractionTests(fixture: TestFixture) =
 
     Assert.True(blocked, "The dialog backdrop should cover the open drawer")
   }
+
+  [<Fact>]
+  member this.``dialog includes native disclosures and the selected radio in its focus loop``() = task {
+    do!
+      this.Page.EmulateMediaAsync(
+        Microsoft.Playwright.PageEmulateMediaOptions(
+          ReducedMotion = Microsoft.Playwright.ReducedMotion.Reduce
+        )
+      )
+
+    do! this.NavigateTo("dialog-native")
+    let trigger = this.Page.GetByTestId("native-dialog-toggle")
+    let dialog = this.Page.Locator(".weave-dialog__window")
+    let first = this.Page.GetByTestId("drawer-first")
+    let summary = this.Page.GetByTestId("drawer-summary")
+    let nested = this.Page.GetByTestId("drawer-nested")
+    let radio = this.Page.GetByTestId("drawer-radio-one")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(first).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! Microsoft.Playwright.Assertions.Expect(summary, "Forward Tab from first control").ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(radio).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(first).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Shift+Tab")
+    do! this.Expect(radio).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Shift+Tab")
+    do! Microsoft.Playwright.Assertions.Expect(summary, "Reverse Tab from selected radio").ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(nested).ToBeVisibleAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(nested).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(radio).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(trigger).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``Escape closes only the optional dialog nested inside a drawer``() = task {
+    do! this.NavigateTo("dialog-in-drawer-optional")
+    let drawerTrigger = this.Page.GetByTestId("nested-drawer-trigger")
+    let dialogTrigger = this.Page.GetByTestId("nested-dialog-trigger")
+    let drawer = this.Page.GetByTestId("nested-dialog-drawer")
+    let dialog = this.Page.GetByRole(Microsoft.Playwright.AriaRole.Dialog)
+    do! drawerTrigger.PressAsync("Enter")
+    do! this.Expect(dialogTrigger).ToBeFocusedAsync()
+    do! dialogTrigger.PressAsync("Enter")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(dialog).ToHaveCountAsync(0)
+    do! this.Expect(drawer).ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-drawer--open"))
+    do! this.Expect(dialogTrigger).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(drawer).ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-drawer--closed"))
+    do! this.Expect(drawerTrigger).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``Escape keeps a Force dialog and its enclosing drawer open``() = task {
+    do! this.NavigateTo("dialog-in-drawer-force")
+    let dialogTrigger = this.Page.GetByTestId("nested-dialog-trigger")
+    let drawer = this.Page.GetByTestId("nested-dialog-drawer")
+    let dialog = this.Page.GetByRole(Microsoft.Playwright.AriaRole.Dialog)
+    do! this.Page.GetByTestId("nested-drawer-trigger").PressAsync("Enter")
+    do! this.Expect(dialogTrigger).ToBeFocusedAsync()
+    do! dialogTrigger.PressAsync("Enter")
+    do! this.Expect(dialog).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        "() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))"
+      )
+
+    do! this.Expect(dialog).ToHaveCountAsync(1)
+    do! this.Expect(drawer).ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-drawer--open"))
+    do! this.Expect(dialog).ToBeFocusedAsync()
+  }

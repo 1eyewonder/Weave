@@ -40,14 +40,8 @@ module private DialogInternal =
     idCounter <- idCounter + 1
     sprintf "weave-dialog-title-%d" idCounter
 
-  let focusableSelector =
-    "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex=\"-1\"])"
-
-  [<Inline "Array.from($container.querySelectorAll($selector)).filter(e => e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden' && !e.closest('[inert]'))">]
-  let visibleFocusable (container: Dom.Element) (selector: string) : Dom.Element[] = X<_>
-
   let trapFocus (container: Dom.Element) (ev: Dom.KeyboardEvent) =
-    let focusable = visibleFocusable container focusableSelector
+    let focusable = FocusNavigation.visibleElements container
 
     if focusable.Length = 0 then
       ev.PreventDefault()
@@ -57,10 +51,10 @@ module private DialogInternal =
       let active = As<Dom.Element>(JS.Document?activeElement)
 
       if ev.ShiftKey then
-        if active = first || active = container then
+        if obj.ReferenceEquals(active, first) || obj.ReferenceEquals(active, container) then
           ev.PreventDefault()
           last?focus ()
-      else if active = last then
+      else if obj.ReferenceEquals(active, last) then
         ev.PreventDefault()
         first?focus ()
 
@@ -167,13 +161,16 @@ type Dialog =
         on.keyDownView forceInteraction
         <| fun el ev interaction ->
           match ev with
-          | Key.Escape ->
+          | Key.Escape when not (As<bool>(ev?defaultPrevented)) ->
+            ev.PreventDefault()
+            ev.StopPropagation()
+
             match interaction with
             | Interaction.Optional closeDialog ->
               restoreFocus ()
               closeDialog ()
             | Interaction.Force -> ()
-          | Key.Tab -> trapFocus el ev
+          | Key.Tab when not (As<bool>(ev?defaultPrevented)) -> trapFocus el ev
           | _ -> ()
       ] [
         div [ Attr.Create "id" titleId; Attr.Style "display" "contents" ] [ title ]

@@ -220,3 +220,22 @@ type DrawerInteractionTests(fixture: TestFixture) =
     do! this.Page.Keyboard.PressAsync("Escape")
     do! this.Expect(trigger).ToBeFocusedAsync()
   }
+
+  [<Fact>]
+  member this.``backdrop dismissal returns focus to the drawer trigger``() = task {
+    do! this.Page.SetViewportSizeAsync(390, 844)
+    do! this.NavigatePage(this.Page, "drawer-closed")
+    let trigger = this.Page.GetByTestId("drawer-toggle")
+    let item = this.Page.GetByTestId("drawer-button")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.Mouse.ClickAsync(350.0f, 400.0f)
+
+    do!
+      this
+        .Expect(this.Page.Locator(".weave-drawer"))
+        .ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-drawer--closed"))
+
+    do! this.Expect(trigger).ToBeFocusedAsync()
+  }

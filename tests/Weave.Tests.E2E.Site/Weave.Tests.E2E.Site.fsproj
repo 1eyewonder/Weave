@@ -4,20 +4,115 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../src/Weave.Docs/examples/shared/ApiReference.fs" Link="docs/shared/ApiReference.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/ExampleHelpers.fs" Link="docs/shared/ExampleHelpers.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/SourceString.fs" Link="docs/shared/SourceString.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/text-field/TextFieldAppearance.fs" Link="docs/text-field/TextFieldAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/text-field/TextFieldExamples.fs" Link="docs/text-field/TextFieldExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/tabs/TabsAppearanceSource.fs" Link="docs/tabs/TabsAppearanceSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/tabs/TabsAppearance.fs" Link="docs/tabs/TabsAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/button/ButtonSource.fs" Link="docs/button/ButtonSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/button/ButtonExamples.fs" Link="docs/button/ButtonExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/snackbar/SnackbarAppearance.fs" Link="docs/snackbar/SnackbarAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/snackbar/SnackbarConfigurator.fs" Link="docs/snackbar/SnackbarConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/snackbar/SnackbarExamples.fs" Link="docs/snackbar/SnackbarExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/progress/ProgressAppearance.fs" Link="docs/progress/ProgressAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/slider/SliderAppearance.fs" Link="docs/slider/SliderAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/progress/ProgressExamples.fs" Link="docs/progress/ProgressExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/pagination/PaginationAppearance.fs" Link="docs/pagination/PaginationAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/pagination/PaginationExamples.fs" Link="docs/pagination/PaginationExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/slider/SliderExamples.fs" Link="docs/slider/SliderExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/ReferenceAppearanceSource.fs" Link="docs/shared/ReferenceAppearanceSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/ReferenceAppearance.fs" Link="docs/shared/ReferenceAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/typography/TypographyAppearanceSource.fs" Link="docs/typography/TypographyAppearanceSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/typography/TypographyAppearance.fs" Link="docs/typography/TypographyAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/GroupBAppearance.fs" Link="docs/shared/GroupBAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/expansion-panel/ExpansionAppearance.fs" Link="docs/expansion-panel/ExpansionAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/button-menu/ButtonMenuAppearance.fs" Link="docs/button-menu/ButtonMenuAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/CardExamples.fs" Link="docs/CardExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/ButtonGroupExamples.fs" Link="docs/ButtonGroupExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/expansion-panel/ExpansionPanelExamples.fs" Link="docs/expansion-panel/ExpansionPanelExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/button-menu/ButtonMenuExamples.fs" Link="docs/button-menu/ButtonMenuExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/alert/AlertAppearance.fs" Link="docs/alert/AlertAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/alert/AlertExamples.fs" Link="docs/alert/AlertExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/ToggleAppearance.fs" Link="docs/shared/ToggleAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/ToggleConfigurator.fs" Link="docs/shared/ToggleConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/CheckboxExamples.fs" Link="docs/CheckboxExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/SwitchExamples.fs" Link="docs/SwitchExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/radio-button/RadioAppearance.fs" Link="docs/radio-button/RadioAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/radio-button/RadioConfigurator.fs" Link="docs/radio-button/RadioConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/radio-button/RadioButtonExamples.fs" Link="docs/radio-button/RadioButtonExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/chip/ChipAppearance.fs" Link="docs/chip/ChipAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/chip/ChipExamples.fs" Link="docs/chip/ChipExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/chip-set/ChipSetAppearance.fs" Link="docs/chip-set/ChipSetAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/chip-set/ChipSetConfigurator.fs" Link="docs/chip-set/ChipSetConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/chip-set/ChipSetExamples.fs" Link="docs/chip-set/ChipSetExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/numeric-field/NumericFieldAppearance.fs" Link="docs/numeric-field/NumericFieldAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/numeric-field/NumericFieldConfigurator.fs" Link="docs/numeric-field/NumericFieldConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/numeric-field/NumericFieldExamples.fs" Link="docs/numeric-field/NumericFieldExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/select/SelectAppearance.fs" Link="docs/select/SelectAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/select/SelectConfigurator.fs" Link="docs/select/SelectConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/select/SelectExamples.fs" Link="docs/select/SelectExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/color-picker/ColorPickerAppearance.fs" Link="docs/color-picker/ColorPickerAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/color-picker/ColorPickerConfigurator.fs" Link="docs/color-picker/ColorPickerConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/color-picker/ColorPickerExamples.fs" Link="docs/color-picker/ColorPickerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/app-bar/AppBarAppearance.fs" Link="docs/app-bar/AppBarAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/app-bar/AppBarExamples.fs" Link="docs/app-bar/AppBarExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/dialog/DialogAppearance.fs" Link="docs/dialog/DialogAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/dialog/DialogExamples.fs" Link="docs/dialog/DialogExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/drawer/DrawerAppearance.fs" Link="docs/drawer/DrawerAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/drawer/DrawerExamples.fs" Link="docs/drawer/DrawerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/carousel/CarouselAppearance.fs" Link="docs/carousel/CarouselAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/carousel/CarouselExamples.fs" Link="docs/carousel/CarouselExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/DataAppearanceSource.fs" Link="docs/shared/DataAppearanceSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/shared/DataAppearance.fs" Link="docs/shared/DataAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/list/ListAppearanceSource.fs" Link="docs/list/ListAppearanceSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/list/ListAppearance.fs" Link="docs/list/ListAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/list/ListExamples.fs" Link="docs/list/ListExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/icons/IconPlaygroundSource.fs" Link="docs/icons/IconPlaygroundSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/icons/IconsExamples.fs" Link="docs/icons/IconsExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/grid/GridSource.fs" Link="docs/grid/GridSource.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/grid/GridExamples.fs" Link="docs/grid/GridExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/container/ContainerAppearance.fs" Link="docs/container/ContainerAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/container/ContainerConfigurator.fs" Link="docs/container/ContainerConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/container/ContainerExamples.fs" Link="docs/container/ContainerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/field/FieldAppearance.fs" Link="docs/field/FieldAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/field/FieldConfigurator.fs" Link="docs/field/FieldConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/field/FieldExamples.fs" Link="docs/field/FieldExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/dropdown-menu/DropdownAppearance.fs" Link="docs/dropdown-menu/DropdownAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/dropdown-menu/DropdownConfigurator.fs" Link="docs/dropdown-menu/DropdownConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/dropdown-menu/DropdownMenuExamples.fs" Link="docs/dropdown-menu/DropdownMenuExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/scroll-to-top/ScrollTopAppearance.fs" Link="docs/scroll-to-top/ScrollTopAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/scroll-to-top/ScrollTopConfigurator.fs" Link="docs/scroll-to-top/ScrollTopConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/scroll-to-top/ScrollToTopExamples.fs" Link="docs/scroll-to-top/ScrollToTopExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/spacer/SpacerAppearance.fs" Link="docs/spacer/SpacerAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/spacer/SpacerConfigurator.fs" Link="docs/spacer/SpacerConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/spacer/SpacerExamples.fs" Link="docs/spacer/SpacerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/ReactiveHelpersExamples.fs" Link="docs/ReactiveHelpersExamples.fs" />
     <Compile Include="DrawerLayoutPage.fs" />
-    <Compile Include="../../src/Weave.Docs/examples/ExampleHelpers.fs" Link="docs/ExampleHelpers.fs" />
     <Compile Include="TabsRegressionPage.fs" />
-    <Compile Include="../../src/Weave.Docs/examples/SnackbarExamples.fs" Link="docs/SnackbarExamples.fs" />
-    <Compile Include="SelectSizingPage.fs" />
     <Compile Include="ColorPickerPage.fs" />
+    <Compile Include="SelectSizingPage.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Startup.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
+    <Content Remove="wwwroot/Scripts/docs.css" />
+    <Content Remove="wwwroot/Scripts/code-highlighting.css" />
+    <Content Remove="wwwroot/Scripts/weave-highlight.min.js" />
+    <Content Include="../../src/Weave.Docs/wwwroot/code-highlighting.css" Link="wwwroot/Scripts/code-highlighting.css" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../src/Weave.Docs/wwwroot/vendor/highlightjs/weave-highlight.min.js" Link="wwwroot/Scripts/weave-highlight.min.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../src/Weave.Docs/wwwroot/docs.css" Link="wwwroot/Scripts/docs.css" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <Target Name="BuildCodeHighlighting" BeforeTargets="BeforeBuild">
+    <Exec Command="node build-highlighting.mjs" WorkingDirectory="$(ProjectDir)../../src/Weave.Docs" />
+  </Target>
   <Target Name="CopyWeaveStyles" BeforeTargets="Build">
     <Copy SourceFiles="../../src/Weave/styles.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="../../src/Weave.Docs/wwwroot/docs.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="../../src/Weave.Docs/wwwroot/code-highlighting.css" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="../../src/Weave.Docs/wwwroot/vendor/highlightjs/weave-highlight.min.js" DestinationFolder="$(ProjectDir)wwwroot/Scripts" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

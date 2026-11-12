@@ -6,6 +6,7 @@ import fsharp from './fsharp.js';
 
 // Only languages used by the docs are included in the browser bundle.
 hljs.registerLanguage('fsharp', fsharp);
+hljs.registerLanguage('fsharp-type', core => fsharp(core, { typeSignature: true }));
 hljs.registerLanguage('bash', bash);
 hljs.registerLanguage('xml', xml);
 hljs.registerLanguage('plaintext', plaintext);

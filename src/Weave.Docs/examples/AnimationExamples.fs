@@ -14,13 +14,14 @@ module AnimationExamples =
     span [ Typography.caption; Typography.Color.primary ] [ text value ]
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
@@ -30,7 +31,12 @@ module AnimationExamples =
         "Animations are built from four composable axes: what plays (kind), how long (duration), what curve (easing), and when it triggers (AnimationOn). Each axis is a module of Attr let-bindings — compose them directly in attrs. AnimationOn is CSS-only (hover/focus); for JS-driven triggers like click or timer, see the Animate module below."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [ tableHeaderCell "Axis"; tableHeaderCell "Purpose"; tableHeaderCell "Example" ]
@@ -90,44 +96,7 @@ module AnimationExamples =
         ]
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-
-// Apply an entrance animation — plays once on mount by default
-div [ AnimationEntrance.fadeIn ] [
-    text "I fade in when rendered"
-]
-
-// Compose all axes: kind + duration + easing + distance + trigger
-div [
-    AnimationEmphasis.bounce
-    AnimationDuration.short
-    AnimationEasing.bounce
-    AnimationDistance.large
-    AnimationOn.hover
-] [
-    text "Bounces further on hover"
-]
-
-// Override distance and scale for dramatic entrances
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDuration.long
-    AnimationDistance.extraLarge
-] [
-    text "Slides up extra far"
-]
-
-div [
-    AnimationEntrance.scaleIn
-    AnimationScale.extraSmall
-] [
-    text "Barely perceptible scale"
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   let private playgroundSection () =
     let description =
@@ -331,7 +300,7 @@ div [
           match animAttr with
           | Some kindAttr ->
             div [
-              BrandColor.BackgroundColor.primary
+              BrandColor.Fill.primary
               BorderRadius.All.medium
               kindAttr
               durAttr
@@ -342,7 +311,6 @@ div [
               AlignItems.center
               JustifyContent.center
               Attr.Style "min-height" "120px"
-              Attr.Style "color" "white"
             ] [ div [ Typography.h5 ] [ text animLabel ] ]
           | None ->
             div [
@@ -354,35 +322,7 @@ div [
             ] [ div [ Typography.body1 ] [ text "Select an animation to preview" ] ])
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-
-// Compose any entrance with optional duration, easing, distance, and scale
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDuration.long
-    AnimationEasing.bounce
-    AnimationDistance.extraLarge
-] [
-    text "Slow bouncy slide — extra far"
-]
-
-// Override scale for a subtle entrance
-div [
-    AnimationEntrance.scaleIn
-    AnimationScale.extraSmall
-] [
-    text "Barely perceptible scale"
-]
-
-// Each axis is independent — use just the kind for defaults
-div [ AnimationEntrance.fadeIn ] [
-    text "Uses default duration, easing, distance, and scale"
-]"""
-
-    Helpers.codeSampleSection "Playground" description content code
+    Helpers.section "Playground" description content
 
   // 2b. Distance & Scale — side-by-side comparison of all 5 levels
   let private distanceAndScaleSection () =
@@ -413,7 +353,7 @@ div [ AnimationEntrance.fadeIn ] [
       div [] [
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ textView (View.Const "Distance (slide up)") ]
 
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (
             text "Replay",
             onClick = (fun () -> replayDistance.Value <- replayDistance.Value + 1),
@@ -433,7 +373,7 @@ div [ AnimationEntrance.fadeIn ] [
               distanceLevels
               |> List.map (fun (label, distAttr) ->
                 div [
-                  BrandColor.BackgroundColor.primary
+                  BrandColor.Fill.primary
                   BorderRadius.All.medium
                   AnimationEntrance.slideUpIn
                   AnimationDuration.long
@@ -444,13 +384,12 @@ div [ AnimationEntrance.fadeIn ] [
                   Attr.Style "min-height" "80px"
                   Attr.Style "min-width" "80px"
                   Attr.Style "flex" "1"
-                  Attr.Style "color" "white"
                 ] [ div [ Typography.body1 ] [ text label ] ])
           ])
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ textView (View.Const "Scale (scale in)") ]
 
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (
             text "Replay",
             onClick = (fun () -> replayScale.Value <- replayScale.Value + 1),
@@ -460,12 +399,17 @@ div [ AnimationEntrance.fadeIn ] [
 
         replayScale.View
         |> Doc.BindView(fun _ ->
-          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Attr.Style "gap" "12px" ] [
+          div [
+            Flex.Flex.allSizes
+            FlexWrap.Wrap.allSizes
+            JustifyContent.spaceEvenly
+            Attr.Style "gap" "12px"
+          ] [
             yield!
               scaleLevels
               |> List.map (fun (label, scaleAttr) ->
                 div [
-                  BrandColor.BackgroundColor.secondary
+                  BrandColor.Fill.secondary
                   BorderRadius.All.medium
                   AnimationEntrance.scaleIn
                   AnimationDuration.long
@@ -476,47 +420,11 @@ div [ AnimationEntrance.fadeIn ] [
                   Attr.Style "min-height" "80px"
                   Attr.Style "min-width" "80px"
                   Attr.Style "flex" "1"
-                  Attr.Style "color" "white"
                 ] [ div [ Typography.body1 ] [ text label ] ])
           ])
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-
-// Override distance — controls how far slides, shakes, and bounces travel
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDistance.extraSmall   // barely moves (8px)
-] [ text "Subtle slide" ]
-
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDistance.extraLarge   // dramatic travel (64px)
-] [ text "Big slide" ]
-
-// Override scale — controls how much elements shrink/grow
-div [
-    AnimationEntrance.scaleIn
-    AnimationScale.extraSmall     // nearly invisible scale (0.95)
-] [ text "Gentle scale" ]
-
-div [
-    AnimationEntrance.scaleIn
-    AnimationScale.extraLarge     // dramatic scale from 0.6
-] [ text "Dramatic scale" ]
-
-// Compose distance and scale with other axes
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDuration.long
-    AnimationEasing.bounce
-    AnimationDistance.large
-] [ text "Long bouncy slide" ]"""
-
-    Helpers.codeSampleSection "Distance & scale" description content code
+    Helpers.section "Distance & scale" description content
 
   let private triggerOnMountSection () =
     let description =
@@ -525,24 +433,20 @@ div [
 
     let content =
       div [
-        BrandColor.BackgroundColor.primary
+        BrandColor.Fill.primary
         BorderRadius.All.medium
         AnimationEntrance.fadeIn
         Flex.Flex.allSizes
         AlignItems.center
         JustifyContent.center
         Attr.Style "min-height" "80px"
-        Attr.Style "color" "white"
       ] [ div [ Typography.body1 ] [ text "I faded in when this page loaded" ] ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
-
-// Animation plays once when the element mounts — no trigger needed
-div [ AnimationEntrance.fadeIn ] [
-    text "I fade in when rendered"
+div [ AnimationEntrance.fadeIn; BrandColor.Fill.primary ] [
+  text "I faded in when this page loaded"
 ]"""
 
     Helpers.codeSampleSection "On mount (default)" description content code
@@ -559,6 +463,7 @@ div [ AnimationEntrance.fadeIn ] [
         div [
           Flex.Flex.allSizes
           FlexWrap.Wrap.allSizes
+          JustifyContent.spaceEvenly
           Attr.Style "gap" "12px"
           Margin.Bottom.small
         ] [
@@ -587,7 +492,12 @@ div [ AnimationEntrance.fadeIn ] [
 
         div [ Typography.subtitle2 ] [ textView (View.Const "Focus triggers (use Tab to navigate)") ]
 
-        div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Attr.Style "gap" "12px" ] [
+        div [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          JustifyContent.spaceEvenly
+          Attr.Style "gap" "12px"
+        ] [
           Button.secondary (
             text "Bounce on focus",
             onClick = ignore,
@@ -608,31 +518,49 @@ div [ AnimationEntrance.fadeIn ] [
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
-
-// Bounce on hover — pure CSS, no JS needed
-Button.primary(
-    text "Bounce on hover",
-    onClick = ignore,
-    attrs = [
-        Button.Variant.filled
-        AnimationEmphasis.bounce
-        AnimationOn.hover
-        AnimationDuration.short
-    ]
+Button.primary (
+  text "Bounce on hover",
+  onClick = ignore,
+  attrs = [
+    Button.Variant.filled
+    AnimationEmphasis.bounce
+    AnimationOn.hover
+    AnimationDuration.short
+  ]
 )
 
-// Respond to both hover and focus
-Button.info(
-    text "Pulse on hover or focus",
-    onClick = ignore,
-    attrs = [
-        Button.Variant.filled
-        AnimationEmphasis.pulse
-        AnimationOn.hoverFocus
-    ]
+Button.error (
+  text "Shake on hover",
+  onClick = ignore,
+  attrs = [
+    Button.Variant.filled
+    AnimationEmphasis.shake
+    AnimationOn.hover
+    AnimationDuration.short
+  ]
+)
+
+Button.secondary (
+  text "Bounce on focus",
+  onClick = ignore,
+  attrs = [
+    Button.Variant.filled
+    AnimationEmphasis.bounce
+    AnimationOn.focus
+    AnimationDuration.short
+  ]
+)
+
+Button.info (
+  text "Pulse on hover or focus",
+  onClick = ignore,
+  attrs = [
+    Button.Variant.filled
+    AnimationEmphasis.pulse
+    AnimationOn.hoverFocus
+  ]
 )"""
 
     Helpers.codeSampleSection "On hover / focus" description content code
@@ -656,93 +584,93 @@ Button.info(
       )
 
     let content =
-      div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Attr.Style "gap" "12px" ] [
+      div [
+        Flex.Flex.allSizes
+        FlexWrap.Wrap.allSizes
+        JustifyContent.spaceEvenly
+        Attr.Style "gap" "12px"
+      ] [
         emphasisButton "Pulse" Button.Color.primary AnimationEmphasis.pulse
         emphasisButton "Shake" Button.Color.error AnimationEmphasis.shake
         emphasisButton "Bounce" Button.Color.success AnimationEmphasis.bounce
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
-
-// Pulse on click — initial mount animation is suppressed automatically
-Button.primary(
-    text "Pulse",
+let emphasisButton label colorAttr emphasisAttr =
+  Button.create (
+    text label,
     onClick = ignore,
     attrs = [
-        Button.Variant.filled
-        AnimationEmphasis.pulse
-        AnimationDuration.medium
-        Animate.replayOnClick
+      Button.Variant.filled
+      colorAttr
+      emphasisAttr
+      AnimationDuration.medium
+      Animate.replayOnClick
     ]
-)"""
+  )
+
+emphasisButton "Pulse" Button.Color.primary AnimationEmphasis.pulse
+emphasisButton "Shake" Button.Color.error AnimationEmphasis.shake
+emphasisButton "Bounce" Button.Color.success AnimationEmphasis.bounce"""
 
     Helpers.codeSampleSection "On click" description content code
 
   let private triggerOnTimerSection () =
     let description =
       Helpers.bodyText
-        "Animate.replayEvery replays an animation on a recurring JS interval. The first play is immediate on mount, then it replays every N milliseconds. The interval self-clears when the element is removed from the DOM. Useful for notification badges and ambient motion."
+        "Start the repeating animation to pulse a chip every three seconds. Stop it at any time. Removing the chip clears its timer; reduced-motion preferences suppress its movement."
+
+    let running = Var.Create false
 
     let content =
       div [
         Flex.Flex.allSizes
         FlexWrap.Wrap.allSizes
+        Gap.All.g4
         AlignItems.center
-        Attr.Style "gap" "16px"
+        JustifyContent.center
       ] [
-        Chip.create (
-          text "New messages",
-          attrs = [
-            Chip.Variant.filled
-            Chip.Color.primary
-            AnimationEmphasis.pulse
-            AnimationDuration.medium
-            Animate.replayEvery 3000
-          ]
-        )
+        Switch.create (running, content = text "Run repeating animation")
 
-        Chip.create (
-          text "Action required",
-          attrs = [
-            Chip.Variant.filled
-            Chip.Color.error
-            AnimationEmphasis.shake
-            AnimationDuration.short
-            Animate.replayEvery 4000
-          ]
-        )
-
-        Chip.create (
-          text "Update available",
-          attrs = [
-            Chip.Variant.filled
-            Chip.Color.success
-            AnimationEmphasis.bounce
-            AnimationDuration.short
-            Animate.replayEvery 5000
-          ]
-        )
+        running.View
+        |> Doc.BindView(fun enabled ->
+          Chip.create (
+            text "New messages",
+            attrs = [
+              Chip.Variant.filled
+              Chip.Color.primary
+              if enabled then
+                AnimationEmphasis.pulse
+                AnimationDuration.medium
+                Animate.replayEvery 3000
+            ]
+          ))
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
+let running = Var.Create false
 
-// Pulse every 3 seconds — no Var, no re-render
-Chip.create(
-    text "New messages",
-    attrs = [
+Doc.Concat [
+  Switch.create (running, content = text "Run repeating animation")
+
+  running.View
+  |> Doc.BindView(fun enabled ->
+    Chip.create (
+      text "New messages",
+      attrs = [
         Chip.Variant.filled
         Chip.Color.primary
-        AnimationEmphasis.pulse
-        AnimationDuration.medium
-        Animate.replayEvery 3000
-    ]
-)"""
+        if enabled then
+          AnimationEmphasis.pulse
+          AnimationDuration.medium
+          Animate.replayEvery 3000
+      ]
+    ))
+]"""
 
     Helpers.codeSampleSection "On a timer" description content code
 
@@ -755,7 +683,7 @@ Chip.create(
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (
             text "Toggle",
             onClick = (fun () -> isActive.Value <- not isActive.Value),
@@ -764,35 +692,33 @@ Chip.create(
         ]
 
         div [
-          BrandColor.BackgroundColor.secondary
+          BrandColor.Fill.secondary
           BorderRadius.All.medium
           Animate.toggleClass AnimationPair.fadeInOut isActive.View
           Flex.Flex.allSizes
           AlignItems.center
           JustifyContent.center
           Attr.Style "min-height" "80px"
-          Attr.Style "color" "white"
         ] [ div [ Typography.body1 ] [ text "I toggle between fade-in and fade-out" ] ]
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
+      """open Weave.CssHelpers.Animation
 
 let isActive = Var.Create false
 
-// Element stays in DOM — classes toggle reactively
-div [
-    Animate.toggleClass AnimationPair.fadeInOut isActive.View
-] [
-    text "I animate between enter/exit states"
-]
-
-Button.create(
+Doc.Concat [
+  Button.primary (
     text "Toggle",
-    onClick = (fun () -> isActive.Value <- not isActive.Value)
-)"""
+    onClick = (fun () -> isActive.Value <- not isActive.Value),
+    attrs = [ Button.Variant.filled ]
+  )
+
+  div [
+    BrandColor.Fill.secondary
+    Animate.toggleClass AnimationPair.fadeInOut isActive.View
+  ] [ text "I toggle between fade-in and fade-out" ]
+]"""
 
     Helpers.codeSampleSection "On reactive state change" description content code
 
@@ -805,7 +731,7 @@ Button.create(
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (
             text "Toggle visibility",
             onClick = (fun () -> isVisible.Value <- not isVisible.Value),
@@ -824,28 +750,24 @@ Button.create(
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
+      """open Weave.CssHelpers.Animation
 
 let isVisible = Var.Create true
 
-// Content is added to DOM on enter, removed after exit animation completes
-Animate.show
-    AnimationPair.slideUpInOut
-    isVisible.View
-    (fun () ->
-        Alert.create(
-            text "Animated mount/unmount!",
-            attrs = [
-                Alert.Variant.filled
-            ]
-        ))
+Doc.Concat [
+  Button.primary (
+    text "Toggle visibility",
+    onClick = (fun () -> isVisible.Value <- not isVisible.Value),
+    attrs = [ Button.Variant.filled ]
+  )
 
-Button.create(
-    text "Toggle",
-    onClick = (fun () -> isVisible.Value <- not isVisible.Value)
-)"""
+  Animate.show AnimationPair.slideUpInOut isVisible.View
+  <| fun () ->
+    Alert.create (
+      text "This alert mounts and unmounts with animation!",
+      attrs = [ Alert.Color.success; Alert.Variant.filled ]
+    )
+]"""
 
     Helpers.codeSampleSection "On mount / unmount" description content code
 
@@ -855,7 +777,12 @@ Button.create(
         "AnimationPair bundles a typed entrance and exit together for use with Animate helpers. Predefined pairs handle natural direction reversal (e.g., slide-up entrance pairs with slide-down exit)."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [ tableHeaderCell "Pair"; tableHeaderCell "Entrance"; tableHeaderCell "Exit" ]
@@ -900,34 +827,7 @@ Button.create(
         ]
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-let isExpanded = Var.Create true
-let isVisible = Var.Create true
-let content = text "Expandable content"
-
-// Use a predefined pair
-let pair = AnimationPair.fadeInOut
-// pair.Enter = AnimationEntrance.FadeIn
-// pair.Exit  = AnimationExit.FadeOut
-
-// Create a custom pair — mix and match any entrance with any exit
-let custom = AnimationPair.create AnimationEntrance.ScaleIn AnimationExit.SlideDownOut
-
-// Use with Animate.toggleClass for DOM-resident elements
-div [
-    Animate.toggleClass AnimationPair.scaleInOut isExpanded.View
-] [ content ]
-
-// Use with Animate.show for mount/unmount with exit animation
-Animate.show
-    AnimationPair.fadeInOut
-    isVisible.View
-    (fun () -> div [] [ text "Animated content" ])"""
-
-    Helpers.codeSampleSection "Animation pairs" description content code
+    Helpers.section "Animation pairs" description content
 
   let private staggeredListSection () =
     let description =
@@ -946,7 +846,7 @@ Animate.show
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (
             text "Replay stagger",
             onClick =
@@ -976,27 +876,45 @@ Animate.show
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
+let isVisible = Var.Create false
 
-let items = [ "Design mockups"; "Implement components"; "Write unit tests" ]
+let items = [
+  "Design mockups"
+  "Implement components"
+  "Write unit tests"
+  "Review pull request"
+  "Deploy to staging"
+]
 
-WeaveList.create(
+Button.primary (
+  text "Replay stagger",
+  onClick =
+    (fun () ->
+      isVisible.Value <- false
+
+      JavaScript.JS.SetTimeout (fun () -> isVisible.Value <- true) 50
+      |> ignore),
+  attrs = [ Button.Variant.filled ]
+)
+
+Animate.show AnimationPair.fadeInOut isVisible.View
+<| fun () ->
+  WeaveList.create (
     items
     |> List.mapi (fun i label ->
-        ListItem.create(
-            text label,
-            value = label,
-            attrs = [
-                AnimationEntrance.slideRightIn
-                AnimationDuration.standard
-                // Stagger: delay--1, delay--2, delay--3 ... (clamped to 1-10)
-                AnimationDelay.stagger (i + 1)
-            ]
-        )),
+      ListItem.create (
+        text label,
+        value = label,
+        attrs = [
+          AnimationEntrance.slideRightIn
+          AnimationDuration.standard
+          AnimationDelay.stagger (i + 1)
+        ]
+      )),
     attrs = [ WeaveList.Color.primary ]
-)"""
+  )"""
 
     Helpers.codeSampleSection "Staggered list" description content code
 
@@ -1027,7 +945,7 @@ WeaveList.create(
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (text "Add alert", onClick = addAlert, attrs = [ Button.Variant.filled ])
         ]
 
@@ -1053,52 +971,55 @@ WeaveList.create(
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
+      """open Weave.CssHelpers.Animation
 
 let alerts = ListModel.Create (fun (id, _, _, _) -> id) []
 
 let nextId = Var.Create 0
 
 let alertConfigs = [
-    Alert.Color.success, "Operation completed successfully!", AnimationPair.slideRightInOut
-    Alert.Color.error, "Something went wrong.", AnimationPair.slideLeftInOut
-    Alert.Color.warning, "Careful — this action is irreversible.", AnimationPair.scaleInOut
-    Alert.Color.info, "New version available.", AnimationPair.fadeInOut
+  Alert.Color.success,
+  "Operation completed successfully!",
+  AnimationPair.slideRightInOut
+  Alert.Color.error, "Something went wrong.", AnimationPair.slideLeftInOut
+  Alert.Color.warning,
+  "Careful — this action is irreversible.",
+  AnimationPair.scaleInOut
+  Alert.Color.info, "New version available.", AnimationPair.fadeInOut
 ]
 
-// Add alert — each gets its own isVisible for exit animation
 let addAlert () =
-    let idx = nextId.Value % alertConfigs.Length
-    let colorAttr, msg, pair = alertConfigs.[idx]
-    let id = nextId.Value
-    nextId.Value <- id + 1
-    alerts.Add(id, colorAttr, msg, pair)
+  let idx = nextId.Value % alertConfigs.Length
+  let colorAttr, msg, pair = alertConfigs.[idx]
+  let id = nextId.Value
+  nextId.Value <- id + 1
+  alerts.Add(id, colorAttr, msg, pair)
 
-// Render with Doc.BindSeqCachedBy so only new items animate
+let removeAlert id = alerts.RemoveByKey id
+
+Button.primary (
+  text "Add alert",
+  onClick = addAlert,
+  attrs = [ Button.Variant.filled ]
+)
+
 alerts.View
 |> Doc.BindSeqCachedBy
-    (fun (id, _, _, _) -> id)
-    (fun (id, colorAttr, msg, pair) ->
-        let isVisible = Var.Create true
+  (fun (id, _, _, _) -> id)
+  (fun (id, colorAttr, msg, pair) ->
+    let isVisible = Var.Create true
 
-        // showWith passes duration to the wrapper and removes from
-        // ListModel only after the exit animation completes
-        Animate.showWith
-            pair
-            isVisible.View
-            (fun () ->
-                Alert.create(
-                    text msg,
-                    onClose = (fun () -> isVisible.Value <- false),
-                    attrs = [
-                        colorAttr
-                        Alert.Variant.filled
-                    ]
-                ))
-            [ AnimationDuration.standard ]
-            (Some (fun () -> alerts.RemoveByKey id)))"""
+    Animate.showWith
+      pair
+      isVisible.View
+      (fun () ->
+        Alert.create (
+          text msg,
+          onClose = (fun () -> isVisible.Value <- false),
+          attrs = [ colorAttr; Alert.Variant.filled ]
+        ))
+      [ AnimationDuration.standard ]
+      (Some(fun () -> removeAlert id)))"""
 
     Helpers.codeSampleSection "Animated alerts" description content code
 
@@ -1121,7 +1042,7 @@ alerts.View
 
     let content =
       div [] [
-        div [ Margin.Bottom.small ] [
+        div [ Margin.Bottom.small; Flex.Flex.allSizes; JustifyContent.center ] [
           Button.primary (text "Add chip", onClick = addChip, attrs = [ Button.Variant.filled ])
         ]
 
@@ -1145,36 +1066,50 @@ alerts.View
       ]
 
     let code =
-      """open Weave
-open Weave.CssHelpers.Animation
+      """open Weave.CssHelpers.Animation
 
+let chipLabels = [|
+  "F#"
+  "WebSharper"
+  "Weave"
+  "Sass"
+  "Playwright"
+  "Expecto"
+  ".NET"
+|]
 
-let chips = ListModel.Create (fun (id, _) -> id) [ (0, "WebSharper") ]
+let activeChips = ListModel.Create (fun (id, _) -> id) []
+let nextChipId = Var.Create 0
 
-// Scale a chip in when added, scale out when removed.
-// showWith puts duration/easing on the wrapper and calls removeChip
-// after the exit animation completes — no hardcoded timeout needed.
-chips.View
-|> Doc.BindSeqCachedBy
-    (fun (id, _) -> id)
-    (fun (id, label) ->
-        let isVisible = Var.Create true
+let addChip () =
+  let idx = nextChipId.Value % chipLabels.Length
+  let id = nextChipId.Value
+  nextChipId.Value <- id + 1
+  activeChips.Add(id, chipLabels.[idx])
 
-        Animate.showWith
-            AnimationPair.scaleInOut
-            isVisible.View
-            (fun () ->
-                Chip.create(
-                    text label,
-                    onClose = (fun () -> isVisible.Value <- false),
-                    attrs = [
-                        Chip.Variant.filled
-                        Chip.Color.primary
-                    ]
-                ))
-            [ AnimationDuration.short
-              AnimationEasing.decelerate ]
-            (Some (fun () -> chips.RemoveByKey id)))"""
+let removeChip id = activeChips.RemoveByKey id
+
+Button.primary (
+  text "Add chip",
+  onClick = addChip,
+  attrs = [ Button.Variant.filled ]
+)
+
+activeChips.View
+|> Doc.BindSeqCachedBy (fun (id, _) -> id) (fun (id, label) ->
+  let isVisible = Var.Create true
+
+  Animate.showWith
+    AnimationPair.scaleInOut
+    isVisible.View
+    (fun () ->
+      Chip.create (
+        text label,
+        onClose = (fun () -> isVisible.Value <- false),
+        attrs = [ Chip.Variant.filled; Chip.Color.primary ]
+      ))
+    [ AnimationDuration.short; AnimationEasing.decelerate ]
+    (Some(fun () -> removeChip id)))"""
 
     Helpers.codeSampleSection "Animated chips" description content code
 
@@ -1311,35 +1246,7 @@ chips.View
         ]
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-
-// Preferred: use the typed F# modules for predefined levels
-div [
-    AnimationEntrance.slideUpIn
-    AnimationDistance.large        // all distance tokens scaled to 1.5x
-] [ text "Longer slide distance" ]
-
-div [
-    AnimationEntrance.scaleIn
-    AnimationScale.extraSmall     // very subtle scale (0.95)
-] [ text "Gentle scale entrance" ]
-
-// Escape hatch: override individual CSS custom properties directly
-div [ Attr.Style "--weave-animation-distance-lg" "100px" ] [
-    div [ AnimationEntrance.slideUpIn ] [
-        text "Slides exactly 100px"
-    ]
-]
-
-// Adjust stagger timing
-div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
-    // Items stagger at 100ms intervals instead of 50ms
-]"""
-
-    Helpers.codeSampleSection "Design tokens" description content code
+    Helpers.section "Design tokens" description content
 
   let private transitionEasingSection () =
     let description =
@@ -1452,49 +1359,7 @@ div [ Attr.Style "--weave-stagger-delay" "100ms" ] [
         ]
       ]
 
-    let code =
-      """open Weave
-open Weave.CssHelpers.Animation
-
-let dashboardContent = text "Dashboard content"
-let settingsContent = text "Settings content"
-let profileContent = text "Profile content"
-let isEnabled = Var.Create false
-
-// Add spring easing to Tabs — the indicator bounces between tabs
-Tabs.create(
-    View.Const [
-        TabItem.create ("Dashboard", dashboardContent)
-        TabItem.create ("Settings", settingsContent)
-        TabItem.create ("Profile", profileContent)
-    ],
-    attrs = [
-        Tabs.Color.primary
-        TransitionEasing.bounce   // springy indicator
-    ]
-)
-
-// Add spring easing to a Switch toggle
-Switch.create(
-    isEnabled,
-    content = text "Dark mode",
-    attrs = [
-        Switch.Color.primary
-        TransitionEasing.bounce   // thumb overshoots slightly
-    ]
-)
-
-// Available easing curves:
-// TransitionEasing.standard     — default ease (no-op, useful for resetting)
-// TransitionEasing.decelerate   — ease-out (fast start, slow end)
-// TransitionEasing.accelerate   — ease-in (slow start, fast end)
-// TransitionEasing.bounce       — spring overshoot (playful, physical)
-// TransitionEasing.smooth       — smooth ease (subtle, refined)
-
-// Works on any component with CSS transitions — just add to attrs.
-// Falls back to standard easing under prefers-reduced-motion."""
-
-    Helpers.codeSampleSection "Transition easing" description content code
+    Helpers.section "Transition easing" description content
 
   let render () =
     Container.create (
@@ -1504,6 +1369,8 @@ Switch.create(
           "Apply entrance, exit, and emphasis animations to any element with composable CSS classes. Each animation is built from six axes — kind, duration, easing, distance, scale, and trigger — all composed the same way as direct Attr bindings. For JS-driven triggers (click, timer, reactive state), use the Animate module. For overriding transition curves on existing components (e.g., springy tab indicators), see TransitionEasing."
         Helpers.divider ()
 
+        triggerOnClickSection ()
+        Helpers.divider ()
         howItWorksSection ()
         Helpers.divider ()
 
@@ -1534,8 +1401,6 @@ Switch.create(
           textView (View.Const "JS triggers (Animate module)")
         ]
 
-        triggerOnClickSection ()
-        Helpers.divider ()
         triggerOnTimerSection ()
         Helpers.divider ()
         triggerOnStateChangeSection ()
@@ -1548,8 +1413,6 @@ Switch.create(
 
         staggeredListSection ()
         Helpers.divider ()
-
-        Helpers.sectionHeader "Transition easing"
 
         div [ Typography.body1; Margin.Bottom.small ] [
           text

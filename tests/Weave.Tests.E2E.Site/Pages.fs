@@ -414,6 +414,17 @@ module Pages =
   let private checkboxPage () =
     div [] [
       Checkbox.create (Var.Create false, View.Const "Default Checkbox")
+      div [
+        Attr.Style "display" "flex"
+        Attr.Style "width" "144px"
+        Attr.Create "data-testid" "narrow-checkbox-host"
+      ] [
+        Checkbox.create (
+          Var.Create false,
+          View.Const "Explore the component library with accessibilityOptionsForEveryWorkspaceAndTranslation",
+          attrs = [ Attr.Create "data-testid" "wrapping-checkbox" ]
+        )
+      ]
       Checkbox.create (Var.Create true, View.Const "Checked Checkbox")
       Checkbox.create (Var.Create false, View.Const "Disabled Checkbox", enabled = View.Const false)
       Checkbox.create (
@@ -714,6 +725,30 @@ module Pages =
       |> View.Const
 
     div [] [
+      div [ Attr.Style "max-width" "320px" ] [
+        for name, label, widthAttrs in
+          [
+            "stable", "Stable (default)", []
+            "dynamic", "Dynamic width", [ Select.Width.dynamic ]
+            "full", "A long descriptive choice label that remains accessible", [ Select.Width.full ]
+          ] do
+          let measuredItems =
+            (if name = "dynamic" then
+               [ "A"; "A considerably longer option" ]
+             else
+               [ "A"; "BB" ])
+            |> List.map (fun value -> SelectItem.create (text value, value, value))
+            |> View.Const
+
+          div [ Attr.Create "data-testid" ("measured-" + name) ] [
+            Select.create (
+              measuredItems,
+              Var.Create<string option> None,
+              labelText = View.Const label,
+              attrs = [ Select.Variant.outlined; yield! widthAttrs ]
+            )
+          ]
+      ]
       Select.create (
         items,
         Var.Create<string option> None,
@@ -1010,6 +1045,45 @@ module Pages =
       attrs = [ Attr.Style "height" "100vh" ]
     )
 
+  let private dialogWithSelectPage () =
+    let dialogOpen = Var.Create false
+    let selected = Var.Create<string option> None
+    let selectedValues = Var.Create Set.empty<string>
+    let closeDialog () = Var.Set dialogOpen false
+
+    let items =
+      [ "Alpha"; "Beta" ]
+      |> List.map (fun value -> SelectItem.create (text value, value, value))
+      |> View.Const
+
+    div [] [
+      Button.create (
+        text "Open dialog",
+        (fun () -> Var.Set dialogOpen true),
+        attrs = [ Attr.Create "data-testid" "select-dialog-trigger" ]
+      )
+      dialogOpen.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          Dialog.create (
+            DialogTitle.create (text "Select within dialog"),
+            DialogContent.create (
+              div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g4 ] [
+                Select.create (items, selected, labelText = View.Const "Choose one")
+                MultiSelect.create (
+                  items,
+                  selectedValues,
+                  labelText = View.Const "Choose several",
+                  showSelectAll = true
+                )
+              ]
+            ),
+            dialogInteraction = View.Const(Dialog.Interaction.Optional closeDialog)
+          )
+        else
+          Doc.Empty)
+    ]
+
   let private dialogForcePage () =
     Dialog.create (
       DialogTitle.create (text "Force Dialog Title"),
@@ -1066,6 +1140,32 @@ module Pages =
       |> View.Const
 
     Tabs.create (tabs)
+
+  let private initiallySelectedTabsPage position =
+    Tabs.create (
+      View.Const [
+        TabItem.create ("Overview", text "Overview panel")
+        TabItem.create ("Activity", text "Activity panel")
+        TabItem.create ("Settings", text "Settings panel")
+      ],
+      activeIndex = Var.Create 2,
+      position = position
+    )
+
+  let private resizableTabsPage position =
+    div [] [
+      div [ Attr.Style "max-width" "900px" ] [
+        Tabs.create (
+          View.Const [
+            for label in [ "Identity"; "Abilities"; "Inventory"; "Skills"; "History"; "Settings" ] do
+              TabItem.create (label, text (label + " panel"))
+          ],
+          position = position,
+          attrs = [ Attr.Create "data-testid" "resize-tabs" ]
+        )
+      ]
+      Button.create (text "Panel action", ignore, attrs = [ Attr.Create "data-testid" "panel-action" ])
+    ]
 
   let private dropdownPage () =
     let selectedAction = Var.Create "none"
@@ -2711,6 +2811,81 @@ module Pages =
 
     Snackbar.create (notifications)
 
+  let private apiReferencePage () =
+    let parameter name typ defaultValue description : Weave.Docs.Examples.ApiReference.Parameter = {
+      Name = name
+      Type = typ
+      Default = defaultValue
+      Description = description
+    }
+
+    let definitions = [
+      Weave.Docs.Examples.ApiReference.Note "Parameters use declaration order."
+      Weave.Docs.Examples.ApiReference.Parameters(
+        "Specimen.create",
+        [
+          parameter "count" "View<int>" "" "Total record count; negative values clamp to zero."
+          parameter "?enabled" "View<bool>" "View.Const false" "Allow activation."
+          parameter "?attrs" "Attr list" "[]" "Styling attributes."
+          parameter "value" "int" "0" "First overload."
+          parameter
+            "value"
+            "View<Map<string, Result<int option, string list>>>"
+            "View.Const Map.empty"
+            "Second overload."
+        ],
+        Some "Doc"
+      )
+      Weave.Docs.Examples.ApiReference.Note "Keyboard support applies only to Specimen.create."
+      Weave.Docs.Examples.ApiReference.Options(
+        "Specimen.Color",
+        [ "primary", "Brand palette"; "error", "Danger palette" ]
+      )
+      Weave.Docs.Examples.ApiReference.Note "Palette choices apply only to Specimen.Color."
+      Weave.Docs.Examples.ApiReference.Parameters("Specimen.reset", [], Some "unit")
+      Weave.Docs.Examples.ApiReference.Note "Reset clears the last selection."
+    ]
+
+    div [
+      Attr.Create "data-testid" "api-reference-page"
+      Attr.Style "height" "100%"
+      Attr.Style "overflow" "auto"
+      Attr.Style "padding" "16px"
+      Attr.Style "box-sizing" "border-box"
+    ] [
+      Html.link [
+        attr.id "api-reference-highlighting-style"
+        attr.rel "stylesheet"
+        attr.href "/Scripts/code-highlighting.css"
+      ] []
+      Html.link [
+        attr.id "api-reference-style"
+        attr.rel "stylesheet"
+        attr.href "/Scripts/docs.css"
+      ] []
+      div [ Attr.Style "block-size" "850px"; Attr.Create "aria-hidden" "true" ] []
+      Weave.Docs.Examples.Helpers.apiSection
+        (p [] [
+          text "A production API reference with parameters, options, notes, and a no-argument member."
+        ])
+        definitions
+    ]
+
+  let private appearancePage preview =
+    div [ Attr.Style "padding" "16px" ] [
+      Html.link [
+        attr.id "appearance-highlighting-style"
+        attr.rel "stylesheet"
+        attr.href "/Scripts/code-highlighting.css"
+      ] []
+      Html.link [
+        attr.id "appearance-docs-style"
+        attr.rel "stylesheet"
+        attr.href "/Scripts/docs.css"
+      ] []
+      preview
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | route when
@@ -2757,6 +2932,7 @@ module Pages =
     | "dialog-with-drawer" -> dialogWithDrawerPage ()
     | "dialog-in-drawer-optional" -> dialogInsideDrawerPage Dialog.Interaction.Optional
     | "dialog-in-drawer-force" -> dialogInsideDrawerPage (fun _ -> Dialog.Interaction.Force)
+    | "dialog-with-select" -> dialogWithSelectPage ()
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
@@ -2778,6 +2954,60 @@ module Pages =
     | "snackbar-example" -> Weave.Docs.Examples.SnackbarExamples.render ()
     | "snackbar-palette" -> snackbarPalettePage ()
     | "card" -> cardPage ()
+    | "api-reference" -> apiReferencePage ()
+    | "text-field-appearance" -> appearancePage (Weave.Docs.Examples.TextFieldExamples.appearanceExample ())
+    | "text-field-documentation" ->
+      appearancePage (
+        div [ Attr.Style "block-size" "calc(100vh - 32px)"; Attr.Style "overflow" "auto" ] [
+          Weave.Docs.Examples.TextFieldExamples.render ()
+        ]
+      )
+    | "tabs-appearance" -> appearancePage (Weave.Docs.Examples.TabsAppearance.render ())
+    | "button-appearance" -> appearancePage (Weave.Docs.Examples.ButtonExamples.appearanceExample ())
+    | "icon-button-appearance" -> appearancePage (Weave.Docs.Examples.ButtonExamples.iconButtonAppearance ())
+    | "reactive-helpers-documentation" ->
+      appearancePage (Weave.Docs.Examples.ReactiveHelpersExamples.render ())
+    | "field-appearance" -> appearancePage (Weave.Docs.Examples.FieldConfigurator.render ())
+    | "dialog-documentation" -> appearancePage (Weave.Docs.Examples.DialogExamples.render ())
+    | "drawer-documentation" -> appearancePage (Weave.Docs.Examples.DrawerExamples.render ())
+    | "docs-container" -> appearancePage (Weave.Docs.Examples.ContainerExamples.render ())
+    | "docs-field" -> appearancePage (Weave.Docs.Examples.FieldExamples.render ())
+    | "docs-dropdown" -> appearancePage (Weave.Docs.Examples.DropdownMenuExamples.render ())
+    | "docs-scrolltop" -> appearancePage (Weave.Docs.Examples.ScrollToTopExamples.render ())
+    | "docs-spacer" -> appearancePage (Weave.Docs.Examples.SpacerExamples.render ())
+    | "docs-snackbar" -> appearancePage (Weave.Docs.Examples.SnackbarExamples.render ())
+    | "grid-builder" -> appearancePage (Weave.Docs.Examples.GridExamples.gridBuilderExample ())
+    | "highlighter-appearance" -> appearancePage (Weave.Docs.Examples.DataAppearance.highlighter ())
+    | "table-appearance" -> appearancePage (Weave.Docs.Examples.DataAppearance.table ())
+    | "list-appearance" -> appearancePage (Weave.Docs.Examples.ListAppearance.render ())
+    | "list-documentation" -> appearancePage (Weave.Docs.Examples.ListExamples.render ())
+    | "icons-documentation" -> appearancePage (Weave.Docs.Examples.IconsExamples.render ())
+    | "app-bar-appearance" -> appearancePage (Weave.Docs.Examples.AppBarExamples.appearanceExample ())
+    | "dialog-appearance" -> appearancePage (Weave.Docs.Examples.DialogExamples.appearanceExample ())
+    | "drawer-appearance" -> appearancePage (Weave.Docs.Examples.DrawerExamples.appearanceExample ())
+    | "carousel-appearance" -> appearancePage (Weave.Docs.Examples.CarouselExamples.appearanceExample ())
+    | "docs-alert" -> appearancePage (Weave.Docs.Examples.AlertExamples.render ())
+    | "docs-checkbox" -> appearancePage (Weave.Docs.Examples.CheckboxExamples.render ())
+    | "docs-switch" -> appearancePage (Weave.Docs.Examples.SwitchExamples.render ())
+    | "docs-radio" -> appearancePage (Weave.Docs.Examples.RadioButtonExamples.render ())
+    | "docs-chip" -> appearancePage (Weave.Docs.Examples.ChipExamples.render ())
+    | "docs-chipset" -> appearancePage (Weave.Docs.Examples.ChipSetExamples.render ())
+    | "docs-numeric" -> appearancePage (Weave.Docs.Examples.NumericFieldExamples.render ())
+    | "docs-select" -> appearancePage (Weave.Docs.Examples.SelectExamples.render ())
+    | "docs-colorpicker" -> appearancePage (Weave.Docs.Examples.ColorPickerExamples.render ())
+    | "progress-appearance" -> appearancePage (Weave.Docs.Examples.ProgressExamples.appearance ())
+    | "pagination-appearance" -> appearancePage (Weave.Docs.Examples.PaginationExamples.appearance ())
+    | "slider-appearance" -> appearancePage (Weave.Docs.Examples.SliderExamples.appearance ())
+    | "link-appearance" -> appearancePage (Weave.Docs.Examples.ReferenceAppearance.link ())
+    | "tooltip-appearance" -> appearancePage (Weave.Docs.Examples.ReferenceAppearance.tooltip ())
+    | "divider-appearance" -> appearancePage (Weave.Docs.Examples.ReferenceAppearance.divider ())
+    | "typography-appearance" -> appearancePage (Weave.Docs.Examples.TypographyAppearance.render ())
+    | "card-appearance" -> appearancePage (Weave.Docs.Examples.CardExamples.appearanceExample ())
+    | "button-group-appearance" ->
+      appearancePage (Weave.Docs.Examples.ButtonGroupExamples.appearanceExample ())
+    | "expansion-panel-appearance" ->
+      appearancePage (Weave.Docs.Examples.ExpansionPanelExamples.appearanceExample ())
+    | "button-menu-appearance" -> appearancePage (Weave.Docs.Examples.ButtonMenuExamples.appearanceExample ())
     | "table" -> tablePage ()
     | "table-default" -> defaultTablePage ()
     | "theme" -> themePage false

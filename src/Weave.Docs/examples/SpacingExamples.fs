@@ -31,26 +31,30 @@ module SpacingExamples =
       |> Option.map snd
       |> Option.defaultValue fallback)
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
   /// A box inside a dashed-border container that makes margin visible as the gap between them.
   let private marginDemoBox (label: string) (marginAttrs: Attr list) =
-    div [ BorderRadius.All.small; SurfaceColor.BackgroundColor.background ] [
+    div [
+      BorderRadius.All.small
+      SurfaceColor.BackgroundColor.background
+      Attr.Style "display" "flow-root"
+    ] [
       div [
         BorderRadius.All.small
-        BrandColor.BackgroundColor.primary
+        BrandColor.Fill.primary
         Flex.Flex.allSizes
         AlignItems.center
         JustifyContent.center
@@ -67,7 +71,7 @@ module SpacingExamples =
       yield! paddingAttrs
     ] [
       div [
-        BrandColor.BackgroundColor.primary
+        BrandColor.Fill.primary
         BorderRadius.All.small
         Padding.All.extraSmall
         Flex.Flex.allSizes
@@ -89,37 +93,41 @@ module SpacingExamples =
         div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
           table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
             thead [] [
-              tr [] [ tableHeaderCell "Size"; tableHeaderCell "Pixels"; tableHeaderCell "F# value" ]
+              tr [] [
+                tableHeaderCell "Size"
+                tableHeaderCell "Value at a 16px root"
+                tableHeaderCell "F# value"
+              ]
             ]
             tbody [] [
               tr [] [
                 tableCell [ text "None" ]
-                tableCell [ text "0px" ]
+                tableCell [ text "0rem (0px)" ]
                 tableCell [ inlineCode "Margin.Bottom.none" ]
               ]
               tr [] [
                 tableCell [ text "ExtraSmall" ]
-                tableCell [ text "4px" ]
+                tableCell [ text "1rem (16px)" ]
                 tableCell [ inlineCode "Margin.Bottom.extraSmall" ]
               ]
               tr [] [
                 tableCell [ text "Small" ]
-                tableCell [ text "8px" ]
+                tableCell [ text "2rem (32px)" ]
                 tableCell [ inlineCode "Margin.Bottom.small" ]
               ]
               tr [] [
                 tableCell [ text "Medium" ]
-                tableCell [ text "12px" ]
+                tableCell [ text "3rem (48px)" ]
                 tableCell [ inlineCode "Margin.Bottom.medium" ]
               ]
               tr [] [
                 tableCell [ text "Large" ]
-                tableCell [ text "16px" ]
+                tableCell [ text "4rem (64px)" ]
                 tableCell [ inlineCode "Margin.Bottom.large" ]
               ]
               tr [] [
                 tableCell [ text "ExtraLarge" ]
-                tableCell [ text "20px" ]
+                tableCell [ text "5rem (80px)" ]
                 tableCell [ inlineCode "Margin.Bottom.extraLarge" ]
               ]
             ]
@@ -185,111 +193,67 @@ module SpacingExamples =
           ]
         ]
 
-        div [ Typography.body2; Attr.Style "opacity" "0.7"; Margin.Bottom.small ] [
+        div [ Typography.body2; Typography.Color.textSecondary; Margin.Bottom.small ] [
           text "Padding follows the same pattern — replace Margin with Padding."
         ]
 
-        div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
-          text "Each CSS class suffix is a number from 0 to 20, where each step equals 0.25rem (4px)"
+        div [ Typography.body2; Typography.Color.textSecondary ] [
+          text
+            "Each numeric CSS class suffix counts 0.25rem steps, from 0 to 20. One step is 4px at a 16px root font size; all values scale with that root size."
         ]
       ]
 
-    let code =
-      """open Weave
-
-
-// Margin: pick a direction and size
-div [ Margin.Bottom.small ] [
-    text "8px below this element"
-]
-
-// Padding: same pattern, applied inside the element
-div [ Padding.All.medium ] [
-    text "12px on all sides"
-]
-
-// Combine directions for fine-grained control
-div [
-    Margin.Bottom.large
-    Padding.Horizontal.small
-] [
-    text "16px margin below, 8px padding left and right"
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   let private marginSection () =
     let description =
       Helpers.bodyText
-        "Margin adds space outside an element, pushing it away from its neighbors. The dashed border below shows the container boundary so the margin gap is visible."
+        "Margin adds space outside an element, pushing it away from its neighbors. The surrounding background makes the margin gap visible."
+
+    let samples = [
+      "Margin.Bottom.small", Margin.Bottom.small
+      "Margin.All.medium", Margin.All.medium
+      "Margin.Vertical.small", Margin.Vertical.small
+      "Margin.Horizontal.large", Margin.Horizontal.large
+    ]
 
     let content =
-      Grid.create (
-        [
+      Grid.create [
+        for label, spacing in samples do
           GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              marginDemoBox "mb-8" [ Margin.Bottom.small ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Margin.Bottom.small"
+            div [ Attr.Style "inline-size" "100%" ] [
+              p [ Typography.body2; Margin.Bottom.extraSmall ] [ text label ]
+              div [ SurfaceColor.BackgroundColor.background; Attr.Style "display" "flow-root" ] [
+                div [ spacing; BrandColor.Fill.primary; Padding.All.small ] [ text "Box" ]
               ]
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              marginDemoBox "ma-12" [ Margin.All.medium ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Margin.All.medium"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              marginDemoBox "my-8" [ Margin.Vertical.small ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Margin.Vertical.small"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              marginDemoBox "mx-16" [ Margin.Horizontal.large ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Margin.Horizontal.large"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-        ]
-      )
+      ]
 
     let code =
-      """open Weave
-
-
-// Bottom margin (most common: space between stacked elements)
-div [ Margin.Bottom.small ] [
-    text "Bottom margin 8px"
+      """div [ SurfaceColor.BackgroundColor.background; Attr.Style "display" "flow-root" ] [
+  div [ Margin.Bottom.small; BrandColor.Fill.primary; Padding.All.small ] [
+    text "Box"
+  ]
 ]
 
-// All sides
-div [ Margin.All.medium ] [
-    text "All sides 12px"
+div [ SurfaceColor.BackgroundColor.background; Attr.Style "display" "flow-root" ] [
+  div [ Margin.All.medium; BrandColor.Fill.primary; Padding.All.small ] [
+    text "Box"
+  ]
 ]
 
-// Multiple directions
-div [
-    Margin.Top.small
-    Margin.Bottom.small
-] [
-    text "Top 8px, Bottom 8px"
+div [ SurfaceColor.BackgroundColor.background; Attr.Style "display" "flow-root" ] [
+  div [ Margin.Vertical.small; BrandColor.Fill.primary; Padding.All.small ] [
+    text "Box"
+  ]
 ]
 
-// Vertical shorthand (top + bottom)
-div [ Margin.Vertical.small ] [
-    text "Top and bottom 8px"
+div [ SurfaceColor.BackgroundColor.background; Attr.Style "display" "flow-root" ] [
+  div [ Margin.Horizontal.large; BrandColor.Fill.primary; Padding.All.small ] [
+    text "Box"
+  ]
 ]"""
 
     Helpers.codeSampleSection "Margin" description content code
@@ -299,73 +263,50 @@ div [ Margin.Vertical.small ] [
       Helpers.bodyText
         "Padding adds space inside an element, between its border and its content. The examples below use a background color to make the padding region visible."
 
+    let samples = [
+      "Padding.All.small", Padding.All.small
+      "Padding.Horizontal.medium", Padding.Horizontal.medium
+      "Padding.Vertical.large", Padding.Vertical.large
+      "Padding.Top.extraLarge", Padding.Top.extraLarge
+    ]
+
     let content =
-      Grid.create (
-        [
+      Grid.create [
+        for label, spacing in samples do
           GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              paddingDemoBox "pa-8" [ Padding.All.small ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Padding.All.small"
+            div [ Attr.Style "inline-size" "100%" ] [
+              p [ Typography.body2; Margin.Bottom.extraSmall ] [ text label ]
+              div [ spacing; SurfaceColor.BackgroundColor.background ] [
+                div [ BrandColor.Fill.primary; Padding.All.extraSmall ] [ text "Box" ]
               ]
             ],
             attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
           )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              paddingDemoBox "px-12" [ Padding.Horizontal.medium ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Padding.Horizontal.medium"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              paddingDemoBox "py-16" [ Padding.Vertical.large ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Padding.Vertical.large"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-              paddingDemoBox "pt-20" [ Padding.Top.extraLarge ]
-              div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                text "Padding.Top.extraLarge"
-              ]
-            ],
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-          )
-        ]
-      )
+      ]
 
     let code =
-      """open Weave
-
-
-// All sides
-div [ Padding.All.small ] [
-    text "Padded content (8px all sides)"
+      """div [ Padding.All.small; SurfaceColor.BackgroundColor.background ] [
+  div [ BrandColor.Fill.primary; Padding.All.extraSmall ] [
+    text "Box"
+  ]
 ]
 
-// Horizontal only
-div [ Padding.Horizontal.medium ] [
-    text "Horizontal padding (12px left and right)"
+div [ Padding.Horizontal.medium; SurfaceColor.BackgroundColor.background ] [
+  div [ BrandColor.Fill.primary; Padding.All.extraSmall ] [
+    text "Box"
+  ]
 ]
 
-// Vertical only
-div [ Padding.Vertical.large ] [
-    text "Vertical padding (16px top and bottom)"
+div [ Padding.Vertical.large; SurfaceColor.BackgroundColor.background ] [
+  div [ BrandColor.Fill.primary; Padding.All.extraSmall ] [
+    text "Box"
+  ]
 ]
 
-// Combining padding directions
-div [
-    Padding.Top.extraSmall
-    Padding.Horizontal.large
-] [
-    text "Top 4px, Left and Right 16px"
+div [ Padding.Top.extraLarge; SurfaceColor.BackgroundColor.background ] [
+  div [ BrandColor.Fill.primary; Padding.All.extraSmall ] [
+    text "Box"
+  ]
 ]"""
 
     Helpers.codeSampleSection "Padding" description content code
@@ -377,7 +318,7 @@ div [
 
     let content =
       let reactiveCaption (labelView: View<string>) =
-        div [ Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [ textView labelView ]
+        div [ Margin.Top.extraSmall; Typography.Color.textSecondary ] [ textView labelView ]
 
       div [] [
         div [ Margin.Bottom.small; Attr.Style "overflow-x" "auto" ] [
@@ -433,7 +374,7 @@ div [
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Live demo" ]
 
-        div [ Typography.body2; Margin.Bottom.small; Attr.Style "opacity" "0.7" ] [
+        div [ Typography.body2; Margin.Bottom.small; Typography.Color.textSecondary ] [
           text
             "The boxes below change their spacing at different breakpoints. Resize the browser to see the labels and values update."
         ]
@@ -445,7 +386,7 @@ div [
                 marginDemoBox "sm: ma-8" [ Margin.All.none; Margin.All.Small.small ]
                 reactiveCaption (
                   responsiveLabel
-                    [ (Breakpoint.Small, "margin: 8px (Small active)") ]
+                    [ (Breakpoint.Small, "margin: 2rem (Small active)") ]
                     "margin: 0px (below Small)"
                 )
               ],
@@ -456,7 +397,7 @@ div [
                 marginDemoBox "md: ma-16" [ Margin.All.none; Margin.All.Medium.large ]
                 reactiveCaption (
                   responsiveLabel
-                    [ (Breakpoint.Medium, "margin: 16px (Medium active)") ]
+                    [ (Breakpoint.Medium, "margin: 4rem (Medium active)") ]
                     "margin: 0px (below Medium)"
                 )
               ],
@@ -467,8 +408,8 @@ div [
                 paddingDemoBox "lg: pa-20" [ Padding.All.extraSmall; Padding.All.Large.extraLarge ]
                 reactiveCaption (
                   responsiveLabel
-                    [ (Breakpoint.Large, "padding: 20px (Large active)") ]
-                    "padding: 4px (Extra small active)"
+                    [ (Breakpoint.Large, "padding: 5rem (Large active)") ]
+                    "padding: 1rem (Extra small active)"
                 )
               ],
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
@@ -484,11 +425,11 @@ div [
                 reactiveCaption (
                   responsiveLabel
                     [
-                      (Breakpoint.Small, "margin: 8px (Small active)")
-                      (Breakpoint.Medium, "margin: 12px (Medium active)")
-                      (Breakpoint.Large, "margin: 16px (Large active)")
+                      (Breakpoint.Small, "margin: 2rem (Small active)")
+                      (Breakpoint.Medium, "margin: 3rem (Medium active)")
+                      (Breakpoint.Large, "margin: 4rem (Large active)")
                     ]
-                    "margin: 4px (Extra small active)"
+                    "margin: 1rem (Extra small active)"
                 )
               ],
               attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
@@ -498,52 +439,21 @@ div [
         )
       ]
 
-    let code =
-      """open Weave
-
-
-// Responsive margin: applies small (8px) margin at the Small breakpoint (600px) and above
-div [ Margin.All.Small.small ] [
-    text "No margin on mobile, 8px margin at >= 600px"
-]
-
-// Combine a mobile default with a larger breakpoint override
-div [
-    Margin.All.extraSmall        // 4px on all viewports
-    Margin.All.Medium.large      // 16px at >= 960px
-] [
-    text "4px margin on mobile, 16px at medium screens and above"
-]
-
-// Progressive scaling across multiple breakpoints
-div [
-    Margin.All.extraSmall          // 4px  base
-    Margin.All.Small.small         // 8px  >= 600px
-    Margin.All.Medium.medium       // 12px >= 960px
-    Margin.All.Large.large         // 16px >= 1280px
-] [
-    text "Spacing grows with the viewport"
-]
-
-// Works the same way for Padding
-div [
-    Padding.Horizontal.small              // 8px always
-    Padding.Horizontal.Large.extraLarge   // 20px >= 1280px
-] [
-    text "Tight on mobile, roomy on desktop"
-]"""
-
-    Helpers.codeSampleSection "Responsive breakpoints" description content code
+    Helpers.section "Responsive breakpoints" description content
 
   let private densitySection () =
     let description =
       Helpers.bodyText
-        "Density controls the internal spacing of components on a three-step scale: Compact, Standard (the default), and Spacious. Apply it to a container element to affect all descendants, or pass it in a single component's attrs to override just that instance. Density is meant as a simple default option to help reduce boilerplate. You can achieve the same effect by applying the underlying CSS utility classes directly."
+        "Density controls component spacing on three steps: Compact, Standard (the default), and Spacious. Apply it to a parent to share the density, or pass it in one component's attrs to override that instance."
 
     let content =
-      let col (label: string) densityAttr =
-        div [ densityAttr ] [
-          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
+      let column density =
+        div [
+          density
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          AlignItems.center
+        ] [
           div [] [
             Button.primary (text "Filled", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
           ]
@@ -555,56 +465,66 @@ div [
           ]
         ]
 
-      Grid.create (
-        [
-          GridItem.create (
-            col "Compact" Density.compact,
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
-          )
-          GridItem.create (
-            col "Standard" Density.standard,
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
-          )
-          GridItem.create (
-            col "Spacious" Density.spacious,
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
-          )
-        ],
-        attrs = [ AlignItems.start ]
-      )
+      Helpers.densityComparison [
+        "Compact", column Density.compact
+        "Standard", column Density.standard
+        "Spacious", column Density.spacious
+      ]
 
     let code =
-      """open Weave
-
-
-// Container-level: all children inherit the density via CSS cascade
-div [ Density.compact ] [
-    Button.primary(
-        text "Filled",
-        onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.filled
-        ]
-    )
-    Button.primary(
-        text "Outlined",
-        onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.outlined
-        ]
-    )
+      """div [ Density.compact ] [
+  Button.primary (
+    text "Filled",
+    onClick = ignore,
+    attrs = [ Button.Variant.filled ]
+  )
+  Button.primary (
+    text "Outlined",
+    onClick = ignore,
+    attrs = [ Button.Variant.outlined ]
+  )
+  Button.primary (
+    text "Text",
+    onClick = ignore,
+    attrs = [ Button.Variant.text ]
+  )
 ]
 
-// Per-instance: pass the density attr in attrs to set it on one component
-Button.primary(
-    text "Spacious",
-    onClick = (fun () -> ()),
-    attrs = [
-        Density.spacious
-        Button.Variant.filled
-    ]
-)
-"""
+div [ Density.standard ] [
+  Button.primary (
+    text "Filled",
+    onClick = ignore,
+    attrs = [ Button.Variant.filled ]
+  )
+  Button.primary (
+    text "Outlined",
+    onClick = ignore,
+    attrs = [ Button.Variant.outlined ]
+  )
+  Button.primary (
+    text "Text",
+    onClick = ignore,
+    attrs = [ Button.Variant.text ]
+  )
+]
+
+div [ Density.spacious ] [
+  Button.primary (
+    text "Filled",
+    onClick = ignore,
+    attrs = [ Button.Variant.filled ]
+  )
+  Button.primary (
+    text "Outlined",
+    onClick = ignore,
+    attrs = [ Button.Variant.outlined ]
+  )
+  Button.primary (
+    text "Text",
+    onClick = ignore,
+    attrs = [ Button.Variant.text ]
+  )
+]"""
 
     Helpers.codeSampleSection "Density" description content code
 
@@ -617,9 +537,9 @@ Button.primary(
         ]
 
         Helpers.divider ()
-        howItWorksSection ()
-        Helpers.divider ()
         marginSection ()
+        Helpers.divider ()
+        howItWorksSection ()
         Helpers.divider ()
         paddingSection ()
         Helpers.divider ()

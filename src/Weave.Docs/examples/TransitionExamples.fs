@@ -11,17 +11,17 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module TransitionExamples =
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
@@ -31,7 +31,12 @@ module TransitionExamples =
         "Transition speed controls how fast component animations play. Weave uses CSS custom properties for all transition durations, so you can override them per-element or subtree. Apply a speed class via the TransitionSpeed module callsites."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [ tableHeaderCell "Speed"; tableHeaderCell "Effect"; tableHeaderCell "F# code" ]
@@ -44,7 +49,7 @@ module TransitionExamples =
             ]
             tr [] [
               tableCell [ text "Fast" ]
-              tableCell [ text "Half speed" ]
+              tableCell [ text "Half duration (faster)" ]
               tableCell [ inlineCode "TransitionSpeed.fast" ]
             ]
             tr [] [
@@ -54,53 +59,24 @@ module TransitionExamples =
             ]
             tr [] [
               tableCell [ text "Slow" ]
-              tableCell [ text "Double speed" ]
+              tableCell [ text "Double duration (slower)" ]
               tableCell [ inlineCode "TransitionSpeed.slow" ]
             ]
           ]
         ]
       ]
 
-    let code =
-      """open Weave
-
-
-// Apply a transition speed to a single element
-div [ TransitionSpeed.fast ] [
-    text "Animations inside here run at half the default duration"
-]
-
-// Disable transitions entirely
-div [ TransitionSpeed.none ] [
-    text "No transitions — all changes are instant"
-]
-
-// The speed class overrides CSS custom properties,
-// so all children inherit the new durations
-div [ TransitionSpeed.slow ] [
-    Button.primary(
-        text "Slow hover",
-        onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.filled
-        ]
-    )
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   let private liveComparisonSection () =
     let description =
       Helpers.bodyText
-        "Hover over each button below to see the same hover transition at different speeds. The speed class is applied to a wrapper div, so all children inherit the speed override."
+        "Hover over or focus each button below to see the same hover transition at different speeds. The speed attribute is applied directly to each button. Apply it to a parent when several components should share the override."
 
     let content =
       let speedColumn (label: string) (speed: Attr) =
-        div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-          div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
-          div [ speed ] [
-            Button.primary (text "Hover me", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ])
-          ]
+        div [ Flex.Flex.allSizes; JustifyContent.center ] [
+          Button.primary (text label, onClick = ignore, attrs = [ Button.Variant.filled; speed ])
         ]
 
       Grid.create (
@@ -125,43 +101,29 @@ div [ TransitionSpeed.slow ] [
       )
 
     let code =
-      """open Weave
+      """Button.primary (
+  text "None",
+  onClick = ignore,
+  attrs = [ Button.Variant.filled; TransitionSpeed.none ]
+)
 
-// None: instant (0ms transitions)
-div [ TransitionSpeed.none ] [
-    Button.primary(
-        text "Hover me",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    )
-]
+Button.primary (
+  text "Fast",
+  onClick = ignore,
+  attrs = [ Button.Variant.filled; TransitionSpeed.fast ]
+)
 
-// Fast: half the default duration
-div [ TransitionSpeed.fast ] [
-    Button.primary(
-        text "Hover me",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    )
-]
+Button.primary (
+  text "Standard",
+  onClick = ignore,
+  attrs = [ Button.Variant.filled; TransitionSpeed.standard ]
+)
 
-// Standard: the default duration
-div [ TransitionSpeed.standard ] [
-    Button.primary(
-        text "Hover me",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    )
-]
-
-// Slow: double the default duration
-div [ TransitionSpeed.slow ] [
-    Button.primary(
-        text "Hover me",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    )
-]"""
+Button.primary (
+  text "Slow",
+  onClick = ignore,
+  attrs = [ Button.Variant.filled; TransitionSpeed.slow ]
+)"""
 
     Helpers.codeSampleSection "Live comparison" description content code
 
@@ -171,7 +133,12 @@ div [ TransitionSpeed.slow ] [
         "Under the hood, the speed classes override these CSS custom properties. All component transitions reference these tokens."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [
@@ -234,21 +201,7 @@ div [ TransitionSpeed.slow ] [
         ]
       ]
 
-    let code =
-      """// Use a duration token in a custom inline transition
-div [
-    Attr.Style "transition" "background-color var(--weave-duration-standard) ease"
-] [
-    text "Uses the same duration as Weave components"
-]
-
-// Override a single token for a subtree
-div [ Attr.Style "--weave-duration-standard" "500ms" ] [
-    // All components inside use 500ms for their standard transitions
-    text "Custom standard duration"
-]"""
-
-    Helpers.codeSampleSection "Duration tokens" description content code
+    Helpers.section "Duration tokens" description content
 
   let private reducedMotionSection () =
     let description =
@@ -257,31 +210,13 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
 
     let content =
       div [] [
-        div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
+        div [ Typography.body2; Typography.Color.textSecondary ] [
           text
             "To test reduced motion in Chrome DevTools: open the Rendering panel, then set \"Emulate CSS media feature prefers-reduced-motion\" to \"reduce\". All Weave transitions will become instant."
         ]
       ]
 
-    let code =
-      """// No F# code needed — the CSS handles it automatically.
-// The :root media query sets all --weave-duration-* tokens to 0s
-// when the user prefers reduced motion.
-
-// @media (prefers-reduced-motion: reduce) {
-//   :root {
-//     --weave-duration-shortest: 0s;
-//     --weave-duration-shorter:  0s;
-//     --weave-duration-short:    0s;
-//     --weave-duration-standard: 0s;
-//     --weave-duration-medium:   0s;
-//     --weave-duration-long:     0s;
-//     --weave-duration-drawer:   0s;
-//     --weave-duration-ripple:   0s;
-//   }
-// }"""
-
-    Helpers.codeSampleSection "Reduced motion" description content code
+    Helpers.section "Reduced motion" description content
 
   let render () =
     Container.create (
@@ -292,9 +227,9 @@ div [ Attr.Style "--weave-duration-standard" "500ms" ] [
         ]
 
         Helpers.divider ()
-        howItWorksSection ()
-        Helpers.divider ()
         liveComparisonSection ()
+        Helpers.divider ()
+        howItWorksSection ()
         Helpers.divider ()
         durationTokensSection ()
         Helpers.divider ()

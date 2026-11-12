@@ -18,7 +18,13 @@ module EventHandlersExamples =
         "Use a native button for actions. It supports mouse, touch, keyboard, and programmatic activation; enabled controls its disabled state."
 
     let content =
-      div [] [
+      div [
+        Flex.Flex.allSizes
+        FlexWrap.Wrap.allSizes
+        AlignItems.center
+        JustifyContent.center
+        Gap.All.g4
+      ] [
         Switch.create (enabled, content = text "Enabled")
         Button.create (text "Activate", (fun () -> Var.Update count (fun n -> n + 1)), enabled = enabled.View)
         div [] [ text "Count: "; textView (count.View |> View.Map string) ]
@@ -28,11 +34,17 @@ module EventHandlersExamples =
       """let count = Var.Create 0
 let enabled = Var.Create true
 
-Button.create (
-  text "Activate",
-  (fun () -> Var.Update count (fun n -> n + 1)),
-  enabled = enabled.View
-)"""
+Doc.Concat [
+  Switch.create (enabled, content = text "Enabled")
+
+  Button.create (
+    text "Activate",
+    (fun () -> Var.Update count (fun n -> n + 1)),
+    enabled = enabled.View
+  )
+
+  textView (count.View |> View.Map(sprintf "Count: %d"))
+]"""
 
     Helpers.codeSampleSection "Native button activation" description content code
 
@@ -44,12 +56,16 @@ Button.create (
     let content =
       let isFocused = Var.Create false
 
-      div [] [
+      div [
+        Attr.Style "inline-size" "fit-content"
+        Attr.Style "max-inline-size" "min(32rem, 100%)"
+        Attr.Style "margin-inline" "auto"
+      ] [
         div [
           SurfaceColor.BackgroundColor.surface
           BorderRadius.All.small
-          Padding.All.medium
-          on.focusIn (fun _ _ -> Var.Set isFocused true) // see here
+          Padding.All.extraSmall
+          on.focusIn (fun _ _ -> Var.Set isFocused true)
           on.focusOut (fun _ _ -> Var.Set isFocused false)
           isFocused.View
           |> View.Map(fun f -> if f then "2px solid var(--palette-primary)" else "none")
@@ -68,9 +84,24 @@ Button.create (
       """let isFocused = Var.Create false
 
 div [
-  on.focusIn (fun el ev -> Var.Set isFocused true)   // see here
-  on.focusOut (fun el ev -> Var.Set isFocused false)
+  SurfaceColor.BackgroundColor.surface
+  BorderRadius.All.small
+  Padding.All.extraSmall
+  on.focusIn (fun _ _ -> Var.Set isFocused true)
+  on.focusOut (fun _ _ -> Var.Set isFocused false)
+  isFocused.View
+  |> View.Map(fun f ->
+    if f then "2px solid var(--palette-primary)" else "none")
+  |> Attr.DynamicStyle "outline"
+  Attr.Style "outline-offset" "2px"
 ] [
+  div [ Margin.Bottom.small; Typography.body2 ] [
+    text "Focus state: "
+    textView (
+      isFocused.View
+      |> View.Map(fun f -> if f then "Focused" else "Not focused")
+    )
+  ]
   TextField.singleLine (Var.Create "", labelText = View.Const "Tab into me")
 ]"""
 
@@ -85,13 +116,19 @@ div [
       let value = Var.Create 50.0
 
       div [] [
-        div [ Flex.Flex.allSizes; Gap.All.g4; AlignItems.center ] [
+        div [
+          Flex.Flex.allSizes
+          FlexWrap.Wrap.allSizes
+          Gap.All.g3
+          AlignItems.center
+          JustifyContent.center
+        ] [
           Button.create (
             text "\u2212 10",
-            onClick = (fun () -> Var.Update value (Bounded.stepDown 0.0 100.0 10.0)), // see here
+            onClick = (fun () -> Var.Update value (Bounded.stepDown 0.0 100.0 10.0)),
             attrs = [ Button.Variant.outlined ]
           )
-          div [ Typography.h5; Attr.Style "min-width" "80px"; Typography.Align.center ] [
+          div [ Typography.h5; Attr.Style "min-width" "3ch"; Typography.Align.center ] [
             textView (value.View |> View.Map(fun v -> sprintf "%.0f" v))
           ]
           Button.create (
@@ -100,25 +137,32 @@ div [
             attrs = [ Button.Variant.outlined ]
           )
         ]
-        div [ Margin.Top.small; Typography.body2; Opacity.sixty ] [ text "Range: 0\u2013100, step: 10" ]
+        div [
+          Margin.Top.small
+          Typography.body2
+          Typography.Color.textSecondary
+          Typography.Align.center
+        ] [ text "Range: 0\u2013100, step: 10" ]
       ]
 
     let code =
       """let value = Var.Create 50.0
 
-// Decrement by 10, clamped to [0, 100]
-Button.create (
-  text "\u2212 10",
-  onClick = (fun () ->
-    Var.Update value (Bounded.stepDown 0.0 100.0 10.0))  // see here
-)
+Doc.Concat [
+  Button.create (
+    text "\u2212 10",
+    onClick = (fun () -> Var.Update value (Bounded.stepDown 0.0 100.0 10.0)),
+    attrs = [ Button.Variant.outlined ]
+  )
 
-// Increment by 10, clamped to [0, 100]
-Button.create (
-  text "+ 10",
-  onClick = (fun () ->
-    Var.Update value (Bounded.stepUp 0.0 100.0 10.0))
-)"""
+  textView (value.View |> View.Map(fun v -> sprintf "%.0f" v))
+
+  Button.create (
+    text "+ 10",
+    onClick = (fun () -> Var.Update value (Bounded.stepUp 0.0 100.0 10.0)),
+    attrs = [ Button.Variant.outlined ]
+  )
+]"""
 
     Helpers.codeSampleSection "Bounded.clamp / stepUp / stepDown" description content code
 
@@ -141,7 +185,7 @@ Button.create (
               sprintf
                 "Raw: %d | Percent: %.0f%% | Snapped to 5: %.0f"
                 v
-                (Bounded.percentOf 0.0 100.0 fv) // see here
+                (Bounded.percentOf 0.0 100.0 fv)
                 (Bounded.snapToStep 0.0 100.0 5.0 fv))
           )
         ]
@@ -150,71 +194,58 @@ Button.create (
     let code =
       """let raw = Var.Create 37
 
-// Convert to percentage within [0, 100]
-Bounded.percentOf 0.0 100.0 37.0  // see here — returns 37.0
+Doc.Concat [
+  Slider.create (raw, min = 0, max = 100, labelText = View.Const "Raw value")
 
-// Snap to nearest step of 5 within [0, 100]
-Bounded.snapToStep 0.0 100.0 5.0 37.0  // returns 35.0"""
+  textView (
+    raw.View
+    |> View.Map(fun v ->
+      let fv = float v
+
+      sprintf
+        "Raw: %d | Percent: %.0f%% | Snapped to 5: %.0f"
+        v
+        (Bounded.percentOf 0.0 100.0 fv)
+        (Bounded.snapToStep 0.0 100.0 5.0 fv))
+  )
+]"""
 
     Helpers.codeSampleSection "Bounded.percentOf / snapToStep" description content code
 
   let private keyboardPatternsSection () =
-    let description =
-      Helpers.bodyText
-        "Weave uses internal active patterns for component keyboard navigation. For an action, prefer a native button and its built-in activation behavior."
-
     let content =
-      div [ Typography.body2 ] [
-        p [] [ text "Available internal active patterns for keyboard events:" ]
-        ul [] [
-          li [] [ Helpers.inlineCode "Key.Enter"; text " \u2014 matches the Enter key" ]
-          li [] [ Helpers.inlineCode "Key.Space"; text " \u2014 matches the Space key" ]
-          li [] [
-            Helpers.inlineCode "Key.Activate"
-            text " \u2014 matches Enter or Space (standard ARIA activation)"
-          ]
-          li [] [ Helpers.inlineCode "Key.Escape"; text " \u2014 matches the Escape key" ]
-          li [] [ Helpers.inlineCode "Key.Tab"; text " \u2014 matches the Tab key" ]
-          li [] [
-            Helpers.inlineCode "Key.ArrowUp / ArrowDown / ArrowLeft / ArrowRight"
-            text " \u2014 directional navigation"
-          ]
-          li [] [
-            Helpers.inlineCode "Key.Home / Key.End"
-            text " \u2014 jump to first/last item"
-          ]
-          li [] [
-            Helpers.inlineCode "Key.NavKey"
-            text " \u2014 parameterized match against any key string"
-          ]
-        ]
-        p [] [
-          text
-            "These patterns are internal to Weave and used by components. Prefer a native button for actions so the browser handles activation."
-        ]
-      ]
+      let search = Var.Create ""
 
-    let code =
-      """// Weave's internal Key patterns match on ev.Key. Your own handlers can do the same:
-let menuKeys =
-  on.keyDown (fun el ev ->
-    match ev.Key with
-    | "Enter" | " " ->
-      ev.PreventDefault()
-      // Handle Enter or Space
-    | "Escape" ->
-      // Close menu/dialog
-      ()
-    | "ArrowDown" ->
-      ev.PreventDefault()
-      // Move focus to next item
-    | _ -> ()
-  )
+      let clearOnEscape =
+        on.keyDown (fun _ event ->
+          if event.Key = "Escape" then
+            event.PreventDefault()
+            Var.Set search "")
 
-// For an action, use a native button:
-Button.create (text "Activate", (fun () -> ()))"""
+      TextField.singleLine (
+        search,
+        labelText = View.Const "Press Escape to clear",
+        inputAttrs = [ clearOnEscape ]
+      )
 
-    Helpers.codeSampleSection "Keyboard Active Patterns" description content code
+    Helpers.codeSampleSection
+      "Keyboard Active Patterns"
+      (Helpers.bodyText
+        "Weave uses internal active patterns for keyboard navigation. In application code, match event.Key for custom behavior. Try Escape to clear this field; use native buttons for Enter and Space activation.")
+      (div [ Flex.Flex.allSizes; JustifyContent.center ] [ content ])
+      """let search = Var.Create ""
+
+let clearOnEscape =
+  on.keyDown (fun _ event ->
+    if event.Key = "Escape" then
+      event.PreventDefault()
+      Var.Set search "")
+
+TextField.singleLine (
+  search,
+  labelText = View.Const "Press Escape to clear",
+  inputAttrs = [ clearOnEscape ]
+)"""
 
   let render () =
     Container.create (

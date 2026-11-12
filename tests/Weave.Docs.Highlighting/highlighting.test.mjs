@@ -46,8 +46,15 @@ test('all existing triple-quoted docs strings preserve their source text', () =>
   const dom = new JSDOM();
   const container = dom.window.document.createElement('div');
   let checked = 0;
-  for (const file of readdirSync(examples).filter(name => name.endsWith('.fs'))) {
-    for (const [, source] of readFileSync(new URL(file, examples), 'utf8').matchAll(/"""([\s\S]*?)"""/g)) {
+  function* exampleFiles(directory) {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = new URL(entry.name + (entry.isDirectory() ? '/' : ''), directory);
+      if (entry.isDirectory()) yield* exampleFiles(path);
+      else if (entry.name.endsWith('.fs')) yield path;
+    }
+  }
+  for (const file of exampleFiles(examples)) {
+    for (const [, source] of readFileSync(file, 'utf8').matchAll(/"""([\s\S]*?)"""/g)) {
       container.innerHTML = highlight(source);
       assert.equal(container.textContent, source.replace(/\r\n?/g, '\n'), file);
       checked++;
@@ -127,4 +134,43 @@ test('the shipped license matches the pinned upstream package', () => {
   const upstream = readFileSync(fileURLToPath(new URL('../../node_modules/highlight.js/LICENSE', import.meta.url)), 'utf8');
   const shipped = readFileSync(new URL('vendor/highlightjs/LICENSE', wwwroot), 'utf8');
   assert.equal(shipped.replace(/\r\n/g, '\n'), upstream.replace(/\r\n/g, '\n'));
+});
+
+
+test('standalone API signatures share code annotation scopes and preserve full text', () => {
+  const dom = new JSDOM();
+  const container = dom.window.document.createElement('div');
+  const tokens = html => {
+    container.innerHTML = html;
+    return [...container.querySelectorAll('span')].map(span => [span.className, span.textContent]);
+  };
+  for (const source of [
+    'int', 'string', 'unit', 'Attr list', 'Var<int>',
+    'View<Carousel.Item list>', '(string -> unit) option',
+    "'T[] * seq<Result<int, string>>", 'Var<string> or FormField<string>',
+  ]) {
+    const fragment = hljs.highlight(source, { language: 'fsharp-type' }).value;
+    const annotation = highlight(': ' + source);
+    assert.deepEqual(tokens(fragment), tokens(annotation).slice(1), source);
+    container.innerHTML = fragment;
+    assert.equal(container.textContent, source);
+    assert.equal(container.querySelector('.hljs-variable'), null, source);
+  }
+  container.innerHTML = hljs.highlight('View<Carousel.Item list>', { language: 'fsharp-type' }).value;
+  assert.equal(container.querySelector('.hljs-type').textContent, 'list');
+  dom.window.close();
+});
+
+test('API type highlighting is safe and repeatable across reactive updates', () => {
+  const { dom, element, render } = fixture('fsharp-type');
+  for (const source of ['int', 'View<Carousel.Item list>', 'string -> unit', '<img src=x onerror=alert(1)>']) {
+    element.textContent = source;
+    render();
+    const markup = element.innerHTML;
+    render();
+    assert.equal(element.innerHTML, markup);
+    assert.equal(element.textContent, source);
+    assert.equal(element.querySelectorAll('img, script').length, 0);
+  }
+  dom.window.close();
 });

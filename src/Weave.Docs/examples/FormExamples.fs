@@ -9,199 +9,183 @@ open Weave
 [<JavaScript>]
 module FormExamples =
 
-  type Person = {
-    Name: string
-    Age: int
-  }
-
-  let private fieldAttrs color = [ Field.Variant.outlined; Field.Label.above; Field.Width.full; color ]
-
-  let private actionButton (color: Attr) kind label =
-    button [
-      attr.``type`` kind
-      Attr.Class "weave-button"
-      if kind = "submit" then
-        color
-        Button.Variant.filled
-      else
-        Button.Variant.outlined
-    ] [ span [ Attr.Class "weave-button__label" ] [ text label ] ]
-
-  let private demo id color (model: FormModel<'T>) onSubmit submitLabel (fields: Doc list) extra =
-    let submitted = Var.Create ""
-
-    let save value = submitted.Value <- onSubmit value
-
-    let columnAttrs = [
-      GridItem.Span.twelve
-      if fields.Length > 1 then
-        GridItem.Span.Small.six
-    ]
-
-    Form.create (
-      model,
-      save,
-      [
-        model.Result |> Doc.sink (fun _ -> submitted.Value <- "")
-
-        Grid.create (
-          fields |> List.map (fun field -> GridItem.create (field, attrs = columnAttrs)),
-          attrs = [ Grid.Spacing.extraLarge; AlignItems.start ]
-        )
-
-        extra
-
-        div [ Margin.Top.small; Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g3 ] [
-          actionButton color "submit" submitLabel
-          actionButton color "reset" "Reset"
-        ]
-
-        div [ Typography.body2; Margin.Top.extraSmall; Attr.Create "role" "status" ] [
-          Doc.TextView submitted.View
-        ]
-      ],
-      attrs = [ Attr.Create "data-demo" id; on.reset (fun _ _ -> submitted.Value <- "") ]
-    )
-
   let private personExample () =
-    let name = FormField.create ("", rules = [ Validate.required "Enter your name." ])
-
-    let age =
-      FormField.create (18, rules = [ Validate.atLeast 18 "You must be at least 18." ])
-
-    let person = Form.model {
-      let! name = name
-      and! age = age
-
-      return {
-        Name = name.Trim()
-        Age = age
-      }
-    }
-
     let content =
-      demo
-        "profile"
-        Button.Color.primary
-        person
-        (fun value -> $"Profile saved for {value.Name}, age {value.Age}.")
-        "Save profile"
+      let name = FormField.create ("", rules = [ Validate.required "Enter your name." ])
+
+      let age =
+        FormField.create (18, rules = [ Validate.atLeast 18 "You must be at least 18." ])
+
+      let person = Form.model {
+        let! name = name
+        and! age = age
+        return name.Trim(), age
+      }
+
+      let submitted = Var.Create ""
+
+      Form.create (
+        person,
+        (fun value -> Var.Set submitted (sprintf "Submitted profile: %s, age %d." (fst value) (snd value))),
         [
-          TextField.singleLine (
-            name,
-            labelText = View.Const "Name",
-            placeholder = View.Const "Ada Lovelace",
-            attrs = fieldAttrs Field.Color.primary
-          )
-          NumericField.create (age, labelText = View.Const "Age", attrs = fieldAttrs Field.Color.primary)
+          TextField.singleLine (name, labelText = View.Const "Name")
+          NumericField.create (age, labelText = View.Const "Age")
+
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+            Button.primary (
+              text "Save profile",
+              onClick = ignore,
+              attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+            )
+            Button.create (
+              text "Reset",
+              onClick = ignore,
+              attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+            )
+          ]
+          p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+        ],
+        attrs = [
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          Gap.All.g3
+          on.reset (fun _ _ -> Var.Set submitted "")
         ]
-        Doc.Empty
+      )
 
     Helpers.codeSampleSection
       "A simple form"
       (Helpers.bodyText
-        "Declare fields and their rules, combine their values into a Person, and pass the fields directly to controls. Errors appear after blur or submit; reset restores the initial values. Top-align rows with AlignItems.start to keep controls anchored. Messages take space only while visible.")
-      content
-      """let name = FormField.create ("", rules = [ Validate.required "Enter your name." ])
+        "Declare fields and their rules, combine their values into a model, and pass the fields directly to controls. Submit an empty name to reveal its error. Reset restores the initial values. These actions only update this demo.")
+      (div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [ content ])
+      """let name =
+  FormField.create ("", rules = [ Validate.required "Enter your name." ])
 
 let age =
-  FormField.create (18, rules = [ Validate.atLeast 18 "You must be at least 18." ])
+  FormField.create (
+    18,
+    rules = [ Validate.atLeast 18 "You must be at least 18." ]
+  )
 
-let person = Form.model {
-  let! name = name
-  and! age = age
-
-  return {
-    Name = name.Trim()
-    Age = age
+let person =
+  Form.model {
+    let! name = name
+    and! age = age
+    return name.Trim(), age
   }
-}
+
+let submitted = Var.Create ""
 
 Form.create (
   person,
-  savePerson,
+  (fun value ->
+    Var.Set
+      submitted
+      (sprintf "Submitted profile: %s, age %d." (fst value) (snd value))),
   [
-    TextField.singleLine (
-      name,
-      labelText = View.Const "Name",
-      attrs = [ Field.Variant.outlined; Field.Label.above ]
-    )
+    TextField.singleLine (name, labelText = View.Const "Name")
+    NumericField.create (age, labelText = View.Const "Age")
 
-    NumericField.create (
-      age,
-      labelText = View.Const "Age",
-      attrs = [ Field.Variant.outlined; Field.Label.above ]
-    )
-
-    // Native buttons preserve Enter-to-submit and reset behavior.
-    button [
-      attr.``type`` "submit"
-      Attr.Class "weave-button"
-      Button.Color.primary
-      Button.Variant.filled
-    ] [ span [ Attr.Class "weave-button__label" ] [ text "Save profile" ] ]
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+      Button.primary (
+        text "Save profile",
+        onClick = ignore,
+        attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+      )
+      Button.create (
+        text "Reset",
+        onClick = ignore,
+        attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+      )
+    ]
+    p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+  ],
+  attrs = [
+    Flex.Flex.allSizes
+    FlexDirection.Column.allSizes
+    Gap.All.g3
+    on.reset (fun _ _ -> Var.Set submitted "")
   ]
 )"""
 
   let private rulesExample () =
-    let password =
-      FormField.create (
-        "",
-        rules = [
-          Validate.required "Enter a password."
-          |> Validate.andThen (Validate.minLength 8 "Use at least eight characters.")
-        ]
-      )
-
-    let confirmationRules =
-      password.Value.View
-      |> View.Map(fun expected -> [
-        Validate.required "Confirm your password."
-        |> Validate.andThen (Validate.equalTo expected "Passwords must match.")
-      ])
-
-    let confirmation = FormField.create ("", rulesView = confirmationRules)
-
-    let account = Form.model {
-      let! password = password
-      and! _ = confirmation
-      return password
-    }
-
     let content =
-      demo
-        "passwords"
-        Button.Color.secondary
-        account
-        (fun _ -> "Passwords match. Your demo account is ready.")
-        "Check passwords"
+      let password =
+        FormField.create (
+          "",
+          rules = [
+            Validate.required "Enter a password."
+            |> Validate.andThen (Validate.minLength 8 "Use at least eight characters.")
+          ]
+        )
+
+      let confirmationRules =
+        password.Value.View
+        |> View.Map(fun expected -> [
+          Validate.required "Confirm your password."
+          |> Validate.andThen (Validate.equalTo expected "Passwords must match.")
+        ])
+
+      let confirmation = FormField.create ("", rulesView = confirmationRules)
+
+      let account = Form.model {
+        let! password = password
+        and! _ = confirmation
+        return password
+      }
+
+      let submitted = Var.Create ""
+
+      Form.create (
+        account,
+        (fun _ -> Var.Set submitted "Passwords matched at submission."),
         [
           TextField.singleLine (
             password,
             labelText = View.Const "Password",
-            inputAttrs = [ attr.``type`` "password"; Attr.Create "autocomplete" "new-password" ],
-            attrs = fieldAttrs Field.Color.secondary
+            inputAttrs = [ attr.``type`` "password"; attr.autocomplete "new-password" ]
           )
           TextField.singleLine (
             confirmation,
             labelText = View.Const "Confirm password",
-            inputAttrs = [ attr.``type`` "password"; Attr.Create "autocomplete" "new-password" ],
-            attrs = fieldAttrs Field.Color.secondary
+            inputAttrs = [ attr.``type`` "password"; attr.autocomplete "new-password" ]
           )
+
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+            Button.primary (
+              text "Check passwords",
+              onClick = ignore,
+              attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+            )
+            Button.create (
+              text "Reset",
+              onClick = ignore,
+              attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+            )
+          ]
+          p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+        ],
+        attrs = [
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          Gap.All.g3
+          on.reset (fun _ _ -> Var.Set submitted "")
         ]
-        Doc.Empty
+      )
 
     Helpers.codeSampleSection
       "Cross-field validation"
       (Helpers.bodyText
-        "Enter matching passwords, then change the original to see the confirmation revalidate. The rulesView dependency keeps both fields in sync.")
-      content
+        "Enter matching passwords, then change the original. The confirmation revalidates through rulesView. Submission remains local to this demo.")
+      (div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [ content ])
       """let password =
   FormField.create (
     "",
     rules = [
       Validate.required "Enter a password."
-      |> Validate.andThen (Validate.minLength 8 "Use at least eight characters.")
+      |> Validate.andThen (
+        Validate.minLength 8 "Use at least eight characters."
+      )
     ]
   )
 
@@ -214,111 +198,202 @@ let confirmationRules =
 
 let confirmation = FormField.create ("", rulesView = confirmationRules)
 
-TextField.singleLine (
-  confirmation,
-  labelText = View.Const "Confirm password",
-  attrs = [ TextField.Variant.outlined; TextField.Color.secondary ]
+let account =
+  Form.model {
+    let! password = password
+    and! _ = confirmation
+    return password
+  }
+
+let submitted = Var.Create ""
+
+Form.create (
+  account,
+  (fun _ -> Var.Set submitted "Passwords matched at submission."),
+  [
+    TextField.singleLine (
+      password,
+      labelText = View.Const "Password",
+      inputAttrs = [
+        attr.``type`` "password"
+        attr.autocomplete "new-password"
+      ]
+    )
+    TextField.singleLine (
+      confirmation,
+      labelText = View.Const "Confirm password",
+      inputAttrs = [
+        attr.``type`` "password"
+        attr.autocomplete "new-password"
+      ]
+    )
+
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+      Button.primary (
+        text "Check passwords",
+        onClick = ignore,
+        attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+      )
+      Button.create (
+        text "Reset",
+        onClick = ignore,
+        attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+      )
+    ]
+    p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+  ],
+  attrs = [
+    Flex.Flex.allSizes
+    FlexDirection.Column.allSizes
+    Gap.All.g3
+    on.reset (fun _ _ -> Var.Set submitted "")
+  ]
 )"""
 
   let private numericExample () =
-    let age =
-      FormField.create (18, rules = [ Validate.between 18 120 "Age must be between 18 and 120." ])
+    let content =
+      let age =
+        FormField.create (18, rules = [ Validate.between 18 120 "Age must be between 18 and 120." ])
 
-    let quantity =
-      FormField.create (
-        2,
-        rules = [
-          Validate.greaterThan 0 "Quantity must be positive."
-          |> Validate.andThen (Validate.custom (fun value -> value % 2 = 0) "Order tickets in pairs.")
+      let quantity =
+        FormField.create (
+          2,
+          rules = [
+            Validate.greaterThan 0 "Quantity must be positive."
+            |> Validate.andThen (Validate.custom (fun value -> value % 2 = 0) "Order tickets in pairs.")
+          ]
+        )
+
+      let booking = Form.model {
+        let! age = age
+        and! quantity = quantity
+        return age, quantity
+      }
+
+      let submitted = Var.Create ""
+
+      Form.create (
+        booking,
+        (fun value ->
+          Var.Set submitted (sprintf "Reserved %d demo tickets for a guest aged %d." (snd value) (fst value))),
+        [
+          NumericField.create (age, labelText = View.Const "Guest age")
+          NumericField.create (quantity, labelText = View.Const "Tickets")
+
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+            Button.primary (
+              text "Reserve tickets",
+              onClick = ignore,
+              attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+            )
+            Button.create (
+              text "Reset",
+              onClick = ignore,
+              attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+            )
+          ]
+          p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+        ],
+        attrs = [
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          Gap.All.g3
+          on.reset (fun _ _ -> Var.Set submitted "")
         ]
       )
-
-    let booking = Form.model {
-      let! age = age
-      and! quantity = quantity
-      return age, quantity
-    }
-
-    let content =
-      demo
-        "numbers"
-        Button.Color.tertiary
-        booking
-        (fun (age, quantity) -> $"Reserved {quantity} demo tickets for a guest aged {age}.")
-        "Reserve tickets"
-        [
-          NumericField.create (
-            age,
-            labelText = View.Const "Guest age",
-            attrs = fieldAttrs Field.Color.tertiary
-          )
-          NumericField.create (
-            quantity,
-            labelText = View.Const "Tickets",
-            attrs = fieldAttrs Field.Color.tertiary
-          )
-        ]
-        Doc.Empty
 
     Helpers.codeSampleSection
       "Numeric comparisons"
       (Helpers.bodyText
-        "atLeast, atMost, and between include their boundaries; greaterThan and lessThan exclude them. Arithmetic predicates use ordinary F#. Browser forms use int or float; the installed WebSharper version does not transpile decimal arithmetic.")
-      content
+        "between includes its boundaries; greaterThan excludes its boundary. A custom predicate requires an even ticket count. Submit to test the rules.")
+      (div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [ content ])
       """let age =
-  FormField.create (18, rules = [ Validate.between 18 120 "Age must be between 18 and 120." ])
+  FormField.create (
+    18,
+    rules = [ Validate.between 18 120 "Age must be between 18 and 120." ]
+  )
 
 let quantity =
   FormField.create (
     2,
     rules = [
       Validate.greaterThan 0 "Quantity must be positive."
-      |> Validate.andThen (Validate.custom (fun value -> value % 2 = 0) "Order tickets in pairs.")
+      |> Validate.andThen (
+        Validate.custom (fun value -> value % 2 = 0) "Order tickets in pairs."
+      )
     ]
-  )"""
+  )
+
+let booking =
+  Form.model {
+    let! age = age
+    and! quantity = quantity
+    return age, quantity
+  }
+
+let submitted = Var.Create ""
+
+Form.create (
+  booking,
+  (fun value ->
+    Var.Set
+      submitted
+      (sprintf
+        "Reserved %d demo tickets for a guest aged %d."
+        (snd value)
+        (fst value))),
+  [
+    NumericField.create (age, labelText = View.Const "Guest age")
+    NumericField.create (quantity, labelText = View.Const "Tickets")
+
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+      Button.primary (
+        text "Reserve tickets",
+        onClick = ignore,
+        attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+      )
+      Button.create (
+        text "Reset",
+        onClick = ignore,
+        attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+      )
+    ]
+    p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+  ],
+  attrs = [
+    Flex.Flex.allSizes
+    FlexDirection.Column.allSizes
+    Gap.All.g3
+    on.reset (fun _ _ -> Var.Set submitted "")
+  ]
+)"""
 
   let private collectionExample () =
-    let interests =
-      FormField.create (
-        Set.empty<string>,
-        rules = [
-          Validate.minLengthBy Set.count 1 "Choose at least one interest."
-          Validate.maxLengthBy Set.count 3 "Choose at most three interests."
-        ]
-      )
-
-    let model = Form.model {
-      let! interests = interests
-      return interests
-    }
-
-    let items =
-      [ "Design"; "Engineering"; "Music"; "Photography"; "Travel" ]
-      |> List.map (fun interest -> SelectItem.create (text interest, interest, interest))
-      |> View.Const
-
-    let selection =
-      div [ Typography.body2; Margin.Top.extraSmall ] [
-        Doc.TextView(
-          interests.Value.View
-          |> View.Map(fun values ->
-            let names =
-              if Set.isEmpty values then
-                "None"
-              else
-                String.concat ", " (Set.toList values)
-
-            $"Selected ({values.Count}/3): {names}")
-        )
-      ]
-
     let content =
-      demo
-        "collections"
-        Button.Color.secondary
-        model
-        (fun values -> "Interests saved: " + String.concat ", " (Set.toList values) + ".")
-        "Save interests"
+      let interests =
+        FormField.create (
+          Set.empty<string>,
+          rules = [
+            Validate.minLengthBy Set.count 1 "Choose at least one interest."
+            Validate.maxLengthBy Set.count 3 "Choose at most three interests."
+          ]
+        )
+
+      let model = Form.model {
+        let! interests = interests
+        return interests
+      }
+
+      let items =
+        [ "Design"; "Engineering"; "Music"; "Photography"; "Travel" ]
+        |> List.map (fun name -> SelectItem.create (text name, name, name))
+        |> View.Const
+
+      let submitted = Var.Create ""
+
+      Form.create (
+        model,
+        (fun value -> Var.Set submitted ("Submitted interests: " + String.concat ", " (Set.toList value))),
         [
           MultiSelect.create (
             items,
@@ -326,16 +401,36 @@ let quantity =
             labelText = View.Const "Interests",
             placeholder = View.Const "Choose your interests",
             clearable = View.Const true,
-            attrs = fieldAttrs Field.Color.secondary @ [ Select.Color.secondary; Select.Width.full ]
+            attrs = [ Select.Width.full ]
           )
+
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+            Button.primary (
+              text "Save interests",
+              onClick = ignore,
+              attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+            )
+            Button.create (
+              text "Reset",
+              onClick = ignore,
+              attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+            )
+          ]
+          p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+        ],
+        attrs = [
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          Gap.All.g3
+          on.reset (fun _ _ -> Var.Set submitted "")
         ]
-        selection
+      )
 
     Helpers.codeSampleSection
       "Collection lengths"
       (Helpers.bodyText
-        "Choose one to three interests; selecting a fourth shows the maximum-length error. Supply List.length, Array.length, Set.count, or a custom measurement to minLengthBy and maxLengthBy.")
-      content
+        "Choose one to three interests; a fourth reveals the maximum-length error. minLengthBy and maxLengthBy accept the measurement function for your collection type.")
+      (div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [ content ])
       """let interests =
   FormField.create (
     Set.empty<string>,
@@ -345,83 +440,191 @@ let quantity =
     ]
   )
 
-MultiSelect.create (
-  items,
-  interests,
-  labelText = View.Const "Interests",
-  attrs = [ Select.Variant.outlined; Select.Color.secondary ]
-)
+let model =
+  Form.model {
+    let! interests = interests
+    return interests
+  }
 
-// You can apply other rules to a measured length, too.
-let tagsRule = Validate.on List.length (Validate.between 1 5 "Choose 1 to 5 tags.")"""
+let items =
+  [ "Design"; "Engineering"; "Music"; "Photography"; "Travel" ]
+  |> List.map (fun name -> SelectItem.create (text name, name, name))
+  |> View.Const
+
+let submitted = Var.Create ""
+
+Form.create (
+  model,
+  (fun value ->
+    Var.Set
+      submitted
+      ("Submitted interests: " + String.concat ", " (Set.toList value))),
+  [
+    MultiSelect.create (
+      items,
+      interests,
+      labelText = View.Const "Interests",
+      placeholder = View.Const "Choose your interests",
+      clearable = View.Const true,
+      attrs = [ Select.Width.full ]
+    )
+
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+      Button.primary (
+        text "Save interests",
+        onClick = ignore,
+        attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+      )
+      Button.create (
+        text "Reset",
+        onClick = ignore,
+        attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+      )
+    ]
+    p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+  ],
+  attrs = [
+    Flex.Flex.allSizes
+    FlexDirection.Column.allSizes
+    Gap.All.g3
+    on.reset (fun _ _ -> Var.Set submitted "")
+  ]
+)"""
 
   let private arithmeticExample () =
-    let price =
-      FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
-
-    let quantityRules =
-      price.Value.View
-      |> View.Map(fun price -> [
-        Validate.atLeast 1 "Quantity must be positive."
-        Validate.on
-          (fun quantity -> price * float quantity)
-          (Validate.atMost 100.0 "Total must not exceed 100.")
-      ])
-
-    let quantity = FormField.create (4, rulesView = quantityRules)
-
-    let order = Form.model {
-      let! price = price
-      and! quantity = quantity
-      return price, quantity
-    }
-
-    let total =
-      View.Map2 (fun price quantity -> price * float quantity) price.Value.View quantity.Value.View
-
-    let summary =
-      div [ Typography.body2; Margin.Top.extraSmall ] [
-        Doc.TextView(total |> View.Map(fun value -> sprintf "Total: $%.2f (budget: $100.00)" value))
-      ]
-
     let content =
-      demo
-        "arithmetic"
-        Button.Color.tertiary
-        order
-        (fun (price, quantity) ->
-          sprintf "Demo order saved: %d items, total $%.2f." quantity (price * float quantity))
-        "Save order"
+      let price =
+        FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
+
+      let quantityRules =
+        price.Value.View
+        |> View.Map(fun price -> [
+          Validate.atLeast 1 "Quantity must be positive."
+          Validate.on
+            (fun quantity -> price * float quantity)
+            (Validate.atMost 100.0 "Total must not exceed 100.")
+        ])
+
+      let quantity = FormField.create (4, rulesView = quantityRules)
+
+      let order = Form.model {
+        let! price = price
+        and! quantity = quantity
+        return price, quantity
+      }
+
+      let total =
+        View.Map2 (fun price count -> price * float count) price.Value.View quantity.Value.View
+
+      let submitted = Var.Create ""
+
+      Form.create (
+        order,
+        (fun value ->
+          Var.Set
+            submitted
+            (sprintf "Submitted %d items for $%.2f." (snd value) (fst value * float (snd value)))),
         [
-          NumericField.create (
-            price,
-            labelText = View.Const "Unit price ($)",
-            attrs = fieldAttrs Field.Color.tertiary
-          )
-          NumericField.create (
-            quantity,
-            labelText = View.Const "Quantity",
-            attrs = fieldAttrs Field.Color.tertiary
-          )
+          NumericField.create (price, labelText = View.Const "Unit price ($)")
+          NumericField.create (quantity, labelText = View.Const "Quantity")
+          p [] [ textView (total |> View.Map(sprintf "Total: $%.2f (budget: $100.00)")) ]
+
+          div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+            Button.primary (
+              text "Save order",
+              onClick = ignore,
+              attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+            )
+            Button.create (
+              text "Reset",
+              onClick = ignore,
+              attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+            )
+          ]
+          p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+        ],
+        attrs = [
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+          Gap.All.g3
+          on.reset (fun _ _ -> Var.Set submitted "")
         ]
-        summary
+      )
 
     Helpers.codeSampleSection
       "Arithmetic across fields"
       (Helpers.bodyText
-        "The budget is $100. Increase quantity to 5, then lower the unit price to 20. Either field rechecks the total through Validate.on, while quantity keeps its original value.")
-      content
+        "The budget is $100. Increase quantity to 5, then lower the unit price to 20. Validate.on checks the derived total while the field retains its original quantity.")
+      (div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [ content ])
       """let price =
-  FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
+  FormField.create (
+    25.0,
+    rules = [ Validate.greaterThan 0.0 "Price must be positive." ]
+  )
 
 let quantityRules =
   price.Value.View
   |> View.Map(fun price -> [
     Validate.atLeast 1 "Quantity must be positive."
-    Validate.on (fun quantity -> price * float quantity) (Validate.atMost 100.0 "Total must not exceed 100.")
+    Validate.on
+      (fun quantity -> price * float quantity)
+      (Validate.atMost 100.0 "Total must not exceed 100.")
   ])
 
-let quantity = FormField.create (4, rulesView = quantityRules)"""
+let quantity = FormField.create (4, rulesView = quantityRules)
+
+let order =
+  Form.model {
+    let! price = price
+    and! quantity = quantity
+    return price, quantity
+  }
+
+let total =
+  View.Map2
+    (fun price count -> price * float count)
+    price.Value.View
+    quantity.Value.View
+
+let submitted = Var.Create ""
+
+Form.create (
+  order,
+  (fun value ->
+    Var.Set
+      submitted
+      (sprintf
+        "Submitted %d items for $%.2f."
+        (snd value)
+        (fst value * float (snd value)))),
+  [
+    NumericField.create (price, labelText = View.Const "Unit price ($)")
+    NumericField.create (quantity, labelText = View.Const "Quantity")
+    p [] [
+      textView (total |> View.Map(sprintf "Total: $%.2f (budget: $100.00)"))
+    ]
+
+    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; Gap.All.g2 ] [
+      Button.primary (
+        text "Save order",
+        onClick = ignore,
+        attrs = [ attr.``type`` "submit"; Button.Variant.filled ]
+      )
+      Button.create (
+        text "Reset",
+        onClick = ignore,
+        attrs = [ attr.``type`` "reset"; Button.Variant.outlined ]
+      )
+    ]
+    p [ Attr.Create "role" "status" ] [ textView submitted.View ]
+  ],
+  attrs = [
+    Flex.Flex.allSizes
+    FlexDirection.Column.allSizes
+    Gap.All.g3
+    on.reset (fun _ _ -> Var.Set submitted "")
+  ]
+)"""
 
   let private apiReference () =
     Helpers.apiSection

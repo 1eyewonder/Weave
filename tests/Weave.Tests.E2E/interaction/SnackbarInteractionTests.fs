@@ -215,11 +215,16 @@ type SnackbarInteractionTests(fixture: TestFixture) =
           "Bottom right", "bottom-right", false, 1
         ] do
         let choice =
-          this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = label, Exact = true))
+          this.Page.GetByRole(AriaRole.Combobox, PageGetByRoleOptions(Name = "Position", Exact = true))
 
         do! choice.ClickAsync()
-        do! this.Expect(choice).ToHaveAttributeAsync("aria-pressed", "true")
-        do! this.Expect(this.Page.Locator("button[aria-pressed='true']")).ToHaveCountAsync(1)
+
+        do!
+          this.Page.GetByRole(AriaRole.Option, PageGetByRoleOptions(Name = label, Exact = true)).ClickAsync()
+
+        do! this.Expect(choice).ToContainTextAsync(label)
+        do! this.Expect(messages).ToHaveCountAsync(0)
+        do! this.Click("Show notification")
 
         do!
           this
@@ -227,7 +232,7 @@ type SnackbarInteractionTests(fixture: TestFixture) =
             .ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-snackbar-host--" + position))
 
         do! this.Expect(messages).ToHaveCountAsync(1)
-        do! this.Expect(messages).ToContainTextAsync(label + " notification")
+        do! this.Expect(messages).ToContainTextAsync("Your changes have been saved.")
         let! bounds = messages.BoundingBoxAsync()
 
         if isTop then
@@ -243,10 +248,25 @@ type SnackbarInteractionTests(fixture: TestFixture) =
       do! this.Click("Clear all")
       do! this.Expect(messages).ToHaveCountAsync(0)
 
-      let topCenter =
-        this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Top center", Exact = true))
+      let positionChoice =
+        this.Page.GetByRole(AriaRole.Combobox, PageGetByRoleOptions(Name = "Position", Exact = true))
 
-      do! topCenter.FocusAsync()
-      do! topCenter.PressAsync("Space")
-      do! this.Expect(messages).ToContainTextAsync("Top center notification")
+      do! positionChoice.FocusAsync()
+      do! positionChoice.PressAsync("ArrowDown")
+      do! positionChoice.PressAsync("ArrowDown")
+      do! positionChoice.PressAsync("Enter")
+      do! this.Expect(positionChoice).ToContainTextAsync("Top center")
+
+      let show =
+        this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Show notification", Exact = true))
+
+      do! show.FocusAsync()
+      do! show.PressAsync("Space")
+
+      do!
+        this
+          .Expect(host)
+          .ToHaveClassAsync(System.Text.RegularExpressions.Regex("weave-snackbar-host--top-center"))
+
+      do! this.Expect(messages).ToContainTextAsync("Your changes have been saved.")
     }

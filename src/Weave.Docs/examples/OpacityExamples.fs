@@ -11,17 +11,17 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module OpacityExamples =
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
@@ -31,7 +31,12 @@ module OpacityExamples =
         "Opacity utility classes control element transparency on a stepped scale from 0 (invisible) to 100 (fully opaque) in increments of 10. Apply an opacity class via the Opacity module callsites (e.g. Opacity.fifty for 50%)."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [
@@ -100,33 +105,12 @@ module OpacityExamples =
         ]
       ]
 
-    let code =
-      """open Weave
-
-// Apply an opacity class directly
-div [ Opacity.fifty ] [
-    text "This element is 50% transparent"
-]
-
-// Named callsites for each step of 10
-// Opacity.zero       → weave-opacity-0
-// Opacity.fifty      → weave-opacity-50
-// Opacity.hundred    → weave-opacity-100
-
-// Combine with other attrs
-div [
-    Opacity.seventy
-    Padding.All.small
-] [
-    text "70% opacity with padding"
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   let private visualScaleSection () =
     let description =
       Helpers.bodyText
-        "The full opacity scale applied to a colored surface. Each box shows its opacity percentage."
+        "The full opacity scale applied to colored samples. Labels stay fully opaque so every value remains readable."
 
     let opacityLevels = [
       0, Opacity.zero
@@ -149,17 +133,17 @@ div [
             GridItem.create (
               div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
                 div [
-                  BrandColor.BackgroundColor.primary
+                  BrandColor.Fill.primary
                   BorderRadius.All.small
                   opacity
                   Flex.Flex.allSizes
                   AlignItems.center
                   JustifyContent.center
-                  Attr.Style "min-height" "64px"
-                  Attr.Style "width" "100%"
-                ] [ div [ Typography.subtitle2 ] [ text (sprintf "%d%%" level) ] ]
-                div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-                  text (sprintf "%d" level)
+                  Attr.Style "height" "64px"
+                  Attr.Style "width" "64px"
+                ] []
+                div [ Typography.body2; Margin.Top.extraSmall; Typography.Color.textSecondary ] [
+                  text (sprintf "%d%%" level)
                 ]
               ],
               attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
@@ -168,21 +152,26 @@ div [
       )
 
     let code =
-      """open Weave
+      """let sample opacity =
+  div [
+    opacity
+    BrandColor.Fill.primary
+    BorderRadius.All.small
+    Attr.Style "width" "64px"
+    Attr.Style "height" "64px"
+  ] []
 
-// Apply opacity to any element via the module callsite
-div [
-    BrandColor.BackgroundColor.primary
-    Opacity.fifty
-] [
-    text "50% opacity"
-]
-
-// Each step of 10 has a named callsite
-div [ BrandColor.BackgroundColor.primary; Opacity.zero ] [ text "0%" ]
-div [ BrandColor.BackgroundColor.primary; Opacity.thirty ] [ text "30%" ]
-div [ BrandColor.BackgroundColor.primary; Opacity.seventy ] [ text "70%" ]
-div [ BrandColor.BackgroundColor.primary; Opacity.hundred ] [ text "100%" ]"""
+sample Opacity.zero
+sample Opacity.ten
+sample Opacity.twenty
+sample Opacity.thirty
+sample Opacity.forty
+sample Opacity.fifty
+sample Opacity.sixty
+sample Opacity.seventy
+sample Opacity.eighty
+sample Opacity.ninety
+sample Opacity.hundred"""
 
     Helpers.codeSampleSection "Visual scale" description content code
 
@@ -192,7 +181,12 @@ div [ BrandColor.BackgroundColor.primary; Opacity.hundred ] [ text "100%" ]"""
         "Weave provides semantic opacity CSS custom properties for common use cases. Components reference these tokens internally."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [ tableHeaderCell "Token"; tableHeaderCell "Value"; tableHeaderCell "Purpose" ]
@@ -232,22 +226,7 @@ div [ BrandColor.BackgroundColor.primary; Opacity.hundred ] [ text "100%" ]"""
         ]
       ]
 
-    let code =
-      """open WebSharper.UI.Html
-
-// Use a design token directly in an inline style
-div [ Attr.Style "opacity" "var(--weave-opacity-disabled)" ] [
-    text "Matches the disabled opacity used by all Weave components"
-]
-
-// Override a token for a subtree
-div [ Attr.Style "--weave-opacity-disabled" "0.5" ] [
-    // All disabled components inside this container
-    // will use 0.5 instead of the default 0.38
-    text "Custom disabled opacity"
-]"""
-
-    Helpers.codeSampleSection "Design tokens" description content code
+    Helpers.section "Design tokens" description content
 
   let render () =
     Container.create (
@@ -258,9 +237,9 @@ div [ Attr.Style "--weave-opacity-disabled" "0.5" ] [
         ]
 
         Helpers.divider ()
-        howItWorksSection ()
-        Helpers.divider ()
         visualScaleSection ()
+        Helpers.divider ()
+        howItWorksSection ()
         Helpers.divider ()
         designTokensSection ()
       ],

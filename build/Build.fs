@@ -177,6 +177,7 @@ let runTests _ =
 
 let runUnitRenderingTests _ =
   runDocsSourceChecks configuration
+
   !!testsGlob
   |> Seq.filter (fun project -> Path.GetFileName(project) <> "Weave.Tests.E2E.fsproj")
   |> runTestProjects

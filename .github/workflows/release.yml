@@ -82,6 +82,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: test-image.tar.gz
+          # Bump the v1 prefix when intentionally refreshing upstream tool versions.
           key: weave-test-image-v1-${{ hashFiles('Dockerfile.tests', 'package.json') }}
 
       - uses: docker/setup-buildx-action@v4

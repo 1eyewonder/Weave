@@ -88,10 +88,11 @@ type TextField =
       | None -> Doc.Empty
 
     let fieldDoc =
-      Field.create (
+      Field.createWithSupportingContent (
         inputElement,
         isFocused.View,
         shouldFloat,
+        counterDoc,
         labelText = labelText,
         ?showHelpText = showHelpText,
         ?helpText = helpText,
@@ -108,7 +109,7 @@ type TextField =
         ]
       )
 
-    [ debounceSinkDoc; fieldDoc; counterDoc ] |> Doc.Concat
+    [ debounceSinkDoc; fieldDoc ] |> Doc.Concat
 
   static member singleLine
     (

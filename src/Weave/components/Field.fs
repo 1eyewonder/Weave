@@ -61,16 +61,13 @@ type FieldHelpText =
 [<JavaScript; RequireQualifiedAccess>]
 type Field =
 
-  /// <summary>
-  /// Core overload: wraps a pre-built input element with the full field chrome
-  /// (label, adornments, outline, help text, variant styling, focus/disabled states).
-  /// Use this when you need a custom input element (e.g. numeric, date, etc.).
-  /// </summary>
-  static member create
+  /// Keeps supporting content, such as a character counter, inside its field.
+  static member internal createWithSupportingContent
     (
       inputElement: Doc,
       isFocused: View<bool>,
       shouldFloat: View<bool>,
+      supportingContent: Doc,
       ?labelText: View<string>,
       ?showHelpText: View<bool>,
       ?helpText: Doc,
@@ -191,4 +188,44 @@ type Field =
 
       helpTextDoc
       errorDoc
+      supportingContent
     ]
+
+  /// <summary>
+  /// Core overload: wraps a pre-built input element with the full field chrome
+  /// (label, adornments, outline, help text, variant styling, focus/disabled states).
+  /// Use this when you need a custom input element (e.g. numeric, date, etc.).
+  /// </summary>
+  static member create
+    (
+      inputElement: Doc,
+      isFocused: View<bool>,
+      shouldFloat: View<bool>,
+      ?labelText: View<string>,
+      ?showHelpText: View<bool>,
+      ?helpText: Doc,
+      ?validation: FieldValidation,
+      ?enabled: View<bool>,
+      ?startAdornment: Doc,
+      ?endAdornment: Doc,
+      ?typoAttrs: Attr list,
+      ?inputId: string,
+      ?attrs: Attr list
+    ) =
+
+    Field.createWithSupportingContent (
+      inputElement,
+      isFocused,
+      shouldFloat,
+      Doc.Empty,
+      ?labelText = labelText,
+      ?showHelpText = showHelpText,
+      ?helpText = helpText,
+      ?validation = validation,
+      ?enabled = enabled,
+      ?startAdornment = startAdornment,
+      ?endAdornment = endAdornment,
+      ?typoAttrs = typoAttrs,
+      ?inputId = inputId,
+      ?attrs = attrs
+    )

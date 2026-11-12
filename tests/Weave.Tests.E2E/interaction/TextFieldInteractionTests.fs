@@ -47,3 +47,30 @@ type TextFieldInteractionTests(fixture: TestFixture) =
       "The label should remain above the input after typing"
     )
   }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``character counters stay within their fields while typing``(width: int) = task {
+    do! this.Page.SetViewportSizeAsync(width, 900)
+    do! this.NavigateTo("textfield")
+
+    for label in [ "Max Length"; "Full width counter"; "Multiline Text Field" ] do
+      let input = this.Page.GetByLabel(label)
+      let field = input.Locator("..").Locator("..")
+      let counter = field.Locator(".weave-field__counter")
+      do! this.Expect(counter).ToHaveTextAsync("0/50")
+      do! input.FillAsync("Hello")
+      do! this.Expect(counter).ToHaveTextAsync("5/50")
+
+      let! controlBox = field.Locator(".weave-field__control").BoundingBoxAsync()
+      let! counterBox = counter.BoundingBoxAsync()
+      let! fieldBox = field.BoundingBoxAsync()
+      Assert.True(counterBox.Y >= controlBox.Y + controlBox.Height - 1.0f, label + ": below the control")
+      Assert.True(counterBox.X >= fieldBox.X - 1.0f, label + ": within the field start")
+
+      Assert.True(
+        counterBox.X + counterBox.Width <= fieldBox.X + fieldBox.Width + 1.0f,
+        label + ": within the field end"
+      )
+  }

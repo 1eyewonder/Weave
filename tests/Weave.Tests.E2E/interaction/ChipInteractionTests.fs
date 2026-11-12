@@ -166,3 +166,55 @@ type ChipInteractionTests(fixture: TestFixture) =
 
           Assert.True(contrast >= 4.5, $"{color} {variant} {state}, dark={dark}, contrast={contrast:F2}:1")
   }
+
+  [<Fact>]
+  member this.``reactive disabled state removes chip actions and links from keyboard use``() = task {
+    do! this.NavigateTo("chip")
+    let action = this.Page.GetByTestId("reactive-chip-action")
+    let both = this.Page.GetByTestId("reactive-chip-both")
+    let link = this.Page.GetByTestId("reactive-chip-link")
+    let linkClose = this.Page.GetByTestId("reactive-chip-link-close")
+
+    let controls = [
+      action
+      both.Locator(".weave-chip__action")
+      both.Locator(".weave-chip__close")
+      link
+      linkClose.Locator(".weave-chip__action")
+      linkClose.Locator(".weave-chip__close")
+    ]
+
+    for control in controls do
+      do! this.Expect(control).ToHaveAttributeAsync("aria-disabled", "false")
+      do! this.Expect(control).ToHaveAttributeAsync("tabindex", "0")
+
+    do! this.Page.GetByTestId("toggle-chip-access").ClickAsync()
+    let originalUrl = this.Page.Url
+
+    for control in controls do
+      do! this.Expect(control).ToHaveAttributeAsync("aria-disabled", "true")
+      do! this.Expect(control).ToHaveAttributeAsync("tabindex", "-1")
+
+      let! _ =
+        control.EvaluateAsync(
+          "el => { el.click(); el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); }"
+        )
+
+      ()
+
+    do! this.Expect(this.Page.GetByTestId("chip-actions")).ToHaveTextAsync("0")
+    do! this.Expect(this.Page.GetByTestId("chip-closes")).ToHaveTextAsync("0")
+    Assert.Equal(originalUrl, this.Page.Url)
+
+    do! this.Page.GetByTestId("toggle-chip-access").ClickAsync()
+
+    for control in controls do
+      do! this.Expect(control).ToHaveAttributeAsync("aria-disabled", "false")
+      do! this.Expect(control).ToHaveAttributeAsync("tabindex", "0")
+
+    do! action.ClickAsync()
+    do! link.ClickAsync()
+    do! both.Locator(".weave-chip__close").ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("chip-actions")).ToHaveTextAsync("2")
+    do! this.Expect(this.Page.GetByTestId("chip-closes")).ToHaveTextAsync("1")
+  }

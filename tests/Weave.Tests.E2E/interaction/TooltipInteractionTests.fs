@@ -412,14 +412,22 @@ type TooltipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``an open tooltip restores its requested side after resize``() = task {
+  member this.``a fixed viewport-relative tooltip restores its requested side after resize``() = task {
     do! this.NavigateTo("tooltip-viewport")
     do! this.Page.SetViewportSizeAsync(320, 640)
     let wrapper = this.Page.GetByTestId("tooltip-edge-right")
+
+    let! _ =
+      wrapper.EvaluateAsync(
+        "el => { el.style.position = 'fixed'; el.style.left = '50vw'; el.style.top = '120px'; }"
+      )
+
     let trigger = wrapper.Locator("button")
     let tooltip = wrapper.GetByRole(AriaRole.Tooltip)
     do! trigger.FocusAsync()
     do! this.ExpectTooltipInViewport tooltip
+    do! this.Expect(tooltip).ToHaveAttributeAsync("data-popover-flip", "")
+    let! originalOwner = wrapper.BoundingBoxAsync()
     do! this.Page.SetViewportSizeAsync(800, 640)
 
     let! _ =
@@ -428,6 +436,14 @@ type TooltipInteractionTests(fixture: TestFixture) =
       )
 
     do! this.ExpectTooltipInViewport tooltip
+    do! this.Expect(tooltip).Not.ToHaveAttributeAsync("data-popover-flip", "")
+    let! resizedOwner = wrapper.BoundingBoxAsync()
+
+    Assert.True(
+      abs (resizedOwner.Width - originalOwner.Width) <= 1.0f,
+      "The trigger must keep a constant size."
+    )
+
     let! target = trigger.BoundingBoxAsync()
     let! popup = tooltip.BoundingBoxAsync()
 

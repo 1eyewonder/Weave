@@ -142,7 +142,7 @@ module DocumentEventListener =
 module internal FocusNavigation =
 
   let private focusableSelector =
-    "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type=\"hidden\"]), select:not([disabled]), summary, [tabindex]"
+    "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type=\"hidden\"]), select:not([disabled]), summary, [contenteditable]:not([contenteditable=\"false\"]), [tabindex]"
 
   let rec private hiddenByClosedDetails (candidate: Dom.Element) (ancestor: Dom.Element) =
     if isNull ancestor then

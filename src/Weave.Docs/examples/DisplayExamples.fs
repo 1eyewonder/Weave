@@ -9,27 +9,25 @@ open Weave
 [<JavaScript>]
 module DisplayExamples =
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
-  let private colorBox (label: string) (color: string) (extraAttrs: Attr list) =
+  let private colorBox (label: string) (color: Attr) (extraAttrs: Attr list) =
     div [
-      Attr.Style "background" color
-      Attr.Style "color" "white"
+      color
+      Typography.subtitle2
       Attr.Style "padding" "8px 12px"
-      Attr.Style "font-size" "13px"
-      Attr.Style "font-weight" "600"
       Attr.Style "border-radius" "4px"
       Attr.Style "text-align" "center"
       yield! extraAttrs
@@ -41,7 +39,12 @@ module DisplayExamples =
         "The Display module controls CSS display types with responsive breakpoint support. Each display type (Block, Flex, Inline, etc.) has always, hidden, HideOn, and ShowOnly sub-modules for responsive visibility."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [
@@ -110,25 +113,7 @@ module DisplayExamples =
         ]
       ]
 
-    let code =
-      """open Weave
-
-// Always display as block
-div [ Display.Block.always ] [ text "Block element" ]
-
-// Always display as flex
-div [ Display.Flex.always ] [ text "Flex container" ]
-
-// Completely hidden
-div [ Display.Block.hidden ] [ text "You cannot see me" ]
-
-// Hide on small screens, show as block on medium and up
-div [ Display.Block.HideOn.xs ] [ text "Hidden on XS" ]
-
-// Show only on large screens as a flex container
-div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   let private basicDisplaySection () =
     let description =
@@ -140,39 +125,39 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
         div [ Margin.Bottom.small ] [
           div [
             Display.Block.always
-            BrandColor.BackgroundColor.primary
+            BrandColor.Fill.primary
             Padding.All.extraSmall
             BorderRadius.All.small
             Margin.Bottom.extraSmall
-          ] [ div [ Typography.body2 ] [ text "Block A — takes full width" ] ]
+          ] [ text "Block A — takes full width" ]
           div [
             Display.Block.always
-            BrandColor.BackgroundColor.secondary
+            BrandColor.Fill.secondary
             Padding.All.extraSmall
             BorderRadius.All.small
-          ] [ div [ Typography.body2 ] [ text "Block B — stacks below" ] ]
+          ] [ text "Block B — stacks below" ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Inline" ]
         div [ Margin.Bottom.small ] [
           span [
             Display.Inline.always
-            BrandColor.BackgroundColor.info
-            Padding.All.extraSmall
+            BrandColor.Fill.info
+            Padding.Horizontal.extraSmall
             BorderRadius.All.small
           ] [ text "Inline A" ]
           text " "
           span [
             Display.Inline.always
-            BrandColor.BackgroundColor.success
-            Padding.All.extraSmall
+            BrandColor.Fill.success
+            Padding.Horizontal.extraSmall
             BorderRadius.All.small
           ] [ text "Inline B" ]
           text " "
           span [
             Display.Inline.always
-            BrandColor.BackgroundColor.warning
-            Padding.All.extraSmall
+            BrandColor.Fill.warning
+            Padding.Horizontal.extraSmall
             BorderRadius.All.small
           ] [ text "Inline C" ]
         ]
@@ -181,37 +166,74 @@ div [ Display.Flex.ShowOnly.lg ] [ text "LG only" ]"""
         div [ Margin.Bottom.small ] [
           div [
             Display.InlineBlock.always
-            BrandColor.BackgroundColor.error
+            BrandColor.Fill.error
             Padding.All.extraSmall
             BorderRadius.All.small
             Attr.Style "width" "120px"
-          ] [ div [ Typography.body2 ] [ text "Inline Block" ] ]
+          ] [ text "Inline Block" ]
           text " "
           div [
             Display.InlineBlock.always
-            BrandColor.BackgroundColor.tertiary
+            BrandColor.Fill.tertiary
             Padding.All.extraSmall
             BorderRadius.All.small
             Attr.Style "width" "120px"
-          ] [ div [ Typography.body2 ] [ text "Inline Block" ] ]
+          ] [ text "Inline Block" ]
         ]
       ]
 
     let code =
-      """open Weave
+      """div [
+  Display.Block.always
+  BrandColor.Fill.primary
+  Padding.All.extraSmall
+  BorderRadius.All.small
+  Margin.Bottom.extraSmall
+] [ text "Block A — takes full width" ]
 
-// Block — stacks vertically, takes full width
-div [ Display.Block.always ] [ text "Block A" ]
-div [ Display.Block.always ] [ text "Block B" ]
+div [
+  Display.Block.always
+  BrandColor.Fill.secondary
+  Padding.All.extraSmall
+  BorderRadius.All.small
+] [ text "Block B — stacks below" ]
 
-// Inline — flows horizontally with text
-span [ Display.Inline.always ] [ text "Inline A" ]
-span [ Display.Inline.always ] [ text "Inline B" ]
+span [
+  Display.Inline.always
+  BrandColor.Fill.info
+  Padding.Horizontal.extraSmall
+  BorderRadius.All.small
+] [ text "Inline A" ]
 
-// Inline Block — flows inline but respects width/height
-div [ Display.InlineBlock.always; Attr.Style "width" "120px" ] [
-    text "Inline Block"
-]"""
+span [
+  Display.Inline.always
+  BrandColor.Fill.success
+  Padding.Horizontal.extraSmall
+  BorderRadius.All.small
+] [ text "Inline B" ]
+
+span [
+  Display.Inline.always
+  BrandColor.Fill.warning
+  Padding.Horizontal.extraSmall
+  BorderRadius.All.small
+] [ text "Inline C" ]
+
+div [
+  Display.InlineBlock.always
+  BrandColor.Fill.error
+  Padding.All.extraSmall
+  BorderRadius.All.small
+  Attr.Style "width" "120px"
+] [ text "Inline Block" ]
+
+div [
+  Display.InlineBlock.always
+  BrandColor.Fill.tertiary
+  Padding.All.extraSmall
+  BorderRadius.All.small
+  Attr.Style "width" "120px"
+] [ text "Inline Block" ]"""
 
     Helpers.codeSampleSection "Basic display" description content code
 
@@ -239,12 +261,13 @@ div [ Display.InlineBlock.always; Attr.Style "width" "120px" ] [
         div [
           Flex.Flex.allSizes
           FlexWrap.Wrap.allSizes
+          JustifyContent.spaceEvenly
           Attr.Style "gap" "8px"
           Margin.Bottom.small
         ] [
-          div [ Display.Block.HideOn.xs ] [ colorBox "Hidden on XS" "var(--palette-primary)" [] ]
-          div [ Display.Block.HideOn.sm ] [ colorBox "Hidden on SM" "var(--palette-secondary)" [] ]
-          div [ Display.Block.HideOn.md ] [ colorBox "Hidden on MD" "var(--palette-info)" [] ]
+          div [ Display.Block.HideOn.xs ] [ colorBox "Hidden on XS" BrandColor.Fill.primary [] ]
+          div [ Display.Block.HideOn.sm ] [ colorBox "Hidden on SM" BrandColor.Fill.secondary [] ]
+          div [ Display.Block.HideOn.md ] [ colorBox "Hidden on MD" BrandColor.Fill.info [] ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [
@@ -254,15 +277,16 @@ div [ Display.InlineBlock.always; Attr.Style "width" "120px" ] [
         div [
           Flex.Flex.allSizes
           FlexWrap.Wrap.allSizes
+          JustifyContent.spaceEvenly
           Attr.Style "gap" "8px"
           Margin.Bottom.small
         ] [
-          div [ Display.Block.ShowOnly.xs ] [ colorBox "XS only" "var(--palette-error)" [] ]
-          div [ Display.Block.ShowOnly.sm ] [ colorBox "SM only" "var(--palette-warning)" [] ]
-          div [ Display.Block.ShowOnly.md ] [ colorBox "MD only" "var(--palette-success)" [] ]
-          div [ Display.Block.ShowOnly.lg ] [ colorBox "LG only" "var(--palette-info)" [] ]
-          div [ Display.Block.ShowOnly.xl ] [ colorBox "XL only" "var(--palette-primary)" [] ]
-          div [ Display.Block.ShowOnly.xxl ] [ colorBox "XXL only" "var(--palette-tertiary)" [] ]
+          div [ Display.Block.ShowOnly.xs ] [ colorBox "XS only" BrandColor.Fill.error [] ]
+          div [ Display.Block.ShowOnly.sm ] [ colorBox "SM only" BrandColor.Fill.warning [] ]
+          div [ Display.Block.ShowOnly.md ] [ colorBox "MD only" BrandColor.Fill.success [] ]
+          div [ Display.Block.ShowOnly.lg ] [ colorBox "LG only" BrandColor.Fill.info [] ]
+          div [ Display.Block.ShowOnly.xl ] [ colorBox "XL only" BrandColor.Fill.primary [] ]
+          div [ Display.Block.ShowOnly.xxl ] [ colorBox "XXL only" BrandColor.Fill.tertiary [] ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Responsive flex container" ]
@@ -272,41 +296,56 @@ div [ Display.InlineBlock.always; Attr.Style "width" "120px" ] [
             Display.Flex.HideOn.xs // see here
             Attr.Style "gap" "8px"
           ] [
-            colorBox "Flex A" "var(--palette-primary)" [ Attr.Style "flex" "1" ]
-            colorBox "Flex B" "var(--palette-secondary)" [ Attr.Style "flex" "1" ]
-            colorBox "Flex C" "var(--palette-info)" [ Attr.Style "flex" "1" ]
+            colorBox "Flex A" BrandColor.Fill.primary [ Attr.Style "flex" "1" ]
+            colorBox "Flex B" BrandColor.Fill.secondary [ Attr.Style "flex" "1" ]
+            colorBox "Flex C" BrandColor.Fill.info [ Attr.Style "flex" "1" ]
           ]
           div [ Display.Block.ShowOnly.xs ] [
-            colorBox "Stacked on XS (flex hidden)" "var(--palette-primary)" []
+            colorBox "Stacked on XS (flex hidden)" BrandColor.Fill.primary []
           ]
         ]
       ]
 
     let code =
-      """open Weave
+      """Chip.create (
+  textView Breakpoint.browserAsText,
+  attrs = [ Chip.Variant.filled; Chip.Color.primary ]
+)
 
-// HideOn — hides at a breakpoint and below, shows above
-div [ Display.Block.HideOn.xs ] [  // see here
-    text "Hidden on extra-small screens"
+div [ Display.Block.HideOn.xs; BrandColor.Fill.primary ] [
+  text "Hidden on XS"
 ]
 
-// ShowOnly — visible at exactly one breakpoint
-div [ Display.Block.ShowOnly.md ] [  // see here
-    text "Visible only on medium screens"
+div [ Display.Block.HideOn.sm; BrandColor.Fill.secondary ] [
+  text "Hidden on SM"
 ]
 
-// Responsive flex — hide the flex layout on XS
-div [ Display.Flex.HideOn.xs ] [
-    div [] [ text "A" ]
-    div [] [ text "B" ]
-    div [] [ text "C" ]
+div [ Display.Block.HideOn.md; BrandColor.Fill.info ] [ text "Hidden on MD" ]
+
+div [ Display.Block.ShowOnly.xs; BrandColor.Fill.error ] [ text "XS only" ]
+
+div [ Display.Block.ShowOnly.sm; BrandColor.Fill.warning ] [ text "SM only" ]
+
+div [ Display.Block.ShowOnly.md; BrandColor.Fill.success ] [ text "MD only" ]
+
+div [ Display.Block.ShowOnly.lg; BrandColor.Fill.info ] [ text "LG only" ]
+
+div [ Display.Block.ShowOnly.xl; BrandColor.Fill.primary ] [ text "XL only" ]
+
+div [ Display.Block.ShowOnly.xxl; BrandColor.Fill.tertiary ] [
+  text "XXL only"
 ]
 
-// Use Breakpoint.browserAsText to show current breakpoint
-Chip.create(
-    textView Breakpoint.browserAsText,
-    attrs = [ Chip.Variant.filled; Chip.Color.primary ]
-)"""
+// This parent changes the arrangement of its children above XS.
+div [ Display.Flex.HideOn.xs; Gap.All.g2 ] [
+  div [ BrandColor.Fill.primary; FlexItem.Grow.allSizes ] [ text "Flex A" ]
+  div [ BrandColor.Fill.secondary; FlexItem.Grow.allSizes ] [ text "Flex B" ]
+  div [ BrandColor.Fill.info; FlexItem.Grow.allSizes ] [ text "Flex C" ]
+]
+
+div [ Display.Block.ShowOnly.xs; BrandColor.Fill.primary ] [
+  text "Stacked on XS (flex hidden)"
+]"""
 
     Helpers.codeSampleSection "Responsive visibility" description content code
 
@@ -316,7 +355,12 @@ Chip.create(
         "Visibility controls element visibility without changing layout. Use srOnly for screen-reader-only content that remains accessible but invisible."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [
@@ -348,38 +392,19 @@ Chip.create(
           div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Invisible vs Hidden" ]
 
           div [ Flex.Flex.allSizes; Attr.Style "gap" "8px"; AlignItems.center ] [
-            colorBox "Visible" "var(--palette-primary)" []
-            div [ Visibility.invisible ] [ colorBox "Invisible" "var(--palette-secondary)" [] ]
-            colorBox "Still here" "var(--palette-info)" []
+            colorBox "Visible" BrandColor.Fill.primary []
+            div [ Visibility.invisible ] [ colorBox "Invisible" BrandColor.Fill.secondary [] ]
+            colorBox "Still here" BrandColor.Fill.info []
           ]
 
-          div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
+          div [ Typography.body2; Margin.Top.extraSmall; Typography.Color.textSecondary ] [
             text
               "The middle box is invisible but still takes up space. Notice the gap between 'Visible' and 'Still here'."
           ]
         ]
       ]
 
-    let code =
-      """open Weave
-open Weave.Icons.MaterialSymbols
-
-// Invisible — hidden but keeps its layout space
-div [ Visibility.invisible ] [ text "Takes space but invisible" ]
-
-// Screen reader only — accessible but not visible
-span [ Visibility.srOnly ] [ text "Opens navigation menu" ]
-
-// Useful for accessible labels on icon buttons
-IconButton.create(
-    Icon.create(Icon.UiActions UiActions.Menu),
-    onClick = (fun () -> ()),
-    attrs = []
-)
-// Add an srOnly label nearby for screen readers
-span [ Visibility.srOnly ] [ text "Toggle menu" ]"""
-
-    Helpers.codeSampleSection "Visibility utilities" description content code
+    Helpers.section "Visibility utilities" description content
 
   let render () =
     Container.create (
@@ -391,9 +416,9 @@ span [ Visibility.srOnly ] [ text "Toggle menu" ]"""
         ]
 
         Helpers.divider ()
-        howItWorksSection ()
-        Helpers.divider ()
         basicDisplaySection ()
+        Helpers.divider ()
+        howItWorksSection ()
         Helpers.divider ()
         responsiveVisibilitySection ()
         Helpers.divider ()

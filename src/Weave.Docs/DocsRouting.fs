@@ -124,6 +124,37 @@ module DocsRouting =
     | ReactiveHelpersExamples -> "Reactive Helpers"
     | EventHandlersExamples -> "Event Handlers"
 
+  /// Reader vocabulary supplements public component names in navigation search.
+  let pageSearchAliases page =
+    match page with
+    | GettingStartedExamples -> "install setup quickstart starter template first app"
+    | TextFieldExamples -> "input textbox textarea text entry password multiline"
+    | NumericFieldExamples -> "input number decimal integer spinner"
+    | FieldExamples -> "input label helper validation error adornment"
+    | FormExamples -> "input form validation submit required error"
+    | DialogExamples -> "modal popup confirmation overlay"
+    | DrawerExamples -> "sidebar navigation panel offcanvas overlay"
+    | DropdownMenuExamples -> "menu popup actions context"
+    | SelectExamples -> "dropdown options picker combobox"
+    | SnackbarExamples -> "toast notification message feedback"
+    | AlertExamples -> "notification message feedback status warning error"
+    | ExpansionPanelExamples -> "accordion disclosure collapse expand"
+    | ProgressExamples -> "loading spinner indicator percentage"
+    | PaginationExamples -> "pages paging page navigation"
+    | CheckboxExamples -> "check checked boolean selection toggle"
+    | RadioButtonExamples -> "radio options choice selection"
+    | SwitchExamples -> "toggle boolean settings on off"
+    | ChipExamples
+    | ChipSetExamples -> "tag badge token filter selection"
+    | TypographyExamples -> "text fonts headings weight type"
+    | ThemingExamples -> "theme dark light colors palette density style"
+    | GridExamples
+    | FlexboxExamples -> "layout columns rows responsive alignment"
+    | IconsExamples -> "icon symbols material"
+    | ReactiveHelpersExamples -> "state var view binding reactive map combine"
+    | EventHandlersExamples -> "event click keyboard input handler"
+    | _ -> ""
+
   let stringToPage s =
     match s with
     | "Home" -> Some Home
@@ -186,7 +217,7 @@ module DocsRouting =
 
   let pageToHash page =
     match page with
-    | Home -> ""
+    | Home -> "#home"
     | GettingStartedExamples -> "#getting-started"
     | AppBarExamples -> "#app-bar"
     | SpacerExamples -> "#spacer"
@@ -322,7 +353,7 @@ module DocsRouting =
   let clearHash () = X<unit>
 
   /// Split a hash string on the first "/" — returns a 1- or 2-element array
-  [<Inline "$s.split('/')">]
+  [<Inline "(function(s) { var i = s.indexOf('/'); if (i < 0) return [s]; var section = s.substring(i + 1); try { section = decodeURIComponent(section); } catch (_) {} return [s.substring(0, i), section]; })($s)">]
   let splitHashParts (s: string) = X<string[]>
 
   /// Remove a leading "#" character

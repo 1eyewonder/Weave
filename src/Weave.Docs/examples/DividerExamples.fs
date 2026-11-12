@@ -11,64 +11,24 @@ module DividerExamples =
 
   let private basicExample () =
     let description =
-      Helpers.bodyText "A basic horizontal divider used to separate content sections."
+      Helpers.bodyText "A horizontal divider separates adjacent content sections."
 
     let content =
-      div [] [
-        div [ Typography.body1; Margin.Bottom.extraSmall ] [ text "Content above the divider" ]
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g4 ] [
+        text "Content above the divider"
+
         Divider.create ()
-        div [ Typography.body1; Margin.Top.extraSmall ] [ text "Content below the divider" ]
+
+        text "Content below the divider"
       ]
 
-    let code =
-      """open Weave
-
-Divider.create()
-"""
+    let code = """Divider.create ()"""
 
     Helpers.codeSampleSection "Basic" description content code
 
-  let private variantExamples () =
-    let description =
-      Helpers.bodyText
-        "Dividers come in three variants: FullWidth (default), Inset (indented from the left), and Middle (inset from both sides)."
-
-    let content =
-      div [] [
-        let row (label: string) variant =
-          div [ Margin.Bottom.small ] [
-            div [ Typography.caption; Margin.Bottom.extraSmall ] [ text label ]
-            Divider.create (attrs = [ variant ])
-          ]
-
-        row "FullWidth" Divider.Variant.fullWidth
-        row "Inset" Divider.Variant.inset
-        row "Middle" Divider.Variant.middle
-      ]
-
-    let code =
-      """open Weave
-
-
-Divider.create(
-    attrs = [ Divider.Variant.fullWidth ]
-)
-
-Divider.create(
-    attrs = [ Divider.Variant.inset ]
-)
-
-Divider.create(
-    attrs = [ Divider.Variant.middle ]
-)
-"""
-
-    Helpers.codeSampleSection "Variants" description content code
-
   let private orientationExamples () =
     let description =
-      Helpers.bodyText
-        "Dividers can be rendered vertically by adding Divider.Orientation.vertical to attrs. Use them inside flex containers to separate inline content."
+      Helpers.bodyText "Use Divider.Orientation.vertical inside a flex row with a defined height."
 
     let content =
       div [
@@ -86,22 +46,18 @@ Divider.create(
       ]
 
     let code =
-      """open Weave
-
-
-div [
-    Flex.Flex.allSizes
-    AlignItems.center
-    Attr.Style "height" "80px"
-    Attr.Style "gap" "16px"
+      """div [
+  Flex.Flex.allSizes
+  AlignItems.center
+  Attr.Style "height" "80px"
+  Attr.Style "gap" "16px"
 ] [
-    div [ Typography.body1 ] [ text "Left" ]
-    Divider.create(attrs = [ Divider.Orientation.vertical ])
-    div [ Typography.body1 ] [ text "Center" ]
-    Divider.create(attrs = [ Divider.Orientation.vertical ])
-    div [ Typography.body1 ] [ text "Right" ]
-]
-"""
+  div [ Typography.body1 ] [ text "Left" ]
+  Divider.create (attrs = [ Divider.Orientation.vertical ])
+  div [ Typography.body1 ] [ text "Center" ]
+  Divider.create (attrs = [ Divider.Orientation.vertical ])
+  div [ Typography.body1 ] [ text "Right" ]
+]"""
 
     Helpers.codeSampleSection "Orientation" description content code
 
@@ -135,7 +91,7 @@ div [
         Helpers.divider ()
         basicExample ()
         Helpers.divider ()
-        variantExamples ()
+        ReferenceAppearance.divider ()
         Helpers.divider ()
         orientationExamples ()
         Helpers.divider ()

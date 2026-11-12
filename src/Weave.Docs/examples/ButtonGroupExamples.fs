@@ -5,192 +5,147 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
+open Weave.Docs
 open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
 module ButtonGroupExamples =
 
+  let private center content =
+    div [ Flex.Flex.allSizes; JustifyContent.center ] [ content ]
+
+  let private comparisonGrid columns items =
+    let span =
+      match columns with
+      | 2 -> GridItem.Span.Medium.six
+      | 4 -> GridItem.Span.Medium.three
+      | _ -> GridItem.Span.Medium.four
+
+    Grid.create (
+      items
+      |> List.map (fun item ->
+        GridItem.create (item, attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; span ])),
+      attrs = [ AlignItems.start ]
+    )
+
   let private basicExample () =
-    let description =
-      Helpers.bodyText "Buttons can be grouped together in Filled, Outlined, and Text variants."
-
-    let content =
-      Grid.create (
+    let group =
+      ButtonGroup.create (
         [
-          let makeGroup variant =
-            GridItem.create (
-              ButtonGroup.create (
-                [
-                  Button.create (text "One", onClick = (fun () -> ()))
-                  Button.create (text "Two", onClick = (fun () -> ()))
-                  Button.create (text "Three", onClick = (fun () -> ()))
-                ],
-                attrs = [ variant; ButtonGroup.Color.primary ]
-              )
-            )
-
-          makeGroup ButtonGroup.Variant.filled
-          makeGroup ButtonGroup.Variant.text
-          makeGroup ButtonGroup.Variant.outlined
+          Button.create (text "One", onClick = ignore)
+          Button.create (text "Two", onClick = ignore)
+          Button.create (text "Three", onClick = ignore)
         ],
-        attrs = [ AlignItems.center ]
+        attrs = [ ButtonGroup.Variant.filled; ButtonGroup.Color.primary ]
       )
 
     let code =
-      """open Weave
-
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.filled
-        ButtonGroup.Color.primary
-    ]
-)
-
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.text
-        ButtonGroup.Color.primary
-    ]
-)
-
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.outlined
-        ButtonGroup.Color.primary
-    ]
+      """ButtonGroup.create (
+  [
+    Button.create (text "One", onClick = ignore)
+    Button.create (text "Two", onClick = ignore)
+    Button.create (text "Three", onClick = ignore)
+  ],
+  attrs = [ ButtonGroup.Variant.filled; ButtonGroup.Color.primary ]
 )"""
 
-    Helpers.codeSampleSection "Basic Button Group" description content code
+    Helpers.codeSampleSection
+      "Basic Button Group"
+      (Helpers.bodyText "Group related actions into one visual unit.")
+      (center group)
+      code
 
-  let private verticalExample () =
-    let description =
-      Helpers.bodyText "With Vertical orientation the buttons are displayed vertically."
+  let appearanceExample () =
+    let variant = Var.Create "Filled"
+    let color = Var.Create "Primary"
+    let density = Var.Create "Standard"
+    let orientation = Var.Create "Horizontal"
 
-    let content =
-      Grid.create (
-        [
-          let makeGroup variant =
-            GridItem.create (
-              ButtonGroup.create (
-                [
-                  Button.create (text "One", onClick = (fun () -> ()))
-                  Button.create (text "Two", onClick = (fun () -> ()))
-                  Button.create (text "Three", onClick = (fun () -> ()))
-                ],
-                attrs = [ variant; ButtonGroup.Color.primary; ButtonGroup.Orientation.vertical ]
-              )
-            )
+    let choice label values (value: Var<string>) =
+      let selected =
+        Var.Lens value Some (fun current next -> Option.defaultValue current next)
 
-          makeGroup ButtonGroup.Variant.filled
-          makeGroup ButtonGroup.Variant.text
-          makeGroup ButtonGroup.Variant.outlined
-        ],
-        attrs = [ AlignItems.start ]
+      let items =
+        values
+        |> List.map (fun name -> SelectItem.create (text name, name, name))
+        |> View.Const
+
+      Select.create (
+        items,
+        selected,
+        labelText = View.Const label,
+        attrs = [
+          Select.Variant.outlined
+          Select.Label.above
+          Select.Width.full
+          Select.PopoverWidth.unbound
+          Select.Color.primary
+        ]
       )
 
-    let code =
-      """open Weave
+    let controls =
+      div [ Attr.Class "docs-appearance__controls" ] [
+        choice "Variant" GroupBAppearance.groupVariants variant
+        choice "Color" GroupBAppearance.colors color
+        choice "Density" GroupBAppearance.densities density
+        choice "Orientation" GroupBAppearance.orientations orientation
+      ]
 
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.filled
-        ButtonGroup.Color.primary
-        ButtonGroup.Orientation.vertical // see here
-    ]
-)"""
+    let attributes =
+      Map.ofList [
+        "ButtonGroup.Variant.filled", ButtonGroup.Variant.filled
+        "ButtonGroup.Variant.outlined", ButtonGroup.Variant.outlined
+        "ButtonGroup.Variant.text", ButtonGroup.Variant.text
+        "ButtonGroup.Color.primary", ButtonGroup.Color.primary
+        "ButtonGroup.Color.secondary", ButtonGroup.Color.secondary
+        "ButtonGroup.Color.tertiary", ButtonGroup.Color.tertiary
+        "ButtonGroup.Color.error", ButtonGroup.Color.error
+        "ButtonGroup.Color.warning", ButtonGroup.Color.warning
+        "ButtonGroup.Color.success", ButtonGroup.Color.success
+        "ButtonGroup.Color.info", ButtonGroup.Color.info
+        "ButtonGroup.Density.compact", ButtonGroup.Density.compact
+        "ButtonGroup.Density.spacious", ButtonGroup.Density.spacious
+        "ButtonGroup.Orientation.vertical", ButtonGroup.Orientation.vertical
+      ]
 
-    Helpers.codeSampleSection "Vertical Orientation" description content code
+    let config =
+      let visual = (variant.View, color.View) ||> View.Map2(fun a b -> a, b)
+      let layout = (density.View, orientation.View) ||> View.Map2(fun a b -> a, b)
+      (visual, layout) ||> View.Map2(fun (a, b) (c, d) -> a, b, c, d)
 
-  let private densityAndColorsExample () =
-    let description =
-      Helpers.bodyText
-        "Button groups support all theme colors and three density levels: Compact, Standard, and Spacious."
+    let preview =
+      config
+      |> Doc.BindView(fun (variant, color, density, orientation) ->
+        let attrs =
+          GroupBAppearance.groupAttributes variant color density orientation
+          |> List.map (fun name -> Map.find name attributes)
 
-    let content =
-      Grid.create (
-        [
-          let makeGroup densityAttr colorAttr =
-            GridItem.create (
-              ButtonGroup.create (
-                [
-                  Button.create (text "One", onClick = (fun () -> ()))
-                  Button.create (text "Two", onClick = (fun () -> ()))
-                  Button.create (text "Three", onClick = (fun () -> ()))
-                ],
-                attrs = [ ButtonGroup.Variant.filled; densityAttr; colorAttr ]
-              )
-            )
+        ButtonGroup.create (
+          [
+            Button.create (text "One", onClick = ignore)
+            Button.create (text "Two", onClick = ignore)
+            Button.create (text "Three", onClick = ignore)
+          ],
+          attrs = attrs
+        ))
 
-          makeGroup ButtonGroup.Density.compact ButtonGroup.Color.primary
-          makeGroup ButtonGroup.Density.standard ButtonGroup.Color.error
-          makeGroup ButtonGroup.Density.spacious ButtonGroup.Color.success
-        ],
-        attrs = [ AlignItems.center ]
-      )
+    let source =
+      config |> View.Map(fun (a, b, c, d) -> GroupBAppearance.groupSource a b c d)
 
-    let code =
-      """open Weave
+    let reset () =
+      Var.Set variant "Filled"
+      Var.Set color "Primary"
+      Var.Set density "Standard"
+      Var.Set orientation "Horizontal"
 
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.filled
-        ButtonGroup.Density.compact
-        ButtonGroup.Color.primary
-    ]
-)
-
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.filled
-        ButtonGroup.Density.standard
-        ButtonGroup.Color.error
-    ]
-)
-
-ButtonGroup.create(
-    [
-        Button.create(text "One", onClick = (fun () -> ()))
-        Button.create(text "Two", onClick = (fun () -> ()))
-        Button.create(text "Three", onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.filled
-        ButtonGroup.Density.spacious
-        ButtonGroup.Color.success
-    ]
-)"""
-
-    Helpers.codeSampleSection "Density and Colors" description content code
+    Helpers.appearanceSection
+      [ "colors"; "vertical-orientation"; "density-and-colors"; "density" ]
+      (Helpers.bodyText "Combine a variant, color, density, and orientation for the whole group.")
+      controls
+      None
+      preview
+      reset
+      source
 
   let private splitButtonExample () =
     let description =
@@ -198,114 +153,125 @@ ButtonGroup.create(
         "A ButtonMenu can be placed inside a button group to create a split button. The group wraps around both the action button and the dropdown trigger."
 
     let content =
-      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
-        let isOpen = Var.Create false
+      let isOpen = Var.Create false
 
-        ButtonGroup.create (
-          [
-            Button.create (text "Reply", onClick = (fun () -> printfn "Reply clicked"))
-            IconButtonMenu.create (
-              closedIcon = Icon.create (Icon.UiActions UiActions.ArrowDropDown),
-              items = [
-                Button.create (
-                  text "Reply",
-                  onClick = (fun () -> printfn "Reply"),
-                  attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
-                Button.create (
-                  text "Reply All",
-                  onClick = (fun () -> printfn "Reply All"),
-                  attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
-                Button.create (
-                  text "Forward",
-                  onClick = (fun () -> printfn "Forward"),
-                  attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
-              ],
-              direction = ButtonMenu.Direction.Bottom,
-              isOpen = isOpen,
-              triggerAttrs = []
-            )
-          ],
-          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
-        )
-      ]
-
-    let code =
-      """open Weave
-open Weave.Icons.MaterialSymbols
-open WebSharper.UI
-
-let isOpen = Var.Create false
-
-ButtonGroup.create(
-    [
-        Button.create(text "Reply", onClick = (fun () -> printfn "Reply clicked"))
-        IconButtonMenu.create(
-            closedIcon = Icon.create(Icon.UiActions UiActions.ArrowDropDown),
+      ButtonGroup.create (
+        [
+          Button.create (text "Reply", onClick = (fun () -> ()))
+          IconButtonMenu.create (
+            closedIcon = Icon.create (Icon.UiActions UiActions.ArrowDropDown),
             items = [
-                Button.create(
-                    text "Reply",
-                    onClick = (fun () -> printfn "Reply"),
-                    attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
-                Button.create(
-                    text "Reply All",
-                    onClick = (fun () -> printfn "Reply All"),
-                    attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
-                Button.create(
-                    text "Forward",
-                    onClick = (fun () -> printfn "Forward"),
-                    attrs = [ Button.Variant.filled; Button.Width.full ]
-                )
+              Button.create (
+                text "Reply",
+                onClick = (fun () -> ()),
+                attrs = [ Button.Variant.filled; Button.Width.full ]
+              )
+              Button.create (
+                text "Reply All",
+                onClick = (fun () -> ()),
+                attrs = [ Button.Variant.filled; Button.Width.full ]
+              )
+              Button.create (
+                text "Forward",
+                onClick = (fun () -> ()),
+                attrs = [ Button.Variant.filled; Button.Width.full ]
+              )
             ],
             direction = ButtonMenu.Direction.Bottom,
             isOpen = isOpen,
             triggerAttrs = []
+          )
+        ],
+        attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
+      )
+
+    let code =
+      """open Weave.Icons.MaterialSymbols
+
+let isOpen = Var.Create false
+
+ButtonGroup.create (
+  [
+    Button.create (text "Reply", onClick = (fun () -> ()))
+    IconButtonMenu.create (
+      closedIcon = Icon.create (Icon.UiActions UiActions.ArrowDropDown),
+      items = [
+        Button.create (
+          text "Reply",
+          onClick = (fun () -> ()),
+          attrs = [ Button.Variant.filled; Button.Width.full ]
         )
-    ],
-    attrs = [
-        ButtonGroup.Variant.outlined
-        ButtonGroup.Color.primary
-    ]
+        Button.create (
+          text "Reply All",
+          onClick = (fun () -> ()),
+          attrs = [ Button.Variant.filled; Button.Width.full ]
+        )
+        Button.create (
+          text "Forward",
+          onClick = (fun () -> ()),
+          attrs = [ Button.Variant.filled; Button.Width.full ]
+        )
+      ],
+      direction = ButtonMenu.Direction.Bottom,
+      isOpen = isOpen,
+      triggerAttrs = []
+    )
+  ],
+  attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
 )"""
 
-    Helpers.codeSampleSection "Split Button" description content code
+    Helpers.codeSampleSection "Split Button" description (center content) code
 
   let private iconButtonExample () =
     let description = Helpers.bodyText "Icon buttons can also be grouped together."
 
     let content =
-      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
-        ButtonGroup.create (
-          [
-            IconButton.create (Icon.create (Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-            IconButton.create (Icon.create (Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-            IconButton.create (Icon.create (Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
-          ],
-          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
-        )
-      ]
+      ButtonGroup.create (
+        [
+          IconButton.create (
+            Icon.create (Icon.Text Text.FormatBold),
+            onClick = (fun () -> ()),
+            attrs = [ Attr.Create "aria-label" "Bold" ]
+          )
+          IconButton.create (
+            Icon.create (Icon.Text Text.FormatItalic),
+            onClick = (fun () -> ()),
+            attrs = [ Attr.Create "aria-label" "Italic" ]
+          )
+          IconButton.create (
+            Icon.create (Icon.Text Text.FormatUnderlined),
+            onClick = (fun () -> ()),
+            attrs = [ Attr.Create "aria-label" "Underline" ]
+          )
+        ],
+        attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
+      )
 
     let code =
-      """open Weave
-open Weave.Icons.MaterialSymbols
+      """open Weave.Icons.MaterialSymbols
 
-ButtonGroup.create(
-    [
-        IconButton.create(Icon.create(Icon.Text Text.FormatBold), onClick = (fun () -> ()))
-        IconButton.create(Icon.create(Icon.Text Text.FormatItalic), onClick = (fun () -> ()))
-        IconButton.create(Icon.create(Icon.Text Text.FormatUnderlined), onClick = (fun () -> ()))
-    ],
-    attrs = [
-        ButtonGroup.Variant.outlined
-        ButtonGroup.Color.primary
-    ]
+ButtonGroup.create (
+  [
+    IconButton.create (
+      Icon.create (Icon.Text Text.FormatBold),
+      onClick = (fun () -> ()),
+      attrs = [ Attr.Create "aria-label" "Bold" ]
+    )
+    IconButton.create (
+      Icon.create (Icon.Text Text.FormatItalic),
+      onClick = (fun () -> ()),
+      attrs = [ Attr.Create "aria-label" "Italic" ]
+    )
+    IconButton.create (
+      Icon.create (Icon.Text Text.FormatUnderlined),
+      onClick = (fun () -> ()),
+      attrs = [ Attr.Create "aria-label" "Underline" ]
+    )
+  ],
+  attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
 )"""
 
-    Helpers.codeSampleSection "Icon Buttons" description content code
+    Helpers.codeSampleSection "Icon Buttons" description (center content) code
 
   let private dropdownExample () =
     let description =
@@ -313,46 +279,38 @@ ButtonGroup.create(
         "A DropdownMenu can be placed inside a button group to create a split button with a dropdown menu."
 
     let content =
-      div [ Flex.Flex.allSizes; JustifyContent.center; AlignItems.center ] [
-        ButtonGroup.create (
-          [
-            Button.create (text "Save", onClick = (fun () -> printfn "Save clicked"))
-            DropdownMenu.create (
-              text "Save Options",
-              View.Const [
-                DropdownMenuItem.create (text "Save as Draft", (fun () -> printfn "Draft"))
-                DropdownMenuItem.create (text "Save and Publish", (fun () -> printfn "Publish"))
-                DropdownMenuItem.create (text "Save and Close", (fun () -> printfn "Close"))
-              ]
-            )
-          ],
-          attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
-        )
-      ]
-
-    let code =
-      """open Weave
-open WebSharper.UI
-
-ButtonGroup.create(
-    [
-        Button.create(text "Save", onClick = (fun () -> printfn "Save clicked"))
-        DropdownMenu.create(
+      ButtonGroup.create (
+        [
+          Button.create (text "Save", onClick = (fun () -> ()))
+          DropdownMenu.create (
             text "Save Options",
             View.Const [
-                DropdownMenuItem.create(text "Save as Draft", (fun () -> printfn "Draft"))
-                DropdownMenuItem.create(text "Save and Publish", (fun () -> printfn "Publish"))
-                DropdownMenuItem.create(text "Save and Close", (fun () -> printfn "Close"))
+              DropdownMenuItem.create (text "Save as Draft", (fun () -> ()))
+              DropdownMenuItem.create (text "Save and Publish", (fun () -> ()))
+              DropdownMenuItem.create (text "Save and Close", (fun () -> ()))
             ]
-        )
-    ],
-    attrs = [
-        ButtonGroup.Variant.outlined
-        ButtonGroup.Color.primary
-    ]
+          )
+        ],
+        attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
+      )
+
+    let code =
+      """ButtonGroup.create (
+  [
+    Button.create (text "Save", onClick = (fun () -> ()))
+    DropdownMenu.create (
+      text "Save Options",
+      View.Const [
+        DropdownMenuItem.create (text "Save as Draft", (fun () -> ()))
+        DropdownMenuItem.create (text "Save and Publish", (fun () -> ()))
+        DropdownMenuItem.create (text "Save and Close", (fun () -> ()))
+      ]
+    )
+  ],
+  attrs = [ ButtonGroup.Variant.outlined; ButtonGroup.Color.primary ]
 )"""
 
-    Helpers.codeSampleSection "Dropdown Menu" description content code
+    Helpers.codeSampleSection "Dropdown Menu" description (center content) code
 
   let private apiReferenceSection () =
     Helpers.apiSection (Helpers.bodyText "Complete API reference for ButtonGroup.") [
@@ -408,9 +366,7 @@ ButtonGroup.create(
         Helpers.divider ()
         basicExample ()
         Helpers.divider ()
-        verticalExample ()
-        Helpers.divider ()
-        densityAndColorsExample ()
+        appearanceExample ()
         Helpers.divider ()
         splitButtonExample ()
         Helpers.divider ()

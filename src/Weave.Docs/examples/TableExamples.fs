@@ -9,6 +9,23 @@ open Weave
 [<JavaScript>]
 module TableExamples =
 
+  let private comparisonGrid columns items =
+    let cells =
+      items
+      |> List.map (fun item ->
+        GridItem.create (
+          item,
+          attrs = [
+            GridItem.Span.twelve
+            GridItem.Span.Small.six
+            (if columns = 4 then GridItem.Span.Medium.three
+             elif columns = 3 then GridItem.Span.Medium.four
+             else GridItem.Span.Medium.six)
+          ]
+        ))
+
+    Grid.create (cells, attrs = [ Grid.Spacing.large; AlignItems.start ])
+
   type private Fruit = {
     Name: string
     Color: string
@@ -57,44 +74,97 @@ module TableExamples =
         "Use Table.create with a list of TableColumn definitions, a reactive list of rows, and a rowKey that gives each row a stable identity. Unchanged rows are not re-rendered when the rows update. Each column has a key that the sort state and rowHeader refer to. Pass caption to name the table for screen readers, and add Table.hiddenCaption to keep it off screen."
 
     let content =
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
+      ]
+
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+        TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun (f: Fruit) -> text (string<int> f.Stock)),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
+
       Table.create (
-        columns (),
+        columns,
         View.Const fruits,
-        fruitName,
+        (fun f -> f.Name),
         rowHeader = "name",
         caption = text "Fruit stock"
       )
 
     let code =
-      """open Weave
-
-type Fruit = { Name: string; Color: string; Stock: int }
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create(
-        "stock",
-        text "Stock",
-        (fun (f: Fruit) -> text (string<int> f.Stock)),
-        attrs = [ Attr.Style "text-align" "end" ]
-    )
+  TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+  TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun (f: Fruit) -> text (string<int> f.Stock)),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    rowHeader = "name",
-    caption = text "Fruit stock"
-)"""
+Table.create (
+  columns,
+  View.Const fruits,
+  (fun f -> f.Name),
+  rowHeader = "name",
+  caption = text "Fruit stock"
+)
+"""
 
     Helpers.codeSampleSection "Basic Usage" description content code
 
@@ -103,44 +173,95 @@ Table.create(
       Helpers.bodyText
         "Pass selectedKey to track the selected row, and onRowClick to react to activation. Clicking anywhere on a row activates it. The first cell holds a button, so keyboard and screen reader users reach and activate the row the same way they would any other button. The selected row is marked with aria-current."
 
-    let selected = Var.Create(Some "Banana")
-
     let content =
-      div [] [
-        Table.create (columns (), View.Const fruits, fruitName, selectedKey = selected)
-        div [ Typography.body2; Margin.Top.small ] [
-          text "Selected: "
-          textView (selected.View |> View.Map(Option.defaultValue "None"))
-        ]
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
       ]
 
-    let code =
-      """open Weave
-open WebSharper.UI
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+        TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun (f: Fruit) -> text (string<int> f.Stock)),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
 
-type Fruit = { Name: string; Color: string; Stock: int }
+      let selected = Var.Create(Some "Banana")
+
+      Table.create (columns, View.Const fruits, (fun f -> f.Name), selectedKey = selected)
+
+    let code =
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)))
+  TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+  TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun (f: Fruit) -> text (string<int> f.Stock)),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
-let selected = Var.Create (Some "Banana")
+let selected = Var.Create(Some "Banana")
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    selectedKey = selected
-)"""
+Table.create (
+  columns,
+  View.Const fruits,
+  (fun f -> f.Name),
+  selectedKey = selected
+)
+"""
 
     Helpers.codeSampleSection "Row Selection" description content code
 
@@ -149,58 +270,106 @@ Table.create(
       Helpers.bodyText
         "Pass selectedKeys to add a checkbox column for selecting any number of rows. The header checkbox selects or clears every row shown and is mixed while only some are selected. With rowHeader set, each checkbox is named by its row header."
 
-    let selected = Var.Create(Set.ofList [ "Cherry" ])
-
     let content =
-      div [] [
-        Table.create (
-          columns (),
-          View.Const fruits,
-          fruitName,
-          selectedKeys = selected,
-          rowHeader = "name",
-          caption = text "Select fruit",
-          attrs = [ Table.hiddenCaption ]
-        )
-        div [ Typography.body2; Margin.Top.small ] [
-          text "Selected: "
-          textView (
-            selected.View
-            |> View.Map(fun keys -> if Set.isEmpty keys then "None" else String.concat ", " keys)
-          )
-        ]
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
       ]
 
-    let code =
-      """open Weave
-open WebSharper.UI
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+        TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun (f: Fruit) -> text (string<int> f.Stock)),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
 
-type Fruit = { Name: string; Color: string; Stock: int }
+      let selected = Var.Create(Set.ofList [ "Cherry" ])
+
+      Table.create (
+        columns,
+        View.Const fruits,
+        (fun f -> f.Name),
+        selectedKeys = selected,
+        rowHeader = "name",
+        caption = text "Select fruit",
+        attrs = [ Table.hiddenCaption ]
+      )
+
+    let code =
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)))
+  TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+  TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun (f: Fruit) -> text (string<int> f.Stock)),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
-let selected = Var.Create (Set.ofList [ "Cherry" ])
+let selected = Var.Create(Set.ofList [ "Cherry" ])
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    selectedKeys = selected,
-    rowHeader = "name",
-    caption = text "Select fruit",
-    attrs = [ Table.hiddenCaption ]
-)"""
+Table.create (
+  columns,
+  View.Const fruits,
+  (fun f -> f.Name),
+  selectedKeys = selected,
+  rowHeader = "name",
+  caption = text "Select fruit",
+  attrs = [ Table.hiddenCaption ]
+)
+"""
 
     Helpers.codeSampleSection "Multiple Selection" description content code
 
@@ -209,63 +378,116 @@ Table.create(
       Helpers.bodyText
         "Pass sort to a column to make its header a sort button. Table.ColumnSort.by sorts by a projected value, and Table.ColumnSort.Compare takes a comparison. Activating the header cycles ascending, descending, then the original order, and the header cell reports the state through aria-sort. Pass a sort Var to the table to start sorted or to read the current sort."
 
-    let sortableColumns = [
-      TableColumn.create (
-        "name",
-        text "Name",
-        (fun (f: Fruit) -> text f.Name),
-        sort = Table.ColumnSort.by (fun f -> f.Name)
-      )
-      TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
-      TableColumn.create (
-        "stock",
-        text "Stock",
-        (fun (f: Fruit) -> text (string<int> f.Stock)),
-        sort = Table.ColumnSort.by (fun f -> f.Stock),
-        attrs = [ Attr.Style "text-align" "end" ]
-      )
-    ]
-
-    let sort =
-      Var.Create(
-        Some {
-          Column = "stock"
-          Direction = Table.SortDirection.Descending
-        }
-        : Table.SortState option
-      )
-
     let content =
-      Table.create (sortableColumns, View.Const fruits, fruitName, sort = sort)
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
+      ]
+
+      let columns = [
+        TableColumn.create (
+          "name",
+          text "Name",
+          (fun f -> text f.Name),
+          sort = Table.ColumnSort.by (fun f -> f.Name)
+        )
+        TableColumn.create ("color", text "Color", (fun f -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun f -> text (string<int> f.Stock)),
+          sort = Table.ColumnSort.by (fun f -> f.Stock),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
+
+      let sort =
+        Var.Create(
+          Some {
+            Column = "stock"
+            Direction = Table.SortDirection.Descending
+          }
+          : Table.SortState option
+        )
+
+      Table.create (columns, View.Const fruits, (fun f -> f.Name), sort = sort)
 
     let code =
-      """open Weave
-open WebSharper.UI
-
-type Fruit = { Name: string; Color: string; Stock: int }
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun f -> text f.Name), sort = Table.ColumnSort.by (fun f -> f.Name))
-    TableColumn.create("color", text "Color", (fun f -> text f.Color))
-    TableColumn.create(
-        "stock",
-        text "Stock",
-        (fun f -> text (string<int> f.Stock)),
-        sort = Table.ColumnSort.by (fun f -> f.Stock)
-    )
+  TableColumn.create (
+    "name",
+    text "Name",
+    (fun f -> text f.Name),
+    sort = Table.ColumnSort.by (fun f -> f.Name)
+  )
+  TableColumn.create ("color", text "Color", (fun f -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun f -> text (string<int> f.Stock)),
+    sort = Table.ColumnSort.by (fun f -> f.Stock),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
 let sort =
-    Var.Create (Some { Column = "stock"; Direction = Table.SortDirection.Descending } : Table.SortState option)
+  Var.Create(
+    Some {
+      Column = "stock"
+      Direction = Table.SortDirection.Descending
+    }
+    : Table.SortState option
+  )
 
-Table.create(columns, View.Const fruits, (fun f -> f.Name), sort = sort)"""
+Table.create (columns, View.Const fruits, (fun f -> f.Name), sort = sort)
+"""
 
     Helpers.codeSampleSection "Sorting" description content code
 
@@ -274,64 +496,116 @@ Table.create(columns, View.Const fruits, (fun f -> f.Name), sort = sort)"""
       Helpers.bodyText
         "Use Table.ColumnSort.External when the rows arrive already ordered, such as from a server. The header still cycles the sort state, and the rows View reads that state to fetch or order the data."
 
-    let sort = Var.Create(None: Table.SortState option)
+    let content =
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
+      ]
 
-    let orderedFruits =
-      sort.View
-      |> View.Map(fun state ->
-        match state with
-        | Some { Direction = Table.SortDirection.Ascending } -> List.sortBy (fun f -> f.Stock) fruits
-        | Some { Direction = Table.SortDirection.Descending } ->
-          List.sortByDescending (fun f -> f.Stock) fruits
-        | None -> fruits)
+      let fetchFruitsSortedBy (state: Table.SortState option) = async {
+        return
+          match state with
+          | Some { Direction = Table.SortDirection.Ascending } -> List.sortBy (fun f -> f.Stock) fruits
+          | Some { Direction = Table.SortDirection.Descending } ->
+            List.sortByDescending (fun f -> f.Stock) fruits
+          | None -> fruits
+      }
 
-    let externalColumns = [
-      TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
-      TableColumn.create (
-        "stock",
-        text "Stock",
-        (fun (f: Fruit) -> text (string<int> f.Stock)),
-        sort = Table.ColumnSort.External,
-        attrs = [ Attr.Style "text-align" "end" ]
-      )
-    ]
+      let sort = Var.Create None
 
-    let content = Table.create (externalColumns, orderedFruits, fruitName, sort = sort)
+      let rows = sort.View |> View.MapAsync fetchFruitsSortedBy
+
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun f -> text f.Name))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun f -> text (string<int> f.Stock)),
+          sort = Table.ColumnSort.External,
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
+
+      Table.create (columns, rows, (fun f -> f.Name), sort = sort)
 
     let code =
-      """open Weave
-open WebSharper.UI
-
-type Fruit = { Name: string; Color: string; Stock: int }
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
-// Stands in for a server query that returns the rows already ordered
 let fetchFruitsSortedBy (state: Table.SortState option) =
-    async {
-        return
-            match state with
-            | Some { Direction = Table.SortDirection.Ascending } -> List.sortBy (fun f -> f.Stock) fruits
-            | Some { Direction = Table.SortDirection.Descending } -> List.sortByDescending (fun f -> f.Stock) fruits
-            | None -> fruits
-    }
+  async {
+    return
+      match state with
+      | Some {
+               Direction = Table.SortDirection.Ascending
+             } -> List.sortBy (fun f -> f.Stock) fruits
+      | Some {
+               Direction = Table.SortDirection.Descending
+             } -> List.sortByDescending (fun f -> f.Stock) fruits
+      | None -> fruits
+  }
 
 let sort = Var.Create None
 
-// The rows come from wherever the sort state is applied, for example a server query
 let rows = sort.View |> View.MapAsync fetchFruitsSortedBy
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun f -> text f.Name))
-    TableColumn.create("stock", text "Stock", (fun f -> text (string<int> f.Stock)), sort = Table.ColumnSort.External)
+  TableColumn.create ("name", text "Name", (fun f -> text f.Name))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun f -> text (string<int> f.Stock)),
+    sort = Table.ColumnSort.External,
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
-Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
+Table.create (columns, rows, (fun f -> f.Name), sort = sort)
+"""
 
     Helpers.codeSampleSection "External Sorting" description content code
 
@@ -340,13 +614,47 @@ Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
       Helpers.bodyText
         "Rows are a View, so filtering is a View.Map over the source. Pass emptyContent to show a message when no rows match."
 
-    let query = Var.Create ""
-
-    let filtered =
-      query.View
-      |> View.Map(fun q -> fruits |> List.filter (fun f -> f.Name.ToLower().Contains(q.Trim().ToLower())))
-
     let content =
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
+      ]
+
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+        TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun (f: Fruit) -> text (string<int> f.Stock)),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
+
+      let query = Var.Create ""
+
+      let filtered =
+        query.View
+        |> View.Map(fun q -> fruits |> List.filter (fun f -> f.Name.ToLower().Contains(q.Trim().ToLower())))
+
       div [] [
         div [
           Flex.Flex.allSizes
@@ -368,9 +676,9 @@ Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
           )
         ]
         Table.create (
-          columns (),
+          columns,
           filtered,
-          fruitName,
+          (fun f -> f.Name),
           rowHeader = "name",
           caption = text "Fruit stock",
           emptyContent = text "No fruit matches the filter",
@@ -379,167 +687,238 @@ Table.create(columns, rows, (fun f -> f.Name), sort = sort)"""
       ]
 
     let code =
-      """open Weave
-open WebSharper.UI
-open WebSharper.UI.Client
-open WebSharper.UI.Html
-
-type Fruit = { Name: string; Color: string; Stock: int }
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)), attrs = [ Attr.Style "text-align" "end" ])
+  TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+  TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun (f: Fruit) -> text (string<int> f.Stock)),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
 let query = Var.Create ""
 
 let filtered =
-    query.View
-    |> View.Map (fun q -> fruits |> List.filter (fun f -> f.Name.ToLower().Contains(q.Trim().ToLower())))
+  query.View
+  |> View.Map(fun q ->
+    fruits
+    |> List.filter (fun f -> f.Name.ToLower().Contains(q.Trim().ToLower())))
 
-div [] [
-    div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; AlignItems.end'; Gap.All.g3; Margin.Bottom.small ] [
-        TextField.singleLine(
-            query,
-            labelText = View.Const "Filter by name",
-            placeholder = View.Const "Search by fruit",
-            attrs = [ TextField.Variant.outlined; TextField.Label.above ]
-        )
-        Button.create(text "Clear filter", onClick = (fun () -> Var.Set query ""), attrs = [ Button.Variant.outlined ])
-    ]
-    Table.create(
-        columns, filtered, (fun f -> f.Name),
-        rowHeader = "name", caption = text "Fruit stock",
-        emptyContent = text "No fruit matches the filter",
-        attrs = [ Table.hoverable ]
-    )
-]"""
+Doc.Concat [
+  TextField.singleLine (
+    query,
+    labelText = View.Const "Filter by name",
+    placeholder = View.Const "Search by fruit",
+    attrs = [ TextField.Variant.outlined; TextField.Label.above ]
+  )
+  Button.create (
+    text "Clear filter",
+    onClick = (fun () -> Var.Set query ""),
+    attrs = [ Button.Variant.outlined ]
+  )
+  Table.create (
+    columns,
+    filtered,
+    (fun f -> f.Name),
+    rowHeader = "name",
+    caption = text "Fruit stock",
+    emptyContent = text "No fruit matches the filter",
+    attrs = [ Table.hoverable ]
+  )
+]
+"""
 
     Helpers.codeSampleSection "Filtering and Empty State" description content code
 
   let private stylingExample () =
     let description =
       Helpers.bodyText
-        "Combine Table.Density with Table.striped and Table.hoverable to adjust the look. Table.StripeColor and Table.HoverColor tint rows with a palette color or a custom CSS color. Check custom colors against the row text in both themes."
+        "Table.striped tints alternate rows; Table.hoverable highlights the row under the pointer. Choose a palette role or a custom CSS color, and check custom colors against row text in both themes. These tables use the default density."
 
     let content =
-      Grid.create (
-        [
-          GridItem.create (
-            Table.create (
-              columns (),
-              View.Const fruits,
-              fruitName,
-              attrs = [ Table.Density.compact; Table.striped; Table.StripeColor.primary ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
+      let fruits = [ "Apple", 42; "Banana", 17; "Cherry", 120 ]
+
+      let createTable attrs =
+        let columns = [
+          TableColumn.create ("fruit", text "Fruit", (fun (name, _) -> text name))
+          TableColumn.create (
+            "stock",
+            text "Stock",
+            (fun (_, stock) -> text (string<int> stock)),
+            attrs = [ Attr.Style "text-align" "end" ]
           )
-          GridItem.create (
-            Table.create (
-              columns (),
-              View.Const fruits,
-              fruitName,
-              attrs = [ Table.Density.standard; Table.hoverable; Table.HoverColor.success ]
-            ),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-          GridItem.create (
-            Table.create (columns (), View.Const fruits, fruitName, attrs = [ Table.Density.spacious ]),
-            attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-          )
-        ],
-        attrs = [ Grid.Spacing.small ]
-      )
+        ]
+
+        Table.create (columns, View.Const fruits, fst, attrs = attrs)
+
+      let preview label attrs =
+        div [ Attr.Style "inline-size" "100%"; Attr.Style "min-inline-size" "0" ] [
+          p [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text label ]
+          createTable attrs
+        ]
+
+      comparisonGrid 3 [
+        preview "Striped" [ Table.striped; Table.StripeColor.primary ]
+        preview "Hoverable" [ Table.hoverable; Table.HoverColor.success ]
+        preview "Custom stripe" [
+          Table.striped
+          Table.StripeColor.custom "rgba(var(--palette-primary-rgb), var(--weave-alpha-selected))"
+        ]
+      ]
 
     let code =
-      """open Weave
+      """let fruits = [ "Apple", 42; "Banana", 17; "Cherry", 120 ]
 
-type Fruit = { Name: string; Color: string; Stock: int }
+let createTable attrs =
+  let columns = [
+    TableColumn.create ("fruit", text "Fruit", (fun (name, _) -> text name))
+    TableColumn.create (
+      "stock",
+      text "Stock",
+      (fun (_, stock) -> text (string<int> stock)),
+      attrs = [ Attr.Style "text-align" "end" ]
+    )
+  ]
 
-let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
-]
+  Table.create (columns, View.Const fruits, fst, attrs = attrs)
 
-let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)))
-]
+createTable [ Table.striped; Table.StripeColor.primary ]
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    attrs = [ Table.Density.compact; Table.striped; Table.StripeColor.primary ]
-)
+createTable [ Table.hoverable; Table.HoverColor.success ]
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    attrs = [ Table.Density.standard; Table.hoverable; Table.HoverColor.success ]
-)
+let stripe =
+  "rgba(var(--palette-primary-rgb), var(--weave-alpha-selected))"
 
-// A theme-aware custom tint
-Table.create(columns, View.Const fruits, (fun f -> f.Name), attrs = [ Table.striped; Table.StripeColor.custom "rgba(var(--palette-primary-rgb), var(--weave-alpha-selected))" ])
+createTable [ Table.striped; Table.StripeColor.custom stripe ]"""
 
-Table.create(columns, View.Const fruits, (fun f -> f.Name), attrs = [ Table.Density.spacious ])"""
-
-    Helpers.codeSampleSection "Density and Styling" description content code
+    Helpers.codeSampleSection "Striping and Hover" description content code
 
   let private stickyHeaderExample () =
     let description =
       Helpers.bodyText
         "Table.stickyHeader keeps the header row visible while the body scrolls. Give the table a max height so it scrolls inside its own frame."
 
-    let manyFruits = [
-      for i in 1..4 do
-        for f in fruits -> { f with Name = sprintf "%s %d" f.Name i }
-    ]
-
     let content =
+      let fruits = [
+        {
+          Name = "Apple"
+          Color = "Red"
+          Stock = 42
+        }
+        {
+          Name = "Banana"
+          Color = "Yellow"
+          Stock = 17
+        }
+        {
+          Name = "Cherry"
+          Color = "Red"
+          Stock = 120
+        }
+        {
+          Name = "Grape"
+          Color = "Purple"
+          Stock = 63
+        }
+      ]
+
+      let columns = [
+        TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+        TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+        TableColumn.create (
+          "stock",
+          text "Stock",
+          (fun (f: Fruit) -> text (string<int> f.Stock)),
+          attrs = [ Attr.Style "text-align" "end" ]
+        )
+      ]
+
       Table.create (
-        columns (),
-        View.Const manyFruits,
-        fruitName,
-        attrs = [ Table.stickyHeader; Attr.Style "max-height" "240px" ]
+        columns,
+        View.Const fruits,
+        (fun f -> f.Name),
+        attrs = [ Table.stickyHeader; Attr.Style "max-height" "160px" ]
       )
 
     let code =
-      """open Weave
-
-type Fruit = { Name: string; Color: string; Stock: int }
+      """type Fruit = {
+  Name: string
+  Color: string
+  Stock: int
+}
 
 let fruits = [
-    { Name = "Apple"; Color = "Red"; Stock = 42 }
-    { Name = "Banana"; Color = "Yellow"; Stock = 17 }
-    { Name = "Cherry"; Color = "Red"; Stock = 120 }
-    { Name = "Grape"; Color = "Purple"; Stock = 63 }
+  {
+    Name = "Apple"
+    Color = "Red"
+    Stock = 42
+  }
+  {
+    Name = "Banana"
+    Color = "Yellow"
+    Stock = 17
+  }
+  {
+    Name = "Cherry"
+    Color = "Red"
+    Stock = 120
+  }
+  {
+    Name = "Grape"
+    Color = "Purple"
+    Stock = 63
+  }
 ]
 
 let columns = [
-    TableColumn.create("name", text "Name", (fun (f: Fruit) -> text f.Name))
-    TableColumn.create("color", text "Color", (fun (f: Fruit) -> text f.Color))
-    TableColumn.create("stock", text "Stock", (fun (f: Fruit) -> text (string<int> f.Stock)))
+  TableColumn.create ("name", text "Name", (fun (f: Fruit) -> text f.Name))
+  TableColumn.create ("color", text "Color", (fun (f: Fruit) -> text f.Color))
+  TableColumn.create (
+    "stock",
+    text "Stock",
+    (fun (f: Fruit) -> text (string<int> f.Stock)),
+    attrs = [ Attr.Style "text-align" "end" ]
+  )
 ]
 
-Table.create(
-    columns,
-    View.Const fruits,
-    (fun f -> f.Name),
-    attrs = [ Table.stickyHeader; Attr.Style "max-height" "240px" ]
-)"""
+Table.create (
+  columns,
+  View.Const fruits,
+  (fun f -> f.Name),
+  attrs = [ Table.stickyHeader; Attr.Style "max-height" "160px" ]
+)
+"""
 
     Helpers.codeSampleSection "Sticky Header" description content code
 
@@ -648,6 +1027,8 @@ Table.create(
         Helpers.bodyText "Displays rows of data in columns using a semantic table."
         Helpers.divider ()
         basicExample ()
+        Helpers.divider ()
+        DataAppearance.table ()
         Helpers.divider ()
         selectionExample ()
         Helpers.divider ()

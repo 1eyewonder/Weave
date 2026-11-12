@@ -4,23 +4,14 @@ open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
-open WebSharper.JavaScript
 open Weave
 open Weave.Docs
 
 [<JavaScript>]
 module GettingStartedExamples =
 
-  [<Inline "document.getElementById($id).scrollIntoView({block: 'start', behavior: 'smooth'})">]
-  let private scrollTo (id: string) = X<unit>
-
   let private stepLink id number title subtitle =
-    a [
-      attr.href ("#getting-started/" + id)
-      on.click (fun _ ev ->
-        ev.PreventDefault()
-        scrollTo id)
-    ] [
+    a [ attr.href ("#getting-started/" + id) ] [
       span [] [ text number ]
       div [] [ strong [] [ text title ]; small [] [ text subtitle ] ]
     ]
@@ -28,7 +19,11 @@ module GettingStartedExamples =
   let private codeBlock lang content =
     div [ Attr.Class "docs-getting-started__code-wrap" ] [
       Helpers.copyButton content
-      pre [ Attr.Class "docs-getting-started__code" ] [
+      pre [
+        Attr.Class "docs-getting-started__code"
+        attr.tabindex "0"
+        Attr.Create "aria-label" (lang + " setup source code")
+      ] [
         code [
           SurfaceColor.BackgroundColor.background
           Attr.Class(sprintf "language-%s" lang)
@@ -50,7 +45,7 @@ module GettingStartedExamples =
           ul [ Attr.Class "docs-getting-started__requirements-list" ] [
             li [] [
               strong [] [ text ".NET SDK" ]
-              span [] [ text "10.0.403 or newer .NET 10 feature band" ]
+              span [] [ text "10.0.403 (the repository baseline), or a compatible .NET 10 SDK" ]
             ]
             li [] [
               strong [] [ text "Package feed" ]
@@ -65,7 +60,7 @@ module GettingStartedExamples =
   let private installPackage () =
     Helpers.textSection "1. Create a starter application" [
       Helpers.bodyText
-        "The stable packages are available on NuGet. The starter template references the matching Weave library version."
+        "The template package creates an app with a matching Weave library reference and stylesheet. No repository checkout is required."
       Helpers.bodyText "Install the template, create the minimal app, and run it:"
       codeBlock
         "bash"
@@ -77,6 +72,10 @@ dotnet run"""
           PackageVersions.Templates)
       Helpers.bodyText
         "Open the address printed by the app. The starter already references Weave and includes its styles. Its README explains the project layout and theme toggle."
+      Helpers.bodyText
+        "You should see the starter page with a Say hello button and a light/dark toggle. Select Say hello to display a notification."
+      Helpers.bodyText
+        "If dotnet is unavailable or reports a missing SDK, install the .NET 10 SDK and reopen your terminal. Run dotnet --list-sdks to check the installed versions. If weave-app is not found, rerun the template install command above and check that it succeeds."
     ]
 
   let private firstPage () =
@@ -85,41 +84,48 @@ dotnet run"""
         "In the generated app, replace the contents of Client.fs with the example below. Run the app again and click the button to update the count. This changes your new starter, not the documentation site."
       codeBlock
         "fsharp"
-        """namespace WeaveStarter
+        """namespace MyApp
 
 open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Client
-open WebSharper.UI.Html
 open Weave
 
 [<JavaScript>]
 module Client =
-    [<SPAEntryPoint>]
-    let Main () =
-        let count = Var.Create 0
-        div [] [
-            textView (count.View |> View.Map (sprintf "Clicks: %d"))
-            Button.primary(
-                text "Click me",
-                onClick = (fun () -> Var.Update count ((+) 1)),
-                attrs = [ Button.Variant.filled ]
-            )
-        ] |> Doc.RunById "main"
+  [<SPAEntryPoint>]
+  let Main () =
+    let count = Var.Create 0
+    let label = count.View |> View.Map (sprintf "Clicks: %d") |> Doc.TextView
+
+    Button.primary (
+      label,
+      onClick = (fun () -> Var.Update count ((+) 1)),
+      attrs = [ Button.Variant.filled ]
+    )
+    |> Doc.RunById "main"
 """
       Helpers.bodyText
-        "Var holds changing state and its View updates the displayed text. The starter's index.html supplies the main element and loads the app and stylesheet."
+        "The page starts at Clicks: 0. Each activation increases the number. Var holds changing state and its View updates the displayed text. The starter's index.html supplies the main element and loads the app and stylesheet."
+      Helpers.bodyText
+        "Component references show the component calls and state relevant to each example. Preview-only layout is omitted. Comparison calls are independent alternatives. Add open WebSharper.UI.Html when using HTML builders such as div and text."
+      Helpers.bodyText
+        "If the component renders without styling, check that the stylesheet link in index.html is present and that its URL loads successfully. For a blank page, check the terminal build output and your browser console before editing the component."
     ]
 
   let private existingProject () =
-    Helpers.textSection "3. Add Weave to an existing app" [
-      Helpers.bodyText "Add Weave to an existing F# WebSharper project:"
-      codeBlock "bash" (sprintf "dotnet add package Weave.WebSharper --version %s" PackageVersions.Library)
-      Helpers.bodyText
-        "The package includes styles.css as a WebSharper resource and a NuGet content file. Link the extracted stylesheet, or copy the content file into your app's static files and link it at the URL your host serves. Your existing WebSharper setup determines the script and host configuration."
-      codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
-      Helpers.bodyText
-        "For the tested WebSharper baseline and a local source checkout workflow, see the repository README."
+    div [] [
+      span [ attr.id "3.-add-weave-to-an-existing-app" ] []
+      Helpers.textSection "Add Weave to an existing app" [
+        Helpers.bodyText
+          "Already have an F# WebSharper project? Follow this path instead of creating a starter:"
+        codeBlock "bash" (sprintf "dotnet add package Weave.WebSharper --version %s" PackageVersions.Library)
+        Helpers.bodyText
+          "The package includes styles.css as a WebSharper resource and a NuGet content file. Link the extracted stylesheet, or copy the content file into your app's static files and link it at the URL your host serves. Your existing WebSharper setup determines the script and host configuration."
+        codeBlock "html" """<link rel="stylesheet" href="Scripts/Weave/styles.css" />"""
+        Helpers.bodyText
+          "For the tested WebSharper baseline and a local source checkout workflow, see the repository README."
+      ]
     ]
 
   let private contributing () =
@@ -200,31 +206,36 @@ yarn dev:docs"""
     ]
 
   let private starterTemplates () =
-    Helpers.textSection "4. Explore the workspace templates" [
-      Helpers.bodyText
-        "Start with an editable F# application and customize it for your project. The template and Weave packages are available on NuGet."
-      Helpers.bodyText
-        "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
-      templateGallery ()
-      Helpers.bodyText "Install the template package with the .NET 10 SDK:"
-      codeBlock "bash" (sprintf "dotnet new install Weave.WebSharper.Templates@%s" PackageVersions.Templates)
-      Helpers.bodyText
-        "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
-      codeBlock
-        "bash"
-        """dotnet new weave-app -n MyApp
+    div [] [
+      span [ attr.id "4.-explore-the-workspace-templates" ] []
+      Helpers.textSection "Explore the workspace templates" [
+        Helpers.bodyText
+          "Start with an editable F# application and customize it for your project. The template and Weave packages are available on NuGet."
+        Helpers.bodyText
+          "Choose weave-app for a minimal app, weave-projects for a project tracker with list and board views, weave-repository for a repository workspace, or weave-dashboard for a business dashboard. The workspace data is fictional, in memory, and resets on refresh."
+        templateGallery ()
+        Helpers.bodyText "Install the template package with the .NET 10 SDK:"
+        codeBlock
+          "bash"
+          (sprintf "dotnet new install Weave.WebSharper.Templates@%s" PackageVersions.Templates)
+        Helpers.bodyText
+          "Choose one command below. Each creates a separate application containing only that starter; generate another project if you want to try a different workspace."
+        codeBlock
+          "bash"
+          """dotnet new weave-app -n MyApp
 dotnet new weave-projects -n MyProjects
 dotnet new weave-repository -n MyRepository
 dotnet new weave-dashboard -n MyDashboard"""
-      Helpers.bodyText "For example, after creating MyProjects, run it with:"
-      codeBlock
-        "bash"
-        """cd MyProjects
+        Helpers.bodyText "For example, after creating MyProjects, run it with:"
+        codeBlock
+          "bash"
+          """cd MyProjects
 dotnet run --urls http://localhost:5000"""
-      Helpers.bodyText
-        "Open http://localhost:5000. Build and deploy the generated project you chose using your preferred hosting setup. Deployment configuration is not included, and the sample data is not persisted. The NuGet packages supply Weave and its styles without a local repository checkout."
-      Helpers.bodyText
-        "In the generated project, start with README.md; the workspace starters separate sample data (Domain.fs), state (State.fs), page components (Views.fs), and CSS. Use the light/dark toggle and edit the stylesheet's body theme variables to make the starter yours. To uninstall the templates, run dotnet new uninstall Weave.WebSharper.Templates."
+        Helpers.bodyText
+          "Open http://localhost:5000. Build and deploy the generated project you chose using your preferred hosting setup. Deployment configuration is not included, and the sample data is not persisted. The NuGet packages supply Weave and its styles without a local repository checkout."
+        Helpers.bodyText
+          "In the generated project, start with README.md; the workspace starters separate sample data (Domain.fs), state (State.fs), page components (Views.fs), and CSS. Use the light/dark toggle and edit the stylesheet's body theme variables to make the starter yours. To uninstall the templates, run dotnet new uninstall Weave.WebSharper.Templates."
+      ]
     ]
 
   let private nextSteps () =
@@ -249,8 +260,14 @@ dotnet run --urls http://localhost:5000"""
         div [ Attr.Class "docs-getting-started__path" ] [
           stepLink "1.-create-a-starter-application" "01" "Create an app" "Install the starter"
           stepLink "2.-build-an-interactive-component" "02" "Try a component" "See reactivity in action"
-          stepLink "3.-add-weave-to-an-existing-app" "03" "Use in your app" "Connect an existing project"
-          stepLink "4.-explore-the-workspace-templates" "04" "Explore starters" "See complete workspaces"
+        ]
+        div [ Attr.Class "docs-getting-started__next" ] [
+          a [ attr.href "#getting-started/add-weave-to-an-existing-app" ] [
+            text "Already have a WebSharper app?"
+          ]
+          a [ attr.href "#getting-started/explore-the-workspace-templates" ] [
+            text "Explore complete workspace starters"
+          ]
         ]
         Helpers.divider ()
         introduction ()
@@ -259,13 +276,13 @@ dotnet run --urls http://localhost:5000"""
         Helpers.divider ()
         firstPage ()
         Helpers.divider ()
+        nextSteps ()
+        Helpers.divider ()
         existingProject ()
         Helpers.divider ()
         starterTemplates ()
         Helpers.divider ()
         contributing ()
-        Helpers.divider ()
-        nextSteps ()
       ],
       attrs = [ Container.MaxWidth.large ]
     )

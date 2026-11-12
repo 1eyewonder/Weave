@@ -210,6 +210,8 @@ The normal `RunTests` target still uses Chromium by default. The all-browser tar
 
 ## Contributing
 
+For documentation changes, follow the [documentation authoring guide](src/Weave.Docs/README.md) for the page contract, copyable examples, and validation workflow.
+
 Community interest will shape the future of Weave.
 
 - Open issues to report bugs or suggest features

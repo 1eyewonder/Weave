@@ -1,52 +1,24 @@
 # Docs code highlighting
 
-This is a docs-only browser feature. No highlighter dependency is shipped in the
-Weave NuGet package. ExampleHelpers.fs keeps calling window.highlightCodeElement
-after WebSharper renders each code element; Copy continues using the original source.
+The docs site highlights code blocks and API type signatures in the browser. This dependency is not shipped in the Weave NuGet package. Copy uses the original source text.
 
-## Ownership
+## Build and test
 
-- engine.js registers only F#, Bash, HTML/XML and plain text against the pinned
-  highlight.js package in the root package.json and yarn.lock.
-- fsharp.js is our fork of highlight.js 11.11.1 src/languages/fsharp.js.
-- regex.js is unchanged from that release's src/lib/regex.js.
-- index.js is the WebSharper hook; it always highlights from text, including when
-  an existing element gets the same source again or changes language.
-- ../wwwroot/code-highlighting.css owns the light/dark editor colors and follows
-  the active Weave palette. Light mode separates keywords (berry), types (green),
-  functions (blue), strings (amber) and numbers (violet). Dark mode keeps its
-  own token mapping. Neutral identifiers and
-  15px code (medium weight in light mode) improve readability.
-- ../wwwroot/vendor/highlightjs/LICENSE covers highlight.js and the forked sources
-  (BSD-3-Clause). Keep the upstream author credits and license when updating.
+From the repository root, run:
 
-Upstream source: https://github.com/highlightjs/highlight.js/tree/11.11.1
+```sh
+yarn build:docs:highlighting
+yarn test:docs:highlighting
+```
 
-## Build and checks
+The docs build also regenerates the browser bundle. The test suite checks grammar, text preservation, repeated rendering, and HTML escaping with jsdom; it does not need a browser server.
 
-Run yarn build:docs:highlighting to rebuild the single browser asset,
-wwwroot/vendor/highlightjs/weave-highlight.min.js. The docs project also runs this
-before building, for Debug and Release. The generated bundle is ignored; the
-source, pinned dependency and license are tracked. Install with yarn install
---immutable before building, as with the existing Sass build.
+## Source and ownership
 
-Run yarn test:docs:highlighting for grammar, text preservation and real DOM
-re-render/escaping checks. RunTests and RunNonBrowserTests also run this command,
-so CI uses its existing test job. The DOM tests use jsdom and do
-not require an HTTP server, browser download, or the F# compiler.
+- [engine.js](engine.js) registers F#, its API type-signature mode, Bash, HTML/XML, and plain text. [fsharp.js](fsharp.js) extends the pinned highlight.js F# grammar; [regex.js](regex.js) is unchanged from upstream.
+- [index.js](index.js) highlights from element text after WebSharper renders it. [ExampleHelpers.fs](../examples/shared/ExampleHelpers.fs) calls that hook for code and type signatures.
+- [code-highlighting.css](../wwwroot/code-highlighting.css) supplies the light and dark token colors. The [highlight.js license](../wwwroot/vendor/highlightjs/LICENSE) covers the bundled upstream code and fork.
 
-## Local grammar changes and limits
+The grammar handles F# numeric suffixes, ranges, record annotations, and member names. API types use the same token rules as type annotations in code blocks. Highlighting is lexical: it cannot reliably distinguish every module, type, or member from context.
 
-The fork adds and!, F# numeric suffix/range handling, record annotation
-boundaries, and identifier/member scopes. Semicolons and closing record braces
-end an annotation; parentheses and brackets remain part of tuple/array types.
-Capitalized identifiers and dotted lowercase members use visual heuristics.
-This is lexical highlighting: it cannot reliably distinguish modules, types,
-record fields and functions, or provide inferred-type tooltips.
-
-When updating upstream, compare the grammar and regex helper against the pinned
-release, reapply these changes, retain the license, and run the regression suite
-and a docs build. Check the code blocks in both themes before publishing.
-
-Compiler-aware snippets with FSharp.Formatting would require a separate build
-tool and checked source files. They are not part of this feature.
+When updating the pinned [highlight.js source](https://github.com/highlightjs/highlight.js/tree/11.11.1), compare the local grammar and regex helper with upstream, retain its license, run the tests and docs build, and inspect code blocks in both themes.

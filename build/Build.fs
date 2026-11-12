@@ -159,12 +159,25 @@ let runTestProjects projects =
 let runDocsHighlightingTests () =
   Yarn.exec "test:docs:highlighting" (fun options -> { options with WorkingDirectory = rootDir })
 
+let runDocsSourceChecks buildConfiguration =
+  let runScript path args =
+    let script = rootDir </> "tests" </> "Weave.Docs.Snippets" </> path
+
+    DotNet.exec (fun options -> { options with WorkingDirectory = rootDir }) "fsi" $"\"%s{script}\"%s{args}"
+    |> failOnBadExitAndPrint
+
+  runScript "check.fsx" $" --configuration %s{buildConfiguration}"
+  runScript "ApiReferenceChecks.fsx" ""
+  runScript "TextFieldAppearanceChecks.fsx" ""
+
 let runTests _ =
   runDocsHighlightingTests ()
+  runDocsSourceChecks configuration
   runTestProjects (!!testsGlob)
 
 let runNonBrowserTests _ =
   runDocsHighlightingTests ()
+  runDocsSourceChecks configuration
 
   !!testsGlob
   |> Seq.filter (fun project -> Path.GetFileName(project) <> "Weave.Tests.E2E.fsproj")
@@ -207,6 +220,8 @@ let buildDocs _ =
   }
 
   DotNet.build setParams (rootDir </> "src" </> "Weave.Docs" </> "Weave.Docs.fsproj")
+
+  runDocsSourceChecks "Release"
 
 let initTargets () =
 

@@ -10,31 +10,26 @@ open Weave.Theming
 [<JavaScript>]
 module ThemingExamples =
 
-  let private toggleExample () =
-    let currentMode = Var.Create(getMode ())
-
-    button [ on.click (fun _ _ -> currentMode.Value <- toggleMode ()) ] [
-      currentMode.View.Map(fun mode ->
-        match mode with
-        | Light -> "Switch to dark"
-        | Dark -> "Switch to light")
-      |> Doc.TextView
-    ]
-
   let private modeSection () =
-    let description =
-      Helpers.bodyText "F# selects the mode on the document body; CSS provides its colors and typography."
+    let content =
+      Button.primary (
+        text "Toggle theme",
+        onClick = (fun () -> toggleMode () |> ignore),
+        attrs = [ Button.Variant.outlined ]
+      )
 
-    let code =
+    Helpers.codeSampleSection
+      "Light / Dark Mode"
+      (Helpers.bodyText
+        "toggleMode changes data-theme on the document body and returns the selected mode. Use setMode Light or setMode Dark when an explicit choice is needed.")
+      (div [ Flex.Flex.allSizes; JustifyContent.center ] [ content ])
       """open Weave.Theming
 
-let currentMode = Var.Create (getMode ())
-let toggle () = currentMode.Value <- toggleMode ()
-
-// Or choose a mode explicitly:
-setMode Dark"""
-
-    Helpers.codeSampleSection "Light / Dark Mode" description (toggleExample ()) code
+Button.primary (
+  text "Toggle theme",
+  onClick = (fun () -> toggleMode () |> ignore),
+  attrs = [ Button.Variant.outlined ]
+)"""
 
   let private cssSection () =
     let description =
@@ -76,18 +71,60 @@ body[data-theme="dark"] {
   --palette-text-primary-rgb: 230, 235, 245;
 }"""
 
-    Helpers.codeSampleSection "Customize with CSS" description Doc.Empty code
+    Helpers.codeSection "css" "Customize with CSS" description code
 
   // Reference values mirror the default CSS; keep these tables in sync with the stylesheets.
-  let private referenceTable headers (rows: string list list) =
-    div [ Attr.Style "overflow-x" "auto"; Margin.Vertical.extraSmall ] [
-      table [ Attr.Class "docs-api-table" ] [
-        thead [] [
-          tr [] [ for header in headers -> th [ Attr.Create "scope" "col" ] [ text header ] ]
-        ]
-        tbody [] [ for row in rows -> tr [] [ for cell in row -> td [] [ text cell ] ] ]
+  let private referenceTable title (headers: string list) (rows: string list list) =
+    let columnCount = List.length headers
+    let firstWidth = if columnCount >= 6 then 28 else 40
+    let valueWidth = (100 - firstWidth) / (columnCount - 1)
+
+    let column index header =
+      let width =
+        if columnCount = 7 then
+          List.item index [ 10; 18; 18; 17; 12; 13; 12 ]
+        elif index = 0 then
+          firstWidth
+        elif index = columnCount - 1 then
+          100 - firstWidth - valueWidth * (columnCount - 2)
+        else
+          valueWidth
+
+      let renderCell (_, values) : Doc =
+        let value = List.item index values
+
+        if index = 0 then
+          code [ Attr.Class "docs-api-name" ] [ text value ]
+        else
+          match header with
+          | "Purpose"
+          | "Use"
+          | "Use or default" -> text value
+          | _ -> code [ Attr.Class "docs-api-default" ] [ text value ]
+
+      TableColumn.create (
+        sprintf "column-%d" index,
+        text header,
+        renderCell,
+        attrs = [ Attr.Create "data-label" header; Attr.Style "width" (sprintf "%d%%" width) ]
+      )
+
+    let values = rows |> List.mapi (fun index row -> string index, row) |> View.Const
+
+    Table.create (
+      List.mapi column headers,
+      values,
+      fst,
+      rowHeader = "column-0",
+      caption = text (title + " theme variable reference"),
+      attrs = [
+        Attr.Class "docs-api-table"
+        Table.hiddenCaption
+        Table.hoverable
+        Table.Density.compact
+        Margin.Vertical.extraSmall
       ]
-    ]
+    )
 
   let private colorReferenceSection () =
     div [ Margin.Bottom.small ] [
@@ -98,7 +135,7 @@ body[data-theme="dark"] {
         h3 [ Typography.h6 ] [ text "Brand and status colors" ]
         Helpers.bodyText
           "Each family has a main color, foreground (-text), interaction variants, and comma-separated RGB channels used for alpha. All seven colors also have filled-surface tokens; override -fill, -fill-hover, -fill-text, and -fill-border when changing filled surfaces on a nested theme selector. Tertiary and status colors also provide -indicator and -subtle-text tokens. Check contrast for custom combinations. Filled interaction colors can lighten or darken the surface to keep the foreground readable in either theme. Snackbar and Alert controls use the same filled hover tokens as buttons and chips."
-        referenceTable [ "Variable"; "Light default"; "Dark default" ] [
+        referenceTable "Brand and status colors" [ "Variable"; "Light default"; "Dark default" ] [
           [ "--palette-indicator-mark"; "#ffffff"; "var(--palette-background)" ]
           [ "--palette-primary"; "#0164fc"; "#088ffd" ]
           [ "--palette-primary-text"; "#ffffff"; "#081b30" ]
@@ -203,7 +240,7 @@ body[data-theme="dark"] {
         h3 [ Typography.h6 ] [ text "Surfaces, text, borders and actions" ]
         Helpers.bodyText
           "Surface tokens fill backgrounds; text and action tokens cover the default, hover, active and disabled states. Primary text RGB also controls translucent component borders."
-        referenceTable [ "Variable"; "Light default"; "Dark default" ] [
+        referenceTable "Surfaces, text, borders and actions" [ "Variable"; "Light default"; "Dark default" ] [
           [ "--palette-background"; "#f5f7fa"; "#151922" ]
           [ "--palette-background-paper"; "#edf1f6"; "#252d3a" ]
           [ "--palette-background-darken"; "#e8edf3"; "#10141b" ]
@@ -259,7 +296,7 @@ body[data-theme="dark"] {
         h3 [ Typography.h6 ] [ text "Component colors" ]
         Helpers.bodyText
           "These affect app bars, drawers, switches and fields. A themed component can define a more local value, which takes precedence over an inherited body value."
-        referenceTable [ "Variable"; "Light default"; "Dark default" ] [
+        referenceTable "Component colors" [ "Variable"; "Light default"; "Dark default" ] [
           [ "--palette-appbar-background"; "#594ae2"; "#27272f" ]
           [ "--palette-appbar-text"; "#ffffff"; "#ffffff" ]
           [ "--palette-drawer-background"; "#f5f5f5"; "#27272f" ]
@@ -294,7 +331,7 @@ body[data-theme="dark"] {
         h3 [ Typography.h6 ] [ text "Neutral and overlay colors" ]
         Helpers.bodyText
           "Gray shades, contrast text, opacity values and the scrim provide additional color controls."
-        referenceTable [ "Variable"; "Light default"; "Dark default" ] [
+        referenceTable "Neutral and overlay colors" [ "Variable"; "Light default"; "Dark default" ] [
           [ "--palette-gray-default"; "#9e9e9e"; "#9e9e9e" ]
           [ "--palette-gray-light"; "#bdbdbd"; "#bdbdbd" ]
           [ "--palette-gray-lighter"; "#e0e0e0"; "#e0e0e0" ]
@@ -327,7 +364,7 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
       Helpers.bodyText
         "Set shared roles on :root after Weave. Variant variables are resolved there, so changing a role only on body does not recalculate inherited variants; override an individual --typography-* token on the mode selector for mode-specific typography. Load any custom fonts separately."
       h3 [ Typography.h6 ] [ text "Font and weight roles" ]
-      referenceTable [ "Variable"; "Default"; "Purpose" ] [
+      referenceTable "Font and weight roles" [ "Variable"; "Default"; "Purpose" ] [
         [ "--weave-font-family-display"; "Lato, sans-serif"; "Headings h1–h6" ]
         [
           "--weave-font-family-body"
@@ -346,14 +383,14 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
       h3 [ Typography.h6 ] [ text "Typography variants" ]
       Helpers.bodyText
         "Every row supports --typography-{variant}-{property}, with property family, size, weight, lineheight, letterspacing or text-transform. For example, --typography-h1-size and --typography-button-text-transform. Defaults below show role references where applicable."
-      referenceTable [
+      referenceTable "Typography variants" [
         "Variant"
-        "family"
-        "size"
-        "weight"
-        "lineheight"
-        "letterspacing"
-        "text-transform"
+        "Family"
+        "Size"
+        "Weight"
+        "Line height"
+        "Letter spacing"
+        "Transform"
       ] [
         [
           "h1"
@@ -449,10 +486,10 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
           "button"
           "var(--weave-font-family-body)"
           "0.875rem"
-          "var(--weave-weight-bold)"
+          "var(--weave-weight-regular)"
           "1.75"
-          "0.03em"
-          "uppercase"
+          "0.005em"
+          "none"
         ]
         [
           "caption"
@@ -482,10 +519,10 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
           "none"
         ]
       ]
-      Helpers.codeSampleSection
+      Helpers.codeSection
+        "css"
         "Typography override example"
         (Helpers.bodyText "Change the shared roles or one variant at a time.")
-        Doc.Empty
         example
     ]
 
@@ -494,7 +531,7 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
       Helpers.sectionHeader "Opacity and alpha variables"
       Helpers.bodyText
         "These :root values are unitless. Opacity tokens set element opacity; alpha tokens are used in translucent colors. Components may choose their own tokens for individual states."
-      referenceTable [ "Variable"; "Default" ] [
+      referenceTable "Opacity and alpha variables" [ "Variable"; "Default" ] [
         [ "--weave-opacity-disabled"; "0.38" ]
         [ "--weave-opacity-disabled-container"; "0.6" ]
         [ "--weave-opacity-placeholder"; "0.42" ]
@@ -514,7 +551,7 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
       h3 [ Typography.h6 ] [ text "Component-scoped color variables" ]
       Helpers.bodyText
         "Components set these on their own elements or variants, so body-level declarations can be shadowed. Override the relevant element with sufficient specificity; prefer shared palette tokens for application-wide colors. RGB values use comma-separated channels."
-      referenceTable [ "Variable"; "Use or default" ] [
+      referenceTable "Component-scoped color variables" [ "Variable"; "Use or default" ] [
         [
           "--checkbox-brand-color"
           "Checkbox color; defaults to action color or selected palette"
@@ -555,7 +592,7 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
       h3 [ Typography.h6 ] [ text "Optional colors without built-in defaults" ]
       Helpers.bodyText
         "These names are referenced by components but are not defined in the default palettes. Define them on the theme selector when using the relevant styles."
-      referenceTable [ "Variable"; "Use" ] [
+      referenceTable "Optional colors without built-in defaults" [ "Variable"; "Use" ] [
         [ "--palette-action-hover"; "Select and dropdown hover background" ]
         [ "--palette-background-gray"; "Gray background utility" ]
       ]
@@ -571,7 +608,7 @@ body[data-theme="dark"] { --typography-body1-family: Georgia, serif; }"""
 
 setMode (detectSystemPreference ())"""
 
-    Helpers.codeSampleSection "System Preference" description Doc.Empty code
+    Helpers.codeSection "fsharp" "System Preference" description code
 
   let private persistenceSection () =
     let description =
@@ -582,19 +619,19 @@ setMode (detectSystemPreference ())"""
 open WebSharper.JavaScript
 
 let initialMode =
-    match JS.Window.LocalStorage.GetItem("theme-mode") with
-    | "dark" -> Dark
-    | "light" -> Light
-    | _ -> detectSystemPreference ()
+  match JS.Window.LocalStorage.GetItem("theme-mode") with
+  | "dark" -> Dark
+  | "light" -> Light
+  | _ -> detectSystemPreference ()
 
 setMode initialMode
 
 let switchAndSave mode =
-    setMode mode
-    let value = if mode = Dark then "dark" else "light"
-    JS.Window.LocalStorage.SetItem("theme-mode", value)"""
+  setMode mode
+  let value = if mode = Dark then "dark" else "light"
+  JS.Window.LocalStorage.SetItem("theme-mode", value)"""
 
-    Helpers.codeSampleSection "Persist a Choice" description Doc.Empty code
+    Helpers.codeSection "fsharp" "Persist a Choice" description code
 
   let render () =
     Container.create (

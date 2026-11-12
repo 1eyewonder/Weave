@@ -11,17 +11,17 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module BorderExamples =
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
@@ -155,41 +155,7 @@ module BorderExamples =
         ]
       ]
 
-    let code =
-      """open Weave
-
-
-// Compose width + style + color for a complete border
-div [
-    BorderWidth.All.one
-    Attr.Style "border-style" "solid"
-    BorderColor.primary
-    BorderRadius.All.small
-    Padding.All.small
-] [
-    text "1px solid primary border with rounded corners"
-]
-
-// Directional borders
-div [
-    BorderWidth.Bottom.two
-    Attr.Style "border-style" "solid"
-    BorderColor.info
-] [
-    text "2px bottom border only"
-]
-
-// Mix and match any combination
-div [
-    BorderWidth.All.four
-    Attr.Style "border-style" "dashed"
-    BorderColor.warning
-    BorderRadius.All.large
-] [
-    text "4px dashed warning border"
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   // 2. Playground — interactive border configurator
   let private playgroundSection () =
@@ -346,7 +312,7 @@ div [
               JustifyContent.center
               Attr.Style "min-height" "120px"
             ] [
-              div [ Typography.h5; Attr.Style "opacity" "0.8" ] [
+              div [ Typography.h5; Typography.Color.textSecondary ] [
                 text (
                   sprintf
                     "%s %s %s"
@@ -359,31 +325,7 @@ div [
           ])
       ]
 
-    let code =
-      """open Weave
-
-
-// Compose all four axes for a complete border
-div [
-    BorderWidth.All.two
-    Attr.Style "border-style" "solid"
-    BorderColor.primary
-    BorderRadius.All.medium
-    Padding.All.medium
-] [
-    text "2px solid primary with medium radius"
-]
-
-// Each axis is independent — omit any to use defaults
-div [
-    BorderWidth.All.four
-    Attr.Style "border-style" "dashed"
-    BorderColor.warning
-] [
-    text "4px dashed warning"
-]"""
-
-    Helpers.codeSampleSection "Playground" description content code
+    Helpers.section "Playground" description content
 
   // 3. Border Radius
   let private borderRadiusSection () =
@@ -391,305 +333,303 @@ div [
       Helpers.bodyText
         "Border radius controls corner rounding. Apply to all corners or target specific sides and individual corners. Special values include pill (capsule shape) and circle."
 
-    let radiusDemo (label: string) (fsharpLabel: string) (radiusAttr: Attr) =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        div [
-          BrandColor.BackgroundColor.primary
-          radiusAttr
-          Flex.Flex.allSizes
-          AlignItems.center
-          JustifyContent.center
-          Attr.Style "width" "80px"
-          Attr.Style "height" "80px"
-        ] [ div [ Typography.subtitle2 ] [ text label ] ]
-        div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [ text fsharpLabel ]
-      ]
+    let samples = [
+      "None", [ BorderRadius.All.none ]
+      "Small", [ BorderRadius.All.small ]
+      "Medium", [ BorderRadius.All.medium ]
+      "Large", [ BorderRadius.All.large ]
+      "Pill", [ BorderRadius.pill; Attr.Style "width" "120px" ]
+      "Circle", [ BorderRadius.circle ]
+      "Top.large", [ BorderRadius.Top.large ]
+      "Bottom.large", [ BorderRadius.Bottom.large ]
+      "Left.large", [ BorderRadius.Left.large ]
+      "Right.large", [ BorderRadius.Right.large ]
+    ]
 
     let content =
-      div [] [
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "All corners" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              radiusDemo "none" "All.none" BorderRadius.All.none,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "sm" "All.small" BorderRadius.All.small,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "md" "All.medium" BorderRadius.All.medium,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "lg" "All.large" BorderRadius.All.large,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
-        )
-
-        div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Special shapes" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              radiusDemo "pill" "pill" BorderRadius.pill,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "circle" "circle" BorderRadius.circle,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
-        )
-
-        div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Directional" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              radiusDemo "top" "Top.large" BorderRadius.Top.large,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "bottom" "Bottom.large" BorderRadius.Bottom.large,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "left" "Left.large" BorderRadius.Left.large,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-            GridItem.create (
-              radiusDemo "right" "Right.large" BorderRadius.Right.large,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.three ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
-        )
+      Grid.create [
+        for label, radius in samples do
+          GridItem.create (
+            div [
+              Flex.Flex.allSizes
+              FlexDirection.Column.allSizes
+              AlignItems.center
+              Gap.All.g2
+            ] [
+              div [
+                BrandColor.Fill.primary
+                Attr.Style "width" "80px"
+                Attr.Style "height" "80px"
+                yield! radius
+              ] []
+              div [ Typography.body2; Typography.Align.center ] [ text label ]
+            ],
+            attrs = [
+              GridItem.Span.six
+              GridItem.Span.Small.four
+              GridItem.Span.Medium.three
+              Flex.Flex.allSizes
+              JustifyContent.center
+            ]
+          )
       ]
 
     let code =
-      """open Weave
+      """div [
+  BorderRadius.All.none
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
 
+div [
+  BorderRadius.All.small
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
 
-// All corners
-div [ BorderRadius.All.small ] [ text "4px corners" ]
-div [ BorderRadius.All.large ] [ text "12px corners" ]
+div [
+  BorderRadius.All.medium
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
 
-// Special shapes
-div [ BorderRadius.pill ]   [ text "Capsule shape" ]
-div [ BorderRadius.circle ] [ text "Circle" ]
+div [
+  BorderRadius.All.large
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
 
-// Directional: round only specific sides
-div [ BorderRadius.Top.large ] [ text "Rounded top only" ]
+div [
+  BorderRadius.pill
+  BrandColor.Fill.primary
+  Attr.Style "width" "120px"
+  Attr.Style "height" "80px"
+] []
 
-// Individual corners
-div [ BorderRadius.TopLeft.large; BorderRadius.BottomRight.large ] [
-    text "Diagonal corners rounded"
-]"""
+div [
+  BorderRadius.circle
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
+
+div [
+  BorderRadius.Top.large
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
+
+div [
+  BorderRadius.Bottom.large
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
+
+div [
+  BorderRadius.Left.large
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []
+
+div [
+  BorderRadius.Right.large
+  BrandColor.Fill.primary
+  Attr.Style "width" "80px"
+  Attr.Style "height" "80px"
+] []"""
 
     Helpers.codeSampleSection "Border Radius" description content code
 
-  // 4. Border Width
   let private borderWidthSection () =
     let description =
       Helpers.bodyText
         "Border width controls thickness. Apply to all sides or target specific edges. All examples use a solid style and a color for visibility."
 
-    let widthDemo (label: string) (fsharpLabel: string) (widthAttr: Attr) =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        div [
-          widthAttr
-          Attr.Style "border-style" "solid"
-          BorderColor.primary
-          BorderRadius.All.small
-          SurfaceColor.BackgroundColor.background
-          Flex.Flex.allSizes
-          AlignItems.center
-          JustifyContent.center
-          Attr.Style "min-height" "64px"
-          Attr.Style "width" "100%"
-        ] [ div [ Typography.subtitle2 ] [ text label ] ]
-        div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [ text fsharpLabel ]
-      ]
+    let samples = [
+      "All.zero", BorderWidth.All.zero
+      "All.one", BorderWidth.All.one
+      "All.two", BorderWidth.All.two
+      "All.four", BorderWidth.All.four
+      "All.eight", BorderWidth.All.eight
+      "Top.two", BorderWidth.Top.two
+      "Bottom.two", BorderWidth.Bottom.two
+      "Left.two", BorderWidth.Left.two
+      "Right.two", BorderWidth.Right.two
+      "Horizontal.two", BorderWidth.Horizontal.two
+      "Vertical.two", BorderWidth.Vertical.two
+    ]
 
     let content =
-      div [] [
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "All sides" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              widthDemo "0px" "All.zero" BorderWidth.All.zero,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-            )
-            GridItem.create (
-              widthDemo "1px" "All.one" BorderWidth.All.one,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-            )
-            GridItem.create (
-              widthDemo "2px" "All.two" BorderWidth.All.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-            )
-            GridItem.create (
-              widthDemo "4px" "All.four" BorderWidth.All.four,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-            )
-            GridItem.create (
-              widthDemo "8px" "All.eight" BorderWidth.All.eight,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
-        )
-
-        div [ Typography.subtitle2; Margin.Top.small; Margin.Bottom.extraSmall ] [ text "Directional" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              widthDemo "top" "Top.two" BorderWidth.Top.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-            GridItem.create (
-              widthDemo "bottom" "Bottom.two" BorderWidth.Bottom.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-            GridItem.create (
-              widthDemo "left" "Left.two" BorderWidth.Left.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-            GridItem.create (
-              widthDemo "right" "Right.two" BorderWidth.Right.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-            GridItem.create (
-              widthDemo "horiz" "Horizontal.two" BorderWidth.Horizontal.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-            GridItem.create (
-              widthDemo "vert" "Vertical.two" BorderWidth.Vertical.two,
-              attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
-        )
+      Grid.create [
+        for label, width in samples do
+          GridItem.create (
+            div [
+              width
+              Attr.Style "border-style" "solid"
+              BorderColor.primary
+              SurfaceColor.BackgroundColor.background
+              Typography.Align.center
+              Padding.All.small
+            ] [ text label ],
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
+          )
       ]
 
     let code =
-      """open Weave
+      """div [
+  BorderWidth.All.zero
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "All.zero" ]
 
-
-// All sides
 div [
-    BorderWidth.All.two
-    Attr.Style "border-style" "solid"
-    BorderColor.primary
-] [
-    text "2px border on all sides"
-]
+  BorderWidth.All.one
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "All.one" ]
 
-// Directional: bottom border only
 div [
-    BorderWidth.Bottom.four
-    Attr.Style "border-style" "solid"
-    BorderColor.error
-] [
-    text "4px bottom border"
-]
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "All.two" ]
 
-// Combine directions: horizontal only
 div [
-    BorderWidth.Horizontal.one
-    Attr.Style "border-style" "solid"
-    BorderColor.info
-] [
-    text "1px left and right"
-]"""
+  BorderWidth.All.four
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "All.four" ]
+
+div [
+  BorderWidth.All.eight
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "All.eight" ]
+
+div [
+  BorderWidth.Top.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Top.two" ]
+
+div [
+  BorderWidth.Bottom.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Bottom.two" ]
+
+div [
+  BorderWidth.Left.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Left.two" ]
+
+div [
+  BorderWidth.Right.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Right.two" ]
+
+div [
+  BorderWidth.Horizontal.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Horizontal.two" ]
+
+div [
+  BorderWidth.Vertical.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Vertical.two" ]"""
 
     Helpers.codeSampleSection "Border Width" description content code
 
-  // 5. Border Style
   let private borderStyleSection () =
     let description =
       Helpers.bodyText
         "Border style controls the line pattern. Combine with a width and color to see the effect."
 
-    let styleDemo (label: string) (styleAttr: Attr) =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        div [
-          BorderWidth.All.two
-          styleAttr
-          BorderColor.primary
-          BorderRadius.All.small
-          SurfaceColor.BackgroundColor.background
-          Flex.Flex.allSizes
-          AlignItems.center
-          JustifyContent.center
-          Attr.Style "min-height" "64px"
-          Attr.Style "width" "100%"
-        ] [ div [ Typography.subtitle2 ] [ text label ] ]
-      ]
+    let styles = [ "solid"; "dashed"; "dotted"; "double"; "hidden"; "none" ]
 
     let content =
-      Grid.create (
-        [
+      Grid.create [
+        for style in styles do
           GridItem.create (
-            styleDemo "Solid" (Attr.Style "border-style" "solid"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
+            div [
+              BorderWidth.All.four
+              Attr.Style "border-style" style
+              BorderColor.primary
+              SurfaceColor.BackgroundColor.background
+              Typography.Align.center
+              Padding.All.small
+            ] [ text style ],
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four ]
           )
-          GridItem.create (
-            styleDemo "Dashed" (Attr.Style "border-style" "dashed"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-          )
-          GridItem.create (
-            styleDemo "Dotted" (Attr.Style "border-style" "dotted"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-          )
-          GridItem.create (
-            styleDemo "Double" (Attr.Style "border-style" "double"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-          )
-          GridItem.create (
-            styleDemo "Hidden" (Attr.Style "border-style" "hidden"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-          )
-          GridItem.create (
-            styleDemo "None" (Attr.Style "border-style" "none"),
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.two ]
-          )
-        ]
-      )
+      ]
 
     let code =
-      """open Weave
+      """div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "solid" ]
 
+div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "dashed"
+  BorderColor.primary
+  Padding.All.small
+] [ text "dashed" ]
 
-// Each style applies the border-style CSS property
-div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.primary ] [
-    text "Solid"
-]
+div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "dotted"
+  BorderColor.primary
+  Padding.All.small
+] [ text "dotted" ]
 
-div [ BorderWidth.All.two; Attr.Style "border-style" "dashed"; BorderColor.info ] [
-    text "Dashed"
-]
+div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "double"
+  BorderColor.primary
+  Padding.All.small
+] [ text "double" ]
 
-div [ BorderWidth.All.two; Attr.Style "border-style" "dotted"; BorderColor.warning ] [
-    text "Dotted"
-]
+div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "hidden"
+  BorderColor.primary
+  Padding.All.small
+] [ text "hidden" ]
 
-// Double requires a thicker width to be visible
-div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.error ] [
-    text "Double"
-]"""
+div [
+  BorderWidth.All.four
+  Attr.Style "border-style" "none"
+  BorderColor.primary
+  Padding.All.small
+] [ text "none" ]"""
 
     Helpers.codeSampleSection "Border Style" description content code
 
-  // 6. Border Color
   let private borderColorSection () =
     let description =
       Helpers.bodyText
@@ -714,242 +654,293 @@ div [ BorderWidth.All.four; Attr.Style "border-style" "double"; BorderColor.erro
         [
           GridItem.create (
             colorDemo "Primary" BorderColor.primary,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Secondary" BorderColor.secondary,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Tertiary" BorderColor.tertiary,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Info" BorderColor.info,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Success" BorderColor.success,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Warning" BorderColor.warning,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Error" BorderColor.error,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
           GridItem.create (
             colorDemo "Lines Default" BorderColor.linesDefault,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            attrs = [ GridItem.Span.twelve; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
           )
         ]
       )
 
     let code =
-      """open Weave
+      """div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.primary
+  Padding.All.small
+] [ text "Primary" ]
 
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.secondary
+  Padding.All.small
+] [ text "Secondary" ]
 
-// Palette colors
-div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.primary ] [
-    text "Primary border"
-]
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.tertiary
+  Padding.All.small
+] [ text "Tertiary" ]
 
-div [ BorderWidth.All.two; Attr.Style "border-style" "solid"; BorderColor.error ] [
-    text "Error border"
-]
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.info
+  Padding.All.small
+] [ text "Info" ]
 
-// Lines default — the standard divider color
-div [ BorderWidth.All.one; Attr.Style "border-style" "solid"; BorderColor.linesDefault ] [
-    text "Subtle border matching dividers"
-]"""
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.success
+  Padding.All.small
+] [ text "Success" ]
+
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.warning
+  Padding.All.small
+] [ text "Warning" ]
+
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.error
+  Padding.All.small
+] [ text "Error" ]
+
+div [
+  BorderWidth.All.two
+  Attr.Style "border-style" "solid"
+  BorderColor.linesDefault
+  Padding.All.small
+] [ text "Lines default" ]"""
 
     Helpers.codeSampleSection "Border Color" description content code
 
   // 7. Borders on Components
   let private bordersOnComponentsSection () =
-    let description =
-      Helpers.bodyText
-        "Border utilities compose with existing Weave components via attrs. Here are some common patterns."
-
-    let content =
-      div [] [
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Buttons" ]
-
-        div [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          Attr.Style "gap" "12px"
-          Margin.Bottom.small
-        ] [
-          Button.primary (
-            text "Dashed border",
-            onClick = ignore,
-            attrs = [
-              Button.Variant.outlined
-              Attr.Style "border-style" "dashed"
-              BorderWidth.All.two
-            ]
-          )
-          Button.error (
-            text "Dotted border",
-            onClick = ignore,
-            attrs = [
-              Button.Variant.outlined
-              Attr.Style "border-style" "dotted"
-              BorderWidth.All.two
-            ]
-          )
-          Button.success (
-            text "Thick border",
-            onClick = ignore,
-            attrs = [ Button.Variant.outlined; BorderWidth.All.four ]
-          )
-        ]
-
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Alerts" ]
-
-        div [
-          Flex.Flex.allSizes
-          FlexDirection.Column.allSizes
-          Attr.Style "gap" "12px"
-          Margin.Bottom.small
-        ] [
-          Alert.create (
-            text "Info alert with a left accent border.",
-            attrs = [
-              Alert.Color.info
-              Alert.Variant.outlined
-              BorderWidth.Left.four
-              Attr.Style "border-style" "solid"
-              BorderColor.info
-            ]
-          )
-          Alert.create (
-            text "Warning alert with a dashed border.",
-            attrs = [
-              Alert.Color.warning
-              Alert.Variant.outlined
-              Attr.Style "border-style" "dashed"
-              BorderWidth.All.two
-            ]
-          )
-        ]
-
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Chips" ]
-
-        div [
-          Flex.Flex.allSizes
-          FlexWrap.Wrap.allSizes
-          Attr.Style "gap" "8px"
-          Margin.Bottom.small
-        ] [
-          Chip.create (
-            text "Dashed chip",
-            attrs = [
-              Chip.Variant.outlined
-              Chip.Color.primary
-              Attr.Style "border-style" "dashed"
-            ]
-          )
-          Chip.create (
-            text "Dotted chip",
-            attrs = [
-              Chip.Variant.outlined
-              Chip.Color.secondary
-              Attr.Style "border-style" "dotted"
-            ]
-          )
-          Chip.create (
-            text "Thick chip",
-            attrs = [ Chip.Variant.outlined; Chip.Color.error; BorderWidth.All.two ]
-          )
-        ]
-
-        div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Cards / Surfaces" ]
-
-        Grid.create (
-          [
-            GridItem.create (
-              div [
-                SurfaceColor.BackgroundColor.surface
-                BorderWidth.All.one
-                Attr.Style "border-style" "solid"
-                BorderColor.linesDefault
-                BorderRadius.All.medium
-                Padding.All.small
-              ] [
-                div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Subtle card" ]
-                div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
-                  text "A surface with a thin border instead of a shadow."
-                ]
-              ],
-              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-            )
-            GridItem.create (
-              div [
-                SurfaceColor.BackgroundColor.surface
-                BorderWidth.Left.four
-                Attr.Style "border-style" "solid"
-                BorderColor.primary
-                BorderRadius.All.small
-                Padding.All.small
-              ] [
-                div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Accent card" ]
-                div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
-                  text "A left accent border draws attention to key content."
-                ]
-              ],
-              attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
-            )
-          ],
-          attrs = [ Grid.Spacing.small ]
+    let buttons =
+      div [
+        Flex.Flex.allSizes
+        FlexWrap.Wrap.allSizes
+        JustifyContent.spaceEvenly
+        Gap.All.g3
+      ] [
+        Button.primary (
+          text "Dashed border",
+          onClick = ignore,
+          attrs = [ Button.Variant.outlined; Attr.Style "border-style" "dashed" ]
+        )
+        Button.error (
+          text "Dotted border",
+          onClick = ignore,
+          attrs = [ Button.Variant.outlined; Attr.Style "border-style" "dotted" ]
+        )
+        Button.success (
+          text "Thick border",
+          onClick = ignore,
+          attrs = [ Button.Variant.outlined; BorderWidth.All.four ]
         )
       ]
 
-    let code =
-      """open Weave
-
-
-// Dashed outlined button
-Button.primary(
-    text "Dashed border",
-    onClick = ignore,
-    attrs = [
-        Button.Variant.outlined
-        Attr.Style "border-style" "dashed"
-        BorderWidth.All.two
-    ]
+    let buttonsSource =
+      """Button.primary (
+  text "Dashed border",
+  onClick = ignore,
+  attrs = [ Button.Variant.outlined; Attr.Style "border-style" "dashed" ]
 )
 
-// Alert with left accent border
-Alert.create(
-    text "Info with accent border",
-    attrs = [
-        Alert.Color.info
-        Alert.Variant.outlined
-        BorderWidth.Left.four
-        Attr.Style "border-style" "solid"
-        BorderColor.info
-    ]
+Button.error (
+  text "Dotted border",
+  onClick = ignore,
+  attrs = [ Button.Variant.outlined; Attr.Style "border-style" "dotted" ]
 )
 
-// Card with subtle border instead of shadow
-div [
-    SurfaceColor.BackgroundColor.surface
-    BorderWidth.All.one
-    Attr.Style "border-style" "solid"
-    BorderColor.linesDefault
-    BorderRadius.All.medium
-    Padding.All.small
-] [
-    text "Bordered card content"
-]"""
+Button.success (
+  text "Thick border",
+  onClick = ignore,
+  attrs = [ Button.Variant.outlined; BorderWidth.All.four ]
+)"""
 
-    Helpers.codeSampleSection "Borders on Components" description content code
+    let alerts =
+      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
+        Alert.create (
+          text "Info alert with a left accent border.",
+          attrs = [
+            Alert.Color.info
+            Alert.Variant.outlined
+            BorderWidth.Left.four
+            BorderColor.info
+          ]
+        )
+        Alert.create (
+          text "Warning alert with a dashed border.",
+          attrs = [
+            Alert.Color.warning
+            Alert.Variant.outlined
+            Attr.Style "border-style" "dashed"
+          ]
+        )
+      ]
 
-  // Render
+    let alertsSource =
+      """Alert.create (
+  text "Info alert with a left accent border.",
+  attrs = [
+    Alert.Color.info
+    Alert.Variant.outlined
+    BorderWidth.Left.four
+    BorderColor.info
+  ]
+)
+
+Alert.create (
+  text "Warning alert with a dashed border.",
+  attrs = [
+    Alert.Color.warning
+    Alert.Variant.outlined
+    Attr.Style "border-style" "dashed"
+  ]
+)"""
+
+    let chips =
+      div [
+        Flex.Flex.allSizes
+        FlexWrap.Wrap.allSizes
+        JustifyContent.spaceEvenly
+        Gap.All.g2
+      ] [
+        Chip.create (
+          text "Dashed chip",
+          attrs = [
+            Chip.Variant.outlined
+            Chip.Color.primary
+            Attr.Style "border-style" "dashed"
+          ]
+        )
+        Chip.create (
+          text "Dotted chip",
+          attrs = [
+            Chip.Variant.outlined
+            Chip.Color.secondary
+            Attr.Style "border-style" "dotted"
+          ]
+        )
+        Chip.create (
+          text "Thick chip",
+          attrs = [ Chip.Variant.outlined; Chip.Color.error; BorderWidth.All.two ]
+        )
+      ]
+
+    let chipsSource =
+      """Chip.create (
+  text "Dashed chip",
+  attrs = [
+    Chip.Variant.outlined
+    Chip.Color.primary
+    Attr.Style "border-style" "dashed"
+  ]
+)
+
+Chip.create (
+  text "Dotted chip",
+  attrs = [
+    Chip.Variant.outlined
+    Chip.Color.secondary
+    Attr.Style "border-style" "dotted"
+  ]
+)
+
+Chip.create (
+  text "Thick chip",
+  attrs = [ Chip.Variant.outlined; Chip.Color.error; BorderWidth.All.two ]
+)"""
+
+    let cards =
+      Grid.create [
+        GridItem.create (
+          Card.create (CardContent.create (text "Subtle card"), attrs = [ BorderColor.linesDefault ]),
+          attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+        )
+        GridItem.create (
+          Card.create (
+            CardContent.create (text "Dashed card"),
+            attrs = [ BorderColor.primary; Attr.Style "border-style" "dashed" ]
+          ),
+          attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six ]
+        )
+      ]
+
+    let cardsSource =
+      """Card.create (
+  CardContent.create (text "Subtle card"),
+  attrs = [ BorderColor.linesDefault ]
+)
+
+Card.create (
+  CardContent.create (text "Dashed card"),
+  attrs = [ BorderColor.primary; Attr.Style "border-style" "dashed" ]
+)"""
+
+    div [] [
+      Helpers.sectionHeader "Borders on Components"
+
+      Helpers.codeSampleSection
+        "Borders on buttons"
+        (Helpers.bodyText "Outlined buttons keep their variant while border style changes.")
+        buttons
+        buttonsSource
+
+      Helpers.codeSampleSection
+        "Borders on alerts"
+        (Helpers.bodyText "Compose border utilities with outlined alerts.")
+        alerts
+        alertsSource
+
+      Helpers.codeSampleSection
+        "Borders on chips"
+        (Helpers.bodyText "Outlined chips can use the same border utilities.")
+        chips
+        chipsSource
+
+      Helpers.codeSampleSection
+        "Borders on cards"
+        (Helpers.bodyText
+          "Apply border attributes to a real Card. Its layout and content padding stay with the component.")
+        cards
+        cardsSource
+
+    ]
+
   let render () =
     Container.create (
       div [] [
@@ -960,13 +951,13 @@ div [
         ]
 
         Helpers.divider ()
+        borderWidthSection ()
+        Helpers.divider ()
         howItWorksSection ()
         Helpers.divider ()
         playgroundSection ()
         Helpers.divider ()
         borderRadiusSection ()
-        Helpers.divider ()
-        borderWidthSection ()
         Helpers.divider ()
         borderStyleSection ()
         Helpers.divider ()

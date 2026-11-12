@@ -12,323 +12,65 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module TooltipExamples =
 
+  let private comparisonGrid columns items =
+    let cells =
+      items
+      |> List.map (fun item ->
+        GridItem.create (
+          div [ Flex.Flex.allSizes; JustifyContent.center ] [ item ],
+          attrs = [
+            GridItem.Span.twelve
+            GridItem.Span.Small.six
+            (if columns = 4 then GridItem.Span.Medium.three
+             elif columns = 3 then GridItem.Span.Medium.four
+             else GridItem.Span.Medium.six)
+          ]
+        ))
+
+    Grid.create (cells, attrs = [ Grid.Spacing.large ])
+
   let grid content = Grid.create (items = content)
-
-  let private directionExamples () =
-    let description =
-      Helpers.bodyText "Tooltips can be positioned in four directions relative to the target element."
-
-    let tooltipBtn direction =
-      let displayText = sprintf "%A" direction
-
-      GridItem.create (
-        content =
-          Tooltip.create (
-            innerContent =
-              Button.primary (
-                text displayText,
-                onClick = (fun () -> ()),
-                attrs = [ Button.Variant.outlined; Button.Width.full ]
-              ),
-            tooltipContent = div [ Typography.body1 ] [ text (sprintf "Tooltip on %A" direction) ],
-            direction = direction
-          ),
-        attrs = [ GridItem.Span.twelve; GridItem.Span.Small.six; GridItem.Span.Medium.three ]
-      )
-
-    let content =
-      [
-        tooltipBtn Tooltip.Direction.Left
-        tooltipBtn Tooltip.Direction.Top
-        tooltipBtn Tooltip.Direction.Bottom
-        tooltipBtn Tooltip.Direction.Right
-      ]
-      |> grid
-
-    let code =
-      """open Weave
-
-Tooltip.create(
-    innerContent =
-        Button.primary(
-            text "Left",
-            onClick = (fun () -> ()),
-            attrs = [ Button.Variant.outlined ]
-        ),
-    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Left" ],
-    direction = Tooltip.Direction.Left
-)
-
-Tooltip.create(
-    innerContent =
-        Button.primary(
-            text "Top",
-            onClick = (fun () -> ()),
-            attrs = [ Button.Variant.outlined ]
-        ),
-    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Top" ],
-    direction = Tooltip.Direction.Top
-)
-
-Tooltip.create(
-    innerContent =
-        Button.primary(
-            text "Bottom",
-            onClick = (fun () -> ()),
-            attrs = [ Button.Variant.outlined ]
-        ),
-    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Bottom" ],
-    direction = Tooltip.Direction.Bottom
-)
-
-Tooltip.create(
-    innerContent =
-        Button.primary(
-            text "Right",
-            onClick = (fun () -> ()),
-            attrs = [ Button.Variant.outlined ]
-        ),
-    tooltipContent = div [ Typography.body1 ] [ text "Tooltip on Right" ],
-    direction = Tooltip.Direction.Right
-)"""
-
-    Helpers.codeSampleSection "Directions" description content code
-
-  let private colorExamples () =
-    let description =
-      Helpers.bodyText "Apply a brand color to the tooltip background using the Tooltip.Color module."
-
-    let content =
-      div [
-        Flex.Flex.allSizes
-        FlexDirection.Row.allSizes
-        FlexWrap.Wrap.allSizes
-        JustifyContent.center
-      ] [
-        let colors = [
-          "Primary", Button.Color.primary, Tooltip.Color.primary
-          "Secondary", Button.Color.secondary, Tooltip.Color.secondary
-          "Tertiary", Button.Color.tertiary, Tooltip.Color.tertiary
-          "Error", Button.Color.error, Tooltip.Color.error
-          "Warning", Button.Color.warning, Tooltip.Color.warning
-          "Success", Button.Color.success, Tooltip.Color.success
-          "Info", Button.Color.info, Tooltip.Color.info
-        ]
-
-        for (displayText, btnColor, tipColor) in colors do
-          Tooltip.create (
-            Button.create (
-              text displayText,
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled; btnColor; Button.Width.full ]
-            ),
-            div [ Typography.body1 ] [ text (sprintf "%s tooltip" displayText) ],
-            tooltipAttrs = [ tipColor ],
-            wrapperAttrs = [ Margin.All.extraSmall ]
-          )
-      ]
-
-    let code =
-      """open Weave
-
-Tooltip.create(
-    Button.primary(
-        text "Primary",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Primary tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.primary ]
-)
-
-Tooltip.create(
-    Button.secondary(
-        text "Secondary",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Secondary tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.secondary ]
-)
-
-Tooltip.create(
-    Button.tertiary(
-        text "Tertiary",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Tertiary tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.tertiary ]
-)
-
-Tooltip.create(
-    Button.error(
-        text "Error",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Error tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.error ]
-)
-
-Tooltip.create(
-    Button.warning(
-        text "Warning",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Warning tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.warning ]
-)
-
-Tooltip.create(
-    Button.success(
-        text "Success",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Success tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.success ]
-)
-
-Tooltip.create(
-    Button.info(
-        text "Info",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "Info tooltip" ],
-    tooltipAttrs = [ Tooltip.Color.info ]
-)"""
-
-    Helpers.codeSampleSection "Colors" description content code
 
   let private activationExamples () =
     let description =
       Helpers.bodyText
-        "Control how the tooltip appears using the activationEvents parameter: Hover (default), Click, or Focus."
+        "The default combines Hover and Focus. For a hover interaction, retain Focus so keyboard users can reveal the same information. Click uses the native button activation, including Enter and Space."
 
     let content =
-      [
-        let gridItem content =
-          GridItem.create (
-            div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] content
-          )
+      let example label activationEvents color =
+        Tooltip.create (
+          Button.create (text label, onClick = ignore, attrs = [ Button.Variant.outlined; color ]),
+          text ("Opened by " + label),
+          activationEvents = activationEvents
+        )
 
-        [
-          Tooltip.create (
-            Button.primary (text "Hover Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
-            div [ Typography.body1 ] [ text "Appears on hover" ],
-            activationEvents = [ Tooltip.Activation.Hover ]
-          )
-          div [ Typography.caption; Margin.Top.small ] [ text "Hover activation" ]
-        ]
-        |> gridItem
-
-        [
-          Tooltip.create (
-            Button.secondary (text "Click Me", onClick = (fun () -> ()), attrs = [ Button.Variant.outlined ]),
-            div [ Typography.body1 ] [ text "Appears on click" ],
-            activationEvents = [ Tooltip.Activation.Click ]
-          )
-          div [ Typography.caption; Margin.Top.small ] [ text "Click activation" ]
-        ]
-        |> gridItem
+      comparisonGrid 3 [
+        example "Hover or focus" [ Tooltip.Activation.Hover; Tooltip.Activation.Focus ] Button.Color.primary
+        example "Click or press" [ Tooltip.Activation.Click ] Button.Color.secondary
+        example "Focus" [ Tooltip.Activation.Focus ] Button.Color.tertiary
       ]
-      |> grid
 
     let code =
-      """open Weave
-
-
-Tooltip.create(
-    Button.primary(
-        text "Hover Me",
-        onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.outlined
-        ]
+      """let example label activationEvents color =
+  Tooltip.create (
+    Button.create (
+      text label,
+      onClick = ignore,
+      attrs = [ Button.Variant.outlined; color ]
     ),
-    div [ Typography.body1 ] [ text "Appears on hover" ],
-    activationEvents = [ Tooltip.Activation.Hover ]
-)
+    text ("Opened by " + label),
+    activationEvents = activationEvents
+  )
 
-Tooltip.create(
-    Button.secondary(
-        text "Click Me",
-        onClick = (fun () -> ()),
-        attrs = [
-            Button.Variant.outlined
-        ]
-    ),
-    div [ Typography.body1 ] [ text "Appears on click" ],
-    activationEvents = [ Tooltip.Activation.Click ]
-)
-    """
+example
+  "Hover or focus"
+  [ Tooltip.Activation.Hover; Tooltip.Activation.Focus ]
+  Button.Color.primary
+
+example "Click or press" [ Tooltip.Activation.Click ] Button.Color.secondary
+example "Focus" [ Tooltip.Activation.Focus ] Button.Color.tertiary"""
 
     Helpers.codeSampleSection "Activation Events" description content code
-
-  let private arrowExamples () =
-    let description =
-      Helpers.bodyText "Toggle the tooltip arrow with the showArrow parameter (true by default)."
-
-    let content =
-      div [
-        Attr.Style "display" "flex"
-        Attr.Style "justify-content" "center"
-        Attr.Style "gap" "32px"
-        Attr.Style "flex-wrap" "wrap"
-        Attr.Style "padding" "32px"
-      ] [
-        div [ Attr.Style "text-align" "center" ] [
-          Tooltip.create (
-            Button.primary (text "With Arrow", onClick = (fun () -> ()), attrs = [ Button.Variant.filled ]),
-            div [ Typography.body1 ] [ text "I have an arrow pointing" ],
-            showArrow = true
-          )
-          div [ Typography.caption; Margin.Top.small ] [ text "showArrow = true (default)" ]
-        ]
-
-        div [ Attr.Style "text-align" "center" ] [
-          Tooltip.create (
-            Button.secondary (
-              text "Without Arrow",
-              onClick = (fun () -> ()),
-              attrs = [ Button.Variant.filled ]
-            ),
-            div [ Typography.body1 ] [ text "No arrow here" ],
-            showArrow = false
-          )
-          div [ Typography.caption; Margin.Top.small ] [ text "showArrow = false" ]
-        ]
-      ]
-
-    let code =
-      """open Weave
-
-// Arrow is shown by default (showArrow = true)
-Tooltip.create(
-    Button.primary(
-        text "With Arrow",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "I have an arrow pointing" ],
-    showArrow = true
-)
-
-// Hide the arrow
-Tooltip.create(
-    Button.secondary(
-        text "Without Arrow",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Typography.body1 ] [ text "No arrow here" ],
-    showArrow = false
-)"""
-
-    Helpers.codeSampleSection "Arrow Visibility" description content code
 
   let private customContentExample () =
     let description =
@@ -357,24 +99,22 @@ Tooltip.create(
       ]
 
     let code =
-      """open Weave
-
-Tooltip.create(
-    Button.info(
-        text "Rich Content Tooltip",
-        onClick = (fun () -> ()),
-        attrs = [ Button.Variant.filled ]
-    ),
-    div [ Attr.Style "padding" "4px" ] [
-        div [
-            Typography.body2
-            Attr.Style "font-weight" "bold"
-            Margin.Bottom.extraSmall
-        ] [ text "Custom Tooltip" ]
-        div [ Typography.caption ] [
-            text "You can use Doc elements for rich content"
-        ]
+      """Tooltip.create (
+  Button.info (
+    text "Rich Content Tooltip",
+    onClick = (fun () -> ()),
+    attrs = [ Button.Variant.filled ]
+  ),
+  div [ Attr.Style "padding" "4px" ] [
+    div [
+      Typography.body2
+      Attr.Style "font-weight" "bold"
+      Margin.Bottom.extraSmall
+    ] [ text "Custom Tooltip" ]
+    div [ Typography.caption ] [
+      text "You can use Doc elements for rich content"
     ]
+  ]
 )"""
 
     Helpers.codeSampleSection "Custom Content" description content code
@@ -393,7 +133,8 @@ Tooltip.create(
             Typography.Color.primary
             Attr.Style "text-decoration" "underline"
           ] [ text "this text" ],
-          span [ Typography.body1 ] [ text "This is a tooltip on inline text" ]
+          text "Inline text tooltip",
+          wrapperAttrs = [ Attr.Create "tabindex" "0" ]
         )
 
         span [ Typography.body1 ] [ text " to see a tooltip. You can also hover over " ]
@@ -404,133 +145,139 @@ Tooltip.create(
             Typography.Color.secondary
             Attr.Style "text-decoration" "underline"
           ] [ text "this other text" ],
-          span [ Typography.body1 ] [ text "Another tooltip example" ],
+          text "More information",
           direction = Tooltip.Direction.Bottom,
-          tooltipAttrs = [ Tooltip.Color.secondary ]
+          tooltipAttrs = [ Tooltip.Color.secondary ],
+          wrapperAttrs = [ Attr.Create "tabindex" "0" ]
         )
 
         span [ Typography.body1 ] [ text " for more information." ]
       ]
 
     let code =
-      """open Weave
+      """div [] [
+  span [ Typography.body1 ] [ text "Hover over " ]
 
-span [ Typography.body1 ] [ text "Hover over " ]
-
-Tooltip.create(
+  Tooltip.create (
     span [
-        Typography.body1
-        Typography.Color.primary
-        Attr.Style "text-decoration" "underline"
+      Typography.body1
+      Typography.Color.primary
+      Attr.Style "text-decoration" "underline"
     ] [ text "this text" ],
-    span [ Typography.body1 ] [ text "This is a tooltip on inline text" ]
-)
+    text "Inline text tooltip",
+    wrapperAttrs = [ Attr.Create "tabindex" "0" ]
+  )
 
-span [ Typography.body1 ] [ text " to see a tooltip. You can also hover over " ]
+  span [ Typography.body1 ] [
+    text " to see a tooltip. You can also hover over "
+  ]
 
-Tooltip.create(
+  Tooltip.create (
     span [
-        Typography.body1
-        Typography.Color.secondary
-        Attr.Style "text-decoration" "underline"
+      Typography.body1
+      Typography.Color.secondary
+      Attr.Style "text-decoration" "underline"
     ] [ text "this other text" ],
-    span [ Typography.body1 ] [ text "Another tooltip example" ],
+    text "More information",
     direction = Tooltip.Direction.Bottom,
-    tooltipAttrs = [ Tooltip.Color.secondary ]
-)
+    tooltipAttrs = [ Tooltip.Color.secondary ],
+    wrapperAttrs = [ Attr.Create "tabindex" "0" ]
+  )
 
-span [ Typography.body1 ] [ text " for more information." ]"""
+  span [ Typography.body1 ] [ text " for more information." ]
+]"""
 
     Helpers.codeSampleSection "Text Tooltips" description content code
 
   let private iconTooltipExample () =
     let description =
-      Helpers.bodyText "Wrap icons in a tooltip to provide context on hover."
+      Helpers.bodyText
+        "Wrap icons in a tooltip to provide context on hover or keyboard focus. Make static triggers focusable with wrapperAttrs."
 
     let content =
-      div [ Flex.Flex.allSizes; FlexDirection.Row.allSizes; JustifyContent.center ] [
+      div [
+        Flex.Flex.allSizes
+        FlexDirection.Row.allSizes
+        JustifyContent.center
+        Gap.All.g4
+      ] [
         Tooltip.create (
-          Icon.create (
-            Icon.UiActions UiActions.CheckCircle,
-            attrs = [
-              BrandColor.TextColor.success
-              Attr.Style "font-size" "32px"
-              Margin.All.extraSmall
-            ]
-          ),
-          span [ Typography.body1 ] [ text "Success!" ],
-          tooltipAttrs = [ Tooltip.Color.success ]
+          Icon.create (Icon.UiActions UiActions.CheckCircle, attrs = [ BrandColor.TextColor.success ]),
+          text "Saved successfully.",
+          tooltipAttrs = [ Tooltip.Color.success ],
+          wrapperAttrs = [
+            Attr.Create "tabindex" "0"
+            Attr.Create "role" "img"
+            Attr.Create "aria-label" "Success"
+          ]
         )
 
         Tooltip.create (
-          Icon.create (
-            Icon.Action Action.Warning,
-            attrs = [
-              BrandColor.TextColor.warning
-              Attr.Style "font-size" "32px"
-              Margin.All.extraSmall
-            ]
-          ),
-          span [ Typography.body1 ] [ text "Warning: Be careful!" ],
-          tooltipAttrs = [ Tooltip.Color.warning ]
+          Icon.create (Icon.Action Action.Warning, attrs = [ BrandColor.TextColor.warning ]),
+          text "Review this setting.",
+          tooltipAttrs = [ Tooltip.Color.warning ],
+          wrapperAttrs = [
+            Attr.Create "tabindex" "0"
+            Attr.Create "role" "img"
+            Attr.Create "aria-label" "Warning"
+          ]
         )
 
         Tooltip.create (
-          Icon.create (
-            Icon.Action Action.Error,
-            attrs = [
-              BrandColor.TextColor.error
-              Attr.Style "font-size" "32px"
-              Margin.All.extraSmall
-            ]
-          ),
-          span [ Typography.body1 ] [ text "Error!!!!" ],
-          tooltipAttrs = [ Tooltip.Color.error ]
+          Icon.create (Icon.Action Action.Error, attrs = [ BrandColor.TextColor.error ]),
+          text "Action could not be completed.",
+          tooltipAttrs = [ Tooltip.Color.error ],
+          wrapperAttrs = [
+            Attr.Create "tabindex" "0"
+            Attr.Create "role" "img"
+            Attr.Create "aria-label" "Error"
+          ]
         )
       ]
 
     let code =
-      """open Weave
-open Weave.Icons
-open Weave.Icons.MaterialSymbols
+      """open Weave.Icons.MaterialSymbols
 
-Tooltip.create(
-    Icon.create(
-        Icon.UiActions UiActions.CheckCircle,
-        attrs = [
-            BrandColor.TextColor.success
-            Attr.Style "font-size" "32px"
-            Margin.All.extraSmall
-        ]
-    ),
-    span [ Typography.body1 ] [ text "Success!" ],
-    tooltipAttrs = [ Tooltip.Color.success ]
+Tooltip.create (
+  Icon.create (
+    Icon.UiActions UiActions.CheckCircle,
+    attrs = [ BrandColor.TextColor.success ]
+  ),
+  text "Saved successfully.",
+  tooltipAttrs = [ Tooltip.Color.success ],
+  wrapperAttrs = [
+    Attr.Create "tabindex" "0"
+    Attr.Create "role" "img"
+    Attr.Create "aria-label" "Success"
+  ]
 )
 
-Tooltip.create(
-    Icon.create(
-        Icon.Action Action.Warning,
-        attrs = [
-            BrandColor.TextColor.warning
-            Attr.Style "font-size" "32px"
-            Margin.All.extraSmall
-        ]
-    ),
-    span [ Typography.body1 ] [ text "Warning: Be careful!" ],
-    tooltipAttrs = [ Tooltip.Color.warning ]
+Tooltip.create (
+  Icon.create (
+    Icon.Action Action.Warning,
+    attrs = [ BrandColor.TextColor.warning ]
+  ),
+  text "Review this setting.",
+  tooltipAttrs = [ Tooltip.Color.warning ],
+  wrapperAttrs = [
+    Attr.Create "tabindex" "0"
+    Attr.Create "role" "img"
+    Attr.Create "aria-label" "Warning"
+  ]
 )
 
-Tooltip.create(
-    Icon.create(
-        Icon.Action Action.Error,
-        attrs = [
-            BrandColor.TextColor.error
-            Attr.Style "font-size" "32px"
-            Margin.All.extraSmall
-        ]
-    ),
-    span [ Typography.body1 ] [ text "Error!!!!" ],
-    tooltipAttrs = [ Tooltip.Color.error ]
+Tooltip.create (
+  Icon.create (
+    Icon.Action Action.Error,
+    attrs = [ BrandColor.TextColor.error ]
+  ),
+  text "Action could not be completed.",
+  tooltipAttrs = [ Tooltip.Color.error ],
+  wrapperAttrs = [
+    Attr.Create "tabindex" "0"
+    Attr.Create "role" "img"
+    Attr.Create "aria-label" "Error"
+  ]
 )"""
 
     Helpers.codeSampleSection "Icon Tooltips" description content code
@@ -545,7 +292,7 @@ Tooltip.create(
           "Activation list"
           "[Hover; Focus]"
           "Which interactions show the tooltip"
-        Helpers.apiParam "?direction" "Direction" "Top" "Which side of the trigger the tooltip appears on"
+        Helpers.apiParam "?direction" "Direction" "Top" "Preferred side; flips and shifts to fit the viewport"
         Helpers.apiParam "?showArrow" "bool" "true" "Whether to display a directional arrow on the tooltip"
         Helpers.apiParam
           "?tooltipAttrs"
@@ -592,13 +339,9 @@ Tooltip.create(
         ]
 
         Helpers.divider ()
-        directionExamples ()
-        Helpers.divider ()
-        colorExamples ()
+        ReferenceAppearance.tooltip ()
         Helpers.divider ()
         activationExamples ()
-        Helpers.divider ()
-        arrowExamples ()
         Helpers.divider ()
         customContentExample ()
         Helpers.divider ()

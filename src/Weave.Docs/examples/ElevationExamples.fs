@@ -11,17 +11,17 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module ElevationExamples =
 
-  let private inlineCode (value: string) =
-    span [ Typography.caption; Typography.Color.primary ] [ text value ]
+  let private inlineCode = Helpers.inlineCode
 
   let private tableCell (children: Doc list) =
-    td [ Attr.Style "padding" "8px 12px"; Attr.Style "white-space" "nowrap" ] children
+    td [ Attr.Style "padding" "8px 12px"; Attr.Style "overflow-wrap" "anywhere" ] children
 
   let private tableHeaderCell (label: string) =
     th [
-      Attr.Style "text-align" "left"
+      Attr.Style "text-align" "start"
+      Attr.Create "scope" "col"
       Attr.Style "padding" "8px 12px"
-      Attr.Style "white-space" "nowrap"
+      Attr.Style "overflow-wrap" "anywhere"
       Attr.Style "border-bottom" "1px solid var(--palette-divider)"
     ] [ text label ]
 
@@ -31,7 +31,12 @@ module ElevationExamples =
         "Elevation adds depth through box-shadow. Each level (0-25) maps to a progressively larger shadow via CSS custom properties. Apply with Elevation.e0 through Elevation.e25."
 
     let content =
-      div [ Attr.Style "overflow-x" "auto" ] [
+      div [
+        Attr.Class "docs-table-scroll"
+        Attr.Style "overflow-x" "auto"
+        attr.tabindex "0"
+        Attr.Create "aria-label" "Utility reference"
+      ] [
         table [ Attr.Style "width" "100%"; Attr.Style "border-collapse" "collapse" ] [
           thead [] [
             tr [] [
@@ -75,104 +80,88 @@ module ElevationExamples =
         ]
       ]
 
-    let code =
-      """open Weave
-
-// Apply elevation as an Attr on any element
-div [
-    Elevation.e4
-    Padding.All.small
-    BorderRadius.All.medium
-    SurfaceColor.BackgroundColor.surface
-] [
-    text "Elevated card at level 4"
-]
-
-// Elevation is just box-shadow — combine with any other attrs
-div [ Elevation.e8; BorderRadius.All.large ] [
-    text "Higher elevation surface"
-]"""
-
-    Helpers.codeSampleSection "How it works" description content code
+    Helpers.section "How it works" description content
 
   // 2. Visual scale
   let private visualScaleSection () =
     let description =
       Helpers.bodyText
-        "A representative sample of the 0-24 elevation scale. Each card shows its shadow depth."
+        "A representative sample of the 0-25 elevation scale. Each card shows its shadow depth."
 
-    let elevationDemo (level: string) (elevAttr: Attr) =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; AlignItems.center ] [
-        div [
-          elevAttr
-          SurfaceColor.BackgroundColor.surface
-          BorderRadius.All.medium
-          Flex.Flex.allSizes
-          AlignItems.center
-          JustifyContent.center
-          Attr.Style "width" "100%"
-          Attr.Style "min-height" "80px"
-        ] [ div [ Typography.h6 ] [ text level ] ]
-        div [ Typography.body2; Margin.Top.extraSmall; Attr.Style "opacity" "0.6" ] [
-          text (sprintf "e%s" level)
-        ]
-      ]
+    let levels = [
+      "e0", Elevation.e0
+      "e2", Elevation.e2
+      "e4", Elevation.e4
+      "e6", Elevation.e6
+      "e8", Elevation.e8
+      "e12", Elevation.e12
+      "e16", Elevation.e16
+      "e20", Elevation.e20
+      "e24", Elevation.e24
+    ]
 
     let content =
-      Grid.create (
-        [
+      Grid.create [
+        for label, elevation in levels do
           GridItem.create (
-            elevationDemo "0" Elevation.e0,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
+            div [
+              elevation
+              Typography.Align.center
+              SurfaceColor.BackgroundColor.surface
+              BorderRadius.All.medium
+              Padding.All.medium
+            ] [ text label ],
+            attrs = [ GridItem.Span.six; GridItem.Span.Small.four ]
           )
-          GridItem.create (
-            elevationDemo "2" Elevation.e2,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "4" Elevation.e4,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "6" Elevation.e6,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "8" Elevation.e8,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "12" Elevation.e12,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "16" Elevation.e16,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "20" Elevation.e20,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-          GridItem.create (
-            elevationDemo "24" Elevation.e24,
-            attrs = [ GridItem.Span.six; GridItem.Span.Small.four; GridItem.Span.Medium.three ]
-          )
-        ]
-      )
+      ]
 
     let code =
-      """open Weave
+      """div [ Elevation.e0; SurfaceColor.BackgroundColor.surface; Padding.All.medium ] [
+  text "e0"
+]
 
-// Each elevation level is a direct Attr
-div [ Elevation.e0 ] [ text "Flat" ]
-div [ Elevation.e4 ] [ text "Raised" ]
-div [ Elevation.e8 ] [ text "Floating" ]
-div [ Elevation.e16 ] [ text "Dialog-level" ]
-div [ Elevation.e24 ] [ text "Modal" ]"""
+div [ Elevation.e2; SurfaceColor.BackgroundColor.surface; Padding.All.medium ] [
+  text "e2"
+]
+
+div [ Elevation.e4; SurfaceColor.BackgroundColor.surface; Padding.All.medium ] [
+  text "e4"
+]
+
+div [ Elevation.e6; SurfaceColor.BackgroundColor.surface; Padding.All.medium ] [
+  text "e6"
+]
+
+div [ Elevation.e8; SurfaceColor.BackgroundColor.surface; Padding.All.medium ] [
+  text "e8"
+]
+
+div [
+  Elevation.e12
+  SurfaceColor.BackgroundColor.surface
+  Padding.All.medium
+] [ text "e12" ]
+
+div [
+  Elevation.e16
+  SurfaceColor.BackgroundColor.surface
+  Padding.All.medium
+] [ text "e16" ]
+
+div [
+  Elevation.e20
+  SurfaceColor.BackgroundColor.surface
+  Padding.All.medium
+] [ text "e20" ]
+
+div [
+  Elevation.e24
+  SurfaceColor.BackgroundColor.surface
+  Padding.All.medium
+] [ text "e24" ]"""
 
     Helpers.codeSampleSection "Visual scale" description content code
 
-  // 3. Playground
   let private playgroundSection () =
     let description =
       Helpers.bodyText "Pick an elevation level from the dropdown to preview the shadow on a live card."
@@ -250,25 +239,14 @@ div [ Elevation.e24 ] [ text "Modal" ]"""
               JustifyContent.center
               Attr.Style "min-height" "160px"
             ] [
-              div [ Typography.h4; Attr.Style "opacity" "0.8" ] [ text (sprintf "Elevation.e%s" levelLabel) ]
+              div [ Typography.h4; Typography.Color.textSecondary ] [
+                text (sprintf "Elevation.e%s" levelLabel)
+              ]
             ]
           ])
       ]
 
-    let code =
-      """open Weave
-
-// Apply any elevation level — the shadow scales smoothly from 0 to 25
-div [
-    Elevation.e4  // see here
-    SurfaceColor.BackgroundColor.surface
-    BorderRadius.All.medium
-    Padding.All.medium
-] [
-    text "Preview card"
-]"""
-
-    Helpers.codeSampleSection "Playground" description content code
+    Helpers.section "Playground" description content
 
   // 4. Common patterns
   let private commonPatternsSection () =
@@ -292,7 +270,7 @@ div [
                 Padding.All.small
               ] [
                 div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Flat card" ]
-                div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
+                div [ Typography.body2; Typography.Color.textSecondary ] [
                   text "Uses a border instead of shadow for separation."
                 ]
               ]
@@ -309,8 +287,8 @@ div [
                 Padding.All.small
               ] [
                 div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Raised card" ]
-                div [ Typography.body2; Attr.Style "opacity" "0.7" ] [
-                  text "Default card elevation. Subtle lift off the background."
+                div [ Typography.body2; Typography.Color.textSecondary ] [
+                  text "A subtle lift off the background. Card is bordered by default."
                 ]
               ]
             ],
@@ -318,7 +296,7 @@ div [
           )
           GridItem.create (
             div [] [
-              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Dialog surface (e8)" ]
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Raised surface (e8)" ]
               div [
                 Elevation.e8
                 SurfaceColor.BackgroundColor.surface
@@ -326,7 +304,7 @@ div [
                 Padding.All.small
               ] [
                 div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Confirm action" ]
-                div [ Typography.body2; Attr.Style "opacity" "0.7"; Margin.Bottom.extraSmall ] [
+                div [ Typography.body2; Typography.Color.textSecondary; Margin.Bottom.extraSmall ] [
                   text "Are you sure you want to proceed?"
                 ]
                 div [ Flex.Flex.allSizes; JustifyContent.flexEnd; Attr.Style "gap" "8px" ] [
@@ -339,7 +317,7 @@ div [
           )
           GridItem.create (
             div [] [
-              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "FAB (e6)" ]
+              div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Circular surface (e6)" ]
               div [
                 Flex.Flex.allSizes
                 AlignItems.center
@@ -348,7 +326,7 @@ div [
               ] [
                 div [
                   Elevation.e6
-                  BrandColor.BackgroundColor.primary
+                  BrandColor.Fill.primary
                   BorderRadius.circle
                   Flex.Flex.allSizes
                   AlignItems.center
@@ -356,10 +334,7 @@ div [
                   Attr.Style "width" "56px"
                   Attr.Style "height" "56px"
                 ] [
-                  Icon.create (
-                    Icon.UiActions UiActions.Add,
-                    attrs = [ Attr.Style "color" "white"; Attr.Style "font-size" "24px" ]
-                  )
+                  Icon.create (Icon.UiActions UiActions.Add, attrs = [ Attr.Style "font-size" "24px" ])
                 ]
               ]
             ],
@@ -369,37 +344,65 @@ div [
       )
 
     let code =
-      """open Weave
+      """open Weave.Icons.MaterialSymbols
 
-// Flat card with border instead of shadow
 div [
-    Elevation.e0
-    BorderWidth.All.one
-    Attr.Style "border-style" "solid"
-    BorderColor.linesDefault
-    BorderRadius.All.medium
-    Padding.All.small
-] [ text "Flat card" ]
-
-// Raised card — default card level
-div [
-    Elevation.e2  // see here
-    SurfaceColor.BackgroundColor.surface
-    BorderRadius.All.medium
-    Padding.All.small
-] [ text "Raised card" ]
-
-// Dialog-level surface
-div [ Elevation.e8; BorderRadius.All.medium; Padding.All.small ] [
-    text "Dialog content"
+  Elevation.e0
+  SurfaceColor.BackgroundColor.surface
+  BorderWidth.All.one
+  Attr.Style "border-style" "solid"
+  BorderColor.linesDefault
+  BorderRadius.All.medium
+  Padding.All.small
+] [
+  div [ Typography.subtitle2 ] [ text "Flat card" ]
+  div [ Typography.body2 ] [
+    text "Uses a border instead of shadow for separation."
+  ]
 ]
 
-// FAB — floating action button level
 div [
-    Elevation.e6  // see here
-    BrandColor.BackgroundColor.primary
-    BorderRadius.circle
-] [ text "+" ]"""
+  Elevation.e2
+  SurfaceColor.BackgroundColor.surface
+  BorderRadius.All.medium
+  Padding.All.small
+] [
+  div [ Typography.subtitle2 ] [ text "Raised card" ]
+  div [ Typography.body2 ] [
+    text "A subtle lift off the background. Card is bordered by default."
+  ]
+]
+
+div [
+  Elevation.e8
+  SurfaceColor.BackgroundColor.surface
+  BorderRadius.All.medium
+  Padding.All.small
+] [
+  div [ Typography.subtitle2 ] [ text "Confirm action" ]
+  div [ Typography.body2 ] [ text "Are you sure you want to proceed?" ]
+  Button.create (
+    text "Cancel",
+    onClick = ignore,
+    attrs = [ Button.Variant.text ]
+  )
+  Button.primary (
+    text "Confirm",
+    onClick = ignore,
+    attrs = [ Button.Variant.filled ]
+  )
+]
+
+div [
+  Elevation.e6
+  BrandColor.Fill.primary
+  BorderRadius.circle
+  Flex.Flex.allSizes
+  AlignItems.center
+  JustifyContent.center
+  Attr.Style "width" "56px"
+  Attr.Style "height" "56px"
+] [ Icon.create (Icon.UiActions UiActions.Add) ]"""
 
     Helpers.codeSampleSection "Common patterns" description content code
 
@@ -414,9 +417,9 @@ div [
         ]
 
         Helpers.divider ()
-        howItWorksSection ()
-        Helpers.divider ()
         visualScaleSection ()
+        Helpers.divider ()
+        howItWorksSection ()
         Helpers.divider ()
         playgroundSection ()
         Helpers.divider ()

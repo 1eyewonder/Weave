@@ -9,19 +9,17 @@ open Weave
 [<JavaScript>]
 module FlexboxExamples =
 
-  let private colorBox (label: string) (color: string) (extraAttrs: Attr list) =
+  let private colorBox (label: string) (color: Attr) (extraAttrs: Attr list) =
     div [
-      Attr.Style "background" color
-      Attr.Style "color" "white"
+      color
+      Typography.subtitle2
       Attr.Style "padding" "8px 16px"
-      Attr.Style "font-size" "13px"
-      Attr.Style "font-weight" "600"
       Attr.Style "border-radius" "4px"
       Attr.Style "text-align" "center"
       yield! extraAttrs
     ] [ text label ]
 
-  let private smallBox (label: string) (color: string) =
+  let private smallBox (label: string) (color: Attr) =
     colorBox label color [ Attr.Style "min-width" "60px" ]
 
   let private flexContainer (extraAttrs: Attr list) (children: Doc list) =
@@ -34,6 +32,7 @@ module FlexboxExamples =
         BorderColor.linesDefault
         Padding.All.extraSmall
         Attr.Style "min-height" "80px"
+        Attr.Style "overflow-x" "auto"
         yield! extraAttrs
       ]
       children
@@ -41,7 +40,7 @@ module FlexboxExamples =
   let private howItWorksSection () =
     let description =
       Helpers.bodyText
-        "The flexbox system uses composable Attr modules. Start with Flex.Flex.allSizes to enable flex, then add direction, wrap, justify, align, and gap. All values support responsive breakpoints (xs, sm, md, lg, xl, xxl)."
+        "Start with Flex.Flex.allSizes, then compose direction, wrapping, alignment, and gap attributes. Source includes the colored items; comparison labels and dashed frames are omitted. Responsive variants are available from xs through xxl."
 
     let content =
       div [
@@ -55,24 +54,34 @@ module FlexboxExamples =
         Padding.All.small
         Attr.Style "min-height" "80px"
       ] [
-        smallBox "A" "var(--palette-primary)"
-        smallBox "B" "var(--palette-secondary)"
-        smallBox "C" "var(--palette-info)"
+        smallBox "A" BrandColor.Fill.primary
+        smallBox "B" BrandColor.Fill.secondary
+        smallBox "C" BrandColor.Fill.info
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
 div [
-    Flex.Flex.allSizes         // display: flex
-    FlexDirection.Row.allSizes // flex-direction: row
-    JustifyContent.center      // justify-content: center
-    AlignItems.center          // align-items: center
-    Gap.All.g3                 // gap: 12px (3 * 4px)
+  Flex.Flex.allSizes
+  FlexDirection.Row.allSizes
+  JustifyContent.center
+  AlignItems.center
+  Gap.All.g3
 ] [
-    div [] [ text "A" ]
-    div [] [ text "B" ]
-    div [] [ text "C" ]
+  box "A" BrandColor.Fill.primary []
+  box "B" BrandColor.Fill.secondary []
+  box "C" BrandColor.Fill.info []
 ]"""
 
     Helpers.codeSampleSection "How it works" description content code
@@ -80,7 +89,8 @@ div [
   // 2. Playground
   let private playgroundSection () =
     let description =
-      Helpers.bodyText "Combine direction, justify, align, wrap, and gap to see how flex items rearrange."
+      Helpers.bodyText
+        "Combine direction, justify, align, wrap, and gap to see how flex items rearrange. The source shows the initial layout; the preview controls let you explore other combinations."
 
     let allDirections = [
       "Row", FlexDirection.Row.allSizes
@@ -218,33 +228,49 @@ div [
               gapAttr
               Attr.Style "min-height" "200px"
             ] [
-              smallBox "1" "var(--palette-primary)"
-              colorBox "2" "var(--palette-secondary)" [
+              smallBox "1" BrandColor.Fill.primary
+              colorBox "2" BrandColor.Fill.secondary [
                 Attr.Style "min-width" "80px"
                 Attr.Style "padding" "16px"
               ]
-              smallBox "3" "var(--palette-info)"
-              colorBox "4" "var(--palette-success)" [ Attr.Style "min-width" "100px" ]
-              smallBox "5" "var(--palette-warning)"
+              smallBox "3" BrandColor.Fill.info
+              colorBox "4" BrandColor.Fill.success [ Attr.Style "min-width" "100px" ]
+              smallBox "5" BrandColor.Fill.warning
             ]
           ])
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Compose all flex properties as attrs
+// Initial playground layout. Change the preview controls to explore.
 div [
-    Flex.Flex.allSizes              // see here — enable flex
-    FlexDirection.Row.allSizes
-    JustifyContent.spaceBetween
-    AlignItems.center
-    FlexWrap.Wrap.allSizes
-    Gap.All.g3
+  Flex.Flex.allSizes
+  FlexDirection.Row.allSizes
+  JustifyContent.flexStart
+  AlignItems.stretch
+  FlexWrap.NoWrap.allSizes
+  Gap.All.g3
+  Attr.Style "min-height" "200px"
 ] [
-    div [] [ text "1" ]
-    div [] [ text "2" ]
-    div [] [ text "3" ]
+  box "1" BrandColor.Fill.primary []
+  box "2" BrandColor.Fill.secondary [
+    Attr.Style "min-width" "80px"
+    Padding.All.small
+  ]
+  box "3" BrandColor.Fill.info []
+  box "4" BrandColor.Fill.success [ Attr.Style "min-width" "100px" ]
+  box "5" BrandColor.Fill.warning []
 ]"""
 
     Helpers.codeSampleSection "Playground" description content code
@@ -257,11 +283,11 @@ div [
 
     let dirDemo (label: string) (dirAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
         flexContainer [ Flex.Flex.allSizes; dirAttr; Gap.All.g2 ] [
-          smallBox "1" "var(--palette-primary)"
-          smallBox "2" "var(--palette-secondary)"
-          smallBox "3" "var(--palette-info)"
+          smallBox "1" BrandColor.Fill.primary
+          smallBox "2" BrandColor.Fill.secondary
+          smallBox "3" BrandColor.Fill.info
         ]
       ]
 
@@ -288,20 +314,29 @@ div [
       )
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Row — horizontal, left to right (default)
-div [ Flex.Flex.allSizes; FlexDirection.Row.allSizes ] [ ... ]
+let row direction =
+  div [ Flex.Flex.allSizes; direction; Gap.All.g2 ] [
+    box "1" BrandColor.Fill.primary []
+    box "2" BrandColor.Fill.secondary []
+    box "3" BrandColor.Fill.info []
+  ]
 
-// Column — vertical, top to bottom
-div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes ] [ ... ]
-
-// Responsive: row on medium+, column on small
-div [
-    Flex.Flex.allSizes
-    FlexDirection.Column.allSizes
-    FlexDirection.Row.md  // see here — switches to row at md
-] [ ... ]"""
+row FlexDirection.Row.allSizes
+row FlexDirection.Column.allSizes
+row FlexDirection.RowReverse.allSizes
+row FlexDirection.ColumnReverse.allSizes"""
 
     Helpers.codeSampleSection "Direction" description content code
 
@@ -312,11 +347,11 @@ div [
 
     let justDemo (label: string) (justAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
         flexContainer [ Flex.Flex.allSizes; justAttr; Gap.All.g2 ] [
-          smallBox "A" "var(--palette-primary)"
-          smallBox "B" "var(--palette-secondary)"
-          smallBox "C" "var(--palette-info)"
+          smallBox "A" BrandColor.Fill.primary
+          smallBox "B" BrandColor.Fill.secondary
+          smallBox "C" BrandColor.Fill.info
         ]
       ]
 
@@ -331,14 +366,33 @@ div [
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-div [ Flex.Flex.allSizes; JustifyContent.flexStart ] [ ... ]
-div [ Flex.Flex.allSizes; JustifyContent.center ] [ ... ]
-div [ Flex.Flex.allSizes; JustifyContent.flexEnd ] [ ... ]
-div [ Flex.Flex.allSizes; JustifyContent.spaceBetween ] [ ... ]  // see here
-div [ Flex.Flex.allSizes; JustifyContent.spaceAround ] [ ... ]
-div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly ] [ ... ]"""
+let items () = [
+  box "A" BrandColor.Fill.primary []
+  box "B" BrandColor.Fill.secondary []
+  box "C" BrandColor.Fill.info []
+]
+
+let row justify =
+  div [ Flex.Flex.allSizes; justify; Gap.All.g2 ] (items ())
+
+row JustifyContent.flexStart
+row JustifyContent.center
+row JustifyContent.flexEnd
+row JustifyContent.spaceBetween
+row JustifyContent.spaceAround
+row JustifyContent.spaceEvenly"""
 
     Helpers.codeSampleSection "Justify Content" description content code
 
@@ -350,17 +404,17 @@ div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly ] [ ... ]"""
 
     let alignDemo (label: string) (alignAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
         flexContainer [ Flex.Flex.allSizes; alignAttr; Gap.All.g2; Attr.Style "min-height" "140px" ] [
-          colorBox "Tall" "var(--palette-primary)" [
+          colorBox "Tall" BrandColor.Fill.primary [
             Attr.Style "height" "120px"
             Attr.Style "padding" "8px 16px"
           ]
-          colorBox "Short" "var(--palette-secondary)" [
+          colorBox "Short" BrandColor.Fill.secondary [
             Attr.Style "height" "40px"
             Attr.Style "padding" "8px 16px"
           ]
-          colorBox "Medium" "var(--palette-info)" [
+          colorBox "Medium" BrandColor.Fill.info [
             Attr.Style "height" "72px"
             Attr.Style "padding" "8px 16px"
           ]
@@ -369,40 +423,40 @@ div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly ] [ ... ]"""
 
     let stretchDemo () =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text "Stretch" ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text "Stretch" ]
         flexContainer [
           Flex.Flex.allSizes
           AlignItems.stretch
           Gap.All.g2
           Attr.Style "min-height" "140px"
         ] [
-          colorBox "Tall" "var(--palette-primary)" [
+          colorBox "Tall" BrandColor.Fill.primary [
             Attr.Style "height" "120px"
             Attr.Style "padding" "8px 16px"
           ]
-          colorBox "No height" "var(--palette-secondary)" [ Attr.Style "padding" "8px 16px" ]
-          colorBox "No height" "var(--palette-info)" [ Attr.Style "padding" "8px 16px" ]
+          colorBox "No height" BrandColor.Fill.secondary [ Attr.Style "padding" "8px 16px" ]
+          colorBox "No height" BrandColor.Fill.info [ Attr.Style "padding" "8px 16px" ]
         ]
       ]
 
     let baselineDemo () =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text "Baseline" ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text "Baseline" ]
         flexContainer [
           Flex.Flex.allSizes
           AlignItems.baseline
           Gap.All.g2
           Attr.Style "min-height" "140px"
         ] [
-          colorBox "Large" "var(--palette-primary)" [
+          colorBox "Large" BrandColor.Fill.primary [
             Attr.Style "font-size" "28px"
             Attr.Style "padding" "24px 16px"
           ]
-          colorBox "Small" "var(--palette-secondary)" [
+          colorBox "Small" BrandColor.Fill.secondary [
             Attr.Style "font-size" "12px"
             Attr.Style "padding" "8px 16px"
           ]
-          colorBox "Medium" "var(--palette-info)" [
+          colorBox "Medium" BrandColor.Fill.info [
             Attr.Style "font-size" "18px"
             Attr.Style "padding" "16px"
           ]
@@ -419,13 +473,55 @@ div [ Flex.Flex.allSizes; JustifyContent.spaceEvenly ] [ ... ]"""
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-div [ Flex.Flex.allSizes; AlignItems.start ] [ ... ]
-div [ Flex.Flex.allSizes; AlignItems.center ] [ ... ]    // see here
-div [ Flex.Flex.allSizes; AlignItems.end' ] [ ... ]
-div [ Flex.Flex.allSizes; AlignItems.stretch ] [ ... ]
-div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
+let row alignment children =
+  div
+    [
+      Flex.Flex.allSizes
+      alignment
+      Gap.All.g2
+      Attr.Style "min-height" "140px"
+    ]
+    children
+
+let sizedItems () = [
+  box "Tall" BrandColor.Fill.primary [ Attr.Style "height" "120px" ]
+  box "Short" BrandColor.Fill.secondary [ Attr.Style "height" "40px" ]
+  box "Medium" BrandColor.Fill.info [ Attr.Style "height" "72px" ]
+]
+
+row AlignItems.start (sizedItems ())
+row AlignItems.center (sizedItems ())
+row AlignItems.end' (sizedItems ())
+
+row AlignItems.stretch [
+  box "Tall" BrandColor.Fill.primary [ Attr.Style "height" "120px" ]
+  box "No height" BrandColor.Fill.secondary []
+  box "No height" BrandColor.Fill.info []
+]
+
+row AlignItems.baseline [
+  box "Large" BrandColor.Fill.primary [
+    Attr.Style "font-size" "28px"
+    Attr.Style "padding" "24px 16px"
+  ]
+  box "Small" BrandColor.Fill.secondary [ Attr.Style "font-size" "12px" ]
+  box "Medium" BrandColor.Fill.info [
+    Attr.Style "font-size" "18px"
+    Attr.Style "padding" "16px"
+  ]
+]"""
 
     Helpers.codeSampleSection "Align Items" description content code
 
@@ -437,7 +533,7 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
 
     let contentDemo (label: string) (contentAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
         flexContainer [
           Flex.Flex.allSizes
           FlexWrap.Wrap.allSizes
@@ -450,9 +546,9 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
             smallBox
               (string i)
               (if i % 2 = 0 then
-                 "var(--palette-secondary)"
+                 BrandColor.Fill.secondary
                else
-                 "var(--palette-primary)")
+                 BrandColor.Fill.primary)
         ]
       ]
 
@@ -487,24 +583,43 @@ div [ Flex.Flex.allSizes; AlignItems.baseline ] [ ... ]"""
       )
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// AlignContent requires wrapping — no effect on single-line containers
-div [
+let row alignment =
+  div [
     Flex.Flex.allSizes
     FlexWrap.Wrap.allSizes
-    AlignContent.spaceBetween
-] [
-    // enough items to wrap
-]
+    alignment
+    Gap.All.g1
+    Attr.Style "min-height" "160px"
+    Attr.Style "max-width" "300px"
+  ] [
+    for number in 1..8 do
+      let color =
+        if number % 2 = 0 then
+          BrandColor.Fill.secondary
+        else
+          BrandColor.Fill.primary
 
-// Responsive: center rows on medium+, stretch on small
-div [
-    Flex.Flex.allSizes
-    FlexWrap.Wrap.allSizes
-    AlignContent.stretch
-    AlignContent.Medium.center
-] [ ... ]"""
+      box (string number) color []
+  ]
+
+row AlignContent.start
+row AlignContent.center
+row AlignContent.end'
+row AlignContent.spaceBetween
+row AlignContent.spaceAround
+row AlignContent.stretch"""
 
     Helpers.codeSampleSection "Align Content" description content code
 
@@ -516,7 +631,7 @@ div [
 
     let content =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [
           text "Container: AlignItems.start — individual items override"
         ]
         flexContainer [
@@ -525,27 +640,41 @@ div [
           Gap.All.g2
           Attr.Style "min-height" "120px"
         ] [
-          colorBox "start (default)" "var(--palette-primary)" [ Attr.Style "padding" "24px 12px" ]
-          colorBox "self: center" "var(--palette-secondary)" [ AlignSelf.center ]
-          colorBox "self: end" "var(--palette-info)" [ AlignSelf.end' ]
-          colorBox "self: stretch" "var(--palette-success)" [ AlignSelf.stretch ]
-          colorBox "self: auto" "var(--palette-warning)" [ AlignSelf.auto ]
+          colorBox "start (default)" BrandColor.Fill.primary [ Attr.Style "padding" "24px 12px" ]
+          colorBox "self: center" BrandColor.Fill.secondary [ AlignSelf.center ]
+          colorBox "self: end" BrandColor.Fill.info [ AlignSelf.end' ]
+          colorBox "self: stretch" BrandColor.Fill.success [ AlignSelf.stretch ]
+          colorBox "self: auto" BrandColor.Fill.warning [ AlignSelf.auto ]
         ]
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Container aligns items to start
-div [ Flex.Flex.allSizes; AlignItems.start ] [
-    div [] [ text "Follows container (start)" ]
-    div [ AlignSelf.center ] [ text "Overrides to center" ]
-    div [ AlignSelf.end' ] [ text "Overrides to end" ]
-    div [ AlignSelf.stretch ] [ text "Overrides to stretch" ]
-]
-
-// Responsive: auto on small, center on medium+
-div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
+div [
+  Flex.Flex.allSizes
+  AlignItems.start
+  Gap.All.g2
+  Attr.Style "min-height" "120px"
+] [
+  box "start (default)" BrandColor.Fill.primary [
+    Attr.Style "padding" "24px 12px"
+  ]
+  box "self: center" BrandColor.Fill.secondary [ AlignSelf.center ]
+  box "self: end" BrandColor.Fill.info [ AlignSelf.end' ]
+  box "self: stretch" BrandColor.Fill.success [ AlignSelf.stretch ]
+  box "self: auto" BrandColor.Fill.warning [ AlignSelf.auto ]
+]"""
 
     Helpers.codeSampleSection "Align Self" description content code
 
@@ -557,12 +686,12 @@ div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
 
     let gapDemo (label: string) (gapAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
         flexContainer [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; gapAttr ] [
-          smallBox "A" "var(--palette-primary)"
-          smallBox "B" "var(--palette-secondary)"
-          smallBox "C" "var(--palette-info)"
-          smallBox "D" "var(--palette-success)"
+          smallBox "A" BrandColor.Fill.primary
+          smallBox "B" BrandColor.Fill.secondary
+          smallBox "C" BrandColor.Fill.info
+          smallBox "D" BrandColor.Fill.success
         ]
       ]
 
@@ -589,20 +718,30 @@ div [ AlignSelf.auto; AlignSelf.Medium.center ] [ text "Centered on md+" ]"""
       )
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Uniform gap
-div [ Flex.Flex.allSizes; Gap.All.g3 ] [ ... ]  // 12px gap
+let row gap =
+  div [ Flex.Flex.allSizes; FlexWrap.Wrap.allSizes; gap ] [
+    box "A" BrandColor.Fill.primary []
+    box "B" BrandColor.Fill.secondary []
+    box "C" BrandColor.Fill.info []
+    box "D" BrandColor.Fill.success []
+  ]
 
-// Independent axes
-div [ Flex.Flex.allSizes; Gap.X.g4; Gap.Y.g2 ] [ ... ]  // see here
-
-// Responsive gap — tighter on small screens
-div [
-    Flex.Flex.allSizes
-    Gap.All.g2
-    Gap.All.Medium.g4  // 16px on md+
-] [ ... ]"""
+row Gap.All.g0
+row Gap.All.g2
+row Gap.All.g4
+row Gap.All.g8"""
 
     Helpers.codeSampleSection "Gap" description content code
 
@@ -616,23 +755,23 @@ div [
       div [] [
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Grow" ]
         flexContainer [ Flex.Flex.allSizes; Gap.All.g2; Margin.Bottom.small ] [
-          colorBox "No grow" "var(--palette-secondary)" []
-          colorBox "Grow" "var(--palette-primary)" [ FlexItem.Grow.allSizes ]
-          colorBox "No grow" "var(--palette-secondary)" []
+          colorBox "No grow" BrandColor.Fill.secondary []
+          colorBox "Grow" BrandColor.Fill.primary [ FlexItem.Grow.allSizes ]
+          colorBox "No grow" BrandColor.Fill.secondary []
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "No Grow" ]
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [
           text "FlexItem.NoGrow prevents an item from growing even if the container has extra space."
         ]
         flexContainer [ Flex.Flex.allSizes; Gap.All.g2; Margin.Bottom.small ] [
-          colorBox "NoGrow" "var(--palette-warning)" [ FlexItem.NoGrow.allSizes ]
-          colorBox "Grow" "var(--palette-primary)" [ FlexItem.Grow.allSizes ]
-          colorBox "Grow" "var(--palette-secondary)" [ FlexItem.Grow.allSizes ]
+          colorBox "NoGrow" BrandColor.Fill.warning [ FlexItem.NoGrow.allSizes ]
+          colorBox "Grow" BrandColor.Fill.primary [ FlexItem.Grow.allSizes ]
+          colorBox "Grow" BrandColor.Fill.secondary [ FlexItem.Grow.allSizes ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Shrink vs No Shrink" ]
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [
           text "When items overflow, NoShrink prevents an item from getting smaller."
         ]
         flexContainer [
@@ -642,11 +781,11 @@ div [
           Margin.Bottom.small
           Attr.Style "max-width" "400px"
         ] [
-          colorBox "Shrinks" "var(--palette-primary)" [
+          colorBox "Shrinks" BrandColor.Fill.primary [
             FlexItem.Shrink.allSizes
             Attr.Style "min-width" "120px"
           ]
-          colorBox "No Shrink" "var(--palette-error)" [
+          colorBox "No Shrink" BrandColor.Fill.error [
             FlexItem.NoShrink.allSizes
             Attr.Style "min-width" "200px"
           ]
@@ -654,74 +793,90 @@ div [
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Flex 1 (equal sizing)" ]
         flexContainer [ Flex.Flex.allSizes; Gap.All.g2; Margin.Bottom.small ] [
-          colorBox "flex-1" "var(--palette-primary)" [ FlexItem.Flex.allSizes ]
-          colorBox "flex-1" "var(--palette-secondary)" [ FlexItem.Flex.allSizes ]
-          colorBox "flex-1" "var(--palette-info)" [ FlexItem.Flex.allSizes ]
+          colorBox "flex-1" BrandColor.Fill.primary [ FlexItem.Flex.allSizes ]
+          colorBox "flex-1" BrandColor.Fill.secondary [ FlexItem.Flex.allSizes ]
+          colorBox "flex-1" BrandColor.Fill.info [ FlexItem.Flex.allSizes ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Auto, Initial, and None" ]
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [
           text
             "Auto sizes based on content then grows/shrinks. Initial sizes based on content but only shrinks. None ignores flex entirely — uses the item's intrinsic width."
         ]
         flexContainer [ Flex.Flex.allSizes; Gap.All.g2; Margin.Bottom.small ] [
-          colorBox "auto" "var(--palette-primary)" [ FlexItem.Auto.allSizes ]
-          colorBox "initial" "var(--palette-secondary)" [ FlexItem.Initial.allSizes ]
-          colorBox "none" "var(--palette-info)" [ FlexItem.None.allSizes ]
+          colorBox "auto" BrandColor.Fill.primary [ FlexItem.Auto.allSizes ]
+          colorBox "initial" BrandColor.Fill.secondary [ FlexItem.Initial.allSizes ]
+          colorBox "none" BrandColor.Fill.info [ FlexItem.None.allSizes ]
         ]
 
         div [ Typography.subtitle2; Margin.Bottom.extraSmall ] [ text "Order" ]
         flexContainer [ Flex.Flex.allSizes; Gap.All.g2; Margin.Bottom.small ] [
-          colorBox "order-3" "var(--palette-info)" [ Order.o3 ]
-          colorBox "order-1" "var(--palette-primary)" [ Order.o1 ]
-          colorBox "order-2" "var(--palette-secondary)" [ Order.o2 ]
+          colorBox "order-3" BrandColor.Fill.info [ Order.o3 ]
+          colorBox "order-1" BrandColor.Fill.primary [ Order.o1 ]
+          colorBox "order-2" BrandColor.Fill.secondary [ Order.o2 ]
         ]
 
-        div [ Typography.body2; Attr.Style "opacity" "0.6" ] [
+        div [ Typography.body2; Typography.Color.textSecondary ] [
           text
-            "The items above are written in DOM order 3, 1, 2 but display as 1, 2, 3 due to their order classes."
+            "The items above are written in DOM order 3, 1, 2 but display as 1, 2, 3. Keep meaningful reading and keyboard order in the DOM; use visual ordering only when it does not change that meaning."
         ]
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Grow — one item fills remaining space
-div [ Flex.Flex.allSizes; Gap.All.g2 ] [
-    div [] [ text "Fixed" ]
-    div [ FlexItem.Grow.allSizes ] [ text "I grow" ]
-    div [] [ text "Fixed" ]
+let row (attrs: Attr list) children =
+  div [ Flex.Flex.allSizes; Gap.All.g2; yield! attrs ] children
+
+row [] [
+  box "No grow" BrandColor.Fill.secondary []
+  box "Grow" BrandColor.Fill.primary [ FlexItem.Grow.allSizes ]
+  box "No grow" BrandColor.Fill.secondary []
 ]
 
-// NoGrow — prevent an item from growing
-div [ Flex.Flex.allSizes ] [
-    div [ FlexItem.NoGrow.allSizes ] [ text "Stays small" ]
-    div [ FlexItem.Grow.allSizes ] [ text "I grow" ]
+row [] [
+  box "NoGrow" BrandColor.Fill.warning [ FlexItem.NoGrow.allSizes ]
+  box "Grow" BrandColor.Fill.primary [ FlexItem.Grow.allSizes ]
+  box "Grow" BrandColor.Fill.secondary [ FlexItem.Grow.allSizes ]
 ]
 
-// NoShrink — prevent an item from shrinking when container overflows
-div [ Flex.Flex.allSizes; FlexWrap.NoWrap.allSizes ] [
-    div [ FlexItem.Shrink.allSizes ] [ text "I can shrink" ]
-    div [ FlexItem.NoShrink.allSizes ] [ text "I keep my size" ]
+row [ FlexWrap.NoWrap.allSizes; Attr.Style "max-width" "400px" ] [
+  box "Shrinks" BrandColor.Fill.primary [
+    FlexItem.Shrink.allSizes
+    Attr.Style "min-width" "120px"
+  ]
+  box "No Shrink" BrandColor.Fill.error [
+    FlexItem.NoShrink.allSizes
+    Attr.Style "min-width" "200px"
+  ]
 ]
 
-// Flex 1 — all items share space equally
-div [ Flex.Flex.allSizes; Gap.All.g2 ] [
-    div [ FlexItem.Flex.allSizes ] [ text "1/3" ]
-    div [ FlexItem.Flex.allSizes ] [ text "1/3" ]
-    div [ FlexItem.Flex.allSizes ] [ text "1/3" ]
+row [] [
+  box "flex-1" BrandColor.Fill.primary [ FlexItem.Flex.allSizes ]
+  box "flex-1" BrandColor.Fill.secondary [ FlexItem.Flex.allSizes ]
+  box "flex-1" BrandColor.Fill.info [ FlexItem.Flex.allSizes ]
 ]
 
-// Sizing modes: auto grows+shrinks, initial only shrinks, none ignores flex
-div [ FlexItem.Auto.allSizes ] [ text "Grows and shrinks" ]
-div [ FlexItem.Initial.allSizes ] [ text "Shrinks only" ]
-div [ FlexItem.None.allSizes ] [ text "Uses intrinsic width" ]
+row [] [
+  box "auto" BrandColor.Fill.primary [ FlexItem.Auto.allSizes ]
+  box "initial" BrandColor.Fill.secondary [ FlexItem.Initial.allSizes ]
+  box "none" BrandColor.Fill.info [ FlexItem.None.allSizes ]
+]
 
-// Order — rearrange visual order without changing DOM
-div [ Flex.Flex.allSizes ] [
-    div [ Order.o3 ] [ text "Third visually" ]
-    div [ Order.o1 ] [ text "First visually" ]
-    div [ Order.o2 ] [ text "Second visually" ]
+row [] [
+  box "order-3" BrandColor.Fill.info [ Order.o3 ]
+  box "order-1" BrandColor.Fill.primary [ Order.o1 ]
+  box "order-2" BrandColor.Fill.secondary [ Order.o2 ]
 ]"""
 
     Helpers.codeSampleSection "Flex Item" description content code
@@ -734,13 +889,13 @@ div [ Flex.Flex.allSizes ] [
 
     let growDemo (label: string) (detail: string) (growAttr: Attr) =
       div [] [
-        div [ Typography.body2; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.6" ] [ text label ]
-        div [ Typography.caption; Margin.Bottom.extraSmall; Attr.Style "opacity" "0.5" ] [ text detail ]
+        div [ Typography.body2; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text label ]
+        div [ Typography.caption; Margin.Bottom.extraSmall; Typography.Color.textSecondary ] [ text detail ]
         flexContainer [ Flex.Flex.allSizes; growAttr; Gap.All.g2 ] [
-          smallBox "A" "var(--palette-primary)"
-          smallBox "B" "var(--palette-secondary)"
-          smallBox "C" "var(--palette-info)"
-          smallBox "D" "var(--palette-success)"
+          smallBox "A" BrandColor.Fill.primary
+          smallBox "B" BrandColor.Fill.secondary
+          smallBox "C" BrandColor.Fill.info
+          smallBox "D" BrandColor.Fill.success
         ]
       ]
 
@@ -754,44 +909,31 @@ div [ Flex.Flex.allSizes ] [
       ]
 
     let code =
-      """open Weave
+      """let box label (color: Attr) (attrs: Attr list) =
+  div [
+    color
+    Typography.subtitle2
+    Padding.Vertical.extraSmall
+    Padding.Horizontal.small
+    BorderRadius.All.small
+    Attr.Style "text-align" "center"
+    Attr.Style "min-width" "60px"
+    yield! attrs
+  ] [ text label ]
 
-// Only the first child grows — no attrs on children needed
-div [
-    Flex.Flex.allSizes
-    FlexItem.GrowChildren.Start.allSizes
-] [
-    div [] [ text "I grow (first)" ]
-    div [] [ text "Fixed" ]
-    div [] [ text "Fixed" ]
-]
+let row grow =
+  div [ Flex.Flex.allSizes; grow; Gap.All.g2 ] [
+    box "A" BrandColor.Fill.primary []
+    box "B" BrandColor.Fill.secondary []
+    box "C" BrandColor.Fill.info []
+    box "D" BrandColor.Fill.success []
+  ]
 
-// First and last grow — middle stays fixed
-div [
-    Flex.Flex.allSizes
-    FlexItem.GrowChildren.StartAndEnd.allSizes
-] [
-    div [] [ text "Grows (first)" ]
-    div [] [ text "Fixed (middle)" ]
-    div [] [ text "Grows (last)" ]
-]
-
-// All children grow equally — like FlexItem.Flex but from the container
-div [
-    Flex.Flex.allSizes
-    FlexItem.GrowChildren.All.allSizes
-] [
-    div [] [ text "1/3" ]
-    div [] [ text "1/3" ]
-    div [] [ text "1/3" ]
-]
-
-// Responsive: start-only on small, middle on medium+
-div [
-    Flex.Flex.allSizes
-    FlexItem.GrowChildren.Start.allSizes
-    FlexItem.GrowChildren.Middle.md
-] [ ... ]"""
+row FlexItem.GrowChildren.Start.allSizes
+row FlexItem.GrowChildren.End.allSizes
+row FlexItem.GrowChildren.StartAndEnd.allSizes
+row FlexItem.GrowChildren.Middle.allSizes
+row FlexItem.GrowChildren.All.allSizes"""
 
     Helpers.codeSampleSection "Grow Children" description content code
 

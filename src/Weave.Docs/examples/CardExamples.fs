@@ -5,6 +5,7 @@ open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
+open Weave.Docs
 open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
@@ -16,19 +17,11 @@ module CardExamples =
         "Use Card.create to group related content on a bordered surface. Compose it with CardHeader, CardContent, and CardActions."
 
     let content =
-      div [
-        SurfaceColor.BackgroundColor.background
-        Padding.All.small
-        BorderRadius.All.small
-      ] [
+      div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [
         Card.create (
           Doc.Concat [
             CardHeader.create (text "Weekly summary", subtitle = text "Updated today")
-            CardContent.create (
-              div [ Typography.body1 ] [
-                text "Cards keep a visible edge so their bounds are clear without hover."
-              ]
-            )
+            CardContent.create (div [ Typography.body1 ] [ text "Cards show their bounds without hover." ])
             CardActions.create (
               Doc.Concat [
                 Button.create (text "Dismiss", (fun () -> ()), attrs = [ Button.Variant.text ])
@@ -40,74 +33,97 @@ module CardExamples =
       ]
 
     let code =
-      """open Weave
-
-Card.create(
-    Doc.Concat [
-        CardHeader.create(text "Weekly summary", subtitle = text "Updated today")
-        CardContent.create(
-            div [ Typography.body1 ] [ text "Cards keep a visible edge so their bounds are clear without hover." ]
+      """Card.create (
+  Doc.Concat [
+    CardHeader.create (text "Weekly summary", subtitle = text "Updated today")
+    CardContent.create (
+      div [ Typography.body1 ] [
+        text "Cards show their bounds without hover."
+      ]
+    )
+    CardActions.create (
+      Doc.Concat [
+        Button.create (
+          text "Dismiss",
+          (fun () -> ()),
+          attrs = [ Button.Variant.text ]
         )
-        CardActions.create(
-            Doc.Concat [
-                Button.create(text "Dismiss", (fun () -> ()), attrs = [ Button.Variant.text ])
-                Button.primary(text "Open", (fun () -> ()), attrs = [ Button.Variant.filled ])
-            ]
+        Button.primary (
+          text "Open",
+          (fun () -> ()),
+          attrs = [ Button.Variant.filled ]
         )
-    ]
+      ]
+    )
+  ]
 )"""
 
     Helpers.codeSampleSection "Basic Usage" description content code
 
-  let private variantExamples () =
-    let description =
-      Helpers.bodyText
-        "A card has a visible border by default. Card.Variant.elevated swaps the border for a shadow, and Card.Variant.filled uses a tinted surface instead."
+  let appearanceExample () =
+    let variant = Var.Create "Default"
+    let actions = Var.Create true
 
-    let card label variant =
-      GridItem.create (
-        Card.create (
-          Doc.Concat [
-            CardHeader.create (text label)
-            CardContent.create (div [ Typography.body2 ] [ text "Card content" ])
-          ],
-          attrs = [ variant ]
-        ),
-        attrs = [ GridItem.Span.twelve; GridItem.Span.Medium.four ]
-      )
+    let selected =
+      Var.Lens variant Some (fun current choice -> Option.defaultValue current choice)
 
-    let content =
-      div [
-        SurfaceColor.BackgroundColor.background
-        Padding.All.small
-        BorderRadius.All.small
-      ] [
-        Grid.create (
-          [
-            card "Default" Attr.Empty
-            card "Elevated" Card.Variant.elevated
-            card "Filled" Card.Variant.filled
-          ],
-          attrs = [ Grid.Spacing.small ]
+    let items =
+      GroupBAppearance.cardVariants
+      |> List.map (fun value -> SelectItem.create (text value, value, value))
+      |> View.Const
+
+    let controls =
+      div [ Attr.Class "docs-appearance__controls" ] [
+        Select.create (
+          items,
+          selected,
+          labelText = View.Const "Variant",
+          attrs = [
+            Select.Variant.outlined
+            Select.Label.above
+            Select.Width.full
+            Select.PopoverWidth.unbound
+            Select.Color.primary
+            Attr.Style "grid-column" "1 / -1"
+          ]
         )
       ]
 
-    let code =
-      """open Weave
+    let preview =
+      (variant.View, actions.View)
+      ||> View.Map2(fun current showActions ->
+        let attrs =
+          match current with
+          | "Elevated" -> [ Card.Variant.elevated ]
+          | "Filled" -> [ Card.Variant.filled ]
+          | _ -> []
 
-Card.create(CardContent.create(text "Default"))
+        Card.create (
+          Doc.Concat [
+            CardHeader.create (text "Weekly summary")
+            CardContent.create (text "Your week at a glance.")
+            if showActions then
+              CardActions.create (Button.primary (text "Open", onClick = ignore))
+          ],
+          attrs = attrs
+        ))
+      |> Doc.EmbedView
 
-Card.create(
-    CardContent.create(text "Elevated"),
-    attrs = [ Card.Variant.elevated ]
-)
+    let source = (variant.View, actions.View) ||> View.Map2 GroupBAppearance.cardSource
 
-Card.create(
-    CardContent.create(text "Filled"),
-    attrs = [ Card.Variant.filled ]
-)"""
+    let reset () =
+      Var.Set variant "Default"
+      Var.Set actions true
 
-    Helpers.codeSampleSection "Variants" description content code
+    Helpers.appearanceSection
+      [ "variants" ]
+      (Helpers.bodyText
+        "Choose a surface and optional actions. The default card has a border; Elevated uses a shadow and Filled uses a tinted surface.")
+      controls
+      (Some(Switch.create (actions, text "Actions")))
+      preview
+      reset
+      source
 
   let private headerActionsExample () =
     let description =
@@ -117,11 +133,7 @@ Card.create(
     let closed = Var.Create false
 
     let content =
-      div [
-        SurfaceColor.BackgroundColor.background
-        Padding.All.small
-        BorderRadius.All.small
-      ] [
+      div [ Attr.Style "max-inline-size" "32rem"; Attr.Style "margin-inline" "auto" ] [
         closed.View
         |> Doc.BindView(fun isClosed ->
           if isClosed then
@@ -137,7 +149,7 @@ Card.create(
                     IconButton.create (
                       Icon.create (Icon.UiActions UiActions.Close),
                       (fun () -> Var.Set closed true),
-                      attrs = [ Attr.Create "aria-label" "close card" ]
+                      attrs = [ Attr.Create "aria-label" "Close card" ]
                     )
                 )
                 CardContent.create (
@@ -148,27 +160,39 @@ Card.create(
       ]
 
     let code =
-      """open Weave
-open Weave.Icons.MaterialSymbols
+      """open Weave.Icons.MaterialSymbols
 
 let closed = Var.Create false
 
-Card.create(
-    Doc.Concat [
-        CardHeader.create(
-            h3 [] [ text "Client profile" ],
-            subtitle = text "Overview",
-            leading = Icon.create(Icon.UiActions UiActions.Home),
-            actions =
-                IconButton.create(
-                    Icon.create(Icon.UiActions UiActions.Close),
-                    (fun () -> Var.Set closed true),
-                    attrs = [ Attr.Create "aria-label" "close card" ]
-                )
+closed.View
+|> Doc.BindView(fun isClosed ->
+  if isClosed then
+    Button.info (
+      text "Reset",
+      onClick = (fun () -> Var.Set closed false),
+      attrs = [ Button.Variant.outlined ]
+    )
+  else
+    Card.create (
+      Doc.Concat [
+        CardHeader.create (
+          h3 [] [ text "Client profile" ],
+          subtitle = text "Overview",
+          leading = Icon.create (Icon.UiActions UiActions.Home),
+          actions =
+            IconButton.create (
+              Icon.create (Icon.UiActions UiActions.Close),
+              onClick = (fun () -> Var.Set closed true),
+              attrs = [ Attr.Create "aria-label" "Close card" ]
+            )
         )
-        CardContent.create(text "Click the close icon to dismiss this card.")
-    ]
-)"""
+        CardContent.create (
+          div [ Typography.body2 ] [
+            text "Click the close icon to dismiss this card."
+          ]
+        )
+      ]
+    ))"""
 
     Helpers.codeSampleSection "Header Content" description content code
 
@@ -180,21 +204,14 @@ Card.create(
     let opened = Var.Create 0
 
     let content =
-      div [
-        SurfaceColor.BackgroundColor.background
-        Padding.All.small
-        BorderRadius.All.small
-      ] [
+      div [ Attr.Style "max-inline-size" "20rem"; Attr.Style "margin-inline" "auto" ] [
         div [ Attr.Style "max-width" "320px" ] [
           Card.create (
             Doc.Concat [
               CardActionArea.create (
                 Doc.Concat [
                   CardMedia.create (
-                    div [
-                      Attr.Style "height" "120px"
-                      Attr.Style "background" "var(--palette-background-paper)"
-                    ] [],
+                    div [ Attr.Style "height" "120px"; SurfaceColor.BackgroundColor.paper ] [],
                     attrs = [ Attr.Create "aria-hidden" "true" ]
                   )
                   CardHeader.create (text "Weekly summary", subtitle = text "Updated today")
@@ -217,27 +234,42 @@ Card.create(
       ]
 
     let code =
-      """open Weave
+      """let opened = Var.Create 0
 
-let openSummary () = ()
-let share () = ()
-
-Card.create(
-    Doc.Concat [
-        CardActionArea.create(
-            Doc.Concat [
-                CardMedia.create(img [ attr.src "/summary.png"; attr.alt "" ] [], attrs = [ Attr.Style "height" "120px" ])
-                CardHeader.create(text "Weekly summary", subtitle = text "Updated today")
-                CardContent.create(text "Opens the summary")
-            ],
-            onClick = openSummary
+Card.create (
+  Doc.Concat [
+    CardActionArea.create (
+      Doc.Concat [
+        CardMedia.create (
+          div [
+            Attr.Style "height" "120px"
+            SurfaceColor.BackgroundColor.paper
+          ] [],
+          attrs = [ Attr.Create "aria-hidden" "true" ]
         )
-        CardActions.create(Button.create(text "Share", share, attrs = [ Button.Variant.text ]))
-    ]
-)
-
-// As a link
-CardActionArea.create(CardContent.create(text "Weekly summary"), href = "/summary")"""
+        CardHeader.create (
+          text "Weekly summary",
+          subtitle = text "Updated today"
+        )
+        CardContent.create (
+          div [ Typography.body2 ] [
+            text "Opened "
+            textView (opened.View |> View.Map string<int>)
+            text " times"
+          ]
+        )
+      ],
+      onClick = (fun () -> Var.Update opened ((+) 1))
+    )
+    CardActions.create (
+      Button.create (
+        text "Share",
+        onClick = ignore,
+        attrs = [ Button.Variant.text ]
+      )
+    )
+  ]
+)"""
 
     Helpers.codeSampleSection "Primary Action and Media" description content code
 
@@ -296,7 +328,7 @@ CardActionArea.create(CardContent.create(text "Weekly summary"), href = "/summar
         Helpers.divider ()
         basicExample ()
         Helpers.divider ()
-        variantExamples ()
+        appearanceExample ()
         Helpers.divider ()
         headerActionsExample ()
         Helpers.divider ()

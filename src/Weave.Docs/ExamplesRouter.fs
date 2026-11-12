@@ -7,7 +7,6 @@ open WebSharper.UI.Client
 open WebSharper.UI.Html
 
 open Weave
-open Weave.CssHelpers.Animation
 open Weave.Icons
 open Weave.Icons.MaterialSymbols
 open Weave.Docs.Examples.DocsRouting
@@ -21,312 +20,7 @@ module ExamplesRouter =
 
   let private renderPage (navigate: Page -> unit) page =
     match page with
-    | Home ->
-      div [] [
-        // Above-fold hero — full-bleed, no max-width cap
-        div [ Attr.Class "docs-home-above-fold docs-weave-pattern" ] [
-          div [ Attr.Class "docs-hero" ] [
-            div [ Attr.Class "docs-hero__content" ] [
-              div [ Attr.Class "docs-hero__brand" ] [
-                img [
-                  attr.src "assets/weave-logo.png"
-                  attr.alt "Weave Logo"
-                  Attr.Class "docs-hero__logo"
-                ] []
-                div [] [
-                  h1 [ Attr.Class "docs-hero__name" ] [ text "Weave" ]
-                  div [ Attr.Class "docs-hero__tagline" ] [ text "Threading Logic. Fabricating UI." ]
-                ]
-              ]
-              div [ Attr.Class "docs-hero__eyebrow" ] [ text "F#  ·  WEBSHARPER  ·  UI" ]
-              h2 [ Attr.Class "docs-hero__promise" ] [ text "From idea to interface, in F#." ]
-              p [ Attr.Class "docs-hero__intro" ] [
-                text "Bring your UI to life with reactive, reusable building blocks for WebSharper."
-              ]
-              div [ Attr.Class "docs-hero-cta" ] [
-                Button.create (
-                  div [ Flex.Inline.allSizes; AlignItems.center; Gap.All.g2 ] [
-                    text "Get Started"
-                    Icon.create (
-                      Icon.Social Social.RocketLaunch,
-                      attrs = [ Attr.Style "font-size" "18px"; Attr.Create "aria-hidden" "true" ]
-                    )
-                  ],
-                  onClick = (fun () -> navigate GettingStartedExamples),
-                  attrs = [ Button.Variant.outlined; Button.Color.primary ]
-                )
-
-                Button.create (
-                  text "Explore a showcase",
-                  onClick = (fun () -> navigate ShowcaseTaskTracker),
-                  attrs = [ Button.Variant.outlined ]
-                )
-              ]
-            ]
-            div [ Attr.Class "docs-hero__preview" ] [
-              div [ Attr.Class "docs-hero__preview-top" ] [
-                span [ Attr.Class "docs-hero__dots"; Attr.Create "aria-hidden" "true" ] [
-                  span [] []
-                  span [] []
-                  span [] []
-                ]
-                span [] [ text "A LITTLE WEAVE IN ACTION" ]
-              ]
-              div [ Attr.Class "docs-hero__preview-body" ] [
-                div [ Attr.Class "docs-hero__preview-label" ] [ text "LIVE EXAMPLE" ]
-                div [ Attr.Class "docs-hero__preview-title" ] [ text "Make it yours." ]
-                p [] [ text "A little state, a little style, and your interface comes to life." ]
-                let count = Var.Create 0
-
-                div [ Attr.Class "docs-hero__demo" ] [
-                  div [] [
-                    div [ Attr.Class "docs-hero__demo-caption" ] [ text "BUTTON CLICKS" ]
-                    div [ Attr.Class "docs-hero__demo-count" ] [ textView (count.View |> View.Map string) ]
-                  ]
-                  Button.primary (
-                    text "Click me",
-                    onClick = (fun () -> Var.Update count ((+) 1)),
-                    attrs = [ Button.Variant.filled ]
-                  )
-                ]
-
-                div [ Attr.Class "docs-hero__preview-foot" ] [
-                  text "REACTIVE STATE"
-                  span [] [ text "Var  →  View  →  UI" ]
-                ]
-              ]
-            ]
-          ]
-
-          // Scroll indicator
-          div [ Attr.Class "docs-scroll-indicator" ] [
-            div [
-              Typography.Color.textSecondary
-              Typography.overline
-              AnimationEmphasis.bounce
-              AnimationDuration.long
-              AnimationEasing.accelerate
-              Animate.replayEvery 2000
-            ] [ text "Scroll" ]
-            Icon.create (
-              Icon.Hardware Hardware.KeyboardArrowDown,
-              attrs = [
-                Typography.Color.textSecondary
-                AnimationEmphasis.bounce
-                AnimationDuration.long
-                AnimationEasing.accelerate
-                Animate.replayEvery 2000
-              ]
-            )
-          ]
-        ]
-
-        // Gradient divider — full-bleed
-        div [ Attr.Class "docs-section-divider" ] []
-
-        // Below-fold content — constrained for readability
-        Container.create (
-          div [] [
-
-            let categorySection (title: string) (items: (string * Page) list) =
-              div [
-                Margin.Bottom.medium
-                AnimationEntrance.fadeIn
-                AnimationDuration.medium
-                AnimationEasing.accelerate
-                Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
-              ] [
-                div [ Typography.h5; Margin.Bottom.small ] [ text title ]
-                Grid.create (
-                  items
-                  |> List.mapi (fun i (label, page) ->
-                    GridItem.create (
-                      div [
-                        Flex.Flex.allSizes
-                        FlexDirection.Column.allSizes
-                        SurfaceColor.BackgroundColor.surface
-                        Cursor.pointer
-                        Attr.Style "height" "100%"
-                        Overflow.hidden
-                        Attr.Style "box-sizing" "border-box"
-                        Attr.Class "docs-component-card"
-                        on.click (fun _ _ -> navigate page)
-                      ] [
-                        ComponentPreviews.forPage page
-                        div [
-                          Flex.Flex.allSizes
-                          JustifyContent.center
-                          AlignItems.center
-                          Padding.Horizontal.extraSmall
-                          Padding.Vertical.extraSmall
-                          FlexItem.Grow.allSizes
-                        ] [
-                          div [
-                            Typography.body2
-                            Typography.Align.center
-                            Attr.Class "docs-component-card__label"
-                          ] [ text label ]
-                        ]
-                      ],
-                      attrs = [
-                        GridItem.Span.six
-                        GridItem.Span.Small.four
-                        GridItem.Span.Medium.three
-                        Flex.Flex.allSizes
-                        FlexDirection.Column.allSizes
-                        AnimationEntrance.fadeIn
-                        AnimationDelay.stagger (min (i + 1) 10)
-                        Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
-                      ]
-                    )),
-                  attrs = [ AlignItems.stretch ]
-                )
-              ]
-
-            div [
-              Margin.Bottom.medium
-              AnimationEntrance.fadeIn
-              AnimationDuration.medium
-              AnimationEasing.accelerate
-              Animate.onScrollWith 0.1 "0px 0px -80px 0px" true
-            ] [
-              div [ Attr.Class "docs-why-weave-label" ] [ text "Why Weave" ]
-              div [ Attr.Class "docs-why-weave-heading" ] [ text "Write less. Express more." ]
-
-              Grid.create (
-                [
-                  "Guided by Types",
-                  Icon.Action Action.Verified,
-                  "F# types and Weave's typed helpers make intent clear and help catch mistakes as you build. Use native WebSharper attributes when you need more control."
-
-                  "Readable F#",
-                  Icon.Action Action.Code,
-                  "Express UI and behavior concisely in one language. Clear, composable code is easier for teammates and coding agents to navigate and extend."
-
-                  "Built-In Theming",
-                  Icon.Images Images.Palette,
-                  "Light and dark mode with CSS custom properties. One-line toggle, no config."
-
-                  "Built for WebSharper",
-                  Icon.Action Action.Extension,
-                  "Use WebSharper's reactive Var and View model alongside native Attr and Doc values to connect state and UI."
-
-                  "Composable Building Blocks",
-                  Icon.UiActions UiActions.Bolt,
-                  "Combine components, layouts, and styling helpers to build larger interfaces, with sensible defaults and customization through attributes."
-
-                  "Structured Styling",
-                  Icon.Maps Maps.Layers,
-                  "BEM + CSS custom properties. Themed by default, overridable by design."
-                ]
-                |> List.mapi (fun i (title, icon, desc) ->
-                  GridItem.create (
-                    div [
-                      SurfaceColor.BackgroundColor.surface
-                      Padding.All.small
-                      BorderRadius.All.large
-                      Attr.Class "docs-value-card docs-weave-pattern"
-                      Flex.Flex.allSizes
-                      FlexDirection.Column.allSizes
-                      Gap.All.g2
-                      Attr.Style "height" "100%"
-                      Attr.Style "box-sizing" "border-box"
-                    ] [
-                      Icon.create (
-                        icon,
-                        attrs = [ BrandColor.TextColor.primary; Attr.Style "font-size" "28px" ]
-                      )
-
-                      div [ Typography.h6 ] [ text title ]
-
-                      div [ Typography.body2; Attr.Style "opacity" "0.8" ] [ text desc ]
-                    ],
-                    attrs = [
-                      GridItem.Span.twelve
-                      GridItem.Span.Small.six
-                      GridItem.Span.Medium.four
-                      Flex.Flex.allSizes
-                      FlexDirection.Column.allSizes
-                      AnimationEntrance.fadeIn
-                      AnimationDelay.stagger (min (i + 1) 6)
-                      Animate.onScrollWith 0.1 "0px 0px -20px 0px" true
-                    ]
-                  )),
-                attrs = [ AlignItems.stretch ]
-              )
-            ]
-
-            // Components — scroll-reveal: fades in as user scrolls down
-            categorySection "Components" [
-              "Alert", AlertExamples
-              "App Bar", AppBarExamples
-              "Button", ButtonExamples
-              "Button Group", ButtonGroupExamples
-              "Button Menu", ButtonMenuExamples
-              "Card", CardExamples
-              "Carousel", CarouselExamples
-              "Checkbox", CheckboxExamples
-              "Chip", ChipExamples
-              "Chip Set", ChipSetExamples
-              "Color Picker", ColorPickerExamples
-              "Container", ContainerExamples
-              "Dialog", DialogExamples
-              "Divider", DividerExamples
-              "Drawer", DrawerExamples
-              "Dropdown Menu", DropdownMenuExamples
-              "Expansion Panel", ExpansionPanelExamples
-              "Forms & Validation", FormExamples
-              "Field", FieldExamples
-              "Grid", GridExamples
-              "Highlighter", HighlighterExamples
-              "Icons", IconsExamples
-              "Link", LinkExamples
-              "List", ListExamples
-              "Numeric Field", NumericFieldExamples
-              "Pagination", PaginationExamples
-              "Progress", ProgressExamples
-              "Radio Button", RadioButtonExamples
-              "Scroll to Top", ScrollToTopExamples
-              "Select", SelectExamples
-              "Slider", SliderExamples
-              "Snackbar", SnackbarExamples
-              "Spacer", SpacerExamples
-              "Switch", SwitchExamples
-              "Table", TableExamples
-              "Tabs", TabsExamples
-              "Text Field", TextFieldExamples
-              "Tooltip", TooltipExamples
-              "Typography", TypographyExamples
-            ]
-
-            // Styling — scroll-reveal: fades in as user scrolls further
-            categorySection "Styling" [
-              "Spacing", SpacingExamples
-              "Opacity", OpacityExamples
-              "Borders", BorderExamples
-              "Display", DisplayExamples
-              "Elevation", ElevationExamples
-              "Flexbox", FlexboxExamples
-              "Transitions", TransitionExamples
-              "Animations", AnimationExamples
-              "Theming", ThemingExamples
-            ]
-
-            categorySection "Utilities" [
-              "Reactive Helpers", ReactiveHelpersExamples
-              "Event Handlers", EventHandlersExamples
-            ]
-
-            categorySection "Showcases" [
-              "Task Tracker", ShowcaseTaskTracker
-              "Pomodoro Timer", ShowcasePomodoroTimer
-              "Expense Tracker", ShowcaseExpenseTracker
-              "Character Sheet", ShowcaseCharacterSheet
-            ]
-          ],
-          attrs = [ Container.MaxWidth.large ]
-        )
-      ]
+    | Home -> DocsHome.render ()
     | componentPage ->
       match componentPage with
       | GettingStartedExamples -> GettingStartedExamples.render ()
@@ -418,9 +112,26 @@ module ExamplesRouter =
       else
         false
 
+    let focusSection id =
+      let section = JS.Document.GetElementById id
+
+      if not (isNull section) then
+        let heading = section.QuerySelector "h1, h2"
+
+        if not (isNull heading) then
+          heading.SetAttribute("tabindex", "-1")
+          heading?focus ({| preventScroll = true |})
+
     let scrollToSectionAfterDelay (id: string) (ms: int) =
-      JS.Window?setTimeout(
-        (fun () -> mainEl.Value |> Option.iter (fun m -> scrollElementTo m id |> ignore)),
+      let requestedPage = (splitHashParts (getLocationHash ())).[0]
+
+      JS.Window.SetTimeout(
+        (fun () ->
+          let current = splitHashParts (getLocationHash ())
+
+          if current.Length = 2 && current.[0] = requestedPage && current.[1] = id then
+            mainEl.Value |> Option.iter (fun m -> scrollElementTo m id |> ignore)
+            focusSection id),
         ms
       )
       |> ignore
@@ -464,9 +175,20 @@ module ExamplesRouter =
         | Some id, Some m ->
           pendingSection <- None
           scrollElementTo m id |> ignore
+          focusSection id
           Var.Set activeSectionId id
           // Re-scroll after layout fully settles
-          JS.Window?setTimeout((fun () -> scrollElementTo m id |> ignore), 300) |> ignore
+          let requestedPage = selectedNav.Value
+
+          JS.Window.SetTimeout(
+            (fun () ->
+              let current = splitHashParts (getLocationHash ())
+
+              if selectedNav.Value = requestedPage && current.Length = 2 && current.[1] = id then
+                scrollElementTo m id |> ignore),
+            300
+          )
+          |> ignore
         | _ ->
           mainEl.Value
           |> Option.iter (fun m ->
@@ -480,7 +202,7 @@ module ExamplesRouter =
 
             Var.Set activeSectionId id)
       elif attempt < 20 then
-        JS.Window?setTimeout((fun () -> collectSectionsWithRetry (attempt + 1)), 100)
+        JS.Window.SetTimeout((fun () -> collectSectionsWithRetry (attempt + 1)), 100)
         |> ignore
 
     let scrollToSection (id: string) =
@@ -492,40 +214,50 @@ module ExamplesRouter =
       // Try immediately, then retry with polling for async WebSharper renders
       collectSectionsWithRetry 0
 
+    let sectionLinks page sections =
+      Doc.Concat [
+        for id, title in sections do
+          a [
+            attr.href (pageToHash page + "/" + id)
+            Attr.Class "docs-toc__item"
+            Attr.DynamicClassPred
+              "docs-toc__item--active"
+              (activeSectionId.View |> View.Map(fun active -> active = id))
+            Attr.DynamicPred
+              "aria-current"
+              (activeSectionId.View |> View.Map(fun active -> active = id))
+              (View.Const "location")
+          ] [ text title ]
+      ]
+
     let tableOfContents =
       currentPageView
       |> Doc.BindView(fun page ->
-        match page with
-        | Home -> Doc.Empty
-        | _ ->
-          div [ Attr.Class "docs-toc" ] [
-            div [ Typography.subtitle2; Attr.Class "docs-toc__title" ] [ text "Contents" ]
+        if page = Home then
+          Doc.Empty
+        else
+          nav [ Attr.Class "docs-toc"; Attr.Create "aria-label" "On this page" ] [
+            div [ Typography.subtitle2; Attr.Class "docs-toc__title" ] [ text "On this page" ]
+            tocSections.View |> Doc.BindView(sectionLinks page)
+          ])
 
-            tocSections.View
-            |> Doc.BindView(fun sections ->
-              Doc.Concat [
-                for id, title in sections do
-                  button [
-                    attr.``type`` "button"
-                    Attr.Class "docs-toc__item"
+    let pageQuickNavigation page =
+      if page = Home then
+        Doc.Empty
+      else
+        tocSections.View
+        |> Doc.BindView(fun sections ->
+          let examples =
+            sections
+            |> Array.tryFind (fun (_, title) -> title <> pageToString page && title <> "API")
 
-                    Attr.DynamicClassPred
-                      "docs-toc__item--active"
-                      (activeSectionId.View |> View.Map(fun a -> a = id))
-
-                    on.click (fun _ _ ->
-                      scrollToSection id
-                      Var.Set activeSectionId id
-
-                      let pageHash =
-                        selectedNav.Value
-                        |> Option.bind stringToPage
-                        |> Option.map pageToHash
-                        |> Option.defaultValue "#home"
-
-                      replaceStateHash (pageHash + "/" + id))
-                  ] [ div [ Typography.body2 ] [ text title ] ]
-              ])
+          nav [ Attr.Class "docs-page-quicknav"; Attr.Create "aria-label" "Page shortcuts" ] [
+            match examples with
+            | Some(id, _) -> a [ attr.href (pageToHash page + "/" + id) ] [ text "Examples" ]
+            | None -> ()
+            if sections |> Array.exists (fun (id, _) -> id = "api") then
+              a [ attr.href (pageToHash page + "/api") ] [ text "API reference" ]
+            details [] [ summary [] [ text "All sections" ]; div [] [ sectionLinks page sections ] ]
           ])
 
     let mutable suppressScrollToTop = initialSection.IsSome
@@ -552,17 +284,11 @@ module ExamplesRouter =
         let isPageChange = pageToString page <> currentName
 
         if isPageChange then
+          // Set the destination before the new page can render synchronously.
+          pendingSection <- sectionPart
           Var.Set selectedNav (Some(pageToString page))
-
-        // If the page changed, the new content renders async — defer the scroll
-        // until collectSectionsWithRetry finds the new sections in the DOM.
-        // If we're already on the page, the element is present so a short delay is fine.
-        sectionPart
-        |> Option.iter (fun id ->
-          if isPageChange then
-            pendingSection <- Some id
-          else
-            scrollToSectionAfterDelay id 50)
+        else
+          sectionPart |> Option.iter (fun id -> scrollToSectionAfterDelay id 0)
       | None ->
         // Bare section slug from an in-page anchor link (e.g. href="#variants")
         // Rewrite the history entry to the combined "#page/section" format
@@ -577,14 +303,57 @@ module ExamplesRouter =
         replaceStateHash (pageHash + "/" + sectionSlug)
         scrollToSectionAfterDelay sectionSlug 0)
 
-    let componentsExpanded = Var.Create false
-    let stylingExpanded = Var.Create false
-    let utilitiesExpanded = Var.Create false
-    let showcasesExpanded = Var.Create false
+    let labelsForGroup title =
+      DocsHome.catalog
+      |> List.find (fun (name, _) -> name = title)
+      |> snd
+      |> List.map pageToString
+
+    let componentsLabels = labelsForGroup "Components"
+    let stylingLabels = labelsForGroup "Styling"
+    let utilitiesLabels = labelsForGroup "Utilities"
+    let showcasesLabels = labelsForGroup "Showcases"
+
+    let componentsExpanded =
+      Var.Create(List.contains (pageToString initialPage) componentsLabels)
+
+    let stylingExpanded =
+      Var.Create(List.contains (pageToString initialPage) stylingLabels)
+
+    let utilitiesExpanded =
+      Var.Create(List.contains (pageToString initialPage) utilitiesLabels)
+
+    let showcasesExpanded =
+      Var.Create(List.contains (pageToString initialPage) showcasesLabels)
+
+    let groupEffects =
+      selectedNav.View
+      |> Doc.sink (fun selected ->
+        match selected with
+        | Some label ->
+          for labels, expanded in
+            [
+              componentsLabels, componentsExpanded
+              stylingLabels, stylingExpanded
+              utilitiesLabels, utilitiesExpanded
+              showcasesLabels, showcasesExpanded
+            ] do
+            if List.contains label labels then
+              Var.Set expanded true
+        | None -> ())
+
+    let matches (query: string) (label: string) =
+      let aliases =
+        label |> stringToPage |> Option.map pageSearchAliases |> Option.defaultValue ""
+
+      let terms = (label + " " + aliases).ToLower()
+
+      query.Trim().ToLower().Split([| ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
+      |> Array.forall terms.Contains
 
     let navLeafItem (label: string) =
-      button [
-        attr.``type`` "button"
+      a [
+        attr.href (label |> stringToPage |> Option.map pageToHash |> Option.defaultValue "#home")
         Flex.Flex.allSizes
         AlignItems.center
         Padding.Vertical.extraSmall
@@ -596,21 +365,13 @@ module ExamplesRouter =
         Attr.DynamicStyle
           "display"
           (navSearch.View
-           |> View.Map(fun query ->
-             if label.ToLower().Contains(query.Trim().ToLower()) then
-               ""
-             else
-               "none"))
+           |> View.Map(fun query -> if matches query label then "" else "none"))
         Attr.DynamicClassPred "weave-nav-item--active" (selectedNav.View |> View.Map(fun s -> s = Some label))
         Attr.DynamicPred
           "aria-current"
           (selectedNav.View |> View.Map(fun s -> s = Some label))
           (View.Const "page")
-        on.click (fun _ _ -> stringToPage label |> Option.iter navigateTo)
       ] [ span [ Typography.body2 ] [ text label ] ]
-
-    let matches (query: string) (label: string) =
-      label.ToLower().Contains(query.Trim().ToLower())
 
     let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) (labels: string list) =
       navSearch.View
@@ -637,7 +398,8 @@ module ExamplesRouter =
                 Attr.Class "weave-nav-group-header"
                 Attr.DynamicCustom
                   (fun el v -> el.SetAttribute("aria-expanded", v))
-                  (isExpanded.View |> View.Map string)
+                  (isExpanded.View
+                   |> View.Map(fun expanded -> if expanded then "true" else "false"))
                 on.click (fun _ _ -> Var.Update isExpanded not)
               ] [
                 Icon.create (
@@ -670,73 +432,20 @@ module ExamplesRouter =
                   Doc.Empty)
           ])
 
-    let componentsLabels = [
-      "Alert"
-      "App Bar"
-      "Button"
-      "Button Group"
-      "Button Menu"
-      "Card"
-      "Carousel"
-      "Checkbox"
-      "Chip"
-      "Chip Set"
-      "Color Picker"
-      "Container"
-      "Dialog"
-      "Divider"
-      "Drawer"
-      "Dropdown Menu"
-      "Expansion Panel"
-      "Field"
-      "Forms & Validation"
-      "Grid"
-      "Highlighter"
-      "Icons"
-      "Link"
-      "List"
-      "Numeric Field"
-      "Pagination"
-      "Progress"
-      "Radio Button"
-      "Scroll to Top"
-      "Select"
-      "Slider"
-      "Snackbar"
-      "Spacer"
-      "Switch"
-      "Table"
-      "Tabs"
-      "Text Field"
-      "Tooltip"
-      "Typography"
-    ]
-
-    let stylingLabels = [
-      "Spacing"
-      "Opacity"
-      "Borders"
-      "Display"
-      "Elevation"
-      "Flexbox"
-      "Transitions"
-      "Animations"
-      "Theming"
-    ]
-
-    let utilitiesLabels = [ "Reactive Helpers"; "Event Handlers" ]
-    let showcasesLabels = [ "Task Tracker"; "Pomodoro Timer"; "Expense Tracker"; "Character Sheet" ]
-
     let allNavLabels =
-      componentsLabels @ stylingLabels @ utilitiesLabels @ showcasesLabels
+      [ "Home"; "Getting Started" ]
+      @ componentsLabels
+      @ stylingLabels
+      @ utilitiesLabels
+      @ showcasesLabels
 
     let navList =
       div [ Padding.Vertical.extraSmall ] [
         div [ Attr.Class "docs-nav-search" ] [
           TextField.singleLine (
             navSearch,
-            labelText = View.Const "Find a component",
-            placeholder = View.Const "Search components",
+            labelText = View.Const "Find a page",
+            placeholder = View.Const "Search documentation",
             endAdornment =
               (navSearch.View
                |> Doc.BindView(fun query ->
@@ -749,15 +458,15 @@ module ExamplesRouter =
                      attrs = [
                        Button.Variant.text
                        Attr.Class "docs-nav-search__clear"
-                       Attr.Create "aria-label" "Clear component search"
+                       Attr.Create "aria-label" "Clear documentation search"
                      ]
                    ))),
             attrs = [ TextField.Variant.outlined; TextField.Label.above; TextField.Width.full ]
           )
         ]
         nav [ Attr.Create "aria-label" "Documentation navigation" ] [
-          button [
-            attr.``type`` "button"
+          a [
+            attr.href "#home"
             Flex.Flex.allSizes
             AlignItems.center
             Padding.Vertical.extraSmall
@@ -774,7 +483,6 @@ module ExamplesRouter =
               "aria-current"
               (selectedNav.View |> View.Map(fun s -> s = Some "Home"))
               (View.Const "page")
-            on.click (fun _ _ -> navigateTo Home)
           ] [
             Icon.create (
               Icon.UiActions UiActions.Home,
@@ -783,8 +491,8 @@ module ExamplesRouter =
             span [ Typography.body2 ] [ text "Home" ]
           ]
 
-          button [
-            attr.``type`` "button"
+          a [
+            attr.href "#getting-started"
             Flex.Flex.allSizes
             AlignItems.center
             Padding.Vertical.extraSmall
@@ -801,7 +509,6 @@ module ExamplesRouter =
               "aria-current"
               (selectedNav.View |> View.Map(fun s -> s = Some "Getting Started"))
               (View.Const "page")
-            on.click (fun _ _ -> navigateTo GettingStartedExamples)
           ] [
             Icon.create (
               Icon.Social Social.RocketLaunch,
@@ -843,22 +550,28 @@ module ExamplesRouter =
         IconButton.create (
           Icon.create (Icon.UiActions UiActions.Menu),
           onClick = (fun () -> Var.Set drawerOpen (not drawerOpen.Value)),
-          attrs = [ Margin.Right.extraSmall; Attr.Create "aria-label" "Toggle navigation" ]
+          attrs = [
+            Margin.Right.extraSmall
+            Attr.Create "aria-label" "Toggle navigation"
+            Attr.Create "aria-controls" "docs-navigation"
+            Attr.Dynamic
+              "aria-expanded"
+              (drawerOpen.View
+               |> View.Map(fun expanded -> if expanded then "true" else "false"))
+          ]
         )
 
-        div [
-          Flex.Flex.allSizes
-          AlignItems.center
-          Gap.All.g2
-          Cursor.pointer
-          on.click (fun _ _ -> navigateTo Home)
-        ] [ div [ Typography.h6 ] [ text "Weave" ] ]
+        a [ attr.href (pageToHash Home); Attr.Class "docs-brand-link" ] [
+          span [ Typography.h6 ] [ text "Weave" ]
+        ]
 
         Spacer.create ()
 
         a [
           attr.href "https://github.com/1eyewonder/Weave"
           attr.target "_blank"
+          Attr.Create "aria-label" "Weave on GitHub (opens in a new tab)"
+          attr.rel "noopener noreferrer"
           Attr.Style "color" "inherit"
           Flex.Flex.allSizes
           AlignItems.center
@@ -866,39 +579,87 @@ module ExamplesRouter =
         ] [ githubSvg () ]
 
         IconButton.create (
-          Theme.current.View
-          |> Doc.BindView(fun mode ->
-            match mode with
-            | Theming.Light -> Icon.create (Icon.Android Android.DarkMode)
-            | Theming.Dark -> Icon.create (Icon.Android Android.LightMode)),
-          onClick =
-            (fun () ->
-              let newMode = Theming.toggleMode ()
-              Var.Set Theme.current newMode),
+          Doc.Concat [
+            span [
+              Attr.Class "docs-theme-icon docs-theme-icon--light"
+              Attr.Create "aria-hidden" "true"
+            ] [ Icon.create (Icon.Android Android.DarkMode) ]
+            span [
+              Attr.Class "docs-theme-icon docs-theme-icon--dark"
+              Attr.Create "aria-hidden" "true"
+            ] [ Icon.create (Icon.Android Android.LightMode) ]
+          ],
+          onClick = Weave.Docs.DocsTheme.toggle,
           attrs = [ Attr.Create "aria-label" "Toggle light and dark theme" ]
         )
       ]
 
+    let initializeMain el =
+      Var.Set mainEl (Some el)
+      suppressScrollToTop <- false
+      // Children can render before their scrolling container is mounted.
+      refreshTocSections ()
+
     div [
       Attr.Style "height" "100vh"
-      Overflow.hidden
+      Attr.Style "overflow" "clip"
       Flex.Flex.allSizes
       FlexDirection.Column.allSizes
       SurfaceColor.BackgroundColor.background
     ] [
+      a [
+        attr.href "#docs-main"
+        Attr.Class "docs-skip-link"
+        on.click (fun _ ev ->
+          ev.PreventDefault()
+          mainEl.Value |> Option.iter (fun el -> el?focus ()))
+      ] [ text "Skip to content" ]
       navEffects
+      groupEffects
 
       AppBar.create (appBarContent, attrs = [ Attr.Class "docs-appbar" ])
 
       DrawerContainer.create (
         mainContent =
           div [
+            attr.id "docs-main"
+            Attr.Create "role" "main"
+            attr.tabindex "-1"
             cl "weave-main-content"
             Attr.Class "docs-main-content"
             Overflow.yAuto
-            Attr.Style "scroll-behavior" "smooth"
             Attr.Style "height" "100%"
-            on.afterRender (fun el -> Var.Set mainEl (Some el))
+            on.afterRender initializeMain
+            on.click (fun _ ev ->
+              if
+                not ev.DefaultPrevented
+                && ev.Button = 0
+                && not (ev.CtrlKey || ev.MetaKey || ev.ShiftKey || ev.AltKey)
+              then
+                let target = As<Dom.Element> ev.Target
+                let link = As<Dom.Element>(target?closest ("a[href]"))
+
+                if
+                  not (isNull link)
+                  && not (link.HasAttribute "target")
+                  && not (link.HasAttribute "download")
+                then
+                  let href = link.GetAttribute "href"
+
+                  if href.StartsWith "#" then
+                    let destination = splitHashParts href
+                    let current = splitHashParts (getLocationHash ())
+
+                    // Native same-hash links do not fire hashchange. They still
+                    // need to move and focus their section after manual scrolling.
+                    if
+                      destination.Length = 2
+                      && current.Length = 2
+                      && destination.[0] = current.[0]
+                      && destination.[1] = current.[1]
+                    then
+                      ev.PreventDefault()
+                      scrollToSectionAfterDelay destination.[1] 0)
             ScrollListener.trackSections ".section-header[id]" 80.0 (fun sectionId ->
               Var.Set activeSectionId sectionId
 
@@ -925,7 +686,17 @@ module ExamplesRouter =
               ] [
                 currentPageView
                 |> Doc.BindView(fun page ->
-                  div [ on.afterRender (fun _ -> refreshTocSections ()) ] [ renderPage navigateTo page ])
+                  div [
+                    on.afterRender (fun el ->
+                      JS.Document.Title <- pageToString page + " — Weave Docs"
+                      let heading = el.QuerySelector "h1"
+
+                      if not (isNull heading) then
+                        heading.SetAttribute("tabindex", "-1")
+                        heading?focus ({| preventScroll = true |})
+
+                      refreshTocSections ())
+                  ] [ pageQuickNavigation page; renderPage navigateTo page ])
               ]
 
               tableOfContents
@@ -940,7 +711,11 @@ module ExamplesRouter =
             breakpoint = Drawer.DrawerBreakpoint.At Breakpoint.Medium,
             overlayClose = (fun () -> Var.Set drawerOpen false),
             isFixed = false,
-            attrs = [ Overflow.yAuto; Attr.Class "docs-navigation-drawer" ]
+            attrs = [
+              attr.id "docs-navigation"
+              Overflow.yAuto
+              Attr.Class "docs-navigation-drawer"
+            ]
           ),
         attrs = [
           FlexItem.Flex.allSizes

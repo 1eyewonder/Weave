@@ -4,6 +4,7 @@
   "private": true,
   "packageManager": "yarn@4.5.3",
   "scripts": {
+    "test:docs:snippets": "dotnet fsi tests/Weave.Docs.Snippets/check.fsx",
     "test:docs:highlighting": "yarn build:docs:highlighting && node --test tests/Weave.Docs.Highlighting/highlighting.test.mjs",
     "build:docs:highlighting": "node src/Weave.Docs/build-highlighting.mjs",
     "build:css": "yarn sass src/Weave/scss/main.scss:src/Weave/styles.css --no-source-map",

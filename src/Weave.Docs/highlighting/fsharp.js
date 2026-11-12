@@ -11,7 +11,7 @@ import * as regex from './regex.js';
 /** @type LanguageFn */
 // Weave: and!, number ranges, record annotation boundaries, identifier scopes.
 // This remains lexical highlighting; see README.md for scope and limitations.
-export default function(hljs) {
+export default function(hljs, { typeSignature = false } = {}) {
   const KEYWORDS = [
     "abstract",
     "and",
@@ -287,8 +287,32 @@ export default function(hljs) {
   // This variant is used when matching '=' should end a parent mode:
   const OPERATOR_WITHOUT_EQUAL = makeOperatorMode({ includeEqual: false });
 
+  // Capitalization cannot distinguish modules, types and union cases.
+  const UPPER_IDENTIFIER = {
+    scope: 'title.class',
+    match: /\b[A-Z][\w']*/,
+    relevance: 0
+  };
+
+  // Code annotations and standalone API signatures share the same token rules.
+  const TYPE_SIGNATURE = {
+    keywords: hljs.inherit(ALL_KEYWORDS, { type: KNOWN_TYPES }),
+    contains: [
+      COMMENT,
+      GENERIC_TYPE_SYMBOL,
+      hljs.inherit(QUOTED_IDENTIFIER, { scope: null }),
+      UPPER_IDENTIFIER,
+      OPERATOR_WITHOUT_EQUAL
+    ]
+  };
+
+  if (typeSignature) {
+    return { name: 'F# type signature', ...TYPE_SIGNATURE };
+  }
+
   const makeTypeAnnotationMode = function(prefix, prefixScope) {
     return {
+      ...TYPE_SIGNATURE,
       begin: regex.concat( // a type annotation is a
         prefix,            // should be a colon or the 'of' keyword
         regex.lookahead(   // that has to be followed by
@@ -315,15 +339,7 @@ export default function(hljs) {
         regex.either(
           /[;}\n]/,
           /=/)),
-      relevance: 0,
-      // we need the known types, and we need the type constraint keywords and literals. e.g.: when 'a : null
-      keywords: hljs.inherit(ALL_KEYWORDS, { type: KNOWN_TYPES }),
-      contains: [
-        COMMENT,
-        GENERIC_TYPE_SYMBOL,
-        hljs.inherit(QUOTED_IDENTIFIER, { scope: null }), // match to avoid strange patterns inside that may break the parsing
-        OPERATOR_WITHOUT_EQUAL
-      ]
+      relevance: 0
     };
   }
 
@@ -480,12 +496,6 @@ export default function(hljs) {
       ),
       /'/
     )
-  };
-  // Capitalization cannot distinguish modules, types and union cases.
-  const UPPER_IDENTIFIER = {
-    scope: 'title.class',
-    match: /\b[A-Z][\w']*/,
-    relevance: 0
   };
   // A dotted lowercase name is usually a function in the docs' fluent API.
   const MEMBER = {

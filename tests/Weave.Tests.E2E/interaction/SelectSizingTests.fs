@@ -315,3 +315,118 @@ type SelectSizingTests(fixture: TestFixture) =
 
       ()
   }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``select configurator demonstrates unbound dynamic width and records selection``(width: int) =
+    task {
+      do! this.Page.SetViewportSizeAsync(width, 900)
+      do! this.NavigatePage(this.Page, "docs-select")
+
+      let section = this.Page.Locator("[id='width-&-popover-width']")
+      do! this.Expect(section).ToHaveCountAsync(1)
+      do! this.Expect(section.GetByRole(AriaRole.Heading)).ToContainTextAsync("Appearance")
+      let settings = this.Page.Locator(".docs-appearance__settings")
+      let preview = this.Page.Locator(".docs-appearance__preview")
+
+      do!
+        settings
+          .GetByRole(AriaRole.Combobox, LocatorGetByRoleOptions(Name = "Width", Exact = true))
+          .ClickAsync()
+
+      do!
+        this.Page
+          .GetByRole(AriaRole.Option, PageGetByRoleOptions(Name = "Dynamic", Exact = true))
+          .ClickAsync()
+
+      do! settings.GetByRole(AriaRole.Switch, LocatorGetByRoleOptions(Name = "Unbound menu")).ClickAsync()
+
+      let trigger =
+        preview.GetByRole(AriaRole.Combobox, LocatorGetByRoleOptions(Name = "Fruit"))
+
+      do! trigger.ClickAsync()
+      let menu = preview.Locator(".weave-select__popover")
+      do! this.Expect(menu).ToBeVisibleAsync()
+      do! this.Settle()
+
+      let longOption =
+        menu.GetByRole(
+          AriaRole.Option,
+          LocatorGetByRoleOptions(Name = "Passion fruit from the southern orchard", Exact = true)
+        )
+
+      do! this.Expect(longOption).ToBeVisibleAsync()
+      let! triggerBounds = trigger.BoundingBoxAsync()
+      and! menuBounds = menu.BoundingBoxAsync()
+
+      Assert.True(
+        menuBounds.Width > triggerBounds.Width + 20.0f,
+        "Unbound menu should be wider than its dynamic trigger"
+      )
+
+      do! this.AssertInside(menu)
+
+      let! labelFits =
+        longOption.EvaluateAsync<bool>(
+          "el => { const item = el.querySelector('.weave-select__item-content'); return item.scrollWidth <= item.clientWidth + 1; }"
+        )
+
+      Assert.True(labelFits, "The long option should wrap instead of clipping")
+      do! longOption.ClickAsync()
+
+      do!
+        this.Page
+          .Locator(".docs-appearance")
+          .Locator("..")
+          .GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Show Code", Exact = true))
+          .ClickAsync()
+
+      let source =
+        this.Page.Locator("pre[aria-label='Selected appearance F# source code'] code")
+
+      do! this.Expect(source).ToContainTextAsync("Select.Width.dynamic")
+      do! this.Expect(source).ToContainTextAsync("Select.PopoverWidth.unbound")
+
+      do!
+        this
+          .Expect(source)
+          .ToContainTextAsync("Var.Create<string option> (Some \"Passion fruit from the southern orchard\")")
+    }
+
+  [<Theory>]
+  [<InlineData("button-appearance", 320)>]
+  [<InlineData("button-appearance", 1280)>]
+  [<InlineData("text-field-appearance", 320)>]
+  [<InlineData("text-field-appearance", 1280)>]
+  [<InlineData("tabs-appearance", 320)>]
+  [<InlineData("tabs-appearance", 1280)>]
+  member this.``pilot setting menus expose readable options without leaving the viewport``
+    (route: string, width: int)
+    = task {
+    do! this.Page.SetViewportSizeAsync(width, 900)
+    do! this.NavigatePage(this.Page, route)
+
+    let! _ =
+      this.Page.WaitForFunctionAsync(
+        "() => ['appearance-docs-style', 'appearance-highlighting-style'].every(id => document.getElementById(id)?.sheet)"
+      )
+
+    let roots = this.Page.Locator(".docs-appearance__controls .weave-select")
+    let! count = roots.CountAsync()
+    Assert.True(count > 0, "The pilot should have appearance selectors")
+
+    for index in 0 .. count - 1 do
+      let root = roots.Nth(index)
+      do! this.Open(root)
+      let menu = root.Locator(".weave-select__popover")
+      do! this.AssertInside(menu)
+
+      let! labelsFit =
+        menu.EvaluateAsync<bool>(
+          "el => [...el.querySelectorAll('.weave-select__item-content')].every(item => item.scrollWidth <= item.clientWidth + 1)"
+        )
+
+      Assert.True(labelsFit, "Every configurator option must be fully available")
+      do! root.GetByRole(AriaRole.Combobox).PressAsync("Escape")
+  }

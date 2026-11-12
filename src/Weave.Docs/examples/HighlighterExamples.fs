@@ -2,6 +2,7 @@ namespace Weave.Docs.Examples
 
 open WebSharper
 open WebSharper.UI
+open WebSharper.UI.Client
 open WebSharper.UI.Html
 open Weave
 
@@ -36,14 +37,10 @@ module HighlighterExamples =
       (Helpers.bodyText
         "Compose a highlighter with lists, table cells, links, or typography. Text and search terms are Views; matching updates as they change. Matching ignores case by default.")
       content
-      """open WebSharper.UI
-open WebSharper.UI.Html
-open Weave
-
-let search = Var.Create "item"
+      """let search = Var.Create "item"
 let sensitive = Var.Create false
 
-div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
+Doc.Concat [
   TextField.singleLine (search, labelText = View.Const "Search text")
   Switch.create (sensitive, content = text "Case sensitive")
   WeaveList.create (
@@ -55,18 +52,24 @@ div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
           "Another item in the list"
         ] do
         ListItem.create (
-          Highlighter.create (View.Const sentence, search.View, caseSensitive = sensitive.View)
+          Highlighter.create (
+            View.Const sentence,
+            search.View,
+            caseSensitive = sensitive.View
+          )
         )
     ]
   )
-]"""
+]
+"""
 
   let private multipleExample () =
     let search = Var.Create "Weave, F#"
 
-    let terms =
-      search.View
-      |> View.Map(fun value -> value.Split(',') |> Array.map (fun s -> s.Trim()) |> Array.toList)
+    let parseTerms (value: string) =
+      value.Split(',') |> Array.map (fun term -> term.Trim()) |> Array.toList
+
+    let terms = search.View |> View.Map parseTerms
 
     let content =
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
@@ -81,75 +84,27 @@ div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
       (Helpers.bodyText
         "Use createMany for several terms. Empty terms are ignored. Matches proceed left to right without overlapping; at the same start position, the longest term wins. Punctuation such as F# or C++ is literal. This demo splits on commas and trims each term; createMany itself accepts the supplied strings unchanged, including commas and spaces.")
       content
-      """open WebSharper.UI
-open WebSharper.UI.Html
-open Weave
+      """let search = Var.Create "Weave, F#"
 
-let search = Var.Create "Weave, F#"
+let parseTerms (value: string) =
+  value.Split(',') |> Array.map (fun term -> term.Trim()) |> Array.toList
 
-let terms =
-  search.View
-  |> View.Map(fun value -> value.Split(',') |> Array.map (fun s -> s.Trim()) |> Array.toList)
+let terms = search.View |> View.Map parseTerms
 
-div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
-  TextField.singleLine (search, labelText = View.Const "Terms separated by commas")
+Doc.Concat [
+  TextField.singleLine (
+    search,
+    labelText = View.Const "Terms separated by commas"
+  )
+
   p [ Typography.body1 ] [
-    Highlighter.createMany (View.Const "Weave helps you build reactive interfaces in F#.", terms)
+    Highlighter.createMany (
+      View.Const "Weave helps you build reactive interfaces in F#.",
+      terms
+    )
   ]
-]"""
-
-  let private appearanceExample () =
-    let content =
-      div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
-        for label, color in
-          [
-            "Warning (default)", Highlighter.Color.warning
-            "Primary", Highlighter.Color.primary
-            "Secondary", Highlighter.Color.secondary
-            "Tertiary", Highlighter.Color.tertiary
-            "Success", Highlighter.Color.success
-            "Error", Highlighter.Color.error
-            "Info", Highlighter.Color.info
-          ] do
-          p [ Typography.body1 ] [
-            Highlighter.create (
-              View.Const(label + ": Find this match."),
-              View.Const "match",
-              attrs = [ color ]
-            )
-          ]
-        Highlighter.create (View.Const "<b>This stays plain text.</b>", View.Const "plain")
-      ]
-
-    Helpers.codeSampleSection
-      "Appearance and Plain Text"
-      (Helpers.bodyText
-        "The inline wrapper inherits typography. Color attributes style the marks using paired theme colors in light and dark mode. Override --weave-highlighter-background and --weave-highlighter-color via attrs for custom styles. Content is always plain text, including HTML-looking strings.")
-      content
-      """open WebSharper.UI
-open WebSharper.UI.Html
-open Weave
-
-div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
-  for label, color in
-    [
-      "Warning (default)", Highlighter.Color.warning
-      "Primary", Highlighter.Color.primary
-      "Secondary", Highlighter.Color.secondary
-      "Tertiary", Highlighter.Color.tertiary
-      "Success", Highlighter.Color.success
-      "Error", Highlighter.Color.error
-      "Info", Highlighter.Color.info
-    ] do
-    p [ Typography.body1 ] [
-      Highlighter.create (
-        View.Const(label + ": Find this match."),
-        View.Const "match",
-        attrs = [ color ]
-      )
-    ]
-  Highlighter.create (View.Const "<b>This stays plain text.</b>", View.Const "plain")
-]"""
+]
+"""
 
   let private matchingBehavior () =
     Helpers.sectionPlain
@@ -233,7 +188,7 @@ div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g3 ] [
         Helpers.divider ()
         multipleExample ()
         Helpers.divider ()
-        appearanceExample ()
+        DataAppearance.highlighter ()
         Helpers.divider ()
         matchingBehavior ()
         Helpers.divider ()

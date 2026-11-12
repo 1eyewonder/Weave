@@ -1,0 +1,12 @@
+name: Load test image
+description: Download the test image artifact for this workflow run and load it into Docker
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v8
+      with:
+        name: test-image.tar.gz
+
+    - name: Load test image
+      shell: bash
+      run: docker image load --input test-image.tar.gz

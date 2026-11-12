@@ -77,38 +77,7 @@ jobs:
         with:
           ref: ${{ needs.validate.outputs.tag }}
 
-      - name: Restore test image cache
-        id: test-image-cache
-        uses: actions/cache@v5
-        with:
-          path: test-image.tar.gz
-          # Bump the v1 prefix when intentionally refreshing upstream tool versions.
-          key: weave-test-image-v1-${{ hashFiles('Dockerfile.tests', 'package.json') }}
-
-      - uses: docker/setup-buildx-action@v4
-        if: steps.test-image-cache.outputs.cache-hit != 'true'
-
-      - name: Build test image
-        if: steps.test-image-cache.outputs.cache-hit != 'true'
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: Dockerfile.tests
-          load: true
-          tags: weave-playwright-tests:ci
-          cache-from: type=gha,scope=weave-test-image
-          cache-to: type=gha,scope=weave-test-image,mode=max,ignore-error=true
-
-      - name: Save test image
-        if: steps.test-image-cache.outputs.cache-hit != 'true'
-        run: docker image save weave-playwright-tests:ci | gzip -1 > test-image.tar.gz
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: test-image
-          path: test-image.tar.gz
-          archive: false
-          retention-days: 1
+      - uses: ./.github/actions/build-test-image
 
   non-browser-tests:
     runs-on: ubuntu-latest
@@ -117,11 +86,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.validate.outputs.tag }}
-      - uses: actions/download-artifact@v8
-        with:
-          name: test-image.tar.gz
-      - name: Load test image
-        run: docker image load --input test-image.tar.gz
+      - uses: ./.github/actions/load-test-image
       - name: Check format and run unit and rendering tests
         run: |
           docker compose run --rm playwright-tests sh -c "./build.sh CheckFormat"
@@ -138,11 +103,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.validate.outputs.tag }}
-      - uses: actions/download-artifact@v8
-        with:
-          name: test-image.tar.gz
-      - name: Load test image
-        run: docker image load --input test-image.tar.gz
+      - uses: ./.github/actions/load-test-image
       - run: docker compose run --rm -e WEAVE_E2E_BROWSER=${{ matrix.browser }} playwright-tests sh -c "./build.sh RunBrowserTests"
 
   publish:

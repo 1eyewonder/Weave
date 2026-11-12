@@ -1,0 +1,38 @@
+name: Build and cache test image
+description: Reuse or build the test image, then publish it as an artifact for this workflow run
+runs:
+  using: composite
+  steps:
+    - name: Restore test image cache
+      id: test-image-cache
+      uses: actions/cache@v5
+      with:
+        path: test-image.tar.gz
+        # Bump the v1 prefix when intentionally refreshing upstream tool versions.
+        key: weave-test-image-v1-${{ hashFiles('Dockerfile.tests', 'package.json') }}
+
+    - uses: docker/setup-buildx-action@v4
+      if: steps.test-image-cache.outputs.cache-hit != 'true'
+
+    - name: Build test image
+      if: steps.test-image-cache.outputs.cache-hit != 'true'
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: Dockerfile.tests
+        load: true
+        tags: weave-playwright-tests:ci
+        cache-from: type=gha,scope=weave-test-image
+        cache-to: type=gha,scope=weave-test-image,mode=max,ignore-error=true
+
+    - name: Save test image
+      if: steps.test-image-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: docker image save weave-playwright-tests:ci | gzip -1 > test-image.tar.gz
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: test-image.tar.gz
+        path: test-image.tar.gz
+        archive: false
+        retention-days: 1

@@ -58,6 +58,13 @@ type Chip =
     let selected = defaultArg selected (View.Const false)
     let attrs = defaultArg attrs List.empty
 
+    let interactiveAttrs () = [
+      Attr.Dynamic "aria-disabled" (enabled |> View.Map(not >> string<bool>))
+      enabled
+      |> View.Map(fun value -> if value then "0" else "-1")
+      |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
+    ]
+
     let leadingDoc =
       match content with
       | Some c -> span [ cl Css.``weave-chip__content`` ] [ c ]
@@ -73,9 +80,7 @@ type Chip =
         span [
           cl Css.``weave-chip__close``
           Attr.Create "role" "button"
-          enabled
-          |> View.Map(fun value -> if value then "0" else "-1")
-          |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
+          yield! interactiveAttrs ()
           Attr.Create "aria-label" "remove"
           on.clickView enabled (fun _ ev isEnabled ->
             ev.StopPropagation()
@@ -116,6 +121,7 @@ type Chip =
         a [
           cl "weave-chip__action"
           attr.href url
+          yield! interactiveAttrs ()
           on.clickView enabled (fun _ ev isEnabled ->
             if not isEnabled then
               ev.PreventDefault()
@@ -131,6 +137,7 @@ type Chip =
         [
           attr.href url
           yield! commonAttrs
+          yield! interactiveAttrs ()
           on.clickView enabled (fun _ ev isEnabled ->
             if not isEnabled then
               ev.PreventDefault()
@@ -145,9 +152,7 @@ type Chip =
           span [
             cl "weave-chip__action"
             Attr.Create "role" "button"
-            enabled
-            |> View.Map(fun value -> if value then "0" else "-1")
-            |> Attr.DynamicCustom(fun el value -> el.SetAttribute("tabindex", value))
+            yield! interactiveAttrs ()
             on.clickViewGuarded enabled handler
             on.keyDownView enabled (fun _ ev isEnabled ->
               match ev with
@@ -169,9 +174,7 @@ type Chip =
             Attr.Create "role" "button"
             on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
 
-            enabled
-            |> View.Map(fun e -> if e then "0" else "-1")
-            |> Attr.DynamicCustom(fun el v -> el.SetAttribute("tabindex", v))
+            yield! interactiveAttrs ()
 
             on.clickViewGuarded enabled handler
 

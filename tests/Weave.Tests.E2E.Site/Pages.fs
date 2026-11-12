@@ -1646,6 +1646,7 @@ module Pages =
     let clicked = Var.Create "none"
     let chipActions = Var.Create 0
     let chipCloses = Var.Create 0
+    let reactiveEnabled = Var.Create true
 
     div [] [
       clicked.View
@@ -1655,6 +1656,39 @@ module Pages =
         text "Clickable Chip",
         onClick = (fun () -> Var.Set clicked "clicked"),
         attrs = [ Chip.Variant.filled; Attr.Create "data-testid" "clickable-chip" ]
+      )
+      Button.create (
+        text "Toggle chip access",
+        onClick = (fun () -> Var.Set reactiveEnabled (not reactiveEnabled.Value)),
+        attrs = [ Attr.Create "data-testid" "toggle-chip-access" ]
+      )
+      Chip.create (
+        text "Reactive action",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        enabled = reactiveEnabled.View,
+        attrs = [ Attr.Create "data-testid" "reactive-chip-action" ]
+      )
+      Chip.create (
+        text "Reactive action and close",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
+        enabled = reactiveEnabled.View,
+        attrs = [ Attr.Create "data-testid" "reactive-chip-both" ]
+      )
+      Chip.create (
+        text "Reactive link",
+        href = "#reactive-chip-target",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        enabled = reactiveEnabled.View,
+        attrs = [ Attr.Create "data-testid" "reactive-chip-link" ]
+      )
+      Chip.create (
+        text "Reactive link and close",
+        href = "#reactive-chip-target",
+        onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
+        onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
+        enabled = reactiveEnabled.View,
+        attrs = [ Attr.Create "data-testid" "reactive-chip-link-close" ]
       )
       Chip.create (text "Default Chip", attrs = [ Chip.Variant.filled ])
       for name, color in

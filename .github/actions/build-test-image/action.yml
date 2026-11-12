@@ -1,5 +1,5 @@
 name: Build and cache test image
-description: Reuse or build the test image, then publish it as an artifact for this workflow run
+description: Restore the shared image cache or build and cache the test image
 runs:
   using: composite
   steps:
@@ -29,10 +29,3 @@ runs:
       if: steps.test-image-cache.outputs.cache-hit != 'true'
       shell: bash
       run: docker image save weave-playwright-tests:ci | gzip -1 > test-image.tar.gz
-
-    - uses: actions/upload-artifact@v7
-      with:
-        name: test-image.tar.gz
-        path: test-image.tar.gz
-        archive: false
-        retention-days: 1

@@ -1,11 +1,14 @@
 name: Load test image
-description: Download the test image artifact for this workflow run and load it into Docker
+description: Restore the shared test image cache and load it into Docker
 runs:
   using: composite
   steps:
-    - uses: actions/download-artifact@v8
+    - name: Restore test image cache
+      uses: actions/cache@v5
       with:
-        name: test-image.tar.gz
+        path: test-image.tar.gz
+        # Keep this in sync with build-test-image/action.yml.
+        key: weave-test-image-v1-${{ hashFiles('Dockerfile.tests', 'package.json') }}
 
     - name: Load test image
       shell: bash

@@ -102,6 +102,14 @@ type SwitchInteractionTests(fixture: TestFixture) =
     do! this.Expect(off.Locator(".weave-switch__thumb")).ToBeVisibleAsync()
     do! this.Expect(on.Locator(".weave-switch__thumb")).ToBeVisibleAsync()
 
+    // This test compares the final disabled states, not the thumb's entrance animation.
+    let! _ =
+      this.Page.AddStyleTagAsync(
+        Microsoft.Playwright.PageAddStyleTagOptions(
+          Content = ".weave-switch__thumb { transition: none !important; }"
+        )
+      )
+
     let! offLeft =
       off.Locator(".weave-switch__thumb").EvaluateAsync<float>("el => parseFloat(getComputedStyle(el).left)")
 

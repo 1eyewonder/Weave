@@ -2064,6 +2064,39 @@ module Pages =
         )
     ]
 
+  let private scrollSectionsPage () =
+    let createScroller name headings =
+      let active = Var.Create ""
+      let selector = "#" + name + "-scroll h2"
+
+      div [] [
+        div [
+          attr.id (name + "-scroll")
+          Attr.Create "data-testid" (name + "-scroll")
+          Attr.Style "position" "relative"
+          Attr.Style "height" "600px"
+          Attr.Style "overflow-y" "auto"
+          ScrollListener.trackSections selector 80.0 (Var.Set active)
+          on.afterRender (fun el -> ScrollListener.detectActiveSection el selector 80.0 |> Var.Set active)
+        ] [
+          div [ Attr.Style "position" "relative"; Attr.Style "height" "1200px" ] [
+            for label, top in headings do
+              h2 [
+                attr.id (name + "-" + label)
+                Attr.Style "position" "absolute"
+                Attr.Style "top" (sprintf "%dpx" top)
+                Attr.Style "margin" "0"
+              ] [ text label ]
+          ]
+        ]
+        div [ Attr.Create "data-testid" (name + "-active") ] [ textView active.View ]
+      ]
+
+    div [] [
+      createScroller "natural" [ "first", 190; "later", 480 ]
+      createScroller "reversed" [ "later", 480; "first", 190 ]
+    ]
+
   let private scrollToTopPage (offset: int) (initial: bool) =
     let mounted = Var.Create true
 
@@ -2377,6 +2410,7 @@ module Pages =
 
   let private renderPage (hash: string) =
     match hash with
+    | "scroll-sections" -> scrollSectionsPage ()
     | "scroll-to-top" -> scrollToTopPage 300 false
     | "scroll-to-top-zero" -> scrollToTopPage 0 false
     | "scroll-to-top-negative" -> scrollToTopPage -20 false

@@ -365,15 +365,17 @@ module on =
 module ScrollListener =
 
   /// <summary>
-  /// Detects the topmost visible section heading inside a scrollable container.
-  /// Returns the id of the best matching heading, or <c>""</c> if none qualifies.
+  /// Selects the heading nearest to and at or above the activation threshold.
+  /// Before any heading reaches it, selects the nearest visible heading below.
+  /// Returns <c>""</c> when neither candidate exists.
   /// </summary>
   let detectActiveSection (container: Dom.Element) (sectionSelector: string) (threshold: float) : string =
     let headers = JS.Document.QuerySelectorAll sectionSelector
     let mTop = container.GetBoundingClientRect().Top
     let mutable bestId = ""
     let mutable bestRelTop = -1.0e10
-    let mutable lastVisibleId = ""
+    let mutable nearestVisibleId = ""
+    let mutable nearestVisibleRelTop = As<float>(container?clientHeight)
 
     for i in 0 .. headers.Length - 1 do
       let h = As<Dom.Element>(headers.Item i)
@@ -383,25 +385,21 @@ module ScrollListener =
         bestRelTop <- relTop
         bestId <- h.Id
 
-      let containerHeight = As<float>(container?clientHeight)
+      if relTop >= 0.0 && relTop < nearestVisibleRelTop then
+        nearestVisibleRelTop <- relTop
+        nearestVisibleId <- h.Id
 
-      if relTop >= 0.0 && relTop < containerHeight then
-        lastVisibleId <- h.Id
-
-    if
-      System.String.IsNullOrEmpty bestId
-      && not (System.String.IsNullOrEmpty lastVisibleId)
-    then
-      bestId <- lastVisibleId
-
-    bestId
+    if System.String.IsNullOrEmpty bestId then
+      nearestVisibleId
+    else
+      bestId
 
   /// <summary>
   /// Returns an <c>Attr</c> that, when applied to a scrollable element, tracks
-  /// the topmost visible section heading and fires <c>onSection</c> with its id.
-  /// A heading qualifies when its top edge is at or below <c>threshold</c> pixels
-  /// from the container top; the best (closest-to-top) qualifying heading wins.
-  /// Fires with <c>""</c> when no heading qualifies (e.g. scrolled to the very top).
+  /// the active section heading and fires <c>onSection</c> with its id.
+  /// The heading nearest to and at or above <c>threshold</c> pixels from the
+  /// container top wins. Before any heading reaches that line, the nearest
+  /// visible heading below it wins. Fires with <c>""</c> if neither exists.
   /// Uses requestAnimationFrame to throttle work to once per paint.
   /// </summary>
   let trackSections (sectionSelector: string) (threshold: float) (onSection: string -> unit) : Attr =

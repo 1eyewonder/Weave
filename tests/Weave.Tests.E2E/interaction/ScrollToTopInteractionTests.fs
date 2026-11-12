@@ -227,3 +227,18 @@ type ScrollToTopInteractionTests(fixture: TestFixture) =
   [<InlineData(true)>]
   member this.``visible buttons pass accessibility and contrast checks``(dark: bool) =
     this.RunAxeScan("scroll-to-top-accessible", contrast = true, dark = dark)
+
+type ScrollListenerInteractionTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``fallback selects the nearest visible heading regardless of DOM order``() = task {
+    do! this.NavigateTo("scroll-sections")
+
+    for name in [ "natural"; "reversed" ] do
+      let active = this.Page.GetByTestId(name + "-active")
+      do! this.Expect(active).ToHaveTextAsync(name + "-first")
+      let panel = this.Page.GetByTestId(name + "-scroll")
+      let! _ = panel.EvaluateAsync("el => el.scrollTop = 450")
+      do! this.Expect(active).ToHaveTextAsync(name + "-later")
+  }

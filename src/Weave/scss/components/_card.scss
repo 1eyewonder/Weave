@@ -26,6 +26,7 @@
 
 .weave-card__header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   padding: density-spacing(8, 4) density-spacing(12, 4);
@@ -38,15 +39,13 @@
 }
 
 .weave-card__header-text {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1 1 0;
+  min-inline-size: 0;
 }
 
 .weave-card__title {
   margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .weave-card__title > :is(h1, h2, h3, h4, h5, h6) {
@@ -56,12 +55,16 @@
 }
 
 .weave-card__subtitle {
+  overflow-wrap: anywhere;
   margin-top: 2px;
   color: var(--palette-text-secondary);
 }
 
 .weave-card__header-actions {
   display: flex;
+  flex-wrap: wrap;
+  max-inline-size: 100%;
+  margin-inline-start: auto;
   flex-shrink: 0;
   align-items: center;
   gap: 4px;

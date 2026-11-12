@@ -175,13 +175,15 @@ let runTests _ =
   runDocsSourceChecks configuration
   runTestProjects (!!testsGlob)
 
-let runNonBrowserTests _ =
-  runDocsHighlightingTests ()
+let runUnitRenderingTests _ =
   runDocsSourceChecks configuration
-
   !!testsGlob
   |> Seq.filter (fun project -> Path.GetFileName(project) <> "Weave.Tests.E2E.fsproj")
   |> runTestProjects
+
+let runNonBrowserTests _ =
+  runDocsHighlightingTests ()
+  runUnitRenderingTests ()
 
 let runBrowserTests _ =
   let configured = System.Environment.GetEnvironmentVariable "WEAVE_E2E_BROWSER"
@@ -238,6 +240,7 @@ let initTargets () =
   Target.create "Analyze" analyze
   Target.create "RunTests" runTests
   Target.create "RunNonBrowserTests" runNonBrowserTests
+  Target.create "RunUnitRenderingTests" runUnitRenderingTests
   Target.create "RunBrowserTests" runBrowserTests
   Target.create "BuildDocs" buildDocs
   Target.create "CheckReleaseBaseline" Release.checkBaseline
@@ -252,6 +255,7 @@ let initTargets () =
   "YarnInstall" ==>! "Build"
   "Build" ==>! "RunTests"
   "Build" ==>! "RunNonBrowserTests"
+  "Build" ==>! "RunUnitRenderingTests"
   "Build" ==>! "RunBrowserTests"
 
   "RunTests" ?=>! "BuildDocs"

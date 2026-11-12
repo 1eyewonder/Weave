@@ -48,6 +48,27 @@ jobs:
           fi
           echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
 
+  docs-highlighting-tests:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install JavaScript dependencies
+        run: yarn install --immutable
+
+      - name: Run docs highlighting tests
+        run: yarn test:docs:highlighting
+
   non-browser-tests:
     runs-on: ubuntu-latest
     needs: validate
@@ -55,12 +76,20 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.validate.outputs.tag }}
+      - uses: docker/setup-buildx-action@v4
       - name: Build test image
-        run: docker compose build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.tests
+          load: true
+          tags: weave-playwright-tests:ci
+          cache-from: type=gha,scope=weave-test-image
+          cache-to: type=gha,scope=weave-test-image,mode=max,ignore-error=true
       - name: Check format and run unit and rendering tests
         run: |
           docker compose run --rm playwright-tests sh -c "./build.sh CheckFormat"
-          docker compose run --rm playwright-tests sh -c "./build.sh RunNonBrowserTests"
+          docker compose run --rm playwright-tests sh -c "./build.sh RunUnitRenderingTests"
 
   browser-tests:
     runs-on: ubuntu-latest
@@ -73,12 +102,20 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.validate.outputs.tag }}
-      - run: docker compose build
+      - uses: docker/setup-buildx-action@v4
+      - name: Build test image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.tests
+          load: true
+          tags: weave-playwright-tests:ci
+          cache-from: type=gha,scope=weave-test-image
       - run: docker compose run --rm -e WEAVE_E2E_BROWSER=${{ matrix.browser }} playwright-tests sh -c "./build.sh RunBrowserTests"
 
   publish:
     runs-on: ubuntu-latest
-    needs: [validate, non-browser-tests, browser-tests]
+    needs: [validate, non-browser-tests, browser-tests, docs-highlighting-tests]
     environment: nuget
     permissions:
       contents: write

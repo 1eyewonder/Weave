@@ -1,5 +1,6 @@
 services:
   playwright-tests:
+    image: weave-playwright-tests:ci
     build:
       context: .
       dockerfile: Dockerfile.tests

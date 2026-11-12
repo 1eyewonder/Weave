@@ -2432,6 +2432,12 @@ module Pages =
     | "theme-system" -> themePage true
     | "appbar" -> appbarPage ()
     | "listener-removal" -> listenerRemovalPage ()
+    | route when
+      route.StartsWith("drawer-sizing-")
+      || route.StartsWith("drawer-clip-")
+      || route.StartsWith("drawer-width-")
+      ->
+      DrawerLayoutPage.render route
     | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false
     | "drawer-responsive" -> drawerPage Drawer.Variant.Responsive true
     | "drawer" -> drawerPage Drawer.Variant.Temporary true

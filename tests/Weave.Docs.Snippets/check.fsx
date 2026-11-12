@@ -587,7 +587,11 @@ let blocksSnippet (diagnostic: FSharpDiagnostic) =
   diagnostic.Severity = FSharpDiagnosticSeverity.Error
   || diagnostic.ErrorNumber = 20
 
+let mutable sourceVersion = 0
+
 let checkSource path source isCompleteFile =
+  sourceVersion <- sourceVersion + 1
+
   let project = {
     options with
         ProjectFileName = path + ".fsproj"
@@ -596,7 +600,7 @@ let checkSource path source isCompleteFile =
   }
 
   let parsed, answer =
-    checker.ParseAndCheckFileInProject(path, 0, source, project)
+    checker.ParseAndCheckFileInProject(path, sourceVersion, source, project)
     |> Async.RunSynchronously
 
   match answer with
@@ -889,6 +893,23 @@ let runCompositionSelfTests () =
 
   printfn "Passed 9 snippet composition self-tests."
 
+let runProjectCacheSelfTest () =
+  let path = Path.Combine(Path.GetTempPath(), "WeaveDocsCacheSelfTest.fsx")
+
+  let diagnostics code =
+    checkSource path (SourceText.ofString (imports + "\n" + code)) false
+
+  if diagnostics "let localOnly = 1" |> Array.exists blocksSnippet then
+    failwith "Project cache self-test: the initial snippet must pass."
+
+  if diagnostics "text (string localOnly)" |> Array.exists blocksSnippet |> not then
+    failwith "Project cache self-test: a later snippet must not borrow prior source."
+
+  if diagnostics "text \"Valid\"" |> Array.exists blocksSnippet then
+    failwith "Project cache self-test: a valid snippet must pass after a failure."
+
+  printfn "Passed 1 snippet project-cache self-test."
+
 let runArgumentSelfTests () =
   let release = parseArguments [ "--configuration"; "Release"; "ButtonExamples" ]
 
@@ -934,6 +955,7 @@ if commandLine.SelfTest then
   runArgumentSelfTests ()
   runInventorySelfTests ()
   runCompositionSelfTests ()
+  runProjectCacheSelfTest ()
   exit 0
 
 if commandLine.CompositionAudit then
@@ -1102,6 +1124,9 @@ for snippet in snippets do
   else
     checkedCount <- checkedCount + 1
 
+    if checkedCount % 1000 = 0 then
+      printfn "Checked %d F# snippets so far." checkedCount
+
     if snippet.Context <> "" then
       cumulativeCount <- cumulativeCount + 1
 
@@ -1111,11 +1136,9 @@ for snippet in snippets do
 
     let extension = if isCompleteFile then ".fs" else ".fsx"
 
-    let path =
-      Path.Combine(
-        Path.GetTempPath(),
-        $"WeaveDocs-{Path.GetFileNameWithoutExtension name}-{snippet.Number}{extension}"
-      )
+    // Reuse the project identity so FCS can reuse its project-wide cache.
+    // The source version changes for each independent snippet check.
+    let path = Path.Combine(Path.GetTempPath(), "WeaveDocsCheckedSnippet" + extension)
 
     let prefix =
       if isCompleteFile then

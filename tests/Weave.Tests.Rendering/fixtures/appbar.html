@@ -19,6 +19,23 @@
 
     <div id="content-after-static" style="height: 20px;"></div>
 
+    <section style="padding: 32px; display: grid; gap: 24px;">
+      <button id="button-baseline" type="button" class="weave-button">
+        <span class="weave-button__label">Action</span>
+      </button>
+      <header id="appbar-button-host" class="weave-appbar">
+        <button id="button-in-appbar" type="button" class="weave-button">
+          <span class="weave-button__label">Action</span>
+        </button>
+        <button id="button-uncolored" type="button" class="weave-button">
+          <span class="weave-button__label">Navigation</span>
+        </button>
+        <button id="button-disabled" type="button" disabled class="weave-button weave-button--primary weave-button--filled">
+          <span class="weave-button__label">Unavailable</span>
+        </button>
+      </header>
+    </section>
+
     <!-- Fixed appbar pinned to top of viewport -->
     <header id="appbar-fixed" class="weave-appbar weave-appbar--fixed-top">
       <span>Fixed Title</span>

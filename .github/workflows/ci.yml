@@ -62,7 +62,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: test-image
+          name: test-image.tar.gz
 
       - name: Load Test Image
         run: docker image load --input test-image.tar.gz
@@ -102,7 +102,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/download-artifact@v8
         with:
-          name: test-image
+          name: test-image.tar.gz
       - name: Load Test Image
         run: docker image load --input test-image.tar.gz
       - name: Run browser suite

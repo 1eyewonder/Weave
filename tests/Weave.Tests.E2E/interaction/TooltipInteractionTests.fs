@@ -246,6 +246,38 @@ type TooltipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``tooltip fades out before it is removed from layout``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.Locator("[data-testid='tooltip-default']")
+    let tooltip = wrapper.Locator("[role='tooltip']")
+    let! _ = tooltip.EvaluateAsync("el => { el.style.transitionDuration = '600ms'; }")
+    do! wrapper.HoverAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+
+    let! _ =
+      tooltip.EvaluateAsync("el => Promise.all(el.getAnimations().map(animation => animation.finished))")
+
+    do! this.Page.Mouse.MoveAsync(640.0f, 600.0f)
+    let! tooltipId = tooltip.GetAttributeAsync("id")
+
+    let! _ =
+      this.Page.WaitForFunctionAsync(
+        """id => {
+          const element = document.getElementById(id);
+          if (!element) return false;
+          const style = getComputedStyle(element);
+          return style.display === "block" && Number(style.opacity) < 1;
+        }""",
+        tooltipId,
+        PageWaitForFunctionOptions(Timeout = 3000.0f)
+      )
+
+    let! display = tooltip.EvaluateAsync<string>("el => getComputedStyle(el).display")
+    Assert.Equal("block", display)
+    do! this.Expect(tooltip).ToBeHiddenAsync()
+  }
+
+  [<Fact>]
   member this.``focusOut hides the tooltip``() = task {
     do! this.NavigateTo("tooltip")
     let wrapper = this.Page.Locator("[data-testid='tooltip-default']")

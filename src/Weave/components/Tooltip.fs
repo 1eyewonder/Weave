@@ -51,7 +51,73 @@ module Tooltip =
 module private TooltipPlacement =
 
   [<Inline "$element.classList.toggle($className, $visible)">]
-  let setVisible (element: Dom.Element) (className: string) (visible: bool) = X<unit>
+  let private toggleVisible (element: Dom.Element) (className: string) (visible: bool) = X<unit>
+
+  [<Inline "$element.style.display = $display">]
+  let private setDisplay (element: Dom.Element) (display: string) = X<unit>
+
+  [<Inline "$element.offsetWidth">]
+  let private forceLayout (element: Dom.Element) = X<int>
+
+  let setVisible (element: Dom.Element) (className: string) (visible: bool) =
+    if visible then
+      setDisplay element "block"
+      forceLayout element |> ignore
+
+    toggleVisible element className visible
+
+  let private milliseconds (duration: string) =
+    let duration = duration.Trim()
+    let isMilliseconds = duration.EndsWith("ms")
+    let suffixLength = if isMilliseconds then 2 else 1
+
+    let value =
+      duration.Substring(0, max 0 (duration.Length - suffixLength))
+      |> System.Double.Parse
+
+    if isMilliseconds then value else value * 1000.
+
+  let private transitionTimeout (element: Dom.Element) =
+    let style = JS.Window?getComputedStyle(element)
+    let durations = As<string>(style?transitionDuration).Split(',')
+    let delays = As<string>(style?transitionDelay).Split(',')
+
+    [|
+      for index in 0 .. durations.Length - 1 do
+        yield milliseconds durations.[index] + milliseconds delays.[index % delays.Length]
+    |]
+    |> Array.max
+    |> max 0.
+    |> int
+
+  let hideAfterTransition (element: Dom.Element) =
+    let mutable active = true
+    let mutable timeout = Unchecked.defaultof<JS.Handle>
+    let mutable handler = System.Action<Dom.Event>(ignore)
+
+    let finish () =
+      if active then
+        active <- false
+        JS.ClearTimeout timeout
+        element.RemoveEventListener("transitionend", handler)
+        setDisplay element "none"
+
+    handler <-
+      System.Action<Dom.Event>(fun event ->
+        if
+          obj.ReferenceEquals(As<obj>(event?target), As<obj>(element))
+          && As<string>(event?propertyName) = "opacity"
+        then
+          finish ())
+
+    element.AddEventListener("transitionend", handler)
+    timeout <- JS.SetTimeout finish (transitionTimeout element + 50)
+
+    fun () ->
+      if active then
+        active <- false
+        JS.ClearTimeout timeout
+        element.RemoveEventListener("transitionend", handler)
 
   [<Inline "$element.style.setProperty($name, $value)">]
   let private setProperty (element: Dom.Element) (name: string) (value: string) = X<unit>
@@ -191,14 +257,23 @@ type Tooltip =
     let isVisible = Var.Create false
     let popupRef = ref (None: Dom.Element option)
     let mutable stopPositioning = ignore
+    let mutable cancelPendingHide = ignore
+    let mutable wasVisible = false
 
     let updateVisibility (popup: Dom.Element) visible =
       stopPositioning ()
       stopPositioning <- ignore
-      TooltipPlacement.setVisible popup Css.``weave-tooltip--visible`` visible
 
       if visible then
+        cancelPendingHide ()
+        cancelPendingHide <- ignore
+        TooltipPlacement.setVisible popup Css.``weave-tooltip--visible`` true
+        wasVisible <- true
         stopPositioning <- TooltipPlacement.watch direction popup
+      elif wasVisible then
+        TooltipPlacement.setVisible popup Css.``weave-tooltip--visible`` false
+        cancelPendingHide <- TooltipPlacement.hideAfterTransition popup
+        wasVisible <- false
 
     let tooltipId = WeaveId.create "weave-tooltip"
 

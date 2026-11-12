@@ -219,6 +219,33 @@ type SelectSizingTests(fixture: TestFixture) =
     }
 
   [<Fact>]
+  member this.``window resize repositions a fixed trigger without changing element sizes``() = task {
+    do! this.Load(width = 1280)
+    let root = this.Page.GetByTestId("viewport-moving")
+    do! this.Open(root)
+    let trigger = root.Locator(".weave-select")
+    let menu = root.Locator(".weave-select__popover")
+    let! triggerBefore = trigger.BoundingBoxAsync()
+    and! menuBefore = menu.BoundingBoxAsync()
+    Assert.True(abs (menuBefore.X - triggerBefore.X) <= 1.0f, "Initial menu uses its natural anchor")
+
+    do! this.Page.SetViewportSizeAsync(700, 900)
+    do! this.Settle()
+    let! triggerAfter = trigger.BoundingBoxAsync()
+    and! menuAfter = menu.BoundingBoxAsync()
+    Assert.True(abs (triggerAfter.Width - triggerBefore.Width) <= 1.0f, "Trigger width stays constant")
+    Assert.True(abs (menuAfter.Width - menuBefore.Width) <= 1.0f, "Menu width stays constant")
+    Assert.True(triggerAfter.X + menuAfter.Width > 692.0f, "Natural position would overflow after resize")
+    do! this.AssertInside(menu)
+
+    do! this.Page.SetViewportSizeAsync(1280, 900)
+    do! this.Settle()
+    let! restoredTrigger = trigger.BoundingBoxAsync()
+    and! restoredMenu = menu.BoundingBoxAsync()
+    Assert.True(abs (restoredMenu.X - restoredTrigger.X) <= 1.0f, "Natural anchor returns after resize")
+  }
+
+  [<Fact>]
   member this.``ancestor scrolling restores natural alignment when room becomes available``() = task {
     do! this.Load()
     let root = this.Page.GetByTestId("scrolling")

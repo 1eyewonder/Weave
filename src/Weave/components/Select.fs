@@ -475,17 +475,20 @@ module private SelectPopoverPlacement =
       let stopOwnerResize = owner |> ResizeListener.watch update
       let stopPopupResize = popup |> ResizeListener.watch update
       let scroll = System.Action<Dom.Event>(fun _ -> update ())
+      let resize = System.Action<Dom.Event>(fun _ -> update ())
       let removal = DomRemovalListener.create ()
 
       let dispose () =
         if active then
           active <- false
           JS.Window.RemoveEventListener("scroll", scroll, true)
+          JS.Window.RemoveEventListener("resize", resize)
           stopOwnerResize ()
           stopPopupResize ()
           removal.Disconnect()
 
       JS.Window.AddEventListener("scroll", scroll, true)
+      JS.Window.AddEventListener("resize", resize)
       removal.Watch(popup, dispose)
 
 open Select

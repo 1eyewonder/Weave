@@ -95,6 +95,12 @@ module SelectSizingPage =
         Attr.Style "bottom" "8px"
       ]
 
+      select "viewport-moving" [ Select.PopoverWidth.unbound ] [
+        Attr.Style "position" "fixed"
+        Attr.Style "left" "45%"
+        Attr.Style "top" "80px"
+      ]
+
       select "origin-right" [
         Select.PopoverWidth.unbound
         Select.AnchorOrigin.bottomRight

@@ -70,5 +70,48 @@
         <div class="weave-tabs__panel">Start panel content</div>
       </div>
     </div>
+    <!-- Filled trays size to their labels while panels keep the available width. -->
+    <div id="tabs-filled" class="weave-tabs weave-tabs--top weave-tabs--filled weave-tabs--primary"
+      style="width: min(600px, 100%); margin-top: 24px;">
+      <div id="filled-tray" class="weave-tabs__header-wrapper">
+        <div class="weave-tabs__header">
+          <button id="filled-first" class="weave-tabs__tab weave-tabs__tab--active">One</button>
+          <button id="filled-last" class="weave-tabs__tab">Two</button>
+          <div class="weave-tabs__indicator"></div>
+        </div>
+      </div>
+      <div id="filled-panels" class="weave-tabs__panels">
+        <div class="weave-tabs__panel">A panel with room beyond its short labels.</div>
+      </div>
+    </div>
+    <div id="tabs-filled-centered" class="weave-tabs weave-tabs--top weave-tabs--filled weave-tabs--centered weave-tabs--primary"
+      style="width: min(600px, 100%); margin-top: 24px;">
+      <div id="filled-centered-tray" class="weave-tabs__header-wrapper">
+        <div class="weave-tabs__header">
+          <button class="weave-tabs__tab weave-tabs__tab--active">One</button>
+          <button class="weave-tabs__tab">Two</button>
+          <div class="weave-tabs__indicator"></div>
+        </div>
+      </div>
+      <div class="weave-tabs__panels"><div class="weave-tabs__panel">Centered panel</div></div>
+    </div>
+    <div id="tabs-filled-scroll" class="weave-tabs weave-tabs--bottom weave-tabs--filled weave-tabs--primary"
+      style="width: 220px; max-width: 100%; margin-top: 24px;">
+      <div id="filled-scroll-tray" class="weave-tabs__header-wrapper">
+        <button id="filled-scroll-back" class="weave-tabs__scroll-btn" aria-label="Previous tabs">
+          <span class="weave-tabs__scroll-icon">&#10094;</span>
+        </button>
+        <div id="filled-scroll-header" class="weave-tabs__header">
+          <button class="weave-tabs__tab weave-tabs__tab--active">First long label</button>
+          <button class="weave-tabs__tab">Second long label</button>
+          <button class="weave-tabs__tab">Third long label</button>
+          <div class="weave-tabs__indicator"></div>
+        </div>
+        <button id="filled-scroll-forward" class="weave-tabs__scroll-btn" aria-label="Next tabs">
+          <span class="weave-tabs__scroll-icon">&#10095;</span>
+        </button>
+      </div>
+      <div class="weave-tabs__panels"><div class="weave-tabs__panel">Scrollable panel</div></div>
+    </div>
   </body>
 </html>

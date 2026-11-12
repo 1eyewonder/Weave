@@ -2413,6 +2413,11 @@ module Pages =
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
+    | "tabs-contrast" -> TabsRegressionPage.render ()
+    | "tabs-initial-top" -> TabsRegressionPage.initial Tabs.Position.Top
+    | "tabs-initial-left" -> TabsRegressionPage.initial Tabs.Position.Left
+    | "tabs-resize-top" -> TabsRegressionPage.resizable Tabs.Position.Top
+    | "tabs-resize-bottom" -> TabsRegressionPage.resizable Tabs.Position.Bottom
     | "carousel" -> carouselPage false false
     | "carousel-autoplay" -> carouselPage true false
     | "carousel-custom-controls" -> carouselPage false true

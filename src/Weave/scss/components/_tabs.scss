@@ -89,6 +89,7 @@
   flex-shrink: 0;
   background: none;
   border: none;
+  border-radius: var(--default-borderradius, 4px);
   outline: none;
   color: var(--palette-text-primary);
   font-family: var(--typography-button-family);
@@ -117,13 +118,11 @@
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(.weave-tabs__tab--disabled) {
       background-color: var(--palette-action-default-hover);
-      border-radius: var(--default-borderradius, 4px);
     }
   }
 
   &:focus-visible:not(.weave-tabs__tab--disabled) {
     background-color: var(--palette-action-default-hover);
-    border-radius: var(--default-borderradius, 4px);
     outline: 2px solid var(--palette-primary);
     outline-offset: -2px;
   }
@@ -299,6 +298,29 @@
 }
 
 .weave-tabs--filled {
+  // Keep a colored horizontal tray with its tabs rather than the panel width.
+  // The cap still gives overflowing strips room to show their scroll controls.
+  &.weave-tabs--top,
+  &.weave-tabs--bottom {
+    > .weave-tabs__header-wrapper {
+      align-self: flex-start;
+      max-inline-size: 100%;
+      min-inline-size: 0;
+    }
+
+    &.weave-tabs--centered > .weave-tabs__header-wrapper {
+      align-self: center;
+    }
+  }
+  > .weave-tabs__header-wrapper > .weave-tabs__header > .weave-tabs__tab:focus-visible {
+    outline-color: var(--tabs-header-foreground, var(--palette-primary));
+  }
+
+  > .weave-tabs__header-wrapper > .weave-tabs__header > .weave-tabs__tab:not(.weave-tabs__tab--active):not(.weave-tabs__tab--disabled),
+  > .weave-tabs__header-wrapper > .weave-tabs__scroll-btn {
+    color: var(--tabs-header-foreground, var(--palette-text-primary));
+  }
+
   .weave-tabs__header-wrapper {
     background-color: var(--tabs-header-background, transparent);
     border-radius: var(--default-borderradius, 4px);
@@ -336,10 +358,22 @@
       // Active tab text contrasts against the colored pill; inactive tabs keep default text color
       .weave-tabs__indicator {
         background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
-        box-shadow: inset 0 0 0 1px var(--palette-#{$color}-fill-border, transparent);
+        box-shadow: inset 0 0 0 1px var(--tabs-header-foreground, var(--palette-#{$color}-fill-border, transparent));
       }
       .weave-tabs__tab--active {
         color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+      }
+
+      > .weave-tabs__header-wrapper > .weave-tabs__header > .weave-tabs__tab--active {
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+          }
+        }
+
+        &:focus-visible {
+          background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+        }
       }
     }
   }

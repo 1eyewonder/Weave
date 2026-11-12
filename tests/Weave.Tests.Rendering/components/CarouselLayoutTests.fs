@@ -14,7 +14,10 @@ type CarouselLayoutTests() =
     let! first = this.Page.Locator("#first").BoundingBoxAsync()
     let! second = this.Page.Locator("#second").BoundingBoxAsync()
     let! carousel = this.Page.Locator("#carousel").BoundingBoxAsync()
-    let! controls = this.Page.Locator(".weave-carousel__controls").BoundingBoxAsync()
+
+    let! controls =
+      this.Page.Locator("#carousel .weave-carousel__controls").BoundingBoxAsync()
+
     Assert.Equal(first.Y, second.Y)
     Assert.Equal(first.Width, second.Width)
     Assert.True(controls.Y >= first.Y + first.Height)
@@ -22,10 +25,53 @@ type CarouselLayoutTests() =
     Assert.True(carousel.X + carousel.Width <= float32 width)
   }
 
+  [<Theory>]
+  [<InlineData(320, "#carousel")>]
+  [<InlineData(1280, "#carousel")>]
+  [<InlineData(320, "#many-carousel")>]
+  [<InlineData(1280, "#many-carousel")>]
+  member this.``narrow navigation keeps arrows together and every indicator reachable``
+    (width: int, selector: string)
+    = task {
+    do! this.LoadFixture width
+    let carousel = this.Page.Locator(selector)
+    let! bounds = carousel.BoundingBoxAsync()
+
+    let! previous =
+      carousel.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Previous slide")).BoundingBoxAsync()
+
+    let! next =
+      carousel.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Next slide")).BoundingBoxAsync()
+
+    Assert.True(abs (previous.Y + previous.Height / 2.0f - next.Y - next.Height / 2.0f) < 1.0f)
+    Assert.True(previous.X < next.X)
+
+    let indicators = carousel.Locator(".weave-carousel__indicator")
+    let! count = indicators.CountAsync()
+
+    for index in 0 .. count - 1 do
+      let! indicator = indicators.Nth(index).BoundingBoxAsync()
+      Assert.True(indicator.Width >= 24.0f && indicator.Height >= 24.0f)
+
+      Assert.True(
+        indicator.X >= bounds.X
+        && indicator.X + indicator.Width <= bounds.X + bounds.Width
+      )
+
+      Assert.True(
+        indicator.Y >= bounds.Y
+        && indicator.Y + indicator.Height <= bounds.Y + bounds.Height
+      )
+
+    do! indicators.Nth(count - 2).FocusAsync()
+    do! indicators.Nth(count - 2).PressAsync("Tab")
+    do! this.Expect(indicators.Last).ToBeFocusedAsync()
+  }
+
   [<Fact>]
   member this.``changing selection does not shift controls below unequal slides``() = task {
     do! this.LoadFixture()
-    let controls = this.Page.Locator(".weave-carousel__controls")
+    let controls = this.Page.Locator("#carousel .weave-carousel__controls")
     let! before = controls.BoundingBoxAsync()
 
     let! _ =

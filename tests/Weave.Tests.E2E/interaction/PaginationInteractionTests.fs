@@ -322,3 +322,42 @@ type PaginationInteractionTests(fixture: TestFixture) =
   [<InlineData(true)>]
   member this.``variants pass accessibility and contrast scans in both themes``(dark: bool) =
     this.RunAxeScan("pagination-ranges", contrast = true, dark = dark)
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``wrapped pagination rows remain centered with every control contained``(width: int) = task {
+    do! this.NavigateTo "pagination"
+    do! this.Page.SetViewportSizeAsync(width, 900)
+    do! (this.Button "Select ten").ClickAsync()
+
+    let! geometry =
+      this.Page
+        .Locator("#pager")
+        .EvaluateAsync<float[][]>(
+          """el => {
+          const root = el.getBoundingClientRect();
+          return [[root.x, root.width], ...Array.from(el.children)
+            .filter(e => e.getBoundingClientRect().width > 0)
+            .map(e => { const r = e.getBoundingClientRect(); return [r.x, r.width, r.y]; })];
+        }"""
+        )
+
+    let root = geometry.[0]
+
+    let rows =
+      geometry.[1..]
+      |> Array.groupBy (fun values -> int (System.Math.Round values.[2]))
+
+    Assert.True(
+      rows.Length = (if width = 320 then 2 else 1),
+      "Expected narrow wrapping and a single desktop row"
+    )
+
+    for _, cells in rows do
+      let first = cells |> Array.minBy (fun values -> values.[0])
+      let last = cells |> Array.maxBy (fun values -> values.[0] + values.[1])
+      let midpoint = (first.[0] + last.[0] + last.[1]) / 2.0
+      Assert.True(abs (midpoint - root.[0] - root.[1] / 2.0) <= 1.0, "Each line should be centered")
+      Assert.True(first.[0] >= root.[0] - 1.0 && last.[0] + last.[1] <= root.[0] + root.[1] + 1.0)
+  }

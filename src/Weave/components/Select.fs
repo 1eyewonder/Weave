@@ -401,6 +401,22 @@ module Select =
     let selectAllRow items selectedValues enabled selectAllText =
       selectAllRowWithAttrs items selectedValues enabled selectAllText []
 
+    let labelSizer labelText placeholder shouldFloat =
+      div [ cl Css.``weave-select__label-sizer``; Attr.Create "aria-hidden" "true" ] [
+        div [
+          cl Css.``weave-select__sizer-item``
+          Attr.DynamicStyle
+            "font-size"
+            (shouldFloat
+             |> View.Map(fun floated ->
+               if floated then
+                 "calc(var(--typography-body2-size, 0.875rem) * 0.75)"
+               else
+                 "var(--typography-body2-size, 0.875rem)"))
+        ] [ Doc.TextView labelText ]
+        div [ cl Css.``weave-select__sizer-item`` ] [ Doc.TextView placeholder ]
+      ]
+
     let sizer (items: View<SelectItemDef<'T> list>) =
       items
       |> Doc.BindView(fun defs ->
@@ -408,6 +424,69 @@ module Select =
           for def in defs do
             div [ cl Css.``weave-select__sizer-item`` ] [ text def.Text ]
         ])
+
+[<JavaScript>]
+module private SelectPopoverPlacement =
+
+  [<Inline "$element.style.setProperty($name, $value)">]
+  let private setProperty (element: Dom.Element) (name: string) (value: string) = X<unit>
+
+  [<Inline "$element.style.getPropertyValue($name)">]
+  let private getProperty (element: Dom.Element) (name: string) = X<string>
+
+  [<Inline "$element.style.removeProperty($name)">]
+  let private removeProperty (element: Dom.Element) (name: string) = X<unit>
+
+  let private position (popup: Dom.Element) =
+    // Read the intended origin at full scale, not an intermediate animated
+    // transform. Flush the final shift before restoring transform transitions.
+    let transition = getProperty popup "transition-property"
+    setProperty popup "transition-property" "opacity"
+    let width: float = JS.Document?documentElement?clientWidth
+    let height: float = JS.Document?documentElement?clientHeight
+    setProperty popup "--_select-shift-x" "0px"
+    setProperty popup "--_select-shift-y" "0px"
+
+    let rect = popup.GetBoundingClientRect()
+    let left = rect.Left |> Bounded.clamp 8. (max 8. (width - rect.Width - 8.))
+    let top = rect.Top |> Bounded.clamp 8. (max 8. (height - rect.Height - 8.))
+    setProperty popup "--_select-shift-x" (sprintf "%.2fpx" (left - rect.Left))
+    setProperty popup "--_select-shift-y" (sprintf "%.2fpx" (top - rect.Top))
+    popup.GetBoundingClientRect() |> ignore
+
+    if String.IsNullOrEmpty transition then
+      removeProperty popup "transition-property"
+    else
+      setProperty popup "transition-property" transition
+
+  /// Bound menus retain their authored placement. Unbound menus keep their
+  /// origin alignment where it fits and move only to avoid viewport clipping.
+  let watch (popup: Dom.Element) =
+    let owner: Dom.Element = popup?parentElement
+
+    if As<bool>(owner?classList?contains Css.``weave-select--popover-unbound``) then
+      let mutable active = true
+
+      let update () =
+        if active && As<bool>(popup?isConnected) then
+          position popup
+
+      update ()
+      let stopOwnerResize = owner |> ResizeListener.watch update
+      let stopPopupResize = popup |> ResizeListener.watch update
+      let scroll = System.Action<Dom.Event>(fun _ -> update ())
+      let removal = DomRemovalListener.create ()
+
+      let dispose () =
+        if active then
+          active <- false
+          JS.Window.RemoveEventListener("scroll", scroll, true)
+          stopOwnerResize ()
+          stopPopupResize ()
+          removal.Disconnect()
+
+      JS.Window.AddEventListener("scroll", scroll, true)
+      removal.Watch(popup, dispose)
 
 open Select
 
@@ -473,7 +552,8 @@ type Select =
           | Some def ->
             match def.SelectedContent with
             | Some c -> c
-            | None -> text def.Text
+            | None ->
+              span [ cl Css.``weave-select__selected-text``; Attr.Create "title" def.Text ] [ text def.Text ]
           | None -> Doc.Empty
         | None -> Doc.Empty)
 
@@ -597,7 +677,9 @@ type Select =
         if isOpen then
           div [
             cl Css.``weave-select__popover``
-            on.afterRender (fun el -> popoverRef.Value <- el)
+            on.afterRender (fun el ->
+              popoverRef.Value <- el
+              SelectPopoverPlacement.watch el)
             on.click (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
@@ -650,6 +732,7 @@ type Select =
         on.afterRender (fun el -> selectRootRef.Value <- el)
         yield! attrs
       ] [
+        Render.labelSizer labelText effectivePlaceholder shouldFloat
         Render.sizer items
         Field.create (
           inputElement,
@@ -907,7 +990,9 @@ type MultiSelect =
         if isOpen then
           div [
             cl Css.``weave-select__popover``
-            on.afterRender (fun el -> popoverRef.Value <- el)
+            on.afterRender (fun el ->
+              popoverRef.Value <- el
+              SelectPopoverPlacement.watch el)
             on.click (fun _ ev -> ev?stopPropagation ())
           ] [
             if searchable then
@@ -998,6 +1083,7 @@ type MultiSelect =
         on.afterRender (fun el -> selectRootRef.Value <- el)
         yield! attrs
       ] [
+        Render.labelSizer labelText effectivePlaceholder shouldFloat
         Render.sizer items
         Field.create (
           inputElement,

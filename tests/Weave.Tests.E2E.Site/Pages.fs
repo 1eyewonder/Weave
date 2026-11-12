@@ -2638,6 +2638,7 @@ module Pages =
     | "form-grid-validation" -> formGridValidationPage ()
     | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()
+    | "select-sizing" -> SelectSizingPage.render ()
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()
     | "button" -> buttonPage ()

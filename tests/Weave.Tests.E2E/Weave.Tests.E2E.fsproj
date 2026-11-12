@@ -58,6 +58,7 @@
     <Compile Include="interaction/ChipSetInteractionTests.fs" />
     <Compile Include="interaction/DialogInteractionTests.fs" />
     <Compile Include="interaction/DrawerInteractionTests.fs" />
+    <Compile Include="interaction/DrawerLayoutTests.fs" />
     <Compile Include="interaction/DropdownMenuInteractionTests.fs" />
     <Compile Include="interaction/ExpansionPanelInteractionTests.fs" />
     <Compile Include="interaction/FieldInteractionTests.fs" />

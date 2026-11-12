@@ -98,3 +98,74 @@ type CardLayoutTests() =
       $"Image ({image.Height}px) should fill the media height"
     )
   }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(390)>]
+  [<InlineData(1280)>]
+  member this.``complete header title remains readable at narrow widths``(width: int) = task {
+    do! this.LoadFixture(width)
+    let title = this.Page.Locator("#card-full .weave-card__title")
+
+    let! fits =
+      title.EvaluateAsync<bool>(
+        "el => el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1"
+      )
+
+    Assert.True(fits, "The complete card title should fit without clipping or truncation")
+    let! card = this.Page.Locator("#card-full").BoundingBoxAsync()
+    let! titleBox = title.BoundingBoxAsync()
+    assertContainedWithin "card" "complete title" card titleBox
+  }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(390)>]
+  member this.``long header actions wrap without hiding the title or controls``(width: int) = task {
+    do! this.LoadFixture(width)
+    let! card = this.Page.Locator("#card-wide-actions").BoundingBoxAsync()
+
+    let! title =
+      this.Page.Locator("#card-wide-actions .weave-card__title").BoundingBoxAsync()
+
+    let! review = this.Page.Locator("#card-review-action").BoundingBoxAsync()
+    let! share = this.Page.Locator("#card-share-action").BoundingBoxAsync()
+    Assert.True(title.Width > 0.0f, "The header title must remain visible")
+    assertContainedWithin "card" "review action" card review
+    assertContainedWithin "card" "share action" card share
+    assertContainedWithin "card" "title" card title
+  }
+
+  [<Theory>]
+  [<InlineData(210)>]
+  [<InlineData(224)>]
+  member this.``narrow header wraps text while keeping its close action beside it``(width: int) = task {
+    do! this.LoadFixture(320)
+    let card = this.Page.Locator("#card-narrow-header")
+    let! _ = card.EvaluateAsync("(el, width) => el.style.width = width + 'px'", width)
+    let title = card.Locator(".weave-card__title")
+    let! cardBox = card.BoundingBoxAsync()
+    let! titleBox = title.BoundingBoxAsync()
+    let! subtitle = card.Locator(".weave-card__subtitle").BoundingBoxAsync()
+    let! leading = this.Page.Locator("#card-narrow-leading").BoundingBoxAsync()
+    let! action = this.Page.Locator("#card-narrow-action").BoundingBoxAsync()
+
+    Assert.True(
+      action.Y < titleBox.Y + titleBox.Height && action.Y + action.Height > titleBox.Y,
+      "The close action should remain beside the title instead of wrapping below it"
+    )
+
+    Assert.True(leading.X + leading.Width <= titleBox.X + tolerance)
+    Assert.True(titleBox.X + titleBox.Width <= action.X + tolerance)
+    Assert.True(subtitle.Y >= titleBox.Y + titleBox.Height - tolerance)
+    assertContainedWithin "narrow card" "title" cardBox titleBox
+    assertContainedWithin "narrow card" "subtitle" cardBox subtitle
+    assertContainedWithin "narrow card" "close action" cardBox action
+
+    let! fits =
+      title.EvaluateAsync<bool>(
+        "el => el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1"
+      )
+
+    Assert.True(fits, "The complete narrow title should wrap without clipping")
+  }

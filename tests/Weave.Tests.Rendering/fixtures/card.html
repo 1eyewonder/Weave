@@ -14,12 +14,15 @@
 
       .card-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 16px;
         align-items: flex-start;
       }
 
       .card-row > * {
         width: 280px;
+        max-width: 100%;
+        flex-shrink: 0;
       }
     </style>
   </head>
@@ -31,7 +34,7 @@
             <span style="display: inline-block; width: 40px; height: 40px"></span>
           </div>
           <div class="weave-card__header-text">
-            <div class="weave-card__title">A card title long enough to need truncating in the header</div>
+            <div class="weave-card__title">A card title long enough to wrap without hiding useful context</div>
             <div class="weave-card__subtitle">Subtitle</div>
           </div>
           <div class="weave-card__header-actions">
@@ -52,6 +55,31 @@
     </div>
     <div id="card-elevated" class="weave-card weave-card--elevated">
         <div class="weave-card__content">Elevated content</div>
+      </div>
+      <div id="card-narrow-header" class="weave-card" style="width: 224px">
+        <div class="weave-card__header">
+          <div id="card-narrow-leading" class="weave-card__header-leading">
+            <span style="display: inline-block; width: 24px; height: 24px">&#8962;</span>
+          </div>
+          <div class="weave-card__header-text">
+            <div class="weave-card__title"><h3>Client profile details</h3></div>
+            <div class="weave-card__subtitle">Overview</div>
+          </div>
+          <div class="weave-card__header-actions">
+            <button id="card-narrow-action" type="button" aria-label="Close" style="width: 32px; height: 32px">x</button>
+          </div>
+        </div>
+      </div>
+      <div id="card-wide-actions" class="weave-card">
+        <div class="weave-card__header">
+          <div class="weave-card__header-text">
+            <div class="weave-card__title">Quarterly project review</div>
+          </div>
+          <div class="weave-card__header-actions">
+            <button id="card-review-action" type="button" style="width: 160px">Review changes</button>
+            <button id="card-share-action" type="button" style="width: 160px">Share with team</button>
+          </div>
+        </div>
       </div>
     </div>
   </body>

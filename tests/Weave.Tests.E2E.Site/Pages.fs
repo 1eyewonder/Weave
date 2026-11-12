@@ -2410,12 +2410,12 @@ module Pages =
 
   let private renderPage (hash: string) =
     match hash with
-    | "scroll-sections" -> scrollSectionsPage ()
     | "scroll-to-top" -> scrollToTopPage 300 false
     | "scroll-to-top-zero" -> scrollToTopPage 0 false
     | "scroll-to-top-negative" -> scrollToTopPage -20 false
     | "scroll-to-top-initial" -> scrollToTopPage 300 true
     | "scroll-to-top-accessible" -> scrollToTopPage 0 true
+    | "scroll-sections" -> scrollSectionsPage ()
     | "pagination" -> paginationPage ()
     | "pagination-controls" -> paginationControlsPage ()
     | "pagination-ranges" -> paginationRangesPage ()

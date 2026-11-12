@@ -698,3 +698,45 @@ type SelectInteractionTests(fixture: TestFixture) =
 
       do! combo.PressAsync("Escape")
   }
+
+  [<Theory>]
+  [<InlineData("restricted-single")>]
+  [<InlineData("restricted-multi")>]
+  member this.``combobox semantics follow reactive enabled and read-only state``(testId: string) = task {
+    do! this.NavigateTo("select")
+    let combobox = this.Page.GetByTestId(testId).Locator("[role='combobox']")
+    do! this.Expect(combobox).ToHaveAttributeAsync("tabindex", "0")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-disabled", "false")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-readonly", "false")
+
+    let toggleEnabled = this.Page.GetByTestId("toggle-select-enabled")
+    do! toggleEnabled.ClickAsync()
+    do! this.Expect(combobox).ToHaveAttributeAsync("tabindex", "-1")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-disabled", "true")
+    do! toggleEnabled.ClickAsync()
+    do! this.Expect(combobox).ToHaveAttributeAsync("tabindex", "0")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-disabled", "false")
+
+    do! this.Page.GetByTestId("toggle-select-readonly").ClickAsync()
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-readonly", "true")
+    do! this.Expect(combobox).ToHaveAttributeAsync("tabindex", "0")
+  }
+
+  [<Theory>]
+  [<InlineData("restricted-single")>]
+  [<InlineData("restricted-multi")>]
+  member this.``closed combobox leaves Escape to its parent``(testId: string) = task {
+    do! this.NavigateTo("select")
+    let combobox = this.Page.GetByTestId(testId).Locator("[role='combobox']")
+
+    let escape =
+      "el => { const ev = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }); el.dispatchEvent(ev); return ev.defaultPrevented; }"
+
+    let! closedPrevented = combobox.EvaluateAsync<bool>(escape)
+    Assert.False(closedPrevented, "A closed Select must leave Escape available to parent overlays")
+    do! combobox.PressAsync("Enter")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-expanded", "true")
+    let! openPrevented = combobox.EvaluateAsync<bool>(escape)
+    Assert.True(openPrevented, "An open Select should consume Escape to close its menu")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-expanded", "false")
+  }

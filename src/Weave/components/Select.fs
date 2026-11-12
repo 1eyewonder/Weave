@@ -542,7 +542,13 @@ type Select =
     let inputElement =
       div [
         cls [ Css.``weave-field__input``; Css.``weave-select__value`` ]
-        Attr.Create "tabindex" "0"
+        Attr.DynamicCustom (fun el value -> el.SetAttribute("tabindex", if value then "0" else "-1")) enabled
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-disabled", if value then "false" else "true"))
+          enabled
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-readonly", if value then "true" else "false"))
+          readOnly
         Attr.Create "role" "combobox"
         Attr.Create "aria-haspopup" "listbox"
         Attr.DynamicCustom
@@ -569,7 +575,7 @@ type Select =
           | Key.ArrowUp when canInteract ->
             ev.PreventDefault()
             handleKeyNav state ev
-          | Key.Escape ->
+          | Key.Escape when openVar.Value ->
             ev.PreventDefault()
             handleKeyNav state ev
           | Key.Tab -> handleKeyNav state ev
@@ -842,7 +848,13 @@ type MultiSelect =
     let inputElement =
       div [
         cls [ Css.``weave-field__input``; Css.``weave-select__value`` ]
-        Attr.Create "tabindex" "0"
+        Attr.DynamicCustom (fun el value -> el.SetAttribute("tabindex", if value then "0" else "-1")) enabled
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-disabled", if value then "false" else "true"))
+          enabled
+        Attr.DynamicCustom
+          (fun el value -> el.SetAttribute("aria-readonly", if value then "true" else "false"))
+          readOnly
         Attr.Create "role" "combobox"
         Attr.Create "aria-haspopup" "listbox"
         on.afterRender (fun el -> inputRef.Value <- el)
@@ -870,7 +882,7 @@ type MultiSelect =
           | Key.ArrowUp when canInteract ->
             ev.PreventDefault()
             handleMultiKeyNav state ev
-          | Key.Escape ->
+          | Key.Escape when openVar.Value ->
             ev.PreventDefault()
             handleKeyNav state ev
           | Key.Tab when showSelectAll && openVar.Value && canInteract && not ev.ShiftKey ->

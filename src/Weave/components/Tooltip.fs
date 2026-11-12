@@ -47,6 +47,125 @@ module Tooltip =
     | Focus
     | Click
 
+[<JavaScript>]
+module private TooltipPlacement =
+
+  [<Inline "$element.classList.toggle($className, $visible)">]
+  let setVisible (element: Dom.Element) (className: string) (visible: bool) = X<unit>
+
+  [<Inline "$element.style.setProperty($name, $value)">]
+  let private setProperty (element: Dom.Element) (name: string) (value: string) = X<unit>
+
+  type Bounds = {
+    Left: float
+    Top: float
+    Right: float
+    Bottom: float
+    Width: float
+    Height: float
+  }
+
+  let private bounds (element: Dom.Element) =
+    let rect = element?getBoundingClientRect ()
+
+    {
+      Left = rect?left
+      Top = rect?top
+      Right = rect?right
+      Bottom = rect?bottom
+      Width = rect?width
+      Height = rect?height
+    }
+
+  let private overflow direction width height rect =
+    match direction with
+    | Tooltip.Direction.Left
+    | Tooltip.Direction.Right -> max 0. (8. - rect.Left) + max 0. (rect.Right - width + 8.)
+    | Tooltip.Direction.Top
+    | Tooltip.Direction.Bottom -> max 0. (8. - rect.Top) + max 0. (rect.Bottom - height + 8.)
+
+  let private position direction (popup: Dom.Element) =
+    let owner: Dom.Element = popup?parentElement
+    let width: float = JS.Document?documentElement?clientWidth
+    let height: float = JS.Document?documentElement?clientHeight
+
+    let setLength name value =
+      setProperty popup name (sprintf "%.2fpx" value)
+
+    setLength "--tooltip-viewport-width" width
+    setLength "--tooltip-viewport-height" height
+    setLength "--tooltip-shift-x" 0.
+    setLength "--tooltip-shift-y" 0.
+    popup.RemoveAttribute("data-popover-flip")
+
+    let preferred = bounds popup
+    let preferredOverflow = overflow direction width height preferred
+
+    if preferredOverflow > 0. then
+      popup.SetAttribute("data-popover-flip", "")
+      let opposite = bounds popup
+
+      if overflow direction width height opposite >= preferredOverflow then
+        popup.RemoveAttribute("data-popover-flip")
+
+    let panel = bounds popup
+    let anchor = bounds owner
+    let left = panel.Left |> Bounded.clamp 8. (max 8. (width - panel.Width - 8.))
+    let top = panel.Top |> Bounded.clamp 8. (max 8. (height - panel.Height - 8.))
+    setLength "--tooltip-shift-x" (left - panel.Left)
+    setLength "--tooltip-shift-y" (top - panel.Top)
+
+    setLength
+      "--tooltip-arrow-x"
+      ((anchor.Left + anchor.Width / 2. - left)
+       |> Bounded.clamp 8. (max 8. (panel.Width - 8.)))
+
+    setLength
+      "--tooltip-arrow-y"
+      ((anchor.Top + anchor.Height / 2. - top)
+       |> Bounded.clamp 8. (max 8. (panel.Height - 8.)))
+
+    let content = popup.QuerySelector(".weave-tooltip__content")
+    let contentHeight: float = content?clientHeight
+    let contentWidth: float = content?clientWidth
+    let scrollHeight: float = content?scrollHeight
+    let scrollWidth: float = content?scrollWidth
+
+    if scrollHeight > contentHeight + 0.5 || scrollWidth > contentWidth + 0.5 then
+      content.SetAttribute("tabindex", "0")
+      content.SetAttribute("role", "region")
+      content.SetAttribute("aria-label", "Tooltip content")
+    else
+      content.RemoveAttribute("tabindex")
+      content.RemoveAttribute("role")
+      content.RemoveAttribute("aria-label")
+
+  let watch direction (popup: Dom.Element) =
+    let owner: Dom.Element = popup?parentElement
+    let mutable active = true
+
+    let update () =
+      if active && As<bool>(popup?isConnected) then
+        position direction popup
+
+    update ()
+    let stopOwnerResize = owner |> ResizeListener.watch update
+    let stopPopupResize = popup |> ResizeListener.watch update
+    let scroll = System.Action<Dom.Event>(fun _ -> update ())
+    let removal = DomRemovalListener.create ()
+
+    let dispose () =
+      if active then
+        active <- false
+        JS.Window.RemoveEventListener("scroll", scroll, true)
+        stopOwnerResize ()
+        stopPopupResize ()
+        removal.Disconnect()
+
+    JS.Window.AddEventListener("scroll", scroll, true)
+    removal.Watch(popup, dispose)
+    dispose
+
 [<JavaScript; RequireQualifiedAccess>]
 type Tooltip =
 
@@ -70,7 +189,46 @@ type Tooltip =
     let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
 
     let isVisible = Var.Create false
+    let mutable stopPositioning = ignore
+
+    let updateVisibility (popup: Dom.Element) visible =
+      stopPositioning ()
+      stopPositioning <- ignore
+      TooltipPlacement.setVisible popup Css.``weave-tooltip--visible`` visible
+
+      if visible then
+        stopPositioning <- TooltipPlacement.watch direction popup
+
     let tooltipId = WeaveId.create "weave-tooltip"
+
+    let describe (element: Dom.Element) =
+      let raw = element.GetAttribute("aria-describedby")
+      let existing = if isNull raw then "" else raw
+
+      let tokens =
+        existing.Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Replace("\u000C", " ")
+
+      if not ((" " + tokens + " ").Contains(" " + tooltipId + " ")) then
+        let value =
+          if existing = "" then
+            tooltipId
+          else
+            existing + " " + tooltipId
+
+        element.SetAttribute("aria-describedby", value)
+
+    let describeTriggers (owner: Dom.Element) =
+      describe owner
+      let popup = owner.QuerySelector("#" + tooltipId)
+
+      let targets =
+        owner.QuerySelectorAll("a[href], button, input, select, textarea, summary, [tabindex]")
+
+      for index in 0 .. targets.Length - 1 do
+        let target = As<Dom.Element>(targets.Item index)
+
+        if not (popup.Contains target) then
+          describe target
 
     let directionAttr =
       match direction with
@@ -95,9 +253,28 @@ type Tooltip =
       yield! rootClasses |> List.map cl
       yield! attrs
 
-      on.keyDown (fun _ ev ->
+      on.afterRender describeTriggers
+      on.focusIn (fun owner ev ->
+        let target = As<Dom.Element>(ev.Target)
+        let popup = owner.QuerySelector("#" + tooltipId)
+
+        if not (popup.Contains target) then
+          describe target)
+
+      on.keyDown (fun owner ev ->
         match ev with
-        | Key.Escape when isVisible.Value -> Var.Set isVisible false
+        | Key.Escape when isVisible.Value ->
+          ev.PreventDefault()
+          ev.StopPropagation()
+          let popup = owner.QuerySelector("[role='tooltip']")
+          let active = As<Dom.Element>(JS.Document?activeElement)
+
+          if popup.Contains active then
+            FocusNavigation.visibleElements owner
+            |> Array.tryFind (fun element -> not (popup.Contains element))
+            |> Option.iter (fun element -> element?focus ())
+
+          Var.Set isVisible false
         | _ -> ())
 
       yield!
@@ -108,8 +285,14 @@ type Tooltip =
               on.mouseLeave (fun _ _ -> Var.Set isVisible false)
             ]
           | Tooltip.Activation.Focus -> [
-              on.focusIn (fun _ _ -> Var.Set isVisible true)
-              on.focusOut (fun _ _ -> Var.Set isVisible false)
+              on.focusIn (fun _ _ ->
+                if not isVisible.Value then
+                  Var.Set isVisible true)
+              on.focusOut (fun owner ev ->
+                let next = As<Dom.Element>(ev?relatedTarget)
+
+                if isNull next || not (owner.Contains next) then
+                  Var.Set isVisible false)
             ]
           | Tooltip.Activation.Click -> [ on.click (fun _ _ -> Var.Set isVisible (not isVisible.Value)) ])
     ] [
@@ -122,6 +305,6 @@ type Tooltip =
         directionAttr
         yield! tooltipAttrs
 
-        isVisible.View |> Attr.DynamicClassPred Css.``weave-tooltip--visible``
-      ] [ tooltipContent ]
+        isVisible.View |> Attr.DynamicCustom updateVisibility
+      ] [ div [ cl Css.``weave-tooltip__content`` ] [ tooltipContent ] ]
     ]

@@ -16,8 +16,14 @@
 }
 
 .weave-tooltip {
+  --tooltip-padding-block: #{density-spacing(4, 4)};
   position: absolute;
-  padding: density-spacing(4, 4) density-spacing(8, 4);
+  display: none;
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: calc(var(--tooltip-viewport-width, 100vw) - 16px);
+  padding: var(--tooltip-padding-block) density-spacing(8, 4);
+  translate: var(--tooltip-shift-x, 0px) var(--tooltip-shift-y, 0px);
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -26,15 +32,17 @@
   line-height: 1.4em;
   border-radius: var(--default-borderradius);
   z-index: var(--weave-zindex-tooltip);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   box-shadow: var(--elevation-2);
 
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  @include transition((opacity, visibility, transform), shorter, $ease-decelerate);
+  @include transition((opacity, visibility), shorter, $ease-decelerate);
 
   &.weave-tooltip--visible {
+    display: block;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -76,7 +84,7 @@
 
       &.weave-tooltip--arrow::after {
         left: calc(100% - 1px);
-        top: 50%;
+        top: var(--tooltip-arrow-y, 50%);
         transform: translateY(-50%) rotate(270deg);
       }
     }
@@ -93,7 +101,7 @@
 
       &.weave-tooltip--arrow::after {
         right: calc(100% - 1px);
-        top: 50%;
+        top: var(--tooltip-arrow-y, 50%);
         transform: translateY(-50%) rotate(90deg);
       }
     }
@@ -110,7 +118,7 @@
 
       &.weave-tooltip--arrow::after {
         top: calc(100% - 1px);
-        left: 50%;
+        left: var(--tooltip-arrow-x, 50%);
         transform: translateX(-50%) rotate(0deg);
       }
     }
@@ -127,7 +135,7 @@
 
       &.weave-tooltip--arrow::after {
         bottom: calc(100% - 1px);
-        left: 50%;
+        left: var(--tooltip-arrow-x, 50%);
         transform: translateX(-50%) rotate(180deg);
       }
     }
@@ -141,4 +149,11 @@
     border-color: transparent;
     border-top-color: inherit;
   }
+}
+
+// Keep the arrow outside the scrolling box so it is never clipped by overflow.
+.weave-tooltip__content {
+  max-block-size: calc(var(--tooltip-viewport-height, 100vh) - 16px - var(--tooltip-padding-block) - var(--tooltip-padding-block));
+  overflow: auto;
+  overflow-wrap: anywhere;
 }

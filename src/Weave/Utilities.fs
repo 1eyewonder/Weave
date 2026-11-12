@@ -137,6 +137,75 @@ module DocumentEventListener =
 
   let onMouseDown = watch "mousedown"
 
+/// Shared native focus candidates for overlay keyboard boundaries.
+[<JavaScript>]
+module internal FocusNavigation =
+
+  let private focusableSelector =
+    "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type=\"hidden\"]), select:not([disabled]), summary, [tabindex]"
+
+  let rec private hiddenByClosedDetails (candidate: Dom.Element) (ancestor: Dom.Element) =
+    if isNull ancestor then
+      false
+    else
+      let closedDetails =
+        ancestor.TagName.ToLower() = "details" && not (ancestor.HasAttribute "open")
+
+      let hiddenHere =
+        if closedDetails then
+          let summary = ancestor.QuerySelector ":scope > summary"
+          isNull summary || not (summary.Contains candidate)
+        else
+          false
+
+      hiddenHere
+      || hiddenByClosedDetails candidate (As<Dom.Element>(ancestor?parentElement))
+
+  let visibleElements (element: Dom.Element) =
+    let candidates = element.QuerySelectorAll(focusableSelector)
+
+    let visible = [|
+      for index in 0 .. candidates.Length - 1 do
+        let candidate = As<Dom.Element>(candidates.Item index)
+
+        if
+          As<int>(candidate?tabIndex) >= 0
+          && not (As<bool>(candidate?matches (":disabled")))
+          && not (hiddenByClosedDetails candidate (As<Dom.Element>(candidate?parentElement)))
+          && candidate.GetClientRects().Length > 0
+          && As<string>(JS.Window?getComputedStyle(candidate)?visibility) <> "hidden"
+          && isNull (candidate?closest ("[inert]"))
+        then
+          candidate
+    |]
+
+    let active = As<Dom.Element>(JS.Document?activeElement)
+
+    let isNamedRadio (candidate: Dom.Element) =
+      As<bool>(candidate?matches ("input[type=radio]"))
+      && not (System.String.IsNullOrEmpty(candidate.GetAttribute "name"))
+
+    let isRadioEntry (candidate: Dom.Element) =
+      if not (isNamedRadio candidate) then
+        true
+      else
+        let group =
+          visible
+          |> Array.filter (fun other ->
+            isNamedRadio other
+            && other.GetAttribute "name" = candidate.GetAttribute "name"
+            && obj.ReferenceEquals(As<obj>(other?form), As<obj>(candidate?form)))
+
+        let entry =
+          group
+          |> Array.tryFind (fun radio -> obj.ReferenceEquals(radio, active))
+          |> Option.orElseWith (fun () -> group |> Array.tryFind (fun radio -> As<bool>(radio?``checked``)))
+          |> Option.orElseWith (fun () -> Array.tryHead group)
+
+        entry |> Option.exists (fun radio -> obj.ReferenceEquals(radio, candidate))
+
+    visible |> Array.filter isRadioEntry
+
 /// <summary>
 /// Provides scoped keyboard navigation for menu components (ButtonMenu, Dropdown).
 /// Listens on a container element for keydown events and manages focus among

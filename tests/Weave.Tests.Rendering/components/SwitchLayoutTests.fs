@@ -198,3 +198,31 @@ type SwitchLayoutTests() =
       $"Label center (x={labelCenter}) should be near container center (x={containerCenter})"
     )
   }
+
+  [<Theory>]
+  [<InlineData(320, "small", 32.0, 16.0, 12.0)>]
+  [<InlineData(320, "medium", 40.0, 20.0, 16.0)>]
+  [<InlineData(320, "large", 48.0, 24.0, 20.0)>]
+  [<InlineData(1280, "small", 32.0, 16.0, 12.0)>]
+  [<InlineData(1280, "medium", 40.0, 20.0, 16.0)>]
+  [<InlineData(1280, "large", 48.0, 24.0, 20.0)>]
+  member this.``public sizes scale track and keep both thumb states inside``
+    (viewportWidth: int, size: string, trackWidth: float, trackHeight: float, idleThumb: float)
+    = task {
+    do! this.LoadFixture(viewportWidth)
+
+    for state in [ "off"; "on" ] do
+      let root = this.Page.Locator($"#size-{size}-{state}")
+      let! track = root.Locator(".weave-switch__container").BoundingBoxAsync()
+      let! thumb = root.Locator(".weave-switch__thumb").BoundingBoxAsync()
+      let expectedThumb = if state = "on" then trackHeight else idleThumb
+
+      Assert.True(abs (float track.Width - trackWidth) < 1.0)
+      Assert.True(abs (float track.Height - trackHeight) < 1.0)
+      Assert.True(abs (float thumb.Width - expectedThumb) < 1.0)
+      Assert.True(abs (float thumb.Height - expectedThumb) < 1.0)
+      Assert.True(thumb.X >= track.X - 1.0f)
+      Assert.True(thumb.X + thumb.Width <= track.X + track.Width + 1.0f)
+      Assert.True(thumb.Y >= track.Y - 1.0f)
+      Assert.True(thumb.Y + thumb.Height <= track.Y + track.Height + 1.0f)
+  }

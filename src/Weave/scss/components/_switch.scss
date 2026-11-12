@@ -3,6 +3,9 @@
 
 .weave-switch {
   --switch-brand-color: var(--palette-action-default);
+  --switch-width: 40px;
+  --switch-height: 20px;
+  --switch-thumb-size: 16px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -20,6 +23,18 @@
   }
 }
 
+.weave-switch.weave-switch__base--small {
+  --switch-width: 32px;
+  --switch-height: 16px;
+  --switch-thumb-size: 12px;
+}
+
+.weave-switch.weave-switch__base--large {
+  --switch-width: 48px;
+  --switch-height: 24px;
+  --switch-thumb-size: 20px;
+}
+
 .weave-switch--disabled,
 .weave-switch--disabled * {
   cursor: default !important;
@@ -35,8 +50,8 @@
   --switch-brand-color: inherit;
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 20px;
+  width: var(--switch-width);
+  height: var(--switch-height);
   flex-shrink: 0;
   vertical-align: middle;
 
@@ -67,14 +82,14 @@
   height: 100%;
   box-sizing: border-box;
   border: 2px solid var(--switch-brand-color, var(--palette-action-default));
-  border-radius: 10px;
+  border-radius: calc(var(--switch-height) / 2);
   background-color: transparent;
   @include transition((opacity, background-color, border-color), short);
 }
 
 .weave-switch__thumb {
-  width: 16px;
-  height: 16px;
+  width: var(--switch-thumb-size);
+  height: var(--switch-thumb-size);
   box-shadow: var(--weave-shadow-thumb);
   border-radius: 50%;
   background-color: var(--switch-thumb-idle, currentColor);
@@ -89,9 +104,9 @@
 
 /* Checked state: grow thumb and move to right */
 .weave-switch__input:checked ~ .weave-switch__thumb {
-  width: 20px;
-  height: 20px;
-  left: calc(100% - 20px);
+  width: var(--switch-height);
+  height: var(--switch-height);
+  left: calc(100% - var(--switch-height));
 }
 .weave-switch__input:checked ~ .weave-switch__track {
   background: var(--switch-brand-color, var(--palette-action-default));

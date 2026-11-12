@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DrawerLayoutPage.fs" />
     <Compile Include="../../src/Weave.Docs/examples/ExampleHelpers.fs" Link="docs/ExampleHelpers.fs" />
     <Compile Include="../../src/Weave.Docs/examples/SnackbarExamples.fs" Link="docs/SnackbarExamples.fs" />
     <Compile Include="ColorPickerPage.fs" />

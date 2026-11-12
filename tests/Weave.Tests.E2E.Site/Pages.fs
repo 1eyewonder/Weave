@@ -2450,6 +2450,12 @@ module Pages =
 
   let private renderPage (hash: string) =
     match hash with
+    | route when
+      route.StartsWith("drawer-sizing-")
+      || route.StartsWith("drawer-clip-")
+      || route.StartsWith("drawer-width-")
+      ->
+      DrawerLayoutPage.render route
     | "scroll-to-top" -> scrollToTopPage 300 false
     | "scroll-to-top-zero" -> scrollToTopPage 0 false
     | "scroll-to-top-negative" -> scrollToTopPage -20 false

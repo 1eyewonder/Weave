@@ -433,9 +433,21 @@ type DrawerContainer =
 
       let bpClass = DrawerBreakpoint.toContainerClass config.Breakpoint
 
+      let widthAttr =
+        config.Width
+        |> Option.map (fun width ->
+          let property =
+            match config.Position with
+            | Position.Left -> "--drawer-width-left"
+            | Position.Right -> "--drawer-width-right"
+
+          Attr.Style property (sprintf "%dpx" width))
+        |> Attr.bindOption id
+
       [
         cl sideClass
         cl bpClass
+        widthAttr
 
         Map [
           (true, Variant.Responsive), Css.``weave-drawer-container--open-responsive``

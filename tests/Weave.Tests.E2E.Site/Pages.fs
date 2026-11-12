@@ -1973,6 +1973,27 @@ module Pages =
       ]
     ]
 
+  let private tooltipCustomIdPage () =
+    Tooltip.create (
+      Button.create (text "Custom ID trigger", ignore),
+      text "Custom ID description",
+      tooltipAttrs = [ attr.id "custom-tooltip" ],
+      wrapperAttrs = [ Attr.Create "data-testid" "tooltip-custom-id" ]
+    )
+
+  let private tooltipNestedPage () =
+    Tooltip.create (
+      Tooltip.create (
+        Button.create (text "Nested trigger", ignore),
+        text "Inner description",
+        tooltipAttrs = [ attr.id "inner-tooltip" ],
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-inner" ]
+      ),
+      text "Outer description",
+      tooltipAttrs = [ attr.id "outer-tooltip" ],
+      wrapperAttrs = [ Attr.Create "data-testid" "tooltip-outer" ]
+    )
+
   let private tooltipInDialogPage () =
     let isOpen = Var.Create true
 
@@ -2525,6 +2546,8 @@ module Pages =
     | "buttongroup" -> buttongroupPage ()
     | "buttongroup-palette" -> filledButtonGroupPalettePage ()
     | "tooltip" -> tooltipPage ()
+    | "tooltip-custom-id" -> tooltipCustomIdPage ()
+    | "tooltip-nested" -> tooltipNestedPage ()
     | "tooltip-viewport" -> tooltipViewportPage ()
     | "tooltip-in-dialog" -> tooltipInDialogPage ()
     | "progress" -> progressPage ()

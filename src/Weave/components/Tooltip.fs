@@ -189,6 +189,7 @@ type Tooltip =
     let tooltipAttrs = tooltipAttrs |> Option.defaultValue []
 
     let isVisible = Var.Create false
+    let popupRef = ref (None: Dom.Element option)
     let mutable stopPositioning = ignore
 
     let updateVisibility (popup: Dom.Element) visible =
@@ -201,25 +202,35 @@ type Tooltip =
 
     let tooltipId = WeaveId.create "weave-tooltip"
 
-    let describe (element: Dom.Element) =
+    let effectiveId (popup: Dom.Element) =
+      let id = popup.GetAttribute("id")
+
+      if System.String.IsNullOrWhiteSpace id then
+        popup.SetAttribute("id", tooltipId)
+        tooltipId
+      else
+        id
+
+    let describe descriptionId (element: Dom.Element) =
       let raw = element.GetAttribute("aria-describedby")
       let existing = if isNull raw then "" else raw
 
       let tokens =
         existing.Replace("\t", " ").Replace("\r", " ").Replace("\n", " ").Replace("\u000C", " ")
 
-      if not ((" " + tokens + " ").Contains(" " + tooltipId + " ")) then
+      if not ((" " + tokens + " ").Contains(" " + descriptionId + " ")) then
         let value =
           if existing = "" then
-            tooltipId
+            descriptionId
           else
-            existing + " " + tooltipId
+            existing + " " + descriptionId
 
         element.SetAttribute("aria-describedby", value)
 
-    let describeTriggers (owner: Dom.Element) =
-      describe owner
-      let popup = owner.QuerySelector("#" + tooltipId)
+    let describeTriggers (popup: Dom.Element) =
+      let owner = As<Dom.Element>(popup?parentElement)
+      let descriptionId = effectiveId popup
+      describe descriptionId owner
 
       let targets =
         owner.QuerySelectorAll("a[href], button, input, select, textarea, summary, [tabindex]")
@@ -228,7 +239,7 @@ type Tooltip =
         let target = As<Dom.Element>(targets.Item index)
 
         if not (popup.Contains target) then
-          describe target
+          describe descriptionId target
 
     let directionAttr =
       match direction with
@@ -249,30 +260,29 @@ type Tooltip =
     div [
       AlignItems.center
       AlignContent.center
-      Attr.Create "aria-describedby" tooltipId
       yield! rootClasses |> List.map cl
       yield! attrs
 
-      on.afterRender describeTriggers
       on.focusIn (fun owner ev ->
         let target = As<Dom.Element>(ev.Target)
-        let popup = owner.QuerySelector("#" + tooltipId)
 
-        if not (popup.Contains target) then
-          describe target)
+        match popupRef.Value with
+        | Some popup when not (popup.Contains target) -> describe (effectiveId popup) target
+        | _ -> ())
 
       on.keyDown (fun owner ev ->
         match ev with
         | Key.Escape when isVisible.Value ->
           ev.PreventDefault()
           ev.StopPropagation()
-          let popup = owner.QuerySelector("[role='tooltip']")
           let active = As<Dom.Element>(JS.Document?activeElement)
 
-          if popup.Contains active then
+          match popupRef.Value with
+          | Some popup when popup.Contains active ->
             FocusNavigation.visibleElements owner
             |> Array.tryFind (fun element -> not (popup.Contains element))
             |> Option.iter (fun element -> element?focus ())
+          | _ -> ()
 
           Var.Set isVisible false
         | _ -> ())
@@ -304,6 +314,9 @@ type Tooltip =
         yield! tooltipClasses |> List.map cl
         directionAttr
         yield! tooltipAttrs
+        on.afterRender (fun popup ->
+          popupRef.Value <- Some popup
+          describeTriggers popup)
 
         isVisible.View |> Attr.DynamicCustom updateVisibility
       ] [ div [ cl Css.``weave-tooltip__content`` ] [ tooltipContent ] ]

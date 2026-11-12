@@ -78,6 +78,39 @@ type TooltipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``custom tooltip ID is used by the trigger description``() = task {
+    let errors = ResizeArray<string>()
+    this.Page.PageError.Add(fun error -> errors.Add error)
+    do! this.NavigateTo("tooltip-custom-id")
+    let wrapper = this.Page.GetByTestId("tooltip-custom-id")
+    let trigger = wrapper.Locator("button")
+    let tooltip = wrapper.Locator(".weave-tooltip")
+    do! this.Expect(tooltip).ToHaveAttributeAsync("id", "custom-tooltip")
+    do! trigger.FocusAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+    do! this.Expect(trigger).ToHaveAttributeAsync("aria-describedby", "custom-tooltip")
+    do! trigger.PressAsync("Escape")
+    do! this.Expect(tooltip).ToBeHiddenAsync()
+    Assert.Empty(errors)
+  }
+
+  [<Fact>]
+  member this.``nested tooltip descriptions use each rendered bubble``() = task {
+    let errors = ResizeArray<string>()
+    this.Page.PageError.Add(fun error -> errors.Add error)
+    do! this.NavigateTo("tooltip-nested")
+    let outer = this.Page.GetByTestId("tooltip-outer")
+    let inner = this.Page.GetByTestId("tooltip-inner")
+    do! this.Expect(outer.Locator(".weave-tooltip").Last).ToHaveAttributeAsync("id", "outer-tooltip")
+    do! this.Expect(inner.Locator(".weave-tooltip")).ToHaveAttributeAsync("id", "inner-tooltip")
+    let! outerDescription = outer.GetAttributeAsync("aria-describedby")
+    let! innerDescription = inner.GetAttributeAsync("aria-describedby")
+    Assert.Equal("outer-tooltip", outerDescription)
+    Assert.Contains("inner-tooltip", innerDescription)
+    Assert.Empty(errors)
+  }
+
+  [<Fact>]
   member this.``tooltip description preserves existing IDs without adding duplicates``() = task {
     do! this.NavigateTo("tooltip")
     let wrapper = this.Page.GetByTestId("tooltip-default")

@@ -145,3 +145,105 @@ type TextFieldLayoutTests() =
       "Standard TextField input paddingBottom should be non-zero"
       paddingBottom
   }
+
+  [<Theory>]
+  [<InlineData(320, "compact", "empty")>]
+  [<InlineData(320, "compact", "populated")>]
+  [<InlineData(320, "standard", "empty")>]
+  [<InlineData(320, "standard", "populated")>]
+  [<InlineData(320, "spacious", "empty")>]
+  [<InlineData(320, "spacious", "populated")>]
+  [<InlineData(1280, "compact", "empty")>]
+  [<InlineData(1280, "compact", "populated")>]
+  [<InlineData(1280, "standard", "empty")>]
+  [<InlineData(1280, "standard", "populated")>]
+  [<InlineData(1280, "spacious", "empty")>]
+  [<InlineData(1280, "spacious", "populated")>]
+  member this.``variants have equal visible control heights for empty and populated values``
+    (width: int, density: string, state: string)
+    = task {
+    do! this.LoadFixture(width)
+    let matrix = this.Page.Locator("#textfield-variant-sizing")
+
+    let! _ =
+      matrix.EvaluateAsync("(el, density) => el.className = 'weave-density--' + density", density)
+
+    let mutable heights = []
+
+    for variant in [ "standard"; "filled"; "outlined" ] do
+      let field = this.Page.Locator($"#textfield-sizing-{variant}-{state}")
+      let! control = field.Locator(".weave-field__control").BoundingBoxAsync()
+      heights <- (variant, control.Height) :: heights
+
+      if state = "populated" then
+        let! label = field.Locator(".weave-field__label span").BoundingBoxAsync()
+        let input = field.Locator(".weave-field__input")
+        let! inputBox = input.BoundingBoxAsync()
+
+        let! paddingTop =
+          input.EvaluateAsync<float>("el => parseFloat(getComputedStyle(el).paddingTop)")
+
+        Assert.True(
+          float (label.Y + label.Height) <= float inputBox.Y + paddingTop + 1.0,
+          $"{variant} floating label should remain above the entered text"
+        )
+
+    let controlHeights = heights |> List.map snd
+    let difference = List.max controlHeights - List.min controlHeights
+
+    Assert.True(
+      difference <= 1.0f,
+      $"{density} {state} controls should have equal heights; measured {heights}"
+    )
+  }
+
+  [<Theory>]
+  [<InlineData(320, "compact")>]
+  [<InlineData(320, "standard")>]
+  [<InlineData(320, "spacious")>]
+  [<InlineData(1280, "compact")>]
+  [<InlineData(1280, "standard")>]
+  [<InlineData(1280, "spacious")>]
+  member this.``empty labels share a baseline across variants``(width: int, density: string) = task {
+    do! this.LoadFixture(width)
+    let matrix = this.Page.Locator("#textfield-variant-sizing")
+
+    let! _ =
+      matrix.EvaluateAsync("(el, density) => el.className = 'weave-density--' + density", density)
+
+    let mutable baselines = []
+
+    for variant in [ "standard"; "filled"; "outlined" ] do
+      let field = this.Page.Locator($"#textfield-sizing-{variant}-empty")
+      let! control = field.Locator(".weave-field__control").BoundingBoxAsync()
+      let! label = field.Locator(".weave-field__label span").BoundingBoxAsync()
+      baselines <- (variant, label.Y + label.Height - control.Y) :: baselines
+
+    let labelBaselines = baselines |> List.map snd
+    let difference = List.max labelBaselines - List.min labelBaselines
+
+    Assert.True(difference <= 1.0f, $"{density} empty labels should share a baseline; measured {baselines}")
+  }
+
+  [<Theory>]
+  [<InlineData("primary")>]
+  [<InlineData("secondary")>]
+  [<InlineData("tertiary")>]
+  [<InlineData("error")>]
+  [<InlineData("warning")>]
+  [<InlineData("success")>]
+  [<InlineData("info")>]
+  member this.``input caret follows the selected field palette``(color: string) = task {
+    do! this.LoadFixture()
+
+    for variant in [ "standard"; "filled"; "outlined" ] do
+      let field = this.Page.Locator($"#textfield-sizing-{variant}-empty")
+
+      let! matches =
+        field.EvaluateAsync<bool>(
+          "(field, color) => { field.classList.add('weave-field--' + color); const input = field.querySelector('.weave-field__input'); const sample = document.createElement('span'); sample.style.color = 'var(--palette-' + color + ')'; field.append(sample); const expected = getComputedStyle(sample).color; const actual = getComputedStyle(input).caretColor; sample.remove(); return actual === expected; }",
+          color
+        )
+
+      Assert.True(matches, $"{variant} field caret should use the {color} palette")
+  }

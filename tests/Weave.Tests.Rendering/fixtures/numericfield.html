@@ -55,5 +55,118 @@
         </div>
       </div>
     </div>
-  </body>
+    <div id="numeric-column" style="display: flex; flex-direction: column; gap: 8px; width: 160px; height: 180px; padding: 16px; box-sizing: border-box; overflow: hidden; margin-top: 16px">
+      <div id="numeric-column-label">STR</div>
+      <div id="numeric-column-field" class="weave-field weave-field--outlined weave-field--numeric weave-field--has-spin weave-field--full-width weave-typography--body2">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="10" aria-label="Strength" />
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="numeric-column-modifier">+0 modifier</div>
+    </div>
+    <!-- Variant sizing compares visible controls, excluding floating-label gutters. -->
+    <div id="numericfield-variant-sizing" style="display: flex; flex-direction: column; align-items: flex-start; gap: 24px; margin-top: 32px">
+      <div id="numericfield-sizing-standard-empty" class="weave-field weave-field--standard weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="numericfield-sizing-filled-empty" class="weave-field weave-field--filled weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="numericfield-sizing-outlined-empty" class="weave-field weave-field--outlined weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="numericfield-sizing-standard-populated" class="weave-field weave-field--standard weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="10" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="numericfield-sizing-filled-populated" class="weave-field weave-field--filled weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="10" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+      <div id="numericfield-sizing-outlined-populated" class="weave-field weave-field--outlined weave-typography weave-typography--body2 weave-field--numeric weave-field--has-spin" style="width: 180px">
+        <div class="weave-field__control">
+          <input class="weave-field__input" type="number" value="10" />
+          <label class="weave-field__label weave-field__label--float"><span>Label</span></label>
+          <div class="weave-field__adornment weave-field__adornment--end">
+            <div class="weave-field__spin-buttons">
+              <button class="weave-field__spin-btn" type="button" aria-label="Increment">&#9650;</button>
+              <button class="weave-field__spin-btn" type="button" aria-label="Decrement">&#9660;</button>
+            </div>
+          </div>
+          <fieldset class="weave-field__outline">
+            <legend class="weave-field__outline-legend weave-field__outline-legend--float"><span>Label</span></legend>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <div id="numeric-no-spin" class="weave-field weave-field--standard weave-field--numeric weave-typography--body2" style="width: 180px; margin-top: 16px">
+      <div class="weave-field__control">
+        <input class="weave-field__input" type="number" value="5" aria-label="Without spin buttons" />
+        <div class="weave-field__adornment weave-field__adornment--end"></div>
+      </div>
+    </div>  </body>
 </html>

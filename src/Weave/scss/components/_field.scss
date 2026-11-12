@@ -12,12 +12,12 @@
   // Standard variant is the default — these custom properties and bottom-border
   // apply unless overridden by .weave-field--filled or .weave-field--outlined.
   --field-label-x: 0.75em;
-  --field-label-y: 0.25rem;
+  --field-label-y: 1rem;
   --field-label-float-x: 0.75em;
   --field-label-float-y: -1.09375em;
-  --field-input-padding: 0.25rem 0.75em 0.4375rem;
-  --field-adorn-pt: 0.25rem;
-  --field-adorn-pb: 0.4375rem;
+  --field-input-padding: 1rem 0.75em 0.9375rem;
+  --field-adorn-pt: 1rem;
+  --field-adorn-pb: 0.9375rem;
   --field-adorn-start-pl: 0.75em;
   --field-adorn-end-pr: 0.75em;
   --field-adorn-end-ml: 0em;
@@ -36,6 +36,8 @@
   align-items: center;
   cursor: text;
   width: 100%;
+  // Match the filled variant while allowing multiline controls to grow.
+  min-height: calc(1lh + 2rem);
   box-sizing: border-box;
 }
 
@@ -76,6 +78,7 @@
   background: transparent;
   font: inherit;
   color: currentColor;
+  caret-color: var(--palette-primary, currentColor);
   box-sizing: border-box;
   margin: 0;
   padding: var(--field-input-padding, 0);
@@ -239,7 +242,7 @@ textarea.weave-field__input {
 // ===========================================================================
 .weave-field--filled {
   --field-label-x: 0.75em;
-  --field-label-y: 1.375rem;
+  --field-label-y: 1rem;
   --field-label-float-x: 0.75em;
   --field-label-float-y: 0.4375em;
   --field-input-padding: 1.375rem 0.75em 0.5625rem;
@@ -265,7 +268,7 @@ textarea.weave-field__input {
 // ===========================================================================
 .weave-field--outlined {
   --field-label-x: 0.875em;
-  --field-label-y: 0.9rem;
+  --field-label-y: 1rem;
   --field-label-float-x: 0.875em;
   --field-label-float-y: -0.5625em;
   --field-input-padding: 0.9rem 0.875em;
@@ -360,7 +363,6 @@ textarea.weave-field__input {
 
 .weave-field--full-width {
   width: 100%;
-  min-height: 100%;
 }
 
 @each $color in $field-colors {
@@ -370,6 +372,10 @@ textarea.weave-field__input {
   }
 
   .weave-field--#{$color} {
+    .weave-field__input {
+      caret-color: var(--palette-#{$color}, currentColor);
+    }
+
     &.weave-field--focused .weave-field__label--float {
       color: var(--palette-#{$color});
     }
@@ -401,6 +407,12 @@ textarea.weave-field__input {
       -webkit-appearance: none;
       margin: 0;
     }
+  }
+
+  // NumericField retains the reactive adornment host when its spin controls
+  // are hidden. An empty host must not reserve padding beside the input.
+  &:not(.weave-field--has-spin) .weave-field__adornment--end {
+    display: none;
   }
 
   // When spin buttons are present, the end adornment stretches to fill the

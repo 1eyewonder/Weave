@@ -1564,6 +1564,41 @@ module Pages =
 
     drawerPageWithContent variant initiallyOpen content
 
+  let private drawerWithoutBackdropClosePage variant =
+    let isOpen = Var.Create false
+
+    let content =
+      Button.create (
+        text "Close drawer from inside",
+        (fun () -> Var.Set isOpen false),
+        attrs = [ Attr.Create "data-testid" "drawer-internal-close" ]
+      )
+
+    div [] [
+      Button.create (
+        text "Open drawer",
+        (fun () -> Var.Set isOpen true),
+        attrs = [ Attr.Create "data-testid" "drawer-no-backdrop-close-trigger" ]
+      )
+
+      DrawerContainer.create (
+        mainContent =
+          Button.create (
+            text "Main focus target",
+            onClick = ignore,
+            attrs = [ Attr.Create "data-testid" "drawer-no-backdrop-close-main" ]
+          ),
+        leftDrawer =
+          Drawer.create (
+            content,
+            isOpen.View,
+            variant = variant,
+            attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
+          ),
+        attrs = [ Attr.Style "height" "100vh" ]
+      )
+    ]
+
   let private nativeOverlayControls () =
     let selected = Var.Create "one"
 
@@ -2565,6 +2600,8 @@ module Pages =
     | "drawer-summary-responsive" -> drawerSummaryOnlyPage Drawer.Variant.Responsive
     | "drawer-native-temporary" -> drawerNativeControlsPage Drawer.Variant.Temporary
     | "drawer-native-responsive" -> drawerNativeControlsPage Drawer.Variant.Responsive
+    | "drawer-no-backdrop-close-temporary" -> drawerWithoutBackdropClosePage Drawer.Variant.Temporary
+    | "drawer-no-backdrop-close-mini" -> drawerWithoutBackdropClosePage Drawer.Variant.Mini
     | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false
     | "drawer-responsive" -> drawerPage Drawer.Variant.Responsive true
     | "drawer" -> drawerPage Drawer.Variant.Temporary true

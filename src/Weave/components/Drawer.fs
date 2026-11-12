@@ -285,8 +285,6 @@ type Drawer =
     // responsive breakpoint and overrides as the drawer's CSS.
     let overlayIsVisible () =
       currentlyOpen.Value
-      && config.Variant <> Variant.Mini
-      && config.OverlayClose.IsSome
       && (overlayElement.Value
           |> Option.exists (fun overlay -> As<string>(JS.Window?getComputedStyle(overlay)?display) <> "none"))
 
@@ -302,9 +300,9 @@ type Drawer =
       match drawerElement.Value with
       | Some element when As<bool>(element?isConnected) ->
         if overlayIsVisible () then
-          if not containsFocus.Value then
-            let active = As<Dom.Element>(JS.Document?activeElement)
+          let active = As<Dom.Element>(JS.Document?activeElement)
 
+          if not containsFocus.Value || isNull active || not (element.Contains active) then
             if not (isNull active) && not (element.Contains active) then
               previousFocus.Value <- Some active
 

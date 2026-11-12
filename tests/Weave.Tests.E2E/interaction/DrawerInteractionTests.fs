@@ -120,6 +120,50 @@ type DrawerInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``temporary backdrop without a close callback still contains focus``() = task {
+    do! this.Page.SetViewportSizeAsync(390, 844)
+    do! this.NavigatePage(this.Page, "drawer-no-backdrop-close-temporary")
+    let trigger = this.Page.GetByTestId("drawer-no-backdrop-close-trigger")
+    let item = this.Page.GetByTestId("drawer-internal-close")
+    let overlay = this.Page.Locator(".weave-drawer__overlay")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(overlay).ToBeVisibleAsync()
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! item.ClickAsync()
+    do! this.Expect(overlay).ToBeHiddenAsync()
+    do! this.Expect(trigger).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``mini drawer traps focus only while its narrow backdrop is visible``() = task {
+    do! this.Page.SetViewportSizeAsync(390, 844)
+    do! this.NavigatePage(this.Page, "drawer-no-backdrop-close-mini")
+    let trigger = this.Page.GetByTestId("drawer-no-backdrop-close-trigger")
+    let item = this.Page.GetByTestId("drawer-internal-close")
+    let main = this.Page.GetByTestId("drawer-no-backdrop-close-main")
+    let overlay = this.Page.Locator(".weave-drawer__overlay")
+    do! trigger.FocusAsync()
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(overlay).ToBeVisibleAsync()
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.SetViewportSizeAsync(1280, 844)
+    do! this.Expect(overlay).ToBeHiddenAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(main).ToBeFocusedAsync()
+    do! this.Page.SetViewportSizeAsync(390, 844)
+    do! this.Expect(overlay).ToBeVisibleAsync()
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! item.ClickAsync()
+    do! this.Expect(overlay).ToBeHiddenAsync()
+    do! this.Expect(main).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``responsive drawer contains focus only while its overlay is visible``() = task {
     do! this.Page.SetViewportSizeAsync(1280, 800)
     do! this.NavigatePage(this.Page, "drawer-responsive")

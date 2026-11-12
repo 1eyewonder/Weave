@@ -962,6 +962,48 @@ module Pages =
       attrs = [ Attr.Style "height" "100vh" ]
     )
 
+  let private dialogInsideDrawerPage createInteraction =
+    let drawerOpen = Var.Create false
+    let dialogOpen = Var.Create false
+    let closeDialog () = Var.Set dialogOpen false
+
+    let drawerContent =
+      div [] [
+        Button.create (
+          text "Open dialog",
+          (fun () -> Var.Set dialogOpen true),
+          attrs = [ Attr.Create "data-testid" "nested-dialog-trigger" ]
+        )
+        dialogOpen.View
+        |> Doc.BindView(fun visible ->
+          if visible then
+            Dialog.create (
+              DialogTitle.create (text "Dialog inside drawer"),
+              DialogContent.create (Button.create (text "Confirm", closeDialog)),
+              dialogInteraction = View.Const(createInteraction closeDialog)
+            )
+          else
+            Doc.Empty)
+      ]
+
+    DrawerContainer.create (
+      mainContent =
+        Button.create (
+          text "Open drawer",
+          (fun () -> Var.Set drawerOpen true),
+          attrs = [ Attr.Create "data-testid" "nested-drawer-trigger" ]
+        ),
+      leftDrawer =
+        Drawer.create (
+          drawerContent,
+          drawerOpen.View,
+          variant = Drawer.Variant.Temporary,
+          overlayClose = (fun () -> Var.Set drawerOpen false),
+          attrs = [ Attr.Create "data-testid" "nested-dialog-drawer" ]
+        ),
+      attrs = [ Attr.Style "height" "100vh" ]
+    )
+
   let private dialogForcePage () =
     Dialog.create (
       DialogTitle.create (text "Force Dialog Title"),
@@ -1482,7 +1524,7 @@ module Pages =
           Doc.Empty)
     ]
 
-  let private drawerPage variant initiallyOpen =
+  let private drawerPageWithContent variant initiallyOpen (drawerContent: Doc) =
     let isOpen = Var.Create initiallyOpen
 
     div [] [
@@ -1503,19 +1545,103 @@ module Pages =
           ],
         leftDrawer =
           Drawer.create (
-            div [] [
-              Button.create (
-                text "Drawer Button",
-                (fun () -> ()),
-                attrs = [ Attr.Create "data-testid" "drawer-button" ]
-              )
-            ],
+            drawerContent,
             isOpen.View,
             variant = variant,
             overlayClose = (fun () -> Var.Set isOpen false),
             attrs = [ Attr.Create "aria-label" "Navigation drawer" ]
           )
       )
+    ]
+
+  let private drawerPage variant initiallyOpen =
+    let content =
+      Button.create (
+        text "Drawer Button",
+        onClick = ignore,
+        attrs = [ Attr.Create "data-testid" "drawer-button" ]
+      )
+
+    drawerPageWithContent variant initiallyOpen content
+
+  let private nativeOverlayControls () =
+    let selected = Var.Create "one"
+
+    let content =
+      div [] [
+        fieldset [ Attr.Create "disabled" "" ] [
+          button [ attr.``type`` "button" ] [ text "Unavailable drawer action" ]
+        ]
+        Button.create (
+          text "First drawer control",
+          onClick = ignore,
+          attrs = [ Attr.Create "data-testid" "drawer-first" ]
+        )
+        input [ attr.``type`` "hidden"; Attr.Create "data-testid" "drawer-hidden" ] []
+        button [
+          attr.``type`` "button"
+          attr.tabindex "-2"
+          Attr.Create "data-testid" "drawer-negative-tabindex"
+        ] [ text "Programmatic focus only" ]
+        details [] [
+          summary [ Attr.Create "data-testid" "drawer-summary" ] [ text "More navigation" ]
+          Button.create (
+            text "Nested drawer control",
+            onClick = ignore,
+            attrs = [ Attr.Create "data-testid" "drawer-nested" ]
+          )
+        ]
+        Radio.create (
+          selected,
+          "one",
+          displayText = View.Const "First radio",
+          inputAttrs = [ attr.name "overlay-choice"; Attr.Create "data-testid" "drawer-radio-one" ]
+        )
+        Radio.create (
+          selected,
+          "two",
+          displayText = View.Const "Second radio",
+          inputAttrs = [ attr.name "overlay-choice"; Attr.Create "data-testid" "drawer-radio-two" ]
+        )
+      ]
+
+    content
+
+  let private drawerNativeControlsPage variant =
+    drawerPageWithContent variant false (nativeOverlayControls ())
+
+  let private drawerSummaryOnlyPage variant =
+    let content =
+      details [] [
+        summary [ Attr.Create "data-testid" "drawer-only-summary" ] [ text "Navigation group" ]
+        Button.create (
+          text "Nested drawer action",
+          onClick = ignore,
+          attrs = [ Attr.Create "data-testid" "drawer-only-nested" ]
+        )
+      ]
+
+    drawerPageWithContent variant false content
+
+  let private dialogNativeControlsPage () =
+    let opened = Var.Create false
+
+    div [] [
+      Button.create (
+        text "Open dialog",
+        onClick = (fun () -> Var.Set opened true),
+        attrs = [ Attr.Create "data-testid" "native-dialog-toggle" ]
+      )
+      opened.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          Dialog.create (
+            DialogTitle.create (text "Native controls"),
+            DialogContent.create (nativeOverlayControls ()),
+            dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> Var.Set opened false))
+          )
+        else
+          Doc.Empty)
     ]
 
   let private linkPage () =
@@ -2407,9 +2533,12 @@ module Pages =
           div [] [ text "Message"; button [ Attr.Style "display" "none" ] [ text "Hidden" ] ]
         )
       )
+    | "dialog-native" -> dialogNativeControlsPage ()
     | "dialog-plain" -> plainDialogPage ()
     | "dialog" -> dialogPage ()
     | "dialog-with-drawer" -> dialogWithDrawerPage ()
+    | "dialog-in-drawer-optional" -> dialogInsideDrawerPage Dialog.Interaction.Optional
+    | "dialog-in-drawer-force" -> dialogInsideDrawerPage (fun _ -> Dialog.Interaction.Force)
     | "dialog-force" -> dialogForcePage ()
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
@@ -2432,6 +2561,10 @@ module Pages =
     | "theme-system" -> themePage true
     | "appbar" -> appbarPage ()
     | "listener-removal" -> listenerRemovalPage ()
+    | "drawer-summary-temporary" -> drawerSummaryOnlyPage Drawer.Variant.Temporary
+    | "drawer-summary-responsive" -> drawerSummaryOnlyPage Drawer.Variant.Responsive
+    | "drawer-native-temporary" -> drawerNativeControlsPage Drawer.Variant.Temporary
+    | "drawer-native-responsive" -> drawerNativeControlsPage Drawer.Variant.Responsive
     | "drawer-closed" -> drawerPage Drawer.Variant.Temporary false
     | "drawer-responsive" -> drawerPage Drawer.Variant.Responsive true
     | "drawer" -> drawerPage Drawer.Variant.Temporary true

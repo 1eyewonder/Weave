@@ -274,20 +274,92 @@ type Drawer =
     // It is cleared after the first open/close interaction.
     let isInitial = Var.Create true
     let mutable firstEventSeen = false
-    let previousFocus = Var.Create(None: Dom.Element option)
+    let previousFocus = ref (None: Dom.Element option)
+    let drawerElement = ref (None: Dom.Element option)
+    let overlayElement = ref (None: Dom.Element option)
+    let currentlyOpen = ref false
+    let containsFocus = ref false
+    let removalListener = DomRemovalListener.create ()
+
+    // Read the rendered overlay so keyboard behavior follows the same
+    // responsive breakpoint and overrides as the drawer's CSS.
+    let overlayIsVisible () =
+      currentlyOpen.Value
+      && config.Variant <> Variant.Mini
+      && config.OverlayClose.IsSome
+      && (overlayElement.Value
+          |> Option.exists (fun overlay -> As<string>(JS.Window?getComputedStyle(overlay)?display) <> "none"))
+
+    let restoreFocus () =
+      previousFocus.Value
+      |> Option.iter (fun element ->
+        if As<bool>(element?isConnected) then
+          element?focus ())
+
+      previousFocus.Value <- None
+
+    let synchronizeFocus () =
+      match drawerElement.Value with
+      | Some element when As<bool>(element?isConnected) ->
+        if overlayIsVisible () then
+          if not containsFocus.Value then
+            let active = As<Dom.Element>(JS.Document?activeElement)
+
+            if not (isNull active) && not (element.Contains active) then
+              previousFocus.Value <- Some active
+
+            let focusable = FocusNavigation.visibleElements element
+
+            match Array.tryHead focusable with
+            | Some target -> target?focus ()
+            | None -> element?focus ()
+
+            containsFocus.Value <- element.Contains(As<Dom.Element>(JS.Document?activeElement))
+        else
+          containsFocus.Value <- false
+
+          if not currentlyOpen.Value then
+            let active = As<Dom.Element>(JS.Document?activeElement)
+
+            if element.Contains active || obj.ReferenceEquals(active, JS.Document?body) then
+              restoreFocus ()
+            else
+              previousFocus.Value <- None
+      | _ -> ()
+
+    let scheduleFocus () =
+      JS.Window.RequestAnimationFrame(fun _ -> synchronizeFocus ()) |> ignore
 
     let trackFocus =
       config.Open
       |> Doc.sinkCached (fun opened ->
-        if opened then
-          let active = JS.Document?activeElement
+        currentlyOpen.Value <- opened
 
-          Var.Set
-            previousFocus
-            (if not (isNull active) && active <> JS.Undefined then
-               Some(As<Dom.Element> active)
-             else
-               None))
+        if opened then
+          let active = As<Dom.Element>(JS.Document?activeElement)
+
+          if not (isNull active) then
+            previousFocus.Value <- Some active
+
+        scheduleFocus ())
+
+    let trapFocus (element: Dom.Element) (ev: Dom.KeyboardEvent) =
+      let focusable = FocusNavigation.visibleElements element
+
+      if focusable.Length = 0 then
+        ev.PreventDefault()
+      else
+        let first = focusable.[0]
+        let last = focusable.[focusable.Length - 1]
+        let active = As<Dom.Element>(JS.Document?activeElement)
+
+        if ev.ShiftKey then
+          if obj.ReferenceEquals(active, first) || obj.ReferenceEquals(active, element) then
+            ev.PreventDefault()
+            last?focus ()
+        elif obj.ReferenceEquals(active, last) then
+          ev.PreventDefault()
+          first?focus ()
 
     let trackInitial =
       Doc.sink
@@ -325,6 +397,9 @@ type Drawer =
           ]
           Attr.DynamicClassPred Css.``weave-drawer__overlay--open`` config.Open
           Attr.DynamicClassPred Css.``weave-drawer--initial`` isInitial.View
+          on.afterRender (fun element ->
+            overlayElement.Value <- Some element
+            scheduleFocus ())
           on.click (fun _ _ -> config.OverlayClose |> Option.iter (fun close -> close ()))
         ] []
 
@@ -348,10 +423,25 @@ type Drawer =
             if opened then
               el.RemoveAttribute("inert")
             else
-              el.SetAttribute("inert", ""))
+              el.SetAttribute("inert", "")
+
+            scheduleFocus ())
         Attr.DynamicClassPred Css.``weave-drawer--initial`` isInitial.View
         Attr.DynamicClassPred Css.``weave-drawer--hover-expand`` config.ExpandOnHover
-        on.keyDown (fun _ ev ->
+        Attr.Create "tabindex" "-1"
+        on.afterRender (fun element ->
+          drawerElement.Value <- Some element
+          ResizeListener.watch scheduleFocus element |> ignore
+
+          removalListener.Watch(
+            element,
+            fun () ->
+              if containsFocus.Value then
+                restoreFocus ()
+          )
+
+          scheduleFocus ())
+        on.keyDown (fun element ev ->
           match ev, config.Variant, config.OverlayClose with
           | Key.Escape, (Variant.Temporary | Variant.Responsive), Some close when
             not (As<bool>(ev?defaultPrevented))
@@ -359,7 +449,8 @@ type Drawer =
             ev.PreventDefault()
             ev.StopPropagation()
             close ()
-            previousFocus.Value |> Option.iter (fun el -> el?focus ())
+          | Key.Tab, _, _ when overlayIsVisible () && not (As<bool>(ev?defaultPrevented)) ->
+            trapFocus element ev
           | _ -> ())
         yield! config.Attrs
       ] [

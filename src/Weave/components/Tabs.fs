@@ -63,16 +63,26 @@ module Tabs =
   /// </summary>
   module HeaderBackground =
 
-    let primary = Attr.Style "--tabs-header-background" Palette.primary
-    let secondary = Attr.Style "--tabs-header-background" Palette.secondary
-    let tertiary = Attr.Style "--tabs-header-background" Palette.tertiary
-    let error = Attr.Style "--tabs-header-background" Palette.error
-    let warning = Attr.Style "--tabs-header-background" Palette.warning
-    let success = Attr.Style "--tabs-header-background" Palette.success
-    let info = Attr.Style "--tabs-header-background" Palette.info
+    let private themed name =
+      Attr.Concat [
+        Attr.Style "--tabs-header-background" ("var(--palette-" + name + ")")
+        Attr.Style "--tabs-header-foreground" ("var(--palette-" + name + "-text)")
+      ]
 
+    let primary = themed "primary"
+    let secondary = themed "secondary"
+    let tertiary = themed "tertiary"
+    let error = themed "error"
+    let warning = themed "warning"
+    let success = themed "success"
+    let info = themed "info"
+
+    /// Custom backgrounds can pair a foreground through --tabs-header-foreground.
     let custom (value: string) =
-      Attr.Style "--tabs-header-background" value
+      Attr.Concat [
+        Attr.Style "--tabs-header-background" value
+        Attr.Style "--tabs-header-foreground" "initial"
+      ]
 
   module Color =
 
@@ -114,13 +124,13 @@ type TabItem =
     let header =
       Doc.Concat [
         match startIcon with
-        | Some icon -> div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
+        | Some icon -> div [ cl Css.``weave-tabs__tab-icon``; Attr.Create "aria-hidden" "true" ] [ icon ]
         | None -> ()
 
         span [ cl Css.``weave-tabs__tab-label`` ] [ text label ]
 
         match endIcon with
-        | Some icon -> div [ cl Css.``weave-tabs__tab-icon`` ] [ icon ]
+        | Some icon -> div [ cl Css.``weave-tabs__tab-icon``; Attr.Create "aria-hidden" "true" ] [ icon ]
         | None -> ()
       ]
 
@@ -245,24 +255,39 @@ module private TabsInternal =
   /// <summary>
   /// Updates the indicator element to match the position and size of the active tab.
   /// </summary>
-  let updateIndicator (headerEl: Dom.Element) (activeIndex: int) (position: Position) =
+  let updateIndicator (headerEl: Dom.Element) (activeIndex: int) (position: Position) (isInitial: bool) =
     let tabs = headerEl.QuerySelectorAll(".weave-tabs__tab")
     let indicatorEl = headerEl.QuerySelector(".weave-tabs__indicator")
 
-    if not (isNull indicatorEl) && activeIndex >= 0 && activeIndex < tabs.Length then
+    if isNull indicatorEl || activeIndex < 0 || activeIndex >= tabs.Length then
+      false
+    else
       let tab = tabs.[activeIndex] :?> Dom.Element
       let isHorizontal = Position.isHorizontal position
+      let tabSize: float = if isHorizontal then tab?offsetWidth else tab?offsetHeight
 
-      if isHorizontal then
-        let tabLeft = tab?offsetLeft: float
-        let tabWidth = tab?offsetWidth: float
-        indicatorEl?style?left <- string<float> tabLeft + "px"
-        indicatorEl?style?width <- string<float> tabWidth + "px"
+      if tabSize <= 0.0 then
+        false
       else
-        let tabTop = tab?offsetTop: float
-        let tabHeight = tab?offsetHeight: float
-        indicatorEl?style?top <- string<float> tabTop + "px"
-        indicatorEl?style?height <- string<float> tabHeight + "px"
+        // The first position is a placement, not a change in selection. Force its
+        // layout before restoring transitions so a non-first tab does not slide in.
+        if isInitial then
+          indicatorEl?style?transition <- "none"
+
+        if isHorizontal then
+          let tabLeft = tab?offsetLeft: float
+          indicatorEl?style?left <- string<float> tabLeft + "px"
+          indicatorEl?style?width <- string<float> tabSize + "px"
+        else
+          let tabTop = tab?offsetTop: float
+          indicatorEl?style?top <- string<float> tabTop + "px"
+          indicatorEl?style?height <- string<float> tabSize + "px"
+
+        if isInitial then
+          let _: float = indicatorEl?offsetWidth
+          indicatorEl?style?transition <- ""
+
+        true
 
   let mutable private nextGroupId = 0
 
@@ -366,9 +391,13 @@ type Tabs =
       | Some el -> Var.Set showScrollButtons (TabsInternal.checkOverflow el position)
       | None -> ()
 
+    let mutable indicatorPositioned = false
+
     let updateIndicator () =
       match headerRef.Value with
-      | Some el -> TabsInternal.updateIndicator el activeIndex.Value position
+      | Some el ->
+        if TabsInternal.updateIndicator el activeIndex.Value position (not indicatorPositioned) then
+          indicatorPositioned <- true
       | None -> ()
 
     let scrollBack () =
@@ -452,9 +481,28 @@ type Tabs =
     let initializeHeader (element: Dom.Element) =
       headerRef.Value <- Some element
 
+      let mutable lastAvailableSize = -1.0
+
       let updateLayout () =
+        let availableSize: float =
+          if Position.isHorizontal position then
+            element?clientWidth
+          else
+            element?clientHeight
+
+        let sizeChanged = availableSize <> lastAvailableSize
+        lastAvailableSize <- availableSize
         updateOverflow ()
         updateIndicator ()
+
+        if sizeChanged then
+          // Scroll after the overflow buttons have taken their space, without reacting to manual scrolling.
+          JS.SetTimeout
+            (fun () ->
+              if As<bool>(element?isConnected) then
+                TabsInternal.scrollToTab element activeIndex.Value position)
+            0
+          |> ignore
 
       let _ = element |> ResizeListener.watch updateLayout
       ()

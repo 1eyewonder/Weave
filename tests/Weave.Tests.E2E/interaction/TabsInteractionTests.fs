@@ -7,6 +7,24 @@ type TabsInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``filled tab retains its rounded shape as hover moves away``() = task {
+    do! this.NavigateTo("tabs-contrast")
+    let tabs = this.Page.GetByTestId("tabs-tray-primary")
+    let selected = tabs.Locator(".weave-tabs__tab--active")
+    let neighbor = tabs.Locator(".weave-tabs__tab").Nth(1)
+    let indicator = tabs.Locator(".weave-tabs__indicator")
+
+    let! expectedRadius =
+      indicator.EvaluateAsync<string>("el => getComputedStyle(el).borderTopLeftRadius")
+
+    Assert.True(expectedRadius <> "0px", "The indicator should have rounded corners")
+    do! selected.HoverAsync()
+    do! this.Expect(selected).ToHaveCSSAsync("border-top-left-radius", expectedRadius)
+    do! neighbor.HoverAsync()
+    do! this.Expect(selected).ToHaveCSSAsync("border-top-left-radius", expectedRadius)
+  }
+
+  [<Fact>]
   member this.``programmatic click activates a tab``() = task {
     do! this.NavigateTo("tabs")
     let secondTab = this.Page.Locator(".weave-tabs__tab").Nth(1)
@@ -170,4 +188,91 @@ type TabsInteractionTests(fixture: TestFixture) =
     do! firstTab.FocusAsync()
     do! this.Page.Keyboard.PressAsync("End")
     do! this.Expect(lastEnabledTab).ToBeFocusedAsync()
+  }
+
+  [<Theory>]
+  [<InlineData("top")>]
+  [<InlineData("bottom")>]
+  member this.``resizing reveals the selected tab and preserves manual scrolling``(position: string) = task {
+    do! this.NavigateTo("tabs-resize-" + position)
+    let root = this.Page.GetByTestId("resize-tabs")
+    let selected = root.Locator("[role='tab']").Last
+    let header = root.Locator("[role='tablist']")
+    let action = this.Page.GetByTestId("panel-action")
+    do! selected.ClickAsync()
+    do! action.FocusAsync()
+    do! this.Page.SetViewportSizeAsync(320, 900)
+
+    let! _ =
+      this.Page.WaitForFunctionAsync(
+        """() => document.querySelector('[data-testid="resize-tabs"] [role="tablist"]').clientWidth < 320"""
+      )
+
+    let! _ =
+      this.Page.WaitForFunctionAsync(
+        """() => {
+          const header = document.querySelector('[data-testid="resize-tabs"] [role="tablist"]');
+          const selected = header.querySelector('[aria-selected="true"]');
+          const view = header.getBoundingClientRect();
+          const tab = selected.getBoundingClientRect();
+          return tab.left >= view.left - 1 && tab.right <= view.right + 1;
+        }""",
+        null,
+        Microsoft.Playwright.PageWaitForFunctionOptions(Timeout = 3000.0f)
+      )
+
+    do! this.Expect(selected).ToHaveAttributeAsync("aria-selected", "true")
+    do! this.Expect(root.Locator("[role='tabpanel']:visible")).ToHaveTextAsync("Settings panel")
+    do! this.Expect(action).ToBeFocusedAsync()
+    let! selectedScroll = header.EvaluateAsync<float>("el => el.scrollLeft")
+    Assert.True(selectedScroll > 0.0, "The last selected tab requires horizontal scrolling at 320px")
+
+    do!
+      root
+        .GetByRole(
+          Microsoft.Playwright.AriaRole.Button,
+          Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Scroll tabs backward")
+        )
+        .ClickAsync()
+
+    let! _ =
+      this.Page.WaitForFunctionAsync(
+        """selectedScroll => document.querySelector('[data-testid="resize-tabs"] [role="tablist"]').scrollLeft < selectedScroll - 20""",
+        selectedScroll
+      )
+
+    let! _ =
+      header.EvaluateAsync(
+        """el => new Promise((resolve, reject) => {
+          const deadline = performance.now() + 3000;
+          let previous = el.scrollLeft;
+          let stable = 0;
+          const check = () => {
+            if (performance.now() >= deadline) {
+              reject(new Error('Tab scrolling did not settle'));
+              return;
+            }
+            stable = Math.abs(el.scrollLeft - previous) < .1 ? stable + 1 : 0;
+            previous = el.scrollLeft;
+            if (stable >= 6) resolve(); else requestAnimationFrame(check);
+          };
+          requestAnimationFrame(check);
+        })"""
+      )
+
+    let! manualScroll = header.EvaluateAsync<float>("el => el.scrollLeft")
+    do! this.Page.SetViewportSizeAsync(320, 800)
+
+    let! afterHeightResize =
+      header.EvaluateAsync<float>(
+        """el => new Promise(resolve => requestAnimationFrame(() =>
+          requestAnimationFrame(() => resolve(el.scrollLeft))))"""
+      )
+
+    Assert.True(
+      abs (afterHeightResize - manualScroll) <= 1.0,
+      "Height-only resizing must preserve manual header scrolling"
+    )
+
+    do! this.Expect(selected).ToHaveAttributeAsync("aria-selected", "true")
   }

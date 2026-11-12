@@ -140,3 +140,53 @@ type TabsLayoutTests() =
     and! childBox = this.Page.Locator(tabId).BoundingBoxAsync()
     assertFillsHeight "header" $"tab button ({tabId})" parentBox childBox
   }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``filled tray hugs its labels without narrowing the panels``(viewportWidth: int) = task {
+    do! this.LoadFixture viewportWidth
+    let! root = this.Page.Locator("#tabs-filled").BoundingBoxAsync()
+    and! tray = this.Page.Locator("#filled-tray").BoundingBoxAsync()
+    and! first = this.Page.Locator("#filled-first").BoundingBoxAsync()
+    and! last = this.Page.Locator("#filled-last").BoundingBoxAsync()
+    and! panels = this.Page.Locator("#filled-panels").BoundingBoxAsync()
+
+    Assert.True(abs (tray.Width - (last.X + last.Width - first.X)) <= 1.0f)
+    Assert.True(tray.Width < root.Width - 20.0f)
+    Assert.True(abs (panels.Width - root.Width) <= 1.0f)
+  }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``filled centered tray stays centered without stretching``(viewportWidth: int) = task {
+    do! this.LoadFixture viewportWidth
+    let! root = this.Page.Locator("#tabs-filled-centered").BoundingBoxAsync()
+    and! tray = this.Page.Locator("#filled-centered-tray").BoundingBoxAsync()
+
+    Assert.True(abs (tray.X + tray.Width / 2.0f - root.X - root.Width / 2.0f) <= 1.0f)
+    Assert.True(tray.Width < root.Width - 20.0f)
+  }
+
+  [<Theory>]
+  [<InlineData(320)>]
+  [<InlineData(1280)>]
+  member this.``filled overflowing tray keeps both scroll controls inside its bounds``(viewportWidth: int) =
+    task {
+      do! this.LoadFixture viewportWidth
+      let! root = this.Page.Locator("#tabs-filled-scroll").BoundingBoxAsync()
+      and! tray = this.Page.Locator("#filled-scroll-tray").BoundingBoxAsync()
+      and! back = this.Page.Locator("#filled-scroll-back").BoundingBoxAsync()
+      and! forward = this.Page.Locator("#filled-scroll-forward").BoundingBoxAsync()
+
+      let! overflows =
+        this.Page
+          .Locator("#filled-scroll-header")
+          .EvaluateAsync<bool>("el => el.scrollWidth > el.clientWidth")
+
+      Assert.True(overflows)
+      assertContainedWithin "tabs root" "filled tray" root tray
+      assertContainedWithin "filled tray" "back control" tray back
+      assertContainedWithin "filled tray" "forward control" tray forward
+    }

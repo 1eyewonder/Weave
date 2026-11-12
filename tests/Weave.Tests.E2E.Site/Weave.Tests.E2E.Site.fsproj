@@ -5,9 +5,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../src/Weave.Docs/examples/ExampleHelpers.fs" Link="docs/ExampleHelpers.fs" />
+    <Compile Include="TabsRegressionPage.fs" />
     <Compile Include="../../src/Weave.Docs/examples/SnackbarExamples.fs" Link="docs/SnackbarExamples.fs" />
     <Compile Include="ColorPickerPage.fs" />
-    <Compile Include="TabsRegressionPage.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Startup.fs" />
   </ItemGroup>

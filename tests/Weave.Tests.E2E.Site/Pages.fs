@@ -2113,6 +2113,108 @@ module Pages =
       )
     ]
 
+  let private tooltipViewportPage () =
+    let mounted = Var.Create true
+    let detail = Var.Create(String.replicate 30 "LongContent")
+
+    let edge direction name placement =
+      Tooltip.create (
+        Button.create (text name, ignore),
+        text ("Viewport " + name + " tooltip"),
+        direction = direction,
+        wrapperAttrs = [
+          Attr.Create "data-testid" ("tooltip-edge-" + name.ToLower())
+          Attr.Style "position" "absolute"
+          yield! placement
+        ]
+      )
+
+    div [ Attr.Style "position" "relative"; Attr.Style "min-height" "1000px" ] [
+      edge Tooltip.Direction.Right "Right" [ Attr.Style "left" "200px"; Attr.Style "top" "120px" ]
+      edge Tooltip.Direction.Left "Left" [ Attr.Style "left" "8px"; Attr.Style "top" "180px" ]
+      edge Tooltip.Direction.Top "Top" [ Attr.Style "left" "120px"; Attr.Style "top" "8px" ]
+      Tooltip.create (
+        Button.create (text "Bottom", ignore),
+        text "Viewport Bottom tooltip",
+        direction = Tooltip.Direction.Bottom,
+        wrapperAttrs = [
+          Attr.Create "data-testid" "tooltip-edge-bottom"
+          Attr.Style "position" "fixed"
+          Attr.Style "left" "120px"
+          Attr.Style "bottom" "8px"
+        ]
+      )
+      mounted.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          Tooltip.create (
+            Button.create (text "Long content", ignore),
+            Doc.TextView detail.View,
+            direction = Tooltip.Direction.Bottom,
+            wrapperAttrs = [
+              Attr.Create "data-testid" "tooltip-long"
+              Attr.Style "position" "absolute"
+              Attr.Style "left" "8px"
+              Attr.Style "top" "260px"
+            ]
+          )
+        else
+          Doc.Empty)
+      div [ Attr.Style "padding-top" "420px" ] [
+        Button.create (
+          text "Extend tooltip content",
+          (fun () -> detail.Value <- String.replicate 300 "LongContent"),
+          attrs = [ Attr.Create "data-testid" "tooltip-extend" ]
+        )
+        Button.create (
+          text "Toggle long tooltip",
+          (fun () -> mounted.Value <- not mounted.Value),
+          attrs = [ Attr.Create "data-testid" "tooltip-toggle" ]
+        )
+      ]
+    ]
+
+  let private tooltipCustomIdPage () =
+    Tooltip.create (
+      Button.create (text "Custom ID trigger", ignore),
+      text "Custom ID description",
+      tooltipAttrs = [ attr.id "custom-tooltip" ],
+      wrapperAttrs = [ Attr.Create "data-testid" "tooltip-custom-id" ]
+    )
+
+  let private tooltipNestedPage () =
+    Tooltip.create (
+      Tooltip.create (
+        Button.create (text "Nested trigger", ignore),
+        text "Inner description",
+        tooltipAttrs = [ attr.id "inner-tooltip" ],
+        wrapperAttrs = [ Attr.Create "data-testid" "tooltip-inner" ]
+      ),
+      text "Outer description",
+      tooltipAttrs = [ attr.id "outer-tooltip" ],
+      wrapperAttrs = [ Attr.Create "data-testid" "tooltip-outer" ]
+    )
+
+  let private tooltipInDialogPage () =
+    let isOpen = Var.Create true
+
+    isOpen.View
+    |> Doc.BindView(fun visible ->
+      if visible then
+        Dialog.create (
+          DialogTitle.create (text "Tooltip host dialog"),
+          DialogContent.create (
+            Tooltip.create (
+              Button.create (text "Tooltip trigger", ignore),
+              text "Helpful tooltip text",
+              wrapperAttrs = [ Attr.Create "data-testid" "tooltip-in-dialog" ]
+            )
+          ),
+          dialogInteraction = View.Const(Dialog.Interaction.Optional(fun () -> isOpen.Value <- false))
+        )
+      else
+        Doc.Empty)
+
   let private sliderPage () =
     div [] [
       Slider.create (Var.Create 50, labelText = View.Const "Default Slider")
@@ -2700,6 +2802,10 @@ module Pages =
     | "buttongroup" -> buttongroupPage ()
     | "buttongroup-palette" -> filledButtonGroupPalettePage ()
     | "tooltip" -> tooltipPage ()
+    | "tooltip-custom-id" -> tooltipCustomIdPage ()
+    | "tooltip-nested" -> tooltipNestedPage ()
+    | "tooltip-viewport" -> tooltipViewportPage ()
+    | "tooltip-in-dialog" -> tooltipInDialogPage ()
     | "progress" -> progressPage ()
     | "slider" -> sliderPage ()
     | "slider-dynamic" -> dynamicSliderPage ()

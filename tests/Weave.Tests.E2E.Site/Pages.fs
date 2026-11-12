@@ -680,7 +680,13 @@ module Pages =
         attrs = [ TextField.Variant.outlined; TextField.Label.above ]
       )
       TextField.singleLine (Var.Create "", labelText = View.Const "Max Length", maxLength = 50)
-      TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field")
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Full width counter",
+        maxLength = 50,
+        attrs = [ TextField.Width.full ]
+      )
+      TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field", maxLength = 50)
     ]
 
   let private selectPage () =

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Carousel fixture</title>
     <link rel="stylesheet" href="../../../src/Weave/styles.css" />
-    <style>body { margin: 0; padding: 16px; } .slide-content { padding: 24px; } .tall { height: 200px; }</style>
+    <style>body { margin: 0; padding: 16px; } .slide-content { padding: 24px; } .tall { height: 200px; } .weave-carousel { inline-size: min(100%, 232px); margin-block-end: 24px; }</style>
   </head>
   <body>
     <div class="weave-carousel" id="carousel">
@@ -14,12 +14,41 @@
         <div class="weave-carousel__item" inert aria-hidden="true" id="second"><div class="slide-content tall">Tall slide</div></div>
       </div>
       <div class="weave-carousel__controls">
-        <button class="weave-button weave-button--icon" aria-label="Previous slide">‹</button>
-        <div class="weave-carousel__indicators">
-          <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 1" aria-current="true"></button>
-          <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 2" aria-current="false"></button>
+        <div class="weave-carousel__navigation">
+          <button class="weave-button weave-button--icon weave-carousel__arrow" aria-label="Previous slide">‹</button>
+          <div class="weave-carousel__indicators" role="group" aria-label="Choose slide">
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 1" aria-current="true"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 2" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 3" aria-current="false"></button>
+          </div>
+          <button class="weave-button weave-button--icon weave-carousel__arrow" aria-label="Next slide">›</button>
         </div>
-        <button class="weave-button weave-button--icon" aria-label="Next slide">›</button>
+      </div>
+    </div>
+    <div class="weave-carousel" id="many-carousel">
+      <div class="weave-carousel__viewport">
+        <div class="weave-carousel__item weave-carousel__item--active"><div class="slide-content">Many slides</div></div>
+      </div>
+      <div class="weave-carousel__controls">
+        <button class="weave-button weave-carousel__rotation">Pause slides</button>
+        <div class="weave-carousel__navigation">
+          <button class="weave-button weave-button--icon weave-carousel__arrow" aria-label="Previous slide">‹</button>
+          <div class="weave-carousel__indicators" role="group" aria-label="Choose slide">
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 1" aria-current="true"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 2" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 3" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 4" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 5" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 6" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 7" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 8" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 9" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 10" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 11" aria-current="false"></button>
+            <button class="weave-button weave-button--icon weave-carousel__indicator" aria-label="Slide 12" aria-current="false"></button>
+          </div>
+          <button class="weave-button weave-button--icon weave-carousel__arrow" aria-label="Next slide">›</button>
+        </div>
       </div>
     </div>
   </body>

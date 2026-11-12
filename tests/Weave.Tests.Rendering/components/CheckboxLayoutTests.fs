@@ -187,3 +187,29 @@ type CheckboxLayoutTests() =
       $"Label center (x={labelCenter}) should be near span center (x={spanCenter})"
     )
   }
+
+  [<Theory>]
+  [<InlineData("ltr")>]
+  [<InlineData("rtl")>]
+  member this.``content placement keeps a gap in either text direction``(direction: string) = task {
+    do! this.LoadFixture()
+
+    let! _ =
+      this.Page.Locator("html").EvaluateAsync("(el, value) => el.dir = value", direction)
+
+    for placement in [ "right"; "left"; "top"; "bottom" ] do
+      let! indicator = this.Page.Locator($"#cp-{placement}-span").BoundingBoxAsync()
+      let! label = this.Page.Locator($"#cp-{placement}-label").BoundingBoxAsync()
+
+      let gap =
+        match placement, direction with
+        | "right", "ltr"
+        | "left", "rtl" -> label.X - (indicator.X + indicator.Width)
+        | "right", "rtl"
+        | "left", "ltr" -> indicator.X - (label.X + label.Width)
+        | "top", _ -> indicator.Y - (label.Y + label.Height)
+        | "bottom", _ -> label.Y - (indicator.Y + indicator.Height)
+        | _ -> failwith "Unknown placement"
+
+      Assert.True(gap > 1.0f, $"{placement} label should have a gap in {direction}; measured {gap}px")
+  }

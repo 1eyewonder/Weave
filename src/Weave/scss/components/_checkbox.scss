@@ -10,14 +10,14 @@ $checkmark-height: 12px;
   --checkbox-brand-color: var(--palette-action-default);
   cursor: pointer;
   display: inline-flex;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   flex-direction: row;
   align-items: center;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
   padding: density-spacing(4, 4);
-  min-inline-size: 0;
-  max-inline-size: 100%;
-  box-sizing: border-box;
 
   &--small {
     --checkbox-size: 16px;
@@ -141,28 +141,29 @@ $checkmark-height: 12px;
 }
 
 .weave-checkbox__label {
-  font-size: 1em;
   min-inline-size: 0;
+  max-inline-size: 100%;
   overflow-wrap: anywhere;
+  font-size: 1em;
 
   .weave-checkbox.weave-flex-row & {
     margin: 0;
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
   }
 
   .weave-checkbox.weave-flex-row-reverse & {
     margin: 0;
-    margin-right: 0.5em;
+    margin-inline-end: 0.5em;
   }
 
   .weave-checkbox.weave-flex-column & {
     margin: 0;
-    margin-top: 0.5em;
+    margin-block-start: 0.5em;
   }
 
   .weave-checkbox.weave-flex-column-reverse & {
     margin: 0;
-    margin-bottom: 0.5em;
+    margin-block-end: 0.5em;
   }
 
   .weave-checkbox--small & {

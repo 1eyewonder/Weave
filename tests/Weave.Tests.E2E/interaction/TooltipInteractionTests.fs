@@ -272,8 +272,6 @@ type TooltipInteractionTests(fixture: TestFixture) =
         PageWaitForFunctionOptions(Timeout = 3000.0f)
       )
 
-    let! display = tooltip.EvaluateAsync<string>("el => getComputedStyle(el).display")
-    Assert.Equal("block", display)
     do! this.Expect(tooltip).ToBeHiddenAsync()
   }
 

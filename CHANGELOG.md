@@ -6,7 +6,7 @@ last_commit_released: 30ae69ac5004cc4e5c0f6b6f49e606d5b52afe0a
 
 ## v0.3.0
 
-### Breaking changes and upgrade guidance
+### 🏗️ Breaking changes
 
 This is a pre-1.0 minor release. The changes below can affect existing layouts or custom CSS; the major version remains `0`.
 
@@ -14,7 +14,7 @@ This is a pre-1.0 minor release. The changes below can affect existing layouts o
 - **BREAKING (visual): Heading weights changed.** `h1` and `h2` now default to bold instead of light; `h3`, `h4`, and `h5` default to bold instead of regular. To retain the old weights, set `--typography-h1-weight` and `--typography-h2-weight` to `var(--weave-weight-light)`, and the `h3` through `h5` weight variables to `var(--weave-weight-regular)`.
 - **BREAKING (custom CSS): TextField counters moved inside their field.** A character counter is now a child of `.weave-field`, rather than its sibling. Update custom sibling selectors or layout rules that assumed the counter sat outside the field; use `.weave-field .weave-field__counter` when targeting it.
 
-### New date and time components
+### 🚀 Features
 
 - Added `DatePicker` for selecting one calendar date.
 - Added `DateRangePicker` for selecting an ordered, inclusive date range, including a single-day range.
@@ -29,7 +29,7 @@ This is a pre-1.0 minor release. The changes below can affect existing layouts o
 - Added `DateAvailability` and `TimeAvailability` to combine allowed windows, exclusions, and filters. Rules can change reactively without recreating a picker.
 - Added picker integration with `FormField`. Clock, minute-step, parsing, and availability errors participate in form validation; unavailable typed or externally assigned times stay entered and block submission until corrected.
 
-### Component and interaction fixes
+### 🐞 Bug Fixes
 
 - **Select and MultiSelect:** Disabled comboboxes now leave the tab order and expose reactive disabled and read-only states to assistive technology.
 - **Select and MultiSelect:** Long labels and selected values fit within their controls instead of clipping action icons or overflowing the layout.

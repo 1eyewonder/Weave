@@ -31,6 +31,58 @@ type TimePickerEntryTests(fixture: TestFixture) =
     do! this.Expect(this.Page.GetByRole(AriaRole.Dialog)).ToHaveCountAsync 0
   }
 
+  [<Fact>]
+  member this.``Given an hour commit awaiting rendering When minutes are typed Then rendering preserves the new draft``
+    ()
+    = task {
+    do! this.NavigateTo "pickers"
+    do! (this.Button "24-hour time").ClickAsync()
+    do! this.Expect(this.Entry "Minutes").ToBeVisibleAsync()
+
+    // Exercise typing before the hour commit's reactive rendering catches up.
+    let! _ =
+      this.Page.EvaluateAsync<obj>(
+        """() => {
+          const hour = document.querySelector('input[aria-label="Hours"]');
+          const minute = document.querySelector('input[aria-label="Minutes"]');
+          hour.value = '23';
+          hour.dispatchEvent(new Event('input', { bubbles: true }));
+          hour.dispatchEvent(new FocusEvent('blur'));
+          minute.value = '59';
+          minute.dispatchEvent(new Event('input', { bubbles: true }));
+          return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        }"""
+      )
+
+    do! this.Expect(this.Entry "Minutes").ToHaveValueAsync "59"
+    do! (this.Entry "Minutes").PressAsync "Enter"
+    do! this.Expect(this.Button "24-hour time").ToHaveTextAsync "23:59"
+  }
+
+  [<Fact>]
+  member this.``Given an hour entry When Enter focuses minutes Then the current minute is selected before rendering``
+    ()
+    = task {
+    do! this.NavigateTo "pickers"
+    do! (this.Button "24-hour time").ClickAsync()
+    do! (this.Entry "Hours").FillAsync "23"
+
+    let! selected =
+      (this.Entry "Hours")
+        .EvaluateAsync<string>(
+          """hour => {
+          hour.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+          const minute = document.querySelector('input[aria-label="Minutes"]');
+          return `${minute.value},${minute.selectionStart},${minute.selectionEnd}`;
+        }"""
+        )
+
+    Assert.Equal("00,0,2", selected)
+    do! (this.Entry "Minutes").FillAsync "59"
+    do! (this.Entry "Minutes").PressAsync "Enter"
+    do! this.Expect(this.Button "24-hour time").ToHaveTextAsync "23:59"
+  }
+
   [<Theory>]
   [<InlineData("Time", "Hour 02", "Minute 15")>]
   [<InlineData("24-hour time", "Hour 23", "Minute 15")>]

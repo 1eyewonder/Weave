@@ -2886,6 +2886,650 @@ module Pages =
       preview
     ]
 
+  let private rangeModelControls
+    (bounds: Var<Interval<System.DateTime> option>)
+    (range: Var<Range<System.DateTime> option>)
+    =
+    let first = System.DateTime(2026, 11, 21)
+    let last = System.DateTime(2026, 11, 22)
+    let windowSelection = Var.Create<Range<System.DateTime> option> None
+    let windowStart = System.DateTime(2026, 11, 1)
+
+    let windows = [
+      Interval.closed windowStart (System.DateTime(2026, 11, 7))
+      Interval.closed (System.DateTime(2026, 11, 5)) (System.DateTime(2026, 11, 7))
+      Interval.closed (System.DateTime(2026, 11, 15)) (System.DateTime(2026, 11, 21))
+    ]
+
+    let availability =
+      windows |> List.choose id |> DateAvailability.ofIntervals |> Var.Create
+
+    let multiMonth =
+      [
+        Interval.closed (System.DateTime(2026, 12, 1)) (System.DateTime(2026, 12, 7))
+        Interval.closed (System.DateTime(2027, 2, 15)) (System.DateTime(2027, 2, 21))
+        Interval.create
+          (LowerBounds.Exclusive(System.DateTime(2028, 7, 1)))
+          (UpperBounds.Exclusive(System.DateTime(2028, 7, 1)))
+      ]
+      |> List.choose id
+      |> DateAvailability.ofIntervals
+
+    let excludeClosures
+      (_: WebSharper.JavaScript.Dom.Element)
+      (event: WebSharper.JavaScript.Dom.KeyboardEvent)
+      =
+      if event.Key = "F4" then
+        event.PreventDefault()
+
+        let closures =
+          [
+            Interval.closed (System.DateTime(2026, 11, 3)) (System.DateTime(2026, 11, 4))
+            Some(Interval.Degenerate(System.DateTime(2026, 11, 17)))
+          ]
+          |> List.choose id
+
+        availability.Value
+        |> DateAvailability.excluding closures
+        |> Var.Set availability
+
+    let construction = Var.Create ""
+
+    let checkSelection selection =
+      match selection with
+      | None -> Var.Set construction "rejected"
+      | Some value ->
+        try
+          DateRangePicker.create (Var.Create(Some value)) |> ignore
+          Var.Set construction "accepted"
+        with :? System.ArgumentException ->
+          Var.Set construction "rejected"
+
+    div [ on.keyDown excludeClosures ] [
+      for label, selection in
+        [
+          "Try closed range", Range.closed first last
+          "Try singleton range", Some(Range.singleton first)
+          "Try exclusive lower", Range.create (LowerBounds.Exclusive first) (UpperBounds.Inclusive last)
+          "Try exclusive upper", Range.create (LowerBounds.Inclusive first) (UpperBounds.Exclusive last)
+          "Try unbounded lower", Range.create LowerBounds.Unbounded (UpperBounds.Inclusive last)
+          "Try unbounded upper", Range.create (LowerBounds.Inclusive first) UpperBounds.Unbounded
+          "Try fully unbounded", Range.create LowerBounds.Unbounded UpperBounds.Unbounded
+          "Try reversed range", Range.closed last first
+        ] do
+        Button.create (text label, (fun () -> checkSelection selection))
+
+      DatePicker.create (
+        Var.Create<System.DateTime option> None,
+        labelText = View.Const "Window date",
+        availability = availability.View
+      )
+      DateRangePicker.create (
+        windowSelection,
+        labelText = View.Const "Window range",
+        availability = availability.View
+      )
+      DatePicker.create (
+        Var.Create<System.DateTime option> None,
+        labelText = View.Const "Multi-month date",
+        availability = View.Const multiMonth
+      )
+      div [ Attr.Create "id" "window-range-value" ] [
+        windowSelection.View
+        |> View.Map(
+          Option.bind Range.tryGetClosed
+          >> Option.map (fun (lower, upper) -> sprintf "%d-%d" lower.Day upper.Day)
+          >> Option.defaultValue "empty"
+        )
+        |> Doc.TextView
+      ]
+      div [ Attr.Create "id" "range-construction-result" ] [ Doc.TextView construction.View ]
+      div [ Attr.Create "id" "range-time-analysis" ] [
+        let workingHours =
+          Range.create
+            (LowerBounds.Inclusive(first.AddHours 9.0))
+            (UpperBounds.Exclusive(first.AddHours 17.0))
+          |> Option.bind (Range.mapBounds (fun date -> date.TimeOfDay))
+          |> Option.map Range.toInterval
+
+        text (
+          if
+            workingHours
+            |> Option.exists (fun interval -> System.TimeSpan.FromHours 17.0 |> Interval.inInterval interval)
+          then
+            "included"
+          else
+            "excluded"
+        )
+      ]
+      div [ Attr.Create "id" "range-number-analysis" ] [
+        text (
+          if Range.closed 1 5 |> Option.exists (fun range -> 5 |> Range.inRange range) then
+            "included"
+          else
+            "excluded"
+        )
+      ]
+      DateRangePicker.create (
+        Var.Create(Range.closed (first.AddHours 9.5) (last.AddHours 17.75)),
+        labelText = View.Const "Timed range",
+        formatDate = (fun date -> sprintf "%02d:%02d" date.Hour date.Minute)
+      )
+      div [ Attr.Create "id" "range-mapped-case" ] [
+        let mapped =
+          Interval.closed first last
+          |> Option.bind (Interval.mapBounds (fun date -> date.Year))
+
+        match mapped with
+        | Some(Interval.Bounded _) -> text "bounded"
+        | Some Interval.Unbounded -> text "unbounded"
+        | Some(Interval.Degenerate _) -> text "degenerate"
+        | None -> text "invalid"
+      ]
+      Button.create (
+        text "Timed calendar bounds",
+        (fun () -> Var.Set bounds (Interval.closed (first.AddHours 9.5) (last.AddHours 17.75)))
+      )
+      Button.create (text "Invalid calendar bounds", (fun () -> Var.Set bounds (Interval.closed last first)))
+      for name, actual in
+        [
+          "equal excluded range",
+          Range.create (LowerBounds.Exclusive first) (UpperBounds.Exclusive first)
+          |> Option.isNone
+          "equal excluded interval",
+          Interval.create (LowerBounds.Exclusive first) (UpperBounds.Exclusive first)
+          |> Option.isNone
+          "collapsed excluded range",
+          Range.create (LowerBounds.Inclusive first) (UpperBounds.Exclusive last)
+          |> Option.bind (Range.mapBounds (fun _ -> first))
+          |> Option.isNone
+          "collapsed excluded interval",
+          Interval.create (LowerBounds.Inclusive first) (UpperBounds.Exclusive last)
+          |> Option.bind (Interval.mapBounds (fun _ -> first))
+          |> Option.isNone
+          "equal inclusive range",
+          Range.closed first first
+          |> Option.exists (fun range -> Range.inRange range first)
+          "equal inclusive interval",
+          Interval.closed first first
+          |> Option.exists (fun interval -> Interval.inInterval interval first)
+        ] do
+        p [ Attr.Create "data-testid" name ] [ text (if actual then "correct" else "incorrect") ]
+      Button.create (text "Set external range", (fun () -> Var.Set range (Range.closed first last)))
+      Button.create (text "Set singleton range", (fun () -> Var.Set range (Some(Range.singleton first))))
+      Button.create (
+        text "Use range as bounds",
+        (fun () -> range.Value |> Option.map Range.toInterval |> Var.Set bounds)
+      )
+      Button.create (
+        text "Set exclusive selection",
+        (fun () -> Var.Set range (Range.create (LowerBounds.Exclusive first) (UpperBounds.Inclusive last)))
+      )
+    ]
+
+  let private calendarValidationForm name initial valid display createPicker =
+    let required = Var.Create false
+
+    let rules =
+      required.View
+      |> View.Map(fun required ->
+        if required then
+          [ Validate.isSome "Choose a selection." ]
+        else
+          [])
+
+    let field = FormField.create (initial, rulesView = rules)
+    let model = Form.model { let! selection = field in return selection }
+    let closedDate = System.DateTime(2026, 11, 18)
+
+    let restricted =
+      DateAvailability.all
+      |> DateAvailability.excluding [ Interval.singleton closedDate ]
+
+    let availability = Var.Create restricted
+    let mounted = Var.Create true
+    let submitted = Var.Create "not submitted"
+
+    Form.create (
+      model,
+      (fun value -> Var.Set submitted (display value)),
+      [
+        mounted.View
+        |> Doc.BindView(fun show ->
+          if show then
+            createPicker field availability.View
+          else
+            Doc.Empty)
+        button [ attr.``type`` "submit" ] [ text ("Submit " + name) ]
+        Button.create (text ("Allow all " + name), fun () -> Var.Set availability DateAvailability.all)
+        Button.create (text ("Exclude " + name), fun () -> Var.Set availability restricted)
+        Button.create (text ("Close " + name), fun () -> Var.Set availability DateAvailability.none)
+        Button.create (text ("Set unavailable " + name), fun () -> Var.Set field.Value initial)
+        Button.create (text ("Set available " + name), fun () -> Var.Set field.Value valid)
+        Button.create (text ("Clear " + name), fun () -> Var.Set field.Value None)
+        Button.create (text ("Require " + name), fun () -> Var.Set required true)
+        Button.create (text ("Unmount " + name), fun () -> Var.Set mounted false)
+        Button.create (text ("Remount " + name), fun () -> Var.Set mounted true)
+        p [ Attr.Create "data-testid" (name + " valid") ] [
+          Doc.TextView(model.IsValid |> View.Map(fun valid -> if valid then "valid" else "invalid"))
+        ]
+        p [ Attr.Create "data-testid" (name + " selected") ] [
+          Doc.TextView(field.Value.View |> View.Map display)
+        ]
+        p [ Attr.Create "data-testid" (name + " submitted") ] [ Doc.TextView submitted.View ]
+        p [ Attr.Create "data-testid" (name + " errors") ] [
+          Doc.TextView(field.Errors |> View.Map(List.length >> sprintf "%d"))
+        ]
+      ]
+    )
+
+  let private calendarValidationPage () =
+    let date day = System.DateTime(2026, 11, day)
+
+    let displayDate =
+      Option.map (fun (date: System.DateTime) -> date.ToString("yyyy-MM-dd"))
+      >> Option.defaultValue "empty"
+
+    let displayRange =
+      Option.bind Range.tryGetClosed
+      >> Option.map (fun (first, last) -> displayDate (Some first) + " – " + displayDate (Some last))
+      >> Option.defaultValue "empty"
+
+    div [] [
+      calendarValidationForm
+        "Booking date"
+        (Some(date 18))
+        (Some(date 17))
+        displayDate
+        (fun (field: FormField<System.DateTime option>) availability ->
+          DatePicker.create (field, labelText = View.Const "Booking date", availability = availability))
+
+      calendarValidationForm
+        "Booking range"
+        (Range.closed (date 17) (date 20))
+        (Range.closed (date 16) (date 17))
+        displayRange
+        (fun (field: FormField<Range<System.DateTime> option>) availability ->
+          DateRangePicker.create (field, labelText = View.Const "Booking range", availability = availability))
+    ]
+
+  let private timeAvailabilityPage () =
+    let time hour minute = System.TimeSpan(hour, minute, 0)
+
+    let morning =
+      Interval.create (LowerBounds.Inclusive(time 9 30)) (UpperBounds.Exclusive(time 10 30))
+
+    let afternoon =
+      Interval.create (LowerBounds.Inclusive(time 15 0)) (UpperBounds.Exclusive(time 16 0))
+
+    let closure =
+      Interval.create (LowerBounds.Inclusive(time 9 45)) (UpperBounds.Exclusive(time 10 0))
+
+    let schedule =
+      [ morning; afternoon ]
+      |> List.choose id
+      |> TimeAvailability.ofIntervals
+      |> TimeAvailability.excluding (closure |> Option.toList)
+
+    let availability = Var.Create schedule
+    let format = Var.Create ClockFormat.TwentyFourHour
+    let step = Var.Create 15
+    let mounted = Var.Create true
+    let applicationRule = Var.Create false
+    let required = Var.Create true
+
+    let rules =
+      (applicationRule.View, required.View)
+      ||> View.Map2(fun blocked required -> [
+        if required then
+          Validate.isSome "Choose a scheduled time."
+        Validate.optional (Validate.custom (fun _ -> not blocked) "Application rule blocked submission.")
+      ])
+
+    let field = FormField.create (Some(time 9 30), rulesView = rules)
+    let model = Form.model { let! selected = field in return selected }
+    let submitted = Var.Create "not submitted"
+
+    let show =
+      Option.map (fun (time: System.TimeSpan) -> sprintf "%02d:%02d" time.Hours time.Minutes)
+      >> Option.defaultValue "empty"
+
+    let moveOpening () =
+      availability.Value
+      |> TimeAvailability.filter (fun value -> value >= time 10 0)
+      |> Var.Set availability
+
+    Form.create (
+      model,
+      (show >> Var.Set submitted),
+      [
+        (mounted.View, format.View, step.View)
+        |||> View.Map3(fun mounted format step -> mounted, format, step)
+        |> Doc.BindView(fun (mounted, format, step) ->
+          if mounted then
+            TimePicker.create (
+              field,
+              labelText = View.Const "Scheduled time",
+              clockFormat = format,
+              minuteStep = step,
+              availability = availability.View,
+              attrs = [ Picker.Controls.clearable ]
+            )
+          else
+            Doc.Empty)
+        button [ attr.``type`` "submit" ] [ text "Submit scheduled time" ]
+        Button.create (text "Move opening", moveOpening)
+        Button.create (text "Allow all slots", fun () -> Var.Set availability TimeAvailability.all)
+        Button.create (text "Close all slots", fun () -> Var.Set availability TimeAvailability.none)
+        Button.create (text "Restore schedule", fun () -> Var.Set availability schedule)
+        Button.create (
+          text "Exclude 09:30",
+          fun () ->
+            availability.Value
+            |> TimeAvailability.excluding [ Interval.singleton (time 9 30) ]
+            |> Var.Set availability
+        )
+        Button.create (
+          text "Only 09:40",
+          fun () -> Var.Set availability (TimeAvailability.ofIntervals [ Interval.singleton (time 9 40) ])
+        )
+        Button.create (text "Use 10-minute steps", fun () -> Var.Set step 10)
+        Button.create (text "Use 12-hour", fun () -> Var.Set format ClockFormat.TwelveHour)
+        Button.create (text "Set unavailable scheduled time", fun () -> Var.Set field.Value (Some(time 18 0)))
+        Button.create (text "Set available scheduled time", fun () -> Var.Set field.Value (Some(time 15 0)))
+        Button.create (text "Block application rule", fun () -> Var.Set applicationRule true)
+        Button.create (text "Make scheduled time optional", fun () -> Var.Set required false)
+        Button.create (text "Clear scheduled time", fun () -> Var.Set field.Value None)
+        Button.create (text "Unmount scheduled picker", fun () -> Var.Set mounted false)
+        Button.create (text "Remount scheduled picker", fun () -> Var.Set mounted true)
+        Button.create (
+          text "Use overnight schedule",
+          fun () ->
+            [
+              Interval.create LowerBounds.Unbounded (UpperBounds.Exclusive(time 2 0))
+              Interval.create (LowerBounds.Inclusive(time 22 0)) UpperBounds.Unbounded
+            ]
+            |> List.choose id
+            |> TimeAvailability.ofIntervals
+            |> Var.Set availability
+        )
+        p [ attr.id "availability-valid" ] [
+          Doc.TextView(model.IsValid |> View.Map(fun valid -> if valid then "valid" else "invalid"))
+        ]
+        p [ attr.id "availability-selected" ] [ Doc.TextView(field.Value.View |> View.Map show) ]
+        p [ attr.id "availability-submitted" ] [ Doc.TextView submitted.View ]
+      ],
+      attrs = [
+        on.keyDown (fun _ event ->
+          if event.Key = "F4" then
+            event.PreventDefault()
+            moveOpening ())
+      ]
+    )
+
+  let private timeValidationExample () =
+    let openHour = Var.Create 9
+    let allowAny = Var.Create false
+
+    let rules =
+      (openHour.View, allowAny.View)
+      ||> View.Map2(fun first unrestricted -> [
+        Validate.isSome "Choose a booking time."
+        Validate.optional (
+          Validate.custom
+            (fun (time: System.TimeSpan) ->
+              unrestricted
+              || (time >= System.TimeSpan(first, 0, 0) && time < System.TimeSpan(17, 0, 0)))
+            "Time is outside booking hours."
+        )
+      ])
+
+    let field = FormField.create (Some(System.TimeSpan(9, 0, 0)), rulesView = rules)
+    let model = Form.model { let! time = field in return time }
+    let mounted = Var.Create true
+    let submitted = Var.Create "not submitted"
+
+    Form.create (
+      model,
+      (fun value ->
+        Var.Set
+          submitted
+          (value
+           |> Option.map (fun t -> sprintf "%02d:%02d" t.Hours t.Minutes)
+           |> Option.defaultValue "empty")),
+      [
+        mounted.View
+        |> Doc.BindView(fun show ->
+          if show then
+            TimePicker.create (
+              field,
+              labelText = View.Const "Business time",
+              clockFormat = ClockFormat.TwentyFourHour,
+              minuteStep = 15
+            )
+          else
+            Doc.Empty)
+        button [ attr.``type`` "submit" ] [ text "Book time" ]
+        button [ attr.``type`` "reset" ] [ text "Reset booking time" ]
+        Button.create (text "Open at ten", fun () -> Var.Set openHour 10)
+        Button.create (text "Allow any business time", fun () -> Var.Set allowAny true)
+        Button.create (
+          text "Set off-step time",
+          fun () -> Var.Set field.Value (Some(System.TimeSpan(13, 7, 0)))
+        )
+        Button.create (
+          text "Set negative time",
+          fun () -> Var.Set field.Value (Some(System.TimeSpan(-1, 0, 0)))
+        )
+        Button.create (
+          text "Set seconds time",
+          (fun () -> Var.Set field.Value (Some(System.TimeSpan(13, 30, 15))))
+        )
+        Button.create (
+          text "Set next-day time",
+          fun () -> Var.Set field.Value (Some(System.TimeSpan(24, 0, 0)))
+        )
+        Button.create (text "Unmount business picker", fun () -> Var.Set mounted false)
+        Button.create (text "Remount business picker", fun () -> Var.Set mounted true)
+        p [ attr.id "business-valid" ] [
+          Doc.TextView(model.IsValid |> View.Map(fun valid -> if valid then "valid" else "invalid"))
+        ]
+        p [ attr.id "business-submitted" ] [ Doc.TextView submitted.View ]
+        p [ attr.id "business-selected" ] [
+          Doc.TextView(
+            field.Value.View
+            |> View.Map(
+              Option.map (fun t -> sprintf "%02d:%02d" t.Hours t.Minutes)
+              >> Option.defaultValue "empty"
+            )
+          )
+        ]
+      ]
+    )
+
+  let private pickersPage opened =
+    Globalization.setCulture "en-US"
+    let date = Var.Create(Some(System.DateTime(2026, 11, 15)))
+    let range = Var.Create<Range<System.DateTime> option> None
+    let time = Var.Create(Some(System.TimeSpan(13, 30, 0)))
+    let mode = Var.Create PickerMode.Editable
+
+    let bounds =
+      Var.Create(Interval.closed (System.DateTime(2026, 11, 10)) (System.DateTime(2026, 11, 25)))
+
+    let availableDates =
+      bounds.View
+      |> View.Map(
+        Option.toList
+        >> DateAvailability.ofIntervals
+        >> DateAvailability.excluding [ Interval.Degenerate(System.DateTime(2026, 11, 18)) ]
+      )
+
+    let weekdays =
+      DateAvailability.all
+      |> DateAvailability.filter (fun date ->
+        date.DayOfWeek <> System.DayOfWeek.Saturday
+        && date.DayOfWeek <> System.DayOfWeek.Sunday)
+      |> View.Const
+
+    let showClear = Var.Create true
+
+    let required =
+      FormField.create ((None: System.DateTime option), rules = [ Validate.isSome "Choose a date" ])
+
+    div [
+      Attr.Style "padding" "24px"
+      on.keyDown (fun _ event ->
+        if event.Key = "F2" then
+          event.PreventDefault()
+          Globalization.setCulture "fr-FR")
+    ] [
+      timeValidationExample ()
+      DatePicker.create (
+        date,
+        isOpen = Var.Create((opened = "Date")),
+        labelText = View.Const "Date",
+        availability = availableDates,
+        mode = mode.View,
+        attrs = [ Picker.Variant.outlined; Picker.Controls.clearableWhen showClear.View ]
+      )
+      DateRangePicker.create (
+        range,
+        isOpen = Var.Create((opened = "Range")),
+        labelText = View.Const "Range",
+        availability = availableDates,
+        mode = mode.View,
+        attrs = [ Picker.Variant.filled; Picker.Controls.clearable ]
+      )
+      TimePicker.create (
+        time,
+        isOpen = Var.Create((opened = "Time")),
+        labelText = View.Const "Time",
+        clockFormat = ClockFormat.TwelveHour,
+        minuteStep = 15,
+        mode = mode.View,
+        attrs = [ Picker.Controls.clearable ]
+      )
+      for name, variant in
+        [
+          "Standard", Picker.Variant.standard
+          "Filled", Picker.Variant.filled
+          "Outlined", Picker.Variant.outlined
+        ] do
+        TimePicker.create (
+          Var.Create<System.TimeSpan option> None,
+          labelText = View.Const(name + " time appearance"),
+          clockFormat = ClockFormat.TwentyFourHour,
+          attrs = [ variant; Picker.Color.primary ]
+        )
+      TimePicker.create (Var.Create(Some(System.TimeSpan(13, 30, 0))), labelText = View.Const "Default time")
+      TimePicker.create (
+        Var.Create<System.TimeSpan option> None,
+        labelText = View.Const "24-hour time",
+        clockFormat = ClockFormat.TwentyFourHour
+      )
+      TimePicker.create (
+        Var.Create<System.TimeSpan option> None,
+        labelText = View.Const "7-minute time",
+        clockFormat = ClockFormat.TwentyFourHour,
+        minuteStep = 7
+      )
+      DatePicker.create (required, labelText = View.Const "Required date")
+      DatePicker.create (
+        Var.Create(Some(System.DateTime(2026, 11, 16))),
+        labelText = View.Const "Weekdays",
+        availability = weekdays
+      )
+      Button.create (text "Validate", (fun () -> required.Touch()))
+      Button.create (
+        text "Toggle enabled",
+        (fun () ->
+          Var.Set
+            mode
+            (if mode.Value = PickerMode.Disabled then
+               PickerMode.Editable
+             else
+               PickerMode.Disabled))
+      )
+      Button.create (
+        text "Toggle read only",
+        (fun () ->
+          Var.Set
+            mode
+            (if mode.Value = PickerMode.ReadOnly then
+               PickerMode.Editable
+             else
+               PickerMode.ReadOnly))
+      )
+      Button.create (
+        text "External update",
+        (fun () ->
+          Var.Set date (Some(System.DateTime(2026, 11, 21)))
+          Var.Set time (Some(System.TimeSpan(0, 45, 0))))
+      )
+      Button.create (
+        text "Tighten bounds",
+        (fun () ->
+          Var.Set bounds (Interval.closed (System.DateTime(2026, 11, 10)) (System.DateTime(2026, 11, 16))))
+      )
+      Button.create (
+        text "Single date",
+        (fun () -> Var.Set bounds (Some(Interval.Degenerate(System.DateTime(2026, 11, 15, 13, 30, 0)))))
+      )
+      Button.create (
+        text "Exclusive bounds",
+        (fun () ->
+          Var.Set
+            bounds
+            (Interval.create
+              (LowerBounds.Exclusive(System.DateTime(2026, 11, 14, 13, 30, 0)))
+              (UpperBounds.Exclusive(System.DateTime(2026, 11, 17, 17, 45, 0)))))
+      )
+      Button.create (text "No bounds", (fun () -> Var.Set bounds (Some Interval.Unbounded)))
+      Button.create (text "Toggle clear", (fun () -> Var.Set showClear (not showClear.Value)))
+      for culture in [ "en-US"; "en-GB"; "fr-FR"; "ar-EG" ] do
+        Button.create (text culture, (fun () -> Globalization.setCulture culture))
+      DatePicker.create (
+        Var.Create(Some(System.DateTime(2026, 11, 15))),
+        labelText = View.Const "Sunday override",
+        firstDayOfWeek = System.DayOfWeek.Sunday
+      )
+      DatePicker.create (
+        Var.Create<System.DateTime option> None,
+        labelText = View.Const "Helpful date",
+        helpText = FieldHelpText.create (text "Calendar help is visible")
+      )
+      div [ Attr.Create "id" "date-value" ] [
+        Doc.TextView(
+          date.View
+          |> View.Map(
+            Option.map (fun d -> sprintf "%04d-%02d-%02d" d.Year d.Month d.Day)
+            >> Option.defaultValue "empty"
+          )
+        )
+      ]
+      rangeModelControls bounds range
+      div [ Attr.Create "id" "range-value" ] [
+        Doc.TextView(
+          range.View
+          |> View.Map(
+            Option.bind Range.tryGetClosed
+            >> Option.map (fun (lower, upper) -> sprintf "%d-%d" lower.Day upper.Day)
+            >> Option.defaultValue "empty"
+          )
+        )
+      ]
+      div [ Attr.Create "id" "time-value" ] [
+        Doc.TextView(
+          time.View
+          |> View.Map(
+            Option.map (fun t -> sprintf "%02d:%02d" t.Hours t.Minutes)
+            >> Option.defaultValue "empty"
+          )
+        )
+      ]
+    ]
+
   let private renderPage (hash: string) =
     match hash with
     | route when
@@ -2903,6 +3547,15 @@ module Pages =
     | "pagination" -> paginationPage ()
     | "pagination-controls" -> paginationControlsPage ()
     | "pagination-ranges" -> paginationRangesPage ()
+    | "time-availability" -> timeAvailabilityPage ()
+    | "calendar-validation" -> calendarValidationPage ()
+    | "time-picker-docs" -> appearancePage (Weave.Docs.Examples.TimePickerExamples.render ())
+    | "date-picker-docs" -> appearancePage (Weave.Docs.Examples.DatePickerExamples.render ())
+    | "date-range-docs" -> appearancePage (Weave.Docs.Examples.DateRangePickerExamples.render ())
+    | "pickers" -> pickersPage ""
+    | "pickers-Date" -> pickersPage "Date"
+    | "pickers-Range" -> pickersPage "Range"
+    | "pickers-Time" -> pickersPage "Time"
     | "checkbox" -> checkboxPage ()
     | "radio-groups" -> radioFormGroupsPage ()
     | "radio" -> radioPage ()

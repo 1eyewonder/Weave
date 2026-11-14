@@ -300,7 +300,7 @@ textarea.weave-field__input {
 
 // Optional persistent label for outlined fields. The associated label remains
 // in the field markup, but sits above the control in every state.
-.weave-field--label-above.weave-field--outlined {
+.weave-field.weave-field--label-above.weave-field--outlined {
   padding-top: 1.75em;
   --field-label-float-x: 0;
   --field-label-float-y: -1.7em;
@@ -350,7 +350,7 @@ textarea.weave-field__input {
     margin-bottom: 0; // 2px border fills the reserved space
   }
 
-  &.weave-field--outlined .weave-field__outline {
+  &.weave-field--outlined > .weave-field__control > .weave-field__outline {
     border-width: 2px;
     border-color: var(--palette-primary);
   }
@@ -385,7 +385,7 @@ textarea.weave-field__input {
         border-bottom-color: var(--palette-#{$color});
       }
 
-      &.weave-field--outlined .weave-field__outline {
+      &.weave-field--outlined > .weave-field__control > .weave-field__outline {
         border-color: var(--palette-#{$color});
       }
     }

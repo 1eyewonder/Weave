@@ -34,6 +34,35 @@ body {
 .weave-nav-leaf { width: calc(100% - 2rem); }
 .weave-nav-group-header { width: 100%; }
 
+/* Use the same row gap before, inside, and after nested navigation. */
+.docs-nav-items,
+.docs-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.docs-nav-group + .docs-nav-group {
+  margin-block-start: 1rem;
+}
+
+.docs-nav-items .weave-nav-leaf {
+  margin-block: 0;
+}
+
+/* Keep nested highlights aligned with sibling rows; indent the content only. */
+.docs-nav-subgroup .weave-nav-group-header {
+  box-sizing: border-box;
+  width: calc(100% - 2rem);
+  margin: 0 1rem;
+  padding-inline-end: 1rem;
+  border-radius: 12px;
+}
+
+.docs-nav-subgroup .weave-nav-leaf {
+  padding-inline: 4rem 1rem;
+}
+
 .weave-nav-item--active {
   background: var(--palette-primary) !important;
   color: var(--palette-primary-text) !important;
@@ -564,6 +593,31 @@ body[data-theme="dark"] .docs-template-preview__image--dark { display: block; }
 .docs-example__code .weave-expansion-panel__content {
   padding-inline: clamp(16px, 2.5vw, 32px);
 }
+/* Picker examples keep fields, live summaries, and form actions on a shared rhythm. */
+.docs-picker-page .docs-example .weave-picker {
+  width: 100%;
+  max-width: 28rem;
+  min-width: 0;
+}
+
+
+.docs-picker-summary { width: 100%; }
+.docs-picker-previews { display: grid; gap: 24px; width: 100%; max-width: 28rem; min-width: 0; }
+.docs-picker-summary__detail { color: var(--palette-text-secondary); }
+.docs-picker-form { width: 100%; max-width: 28rem; margin-inline: auto; }
+.docs-picker-form > [role="status"] { line-height: 1.6; }
+/* Field examples share leading edges and stay aligned when controls gain actions. */
+.docs-appearance.docs-picker-columns { align-items: start; }
+.docs-picker-columns .docs-appearance__preview { justify-content: flex-start; }
+.docs-picker-columns .docs-picker-previews { max-width: none; }
+.docs-picker-page .docs-picker-columns .weave-picker { max-width: none; }
+@media (min-width: 768px) {
+  /* Match the first outlined field's reserved label space. */
+  .docs-picker-culture-controls { padding-block-start: var(--weave-field-label-gutter); }
+}
+
+
+
 .docs-toc__item { line-height: 1.45; }
 @media (prefers-reduced-motion: reduce) {
   .anchor-link { transition: none; }
@@ -750,6 +804,7 @@ body[data-theme="dark"] .docs-template-preview__image--dark { display: block; }
 .docs-page-title + .weave-typography--body1 { line-height: var(--typography-body1-lineheight); }
 .docs-surface { min-inline-size: 0; }
 .docs-text-surface { line-height: var(--typography-body1-lineheight); }
+.docs-text-surface > :where(ul, ol):not([class]) { padding-inline-start: 1.5em; }
 .docs-text-surface > * + * { margin-block-start: 18px; }
 .docs-api-surface { overflow-anchor: none; display: grid; gap: 24px; padding-block-start: 4px; }
 .docs-guidance-card { background: transparent; padding: 0; border-radius: 0; }
@@ -933,4 +988,43 @@ body[data-theme="dark"] .docs-theme-icon--dark { display: inline-flex; }
 
 @media (max-width: 380px) {
   .docs-appearance__controls { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The guide uses shared example frames; these rules group its teaching content. */
+.docs-date-guide__lesson { margin-block-end: 48px; }
+.docs-date-guide__pickers { inline-size: 100%; }
+.docs-date-guide__experiment { display: flex; flex-direction: column; gap: 24px; min-inline-size: 0; }
+.docs-date-guide__instructions,
+.docs-date-guide__takeaway,
+.docs-date-guide__result { display: flex; flex-direction: column; gap: 8px; min-inline-size: 0; }
+.docs-date-guide__instructions > p,
+.docs-date-guide__takeaway > p,
+.docs-date-guide__result > p { margin: 0; line-height: 1.6; }
+.docs-date-guide__takeaway { padding-block-start: 16px; border-block-start: 1px solid var(--palette-divider-light); }
+.docs-date-guide__timeline { margin: 8px auto 0; inline-size: 100%; max-inline-size: 560px; }
+.docs-date-guide__timeline svg { inline-size: 100%; display: block; overflow: visible; }
+.docs-date-guide__axis { stroke: var(--palette-divider); stroke-width: 3; }
+.docs-date-guide__band { stroke: var(--palette-primary); stroke-width: 5; }
+.docs-date-guide__arrow { fill: none; stroke: var(--palette-primary); stroke-width: 3; }
+.docs-date-guide__point { stroke-width: 3; }
+.docs-date-guide__point--included { fill: var(--palette-primary); stroke: var(--palette-primary); }
+.docs-date-guide__point--excluded { fill: var(--palette-surface); stroke: var(--palette-primary); }
+.docs-date-guide__point--outside { fill: var(--palette-divider); stroke: var(--palette-divider); }
+.docs-date-guide__point--invalid { fill: var(--palette-surface); stroke: var(--palette-error); }
+.docs-date-guide__labels { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: center; min-block-size: 1.5em; text-align: center; }
+.docs-date-guide__tick { color: var(--palette-text-primary); font-variant-numeric: tabular-nums; }
+.docs-date-guide__endpoint-label { color: var(--palette-text-secondary); white-space: nowrap; justify-self: center; }
+.docs-date-guide__legend { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--palette-text-secondary); }
+.docs-date-guide__legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.docs-date-guide__legend-dot { inline-size: 12px; block-size: 12px; box-sizing: border-box; border: 2px solid var(--palette-primary); border-radius: 50%; }
+.docs-date-guide__legend-dot--filled { background: var(--palette-primary); }
+.docs-date-guide__calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.docs-date-guide__date { display: flex; flex-direction: column; align-items: center; justify-content: center; min-block-size: 52px; border: 1px solid var(--palette-divider); border-radius: var(--default-borderradius); font-size: var(--typography-body2-size); }
+.docs-date-guide__date > small { line-height: 1; margin-block-start: 3px; }
+.docs-date-guide__date--available { background: color-mix(in srgb, var(--palette-primary) 14%, var(--palette-surface)); border-color: color-mix(in srgb, var(--palette-primary) 40%, var(--palette-divider)); color: var(--palette-text-primary); }
+.docs-date-guide__date--closed { border-style: dashed; color: var(--palette-error); }
+.docs-date-guide__date--outside { color: var(--palette-text-secondary); }
+.docs-date-guide .weave-button[aria-pressed="true"] { background: var(--palette-primary-fill, var(--palette-primary)); color: var(--palette-primary-fill-text, var(--palette-primary-text)); border-color: var(--palette-primary-fill-border, var(--palette-primary)); }
+@media (max-width: 599px) {
+  .docs-date-guide__legend { gap: 8px 16px; }
 }

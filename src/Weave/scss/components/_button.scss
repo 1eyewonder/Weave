@@ -1,6 +1,67 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
+// Shared with picker footer actions so color states stay consistent.
+@mixin outlined-color($color) {
+  color: var(--palette-#{$color});
+  --ripple-color: var(--palette-#{$color});
+  border: 2px
+    solid
+    rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
+      border: 2px solid
+        rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+      background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
+    }
+  }
+
+  &:focus-visible {
+    color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
+    outline: 2px solid var(--palette-#{$color});
+    outline-offset: 2px;
+    border: 2px
+      solid
+      rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+    background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
+  }
+
+  &:active {
+    color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
+    border: 2px
+      solid
+      rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
+    background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
+  }
+}
+
+@mixin filled-color($color) {
+  color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+  --ripple-color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
+  &:not(:disabled) {
+    box-shadow: inset 0 0 0 1px var(--palette-#{$color}-fill-border, transparent);
+  }
+  background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--palette-#{$color});
+    outline-offset: 2px;
+    background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+  }
+
+  &:active {
+    background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
+  }
+}
+
 .weave-button {
   color: inherit;
   border: 0;
@@ -129,38 +190,7 @@
 
   @each $color in $palette-colors {
     &.weave-button--#{$color} {
-      color: var(--palette-#{$color});
-      --ripple-color: var(--palette-#{$color});
-      border: 2px
-        solid
-        rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
-          border: 2px solid
-            rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-          background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
-        }
-      }
-
-      &:focus-visible {
-        color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
-        outline: 2px solid var(--palette-#{$color});
-        outline-offset: 2px;
-        border: 2px
-          solid
-          rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
-      }
-
-      &:active {
-        color: var(--palette-#{$color}-darken, var(--palette-#{$color}));
-        border: 2px
-          solid
-          rgba(var(--palette-#{$color}-rgb), var(--palette-border-opacity));
-        background-color: rgba(var(--palette-#{$color}-rgb), var(--weave-alpha-selected));
-      }
+      @include outlined-color($color);
     }
   }
 
@@ -203,28 +233,7 @@
 
   @each $color in $palette-colors {
     &.weave-button--#{$color} {
-      color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
-      --ripple-color: var(--palette-#{$color}-fill-text, var(--palette-#{$color}-text));
-      &:not(:disabled) {
-        box-shadow: inset 0 0 0 1px var(--palette-#{$color}-fill-border, transparent);
-      }
-      background-color: var(--palette-#{$color}-fill, var(--palette-#{$color}));
-
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
-        }
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--palette-#{$color});
-        outline-offset: 2px;
-        background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
-      }
-
-      &:active {
-        background-color: var(--palette-#{$color}-fill-hover, var(--palette-#{$color}-darken));
-      }
+      @include filled-color($color);
     }
   }
 }

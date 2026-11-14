@@ -79,6 +79,12 @@
     <Compile Include="interaction/ListInteractionTests.fs" />
     <Compile Include="interaction/NumericFieldInteractionTests.fs" />
     <Compile Include="interaction/TextFieldInteractionTests.fs" />
+    <Compile Include="interaction/PickerInteractionTests.fs" />
+    <Compile Include="interaction/TimePickerEntryTests.fs" />
+    <Compile Include="interaction/TimePickerValidationTests.fs" />
+    <Compile Include="interaction/PickerCalendarInteractionTests.fs" />
+    <Compile Include="interaction/RangePickerModelTests.fs" />
+    <Compile Include="interaction/CalendarPickerValidationTests.fs" />
     <Compile Include="interaction/RadioInteractionTests.fs" />
     <Compile Include="interaction/ResizeListenerInteractionTests.fs" />
     <Compile Include="interaction/ScrollToTopInteractionTests.fs" />

@@ -1,0 +1,263 @@
+@use "../abstracts/variables" as *;
+@use "button";
+
+.weave-picker {
+  --picker-color: var(--palette-primary);
+  --picker-contrast: var(--palette-primary-text);
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 240px;
+  max-width: 100%;
+  &--full-width { width: 100%; }
+  &__clear { display: none; }
+  &--clearable &__clear--has-value { display: inline-flex; }
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    text-align: start;
+    cursor: pointer;
+    > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  }
+  &__icon { width: 24px; height: 24px; flex-shrink: 0; vertical-align: middle; }
+  &.weave-field--focused .weave-field__label--float { color: var(--palette-primary-darken); }
+  &__popup {
+    position: absolute;
+    top: 100%;
+    inset-inline-start: 0;
+    z-index: var(--weave-zindex-dropdown);
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    max-height: min(560px, 75vh);
+    overflow-y: auto;
+    padding: 12px;
+    box-sizing: border-box;
+    color: var(--palette-text-primary);
+    background: var(--palette-surface);
+    border: 1px solid var(--palette-divider);
+    border-radius: var(--default-borderradius);
+    box-shadow: var(--elevation-8);
+  }
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+    > .weave-button--outlined { @include button.outlined-color(primary); }
+    > .weave-button--filled { @include button.filled-color(primary); }
+  }
+  &__button {
+    min-width: 36px;
+    min-height: 36px;
+    &[aria-pressed="true"] { background: var(--picker-color); color: var(--picker-contrast); }
+  }
+}
+.weave-calendar {
+  width: 100%;
+  &__header { display: flex; align-items: center; gap: 4px; }
+  &__header > .weave-picker__button {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    > .weave-picker__icon { align-self: center; }
+  }
+  &__month {
+    flex: 1;
+    min-width: 0;
+    .weave-select, .weave-field { width: 100%; min-width: 0; font: inherit; }
+    .weave-field { padding-top: 0; }
+    .weave-field__label { display: none; }
+    .weave-field .weave-field__control {
+      height: 36px;
+      border: 0;
+      margin: 0;
+      background: transparent;
+    }
+    // The enclosing picker's outlined variant also matches nested Field outlines.
+    .weave-field .weave-field__outline { display: none; }
+    .weave-select__value { align-self: stretch; min-height: 0; padding: 0 4px; font: inherit; }
+    .weave-field__adornment--end { padding: 0 4px 0 0; margin: 0; }
+    .weave-select__chevron { font-size: 12px; }
+    .weave-select__popover { overflow: hidden; }
+    .weave-select__list { max-height: min(240px, 45vh); }
+  }
+  &__month .weave-select__value:focus-visible,
+  &__year:focus-visible {
+    outline: 2px solid var(--picker-color);
+    outline-offset: -2px;
+    border-radius: var(--default-borderradius);
+  }
+  &__year {
+    height: 36px;
+    min-width: 0;
+    width: 4.5em;
+    box-sizing: border-box;
+    border: 0;
+    padding: 0 4px;
+    background: var(--palette-surface);
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  &__title { text-align: center; margin: 8px 0; font-weight: 500; }
+  &__weekdays, &__days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center; }
+  &__weekdays { color: var(--palette-text-secondary); font-size: .75rem; padding: 6px 0; }
+  &__day {
+    width: 100%;
+    max-width: 36px;
+    aspect-ratio: 1;
+    min-height: 0;
+    padding: 0;
+    place-self: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    &[aria-current="date"] { box-shadow: inset 0 0 0 1px var(--picker-color); }
+    &:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--palette-action-default-hover); }
+    &--selected, &--selected:hover:not(:disabled) { background: var(--picker-color); color: var(--picker-contrast); }
+    &:focus-visible { outline: 2px solid var(--picker-color); outline-offset: -2px; }
+    &:disabled, &[aria-disabled="true"] { color: var(--palette-action-disabled); cursor: default; }
+  }
+}
+.weave-time-picker {
+  width: 100%;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: -12px -12px 20px;
+    padding: 16px 20px;
+    min-height: 80px;
+    background: var(--picker-color);
+    color: var(--picker-contrast);
+  }
+
+  &__time { display: flex; align-items: baseline; font-size: 3.25rem; line-height: 1.2; }
+  // Fira Sans positions colon dots below the center of its lining numerals.
+  &__separator { position: relative; inset-block-start: -.12em; }
+  &__value, &__period {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    opacity: .7;
+    &[aria-pressed="true"] { opacity: 1; }
+    &:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: var(--default-borderradius); }
+  }
+  &__value.weave-field {
+    font: inherit;
+    color: inherit;
+    width: 2.6ch;
+    min-width: 2.6ch;
+    opacity: 1;
+    min-height: 0;
+    padding: 0;
+    cursor: text;
+    &[data-active="true"], &:focus-within { opacity: 1; }
+    .weave-field__control { min-height: 0; border: 0; margin: 0; }
+    > .weave-field__control > .weave-field__outline { display: none; }
+    .weave-field__input {
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+      padding: 0 .1em;
+      font: inherit;
+      line-height: 1.2;
+      text-align: center;
+      color: inherit;
+      caret-color: currentColor;
+      &::placeholder { color: inherit; opacity: .75; }
+      &:focus { outline: 2px solid currentColor; outline-offset: -2px; border-radius: var(--default-borderradius); }
+    }
+  }
+  &__toolbar .weave-button__label { font: inherit; letter-spacing: inherit; text-transform: none; padding: 0; }
+  &__periods { display: flex; flex-direction: column; gap: 4px; font-size: 1.125rem; }
+  &__period {
+    min-height: 44px;
+    min-width: 44px;
+    opacity: 1;
+    &[aria-pressed="true"] { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  }
+
+  &__clock {
+    position: relative;
+    width: 264px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: var(--palette-action-default-hover);
+    touch-action: none;
+    user-select: none;
+  }
+  &__dial { position: absolute; inset: 0; border-radius: 50%; }
+  &__dial:focus-visible { outline: 2px solid var(--picker-color); outline-offset: 4px; }
+  &__hand {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    fill: var(--picker-color);
+    line { stroke: var(--picker-color); stroke-width: .8; }
+  }
+  &__number {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    background: transparent;
+    color: var(--palette-text-primary);
+    font: inherit;
+    font-size: .875rem;
+    cursor: pointer;
+    touch-action: none;
+    &--selected { color: var(--picker-contrast); }
+    &:disabled { color: var(--palette-action-disabled); cursor: default; }
+    &:focus-visible { outline: 2px solid var(--picker-color); outline-offset: 1px; }
+  }
+  // Popup validation is independent of the trigger's collapsible help text.
+  &__feedback {
+    max-height: none;
+    overflow: visible;
+    opacity: 1;
+    margin: 0 0.875rem 8px;
+    color: var(--palette-error);
+    transition: none;
+  }
+  &__status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+@each $color in $palette-colors {
+  .weave-picker--#{$color} {
+    --picker-color: var(--palette-#{$color});
+    --picker-contrast: var(--palette-#{$color}-text);
+    &.weave-field--focused .weave-field__label--float { color: var(--palette-#{$color}-darken); }
+    .weave-picker__actions > .weave-button--outlined { @include button.outlined-color($color); }
+    .weave-picker__actions > .weave-button--filled { @include button.filled-color($color); }
+  }
+}

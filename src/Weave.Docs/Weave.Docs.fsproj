@@ -113,6 +113,15 @@
     <Compile Include="examples/ReactiveHelpersExamples.fs" />
     <Compile Include="examples/EventHandlersExamples.fs" />
     <Compile Include="examples/FormExamples.fs" />
+    <Compile Include="examples/date-time/PickerAppearance.fs" />
+    <Compile Include="examples/date-time/PickerExampleHelpers.fs" />
+    <Compile Include="examples/date-time/PickerConfigurator.fs" />
+    <Compile Include="examples/date-time/DateTimeGuideSource.fs" />
+    <Compile Include="examples/date-time/DatePickerExamples.fs" />
+    <Compile Include="examples/date-time/DateRangePickerExamples.fs" />
+    <Compile Include="examples/date-time/TimePickerExamples.fs" />
+    <Compile Include="examples/date-time/DateTimeGuideVisuals.fs" />
+    <Compile Include="examples/date-time/DateTimeGuide.fs" />
     <Compile Include="DocsTheme.fs" />
     <Compile Include="DocsRouting.fs" />
     <Compile Include="DocsHome.fs" />

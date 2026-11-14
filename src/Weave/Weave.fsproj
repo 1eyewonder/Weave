@@ -7,6 +7,11 @@
     <PackageReference Include="Zanaptak.TypedCssClasses" Version="1.0.0" PrivateAssets="all" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Forms.fs" />
+    <Compile Include="Intervals.fs" />
+    <Compile Include="Availability.fs" />
+    <Compile Include="DateAvailability.fs" />
+    <Compile Include="TimeAvailability.fs" />
+    <Compile Include="Globalization.fs" />
     <Compile Include="Theming.fs" />
     <Compile Include="Core.fs" />
     <Compile Include="Spacing.fs" />
@@ -44,6 +49,12 @@
     <Compile Include="components/DropdownMenu.fs" />
     <Compile Include="components/List.fs" />
     <Compile Include="components/Select.fs" />
+    <Compile Include="components/Picker.fs" />
+    <Compile Include="components/Calendar.fs" />
+    <Compile Include="components/DatePicker.fs" />
+    <Compile Include="components/DateRangePicker.fs" />
+    <Compile Include="components/TimePickerClock.fs" />
+    <Compile Include="components/TimePicker.fs" />
     <Compile Include="components/Link.fs" />
     <Compile Include="components/ExpansionPanel.fs" />
     <Compile Include="components/Tabs.fs" />

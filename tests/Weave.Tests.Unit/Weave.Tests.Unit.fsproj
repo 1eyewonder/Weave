@@ -6,11 +6,18 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Weave/Weave.fsproj" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/DateTimeGuideSource.fs" Link="docs/DateTimeGuideSource.fs" />
+    <Compile Include="docs/DateTimeGuideTests.fs" />
     <Compile Include="components/ChipSetTests.fs" />
     <Compile Include="components/colorpicker/PickerColorTests.fs" />
     <Compile Include="components/TableTests.fs" />
     <Compile Include="utilities/AnimationTests.fs" />
     <Compile Include="utilities/BoundedTests.fs" />
+    <Compile Include="Generators.fs" />
+    <Compile Include="utilities/IntervalTests.fs" />
+    <Compile Include="utilities/DateAvailabilityTests.fs" />
+    <Compile Include="utilities/TimeAvailabilityTests.fs" />
+    <Compile Include="utilities/RangeTests.fs" />
     <Compile Include="utilities/ValidationTests.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

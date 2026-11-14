@@ -226,6 +226,7 @@ module Select =
                 onKeyDown current ev
               | Key.Escape ->
                 ev.PreventDefault()
+                ev.StopPropagation()
                 onKeyDown current ev
               | Key.Tab when tabToSelectAll && not ev.ShiftKey && canInteract current -> ()
               | Key.Tab -> onKeyDown current ev
@@ -657,6 +658,7 @@ type Select =
             handleKeyNav state ev
           | Key.Escape when openVar.Value ->
             ev.PreventDefault()
+            ev.StopPropagation()
             handleKeyNav state ev
           | Key.Tab -> handleKeyNav state ev
           | _ -> ())
@@ -967,6 +969,7 @@ type MultiSelect =
             handleMultiKeyNav state ev
           | Key.Escape when openVar.Value ->
             ev.PreventDefault()
+            ev.StopPropagation()
             handleKeyNav state ev
           | Key.Tab when showSelectAll && openVar.Value && canInteract && not ev.ShiftKey ->
             ev.PreventDefault()

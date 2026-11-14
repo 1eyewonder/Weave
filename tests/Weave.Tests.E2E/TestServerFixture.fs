@@ -94,6 +94,9 @@ type TestFixture() =
     return context, page
   }
 
+  member _.NewTimezoneContextAsync(timezone: string) =
+    browser.NewContextAsync(BrowserNewContextOptions(TimezoneId = timezone))
+
   member _.NewTouchContextAsync() =
     browser.NewContextAsync(
       BrowserNewContextOptions(

@@ -342,6 +342,7 @@ type PickerInteractionTests(fixture: TestFixture) =
     task {
       do! this.NavigateTo "pickers"
       do! (this.Button "24-hour time").ClickAsync()
+      do! this.Expect(this.Button "Hour 01").ToBeVisibleAsync()
       let! inner = (this.Button "Hour 01").BoundingBoxAsync()
       let! outer = (this.Button "Hour 13").BoundingBoxAsync()
       let! dial = this.Page.Locator(".weave-time-picker__clock").BoundingBoxAsync()
@@ -359,7 +360,9 @@ type PickerInteractionTests(fixture: TestFixture) =
     do! this.Page.SetViewportSizeAsync(width, 800)
     do! this.SetTheme theme
     do! (this.Button "Time").ClickAsync()
-    let! dial = this.Page.Locator(".weave-time-picker__clock").BoundingBoxAsync()
+    let clock = this.Page.Locator(".weave-time-picker__clock")
+    do! this.Expect(clock).ToBeVisibleAsync()
+    let! dial = clock.BoundingBoxAsync()
     Assert.True(abs (dial.Width - dial.Height) < 1.0f)
     do! this.Capture(sprintf "clock-%d-%s" width theme)
   }

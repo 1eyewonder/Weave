@@ -4,7 +4,7 @@ namespace Weave.Docs
 module PackageVersions =
 
   [<Literal>]
-  let Library = "0.2.0"
+  let Library = "0.3.0"
 
   [<Literal>]
-  let Templates = "0.2.1"
+  let Templates = "0.3.0"

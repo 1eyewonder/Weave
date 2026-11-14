@@ -80,10 +80,22 @@ module internal TimePickerClock =
     Var.Set entry.Field.Value text
     Var.Set entry.Edited false
 
+  let private synchronizeEntry current entry =
+    // A change to the other part of the time must not replace an in-progress draft.
+    if entry.Displayed.Value <> entry.Display current then
+      resetEntry current entry
+
+  let synchronizeEntries current entries =
+    synchronizeEntry current entries.Hour
+    synchronizeEntry current entries.Minute
+
   let private commit context value =
     if canInteract context then
       context.Touch()
       Var.Set context.Value (Some value)
+      // Synchronize before another input event can begin a draft. The render sink
+      // then observes the same displayed value and leaves that newer draft intact.
+      synchronizeEntries (Some value) context.Entries
 
   let private commitDial phase context value =
     if canInteract context then
@@ -236,15 +248,6 @@ module internal TimePickerClock =
   let resetEntries current entries =
     resetEntry current entries.Hour
     resetEntry current entries.Minute
-
-  let private synchronizeEntry current entry =
-    // A change to the other part of the time must not replace an in-progress draft.
-    if entry.Displayed.Value <> entry.Display current then
-      resetEntry current entry
-
-  let synchronizeEntries current entries =
-    synchronizeEntry current entries.Hour
-    synchronizeEntry current entries.Minute
 
   let entryErrors (resetVersion: Var<int>) entries =
     let errors entry =
@@ -606,6 +609,9 @@ module internal TimePickerClock =
           on.focus (fun element _ ->
             synchronizeEntry context.Value.Value entry
             Var.Set context.Phase phase
+            // Select the current value, even when its reactive DOM update is pending.
+            // Otherwise that update can collapse the selection before typing starts.
+            element?value <- draft.Value
             element?select ())
           on.input (fun element _ ->
             let raw = As<string>(element?value)

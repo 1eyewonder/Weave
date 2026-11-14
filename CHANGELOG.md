@@ -8,74 +8,50 @@ last_commit_released: 30ae69ac5004cc4e5c0f6b6f49e606d5b52afe0a
 
 ### 🏗️ Breaking changes
 
-This is a pre-1.0 minor release. The changes below can affect existing layouts or custom CSS; the major version remains `0`.
-
-- **BREAKING (visual): Heading sizes and spacing changed.** `Typography.h1` through `h6` now use a consistent 1.25-ratio responsive scale and revised letter spacing. Review heading wrapping and page layouts. To retain your previous styling, override the affected `--typography-hN-size` and `--typography-hN-letterspacing` variables in your theme, replacing `N` with the heading level.
-- **BREAKING (visual): Heading weights changed.** `h1` and `h2` now default to bold instead of light; `h3`, `h4`, and `h5` default to bold instead of regular. To retain the old weights, set `--typography-h1-weight` and `--typography-h2-weight` to `var(--weave-weight-light)`, and the `h3` through `h5` weight variables to `var(--weave-weight-regular)`.
-- **BREAKING (custom CSS): TextField counters moved inside their field.** A character counter is now a child of `.weave-field`, rather than its sibling. Update custom sibling selectors or layout rules that assumed the counter sat outside the field; use `.weave-field .weave-field__counter` when targeting it.
+- **BREAKING: Heading sizes and letter spacing changed.** Review heading wrapping in existing layouts. Override `--typography-hN-size` and `--typography-hN-letterspacing` to retain your theme's previous values (`N` is the heading level). [d5de59d](https://github.com/1eyewonder/Weave/commit/d5de59dde5f39ef6247620c43bb9be404ee92de9)
+- **BREAKING: Headings h1–h5 now default to bold.** To restore previous weights, set `--typography-h1-weight` and `--typography-h2-weight` to `var(--weave-weight-light)`, and the h3–h5 weight variables to `var(--weave-weight-regular)`. [d5de59d](https://github.com/1eyewonder/Weave/commit/d5de59dde5f39ef6247620c43bb9be404ee92de9)
+- **BREAKING: TextField counters moved inside `.weave-field`.** Update custom sibling selectors to target `.weave-field .weave-field__counter`. [9720386](https://github.com/1eyewonder/Weave/commit/9720386c947564a73b2efa3b3073bcf234f7cf15)
 
 ### 🚀 Features
 
-- Added `DatePicker` for selecting one calendar date.
-- Added `DateRangePicker` for selecting an ordered, inclusive date range, including a single-day range.
-- Added `TimePicker` with a default 12-hour clock and an explicit 24-hour option.
-- Added editable hour and minute fields alongside the time dial, with numeric input, validation messages, and configurable minute steps.
-- Added shared picker variants, theme colors, clear controls, and editable, read-only, and disabled modes.
-- Pickers stay open after selection so users can review the value; Done, Escape, or an outside click closes the popup.
-- Added application-wide calendar culture through `Globalization`; month names, weekday labels, and default week starts follow that culture. Date pickers also accept an explicit first-day override and custom display formatting.
-- Added generic `Range<'T>` values with checked construction, inclusive/exclusive bounds, and read-only `Lower` and `Upper` members.
-- Added `Interval<'T>` to represent bounded, unbounded, or single-value intervals.
-- Added range and interval membership checks, closed/singleton constructors, and `mapBounds` helpers for projecting endpoint values.
-- Added `DateAvailability` and `TimeAvailability` to combine allowed windows, exclusions, and filters. Rules can change reactively without recreating a picker.
-- Added picker integration with `FormField`. Clock, minute-step, parsing, and availability errors participate in form validation; unavailable typed or externally assigned times stay entered and block submission until corrected.
+- Added `DatePicker` for selecting a calendar date. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
+- Added `DateRangePicker` for selecting an inclusive date range. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
+- Added `TimePicker` with editable time fields, 12/24-hour clocks, and configurable minute steps. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
+- Added `Range<'T>` and `Interval<'T>` for validated bounds, membership checks, and endpoint mapping. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
+- Added `DateAvailability` and `TimeAvailability` for composing booking windows, exclusions, and filters. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
+- Added `Globalization` for shared calendar culture, with per-picker week-start and date-format overrides. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
 
 ### 🐞 Bug Fixes
 
-- **Select and MultiSelect:** Disabled comboboxes now leave the tab order and expose reactive disabled and read-only states to assistive technology.
-- **Select and MultiSelect:** Long labels and selected values fit within their controls instead of clipping action icons or overflowing the layout.
-- **Select and MultiSelect:** Unbound menus stay inside the viewport and reposition when the page scrolls or the window resizes.
-- **Fields:** Standard, filled, and outlined controls now use consistent heights.
-- **Fields:** Caret colors follow the field's theme color.
-- **Fields:** Above-field labels reserve their spacing once, including when a Select wraps an inner field.
-- **Dialogs:** Tab navigation includes editable content, summaries, and radio groups while skipping hidden, inert, and disabled controls.
-- **Nested overlays:** Escape closes the active selector or tooltip before its containing dialog or drawer.
-- **Drawers:** Custom widths now agree across the panel, surrounding layout, and hover-expanded state.
-- **Drawers:** Keyboard focus is trapped only while the backdrop is visible, including when responsive breakpoints or custom styles change its visibility.
-- **Drawers:** Closing or removing an overlay restores focus to its trigger when focus is still inside the drawer.
-- **Tooltips:** Bubbles reposition near viewport edges and after scrolling or resizing.
-- **Tooltips:** Long content remains scrollable and reachable with the keyboard.
-- **Tooltips:** Accessible descriptions connect to native triggers, including custom tooltip IDs and replacement triggers.
-- **Tabs:** The initial indicator starts at the selected tab instead of sliding from the first tab.
-- **Tabs:** The selected tab remains visible after its container resizes.
-- **Tabs:** Filled tabs and themed header backgrounds use contrasting text and clearer active-pill boundaries. Custom header backgrounds can set `--tabs-header-foreground` for an appropriate text color.
-- **Checkboxes:** Long labels wrap without shrinking the checkbox control.
-- **Checkboxes:** Label spacing follows right-to-left layouts.
-- **Chips:** Disabled links, action buttons, and remove controls expose their disabled state and update their tab stops reactively.
-- **Switches:** The track and thumb scale together for each size.
-- **Cards:** Long header text wraps instead of being truncated.
-- **Carousels:** Navigation controls remain usable in narrow containers.
-- **Pagination:** Wrapped control rows remain centered.
-- **Links:** Hover and focus colors remain readable across supported color styles.
-- **App bars:** Filled, outlined, and text buttons retain readable colors on themed surfaces.
-- **ScrollListener:** Before a heading crosses the activation threshold, the nearest visible heading is selected instead of a later heading farther down the page.
+- **Select and MultiSelect:** Disabled controls leave the tab order, and disabled/read-only states are exposed to assistive technology. [abae806](https://github.com/1eyewonder/Weave/commit/abae806ffcb2a6ed91771cbb82e8747f5a68fc34)
+- **Select and MultiSelect:** Fixed long-label sizing and menus overflowing the viewport after scrolling or resizing. [84b8b69](https://github.com/1eyewonder/Weave/commit/84b8b69bbf23c2ec84cb376b1c84e73b6c9990c3)
+- **Fields:** Aligned control heights and caret colors across field variants. [60daf82](https://github.com/1eyewonder/Weave/commit/60daf82fe6a7266ca5596603dc83a81e9839d743)
+- **Dialogs and nested popups:** Fixed focus containment and Escape closing the containing overlay before its popup. [1fd58ef](https://github.com/1eyewonder/Weave/commit/1fd58ef602fcf66665224bd99b91cd7caf0cb8b8), [0fc37ac](https://github.com/1eyewonder/Weave/commit/0fc37ac8ccbc87075d550a5b9c18d1a69df71c9b)
+- **Drawers:** Fixed custom widths and focus trapping when responsive layouts change backdrop visibility. [bbd9a91](https://github.com/1eyewonder/Weave/commit/bbd9a91ed2973e99fbef022b05dbeacadecb01e7), [9d19cdd](https://github.com/1eyewonder/Weave/commit/9d19cdd62a275820a7a04138469214da8684c46c)
+- **Tooltips:** Fixed viewport clipping, keyboard access to long content, and accessible trigger descriptions. [4af2c6c](https://github.com/1eyewonder/Weave/commit/4af2c6c654e14addc8e63ca7c8b24300518dbbdd)
+- **Tabs:** Fixed selected-tab indicator placement and visibility after resizing, and improved filled-tab contrast. [7605899](https://github.com/1eyewonder/Weave/commit/7605899cb7e6f00c136c990dd80a24f9cc2f7502), [f0f0d64](https://github.com/1eyewonder/Weave/commit/f0f0d6401d84702f77897159e479de435d7b2a26)
+- **Checkboxes:** Long labels wrap without shrinking the checkbox, with correct spacing in right-to-left layouts. [666fa1d](https://github.com/1eyewonder/Weave/commit/666fa1de095922f1245aa98606381542b8d932c2), [e5e02eb](https://github.com/1eyewonder/Weave/commit/e5e02ebf9ff75fe9ef704d3d577c864df37727e4)
+- **Chips:** Disabled actions and remove controls now expose their disabled state and leave the tab order. [92e210c](https://github.com/1eyewonder/Weave/commit/92e210c496d857b69aef95ce061584dade4098f4)
+- **Switches:** Corrected track and thumb proportions across sizes. [38d9479](https://github.com/1eyewonder/Weave/commit/38d947974b4498ef102ffc4f7ae275cbd71c9a91)
+- **Cards:** Long headers wrap instead of being truncated. [5dda519](https://github.com/1eyewonder/Weave/commit/5dda5199174f16356908184bc3be56471b05e918)
+- **Carousels:** Navigation controls fit narrow containers. [4e6064f](https://github.com/1eyewonder/Weave/commit/4e6064fd25ae266fdb586d7e74a0f60cdd25ddd2)
+- **Pagination:** Wrapped control rows stay centered. [581a5cb](https://github.com/1eyewonder/Weave/commit/581a5cb1cb89f63fefa5600c265797db423f4ee9)
+- **Links:** Fixed hover and focus contrast. [c410f74](https://github.com/1eyewonder/Weave/commit/c410f74a02e9db90f4d1bc3d1eddd895cd15af82)
+- **App bars:** Fixed button contrast on themed backgrounds. [eeb2255](https://github.com/1eyewonder/Weave/commit/eeb225569e57e1f92d3b596dda064f12cac3323d)
+- **ScrollListener:** Fixed section navigation highlighting the wrong visible heading. [72b47b9](https://github.com/1eyewonder/Weave/commit/72b47b91794d1143e171c064e247d9c1a21e2adf)
 
 ### Documentation
 
-- Rebuilt the documentation home, navigation, search, and responsive component examples.
-- Added a Date & Time guide explaining ranges, intervals, availability rules, and picker integration, with API references and copyable examples.
-- Added interactive appearance configurators and improved copyable F# examples, syntax highlighting, and example layout on desktop and mobile.
+- Refreshed the documentation home, navigation, search, and interactive component examples. [5af21d3](https://github.com/1eyewonder/Weave/commit/5af21d3aa82322acb1114009f736f9be7b25fb89)
+- Added a [Date & Time guide](https://1eyewonder.github.io/Weave/#date-time-guide) covering ranges, intervals, availability, and picker integration. [07a303b](https://github.com/1eyewonder/Weave/commit/07a303bd6666e004566d669acd0c0b14825a38c9)
 
 ### Starter templates
 
-- Updated `Weave.WebSharper.Templates` to `0.3.0`.
-- Updated `weave-app`, `weave-dashboard`, `weave-projects`, and `weave-repository` to reference `Weave.WebSharper` `0.3.0`.
+- Updated all four starter templates to use `Weave.WebSharper` `0.3.0`. [923cc3d](https://github.com/1eyewonder/Weave/commit/923cc3d527807a73c1a1e7e2808ea26a3ea97575)
 
-### Compatibility
+**Compatibility:** Tested with WebSharper and WebSharper.FSharp `10.1.9.686`, and WebSharper.UI `10.1.7.686`. Starter templates target .NET 10.
 
-- The tested baseline remains WebSharper and WebSharper.FSharp `10.1.9.686`, with WebSharper.UI `10.1.7.686`.
-- Starter templates continue to target .NET 10 and require the .NET 10.0.403 SDK or a newer .NET 10 feature band.
-
-[Full library changes since v0.2.0](https://github.com/1eyewonder/Weave/compare/v0.2.0...v0.3.0)
+[Full changes since v0.2.0](https://github.com/1eyewonder/Weave/compare/v0.2.0...v0.3.0)
 
 ## v0.2.0
 

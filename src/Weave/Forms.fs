@@ -122,13 +122,25 @@ type FormModel<'T>
       | Error _ -> ())
 
 [<JavaScript>]
-type FormField<'T when 'T: equality> internal (initialValue: 'T, rules: View<Validator<'T> list>) =
-  let value = Var.Create initialValue
+type FormField<'T when 'T: equality> internal (value: Var<'T>, rules: View<Validator<'T> list>) =
+  let initialValue = value.Value
   let touched = Var.Create false
+  let resetVersion = Var.Create 0
   let id = WeaveId.create "weave-validation"
 
-  let errors =
+  let ruleErrors =
     View.Map2 (fun current validators -> Validate.all validators current) value.View rules
+
+  let contributions = Var.Create(Map.empty<string, View<string list>>)
+
+  let contributedErrors =
+    contributions.View
+    |> View.Bind(fun sources ->
+      sources
+      |> Map.toList
+      |> List.fold (fun combined (_, messages) -> (combined, messages) ||> View.Map2 (@)) (View.Const []))
+
+  let errors = (ruleErrors, contributedErrors) ||> View.Map2 (@)
 
   let visibleErrors =
     View.Map2 (fun show messages -> if show then messages else []) touched.View errors
@@ -138,6 +150,7 @@ type FormField<'T when 'T: equality> internal (initialValue: 'T, rules: View<Val
   let reset () =
     value.Value <- initialValue
     touched.Value <- false
+    Var.Update resetVersion ((+) 1)
 
   let result =
     View.Map2
@@ -155,6 +168,19 @@ type FormField<'T when 'T: equality> internal (initialValue: 'T, rules: View<Val
       value.View
       errors
 
+  // Custom controls contribute parser/constraint errors to the same form model.
+  // The control owns registration and removes its contribution when unmounted.
+  member internal _.ContributeErrors(owner, messages) =
+    Var.Update contributions (Map.add owner messages)
+
+  member internal _.RemoveErrors(owner) =
+    Var.Update contributions (Map.remove owner)
+
+  member internal _.VisibleRuleErrors =
+    (touched.View, ruleErrors)
+    ||> View.Map2(fun show messages -> if show then messages else [])
+
+  member internal _.ResetVersion = resetVersion
   member _.Value = value
   member _.Errors = errors
   member _.IsTouched = touched.View
@@ -174,7 +200,9 @@ type FormField<'T when 'T: equality> internal (initialValue: 'T, rules: View<Val
 type FormField =
   /// rulesView replaces rules when supplied. Use it for reactive cross-field rules.
   static member create(initialValue: 'T, ?rules: Validator<'T> list, ?rulesView: View<Validator<'T> list>) =
-    FormField<'T>(initialValue, defaultArg rulesView (View.Const(defaultArg rules [])))
+    FormField<'T>(Var.Create initialValue, defaultArg rulesView (View.Const(defaultArg rules [])))
+
+  static member internal bind(value: Var<'T>) = FormField<'T>(value, View.Const [])
 
 [<JavaScript; RequireQualifiedAccess>]
 module FormModel =

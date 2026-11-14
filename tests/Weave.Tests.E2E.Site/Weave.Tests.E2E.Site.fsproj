@@ -93,6 +93,12 @@
     <Compile Include="TabsRegressionPage.fs" />
     <Compile Include="ColorPickerPage.fs" />
     <Compile Include="SelectSizingPage.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/PickerAppearance.fs" Link="docs/date-time/PickerAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/PickerExampleHelpers.fs" Link="docs/date-time/PickerExampleHelpers.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/PickerConfigurator.fs" Link="docs/date-time/PickerConfigurator.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/DatePickerExamples.fs" Link="docs/date-time/DatePickerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/DateRangePickerExamples.fs" Link="docs/date-time/DateRangePickerExamples.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/date-time/TimePickerExamples.fs" Link="docs/date-time/TimePickerExamples.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Startup.fs" />
   </ItemGroup>

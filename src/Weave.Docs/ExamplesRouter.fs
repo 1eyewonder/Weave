@@ -44,6 +44,10 @@ module ExamplesRouter =
       | ProgressExamples -> ProgressExamples.render ()
       | SliderExamples -> SliderExamples.render ()
       | ColorPickerExamples -> ColorPickerExamples.render ()
+      | DateTimeGuide -> DateTimeGuide.render ()
+      | DatePickerExamples -> DatePickerExamples.render ()
+      | DateRangePickerExamples -> DateRangePickerExamples.render ()
+      | TimePickerExamples -> TimePickerExamples.render ()
       | ContainerExamples -> ContainerExamples.render ()
       | FormExamples -> FormExamples.render ()
       | FieldExamples -> FieldExamples.render ()
@@ -309,6 +313,11 @@ module ExamplesRouter =
       |> snd
       |> List.map pageToString
 
+    let dateTimeLabels = [ "Date & Time Guide"; "Date Picker"; "Date Range Picker"; "Time Picker" ]
+
+    let dateTimeExpanded =
+      Var.Create(List.contains (pageToString initialPage) dateTimeLabels)
+
     let componentsLabels = labelsForGroup "Components"
     let stylingLabels = labelsForGroup "Styling"
     let utilitiesLabels = labelsForGroup "Utilities"
@@ -334,6 +343,7 @@ module ExamplesRouter =
           for labels, expanded in
             [
               componentsLabels, componentsExpanded
+              dateTimeLabels, dateTimeExpanded
               stylingLabels, stylingExpanded
               utilitiesLabels, utilitiesExpanded
               showcasesLabels, showcasesExpanded
@@ -373,7 +383,7 @@ module ExamplesRouter =
           (View.Const "page")
       ] [ span [ Typography.body2 ] [ text label ] ]
 
-    let navGroup categoryIcon (label: string) (isExpanded: Var<bool>) (labels: string list) =
+    let rec navGroup categoryIcon (label: string) (isExpanded: Var<bool>) (labels: string list) =
       navSearch.View
       |> Doc.BindView(fun query ->
         let searching = query.Trim() <> ""
@@ -382,7 +392,7 @@ module ExamplesRouter =
         if searching && List.isEmpty matching then
           Doc.Empty
         else
-          div [] [
+          div [ Attr.Class "docs-nav-group" ] [
             if searching then
               div [ Attr.Class "docs-nav-results-heading" ] [ text label ]
               div [] (matching |> List.map navLeafItem)
@@ -427,7 +437,21 @@ module ExamplesRouter =
               isExpanded.View
               |> Doc.BindView(fun exp ->
                 if exp then
-                  div [] (labels |> List.map navLeafItem)
+                  div [ Attr.Class "docs-nav-items" ] [
+                    for item in labels do
+                      if label = "Components" && item = "Date & Time Guide" then
+                        div [ Attr.Class "docs-nav-subgroup" ] [
+                          navGroup
+                            (Icon.Android Android.Widgets)
+                            "Date & time"
+                            dateTimeExpanded
+                            dateTimeLabels
+                        ]
+                      elif label = "Components" && List.contains item dateTimeLabels then
+                        ()
+                      else
+                        navLeafItem item
+                  ]
                 else
                   Doc.Empty)
           ])

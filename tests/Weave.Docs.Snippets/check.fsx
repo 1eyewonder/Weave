@@ -34,6 +34,9 @@
 #load "../../src/Weave.Docs/examples/list/ListAppearanceSource.fs"
 #load "../../src/Weave.Docs/examples/icons/IconPlaygroundSource.fs"
 
+#load "../../src/Weave.Docs/examples/date-time/PickerAppearance.fs"
+#load "../../src/Weave.Docs/examples/date-time/DateTimeGuideSource.fs"
+
 open System
 open System.IO
 open System.Text.RegularExpressions
@@ -1033,6 +1036,16 @@ let generatedSnippets = [
 let appearanceSnippets = [
   for page, sourceFile, cases in
     [
+      "DatePickerExamples.fs",
+      "PickerAppearance.fs",
+      Weave.Docs.PickerAppearance.cases Weave.Docs.PickerAppearance.Kind.Date
+      "DateRangePickerExamples.fs",
+      "PickerAppearance.fs",
+      Weave.Docs.PickerAppearance.cases Weave.Docs.PickerAppearance.Kind.DateRange
+      "TimePickerExamples.fs",
+      "PickerAppearance.fs",
+      Weave.Docs.PickerAppearance.cases Weave.Docs.PickerAppearance.Kind.Time
+      "DateTimeGuide.fs", "DateTimeGuideSource.fs", Weave.Docs.DateTimeGuideSource.cases ()
       "GridExamples.fs", "GridSource.fs", Weave.Docs.GridSource.spacingCases ()
       "ButtonExamples.fs",
       "ButtonSource.fs",

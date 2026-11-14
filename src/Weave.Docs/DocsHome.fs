@@ -26,6 +26,10 @@ module DocsHome =
       ChipSetExamples
       ColorPickerExamples
       ContainerExamples
+      DateTimeGuide
+      DatePickerExamples
+      DateRangePickerExamples
+      TimePickerExamples
       DialogExamples
       DividerExamples
       DrawerExamples

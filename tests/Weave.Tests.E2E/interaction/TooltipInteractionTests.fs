@@ -246,36 +246,6 @@ type TooltipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``tooltip fades out before it is removed from layout``() = task {
-    do! this.NavigateTo("tooltip")
-    let wrapper = this.Page.Locator("[data-testid='tooltip-default']")
-    let tooltip = wrapper.Locator("[role='tooltip']")
-    let! _ = tooltip.EvaluateAsync("el => { el.style.transitionDuration = '600ms'; }")
-    do! wrapper.HoverAsync()
-    do! this.Expect(tooltip).ToBeVisibleAsync()
-
-    let! _ =
-      tooltip.EvaluateAsync("el => Promise.all(el.getAnimations().map(animation => animation.finished))")
-
-    do! this.Page.Mouse.MoveAsync(640.0f, 600.0f)
-    let! tooltipId = tooltip.GetAttributeAsync("id")
-
-    let! _ =
-      this.Page.WaitForFunctionAsync(
-        """id => {
-          const element = document.getElementById(id);
-          if (!element) return false;
-          const style = getComputedStyle(element);
-          return style.display === "block" && Number(style.opacity) < 1;
-        }""",
-        tooltipId,
-        PageWaitForFunctionOptions(Timeout = 3000.0f)
-      )
-
-    do! this.Expect(tooltip).ToBeHiddenAsync()
-  }
-
-  [<Fact>]
   member this.``focusOut hides the tooltip``() = task {
     do! this.NavigateTo("tooltip")
     let wrapper = this.Page.Locator("[data-testid='tooltip-default']")
@@ -611,4 +581,44 @@ type TooltipInteractionTests(fixture: TestFixture) =
     do! this.Expect(trigger).ToBeFocusedAsync()
     do! trigger.PressAsync("Escape")
     do! this.Expect(dialog).ToHaveCountAsync(0)
+  }
+
+// Holding hover through a transition must not compete with other browser pages.
+[<Collection("Browser input")>]
+type TooltipTransitionTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``tooltip fades out before it is removed from layout``() = task {
+    do! this.NavigateTo("tooltip")
+    let wrapper = this.Page.GetByTestId("tooltip-default")
+    let tooltip = wrapper.Locator("[role='tooltip']")
+    let! _ = tooltip.EvaluateAsync("el => { el.style.transitionDuration = '600ms'; }")
+    do! wrapper.HoverAsync()
+    do! this.Expect(tooltip).ToBeVisibleAsync()
+
+    let! _ =
+      tooltip.EvaluateAsync("el => Promise.all(el.getAnimations().map(animation => animation.finished))")
+
+    // Observe in the browser before mouseleave; polling after the action can miss
+    // the entire fade under CI load. Register before the component's hide handler.
+    let! _ =
+      tooltip.EvaluateAsync(
+        """el => {
+          const onEnd = event => {
+            if (event.target !== el || event.propertyName !== 'opacity'
+                || el.classList.contains('weave-tooltip--visible')) return;
+            const style = getComputedStyle(el);
+            el.setAttribute('data-fade-out-display', style.display);
+            el.setAttribute('data-fade-out-opacity', style.opacity);
+            el.removeEventListener('transitionend', onEnd);
+          };
+          el.addEventListener('transitionend', onEnd);
+        }"""
+      )
+
+    do! this.Page.Mouse.MoveAsync(640.0f, 600.0f)
+    do! this.Expect(tooltip).ToHaveAttributeAsync("data-fade-out-display", "block")
+    do! this.Expect(tooltip).ToHaveAttributeAsync("data-fade-out-opacity", "0")
+    do! this.Expect(tooltip).ToHaveCSSAsync("display", "none")
   }

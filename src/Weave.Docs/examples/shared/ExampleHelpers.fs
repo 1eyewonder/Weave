@@ -365,7 +365,7 @@ module Helpers =
     title
     description
     (content: Doc option)
-    (linesOfCode: string)
+    (linesOfCode: View<string>)
     =
     let languageLabel =
       match language with
@@ -394,7 +394,7 @@ module Helpers =
         let icon =
           codeIsExpanded.View
           |> Doc.BindView(fun expanded ->
-            let attrs = [ AlignItems.center ]
+            let attrs = [ AlignItems.center; Attr.Create "aria-hidden" "true" ]
 
             if expanded then
               Icon.create (Icon.UiActions UiActions.CollapseAll, attrs = attrs)
@@ -414,21 +414,23 @@ module Helpers =
           )
 
         let codeContent =
-          div [ Attr.Class "docs-copy-code-wrapper" ] [
-            span [ Attr.Class "docs-code-language" ] [ text languageLabel ]
-            copyButton linesOfCode
+          linesOfCode
+          |> Doc.BindView(fun current ->
+            div [ Attr.Class "docs-copy-code-wrapper" ] [
+              span [ Attr.Class "docs-code-language" ] [ text languageLabel ]
+              copyButton current
 
-            pre [
-              attr.tabindex "0"
-              Attr.Create "aria-label" (title + " " + languageLabel + " source code")
-            ] [
-              code [
-                Attr.Class("language-" + language)
-                on.afterRender highlightCodeElement
-                Typography.Family.mono
-              ] [ text linesOfCode ]
-            ]
-          ]
+              pre [
+                attr.tabindex "0"
+                Attr.Create "aria-label" (title + " " + languageLabel + " source code")
+              ] [
+                code [
+                  Attr.Class("language-" + language)
+                  on.afterRender highlightCodeElement
+                  Typography.Family.mono
+                ] [ text current ]
+              ]
+            ])
 
         ExpansionPanelContainer.create (
           [
@@ -540,11 +542,15 @@ module Helpers =
 
   /// A live example paired with source in the selected language.
   let codeSampleSectionFor language title description content linesOfCode =
-    codeSampleSectionWithLanguage language title description (Some content) linesOfCode
+    codeSampleSectionWithLanguage language title description (Some content) (View.Const linesOfCode)
 
   let codeSampleSection title description content linesOfCode =
     codeSampleSectionFor "fsharp" title description content linesOfCode
 
   /// Source-only guidance avoids an empty preview above the code disclosure.
   let codeSection language title description linesOfCode =
-    codeSampleSectionWithLanguage language title description None linesOfCode
+    codeSampleSectionWithLanguage language title description None (View.Const linesOfCode)
+
+  /// A live example whose copied source follows its state without resetting the disclosure.
+  let codeSampleSectionView title description content source =
+    codeSampleSectionWithLanguage "fsharp" title description (Some content) source

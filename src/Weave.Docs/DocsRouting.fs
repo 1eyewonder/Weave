@@ -36,6 +36,10 @@ module DocsRouting =
     | NumericFieldExamples
     | DropdownMenuExamples
     | SelectExamples
+    | DateTimeGuide
+    | TimePickerExamples
+    | DateRangePickerExamples
+    | DatePickerExamples
     | ExpansionPanelExamples
     | DialogExamples
     | DrawerExamples
@@ -94,6 +98,10 @@ module DocsRouting =
     | FieldExamples -> "Field"
     | NumericFieldExamples -> "Numeric Field"
     | DropdownMenuExamples -> "Dropdown Menu"
+    | DatePickerExamples -> "Date Picker"
+    | DateRangePickerExamples -> "Date Range Picker"
+    | DateTimeGuide -> "Date & Time Guide"
+    | TimePickerExamples -> "Time Picker"
     | SelectExamples -> "Select"
     | ExpansionPanelExamples -> "Expansion Panel"
     | DialogExamples -> "Dialog"
@@ -136,6 +144,10 @@ module DocsRouting =
     | DrawerExamples -> "sidebar navigation panel offcanvas overlay"
     | DropdownMenuExamples -> "menu popup actions context"
     | SelectExamples -> "dropdown options picker combobox"
+    | DatePickerExamples -> "calendar date availability weekday booking"
+    | DateRangePickerExamples -> "calendar date range interval booking stay bounds"
+    | TimePickerExamples -> "time clock hour minute am pm appointment"
+    | DateTimeGuide -> "date time tutorial range interval bounds availability"
     | SnackbarExamples -> "toast notification message feedback"
     | AlertExamples -> "notification message feedback status warning error"
     | ExpansionPanelExamples -> "accordion disclosure collapse expand"
@@ -184,6 +196,10 @@ module DocsRouting =
     | "Field" -> Some FieldExamples
     | "Numeric Field" -> Some NumericFieldExamples
     | "Dropdown Menu" -> Some DropdownMenuExamples
+    | "Date Picker" -> Some DatePickerExamples
+    | "Date Range Picker" -> Some DateRangePickerExamples
+    | "Date & Time Guide" -> Some DateTimeGuide
+    | "Time Picker" -> Some TimePickerExamples
     | "Select" -> Some SelectExamples
     | "Expansion Panel" -> Some ExpansionPanelExamples
     | "Dialog" -> Some DialogExamples
@@ -244,6 +260,10 @@ module DocsRouting =
     | FieldExamples -> "#field"
     | NumericFieldExamples -> "#numeric-field"
     | DropdownMenuExamples -> "#dropdown-menu"
+    | DatePickerExamples -> "#date-picker"
+    | DateRangePickerExamples -> "#date-range-picker"
+    | DateTimeGuide -> "#date-time-guide"
+    | TimePickerExamples -> "#time-picker"
     | SelectExamples -> "#select"
     | ExpansionPanelExamples -> "#expansion-panel"
     | DialogExamples -> "#dialog"
@@ -304,6 +324,10 @@ module DocsRouting =
     | "#field" -> Some FieldExamples
     | "#numeric-field" -> Some NumericFieldExamples
     | "#dropdown-menu" -> Some DropdownMenuExamples
+    | "#date-picker" -> Some DatePickerExamples
+    | "#date-range-picker" -> Some DateRangePickerExamples
+    | "#date-time-guide" -> Some DateTimeGuide
+    | "#time-picker" -> Some TimePickerExamples
     | "#select" -> Some SelectExamples
     | "#expansion-panel" -> Some ExpansionPanelExamples
     | "#dialog" -> Some DialogExamples

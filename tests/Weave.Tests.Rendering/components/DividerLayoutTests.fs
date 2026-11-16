@@ -48,6 +48,35 @@ type DividerLayoutTests() =
   }
 
   [<Fact>]
+  member this.``given a content-sized row when a sibling sets its height then the vertical divider spans the row``
+    ()
+    = task {
+    do! this.LoadFixture 320
+    let row = this.Page.Locator("#divider-content-row")
+    let! sibling = row.Locator("span").First.BoundingBoxAsync()
+    and! divider = row.Locator(".weave-divider").BoundingBoxAsync()
+
+    Assert.Equal(sibling.Height, divider.Height)
+  }
+
+  [<Fact>]
+  member this.``given a block with a definite height then the vertical divider fills it``() = task {
+    do! this.LoadFixture()
+    let block = this.Page.Locator("#divider-block")
+    let! container = block.BoundingBoxAsync()
+    and! divider = block.Locator(".weave-divider").BoundingBoxAsync()
+
+    Assert.Equal(container.Height, divider.Height)
+  }
+
+  [<Fact>]
+  member this.``given an explicit shorter divider then the row does not stretch it``() = task {
+    do! this.LoadFixture()
+    let! divider = this.Page.Locator("#divider-short .weave-divider").BoundingBoxAsync()
+    Assert.Equal(24.0f, divider.Height)
+  }
+
+  [<Fact>]
   member this.``middle variant has horizontal margins``() = task {
     do! this.LoadFixture()
     let! container = this.Page.Locator("#divider-middle-container").BoundingBoxAsync()

@@ -28,7 +28,8 @@ module DividerExamples =
 
   let private orientationExamples () =
     let description =
-      Helpers.bodyText "Use Divider.Orientation.vertical inside a flex row with a defined height."
+      Helpers.bodyText
+        "A vertical divider stretches to the height of its row. To give it a shorter height in a fixed-height container, set its height and min-height: 0."
 
     let content =
       div [

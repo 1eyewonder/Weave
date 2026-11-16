@@ -30,11 +30,18 @@
 
 .weave-divider--vertical {
   border-style: none solid none none;
-  height: 100%;
+  align-self: stretch;
+  height: stretch;
+
+  @supports not (height: stretch) {
+    // An auto cross size stretches in a flex row. A definite block resolves the minimum.
+    min-height: 100%;
+  }
 }
 
 .weave-divider--flexitem {
   height: auto;
+  min-height: auto;
   align-self: stretch;
 }
 

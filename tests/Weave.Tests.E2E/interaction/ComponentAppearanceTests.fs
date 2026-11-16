@@ -144,6 +144,40 @@ type ComponentAppearanceTests(fixture: TestFixture) =
   }
 
   [<Theory>]
+  [<InlineData("Left", "ltr")>]
+  [<InlineData("Right", "ltr")>]
+  [<InlineData("Left", "rtl")>]
+  [<InlineData("Right", "rtl")>]
+  member this.``Dialog side positions keep their physical inset in either text direction``
+    (position: string, direction: string)
+    = task {
+    do! this.Page.EmulateMediaAsync(PageEmulateMediaOptions(ReducedMotion = ReducedMotion.Reduce))
+    do! this.NavigateTo("dialog-appearance")
+
+    let! _ =
+      this.Page.EvaluateAsync("dir => document.documentElement.dir = dir", direction)
+
+    do! this.Choose("Position", position)
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Open dialog", Exact = true))
+        .ClickAsync()
+
+    let dialog = this.Page.GetByRole(AriaRole.Dialog)
+    do! this.Expect(dialog).ToBeVisibleAsync()
+    let! bounds = dialog.BoundingBoxAsync()
+
+    let inset =
+      if position = "Left" then
+        bounds.X
+      else
+        float32 this.Page.ViewportSize.Width - bounds.X - bounds.Width
+
+    Assert.InRange(inset, 31.5f, 32.5f)
+  }
+
+  [<Theory>]
   [<InlineData(320)>]
   [<InlineData(1280)>]
   member this.``Dialog configuration supports optional escape and matching source``(width: int) = task {

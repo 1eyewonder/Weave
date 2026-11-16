@@ -68,6 +68,14 @@ let tests =
         Blue = 255
         Alpha = 255
       }
+
+      "\u0085#aBc8\u00A0",
+      {
+        Red = 170
+        Green = 187
+        Blue = 204
+        Alpha = 136
+      }
     ]
     <| fun (input, expected) ->
       let color = PickerColor.ofHex input
@@ -85,6 +93,8 @@ let tests =
       "invalid digits", "#12GG34"
       "named color", "red"
       "embedded space", "#12 456"
+      "ligature that uppercases to FF", "\uFB00f"
+      "byte order mark", "\uFEFF#123"
     ]
     <| fun (_, input) -> Expect.isNone (PickerColor.tryParseHex input) "Malformed input"
 

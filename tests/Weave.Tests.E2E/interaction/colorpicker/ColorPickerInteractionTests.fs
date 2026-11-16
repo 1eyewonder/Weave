@@ -6,18 +6,31 @@ open Microsoft.Playwright
 type ColorPickerInteractionTests(fixture: TestFixture) =
   inherit ColorPickerTestBase(fixture)
 
-  [<Fact>]
-  member this.``Given valid hex when Enter is pressed then the bound color changes``() = task {
+  [<Theory>]
+  [<InlineData("#08f8", "#0088FF88")>]
+  [<InlineData("\u0085#aBc8\u00A0", "#AABBCC88")>]
+  member this.``Given valid hex when Enter is pressed then the bound color changes``
+    (input: string, expected: string)
+    = task {
     do! this.NavigateTo("color-picker")
-    do! this.EnterHex("#08f8")
-    do! this.Expect(this.Value).ToHaveTextAsync("#0088FF88")
+    do! this.EnterHex(input)
+    do! this.Expect(this.Value).ToHaveTextAsync(expected)
   }
 
-  [<Fact>]
-  member this.``Given invalid hex when committed then the selected color is retained``() = task {
+  [<Theory>]
+  [<InlineData("#invalid")>]
+  [<InlineData("\uFB00f")>]
+  [<InlineData("\uFEFF#123")>]
+  member this.``Given invalid hex when committed then the selected color is retained``(input: string) = task {
     do! this.NavigateTo("color-picker")
-    do! this.EnterHex("#invalid")
+    do! this.EnterHex(input)
     do! this.Expect(this.Hex).ToHaveAttributeAsync("aria-invalid", "true")
+
+    do!
+      this
+        .Expect(this.Picker.GetByRole(AriaRole.Status))
+        .ToHaveTextAsync("Enter a hex color, such as #6200EA.")
+
     do! this.Expect(this.Value).ToHaveTextAsync("#FF0000")
   }
 

@@ -91,22 +91,6 @@ type SliderInteractionTests(fixture: TestFixture) =
     do! this.AdjustWithPointerThenKeyboard(page, fun slider -> slider.TapAsync())
   }
 
-  [<Fact>]
-  member this.``disabling a slider during a pointer adjustment keeps focus on the previous control``() = task {
-    do! this.NavigateTo("slider-dynamic")
-    let slider = this.Page.GetByRole(AriaRole.Slider)
-    let toggle = this.Page.GetByTestId("toggle-slider-enabled")
-    do! toggle.FocusAsync()
-    let! track = slider.BoundingBoxAsync()
-    do! this.Page.Mouse.MoveAsync(track.X + track.Width / 4.0f, track.Y + track.Height / 2.0f)
-    do! this.Page.Mouse.DownAsync()
-    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "25")
-    let! _ = toggle.EvaluateAsync("button => button.click()")
-    do! this.Expect(slider).ToHaveAttributeAsync("aria-disabled", "true")
-    do! this.Page.Mouse.UpAsync()
-    do! this.Expect(toggle).ToBeFocusedAsync()
-  }
-
   [<Theory>]
   [<InlineData("slider-fine-ticks")>]
   [<InlineData("slider-tiny-step")>]
@@ -272,4 +256,31 @@ type SliderInteractionTests(fixture: TestFixture) =
     do! this.Expect(slider).ToHaveAttributeAsync("tabindex", "0")
     do! slider.PressAsync("ArrowRight")
     do! this.Expect(slider).Not.ToHaveAttributeAsync("aria-valuenow", before)
+  }
+
+// Firefox can route clicks from other pages to the slider while it holds pointer capture.
+[<Collection("Browser input")>]
+type SliderPointerInteractionTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``disabling a slider during a pointer adjustment keeps focus on the previous control``() = task {
+    do! this.NavigateTo("slider-dynamic")
+    let slider = this.Page.GetByRole(AriaRole.Slider)
+    let toggle = this.Page.GetByTestId("toggle-slider-enabled")
+    do! toggle.FocusAsync()
+    let! track = slider.BoundingBoxAsync()
+    do! this.Page.Mouse.MoveAsync(track.X + track.Width / 4.0f, track.Y + track.Height / 2.0f)
+    do! this.Page.Mouse.DownAsync()
+
+    try
+      do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "25")
+      let! _ = toggle.EvaluateAsync("button => button.click()")
+      do! this.Expect(slider).ToHaveAttributeAsync("aria-disabled", "true")
+    with ex ->
+      do! this.Page.Mouse.UpAsync()
+      return raise ex
+
+    do! this.Page.Mouse.UpAsync()
+    do! this.Expect(toggle).ToBeFocusedAsync()
   }

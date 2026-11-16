@@ -627,13 +627,30 @@ module Pages =
     ]
 
   let private numericFieldPage () =
+    let intValue = Var.Create 5
+    let floatValue = Var.Create 5.0
+
+    let setValues value =
+      intValue.Set value
+      floatValue.Set(float value)
+
     div [] [
       div [ Attr.Create "data-testid" "numeric-int" ] [
-        NumericField.create (Var.Create 5, labelText = View.Const "Integer spin")
+        NumericField.create (
+          intValue,
+          labelText = View.Const "Integer spin",
+          showSpinButtons = (intValue.View |> View.Map(fun value -> value > 0))
+        )
       ]
       div [ Attr.Create "data-testid" "numeric-float" ] [
-        NumericField.create (Var.Create 5.0, labelText = View.Const "Float spin")
+        NumericField.create (
+          floatValue,
+          labelText = View.Const "Float spin",
+          showSpinButtons = (floatValue.View |> View.Map(fun value -> value > 0.0))
+        )
       ]
+      button [ on.click (fun _ _ -> setValues 6) ] [ text "Set spin values to six" ]
+      button [ on.click (fun _ _ -> setValues 0) ] [ text "Set spin values to zero" ]
       NumericField.create (
         Var.Create 5,
         labelText = View.Const "Standard Numeric",

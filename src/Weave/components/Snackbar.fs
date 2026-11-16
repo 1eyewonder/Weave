@@ -262,7 +262,7 @@ type Snackbar =
       Attr.Create "role" "region"
       Attr.Create "aria-label" "Notifications"
       Attr.Create "aria-live" "polite"
-      Attr.Create "aria-relevant" "additions"
+      Attr.Create "aria-relevant" "additions text"
       yield! defaultArg attrs []
     ] [
       controller.visible

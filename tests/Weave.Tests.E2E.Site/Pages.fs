@@ -1236,6 +1236,32 @@ module Pages =
       )
     ]
 
+  let private typeAheadDropdownPage () =
+    let selected = Var.Create "None"
+
+    let item label searchText disabled =
+      DropdownMenuItem.create (
+        text label,
+        (fun () -> Var.Set selected label),
+        text = searchText,
+        disabled = View.Const disabled
+      )
+
+    div [] [
+      DropdownMenu.create (
+        text "Choose fruit",
+        View.Const [
+          item "Apple" "🍎 Apple" false
+          item "Blackberry" "Blackberry" true
+          DropdownMenuItem.divider ()
+          item "Basket" "" false
+          item "Banana" "Banana" false
+          item "Blueberry" "Blueberry" false
+        ]
+      )
+      div [ Attr.Create "data-testid" "chosen-fruit" ] [ Doc.TextView selected.View ]
+    ]
+
   let private expansionPanelPage () =
     let expanded1 = Var.Create true
     let expanded2 = Var.Create false
@@ -3685,6 +3711,7 @@ module Pages =
     | "dropdown-menu-icon" -> dropdownPage Doc.Empty [ Attr.Create "aria-label" "More actions" ]
     | "dropdown-menu-dynamic" -> dynamicDropdownPage DropdownMenu.OpenOn.Click
     | "dropdown-menu-dynamic-hover" -> dynamicDropdownPage DropdownMenu.OpenOn.Hover
+    | "dropdown-menu-typeahead" -> typeAheadDropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()

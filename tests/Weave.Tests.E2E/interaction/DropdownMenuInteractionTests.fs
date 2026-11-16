@@ -6,6 +6,39 @@ open Xunit
 type DropdownMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Fact>]
+  member this.``printable keys cycle through matching enabled item text before activating the focused action``
+    ()
+    = task {
+    do! this.NavigateTo("dropdown-menu-typeahead")
+
+    let trigger =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Choose fruit"))
+
+    let item name =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = name, Exact = true))
+
+    do! trigger.PressAsync("Enter")
+    do! this.Expect(item "Apple").ToBeVisibleAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowDown")
+    do! this.Expect(item "Apple").ToBeFocusedAsync()
+    do! (item "Banana").HoverAsync()
+    do! this.Page.Keyboard.PressAsync("b")
+    do! this.Expect(item "Banana").ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Shift+B")
+    do! this.Expect(item "Blueberry").ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("b")
+    do! this.Expect(item "Banana").ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("z")
+    do! this.Page.Keyboard.PressAsync("Control+b")
+    do! this.Expect(item "Banana").ToBeFocusedAsync()
+    do! (item "Banana").DispatchEventAsync("keydown", {| key = "🍎" |})
+    do! this.Expect(item "Apple").ToBeFocusedAsync()
+    do! this.Expect(this.Page.GetByTestId("chosen-fruit")).ToHaveTextAsync("None")
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("chosen-fruit")).ToHaveTextAsync("Apple")
+  }
+
   [<Theory>]
   [<InlineData("Enter")>]
   [<InlineData(" ")>]

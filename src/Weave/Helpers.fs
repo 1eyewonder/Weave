@@ -24,6 +24,26 @@ module Generic =
   [<Inline>]
   let inline uncurry f (a, b) = f a b
 
+[<JavaScript; RequireQualifiedAccess>]
+module internal UnicodeWhitespace =
+
+  // Unicode White_Space, matching .NET's default Trim on both runtimes.
+  let private characters = [|
+    yield! [ '\u0009' .. '\u000D' ]
+    ' '
+    '\u0085'
+    '\u00A0'
+    '\u1680'
+    yield! [ '\u2000' .. '\u200A' ]
+    '\u2028'
+    '\u2029'
+    '\u202F'
+    '\u205F'
+    '\u3000'
+  |]
+
+  let trim (value: string) = value.Trim(characters)
+
 [<JavaScript>]
 module Option =
 

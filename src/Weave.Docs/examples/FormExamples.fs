@@ -710,7 +710,11 @@ Form.create (
             "Validator<'T>"
             ""
             "Fail when the predicate returns false"
-          Helpers.apiParam "required message" "Validator<string>" "" "Reject null, empty, and whitespace"
+          Helpers.apiParam
+            "required message"
+            "Validator<string>"
+            ""
+            "Reject null, empty, and Unicode whitespace-only text using .NET whitespace rules"
           Helpers.apiParam
             "minLength / maxLength"
             "int -> string -> Validator<string>"

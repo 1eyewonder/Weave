@@ -118,6 +118,17 @@ let validationTests =
 
       Expect.isEmpty (rule "  Ada  ") "Nonblank input is valid"
 
+    testCase "required agrees with .NET whitespace classification for every UTF-16 code unit"
+    <| fun () ->
+      let rule = Validate.required "Required"
+      let characters = [ '\u0000' .. System.Char.MaxValue ]
+
+      let rejected =
+        characters |> List.filter (string<char> >> rule >> List.isEmpty >> not)
+
+      let whitespace = characters |> List.filter System.Char.IsWhiteSpace
+      Expect.equal rejected whitespace "Only Unicode whitespace is rejected"
+
     testCase "length boundaries are inclusive and null is safe"
     <| fun () ->
       let rule =

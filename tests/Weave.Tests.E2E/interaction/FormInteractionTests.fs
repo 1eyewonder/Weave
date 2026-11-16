@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open System.Text.RegularExpressions
 open Xunit
 open Microsoft.Playwright
 open Deque.AxeCore.Playwright
@@ -171,6 +172,45 @@ type FormInteractionTests(fixture: TestFixture) =
 
     do! this.Page.GetByRole(AriaRole.Option, PageGetByRoleOptions(Name = "Music", Exact = true)).ClickAsync()
     do! this.Page.Keyboard.PressAsync("Escape")
+  }
+
+  [<Fact>]
+  member this.``Given a required name containing only Unicode whitespace When submitted Then its error is linked and the callback is blocked``
+    ()
+    = task {
+    do! this.NavigateTo("form")
+    do! this.FillValidForm()
+    let name = this.Page.GetByLabel("Name", PageGetByLabelOptions(Exact = true))
+    do! name.FillAsync(" \u0085\u00A0")
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Save", Exact = true)).ClickAsync()
+    do! this.Expect(name).ToHaveAttributeAsync("aria-invalid", "true")
+    do! this.Expect(name).ToHaveAccessibleDescriptionAsync(Regex("Name required\\."))
+
+    do!
+      this
+        .Expect(this.Page.GetByText("Name required.", PageGetByTextOptions(Exact = true)))
+        .ToBeVisibleAsync()
+
+    do! this.Expect(this.Page.Locator("#submitted")).ToHaveTextAsync("0")
+  }
+
+  [<Fact>]
+  member this.``Given a required name containing a byte order mark When submitted Then the original text reaches the callback``
+    ()
+    = task {
+    do! this.NavigateTo("form")
+    do! this.FillValidForm()
+    let name = this.Page.GetByLabel("Name", PageGetByLabelOptions(Exact = true))
+    let entered = " \uFEFF\u00A0"
+    do! name.FillAsync(entered)
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Save", Exact = true)).ClickAsync()
+    do! this.Expect(this.Page.Locator("#submitted")).ToHaveTextAsync("1")
+    do! this.Expect(name).ToHaveAttributeAsync("aria-invalid", "false")
+
+    do!
+      this
+        .Expect(this.Page.Locator("#result"))
+        .ToHaveJSPropertyAsync("textContent", entered + "|21|Canada|Music")
   }
 
   [<Fact>]

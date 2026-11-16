@@ -65,8 +65,9 @@ module Validate =
       | [] -> next value
       | errors -> errors
 
+  /// Reject null, empty, and Unicode whitespace-only text on both client and server.
   let required message : Validator<string> =
-    custom (System.String.IsNullOrWhiteSpace >> not) message
+    custom (fun value -> not (isNull value) && UnicodeWhitespace.trim value <> "") message
 
   let minLength length message : Validator<string> =
     custom (fun value -> not (isNull value) && value.Length >= length) message

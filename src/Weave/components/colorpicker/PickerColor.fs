@@ -51,23 +51,8 @@ module PickerColor =
 
   let internal withBlue blue color = rgba color.R color.G blue color.A
 
-  // Unicode White_Space, matching .NET's default Trim on both runtimes.
-  let private whitespace = [|
-    yield! [ '\u0009' .. '\u000D' ]
-    ' '
-    '\u0085'
-    '\u00A0'
-    '\u1680'
-    yield! [ '\u2000' .. '\u200A' ]
-    '\u2028'
-    '\u2029'
-    '\u202F'
-    '\u205F'
-    '\u3000'
-  |]
-
   let private normalizeHex (value: string) =
-    let trimmed = value.Trim(whitespace)
+    let trimmed = UnicodeWhitespace.trim value
 
     if trimmed.Length > 0 && trimmed.[0] = '#' then
       trimmed.Substring(1)

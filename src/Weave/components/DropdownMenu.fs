@@ -81,6 +81,7 @@ module DropdownMenu =
     let chevron (isOpen: View<bool>) =
       span [
         cl Css.``weave-dropdownmenu__chevron``
+        Attr.Create "aria-hidden" "true"
         Attr.DynamicClassPred Css.``weave-dropdownmenu__chevron--open`` isOpen
       ] [ text "▼" ]
 
@@ -185,7 +186,7 @@ type DropdownMenu =
   /// <param name="openOn">Whether the menu opens on Click or Hover. Defaults to Click.</param>
   /// <param name="enabled">Reactive view controlling whether the dropdown menu trigger is interactive. Defaults to true.</param>
   /// <param name="closeOnOutsideClick">Whether clicking outside closes the menu. Defaults to true.</param>
-  /// <param name="triggerAttrs">Additional attributes applied to the trigger button.</param>
+  /// <param name="triggerAttrs">Attributes applied to the trigger button. For an icon-only trigger, supply an accessible name with aria-label or aria-labelledby.</param>
   /// <param name="attrs">Additional attributes applied to the root container.</param>
   static member create
     (

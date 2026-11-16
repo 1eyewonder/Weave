@@ -12,6 +12,14 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module Pages =
 
+  let private sharedFieldPage () =
+    let name = FormField.create ("", rules = [ Validate.required "Name required." ])
+
+    div [] [
+      TextField.singleLine (name, labelText = View.Const "First name editor")
+      TextField.singleLine (name, labelText = View.Const "Second name editor")
+    ]
+
   let private formArithmeticPage () =
     let price =
       FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
@@ -3621,6 +3629,7 @@ module Pages =
     | "textfield" -> textFieldPage ()
     | "form" -> formPage ()
     | "form-sizing" -> formSizingPage ()
+    | "form-shared-field" -> sharedFieldPage ()
     | "form-grid-validation" -> formGridValidationPage ()
     | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()

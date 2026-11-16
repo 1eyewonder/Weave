@@ -8,6 +8,39 @@ open Deque.AxeCore.Playwright
 type FormInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Fact>]
+  member this.``Given two editors for one field When validation appears Then each editor describes its own error``
+    ()
+    = task {
+    do! this.NavigateTo("form-shared-field")
+
+    let first =
+      this.Page.GetByRole(AriaRole.Textbox, PageGetByRoleOptions(Name = "First name editor"))
+
+    let second =
+      this.Page.GetByRole(AriaRole.Textbox, PageGetByRoleOptions(Name = "Second name editor"))
+
+    do! first.FocusAsync()
+    do! first.PressAsync("Tab")
+    do! this.Expect(second).ToBeFocusedAsync()
+
+    for editor in [ first; second ] do
+      do! this.Expect(editor).ToHaveAccessibleDescriptionAsync("Name required.")
+      let! errorId = editor.GetAttributeAsync("aria-describedby")
+      let error = this.Page.Locator("#" + errorId)
+      do! this.Expect(error).ToHaveCountAsync(1)
+
+      let field =
+        this.Page.Locator(".weave-field").Filter(LocatorFilterOptions(Has = editor))
+
+      do! this.Expect(field.Locator("#" + errorId)).ToBeVisibleAsync()
+
+    do! second.FillAsync("Ada")
+    do! this.Expect(first).ToHaveValueAsync("Ada")
+    do! this.Expect(first).ToHaveAccessibleDescriptionAsync("")
+    do! this.Expect(second).ToHaveAccessibleDescriptionAsync("")
+  }
+
   [<Theory>]
   [<InlineData("standard")>]
   [<InlineData("filled")>]

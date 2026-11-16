@@ -679,6 +679,11 @@ Form.create (
             ""
             "Low-level presentation state for custom controls; standard fields wire it automatically"
           Helpers.apiParam
+            "CreateEditorValidation()"
+            "FieldValidation"
+            ""
+            "For custom controls sharing one field, call once per editor and pass the result to both ValidationInput.attrs and Field.create. Built-in field bindings do this automatically."
+          Helpers.apiParam
             "Touch() / Reset()"
             "unit"
             ""

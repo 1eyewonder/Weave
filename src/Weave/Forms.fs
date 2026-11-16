@@ -148,6 +148,12 @@ type FormField<'T when 'T: equality> internal (value: Var<'T>, rules: View<Valid
 
   let touch () = touched.Value <- true
 
+  let validation errorId = {
+    ErrorId = errorId
+    VisibleErrors = visibleErrors
+    Touch = touch
+  }
+
   let reset () =
     value.Value <- initialValue
     touched.Value <- false
@@ -187,11 +193,10 @@ type FormField<'T when 'T: equality> internal (value: Var<'T>, rules: View<Valid
   member _.IsTouched = touched.View
   member _.IsDirty = value.View |> View.Map(fun current -> current <> initialValue)
 
-  member _.Validation = {
-    ErrorId = id
-    VisibleErrors = visibleErrors
-    Touch = touch
-  }
+  member _.Validation = validation id
+
+  /// Create once per editor and use the same state for its input attributes and rendered error.
+  member _.CreateEditorValidation() = WeaveId.create id |> validation
 
   member _.Model = FormModel(result, touch, reset)
   member _.Touch() = touch ()

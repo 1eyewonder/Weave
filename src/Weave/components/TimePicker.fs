@@ -102,7 +102,7 @@ type TimePicker =
         Label = defaultArg labelText (View.Const "")
         Placeholder = defaultArg placeholder (View.Const "")
         Help = helpText
-        Validation = Some field.Validation
+        Validation = Some(field.CreateEditorValidation())
         ValidationMessages = Some outerErrors
         Attrs = PickerRender.contributeErrors field errors :: defaultArg attrs []
       }

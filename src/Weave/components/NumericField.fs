@@ -509,7 +509,7 @@ type NumericField =
     ) =
     NumericField.create (
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,
@@ -555,7 +555,7 @@ type NumericField =
     ) =
     NumericField.create (
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,

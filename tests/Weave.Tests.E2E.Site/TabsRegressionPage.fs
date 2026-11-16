@@ -11,6 +11,32 @@ open Weave.Icons.MaterialSymbols
 [<JavaScript>]
 module TabsRegressionPage =
 
+  let namedGroups () =
+    let tabs () =
+      View.Const [
+        TabItem.create ("Overview", text "Overview panel")
+        TabItem.createIconOnly (
+          Icon.create (Icon.UiActions UiActions.Settings, attrs = [ Attr.Create "aria-hidden" "true" ]),
+          text "Preferences panel",
+          label = "Settings"
+        )
+      ]
+
+    div [] [
+      Tabs.create (
+        tabs (),
+        tabListAttrs = [ Attr.Create "aria-label" "Project" ],
+        attrs = [ Attr.Create "data-testid" "project-tabs" ]
+      )
+      h2 [ attr.id "account-heading" ] [ text "Account" ]
+      Tabs.create (
+        tabs (),
+        position = Tabs.Position.Left,
+        tabListAttrs = [ Attr.Create "aria-labelledby" "account-heading" ],
+        attrs = [ Attr.Create "data-testid" "account-tabs" ]
+      )
+    ]
+
   let render () =
     let palettes = [
       "primary", Tabs.Color.primary, Tabs.HeaderBackground.primary

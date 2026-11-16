@@ -204,7 +204,7 @@ module Views =
         "date",
         text "Created",
         (fun (item: Transaction) -> text (whenLabel item.DaysAgo)),
-        sort = Table.ColumnSort.by (fun item -> item.DaysAgo)
+        sort = Table.ColumnSort.by (fun item -> -item.DaysAgo)
       )
     ]
 

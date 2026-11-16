@@ -3662,6 +3662,7 @@ module Pages =
       appearancePage (Weave.Docs.Examples.ExpansionPanelExamples.appearanceExample ())
     | "button-menu-appearance" -> appearancePage (Weave.Docs.Examples.ButtonMenuExamples.appearanceExample ())
     | "table" -> tablePage ()
+    | "dashboard-template" -> WeaveStarter.State.create () |> WeaveStarter.Views.render
     | "table-default" -> defaultTablePage ()
     | "theme" -> themePage false
     | "theme-system" -> themePage true

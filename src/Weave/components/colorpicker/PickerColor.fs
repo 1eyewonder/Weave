@@ -51,15 +51,38 @@ module PickerColor =
 
   let internal withBlue blue color = rgba color.R color.G blue color.A
 
+  // Unicode White_Space, matching .NET's default Trim on both runtimes.
+  let private whitespace = [|
+    yield! [ '\u0009' .. '\u000D' ]
+    ' '
+    '\u0085'
+    '\u00A0'
+    '\u1680'
+    yield! [ '\u2000' .. '\u200A' ]
+    '\u2028'
+    '\u2029'
+    '\u202F'
+    '\u205F'
+    '\u3000'
+  |]
+
   let private normalizeHex (value: string) =
-    let trimmed = value.Trim().ToUpper()
+    let trimmed = value.Trim(whitespace)
 
     if trimmed.Length > 0 && trimmed.[0] = '#' then
       trimmed.Substring(1)
     else
       trimmed
 
-  let private hexDigit (digit: char) = "0123456789ABCDEF".IndexOf digit
+  let private hexDigit (digit: char) =
+    if digit >= '0' && digit <= '9' then
+      int digit - int '0'
+    elif digit >= 'A' && digit <= 'F' then
+      int digit - int 'A' + 10
+    elif digit >= 'a' && digit <= 'f' then
+      int digit - int 'a' + 10
+    else
+      -1
 
   let private isValidHex (hex: string) =
     let validLength = [ 3; 4; 6; 8 ] |> List.contains hex.Length
@@ -78,7 +101,7 @@ module PickerColor =
   let private tryDecodeHex hex =
     if isValidHex hex then Some(decodeHex hex) else None
 
-  /// Accepts #RGB, #RGBA, #RRGGBB and #RRGGBBAA (the # is optional).
+  /// Accepts 3, 4, 6 or 8 ASCII hex digits with an optional # and surrounding Unicode whitespace.
   let tryParseHex value =
     value |> Option.ofObj |> Option.map normalizeHex |> Option.bind tryDecodeHex
 

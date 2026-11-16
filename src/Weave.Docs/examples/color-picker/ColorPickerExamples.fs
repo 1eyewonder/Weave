@@ -362,7 +362,7 @@ Doc.Concat [
             "ofHex / tryParseHex"
             "string -> PickerColor / PickerColor option"
             ""
-            "Parse #RGB, #RGBA, #RRGGBB, #RRGGBBAA; # is optional"
+            "Parse 3, 4, 6 or 8 ASCII hex digits with an optional #. Surrounding Unicode whitespace is ignored."
 
           Helpers.apiParam
             "toHex / toCss"

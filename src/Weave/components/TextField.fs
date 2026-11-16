@@ -164,14 +164,8 @@ type TextField =
       if rendered = value.Value && As<string> element?value <> rendered then
         element?value <- rendered
 
-    let readValue (element: Dom.Element) (_: Dom.Event) =
-      let current = As<string> element?value
-
-      if current <> value.Value then
-        Var.Set value current
-
     let inputElement =
-      input [
+      Elt.input [
         cls [ Css.``weave-field__input`` ]
         Attr.Create "id" inputId
         Attr.DynamicProp "placeholder" effectivePlaceholder
@@ -193,10 +187,11 @@ type TextField =
         | None -> ()
         yield! inputAttrs
         Attr.DynamicCustom writeValue value.View
-        on.input readValue
-        on.change readValue
-        on.keyPress readValue
       ] []
+
+    // Use the native edit listener. The built-in writer skips values that match the last edit.
+    let listenForEdits, _, _ = BindVar.StringApply value
+    listenForEdits inputElement.Dom
 
     TextField.createField (
       inputElement,

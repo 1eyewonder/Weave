@@ -7,6 +7,114 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``character navigation handles missing text focus and items``() = task {
+    do! this.NavigateTo("dropdown-menu-typeahead")
+    let errors = ResizeArray<string>()
+    this.Page.PageError.Add(errors.Add)
+
+    let trigger =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Choose fruit"))
+
+    do! trigger.ClickAsync()
+    let menu = this.Page.GetByRole(AriaRole.Menu)
+    do! this.Expect(menu).ToBeVisibleAsync()
+
+    let! _ =
+      menu.EvaluateAsync(
+        """menu => {
+          const original = Object.getOwnPropertyDescriptor(document, 'activeElement');
+          try {
+            Object.defineProperty(document, 'activeElement', {configurable: true, get: () => null});
+            menu.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}));
+            const missingKey = new KeyboardEvent('keydown', {bubbles: true});
+            Object.defineProperty(missingKey, 'key', {value: null});
+            menu.dispatchEvent(missingKey);
+          } finally {
+            if (original) Object.defineProperty(document, 'activeElement', original);
+            else delete document.activeElement;
+          }
+        }"""
+      )
+
+    let banana =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Banana", Exact = true))
+
+    do! this.Expect(banana).ToBeFocusedAsync()
+
+    let clear =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Clear options"))
+
+    let! _ = clear.EvaluateAsync("button => button.click()")
+    do! this.Expect(this.Page.GetByRole(AriaRole.Menuitem)).ToHaveCountAsync(0)
+    do! menu.DispatchEventAsync("keydown", {| key = "b" |})
+    do! this.Expect(menu).ToBeVisibleAsync()
+    Assert.Empty(errors)
+  }
+
+  [<Fact>]
+  member this.``character navigation skips a missing item and processes consecutive keys``() = task {
+    do! this.NavigateTo("dropdown-menu-typeahead")
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Choose fruit")).ClickAsync()
+
+    let apple =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Apple", Exact = true))
+
+    let banana =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Banana", Exact = true))
+
+    let blueberry =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Blueberry", Exact = true))
+
+    do! apple.FocusAsync()
+
+    let! _ =
+      apple.EvaluateAsync(
+        """item => {
+          item.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}));
+          document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}));
+        }"""
+      )
+
+    do! this.Expect(blueberry).ToBeFocusedAsync()
+    let! _ = banana.EvaluateAsync("item => item.remove()")
+    do! apple.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("b")
+    do! this.Expect(blueberry).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``character navigation follows focus inside a shadow root``() = task {
+    do! this.NavigateTo("dropdown-menu-typeahead")
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        """() => {
+          const menu = document.querySelector('.weave-dropdownmenu');
+          const host = document.createElement('div');
+          document.body.append(host);
+          host.attachShadow({mode: 'open'}).append(menu);
+        }"""
+      )
+
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Choose fruit")).ClickAsync()
+
+    let apple =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Apple", Exact = true))
+
+    let banana =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Banana", Exact = true))
+
+    let blueberry =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Blueberry", Exact = true))
+
+    do! apple.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("b")
+    do! this.Expect(banana).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("b")
+    do! this.Expect(blueberry).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``printable keys cycle through matching enabled item text before activating the focused action``
     ()
     = task {

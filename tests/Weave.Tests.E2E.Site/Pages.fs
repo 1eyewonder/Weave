@@ -1247,18 +1247,20 @@ module Pages =
         disabled = View.Const disabled
       )
 
+    let items =
+      Var.Create [
+        item "Apple" "🍎 Apple" false
+        item "Blackberry" "Blackberry" true
+        DropdownMenuItem.divider ()
+        item "Basket" "" false
+        item "No search text" null false
+        item "Banana" "Banana" false
+        item "Blueberry" "Blueberry" false
+      ]
+
     div [] [
-      DropdownMenu.create (
-        text "Choose fruit",
-        View.Const [
-          item "Apple" "🍎 Apple" false
-          item "Blackberry" "Blackberry" true
-          DropdownMenuItem.divider ()
-          item "Basket" "" false
-          item "Banana" "Banana" false
-          item "Blueberry" "Blueberry" false
-        ]
-      )
+      DropdownMenu.create (text "Choose fruit", items.View)
+      Button.create (text "Clear options", (fun () -> Var.Set items []))
       div [ Attr.Create "data-testid" "chosen-fruit" ] [ Doc.TextView selected.View ]
     ]
 

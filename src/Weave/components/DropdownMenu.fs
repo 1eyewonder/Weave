@@ -254,9 +254,7 @@ type DropdownMenu =
             | DropdownMenuItemKind.Action def when matches def ->
               let itemEl = container.QuerySelector(sprintf "#%s-item-%d" dropdownMenuId candidate)
 
-              let isDisabled = not (isNull itemEl) && itemEl.ClassList.Contains(disabledClass)
-
-              if not isDisabled then
+              if not (isNull itemEl) && not (itemEl.ClassList.Contains(disabledClass)) then
                 Some candidate
               else
                 search candidate (steps + 1)
@@ -273,7 +271,7 @@ type DropdownMenu =
 
       if not (isNull itemEl) then
         Var.Set highlightedIndex index
-        JS.Window.SetTimeout((fun () -> itemEl?focus ()), 0) |> ignore
+        itemEl?focus ()
 
     let close () =
       Var.Set openVar false
@@ -399,8 +397,9 @@ type DropdownMenu =
       | _ when not (ev.CtrlKey || ev.MetaKey || ev.AltKey || ev?isComposing) ->
         let key = ev.Key
 
-        if DropdownMenu.isSingleCharacter key then
-          let focusedId = JS.Document.ActiveElement.Id
+        if not (System.String.IsNullOrEmpty key) && DropdownMenu.isSingleCharacter key then
+          let active = container.QuerySelector("[role='menuitem']:focus-within")
+          let focusedId = if isNull active then "" else active.Id
 
           let fromIndex =
             seq { 0 .. count - 1 }
@@ -408,7 +407,8 @@ type DropdownMenu =
             |> Option.defaultValue -1
 
           let matches def =
-            DropdownMenu.startsWithCharacter key def.Text
+            not (System.String.IsNullOrEmpty def.Text)
+            && DropdownMenu.startsWithCharacter key def.Text
 
           match findActionIndex matches container fromIndex 1 with
           | Some index ->

@@ -271,6 +271,53 @@ type TextFieldAppearanceTests(fixture: TestFixture) =
     Assert.Equal(source, copied)
   }
 
+  [<Theory>]
+  [<InlineData("missing")>]
+  [<InlineData("denied")>]
+  member this.``copy failure leaves the source available for manual copying``(scenario: string) = task {
+    do! this.Load()
+
+    do!
+      this
+        .Expect(this.Page.Locator(".weave-expansion-panel__content-wrapper"))
+        .Not.ToHaveAttributeAsync("inert", "")
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        """scenario => {
+          const clipboard = scenario === 'missing' ? undefined : {
+            writeText: () => Promise.reject(new DOMException('Clipboard access denied', 'NotAllowedError'))
+          };
+          Object.defineProperty(navigator, 'clipboard', { value: clipboard });
+        }""",
+        scenario
+      )
+
+    let errors = ResizeArray<string>()
+    this.Page.PageError.Add(errors.Add)
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Copy", Exact = true))
+        .PressAsync("Enter")
+
+    let failed =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Copy failed", Exact = true))
+
+    do! this.Expect(failed).ToBeFocusedAsync()
+    do! this.Expect(failed).ToHaveAttributeAsync("aria-live", "polite")
+    do! failed.PressAsync("Tab")
+    do! this.Expect(this.Page.GetByLabel("Selected appearance F# source code")).ToBeFocusedAsync()
+    do! this.Expect(this.Source).ToHaveTextAsync(minimal)
+    do! this.Source.GetByText("let", LocatorGetByTextOptions(Exact = true)).DblClickAsync()
+
+    let! selected =
+      this.Page.EvaluateAsync<string>("() => getSelection().toString().trim()")
+
+    Assert.Equal("let", selected)
+    Assert.Empty(errors)
+  }
+
   [<Fact>]
   member this.``expanded source copies the selected F sharp to the real Chromium clipboard``() = task {
     if this.Page.Context.Browser.BrowserType.Name <> "chromium" then

@@ -122,8 +122,8 @@ module Helpers =
   [<Inline "window.highlightCodeElement($0)">]
   let highlightCodeElement (el: Dom.Element) = X<unit>
 
-  [<Inline "navigator.clipboard.writeText($text).then(function(){ $onSuccess(); }).catch(function(){ $onError(); })">]
-  let private copyToClipboard (text: string) (onSuccess: unit -> unit) (onError: unit -> unit) = X<unit>
+  [<Inline "navigator.clipboard.writeText($text)">]
+  let private writeClipboardText (text: string) = X<Promise<unit>>
 
   let copyButton (content: string) =
     let status = Var.Create "Copy"
@@ -133,7 +133,14 @@ module Helpers =
       attr.``type`` "button"
       Attr.Create "aria-live" "polite"
       on.click (fun _ _ ->
-        copyToClipboard content (fun () -> Var.Set status "Copied") (fun () -> Var.Set status "Copy failed"))
+        promise {
+          try
+            do! writeClipboardText content
+            Var.Set status "Copied"
+          with _ ->
+            Var.Set status "Copy failed"
+        }
+        |> ignore)
     ] [ textView status.View ]
 
   /// Inline code badge — renders text in a monospace pill (e.g. `ChipSet`)

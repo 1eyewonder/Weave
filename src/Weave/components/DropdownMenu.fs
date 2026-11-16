@@ -184,7 +184,7 @@ type DropdownMenu =
   /// <param name="items">Reactive view of the menu item list. Use View.Const for static lists.</param>
   /// <param name="isOpen">Two-way binding for the open/closed state. Caller owns the Var.</param>
   /// <param name="openOn">Whether the menu opens on Click or Hover. Defaults to Click.</param>
-  /// <param name="enabled">Reactive view controlling whether the dropdown menu trigger is interactive. Defaults to true.</param>
+  /// <param name="enabled">Whether the menu can open. Disabling it closes it and resets isOpen. Defaults to true.</param>
   /// <param name="closeOnOutsideClick">Whether clicking outside closes the menu. Defaults to true.</param>
   /// <param name="triggerAttrs">Attributes applied to the trigger button. For an icon-only trigger, supply an accessible name with aria-label or aria-labelledby.</param>
   /// <param name="attrs">Additional attributes applied to the root container.</param>
@@ -208,6 +208,7 @@ type DropdownMenu =
     let attrs = defaultArg attrs []
 
     let highlightedIndex = Var.Create -1
+    let visible = (enabled, openVar.View) ||> View.map2Cached (&&)
     let dropdownMenuId = WeaveId.create "weave-dropdownmenu"
     let menuId = sprintf "%s-menu" dropdownMenuId
 
@@ -262,9 +263,12 @@ type DropdownMenu =
         Var.Set highlightedIndex index
         JS.Window.SetTimeout((fun () -> itemEl?focus ()), 0) |> ignore
 
-    let closeAndRefocusTrigger () =
+    let close () =
       Var.Set openVar false
       Var.Set highlightedIndex -1
+
+    let closeAndRefocusTrigger () =
+      close ()
       triggerRef.Value?focus()
 
     /// Handle keyboard events on the trigger button.
@@ -317,8 +321,7 @@ type DropdownMenu =
 
       | Key.Tab ->
         if openVar.Value then
-          Var.Set openVar false
-          Var.Set highlightedIndex -1
+          close ()
       | _ -> ()
 
     /// Handle keyboard events when focus is on a menu item.
@@ -380,13 +383,11 @@ type DropdownMenu =
           | Some idx -> focusItemAt idx
           | None -> ()
 
-      | Key.Tab ->
-        Var.Set openVar false
-        Var.Set highlightedIndex -1
+      | Key.Tab -> close ()
       | _ -> ()
 
     let triggerButton =
-      let contents = [ triggerContent; Render.chevron openVar.View ] |> Doc.Concat
+      let contents = [ triggerContent; Render.chevron visible ] |> Doc.Concat
 
       let clickHandler =
         match openOn with
@@ -407,15 +408,17 @@ type DropdownMenu =
           Attr.Create "aria-controls" menuId
           Attr.DynamicCustom
             (fun el v -> el.SetAttribute("aria-expanded", v))
-            (openVar.View |> View.Map(sprintf "%b"))
+            (visible |> View.Map(sprintf "%b"))
           on.afterRender (fun el -> triggerRef.Value <- el)
-          on.keyDown (fun _ ev -> handleTriggerKeyDown ev)
+          on.keyDownView enabled (fun _ ev canOpen ->
+            if canOpen then
+              handleTriggerKeyDown ev)
           yield! triggerAttrs
         ]
       )
 
     let popover =
-      openVar.View
+      visible
       |> Doc.BindView(fun isOpen ->
         if isOpen then
           div [
@@ -427,13 +430,15 @@ type DropdownMenu =
               cl Css.``weave-dropdownmenu__list``
               Attr.Create "id" menuId
               Attr.Create "role" "menu"
-              on.keyDown (fun _ ev -> handleMenuKeyDown ev)
+              on.keyDownView visible (fun _ ev isVisible ->
+                if isVisible then
+                  handleMenuKeyDown ev)
             ] [
               itemsTracked
               |> Doc.BindView(fun currentItems ->
                 currentItems
                 |> List.mapi (fun i kind ->
-                  Render.renderItem dropdownMenuId i kind highlightedIndex openVar enabled)
+                  Render.renderItem dropdownMenuId i kind highlightedIndex openVar visible)
                 |> Doc.Concat)
             ]
           ]
@@ -442,33 +447,34 @@ type DropdownMenu =
 
     let outsideClickWatcher =
       if closeOnOutsideClick then
-        openVar.View
-        |> DocumentEventListener.onMouseDown [ rootRef; popoverRef ] (fun () ->
-          Var.Set openVar false
-          Var.Set highlightedIndex -1)
+        visible |> DocumentEventListener.onMouseDown [ rootRef; popoverRef ] close
       else
         Doc.Empty
 
     let hoverAttrs =
       match openOn with
       | OpenOn.Hover -> [
-          on.mouseEnter (fun _ _ ->
-            if not openVar.Value then
+          on.mouseEnterView enabled (fun _ _ canOpen ->
+            if canOpen && not openVar.Value then
               Var.Set openVar true
               Var.Set highlightedIndex -1)
           on.mouseLeave (fun _ _ ->
             if openVar.Value then
-              Var.Set openVar false
-              Var.Set highlightedIndex -1)
+              close ())
         ]
       | OpenOn.Click -> []
 
     [
+      View.zip enabled openVar.View
+      |> Doc.sinkCached (fun (canOpen, requested) ->
+        if not canOpen && requested then
+          close ())
+
       outsideClickWatcher
 
       div [
         cl Css.``weave-dropdownmenu``
-        Attr.DynamicClassPred Css.``weave-dropdownmenu--open`` openVar.View
+        Attr.DynamicClassPred Css.``weave-dropdownmenu--open`` visible
         Disabled.disabledClass Css.``weave-dropdownmenu--disabled`` enabled
         on.afterRender (fun el -> rootRef.Value <- el)
         yield! hoverAttrs

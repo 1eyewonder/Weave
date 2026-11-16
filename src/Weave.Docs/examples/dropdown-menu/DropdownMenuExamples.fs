@@ -255,7 +255,7 @@ DropdownMenu.create (
           "?enabled"
           "View<bool>"
           "View.Const true"
-          "Whether the dropdown menu trigger is interactive"
+          "Whether the menu can open. Disabling it closes it and resets isOpen."
         Helpers.apiParam "?closeOnOutsideClick" "bool" "true" "Close the menu when clicking outside"
         Helpers.apiParam
           "?triggerAttrs"

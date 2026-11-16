@@ -99,6 +99,9 @@
     <Compile Include="../../src/Weave.Docs/examples/date-time/DatePickerExamples.fs" Link="docs/date-time/DatePickerExamples.fs" />
     <Compile Include="../../src/Weave.Docs/examples/date-time/DateRangePickerExamples.fs" Link="docs/date-time/DateRangePickerExamples.fs" />
     <Compile Include="../../src/Weave.Docs/examples/date-time/TimePickerExamples.fs" Link="docs/date-time/TimePickerExamples.fs" />
+    <Compile Include="../../templates/content/WeaveDashboard/Domain.fs" Link="dashboard/Domain.fs" />
+    <Compile Include="../../templates/content/WeaveDashboard/State.fs" Link="dashboard/State.fs" />
+    <Compile Include="../../templates/content/WeaveDashboard/Views.fs" Link="dashboard/Views.fs" />
     <Compile Include="Pages.fs" />
     <Compile Include="Startup.fs" />
   </ItemGroup>

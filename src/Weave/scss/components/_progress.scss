@@ -50,6 +50,19 @@
   to { inset-inline-start: 100%; }
 }
 
+@media (forced-colors: active) {
+  .weave-progress-linear {
+    &__track, &__buffer {
+      background-color: transparent;
+      opacity: 1;
+    }
+
+    &__track { border-block-end: 1px solid CanvasText; }
+    &__buffer { border-block-start: var(--progress-thickness) dashed CanvasText; }
+    &__fill { border-block-start: var(--progress-thickness) solid CanvasText; }
+  }
+}
+
 .weave-progress-circular {
   --progress-size: 40px;
   --progress-thickness: 4px;

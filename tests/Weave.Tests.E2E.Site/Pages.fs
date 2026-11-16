@@ -2356,6 +2356,17 @@ module Pages =
 
     ]
 
+  let private tickSliderPage minimum maximum step (initial: float) =
+    Slider.create (
+      Var.Create initial,
+      min = minimum,
+      max = maximum,
+      step = step,
+      labelText = View.Const "Output level",
+      showTickMarks = true,
+      tickMarkLabels = [ "Low"; "Medium"; "High" ]
+    )
+
   let private dynamicSliderPage () =
     let enabled = Var.Create true
 
@@ -3706,6 +3717,10 @@ module Pages =
     | "tooltip-in-dialog" -> tooltipInDialogPage ()
     | "progress" -> progressPage ()
     | "slider" -> sliderPage ()
+    | "slider-fine-ticks" -> tickSliderPage 0.0 100.0 0.01 49.99
+    | "slider-uneven-ticks" -> tickSliderPage -20.0 80.0 3.0 28.0
+    | "slider-tiny-step" -> tickSliderPage 0.0 100.0 1e-310 50.0
+    | "slider-wide-range" -> tickSliderPage -1e308 1e308 1e307 0.0
     | "slider-dynamic" -> dynamicSliderPage ()
     | "color-picker" -> ColorPickerPage.render ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]

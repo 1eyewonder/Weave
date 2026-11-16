@@ -24,6 +24,29 @@ module Slider =
 [<JavaScript; RequireQualifiedAccess>]
 type Slider =
 
+  static member private tickPositions minimum maximum step =
+    let span = maximum - minimum
+
+    if not (span >= 0.0) || System.Double.IsInfinity span then
+      []
+    elif span = 0.0 || step > span then
+      [ 0.0 ]
+    else
+      let lastStep = floor (span / step)
+      let intervals = int (min 20.0 lastStep)
+
+      let position index =
+        let fraction = float index / float intervals
+
+        if System.Double.IsInfinity lastStep then
+          // The step is smaller than the precision of each sampled percentage.
+          fraction * 100.0
+        else
+          let stepIndex = round (lastStep * fraction)
+          Bounded.percentOf minimum maximum (minimum + stepIndex * step)
+
+      [ 0..intervals ] |> List.map position |> List.distinct
+
   static member private renderSlider
     (
       valueAsFloat: Var<float>,
@@ -37,16 +60,24 @@ type Slider =
       attrs: Attr list
     ) =
 
+    // Opposite-sign finite bounds can overflow when subtracted. Scaling them
+    // together keeps tick, thumb and fill percentages on the same track.
+    let scale =
+      if System.Double.IsInfinity(maxVal - minVal) then
+        0.5
+      else
+        1.0
+
+    let minimum = minVal * scale
+    let maximum = maxVal * scale
+
     let pct =
-      valueAsFloat.View |> View.MapCached(fun v -> Bounded.percentOf minVal maxVal v)
+      valueAsFloat.View
+      |> View.MapCached(fun v -> Bounded.percentOf minimum maximum (v * scale))
 
     let tickPositions =
       if showTickMarks && stepVal > 0.0 then
-        let count = int ((maxVal - minVal) / stepVal)
-
-        [
-          for i in 0..count -> Bounded.percentOf minVal maxVal (minVal + float i * stepVal)
-        ]
+        Slider.tickPositions minimum maximum (stepVal * scale)
       else
         []
 
@@ -109,16 +140,13 @@ type Slider =
       else
         div [ cl Css.``weave-slider__tick-container`` ] [
           for tickPct in tickPositions do
-            pct
-            |> Doc.BindView(fun currentPct ->
-              let isActive = tickPct <= currentPct
-
-              div [
-                cl Css.``weave-slider__tick``
-                if isActive then
-                  cl Css.``weave-slider__tick--active``
-                Attr.Style "left" (sprintf "%.4f%%" tickPct)
-              ] [])
+            div [
+              cl Css.``weave-slider__tick``
+              Attr.DynamicClassPred
+                Css.``weave-slider__tick--active``
+                (pct |> View.MapCached(fun current -> tickPct <= current))
+              Attr.Style "left" (sprintf "%.4f%%" tickPct)
+            ] []
         ]
 
     let tickLabelsDoc =

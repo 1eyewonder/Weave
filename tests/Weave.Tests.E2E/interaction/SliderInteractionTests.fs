@@ -1,10 +1,98 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open Microsoft.Playwright
 open Xunit
 
 type SliderInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  member private this.TickPositions(slider: ILocator) =
+    slider
+      .Locator(".weave-slider__tick")
+      .EvaluateAllAsync<float array>("ticks => ticks.map(tick => parseFloat(tick.style.left))")
+
+  [<Theory>]
+  [<InlineData("slider-fine-ticks")>]
+  [<InlineData("slider-tiny-step")>]
+  [<InlineData("slider-wide-range")>]
+  member this.``fine and extreme grids show bounded distinct marks spanning the track``(pageName: string) =
+    task {
+      do! this.NavigateTo(pageName)
+      let! positions = this.TickPositions(this.Page.GetByRole(AriaRole.Slider))
+      Assert.InRange(positions.Length, 3, 21)
+      Assert.Equal(0.0, Array.head positions)
+      Assert.Equal(100.0, Array.last positions)
+      Assert.All(Array.pairwise positions, fun (left, right) -> Assert.True(left < right))
+    }
+
+  [<Fact>]
+  member this.``a sampled grid stops at the last valid step``() = task {
+    do! this.NavigateTo("slider-uneven-ticks")
+    let! positions = this.TickPositions(this.Page.GetByRole(AriaRole.Slider))
+    Assert.InRange(positions.Length, 2, 21)
+    Assert.Equal(99.0, Array.last positions)
+    Assert.All(positions, fun position -> Assert.Equal(round (position / 3.0) * 3.0, position, 4))
+  }
+
+  [<Fact>]
+  member this.``stepping across a visible tick updates its state and keeps the original nodes``() = task {
+    do! this.NavigateTo("slider-fine-ticks")
+    let slider = this.Page.GetByRole(AriaRole.Slider)
+    let ticks = slider.Locator(".weave-slider__tick")
+    let! count = ticks.CountAsync()
+    let middle = ticks.Nth(count / 2)
+    let active = Regex("weave-slider__tick--active")
+    do! this.Expect(middle).Not.ToHaveClassAsync(active)
+
+    let container = slider.Locator(".weave-slider__tick-container")
+    let! original = container.EvaluateHandleAsync("el => Array.from(el.children)")
+
+    do! slider.PressAsync("ArrowRight")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "50.00")
+    do! this.Expect(middle).ToHaveClassAsync(active)
+    do! slider.PressAsync("ArrowLeft")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "49.99")
+    do! this.Expect(middle).Not.ToHaveClassAsync(active)
+
+    let! keptNodes =
+      container.EvaluateAsync<bool>(
+        "(el, ticks) => ticks.length === el.childElementCount && ticks.every((tick, i) => tick === el.children[i])",
+        original
+      )
+
+    Assert.True(keptNodes, "Changing the slider value must preserve the rendered tick nodes")
+    do! original.DisposeAsync()
+  }
+
+  [<Fact>]
+  member this.``a range wider than the largest float places the thumb at the active middle mark``() = task {
+    do! this.NavigateTo("slider-wide-range")
+    let slider = this.Page.GetByRole(AriaRole.Slider)
+
+    let! thumb =
+      slider.Locator(".weave-slider__thumb").EvaluateAsync<float>("el => parseFloat(el.style.left)")
+
+    let! activeEnd =
+      slider
+        .Locator(".weave-slider__tick--active")
+        .Last.EvaluateAsync<float>("el => parseFloat(el.style.left)")
+
+    Assert.Equal(50.0, thumb)
+    Assert.Equal(50.0, activeEnd)
+  }
+
+  [<Fact>]
+  member this.``a coarse slider keeps each step and its caller-supplied labels``() = task {
+    do! this.NavigateTo("slider")
+
+    let slider =
+      this.Page.GetByRole(AriaRole.Slider, PageGetByRoleOptions(Name = "With Ticks"))
+
+    let! positions = this.TickPositions(slider)
+    Assert.Equal<float>([| 0.0..10.0..100.0 |], positions)
+    do! this.Expect(this.Page.Locator(".weave-slider__tick-label")).ToHaveTextAsync([| "0"; "5"; "10" |])
+  }
 
   [<Fact>]
   member this.``slider track container has role slider``() = task {

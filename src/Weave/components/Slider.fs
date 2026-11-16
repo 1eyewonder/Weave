@@ -108,7 +108,18 @@ type Slider =
         if enabledRef.Value && isDragging.Value then
           updateFromPointer el (float ev.ClientX))
 
-    let onPointerUp = on.pointerUp (fun _ _ -> isDragging.Value <- false)
+    let onPointerUp =
+      on.pointerUp (fun el ev ->
+        // Pointerdown suppresses native focus. Transfer it when the primary adjustment finishes.
+        if
+          isDragging.Value
+          && ev.Button = 0
+          && ev?isPrimary
+          && el?hasPointerCapture (ev?pointerId)
+        then
+          el?focus (New [ "preventScroll" => true ])
+
+        isDragging.Value <- false)
 
     let onPointerCancel = on.pointerCancel (fun _ _ -> isDragging.Value <- false)
 

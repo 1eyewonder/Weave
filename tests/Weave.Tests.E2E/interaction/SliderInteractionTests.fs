@@ -1,6 +1,7 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open System.Threading.Tasks
 open Microsoft.Playwright
 open Xunit
 
@@ -11,6 +12,52 @@ type SliderInteractionTests(fixture: TestFixture) =
     slider
       .Locator(".weave-slider__tick")
       .EvaluateAllAsync<float array>("ticks => ticks.map(tick => parseFloat(tick.style.left))")
+
+  member private this.AdjustWithPointerThenKeyboard(page: IPage, activate: ILocator -> Task) = task {
+    do! this.NavigatePage(page, "slider")
+
+    let previous =
+      page.GetByRole(AriaRole.Slider, PageGetByRoleOptions(Name = "Default Slider"))
+
+    let adjusted =
+      page.GetByRole(AriaRole.Slider, PageGetByRoleOptions(Name = "With Ticks"))
+
+    do! previous.FocusAsync()
+    do! activate adjusted
+    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "5.00")
+    do! Assertions.Expect(adjusted).ToBeFocusedAsync()
+    do! page.Keyboard.PressAsync("ArrowRight")
+    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "6.00")
+    do! Assertions.Expect(previous).ToHaveAttributeAsync("aria-valuenow", "50.00")
+  }
+
+  [<Fact>]
+  member this.``clicking the track focuses the adjusted slider for the next arrow key``() =
+    this.AdjustWithPointerThenKeyboard(this.Page, fun slider -> slider.ClickAsync())
+
+  [<Fact>]
+  [<Trait("Capability", "MobileEmulation")>]
+  member this.``tapping the track focuses the adjusted slider for the next arrow key``() = task {
+    use! context = fixture.NewTouchContextAsync()
+    let! page = context.NewPageAsync()
+    do! this.AdjustWithPointerThenKeyboard(page, fun slider -> slider.TapAsync())
+  }
+
+  [<Fact>]
+  member this.``disabling a slider during a pointer adjustment keeps focus on the previous control``() = task {
+    do! this.NavigateTo("slider-dynamic")
+    let slider = this.Page.GetByRole(AriaRole.Slider)
+    let toggle = this.Page.GetByTestId("toggle-slider-enabled")
+    do! toggle.FocusAsync()
+    let! track = slider.BoundingBoxAsync()
+    do! this.Page.Mouse.MoveAsync(track.X + track.Width / 4.0f, track.Y + track.Height / 2.0f)
+    do! this.Page.Mouse.DownAsync()
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "25.00")
+    let! _ = toggle.EvaluateAsync("button => button.click()")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Page.Mouse.UpAsync()
+    do! this.Expect(toggle).ToBeFocusedAsync()
+  }
 
   [<Theory>]
   [<InlineData("slider-fine-ticks")>]

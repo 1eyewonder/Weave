@@ -773,7 +773,7 @@ type Select =
     Select.create (
       items,
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,
@@ -1128,7 +1128,7 @@ type MultiSelect =
     MultiSelect.create (
       items,
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,

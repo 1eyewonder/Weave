@@ -132,7 +132,7 @@ type DateRangePicker =
         Label = defaultArg labelText (View.Const "")
         Placeholder = defaultArg placeholder (View.Const "")
         Help = helpText
-        Validation = Some field.Validation
+        Validation = Some(field.CreateEditorValidation())
         ValidationMessages = None
         Attrs = PickerRender.contributeErrors field errors :: defaultArg attrs []
       }

@@ -328,7 +328,7 @@ type TextField =
     ) =
     TextField.singleLine (
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,
@@ -368,7 +368,7 @@ type TextField =
     ) =
     TextField.multiLine (
       field.Value,
-      validation = field.Validation,
+      validation = field.CreateEditorValidation(),
       ?labelText = labelText,
       ?placeholder = placeholder,
       ?showHelpText = showHelpText,

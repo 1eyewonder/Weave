@@ -6,6 +6,92 @@ open Xunit
 type DropdownMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Theory>]
+  [<InlineData("Enter")>]
+  [<InlineData(" ")>]
+  [<InlineData("click")>]
+  member this.``disabling a focused menu blocks activation and closes its bound state``(activation: string) =
+    task {
+      do! this.NavigateTo("dropdown-menu-dynamic")
+
+      let trigger =
+        this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Actions"))
+
+      let item = this.Page.GetByRole(AriaRole.Menuitem)
+      let activations = this.Page.GetByTestId("activations")
+
+      let openAndFocusAction () = task {
+        do! trigger.PressAsync("Enter")
+        do! this.Expect(item).ToBeVisibleAsync()
+        do! trigger.PressAsync("ArrowDown")
+        do! this.Expect(item).ToBeFocusedAsync()
+      }
+
+      do! openAndFocusAction ()
+
+      // Update availability without moving focus, then activate before the popup can be removed.
+      let! _ =
+        item.EvaluateAsync(
+          """(item, activation) => {
+          document.querySelector('[data-testid="toggle-availability"]').click();
+          if (activation === 'click') item.click();
+          else item.dispatchEvent(new KeyboardEvent('keydown', {key: activation, bubbles: true, cancelable: true}));
+        }""",
+          activation
+        )
+
+      do! this.Expect(trigger).ToBeDisabledAsync()
+      do! this.Expect(activations).ToHaveTextAsync("0")
+      do! this.Expect(this.Page.GetByRole(AriaRole.Menu)).ToHaveCountAsync(0)
+      do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "false")
+      do! this.Expect(this.Page.GetByTestId("open-state")).ToHaveTextAsync("false")
+
+      do! this.Page.GetByTestId("toggle-availability").ClickAsync()
+      do! this.Expect(trigger).ToBeEnabledAsync()
+      do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "false")
+      do! openAndFocusAction ()
+
+      if activation = "click" then
+        do! item.ClickAsync()
+      else
+        do! this.Page.Keyboard.PressAsync(activation)
+
+      do! this.Expect(activations).ToHaveTextAsync("1")
+    }
+
+  [<Fact>]
+  member this.``disabled hover menu rejects open requests until enabled and explicitly reopened``() = task {
+    do! this.NavigateTo("dropdown-menu-dynamic-hover")
+
+    let trigger =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Actions"))
+
+    let menu = this.Page.GetByRole(AriaRole.Menu)
+    let toggle = this.Page.GetByTestId("toggle-availability")
+
+    let requestOpen =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Request open"))
+
+    do! toggle.ClickAsync()
+    do! this.Expect(trigger).ToBeDisabledAsync()
+    do! requestOpen.ClickAsync()
+
+    // Let the external open request reach the UI before checking that it was rejected.
+    let! _ =
+      this.Page.EvaluateAsync(
+        "() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))"
+      )
+
+    do! this.Expect(menu).ToHaveCountAsync(0)
+    do! this.Expect(this.Page.GetByTestId("open-state")).ToHaveTextAsync("false")
+    do! toggle.ClickAsync()
+    do! this.Expect(trigger).ToBeEnabledAsync()
+    do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "false")
+    do! trigger.HoverAsync()
+    do! this.Expect(menu).ToBeVisibleAsync()
+    do! this.Expect(this.Page.GetByTestId("open-state")).ToHaveTextAsync("true")
+  }
+
   [<Fact>]
   member this.``programmatic click activates menu item and closes menu``() = task {
     do! this.NavigateTo("dropdown-menu")

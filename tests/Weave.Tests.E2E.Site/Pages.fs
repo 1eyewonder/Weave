@@ -1184,6 +1184,33 @@ module Pages =
       Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
 
+  let private dynamicDropdownPage openOn =
+    let enabled = Var.Create true
+    let opened = Var.Create false
+    let activations = Var.Create 0
+
+    div [] [
+      Button.create (
+        text "Toggle availability",
+        (fun () -> Var.Update enabled not),
+        attrs = [ Attr.Create "data-testid" "toggle-availability" ]
+      )
+      Button.create (text "Request open", (fun () -> Var.Set opened true))
+      div [ Attr.Create "data-testid" "open-state" ] [ Doc.TextView(opened.View |> View.Map(sprintf "%b")) ]
+      div [ Attr.Create "data-testid" "activations" ] [
+        Doc.TextView(activations.View |> View.Map string<int>)
+      ]
+      DropdownMenu.create (
+        text "Actions",
+        View.Const [
+          DropdownMenuItem.create (text "Run", (fun () -> Var.Update activations ((+) 1)))
+        ],
+        enabled = enabled.View,
+        isOpen = opened,
+        openOn = openOn
+      )
+    ]
+
   let private expansionPanelPage () =
     let expanded1 = Var.Create true
     let expanded2 = Var.Create false
@@ -3625,6 +3652,8 @@ module Pages =
     | "carousel-pair" -> carouselPairPage ()
     | "dropdown-menu" -> dropdownPage (text "Open Menu") []
     | "dropdown-menu-icon" -> dropdownPage Doc.Empty [ Attr.Create "aria-label" "More actions" ]
+    | "dropdown-menu-dynamic" -> dynamicDropdownPage DropdownMenu.OpenOn.Click
+    | "dropdown-menu-dynamic-hover" -> dynamicDropdownPage DropdownMenu.OpenOn.Hover
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()

@@ -60,7 +60,7 @@ type TimePickerEntryTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``Given an hour entry When Enter focuses minutes Then the current minute is selected before rendering``
+  member this.``Given an hour entry When Enter focuses minutes Then replacing the selection survives the pending render``
     ()
     = task {
     do! this.NavigateTo "pickers"
@@ -70,15 +70,25 @@ type TimePickerEntryTests(fixture: TestFixture) =
     let! selected =
       (this.Entry "Hours")
         .EvaluateAsync<string>(
-          """hour => {
-          hour.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+          """async hour => {
+          const frame = () => new Promise(requestAnimationFrame);
+          await frame();
           const minute = document.querySelector('input[aria-label="Minutes"]');
-          return `${minute.value},${minute.selectionStart},${minute.selectionEnd}`;
+          // Schedule the edit before Enter queues the render of the new hour's default minutes.
+          const edit = frame().then(() => {
+            minute.setRangeText('59', minute.selectionStart, minute.selectionEnd, 'end');
+            minute.dispatchEvent(new InputEvent('input', { bubbles: true, data: '59' }));
+          });
+          hour.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+          const selection = `${minute.value},${minute.selectionStart},${minute.selectionEnd}`;
+          await edit;
+          await frame();
+          return selection;
         }"""
         )
 
     Assert.Equal("00,0,2", selected)
-    do! (this.Entry "Minutes").FillAsync "59"
+    do! this.Expect(this.Entry "Minutes").ToHaveValueAsync "59"
     do! (this.Entry "Minutes").PressAsync "Enter"
     do! this.Expect(this.Button "24-hour time").ToHaveTextAsync "23:59"
   }

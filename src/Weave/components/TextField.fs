@@ -159,31 +159,35 @@ type TextField =
 
     let inputId = WeaveId.create "weave-text-field"
 
+    let writeValue (element: Dom.Element) rendered =
+      // A queued render can run after the next input event has already updated the Var.
+      if rendered = value.Value && As<string> element?value <> rendered then
+        element?value <- rendered
+
     let inputElement =
-      Doc.InputType.Text
-        [
-          cls [ Css.``weave-field__input`` ]
-          Attr.Create "id" inputId
-          Attr.DynamicProp "placeholder" effectivePlaceholder
-          Attr.enabled enabled
-          Attr.DynamicBool "readOnly" readOnly
+      input [
+        cls [ Css.``weave-field__input`` ]
+        Attr.Create "id" inputId
+        Attr.DynamicProp "placeholder" effectivePlaceholder
+        Attr.enabled enabled
+        Attr.DynamicBool "readOnly" readOnly
 
-          match maxLength with
-          | Some ml -> Attr.Create "maxlength" (string ml)
-          | None -> ()
+        match maxLength with
+        | Some ml -> Attr.Create "maxlength" (string ml)
+        | None -> ()
 
-          on.focus (fun _ _ -> isFocused.Value <- true)
+        on.focus (fun _ _ -> isFocused.Value <- true)
 
-          on.blur (fun el _ ->
-            el?scrollLeft <- 0
-            isFocused.Value <- false)
+        on.blur (fun el _ ->
+          el?scrollLeft <- 0
+          isFocused.Value <- false)
 
-          match validation with
-          | Some state -> yield! ValidationInput.attrs state
-          | None -> ()
-          yield! inputAttrs
-        ]
-        value
+        match validation with
+        | Some state -> yield! ValidationInput.attrs state
+        | None -> ()
+        yield! inputAttrs
+        Attr.CustomVar value writeValue (fun element -> Some(As<string> element?value))
+      ] []
 
     TextField.createField (
       inputElement,

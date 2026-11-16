@@ -5,7 +5,7 @@ open System.Globalization
 open WebSharper
 open WebSharper.UI
 
-/// Shared application culture for calendar labels and default week order.
+/// Shared application culture for calendars and case-insensitive option searches.
 /// Use a BCP 47 culture name such as en-US, en-GB, or fr-FR.
 [<JavaScript; RequireQualifiedAccess>]
 module Globalization =
@@ -19,11 +19,15 @@ module Globalization =
 
   let private currentCulture = Var.Create(detectCulture ())
 
-  /// Read-only view; changes update mounted calendars as well as future calendars.
+  /// Read-only culture view for mounted controls and new instances.
   let culture = currentCulture.View
 
   let setCulture name =
     name |> canonicalize |> Var.Set currentCulture
+
+  [<Inline "$value.toLocaleLowerCase($name)">]
+  let internal toLower (name: string) (value: string) =
+    value.ToLower(CultureInfo.GetCultureInfo(name))
 
   // CLDR 49 first-day fallback for engines exposing neither getWeekInfo nor weekInfo.
   // https://github.com/unicode-org/cldr-json/blob/main/cldr-json/cldr-core/supplemental/weekData.json

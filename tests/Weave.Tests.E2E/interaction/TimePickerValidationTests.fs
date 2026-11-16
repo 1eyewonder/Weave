@@ -13,6 +13,31 @@ type TimePickerValidationTests(fixture: TestFixture) =
     this.Page.GetByRole(AriaRole.Textbox, PageGetByRoleOptions(Name = name, Exact = true))
 
   [<Fact>]
+  member this.``Given a retained minute beyond the last step then the dial range includes it until corrected``
+    ()
+    = task {
+    do! this.NavigateTo "pickers"
+    do! (this.Button "Set time to 09:59").ClickAsync()
+    do! (this.Button "Business time").ClickAsync()
+    do! (this.Entry "Minutes").FocusAsync()
+
+    let dial =
+      this.Page.GetByRole(AriaRole.Slider, PageGetByRoleOptions(Name = "Minutes"))
+
+    do! this.Expect(dial).ToHaveAttributeAsync("aria-valuemin", "0")
+    do! this.Expect(dial).ToHaveAttributeAsync("aria-valuenow", "59")
+    do! this.Expect(dial).ToHaveAttributeAsync("aria-valuemax", "59")
+    do! this.Expect(this.Page.Locator "#business-selected").ToHaveTextAsync "09:59"
+    do! this.Expect(this.Page.Locator "#business-valid").ToHaveTextAsync "invalid"
+
+    do! dial.PressAsync("ArrowLeft")
+    do! this.Expect(dial).ToHaveAttributeAsync("aria-valuenow", "45")
+    do! this.Expect(dial).ToHaveAttributeAsync("aria-valuemax", "45")
+    do! this.Expect(this.Page.Locator "#business-selected").ToHaveTextAsync "09:45"
+    do! this.Expect(this.Page.Locator "#business-valid").ToHaveTextAsync "valid"
+  }
+
+  [<Fact>]
   member this.``Given custom form rules When an unavailable time is typed Then it remains entered and submission is blocked``
     ()
     = task {

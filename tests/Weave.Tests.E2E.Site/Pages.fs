@@ -3318,6 +3318,10 @@ module Pages =
           fun () -> Var.Set field.Value (Some(System.TimeSpan(13, 7, 0)))
         )
         Button.create (
+          text "Set time to 09:59",
+          fun () -> Var.Set field.Value (Some(System.TimeSpan(9, 59, 0)))
+        )
+        Button.create (
           text "Set negative time",
           fun () -> Var.Set field.Value (Some(System.TimeSpan(-1, 0, 0)))
         )

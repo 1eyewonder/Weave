@@ -528,7 +528,8 @@ module internal TimePickerClock =
            |||> View.Map3(fun active _ availability ->
              not active || List.isEmpty (availableNumbers phase context availability)))
         Attr.Create "aria-valuemin" (string<int> minimum)
-        Attr.Create "aria-valuemax" (string<int> maximum)
+        // A caller can supply an off-step minute above the last dial choice.
+        Attr.Dynamic "aria-valuemax" (selected |> View.Map(max maximum >> string<int>))
         Attr.Dynamic "aria-valuenow" (selected |> View.Map string<int>)
       ] []
 

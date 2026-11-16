@@ -9,6 +9,8 @@
     <Compile Include="../../src/Weave.Docs/examples/date-time/DateTimeGuideSource.fs" Link="docs/DateTimeGuideSource.fs" />
     <Compile Include="docs/DateTimeGuideTests.fs" />
     <Compile Include="components/ChipSetTests.fs" />
+    <Compile Include="components/IconTests.fs" />
+    <None Include="../Weave.Tests.E2E.Site/wwwroot/vendor/material-symbols/MaterialSymbols.codepoints" Link="MaterialSymbols.codepoints" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="components/colorpicker/PickerColorTests.fs" />
     <Compile Include="components/TableTests.fs" />
     <Compile Include="utilities/AnimationTests.fs" />

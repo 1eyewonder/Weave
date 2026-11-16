@@ -9,3 +9,8 @@ https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=ch
 It is served locally so pagination layout tests exercise real icon ligatures
 without depending on external font requests. Applications load the standard
 Material Symbols Outlined font as documented by Weave's Icons examples.
+
+MaterialSymbols.codepoints is the unmodified ligature catalog used by the
+Outlined, Rounded and Sharp variable fonts at revision
+10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7. The three catalogs are identical.
+Source: https://github.com/google/material-design-icons/tree/10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7/variablefont

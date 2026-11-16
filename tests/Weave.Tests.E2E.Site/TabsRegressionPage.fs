@@ -9,6 +9,27 @@ open Weave.CssHelpers
 open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
+type private TabsCaller =
+
+  static member create
+    (
+      tabs: View<Tabs.TabDef list>,
+      ?activeIndex: Var<int>,
+      ?position: Tabs.Position,
+      ?scrollBackIcon: Doc,
+      ?scrollForwardIcon: Doc,
+      ?attrs: Attr list
+    ) =
+    Tabs.create (
+      tabs,
+      ?activeIndex = activeIndex,
+      ?position = position,
+      ?scrollBackIcon = scrollBackIcon,
+      ?scrollForwardIcon = scrollForwardIcon,
+      ?attrs = attrs
+    )
+
+[<JavaScript>]
 module TabsRegressionPage =
 
   let namedGroups () =
@@ -72,7 +93,7 @@ module TabsRegressionPage =
     ]
 
   let initial position =
-    Tabs.create (
+    TabsCaller.create (
       View.Const [
         TabItem.create ("Overview", text "Overview panel")
         TabItem.create ("Activity", text "Activity panel")

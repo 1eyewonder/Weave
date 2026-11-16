@@ -186,7 +186,7 @@ Tabs.create (
         Helpers.apiParam "?scrollForwardIcon" "Doc" "" "Custom icon for the scroll-forward button"
         Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
         Helpers.apiParam
-          "tabListAttrs"
+          "?tabListAttrs"
           "Attr list"
           "[]"
           "Attributes on the tab list. Use aria-label or aria-labelledby to name the group."

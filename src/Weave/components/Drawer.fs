@@ -288,6 +288,13 @@ type Drawer =
       && (overlayElement.Value
           |> Option.exists (fun overlay -> As<string>(JS.Window?getComputedStyle(overlay)?display) <> "none"))
 
+    let canDismissWithEscape () =
+      match config.Variant with
+      | Variant.Temporary -> true
+      | Variant.Responsive -> overlayIsVisible ()
+      | Variant.Persistent
+      | Variant.Mini -> false
+
     let restoreFocus () =
       previousFocus.Value
       |> Option.iter (fun element ->
@@ -440,14 +447,12 @@ type Drawer =
 
           scheduleFocus ())
         on.keyDown (fun element ev ->
-          match ev, config.Variant, config.OverlayClose with
-          | Key.Escape, (Variant.Temporary | Variant.Responsive), Some close when
-            not (As<bool>(ev?defaultPrevented))
-            ->
+          match ev, config.OverlayClose with
+          | Key.Escape, Some close when not (As<bool>(ev?defaultPrevented)) && canDismissWithEscape () ->
             ev.PreventDefault()
             ev.StopPropagation()
             close ()
-          | Key.Tab, _, _ when overlayIsVisible () && not (As<bool>(ev?defaultPrevented)) ->
+          | Key.Tab, _ when overlayIsVisible () && not (As<bool>(ev?defaultPrevented)) ->
             trapFocus element ev
           | _ -> ())
         yield! config.Attrs

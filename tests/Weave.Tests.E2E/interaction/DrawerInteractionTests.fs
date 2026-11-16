@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open Microsoft.Playwright
 open Xunit
 
 [<Collection("Browser input")>]
@@ -161,6 +162,30 @@ type DrawerInteractionTests(fixture: TestFixture) =
     do! item.ClickAsync()
     do! this.Expect(overlay).ToBeHiddenAsync()
     do! this.Expect(main).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``Escape closes a responsive drawer only while its backdrop is visible``() = task {
+    do! this.NavigateTo("drawer-responsive")
+
+    let item =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Drawer Button", Exact = true))
+
+    let pageEscapes = this.Page.GetByTestId("page-escapes")
+    let overlay = this.Page.Locator(".weave-drawer__overlay")
+    do! this.Expect(overlay).ToBeHiddenAsync()
+    do! item.FocusAsync()
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(pageEscapes).ToHaveTextAsync("1")
+
+    do! this.Page.SetViewportSizeAsync(390, 844)
+    do! this.Expect(overlay).ToBeVisibleAsync()
+    do! this.Expect(item).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Escape")
+    do! this.Expect(overlay).ToBeHiddenAsync()
+    do! this.Expect(this.Page.Locator(".weave-drawer")).ToHaveAttributeAsync("inert", "")
+    do! this.Expect(pageEscapes).ToHaveTextAsync("1")
   }
 
   [<Fact>]

@@ -1632,8 +1632,16 @@ module Pages =
 
   let private drawerPageWithContent variant initiallyOpen (drawerContent: Doc) =
     let isOpen = Var.Create initiallyOpen
+    let pageEscapes = Var.Create 0
 
-    div [] [
+    let countEscape (_: Dom.Element) (event: Dom.KeyboardEvent) =
+      if event.Key = "Escape" then
+        Var.Update pageEscapes ((+) 1)
+
+    div [ on.keyDown countEscape ] [
+      span [ Attr.Create "data-testid" "page-escapes" ] [
+        textView (pageEscapes.View |> View.Map string<int>)
+      ]
       Button.create (
         text "Toggle Drawer",
         (fun () -> Var.Set isOpen (not isOpen.Value)),

@@ -265,7 +265,8 @@ type PickerInteractionTests(fixture: TestFixture) =
   member this.``Given an open picker When clicking outside Then it closes``() = task {
     do! this.NavigateTo "pickers"
     do! (this.Button "Date").ClickAsync()
-    do! this.Page.Mouse.ClickAsync(1100.0f, 700.0f)
+    do! this.Expect(this.Popup).ToBeVisibleAsync()
+    do! this.Page.Locator("#date-value").ClickAsync()
     do! this.Expect(this.Popup).ToHaveCountAsync 0
   }
 

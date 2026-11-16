@@ -261,7 +261,7 @@ DropdownMenu.create (
           "?triggerAttrs"
           "Attr list"
           "[]"
-          "Additional attributes applied to the trigger button"
+          "Attributes on the trigger button. For an icon-only trigger, provide a label with Attr.Create \"aria-label\" \"More actions\" or reference an existing label with aria-labelledby."
         Helpers.apiParam
           "?attrs"
           "Attr list"

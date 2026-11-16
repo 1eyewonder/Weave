@@ -1167,18 +1167,19 @@ module Pages =
       Button.create (text "Panel action", ignore, attrs = [ Attr.Create "data-testid" "panel-action" ])
     ]
 
-  let private dropdownPage () =
+  let private dropdownPage triggerContent triggerAttrs =
     let selectedAction = Var.Create "none"
 
     div [] [
       div [ Attr.Create "data-testid" "dropdown-action" ] [ Doc.TextView selectedAction.View ]
       DropdownMenu.create (
-        text "Open Menu",
+        triggerContent,
         View.Const [
           DropdownMenuItem.create (text "Item 1", (fun () -> Var.Set selectedAction "item 1"))
           DropdownMenuItem.create (text "Item 2", (fun () -> ()))
           DropdownMenuItem.create (text "Disabled Item", (fun () -> ()), disabled = View.Const true)
-        ]
+        ],
+        triggerAttrs = triggerAttrs
       )
       Button.create (text "After", (fun () -> ()), attrs = [ Attr.Create "data-testid" "focus-target" ])
     ]
@@ -3611,7 +3612,8 @@ module Pages =
     | "carousel-custom-controls" -> carouselPage false true
     | "carousel-autoplay-custom-controls" -> carouselPage true true
     | "carousel-pair" -> carouselPairPage ()
-    | "dropdown-menu" -> dropdownPage ()
+    | "dropdown-menu" -> dropdownPage (text "Open Menu") []
+    | "dropdown-menu-icon" -> dropdownPage Doc.Empty [ Attr.Create "aria-label" "More actions" ]
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()

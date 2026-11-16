@@ -1,5 +1,6 @@
 namespace Weave.Tests.E2E
 
+open Microsoft.Playwright
 open Xunit
 
 type DropdownMenuInteractionTests(fixture: TestFixture) =
@@ -66,15 +67,25 @@ type DropdownMenuInteractionTests(fixture: TestFixture) =
     do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToBeVisibleAsync()
   }
 
-  [<Fact>]
-  member this.``Enter on trigger toggles the dropdown menu closed``() = task {
-    do! this.NavigateTo("dropdown-menu")
-    let trigger = this.Page.Locator(".weave-dropdownmenu .weave-button").First
-    do! trigger.FocusAsync()
+  [<Theory>]
+  [<InlineData("dropdown-menu", "Open Menu")>]
+  [<InlineData("dropdown-menu-icon", "More actions")>]
+  member this.``Given a named dropdown trigger When toggled with Enter Then it keeps its name and reports the menu state``
+    (route: string, name: string)
+    = task {
+    do! this.NavigateTo(route)
+
+    let trigger =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = name, Exact = true))
+
+    let menu = this.Page.GetByRole(AriaRole.Menu)
+    do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "false")
     do! trigger.PressAsync("Enter")
-    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToBeVisibleAsync()
+    do! this.Expect(menu).ToBeVisibleAsync()
+    do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "true")
     do! trigger.PressAsync("Enter")
-    do! this.Expect(this.Page.Locator(".weave-dropdownmenu__list")).ToHaveCountAsync(0)
+    do! this.Expect(menu).ToHaveCountAsync(0)
+    do! this.Expect(trigger).ToHaveAttributeAsync("aria-expanded", "false")
   }
 
   [<Fact>]

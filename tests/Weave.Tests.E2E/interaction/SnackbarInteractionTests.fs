@@ -11,6 +11,27 @@ type SnackbarInteractionTests(fixture: TestFixture) =
   member private this.Host = this.Page.GetByTestId("primary-host")
   member private this.Message = this.Host.Locator(".weave-snackbar")
 
+  [<Fact>]
+  member this.``reactive snackbar text remains in a live region that includes text changes``() = task {
+    do! this.NavigateTo("snackbar")
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Show upload", Exact = true))
+        .ClickAsync()
+
+    do! this.Expect(this.Message).ToContainTextAsync("Upload started")
+    do! this.Expect(this.Host).ToHaveAttributeAsync("aria-live", "polite")
+    do! this.Expect(this.Host).ToHaveAttributeAsync("aria-relevant", "additions text")
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Finish upload", Exact = true))
+        .ClickAsync()
+
+    do! this.Expect(this.Message).ToContainTextAsync("Upload finished")
+  }
+
   member private this.Click(label: string) = task {
     do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = label, Exact = true)).ClickAsync()
     // WebSharper synchronizes reactive DOM changes on the next animation frame.

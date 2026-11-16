@@ -2764,6 +2764,7 @@ module Pages =
 
   let private snackbarPage () =
     let notifications = SnackbarController.create (duration = 1000, maxVisible = 1)
+    let progress = Var.Create "Upload started"
     let other = SnackbarController.create (maxVisible = 1)
     let mounted = Var.Create true
     let last = Var.Create ""
@@ -2778,6 +2779,10 @@ module Pages =
 
     div [ Attr.Style "padding" "120px 16px" ] [
       control "Persistent" (fun () -> send "Persistent message")
+      control "Show upload" (fun () ->
+        notifications.add (Doc.TextView progress.View, dismissal = Snackbar.Dismissal.Manual)
+        |> ignore)
+      control "Finish upload" (fun () -> Var.Set progress "Upload finished")
       control "Duplicate" (fun () -> send "Persistent message")
       control "Timed" (fun () -> Var.Set last (notifications.show ("Timed message")))
       control "Timed override" (fun () ->

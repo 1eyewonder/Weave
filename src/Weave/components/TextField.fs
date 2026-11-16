@@ -46,13 +46,12 @@ type TextField =
     else
       value.Replace("\r\n", "\n").Replace('\r', '\n')
 
-  static member private writeCurrentValue (value: Var<string>) display (element: Dom.Element) rendered =
-    // A queued render can run after the next input event has already updated the Var.
-    if rendered = value.Value then
-      let nextValue = display rendered
+  static member private writeCurrentValue (value: Var<string>) display (element: Dom.Element) _ =
+    // A queued render may run after a newer input event.
+    let nextValue = display value.Value
 
-      if As<string> element?value <> nextValue then
-        element?value <- nextValue
+    if As<string> element?value <> nextValue then
+      element?value <- nextValue
 
   static member private createField
     (

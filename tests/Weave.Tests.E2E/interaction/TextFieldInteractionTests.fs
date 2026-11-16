@@ -55,6 +55,36 @@ type TextFieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``multiline typing retains a newer external value during a queued render``() = task {
+    do! this.NavigateTo("multiline-editing")
+    let notes = this.Page.GetByLabel("Notes")
+    do! notes.FillAsync("")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("0/50")
+
+    let! _ =
+      notes.EvaluateAsync(
+        """async el => {
+          const frame = () => new Promise(requestAnimationFrame);
+          const type = ch => {
+            el.setRangeText(ch, el.selectionStart, el.selectionEnd, 'end');
+            el.dispatchEvent(new InputEvent('input', { bubbles: true, data: ch }));
+          };
+          await frame();
+          const button = [...document.querySelectorAll('button')].find(el => el.textContent === 'Restore notes');
+          const restore = frame().then(() => button.click());
+          type('1');
+          await restore;
+          await frame();
+          type('3');
+        }"""
+      )
+
+    let expected = String.replicate 18 "a\n" + "\n🙂z3"
+    do! this.Expect(notes).ToHaveValueAsync(expected)
+    do! this.Expect(this.Page.Locator("output")).ToHaveTextAsync(expected)
+  }
+
+  [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {
     do! this.NavigateTo("textfield")
     let input = this.Page.Locator("input[aria-invalid='true']").First

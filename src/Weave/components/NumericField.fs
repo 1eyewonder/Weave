@@ -33,6 +33,12 @@ module NumericField =
 
     let full = cl Css.``weave-field--full-width``
 
+  let internal boundAttribute name (value: float) =
+    if Double.IsNaN value || Double.IsInfinity value then
+      Attr.Empty
+    else
+      Attr.Create name (string<float> value)
+
 [<JavaScript>]
 type NumericField =
 
@@ -141,6 +147,8 @@ type NumericField =
           Attr.Create "id" inputId
           attr.``type`` "number"
 
+          min |> Attr.bindOption (string<int> >> attr.min)
+          max |> Attr.bindOption (string<int> >> attr.max)
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
@@ -204,7 +212,9 @@ type NumericField =
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"
-              Attr.Tab.natural
+              Attr.enabled (
+                View.Map2 (fun canEdit current -> canEdit && current < maxVal) editable value.View
+              )
               Attr.Create "aria-label" "Increment"
               on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
@@ -214,7 +224,9 @@ type NumericField =
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"
-              Attr.Tab.natural
+              Attr.enabled (
+                View.Map2 (fun canEdit current -> canEdit && current > minVal) editable value.View
+              )
               Attr.Create "aria-label" "Decrement"
               on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
@@ -374,6 +386,8 @@ type NumericField =
           attr.``type`` "number"
           Attr.Create "step" "any"
 
+          min |> Attr.bindOption (NumericField.boundAttribute "min")
+          max |> Attr.bindOption (NumericField.boundAttribute "max")
           Attr.DynamicProp "placeholder" effectivePlaceholder
           Attr.enabled enabled
           Attr.DynamicBool "readOnly" readOnly
@@ -436,7 +450,9 @@ type NumericField =
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"
-              Attr.Tab.natural
+              Attr.enabled (
+                View.Map2 (fun canEdit current -> canEdit && current < maxVal) editable value.View
+              )
               Attr.Create "aria-label" "Increment"
               on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then
@@ -446,7 +462,9 @@ type NumericField =
             button [
               Css.``weave-field__spin-btn`` |> cl
               attr.``type`` "button"
-              Attr.Tab.natural
+              Attr.enabled (
+                View.Map2 (fun canEdit current -> canEdit && current > minVal) editable value.View
+              )
               Attr.Create "aria-label" "Decrement"
               on.clickView clickState (fun _ _ (step, canEdit) ->
                 if canEdit then

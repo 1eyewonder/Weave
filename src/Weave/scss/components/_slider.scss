@@ -155,7 +155,8 @@
     background-color: CanvasText;
   }
 
-  .weave-slider__track {
+  .weave-slider__track,
+  .weave-slider__tick {
     forced-color-adjust: none;
     background-color: CanvasText;
     opacity: 1;
@@ -163,7 +164,8 @@
 
   .weave-slider--disabled .weave-slider__thumb,
   .weave-slider--disabled .weave-slider__fill,
-  .weave-slider--disabled .weave-slider__track {
+  .weave-slider--disabled .weave-slider__track,
+  .weave-slider--disabled .weave-slider__tick {
     background-color: GrayText;
   }
 }

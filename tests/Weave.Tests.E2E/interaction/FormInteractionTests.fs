@@ -284,6 +284,24 @@ type FormInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``Given a typed password when the model changes away and back then the input displays the restored value``
+    ()
+    = task {
+    do! this.NavigateTo("form")
+    let password = this.Page.GetByLabel("Password", PageGetByLabelOptions(Exact = true))
+    do! password.FillAsync("password123")
+
+    do!
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Invalidate and submit")).ClickAsync()
+
+    do! this.Expect(password).ToHaveValueAsync("changed123")
+
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Fill and submit")).ClickAsync()
+    do! this.Expect(this.Page.Locator("#submitted")).ToHaveTextAsync("1")
+    do! this.Expect(password).ToHaveValueAsync("password123")
+  }
+
+  [<Fact>]
   member this.``validated form is accessible before and after errors``() = task {
     do! this.RunAxeScan("form")
     do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Save", Exact = true)).ClickAsync()

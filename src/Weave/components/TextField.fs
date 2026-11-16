@@ -165,7 +165,7 @@ type TextField =
         element?value <- rendered
 
     let inputElement =
-      input [
+      Elt.input [
         cls [ Css.``weave-field__input`` ]
         Attr.Create "id" inputId
         Attr.DynamicProp "placeholder" effectivePlaceholder
@@ -186,8 +186,12 @@ type TextField =
         | Some state -> yield! ValidationInput.attrs state
         | None -> ()
         yield! inputAttrs
-        Attr.CustomVar value writeValue (fun element -> Some(As<string> element?value))
+        Attr.DynamicCustom writeValue value.View
       ] []
+
+    // Use the native edit listener. The built-in writer skips values that match the last edit.
+    let listenForEdits, _, _ = BindVar.StringApply value
+    listenForEdits inputElement.Dom
 
     TextField.createField (
       inputElement,

@@ -164,6 +164,12 @@ type TextField =
       if rendered = value.Value && As<string> element?value <> rendered then
         element?value <- rendered
 
+    let readValue (element: Dom.Element) (_: Dom.Event) =
+      let current = As<string> element?value
+
+      if current <> value.Value then
+        Var.Set value current
+
     let inputElement =
       input [
         cls [ Css.``weave-field__input`` ]
@@ -186,7 +192,10 @@ type TextField =
         | Some state -> yield! ValidationInput.attrs state
         | None -> ()
         yield! inputAttrs
-        Attr.CustomVar value writeValue (fun element -> Some(As<string> element?value))
+        Attr.DynamicCustom writeValue value.View
+        on.input readValue
+        on.change readValue
+        on.keyPress readValue
       ] []
 
     TextField.createField (

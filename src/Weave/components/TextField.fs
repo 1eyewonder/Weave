@@ -40,6 +40,20 @@ module TextField =
 [<JavaScript; RequireQualifiedAccess>]
 type TextField =
 
+  static member private normalizeNewlines(value: string) =
+    if isNull value then
+      ""
+    else
+      value.Replace("\r\n", "\n").Replace('\r', '\n')
+
+  static member private writeCurrentValue (value: Var<string>) display (element: Dom.Element) rendered =
+    // A queued render can run after the next input event has already updated the Var.
+    if rendered = value.Value then
+      let nextValue = display rendered
+
+      if As<string> element?value <> nextValue then
+        element?value <- nextValue
+
   static member private createField
     (
       inputElement: Doc,
@@ -82,8 +96,14 @@ type TextField =
     let counterDoc =
       match maxLength with
       | Some ml ->
+        let displayed =
+          if isMultiline then
+            value |> View.Map TextField.normalizeNewlines
+          else
+            value
+
         Html.span [ Css.``weave-field__counter`` |> cl ] [
-          Doc.TextView(value |> View.Map(fun v -> $"{v.Length}/{ml}"))
+          Doc.TextView(displayed |> View.Map(fun v -> $"%d{v.Length}/%d{ml}"))
         ]
       | None -> Doc.Empty
 
@@ -159,11 +179,6 @@ type TextField =
 
     let inputId = WeaveId.create "weave-text-field"
 
-    let writeValue (element: Dom.Element) rendered =
-      // A queued render can run after the next input event has already updated the Var.
-      if rendered = value.Value && As<string> element?value <> rendered then
-        element?value <- rendered
-
     let inputElement =
       Elt.input [
         cls [ Css.``weave-field__input`` ]
@@ -186,7 +201,7 @@ type TextField =
         | Some state -> yield! ValidationInput.attrs state
         | None -> ()
         yield! inputAttrs
-        Attr.DynamicCustom writeValue value.View
+        Attr.DynamicCustom (TextField.writeCurrentValue value id) value.View
       ] []
 
     // Use the native edit listener. The built-in writer skips values that match the last edit.
@@ -214,6 +229,7 @@ type TextField =
       attrs
     )
 
+  /// The counter and native maxlength use UTF-16 code units with CRLF and CR line endings counted as LF.
   static member multiLine
     (
       value: Var<string>,
@@ -274,7 +290,7 @@ type TextField =
         | Some ml -> Attr.Create "maxlength" (string ml)
         | None -> ()
 
-        Attr.DynamicProp "value" value.View
+        Attr.DynamicCustom (TextField.writeCurrentValue value TextField.normalizeNewlines) value.View
         on.input (fun el _ -> value.Value <- el?value)
         on.focus (fun _ _ -> isFocused.Value <- true)
         on.blur (fun _ _ -> isFocused.Value <- false)

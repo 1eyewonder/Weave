@@ -725,6 +725,16 @@ module Pages =
       TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field", maxLength = 50)
     ]
 
+  let private multilineEditingPage () =
+    let initial = String.replicate 18 "a\r\n" + "\r🙂z"
+    let value = Var.Create initial
+
+    div [] [
+      TextField.multiLine (value, labelText = View.Const "Notes", maxLength = 50)
+      output [] [ textView value.View ]
+      button [ on.click (fun _ _ -> value.Set initial) ] [ text "Restore notes" ]
+    ]
+
   let private selectPage () =
     let dynamicDisabled = Var.Create false
     let selectEnabled = Var.Create true
@@ -3644,6 +3654,7 @@ module Pages =
     | "field" -> fieldPage ()
     | "numericfield" -> numericFieldPage ()
     | "textfield" -> textFieldPage ()
+    | "multiline-editing" -> multilineEditingPage ()
     | "form" -> formPage ()
     | "form-sizing" -> formSizingPage ()
     | "form-shared-field" -> sharedFieldPage ()

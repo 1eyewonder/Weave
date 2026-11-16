@@ -2,8 +2,57 @@ namespace Weave.Tests.E2E
 
 open Xunit
 
+[<Collection("Browser input")>]
 type TextFieldInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``multiline length uses normalized newlines and native UTF-16 units``() = task {
+    do! this.NavigateTo("multiline-editing")
+    let notes = this.Page.GetByLabel("Notes")
+    let counter = this.Page.Locator(".weave-field__counter")
+    let initial = String.replicate 18 "a\n" + "\n🙂z"
+    do! this.Expect(notes).ToHaveValueAsync(initial)
+    do! this.Expect(counter).ToHaveTextAsync("40/50")
+    do! notes.PressAsync("Control+End")
+    do! notes.PressSequentiallyAsync("12345678901")
+    do! this.Expect(notes).ToHaveValueAsync(initial + "1234567890")
+    do! this.Expect(counter).ToHaveTextAsync("50/50")
+    let! model = this.Page.Locator("output").TextContentAsync()
+    Assert.Equal(initial + "1234567890", model)
+    do! this.Page.GetByText("Restore notes").ClickAsync()
+    do! this.Expect(notes).ToHaveValueAsync(initial)
+    do! this.Expect(counter).ToHaveTextAsync("40/50")
+  }
+
+  [<Fact>]
+  member this.``multiline typing preserves edits made during a queued render``() = task {
+    do! this.NavigateTo("multiline-editing")
+    let notes = this.Page.GetByLabel("Notes")
+    do! notes.FillAsync("")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("0/50")
+
+    let! _ =
+      notes.EvaluateAsync(
+        """async el => {
+      const frame = () => new Promise(requestAnimationFrame);
+      const type = ch => {
+        el.setRangeText(ch, el.selectionStart, el.selectionEnd, 'end');
+        el.dispatchEvent(new InputEvent('input', { bubbles: true, data: ch }));
+      };
+      await frame();
+      // Queue the second edit ahead of the first edit's render, then type against the resulting DOM.
+      const second = frame().then(() => type('2'));
+      type('1');
+      await second;
+      await frame();
+      type('3');
+    }"""
+      )
+
+    do! this.Expect(notes).ToHaveValueAsync("123")
+    do! this.Expect(this.Page.Locator("output")).ToHaveTextAsync("123")
+  }
 
   [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {

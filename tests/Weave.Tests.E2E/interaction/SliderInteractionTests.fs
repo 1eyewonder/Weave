@@ -8,10 +8,58 @@ open Xunit
 type SliderInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Theory>]
+  [<InlineData("integer", "5", "5", "5", "1")>]
+  [<InlineData("fraction", "0.001", "0.002", "0.004", "0.001")>]
+  member this.``slider model and accessible values agree across initial and external range changes``
+    (id: string, initial: string, afterRight: string, maximum: string, step: string)
+    = task {
+    do! this.NavigateTo("slider-range")
+    let root = this.Page.GetByTestId(id)
+    let model = root.Locator("output")
+    let slider = root.GetByRole(AriaRole.Slider)
+
+    let expectValue (value: string) = task {
+      do! this.Expect(model).ToHaveTextAsync(value)
+      do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", value)
+    }
+
+    do! expectValue initial
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuemin", "0")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuemax", maximum)
+    do! slider.PressAsync("ArrowRight")
+    do! expectValue afterRight
+    do! this.Page.GetByText("Set below minimum").ClickAsync()
+    do! expectValue "0"
+
+    let! low =
+      root.Locator(".weave-slider__thumb").EvaluateAsync<float>("el => parseFloat(el.style.left)")
+
+    Assert.Equal(0.0, low)
+    do! slider.PressAsync("ArrowRight")
+    do! expectValue step
+    do! this.Page.GetByText("Set above maximum").ClickAsync()
+    do! expectValue maximum
+
+    let! high =
+      root.Locator(".weave-slider__thumb").EvaluateAsync<float>("el => parseFloat(el.style.left)")
+
+    Assert.Equal(100.0, high)
+  }
+
   member private this.TickPositions(slider: ILocator) =
     slider
       .Locator(".weave-slider__tick")
       .EvaluateAllAsync<float array>("ticks => ticks.map(tick => parseFloat(tick.style.left))")
+
+  [<Fact>]
+  member this.``a NaN assignment resets the fractional slider to its minimum``() = task {
+    do! this.NavigateTo("slider-range")
+    do! this.Page.GetByText("Set fraction to NaN").ClickAsync()
+    let root = this.Page.GetByTestId("fraction")
+    do! this.Expect(root.Locator("output")).ToHaveTextAsync("0")
+    do! this.Expect(root.GetByRole(AriaRole.Slider)).ToHaveAttributeAsync("aria-valuenow", "0")
+  }
 
   member private this.AdjustWithPointerThenKeyboard(page: IPage, activate: ILocator -> Task) = task {
     do! this.NavigatePage(page, "slider")
@@ -24,11 +72,11 @@ type SliderInteractionTests(fixture: TestFixture) =
 
     do! previous.FocusAsync()
     do! activate adjusted
-    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "5.00")
+    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "5")
     do! Assertions.Expect(adjusted).ToBeFocusedAsync()
     do! page.Keyboard.PressAsync("ArrowRight")
-    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "6.00")
-    do! Assertions.Expect(previous).ToHaveAttributeAsync("aria-valuenow", "50.00")
+    do! Assertions.Expect(adjusted).ToHaveAttributeAsync("aria-valuenow", "6")
+    do! Assertions.Expect(previous).ToHaveAttributeAsync("aria-valuenow", "50")
   }
 
   [<Fact>]
@@ -52,7 +100,7 @@ type SliderInteractionTests(fixture: TestFixture) =
     let! track = slider.BoundingBoxAsync()
     do! this.Page.Mouse.MoveAsync(track.X + track.Width / 4.0f, track.Y + track.Height / 2.0f)
     do! this.Page.Mouse.DownAsync()
-    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "25.00")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "25")
     let! _ = toggle.EvaluateAsync("button => button.click()")
     do! this.Expect(slider).ToHaveAttributeAsync("aria-disabled", "true")
     do! this.Page.Mouse.UpAsync()
@@ -96,7 +144,7 @@ type SliderInteractionTests(fixture: TestFixture) =
     let! original = container.EvaluateHandleAsync("el => Array.from(el.children)")
 
     do! slider.PressAsync("ArrowRight")
-    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "50.00")
+    do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "50")
     do! this.Expect(middle).ToHaveClassAsync(active)
     do! slider.PressAsync("ArrowLeft")
     do! this.Expect(slider).ToHaveAttributeAsync("aria-valuenow", "49.99")

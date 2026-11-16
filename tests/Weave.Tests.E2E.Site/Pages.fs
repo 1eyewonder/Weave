@@ -2437,6 +2437,34 @@ module Pages =
       )
     ]
 
+  let private sliderRangePage () =
+    let integer = Var.Create 7
+    let fraction = Var.Create 0.001
+
+    let setValues whole part =
+      integer.Set whole
+      fraction.Set part
+
+    div [] [
+      div [ Attr.Create "data-testid" "integer" ] [
+        Slider.create (integer, min = 0, max = 5, labelText = View.Const "Whole units")
+        output [] [ textView (integer.View |> View.Map string<int>) ]
+      ]
+      div [ Attr.Create "data-testid" "fraction" ] [
+        Slider.create (
+          fraction,
+          min = 0.0,
+          max = 0.004,
+          step = 0.001,
+          labelText = View.Const "Fractional units"
+        )
+        output [] [ textView (fraction.View |> View.Map string<float>) ]
+      ]
+      button [ on.click (fun _ _ -> setValues -2 -0.01) ] [ text "Set below minimum" ]
+      button [ on.click (fun _ _ -> setValues 8 0.01) ] [ text "Set above maximum" ]
+      button [ on.click (fun _ _ -> fraction.Set nan) ] [ text "Set fraction to NaN" ]
+    ]
+
   let private resizeListenerPage () =
     let mounted = Var.Create true
     let size = Var.Create<ResizeListener.ElementSize option> None
@@ -3782,6 +3810,7 @@ module Pages =
     | "slider-tiny-step" -> tickSliderPage 0.0 100.0 1e-310 50.0
     | "slider-wide-range" -> tickSliderPage -1e308 1e308 1e307 0.0
     | "slider-dynamic" -> dynamicSliderPage ()
+    | "slider-range" -> sliderRangePage ()
     | "color-picker" -> ColorPickerPage.render ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 

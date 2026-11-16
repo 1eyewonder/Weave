@@ -1236,6 +1236,38 @@ module Pages =
       )
     ]
 
+  let private containerHeightPage column =
+    let content label =
+      div [ Attr.Style "height" "40px" ] [ text label ]
+
+    let section id label =
+      Container.create (
+        content label,
+        attrs = [
+          Container.contentHeight
+          Container.gutters
+          SurfaceColor.BackgroundColor.paper
+          Attr.Create "data-testid" id
+        ]
+      )
+
+    div [] [
+      div [
+        Attr.Style "height" "300px"
+        if column then
+          Flex.Flex.allSizes
+          FlexDirection.Column.allSizes
+        Attr.Create "data-testid" "section-parent"
+      ] [
+        section "account-section" "Account settings"
+        section "notification-section" "Notifications"
+      ]
+      div [ Attr.Create "data-testid" "following-content" ] [ text "Following content" ]
+      div [ Attr.Style "height" "120px" ] [
+        Container.create (content "Page shell", attrs = [ Attr.Create "data-testid" "default-shell" ])
+      ]
+    ]
+
   let private expansionPanelPage () =
     let expanded1 = Var.Create true
     let expanded2 = Var.Create false
@@ -3709,6 +3741,8 @@ module Pages =
     | "dialog-documentation" -> appearancePage (Weave.Docs.Examples.DialogExamples.render ())
     | "drawer-documentation" -> appearancePage (Weave.Docs.Examples.DrawerExamples.render ())
     | "docs-container" -> appearancePage (Weave.Docs.Examples.ContainerExamples.render ())
+    | "container-block-sections" -> containerHeightPage false
+    | "container-column-sections" -> containerHeightPage true
     | "docs-field" -> appearancePage (Weave.Docs.Examples.FieldExamples.render ())
     | "docs-dropdown" -> appearancePage (Weave.Docs.Examples.DropdownMenuExamples.render ())
     | "docs-scrolltop" -> appearancePage (Weave.Docs.Examples.ScrollToTopExamples.render ())

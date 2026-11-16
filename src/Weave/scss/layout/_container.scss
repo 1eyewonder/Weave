@@ -20,6 +20,11 @@
   flex-direction: column;
 }
 
+.weave-container--content-height {
+  height: auto;
+  flex-grow: 0;
+}
+
 @media (min-width: $breakpoint-sm) {
   .weave-container--gutters {
     padding-left: 24px;

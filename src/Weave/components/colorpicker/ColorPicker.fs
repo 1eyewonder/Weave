@@ -82,7 +82,7 @@ type ColorPicker =
 
     let swatches = defaultArg palette (View.Const ColorPicker.defaultPalette)
 
-    let color = value.View |> View.Map(ColorPickerState.applyAlphaPolicy allowsAlpha)
+    let description = ColorPickerRender.opacityDescription allowsAlpha value.View
 
     div [
       cl Css.``weave-colorpicker``
@@ -95,8 +95,16 @@ type ColorPicker =
       ColorPickerState.synchronize state
 
       div [ cl Css.``weave-colorpicker__header`` ] [
-        span [] [ Doc.TextView labelText ]
-        ColorPickerRender.preview color
+        div [] [
+          span [] [ Doc.TextView labelText ]
+          description
+          |> Doc.BindView(fun hint ->
+            if hint.Length = 0 then
+              Doc.Empty
+            else
+              div [ Typography.caption ] [ text hint ])
+        ]
+        ColorPickerRender.preview value.View
       ]
 
       ColorPickerRender.spectrum state
@@ -135,7 +143,7 @@ type ColorPicker =
     let trigger = Var.Create<Dom.Element option> None
     let id = WeaveId.create "weave-colorpicker"
 
-    let color = value.View |> View.Map(ColorPickerState.applyAlphaPolicy allowsAlpha)
+    let description = ColorPickerRender.opacityDescription allowsAlpha value.View
 
     let openView = (editable, openVar.View) ||> View.Map2 (&&)
 
@@ -191,7 +199,7 @@ type ColorPicker =
       Button.create (
         div [ cl Css.``weave-colorpicker-field__label`` ] [
           span [] [ Doc.TextView labelText ]
-          ColorPickerRender.preview color
+          ColorPickerRender.preview value.View
         ],
         (fun () -> openVar.Value <- not openVar.Value),
         enabled = editable,
@@ -199,6 +207,10 @@ type ColorPicker =
           Button.Variant.outlined
           Attr.Create "aria-haspopup" "dialog"
           Attr.Create "aria-controls" id
+          Attr.DynamicPred
+            "aria-description"
+            (description |> View.Map(fun hint -> hint.Length > 0))
+            description
 
           Attr.DynamicCustom
             (fun element isOpen -> element.SetAttribute("aria-expanded", if isOpen then "true" else "false"))

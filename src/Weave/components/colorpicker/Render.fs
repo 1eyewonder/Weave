@@ -11,6 +11,19 @@ open Weave.CssHelpers.Core
 [<JavaScript; RequireQualifiedAccess>]
 module internal ColorPickerRender =
 
+  let opacityDescription allowsAlpha (color: View<PickerColor>) =
+    if allowsAlpha then
+      View.Const ""
+    else
+      color
+      |> View.MapCached(fun current ->
+        if current.Alpha = 255 then
+          ""
+        else
+          sprintf
+            "Current opacity is %.1f%%. Edits make this color opaque."
+            (float current.Alpha * 100.0 / 255.0))
+
   let preview color =
     span [ cl Css.``weave-colorpicker__preview``; Attr.Create "aria-hidden" "true" ] [
       span [ Attr.DynamicStyle "background-color" (color |> View.Map PickerColor.toCss) ] []

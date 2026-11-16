@@ -24,6 +24,12 @@
         max-width: 100%;
         flex-shrink: 0;
       }
+
+      .thumbnail-override {
+        width: 64px;
+        height: 40px;
+        object-fit: contain;
+      }
     </style>
   </head>
   <body>
@@ -48,13 +54,26 @@
       </div>
 
       <div id="card-media" class="weave-card">
-      <div class="weave-card__media" style="height: 80px">
-        <img id="card-media-image" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+        <div class="weave-card__media" style="height: 80px">
+          <img id="card-media-image" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+        </div>
+        <div class="weave-card__content">Media content</div>
       </div>
-      <div class="weave-card__content">Media content</div>
-    </div>
-    <div id="card-elevated" class="weave-card weave-card--elevated">
+      <div id="card-picture" class="weave-card">
+        <div class="weave-card__media">
+          <picture>
+            <source media="(max-width: 600px)" srcset="../../../src/Weave.Docs/wwwroot/assets/templates/dashboard-light.jpg" />
+            <img alt="Dashboard starter preview" src="../../../src/Weave.Docs/wwwroot/assets/templates/dashboard-dark.jpg" />
+          </picture>
+        </div>
+      </div>
+      <div id="card-elevated" class="weave-card weave-card--elevated">
         <div class="weave-card__content">Elevated content</div>
+      </div>
+      <div id="card-action-only" class="weave-card">
+        <button type="button" class="weave-card__action-area">
+          <div class="weave-card__content">Open dashboard</div>
+        </button>
       </div>
       <div id="card-narrow-header" class="weave-card" style="width: 224px">
         <div class="weave-card__header">

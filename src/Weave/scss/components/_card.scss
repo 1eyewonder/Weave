@@ -77,7 +77,8 @@
 
 .weave-card__media > img,
 .weave-card__media > video,
-.weave-card__media > picture {
+.weave-card__media > picture,
+:where(.weave-card__media > picture) > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -133,58 +134,15 @@
   flex: 1 1 auto;
   min-height: 0;
   padding: density-spacing(8, 4) density-spacing(12, 4);
+
+  &:where(:not(:first-child)) {
+    padding-block-start: 0;
+  }
 }
 
 .weave-card__header + .weave-card__media {
   display: block;
   overflow: hidden;
-}
-
-.weave-card__media > img,
-.weave-card__media > video,
-.weave-card__media > picture {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.weave-card__action-area {
-  position: relative;
-  display: block;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  color: inherit;
-  text-align: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-.weave-card__action-area::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-color: var(--palette-action-default-hover);
-  opacity: 0;
-  @include transition(opacity, short);
-}
-
-.weave-card__action-area:hover::after {
-  opacity: 1;
-}
-
-.weave-card__action-area:focus-visible {
-  outline: 2px solid var(--palette-primary);
-  outline-offset: -2px;
-}
-
-.weave-card__content {
-  padding-top: 0;
 }
 
 .weave-card__actions {

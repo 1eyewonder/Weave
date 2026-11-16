@@ -100,6 +100,86 @@ type CardLayoutTests() =
   }
 
   [<Theory>]
+  [<InlineData(320, "dashboard-light.jpg")>]
+  [<InlineData(1280, "dashboard-dark.jpg")>]
+  member this.``Given a responsive picture When media has a fixed height Then the selected image fills the region``
+    (width: int, source: string)
+    = task {
+    do! this.LoadFixture(width)
+    let media = this.Page.Locator("#card-picture .weave-card__media")
+    let image = media.Locator("img")
+    let! _ = media.EvaluateAsync("el => el.style.height = '80px'")
+    let! selected = image.EvaluateAsync<string>("img => img.currentSrc")
+    Assert.EndsWith(source, selected)
+    let! region = media.BoundingBoxAsync()
+    and! imageBox = image.BoundingBoxAsync()
+    assertFillsWidth "media" "selected picture image" region imageBox
+    assertFillsHeight "media" "selected picture image" region imageBox
+    do! this.Expect(image).ToHaveCSSAsync("object-fit", "cover")
+  }
+
+  [<Fact>]
+  member this.``Given a responsive picture When media has automatic height Then the image aspect ratio determines the card height``
+    ()
+    = task {
+    do! this.LoadFixture(320)
+    let media = this.Page.Locator("#card-picture .weave-card__media")
+    let image = media.Locator("img")
+    let! region = media.BoundingBoxAsync()
+    and! imageBox = image.BoundingBoxAsync()
+
+    let! ratio =
+      image.EvaluateAsync<float32>("img => img.naturalHeight / img.naturalWidth")
+
+    assertFillsWidth "media" "picture image" region imageBox
+    assertFillsHeight "media" "picture image" region imageBox
+    Assert.InRange(abs (region.Height - region.Width * ratio), 0.0f, tolerance)
+  }
+
+  [<Fact>]
+  member this.``Given caller styles on a picture image When rendered Then its dimensions and fit are respected``
+    ()
+    = task {
+    do! this.LoadFixture()
+    let image = this.Page.Locator("#card-picture img")
+    let! _ = image.EvaluateAsync("img => img.classList.add('thumbnail-override')")
+    do! this.Expect(image).ToHaveCSSAsync("width", "64px")
+    do! this.Expect(image).ToHaveCSSAsync("height", "40px")
+    do! this.Expect(image).ToHaveCSSAsync("object-fit", "contain")
+  }
+
+  [<Theory>]
+  [<InlineData("compact", "8px")>]
+  [<InlineData("standard", "12px")>]
+  [<InlineData("spacious", "16px")>]
+  member this.``Given content alone in a card or action area When density changes Then both vertical insets follow it``
+    (density: string, expected: string)
+    = task {
+    do! this.LoadFixture(320)
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        "(density) => document.body.classList.add('weave-density--' + density)",
+        density
+      )
+
+    for card in [ "#card-elevated"; "#card-action-only" ] do
+      let content = this.Page.Locator(card + " .weave-card__content")
+      do! this.Expect(content).ToHaveCSSAsync("padding-top", expected)
+      do! this.Expect(content).ToHaveCSSAsync("padding-bottom", expected)
+  }
+
+  [<Theory>]
+  [<InlineData("#card-full")>]
+  [<InlineData("#card-media")>]
+  member this.``Given content after a header or media When rendered Then it keeps its compact top inset``
+    (card: string)
+    = task {
+    do! this.LoadFixture()
+    do! this.Expect(this.Page.Locator(card + " .weave-card__content")).ToHaveCSSAsync("padding-top", "0px")
+  }
+
+  [<Theory>]
   [<InlineData(320)>]
   [<InlineData(390)>]
   [<InlineData(1280)>]

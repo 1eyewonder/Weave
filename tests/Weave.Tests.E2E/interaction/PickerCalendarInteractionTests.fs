@@ -133,6 +133,52 @@ type PickerCalendarInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``Given a pending start that becomes unavailable When choosing a new range Then the picker recovers in place``
+    ()
+    = task {
+    do! this.NavigateTo "pickers"
+    do! (this.Button "Window range").ClickAsync()
+    let value = this.Page.Locator "#window-range-value"
+    do! (this.Button "2026-11-01").ClickAsync()
+    do! (this.Button "2026-11-02").ClickAsync()
+    do! this.Expect(value).ToHaveTextAsync "1-2"
+
+    let start = this.Button "2026-11-03"
+    do! start.PressAsync "Enter"
+    do! this.Expect(start).ToHaveAttributeAsync("aria-pressed", "true")
+    do! start.PressAsync "F4"
+    do! this.Expect(start).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Expect(start).ToHaveAttributeAsync("aria-pressed", "false")
+    let status = this.Page.GetByRole(AriaRole.Status)
+    do! this.Expect(status).ToContainTextAsync "Choose a new start date"
+    do! this.Expect(start).ToBeFocusedAsync()
+
+    do! this.Page.Keyboard.PressAsync "ArrowRight"
+    do! this.Page.Keyboard.PressAsync "ArrowRight"
+    do! this.Page.Keyboard.PressAsync "Enter"
+    do! this.Expect(this.Button "2026-11-05").ToHaveAttributeAsync("aria-pressed", "true")
+    do! this.Expect(status).ToHaveTextAsync ""
+    do! this.Expect(value).ToHaveTextAsync "1-2"
+    do! this.Page.Keyboard.PressAsync "ArrowRight"
+    do! this.Page.Keyboard.PressAsync "Enter"
+    do! this.Expect(value).ToHaveTextAsync "5-6"
+  }
+
+  [<Fact>]
+  member this.``Given a pending start that stays available When other dates close Then choosing an end commits the original start``
+    ()
+    = task {
+    do! this.NavigateTo "pickers"
+    do! (this.Button "Window range").ClickAsync()
+    let start = this.Button "2026-11-05"
+    do! start.ClickAsync()
+    do! start.PressAsync "F4"
+    do! this.Expect(this.Button "2026-11-03").ToHaveAttributeAsync("aria-disabled", "true")
+    do! (this.Button "2026-11-07").ClickAsync()
+    do! this.Expect(this.Page.Locator "#window-range-value").ToHaveTextAsync "5-7"
+  }
+
+  [<Fact>]
   member this.``Given multiple allowed months When opening the calendar Then navigation starts at the earliest window``
     ()
     = task {

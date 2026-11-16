@@ -64,6 +64,11 @@ type DateRangePicker =
     let selected = (pending.View, dates) ||> View.Map2 selection
 
     let content () =
+      let discardUnavailableStart availability =
+        if pending.Value |> Option.exists (DateAvailability.allows availability >> not) then
+          Var.Set pending None
+          Var.Set message "The start date is no longer available. Choose a new start date."
+
       let select date =
         let restrictions = Calendar.sample availability
 
@@ -84,6 +89,8 @@ type DateRangePicker =
             Var.Set message "Range includes an unavailable date. Choose another end date."
 
       div [] [
+        availability |> Doc.sink discardUnavailableStart
+
         Calendar.render {
           Initial = dates |> View.Map(Option.map fst)
           Selection = selected

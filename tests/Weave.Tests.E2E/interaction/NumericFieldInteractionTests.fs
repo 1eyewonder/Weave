@@ -1,9 +1,46 @@
 namespace Weave.Tests.E2E
 
 open Xunit
+open Microsoft.Playwright
 
+[<Collection("Browser input")>]
 type NumericFieldInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("numeric-int")>]
+  [<InlineData("numeric-float")>]
+  member this.``a pressed spin button retains its click and focus when visibility stays true``
+    (testId: string)
+    = task {
+    do! this.NavigateTo("numericfield")
+    let field = this.Page.GetByTestId(testId)
+    let input = field.Locator("input")
+
+    let increment =
+      field.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Increment"))
+
+    let setSix =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Set spin values to six"))
+
+    let setZero =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Set spin values to zero"))
+
+    do! increment.FocusAsync()
+    do! increment.HoverAsync()
+    do! this.Page.Mouse.DownAsync()
+    do! setSix.DispatchEventAsync("click")
+    do! this.Expect(input).ToHaveValueAsync("6")
+    do! this.Expect(increment).ToBeFocusedAsync()
+    do! this.Page.Mouse.UpAsync()
+    do! this.Expect(input).ToHaveValueAsync("7")
+
+    do! setZero.ClickAsync()
+    do! this.Expect(field.GetByRole(AriaRole.Button)).ToHaveCountAsync(0)
+    do! setSix.ClickAsync()
+    do! field.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Decrement")).PressAsync("Enter")
+    do! this.Expect(input).ToHaveValueAsync("5")
+  }
 
   [<Theory>]
   [<InlineData("numeric-int")>]

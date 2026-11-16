@@ -193,7 +193,7 @@ type NumericField =
     // Spin buttons (up / down) — only rendered when showSpinButtons is true.
     let spinButtonsDoc =
       showSpinButtons
-      |> Doc.BindView(fun show ->
+      |> View.MapCached(fun show ->
         if show then
           div [
             Css.``weave-field__spin-buttons`` |> cl
@@ -223,6 +223,7 @@ type NumericField =
           ]
         else
           Doc.Empty)
+      |> Doc.EmbedView
 
     [
       syncToString
@@ -424,7 +425,7 @@ type NumericField =
 
     let spinButtonsDoc =
       showSpinButtons
-      |> Doc.BindView(fun show ->
+      |> View.MapCached(fun show ->
         if show then
           div [
             Css.``weave-field__spin-buttons`` |> cl
@@ -454,6 +455,7 @@ type NumericField =
           ]
         else
           Doc.Empty)
+      |> Doc.EmbedView
 
     [
       syncToString

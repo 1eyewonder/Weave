@@ -186,6 +186,19 @@ type WeaveList =
 
       let isSelectable = def.Value.IsSome || hasNestedLeafValues
 
+      let checkbox =
+        span [
+          cl Css.``weave-list-item__checkbox``
+          Attr.DynamicClassPred Css.``weave-list-item__checkbox--checked`` isSelected
+          Attr.DynamicClassPred Css.``weave-list-item__checkbox--indeterminate`` isIndeterminate
+          if hasNestedLeafValues then
+            on.clickView (View.zip interactable enabledLeafValues) (fun _ ev (isInteractable, enabled) ->
+              ev.StopPropagation()
+
+              if isInteractable then
+                handleParentCheckboxClick enabled)
+        ] []
+
       let itemRow =
         div [
           cl Css.``weave-list-item``
@@ -198,17 +211,11 @@ type WeaveList =
           yield! def.Attrs
         ] [
           if isMultiSelect && isSelectable then
-            span [
-              cl Css.``weave-list-item__checkbox``
-              Attr.DynamicClassPred Css.``weave-list-item__checkbox--checked`` isSelected
-              Attr.DynamicClassPred Css.``weave-list-item__checkbox--indeterminate`` isIndeterminate
-              if hasNestedLeafValues then
-                on.clickView (View.zip interactable enabledLeafValues) (fun _ ev (isInteractable, enabled) ->
-                  ev.StopPropagation()
-
-                  if isInteractable then
-                    handleParentCheckboxClick enabled)
-            ] []
+            if hasNestedLeafValues then
+              enabledLeafValues
+              |> Doc.BindView(fun enabled -> if Set.isEmpty enabled then Doc.Empty else checkbox)
+            else
+              checkbox
 
           div [ cl Css.``weave-list-item__content`` ] [
             def.Content

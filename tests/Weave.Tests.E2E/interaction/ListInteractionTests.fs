@@ -7,6 +7,26 @@ type ListInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``parent checkbox follows availability of all leaves``() = task {
+    do! this.NavigateTo("list")
+    let group = this.Page.GetByTestId("bulk-list")
+    let row = group.Locator(".weave-list-item").First
+    let checkbox = row.Locator(".weave-list-item__checkbox")
+    let toggle = group.GetByText("Toggle department availability")
+    do! this.Expect(checkbox).ToHaveCountAsync(1)
+    do! toggle.ClickAsync()
+    do! this.Expect(checkbox).ToHaveCountAsync(0)
+    do! row.ClickAsync()
+    do! this.Expect(group.Locator(".weave-list-nested")).ToHaveCountAsync(0)
+    do! toggle.ClickAsync()
+    do! this.Expect(checkbox).ToHaveCountAsync(1)
+    do! checkbox.ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("bulk-selection")).ToHaveTextAsync("archived,sales,support")
+    do! toggle.ClickAsync()
+    do! this.Expect(checkbox).ToHaveCountAsync(0)
+  }
+
+  [<Fact>]
   member this.``parent selection follows enabled leaves and preserves a disabled selection``() = task {
     do! this.NavigateTo("list")
     let group = this.Page.GetByTestId("bulk-list")

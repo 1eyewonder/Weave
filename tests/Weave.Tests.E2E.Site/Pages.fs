@@ -2026,6 +2026,7 @@ module Pages =
     let nestedExpanded = Var.Create false
     let bulkSelection = Var.Create(Set.singleton "archived")
     let archivedDisabled = Var.Create true
+    let departmentsDisabled = Var.Create false
 
     div [] [
       selected.View
@@ -2101,8 +2102,8 @@ module Pages =
               value = "group",
               expanded = Var.Create true,
               nestedChildren = [
-                ListItem.create (text "Sales", value = "sales")
-                ListItem.create (text "Support", value = "support")
+                ListItem.create (text "Sales", value = "sales", disabled = departmentsDisabled.View)
+                ListItem.create (text "Support", value = "support", disabled = departmentsDisabled.View)
                 ListItem.create (text "Archived", value = "archived", disabled = archivedDisabled.View)
               ]
             )
@@ -2115,6 +2116,7 @@ module Pages =
           selectedValues = bulkSelection
         )
         Button.create (text "Toggle archived availability", fun () -> Var.Update archivedDisabled not)
+        Button.create (text "Toggle department availability", fun () -> Var.Update departmentsDisabled not)
         Button.create (text "Select group value", fun () -> Var.Set bulkSelection (Set.singleton "group"))
         div [ Attr.Create "data-testid" "bulk-selection" ] [
           Doc.TextView(bulkSelection.View |> View.Map(String.concat ","))

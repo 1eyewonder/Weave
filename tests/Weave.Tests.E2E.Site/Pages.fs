@@ -730,9 +730,20 @@ module Pages =
     let value = Var.Create initial
 
     div [] [
-      TextField.multiLine (value, labelText = View.Const "Notes", maxLength = 50)
+      TextField.multiLine (
+        value,
+        labelText = View.Const "Notes",
+        maxLength = 50,
+        inputAttrs = [ Attr.Create "minlength" "10" ]
+      )
       output [] [ textView value.View ]
       button [ on.click (fun _ _ -> value.Set initial) ] [ text "Restore notes" ]
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Summary",
+        maxLength = 50,
+        inputAttrs = [ Attr.Create "minlength" "10" ]
+      )
     ]
 
   let private selectPage () =

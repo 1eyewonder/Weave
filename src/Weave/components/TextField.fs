@@ -50,6 +50,7 @@ type TextField =
     // A queued render may run after a newer input event.
     let nextValue = display value.Value
 
+    // Reassigning the same text can clear native minlength validation.
     if As<string> element?value <> nextValue then
       element?value <- nextValue
 

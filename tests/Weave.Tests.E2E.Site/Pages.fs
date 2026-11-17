@@ -2178,7 +2178,7 @@ module Pages =
       div [ Attr.Create "data-testid" "chip-actions" ] [ Doc.TextView(chipActions.View |> View.Map string) ]
       div [ Attr.Create "data-testid" "chip-closes" ] [ Doc.TextView(chipCloses.View |> View.Map string) ]
       Chip.create (
-        text "Both",
+        textView (chipActions.View |> View.Map(fun count -> $"Item %d{count}")),
         onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
         onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
         attrs = [ Attr.Create "data-testid" "chip-both" ]
@@ -2206,6 +2206,7 @@ module Pages =
 
   let private chipsetPage () =
     let selected = Var.Create<string option> None
+    let removed = Var.Create ""
 
     div [] [
       selected.View
@@ -2240,9 +2241,11 @@ module Pages =
             ChipItem.create (text "Disabled", "disabled", closable = true, disabled = View.Const true)
             ChipItem.create (text "Three", "three", closable = true)
           ],
-          selectedValue = Var.Create None,
-          onClose = (fun _ -> ())
+          selectedValues = Var.Create Set.empty,
+          selectionMode = ChipSet.SelectionMode.Multi,
+          onClose = removed.Set
         )
+        div [ Attr.Create "data-testid" "removed-chip" ] [ textView removed.View ]
       ]
     ]
 

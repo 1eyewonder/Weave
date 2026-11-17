@@ -474,11 +474,21 @@ textarea.weave-field__input {
   user-select: none;
   transition: background-color var(--weave-duration-short) $ease-standard;
 
-  &:hover {
+  &:focus-visible {
+    outline: 2px solid var(--palette-primary);
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    color: var(--palette-action-disabled);
+    cursor: default;
+  }
+
+  &:enabled:hover {
     background-color: var(--palette-action-default-hover);
   }
 
-  &:active {
+  &:enabled:active {
     background-color: var(--palette-action-default-active);
   }
 

@@ -629,6 +629,8 @@ module Pages =
   let private numericFieldPage () =
     let intValue = Var.Create 5
     let floatValue = Var.Create 5.0
+    let readOnly = Var.Create false
+    let enabled = Var.Create true
 
     let setValues value =
       intValue.Set value
@@ -651,6 +653,32 @@ module Pages =
       ]
       button [ on.click (fun _ _ -> setValues 6) ] [ text "Set spin values to six" ]
       button [ on.click (fun _ _ -> setValues 0) ] [ text "Set spin values to zero" ]
+      div [ Attr.Create "data-testid" "bounded-int" ] [
+        NumericField.create (
+          Var.Create 5,
+          min = 3,
+          max = 7,
+          step = View.Const 2,
+          enableArrowKeys = View.Const false,
+          enabled = enabled.View,
+          readOnly = readOnly.View,
+          labelText = View.Const "Bounded integer"
+        )
+      ]
+      div [ Attr.Create "data-testid" "bounded-float" ] [
+        NumericField.create (
+          Var.Create 5.0,
+          min = 4.5,
+          max = 5.5,
+          step = View.Const 0.5,
+          enableArrowKeys = View.Const false,
+          enabled = enabled.View,
+          readOnly = readOnly.View,
+          labelText = View.Const "Bounded decimal"
+        )
+      ]
+      button [ on.click (fun _ _ -> readOnly.Update not) ] [ text "Toggle read-only" ]
+      button [ on.click (fun _ _ -> enabled.Update not) ] [ text "Toggle enabled" ]
       NumericField.create (
         Var.Create 5,
         labelText = View.Const "Standard Numeric",

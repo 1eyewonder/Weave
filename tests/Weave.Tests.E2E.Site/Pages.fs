@@ -1651,6 +1651,14 @@ module Pages =
       div [ Attr.Create "data-testid" "clicked-row" ] [ textView clicked.View ]
       Table.create (
         columns (),
+        View.Const rows,
+        fst,
+        (fun (name, _) -> Var.Set clicked name),
+        caption = text "Positional callback",
+        attrs = [ Attr.Create "data-testid" "positional-callback-table"; Table.hiddenCaption ]
+      )
+      Table.create (
+        columns (),
         View.Const [],
         fst,
         emptyContent = text "No rows",
@@ -1708,7 +1716,17 @@ module Pages =
         attrs = [ Attr.Create "data-testid" "header-attributes-table"; Table.hiddenCaption ]
       )
       button [ on.click (fun _ _ -> scopedHeaderId.Set "new-scoped-name") ] [ text "Update scoped ID" ]
-      Table.createWithRowLabel (
+      Table.create (
+        columns (),
+        View.Const rows,
+        fst,
+        headerAttrs = (Map.empty |> Map.add "name" [ attr.id "combined-header-id" ]),
+        rowLabel = (fun (name, _) -> "Named " + name),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        caption = text "Named rows and header",
+        attrs = [ Attr.Create "data-testid" "combined-overload-table"; Table.hiddenCaption ]
+      )
+      Table.create (
         columns (),
         View.Const rows,
         (fun (name, _) -> "opaque-" + name),
@@ -1718,7 +1736,7 @@ module Pages =
         caption = text "Named selection",
         attrs = [ Attr.Create "data-testid" "named-selection-table"; Table.hiddenCaption ]
       )
-      Table.createWithRowLabel (
+      Table.create (
         columns (),
         View.Const rows,
         (fun (name, _) -> "opaque-" + name),

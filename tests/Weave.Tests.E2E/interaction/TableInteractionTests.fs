@@ -13,6 +13,31 @@ type TableInteractionTests(fixture: TestFixture) =
     this.Rows.Nth(index).Locator("td").First
 
   [<Fact>]
+  member this.``create overloads preserve positional callbacks and combine labels with header attributes``() =
+    task {
+      do! this.NavigateTo("table")
+      let legacy = this.Page.GetByTestId("positional-callback-table")
+
+      do!
+        legacy.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Alpha", Exact = true)).ClickAsync()
+
+      do! this.Expect(this.Page.GetByTestId("clicked-row")).ToHaveTextAsync("Alpha")
+      let combined = this.Page.GetByTestId("combined-overload-table")
+      do! this.Expect(combined.Locator("thead #combined-header-id")).ToHaveCountAsync(1)
+      do! this.Expect(combined.Locator("tbody #combined-header-id")).ToHaveCountAsync(0)
+
+      do!
+        this
+          .Expect(
+            combined.GetByRole(
+              AriaRole.Checkbox,
+              LocatorGetByRoleOptions(Name = "Select row Named Alpha", Exact = true)
+            )
+          )
+          .ToHaveCountAsync(1)
+    }
+
+  [<Fact>]
   member this.``clickable row exposes a button in its first cell``() = task {
     do! this.NavigateTo("table")
 

@@ -210,6 +210,7 @@ type Table =
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
   /// <param name="headerAttrs">Header-only attributes keyed by column key; shared column attributes remain unchanged.</param>
   /// <param name="rowLabel">Optional descriptive label for each row's selection checkbox. Takes precedence over the row header. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
+  [<Name "create_1">]
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
@@ -458,6 +459,7 @@ type Table =
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
+  [<Name "create">]
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
@@ -489,14 +491,13 @@ type Table =
 
   /// <summary>Creates a table with caller-supplied labels for row selection checkboxes.</summary>
   /// <param name="rowLabel">Returns a descriptive label for each row. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
-  /// <param name="headerAttrs">Optional header-only attributes keyed by column key.</param>
-  static member createWithRowLabel<'T>
+  [<Name "create_2">]
+  static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
       rows: View<'T list>,
       rowKey: 'T -> string,
       rowLabel: 'T -> string,
-      ?headerAttrs: Map<string, Attr list>,
       ?onRowClick: 'T -> unit,
       ?selectedKey: Var<string option>,
       ?selectedKeys: Var<Set<string>>,
@@ -510,8 +511,8 @@ type Table =
       columns,
       rows,
       rowKey,
-      defaultArg headerAttrs Map.empty,
-      rowLabel = rowLabel,
+      Map.empty,
+      ?rowLabel = Some rowLabel,
       ?onRowClick = onRowClick,
       ?selectedKey = selectedKey,
       ?selectedKeys = selectedKeys,

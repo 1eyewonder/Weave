@@ -1579,6 +1579,8 @@ module Pages =
     let clicked = Var.Create "none"
     let selected = Var.Create(None: string option)
     let checkedRows = Var.Create(Set.ofList [ "Alpha" ])
+    let nameHeaderId = Var.Create "select-name"
+    let scopedHeaderId = Var.Create "scoped-name"
 
     let externalSort =
       Var.Create(
@@ -1649,6 +1651,14 @@ module Pages =
       div [ Attr.Create "data-testid" "clicked-row" ] [ textView clicked.View ]
       Table.create (
         columns (),
+        View.Const rows,
+        fst,
+        (fun (name, _) -> Var.Set clicked name),
+        caption = text "Positional callback",
+        attrs = [ Attr.Create "data-testid" "positional-callback-table"; Table.hiddenCaption ]
+      )
+      Table.create (
+        columns (),
         View.Const [],
         fst,
         emptyContent = text "No rows",
@@ -1673,13 +1683,77 @@ module Pages =
         ]
       )
       Table.create (
-        columns (),
+        columns ()
+        |> List.map (fun column ->
+          let id =
+            if column.Key = "name" then
+              Attr.Dynamic "id" nameHeaderId.View
+            else
+              attr.id "select-count"
+
+          { column with Attrs = [ id; Attr.Class "selection-column" ] }),
         View.Const rows,
         fst,
         selectedKeys = checkedRows,
         rowHeader = "name",
         caption = text "Selectable rows",
         attrs = [ Attr.Create "data-testid" "select-table"; Table.hiddenCaption ]
+      )
+      button [ on.click (fun _ _ -> nameHeaderId.Set "updated-name") ] [ text "Update column ID" ]
+      Table.create (
+        columns ()
+        |> List.map (fun column ->
+          let id =
+            if column.Key = "name" then
+              Attr.Dynamic "id" scopedHeaderId.View
+            else
+              attr.id "scoped-count"
+
+          {
+            column with
+                Header = span [ id ] [ column.Header ]
+                Attrs = [ Attr.Class "shared-cell" ]
+          }),
+        View.Const rows,
+        fst,
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        rowHeader = "name",
+        caption = text "Header attributes",
+        attrs = [ Attr.Create "data-testid" "header-attributes-table"; Table.hiddenCaption ]
+      )
+      button [ on.click (fun _ _ -> scopedHeaderId.Set "new-scoped-name") ] [ text "Update scoped ID" ]
+      Table.create (
+        columns ()
+        |> List.map (fun column ->
+          if column.Key = "name" then
+            { column with Header = span [ attr.id "combined-header-id" ] [ column.Header ] }
+          else
+            column),
+        View.Const rows,
+        fst,
+        rowLabel = (fun (name, _) -> "Named " + name),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        caption = text "Named rows and header",
+        attrs = [ Attr.Create "data-testid" "combined-overload-table"; Table.hiddenCaption ]
+      )
+      Table.create (
+        columns (),
+        View.Const rows,
+        (fun (name, _) -> "opaque-" + name),
+        (fun (name, count) -> if name = "Gamma" then " " else $"%s{name}: %d{count} items"),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        rowHeader = "name",
+        caption = text "Named selection",
+        attrs = [ Attr.Create "data-testid" "named-selection-table"; Table.hiddenCaption ]
+      )
+      Table.create (
+        columns (),
+        View.Const rows,
+        (fun (name, _) -> "opaque-" + name),
+        (fun (name, _) -> if name = "Beta" then "Named Beta" else " "),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        caption = text "Empty selection labels",
+        attrs = [ Attr.Create "data-testid" "empty-selection-labels"; Table.hiddenCaption ]
       )
       Table.create (
         columns (),

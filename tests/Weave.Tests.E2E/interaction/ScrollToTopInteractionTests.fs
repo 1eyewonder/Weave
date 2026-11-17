@@ -3,8 +3,63 @@ namespace Weave.Tests.E2E
 open Microsoft.Playwright
 open Xunit
 
+[<Collection("Browser input")>]
+type ScrollToTopKeyboardTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("scroll-page", "scroll-toggle", "html", false)>]
+  [<InlineData("scroll-panel", "panel-start", "#scroll-target", false)>]
+  [<InlineData("scroll-panel", "panel-start", "#scroll-target", true)>]
+  member this.``after returning to the top Tab continues at the start of the target``
+    (testId: string, startId: string, target: string, removeTabIndex: bool)
+    = task {
+    do! this.NavigateTo("scroll-to-top")
+    let button = this.Page.GetByTestId(testId)
+    let scroller = this.Page.Locator(target)
+
+    if removeTabIndex then
+      let! _ = scroller.EvaluateAsync("el => el.removeAttribute('tabindex')")
+      ()
+
+    let! _ = scroller.EvaluateAsync("el => el.scrollTop = 600")
+    do! this.Expect(button).ToBeVisibleAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(button).ToBeHiddenAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(this.Page.GetByTestId(startId)).ToBeFocusedAsync()
+
+    if removeTabIndex then
+      do! this.Expect(scroller).Not.ToHaveAttributeAsync("tabindex", "-1")
+  }
+
 type ScrollToTopInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``reused buttons read the current scroll position and can activate again``() = task {
+    do! this.NavigateTo("scroll-to-top")
+    let pageButton = this.Page.GetByTestId("scroll-page")
+    let panelButton = this.Page.GetByTestId("scroll-panel")
+    let toggle = this.Page.GetByTestId("scroll-toggle")
+    let panel = this.Page.Locator("#scroll-target")
+    let! _ = toggle.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToHaveCountAsync(0)
+    do! this.Expect(panelButton).ToHaveCountAsync(0)
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        "() => { window.scrollTo(0, 600); document.getElementById('scroll-target').scrollTop = 400; }"
+      )
+
+    let! _ = toggle.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToBeVisibleAsync()
+    do! this.Expect(panelButton).ToBeVisibleAsync()
+    let! _ = panelButton.EvaluateAsync("el => el.click()")
+    do! this.Expect(panel).ToHaveJSPropertyAsync("scrollTop", 0)
+    let! _ = pageButton.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToBeHiddenAsync()
+  }
 
   [<Fact>]
   member this.``page threshold is inclusive and hidden buttons are inaccessible``() = task {

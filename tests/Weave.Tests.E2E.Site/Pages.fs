@@ -2726,6 +2726,9 @@ module Pages =
   let private scrollToTopPage (offset: int) (initial: bool) =
     let mounted = Var.Create true
 
+    let whileShown control =
+      mounted.View |> Doc.BindView(fun show -> if show then control else Doc.Empty)
+
     div [] [
       Button.create (
         text "Toggle page button",
@@ -2743,7 +2746,10 @@ module Pages =
           if initial then
             on.afterRender (fun el -> el?scrollTop <- 450)
         ] [
-          div [ Attr.Style "height" "1400px"; Attr.Style "width" "1600px" ] [ text "Panel content" ]
+          div [ Attr.Style "height" "1400px"; Attr.Style "width" "1600px" ] [
+            button [ Attr.Create "data-testid" "panel-start" ] [ text "Panel start" ]
+            text "Panel content"
+          ]
         ]
         ScrollToTop.create (
           selector = "#scroll-target",
@@ -2756,21 +2762,19 @@ module Pages =
             Button.Color.secondary
           ]
         )
+        |> whileShown
       ]
-      mounted.View
-      |> Doc.BindView(fun show ->
-        if show then
-          ScrollToTop.create (
-            topOffset = offset,
-            attrs = [ Attr.Create "data-testid" "scroll-page"; Button.Color.primary ]
-          )
-        else
-          Doc.Empty)
+      ScrollToTop.create (
+        topOffset = offset,
+        attrs = [ Attr.Create "data-testid" "scroll-page"; Button.Color.primary ]
+      )
+      |> whileShown
       ScrollToTop.create (
         selector = "#missing-target",
         attrs = [ Attr.Create "data-testid" "scroll-missing" ]
       )
       div [ Attr.Style "height" "1800px" ] [ text "Page content" ]
+      button [] [ text "Page end" ]
     ]
 
   let private progressPage () =

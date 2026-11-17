@@ -38,7 +38,7 @@ module internal ColorPickerState =
 
     AllowsAlpha = allowsAlpha
     Hsv = Var.Create(PickerColor.toHsv value.Value)
-    Hex = Var.Create(value.Value |> applyAlphaPolicy allowsAlpha |> PickerColor.toHex)
+    Hex = Var.Create(PickerColor.toHex value.Value)
     InvalidHex = Var.Create false
   }
 
@@ -88,14 +88,16 @@ module internal ColorPickerState =
     if canEdit state then
       match PickerColor.tryParseHex state.Hex.Value with
       | Some color ->
-        color |> setColor state
-        state.Hex.Value <- color |> applyAlphaPolicy state.AllowsAlpha |> PickerColor.toHex
+        if state.Hex.Value <> PickerColor.toHex state.Value.Value then
+          color |> setColor state
+
+        state.Hex.Value <- PickerColor.toHex state.Value.Value
         state.InvalidHex.Value <- false
       | None -> state.InvalidHex.Value <- true
 
   let synchronize state =
     let synchronizeHex color =
-      state.Hex.Value <- color |> applyAlphaPolicy state.AllowsAlpha |> PickerColor.toHex
+      state.Hex.Value <- PickerColor.toHex color
       state.InvalidHex.Value <- false
 
     Doc.Concat [

@@ -9,7 +9,54 @@ open Weave.CssHelpers
 open Weave.Icons.MaterialSymbols
 
 [<JavaScript>]
+type private TabsCaller =
+
+  static member create
+    (
+      tabs: View<Tabs.TabDef list>,
+      ?activeIndex: Var<int>,
+      ?position: Tabs.Position,
+      ?scrollBackIcon: Doc,
+      ?scrollForwardIcon: Doc,
+      ?attrs: Attr list
+    ) =
+    Tabs.create (
+      tabs,
+      ?activeIndex = activeIndex,
+      ?position = position,
+      ?scrollBackIcon = scrollBackIcon,
+      ?scrollForwardIcon = scrollForwardIcon,
+      ?attrs = attrs
+    )
+
+[<JavaScript>]
 module TabsRegressionPage =
+
+  let namedGroups () =
+    let tabs () =
+      View.Const [
+        TabItem.create ("Overview", text "Overview panel")
+        TabItem.createIconOnly (
+          Icon.create (Icon.UiActions UiActions.Settings, attrs = [ Attr.Create "aria-hidden" "true" ]),
+          text "Preferences panel",
+          label = "Settings"
+        )
+      ]
+
+    div [] [
+      Tabs.create (
+        tabs (),
+        tabListAttrs = [ Attr.Create "aria-label" "Project" ],
+        attrs = [ Attr.Create "data-testid" "project-tabs" ]
+      )
+      h2 [ attr.id "account-heading" ] [ text "Account" ]
+      Tabs.create (
+        tabs (),
+        position = Tabs.Position.Left,
+        tabListAttrs = [ Attr.Create "aria-labelledby" "account-heading" ],
+        attrs = [ Attr.Create "data-testid" "account-tabs" ]
+      )
+    ]
 
   let render () =
     let palettes = [
@@ -46,7 +93,7 @@ module TabsRegressionPage =
     ]
 
   let initial position =
-    Tabs.create (
+    TabsCaller.create (
       View.Const [
         TabItem.create ("Overview", text "Overview panel")
         TabItem.create ("Activity", text "Activity panel")

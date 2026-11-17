@@ -8,6 +8,48 @@ type NumericFieldInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Theory>]
+  [<InlineData("bounded-int", "3", "7")>]
+  [<InlineData("bounded-float", "4.5", "5.5")>]
+  member this.``bounded numeric fields expose their limits and support Tab stepping with arrow keys off``
+    (testId: string, minimum: string, maximum: string)
+    = task {
+    do! this.NavigateTo("numericfield")
+    let root = this.Page.GetByTestId(testId)
+    let input = root.GetByRole(AriaRole.Spinbutton)
+    let increment = root.GetByLabel("Increment")
+    let decrement = root.GetByLabel("Decrement")
+    do! this.Expect(input).ToHaveAttributeAsync("min", minimum)
+    do! this.Expect(input).ToHaveAttributeAsync("max", maximum)
+    do! input.PressAsync("ArrowUp")
+    do! this.Expect(input).ToHaveValueAsync("5")
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(increment).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(decrement).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Space")
+    do! this.Expect(input).ToHaveValueAsync(minimum)
+    do! this.Expect(decrement).ToBeDisabledAsync()
+    do! input.PressAsync("Tab")
+    do! this.Expect(increment).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(input).ToHaveValueAsync("5")
+    do! increment.PressAsync("Enter")
+    do! this.Expect(input).ToHaveValueAsync(maximum)
+    do! this.Expect(increment).ToBeDisabledAsync()
+    do! this.Expect(decrement).ToBeEnabledAsync()
+
+    for toggle in [ "Toggle read-only"; "Toggle enabled" ] do
+      let control =
+        this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = toggle))
+
+      do! control.ClickAsync()
+      do! this.Expect(increment).ToBeDisabledAsync()
+      do! this.Expect(decrement).ToBeDisabledAsync()
+      do! control.ClickAsync()
+      do! this.Expect(decrement).ToBeEnabledAsync()
+  }
+
+  [<Theory>]
   [<InlineData("numeric-int")>]
   [<InlineData("numeric-float")>]
   member this.``a pressed spin button retains its click and focus when visibility stays true``

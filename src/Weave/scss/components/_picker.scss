@@ -252,6 +252,36 @@
   }
   &__status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 }
+
+@media (forced-colors: active) {
+  .weave-calendar__day {
+    &[aria-current="date"] { border: 1px solid CanvasText; }
+    &--selected, &--selected:hover:not(:disabled) {
+      forced-color-adjust: none;
+      background: CanvasText;
+      color: Canvas;
+    }
+    &--selected[aria-current="date"] { border-color: Canvas; }
+    &:focus-visible { outline: 2px solid CanvasText; outline-offset: 1px; }
+    &:disabled, &[aria-disabled="true"] { color: GrayText; }
+    &--selected:disabled, &--selected[aria-disabled="true"] {
+      background: Canvas;
+      border: 1px dashed GrayText;
+    }
+  }
+
+  .weave-time-picker__hand {
+    forced-color-adjust: none;
+    fill: CanvasText;
+    line { stroke: CanvasText; }
+  }
+
+  .weave-time-picker__number {
+    &--selected { forced-color-adjust: none; color: Canvas; }
+    &:focus-visible { outline: 2px solid CanvasText; }
+    &:disabled { color: GrayText; }
+  }
+}
 @each $color in $palette-colors {
   .weave-picker--#{$color} {
     --picker-color: var(--palette-#{$color});

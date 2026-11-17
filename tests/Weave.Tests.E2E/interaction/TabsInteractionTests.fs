@@ -1,10 +1,47 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open Microsoft.Playwright
 open Xunit
 
 type TabsInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``Given two tab groups When named by text or a heading Then their tab lists have distinct accessible names``
+    ()
+    = task {
+    do! this.NavigateTo("tabs-named")
+
+    for name in [ "Project"; "Account" ] do
+      let group =
+        this.Page.GetByRole(AriaRole.Tablist, PageGetByRoleOptions(Name = name, Exact = true))
+
+      do! this.Expect(group.GetByRole(AriaRole.Tab)).ToHaveCountAsync(2)
+  }
+
+  [<Fact>]
+  member this.``Given vertical tabs When using a down arrow Then focus follows the exposed orientation``() =
+    task {
+      do! this.NavigateTo("tabs-named")
+      let group = this.Page.GetByTestId("account-tabs").GetByRole(AriaRole.Tablist)
+      do! this.Expect(group).ToHaveAttributeAsync("aria-orientation", "vertical")
+      let tabs = group.GetByRole(AriaRole.Tab)
+      do! tabs.First.PressAsync("ArrowDown")
+      do! this.Expect(tabs.Last).ToBeFocusedAsync()
+      do! this.Expect(tabs.Last).ToHaveAttributeAsync("aria-selected", "true")
+    }
+
+  [<Fact>]
+  member this.``Given an icon-only tab When selected Then the tab and panel expose its supplied name``() =
+    task {
+      do! this.NavigateTo("tabs-named")
+      let root = this.Page.GetByTestId("project-tabs")
+      let tabs = root.GetByRole(AriaRole.Tab)
+      do! tabs.First.PressAsync("ArrowRight")
+      do! this.Expect(tabs.Last).ToHaveAccessibleNameAsync("Settings")
+      do! this.Expect(root.GetByRole(AriaRole.Tabpanel)).ToHaveAccessibleNameAsync("Settings")
+    }
 
   [<Fact>]
   member this.``filled tab retains its rounded shape as hover moves away``() = task {

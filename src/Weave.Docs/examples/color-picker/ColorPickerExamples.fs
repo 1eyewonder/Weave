@@ -134,7 +134,7 @@ Doc.Concat [
     Helpers.codeSampleSection
       "Palette and opaque colors"
       (Helpers.bodyText
-        "Supply your own swatches and use Hex or RGB mode when your application needs solid colors. Edits then produce opaque values. Programmatic values are never rewritten just by mounting a picker. Pass palette = View.Const [] to omit swatches.")
+        "Supply your own swatches and use Hex or RGB mode when your application needs solid colors. A translucent value keeps its opacity in the preview and hex text until the user edits the color. Edits produce opaque values. Pass palette = View.Const [] to omit swatches.")
       content
       """let color = Var.Create(PickerColor.ofHex "#2E7D32")
 

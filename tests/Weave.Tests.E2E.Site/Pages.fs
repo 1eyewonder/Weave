@@ -629,6 +629,8 @@ module Pages =
   let private numericFieldPage () =
     let intValue = Var.Create 5
     let floatValue = Var.Create 5.0
+    let readOnly = Var.Create false
+    let enabled = Var.Create true
 
     let setValues value =
       intValue.Set value
@@ -651,6 +653,32 @@ module Pages =
       ]
       button [ on.click (fun _ _ -> setValues 6) ] [ text "Set spin values to six" ]
       button [ on.click (fun _ _ -> setValues 0) ] [ text "Set spin values to zero" ]
+      div [ Attr.Create "data-testid" "bounded-int" ] [
+        NumericField.create (
+          Var.Create 5,
+          min = 3,
+          max = 7,
+          step = View.Const 2,
+          enableArrowKeys = View.Const false,
+          enabled = enabled.View,
+          readOnly = readOnly.View,
+          labelText = View.Const "Bounded integer"
+        )
+      ]
+      div [ Attr.Create "data-testid" "bounded-float" ] [
+        NumericField.create (
+          Var.Create 5.0,
+          min = 4.5,
+          max = 5.5,
+          step = View.Const 0.5,
+          enableArrowKeys = View.Const false,
+          enabled = enabled.View,
+          readOnly = readOnly.View,
+          labelText = View.Const "Bounded decimal"
+        )
+      ]
+      button [ on.click (fun _ _ -> readOnly.Update not) ] [ text "Toggle read-only" ]
+      button [ on.click (fun _ _ -> enabled.Update not) ] [ text "Toggle enabled" ]
       NumericField.create (
         Var.Create 5,
         labelText = View.Const "Standard Numeric",
@@ -744,6 +772,20 @@ module Pages =
         maxLength = 50,
         inputAttrs = [ Attr.Create "minlength" "10" ]
       )
+    ]
+
+  let private selectCulturePage () =
+    Globalization.setCulture "en-US"
+
+    let cities =
+      [ "İSTANBUL"; "IĞDIR"; "ANKARA" ]
+      |> List.map (fun city -> SelectItem.create (text city, city, city))
+      |> View.Const
+
+    div [] [
+      Button.create (text "Use Turkish", fun () -> Globalization.setCulture "tr-TR")
+      Select.create (cities, Var.Create None, searchable = true, labelText = View.Const "City")
+      MultiSelect.create (cities, Var.Create Set.empty, searchable = true, labelText = View.Const "Cities")
     ]
 
   let private selectPage () =
@@ -1255,6 +1297,34 @@ module Pages =
         isOpen = opened,
         openOn = openOn
       )
+    ]
+
+  let private typeAheadDropdownPage () =
+    let selected = Var.Create "None"
+
+    let item label searchText disabled =
+      DropdownMenuItem.create (
+        text label,
+        (fun () -> Var.Set selected label),
+        text = searchText,
+        disabled = View.Const disabled
+      )
+
+    let items =
+      Var.Create [
+        item "Apple" "🍎 Apple" false
+        item "Blackberry" "Blackberry" true
+        DropdownMenuItem.divider ()
+        item "Basket" "" false
+        item "No search text" null false
+        item "Banana" "Banana" false
+        item "Blueberry" "Blueberry" false
+      ]
+
+    div [] [
+      DropdownMenu.create (text "Choose fruit", items.View)
+      Button.create (text "Clear options", (fun () -> Var.Set items []))
+      div [ Attr.Create "data-testid" "chosen-fruit" ] [ Doc.TextView selected.View ]
     ]
 
   let private expansionPanelPage () =
@@ -2456,6 +2526,34 @@ module Pages =
         (fun () -> enabled.Value <- not enabled.Value),
         attrs = [ Attr.Create "data-testid" "toggle-slider-enabled" ]
       )
+    ]
+
+  let private sliderRangePage () =
+    let integer = Var.Create 7
+    let fraction = Var.Create 0.001
+
+    let setValues whole part =
+      integer.Set whole
+      fraction.Set part
+
+    div [] [
+      div [ Attr.Create "data-testid" "integer" ] [
+        Slider.create (integer, min = 0, max = 5, labelText = View.Const "Whole units")
+        output [] [ textView (integer.View |> View.Map string<int>) ]
+      ]
+      div [ Attr.Create "data-testid" "fraction" ] [
+        Slider.create (
+          fraction,
+          min = 0.0,
+          max = 0.004,
+          step = 0.001,
+          labelText = View.Const "Fractional units"
+        )
+        output [] [ textView (fraction.View |> View.Map string<float>) ]
+      ]
+      button [ on.click (fun _ _ -> setValues -2 -0.01) ] [ text "Set below minimum" ]
+      button [ on.click (fun _ _ -> setValues 8 0.01) ] [ text "Set above maximum" ]
+      button [ on.click (fun _ _ -> fraction.Set nan) ] [ text "Set fraction to NaN" ]
     ]
 
   let private resizeListenerPage () =
@@ -3672,6 +3770,7 @@ module Pages =
     | "form-grid-validation" -> formGridValidationPage ()
     | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()
+    | "select-culture" -> selectCulturePage ()
     | "select-sizing" -> SelectSizingPage.render ()
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()
@@ -3694,6 +3793,7 @@ module Pages =
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
     | "tabs-contrast" -> TabsRegressionPage.render ()
+    | "tabs-named" -> TabsRegressionPage.namedGroups ()
     | "tabs-initial-top" -> TabsRegressionPage.initial Tabs.Position.Top
     | "tabs-initial-left" -> TabsRegressionPage.initial Tabs.Position.Left
     | "tabs-resize-top" -> TabsRegressionPage.resizable Tabs.Position.Top
@@ -3707,6 +3807,7 @@ module Pages =
     | "dropdown-menu-icon" -> dropdownPage Doc.Empty [ Attr.Create "aria-label" "More actions" ]
     | "dropdown-menu-dynamic" -> dynamicDropdownPage DropdownMenu.OpenOn.Click
     | "dropdown-menu-dynamic-hover" -> dynamicDropdownPage DropdownMenu.OpenOn.Hover
+    | "dropdown-menu-typeahead" -> typeAheadDropdownPage ()
     | "expansion-panel" -> expansionPanelPage ()
     | "expansion-panel-dynamic" -> dynamicExpansionPanelPage ()
     | "alert" -> alertPage ()
@@ -3756,6 +3857,7 @@ module Pages =
     | "docs-select" -> appearancePage (Weave.Docs.Examples.SelectExamples.render ())
     | "docs-colorpicker" -> appearancePage (Weave.Docs.Examples.ColorPickerExamples.render ())
     | "progress-appearance" -> appearancePage (Weave.Docs.Examples.ProgressExamples.appearance ())
+    | "docs-progress" -> appearancePage (Weave.Docs.Examples.ProgressExamples.render ())
     | "pagination-appearance" -> appearancePage (Weave.Docs.Examples.PaginationExamples.appearance ())
     | "slider-appearance" -> appearancePage (Weave.Docs.Examples.SliderExamples.appearance ())
     | "link-appearance" -> appearancePage (Weave.Docs.Examples.ReferenceAppearance.link ())
@@ -3804,6 +3906,7 @@ module Pages =
     | "slider-tiny-step" -> tickSliderPage 0.0 100.0 1e-310 50.0
     | "slider-wide-range" -> tickSliderPage -1e308 1e308 1e307 0.0
     | "slider-dynamic" -> dynamicSliderPage ()
+    | "slider-range" -> sliderRangePage ()
     | "color-picker" -> ColorPickerPage.render ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 

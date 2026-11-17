@@ -155,7 +155,7 @@ type TableColumn =
   /// <param name="header">The Doc rendered in the column header cell.</param>
   /// <param name="cell">Renders the body cell content for a row value.</param>
   /// <param name="sort">When supplied, the header becomes a button that sorts by this column.</param>
-  /// <param name="attrs">Additional attributes merged onto both the header and body cells of this column, such as alignment or width.</param>
+  /// <param name="attrs">Additional attributes shared by the header and body cells, such as alignment or width. An id identifies only the column header.</param>
   static member create<'T>
     (key: string, header: Doc, cell: 'T -> Doc, ?sort: Table.ColumnSort<'T>, ?attrs: Attr list)
     : Table.TableColumnDef<'T> = {
@@ -168,12 +168,6 @@ type TableColumn =
 
 [<JavaScript>]
 module private TableInternal =
-
-  let mutable idCounter = 0
-
-  let nextRowHeaderId () =
-    idCounter <- idCounter + 1
-    sprintf "weave-table-row-header-%d" idCounter
 
   let selectBox (name: Attr) (isChecked: View<bool>) (isIndeterminate: View<bool>) (onToggle: Attr) =
     label [
@@ -208,7 +202,7 @@ type Table =
   /// <param name="rowKey">Stable identity for each row. Unchanged rows are not re-rendered when <c>rows</c> updates, and selection is tracked by this key.</param>
   /// <param name="onRowClick">When supplied, rows activate on click, and the first cell holds a button that activates the row from the keyboard.</param>
   /// <param name="selectedKey">When supplied, activating a row selects it and the selected row is marked with <c>aria-current</c>.</param>
-  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown.</param>
+  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox is named by its row header or, when none is configured, by its row key.</param>
   /// <param name="sort">The sort state. Supply it to start sorted or to react to sorting, such as sorting on a server. Defaults to unsorted.</param>
   /// <param name="rowHeader">Key of the column whose cells label their rows, rendered as row header cells.</param>
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
@@ -231,6 +225,10 @@ type Table =
     let attrs = defaultArg attrs List.empty
     let sort = defaultArg sort (Var.Create None)
     let isInteractive = Option.isSome onRowClick || Option.isSome selectedKey
+
+    let rowHeader =
+      rowHeader
+      |> Option.filter (fun key -> columns |> List.exists (fun column -> column.Key = key))
 
     let columnCount =
       List.length columns + (if Option.isSome selectedKeys then 1 else 0)
@@ -339,7 +337,9 @@ type Table =
 
     let renderRow (row: 'T) =
       let key = rowKey row
-      let headerId = rowHeader |> Option.map (fun _ -> TableInternal.nextRowHeaderId ())
+
+      let headerId =
+        rowHeader |> Option.map (fun _ -> WeaveId.create "weave-table-row-header")
 
       let isCurrent =
         selectedKey
@@ -363,7 +363,7 @@ type Table =
       let selectName =
         match headerId with
         | Some id -> Attr.Create "aria-labelledby" id
-        | None -> Attr.Create "aria-label" "Select row"
+        | None -> Attr.Create "aria-label" ("Select row " + key)
 
       let cell (index: int) (column: Table.TableColumnDef<'T>) =
         let content =
@@ -376,11 +376,16 @@ type Table =
           th [
             cls [ Css.``weave-table__cell``; Css.``weave-table__row-header`` ]
             attr.scope "row"
-            Attr.bindOption attr.id headerId
             yield! column.Attrs
+            Attr.bindOption attr.id headerId
           ] [ content ]
         else
-          td [ cl Css.``weave-table__cell``; yield! column.Attrs ] [ content ]
+          td [
+            cl Css.``weave-table__cell``
+            yield! column.Attrs
+            if not column.Attrs.IsEmpty then
+              on.afterRender (fun el -> el.RemoveAttribute "id")
+          ] [ content ]
 
       tr [ cl Css.``weave-table__row``; yield! rowAttrs ] [
         match selectedKeys with

@@ -159,6 +159,44 @@ type TableInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``each row checkbox has a name even without a row header``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("current-and-checked-table")
+
+    for name in [ "Alpha"; "Beta"; "Gamma" ] do
+      do!
+        this
+          .Expect(
+            table.GetByRole(
+              AriaRole.Checkbox,
+              LocatorGetByRoleOptions(Name = "Select row " + name, Exact = true)
+            )
+          )
+          .ToHaveCountAsync(1)
+  }
+
+  [<Fact>]
+  member this.``column identifiers belong to headers and shared classes also reach the body``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("select-table")
+
+    for key in [ "name"; "count" ] do
+      do! this.Expect(this.Page.Locator("#select-" + key)).ToHaveCountAsync(1)
+      do! this.Expect(table.Locator("thead #select-" + key)).ToHaveCountAsync(1)
+
+    do! this.Expect(table.Locator("tbody .selection-column")).ToHaveCountAsync(6)
+    do! this.Page.GetByText("Update column ID").ClickAsync()
+    do! this.Expect(table.Locator("thead #updated-name")).ToHaveCountAsync(1)
+    do! this.Expect(this.Page.Locator("#updated-name")).ToHaveCountAsync(1)
+
+    for name in [ "Alpha"; "Beta"; "Gamma" ] do
+      let checkbox =
+        table.GetByRole(AriaRole.Checkbox, LocatorGetByRoleOptions(Name = name, Exact = true))
+
+      do! this.Expect(checkbox).ToHaveCountAsync(1)
+  }
+
+  [<Fact>]
   member this.``row checkbox is named by its row header``() = task {
     do! this.NavigateTo("table")
 

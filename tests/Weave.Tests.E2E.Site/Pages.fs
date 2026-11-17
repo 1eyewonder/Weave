@@ -1559,6 +1559,7 @@ module Pages =
     let clicked = Var.Create "none"
     let selected = Var.Create(None: string option)
     let checkedRows = Var.Create(Set.ofList [ "Alpha" ])
+    let nameHeaderId = Var.Create "select-name"
 
     let externalSort =
       Var.Create(
@@ -1653,7 +1654,15 @@ module Pages =
         ]
       )
       Table.create (
-        columns (),
+        columns ()
+        |> List.map (fun column ->
+          let id =
+            if column.Key = "name" then
+              Attr.Dynamic "id" nameHeaderId.View
+            else
+              attr.id "select-count"
+
+          { column with Attrs = [ id; Attr.Class "selection-column" ] }),
         View.Const rows,
         fst,
         selectedKeys = checkedRows,
@@ -1661,6 +1670,7 @@ module Pages =
         caption = text "Selectable rows",
         attrs = [ Attr.Create "data-testid" "select-table"; Table.hiddenCaption ]
       )
+      button [ on.click (fun _ _ -> nameHeaderId.Set "updated-name") ] [ text "Update column ID" ]
       Table.create (
         columns (),
         View.Const rows,

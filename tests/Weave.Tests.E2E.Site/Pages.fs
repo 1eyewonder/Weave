@@ -2800,6 +2800,52 @@ module Pages =
       button [] [ text "Page end" ]
     ]
 
+  let private lifecycleFailurePage (failCleanup: bool) =
+    let mounted = Var.Create true
+    let attempts = Var.Create 0
+    let cleanups = Var.Create 0
+    let handler (_: Dom.Event) = ()
+
+    let marker =
+      DomLifecycleListener.watch
+        (fun _ ->
+          JS.Window.AddEventListener("scroll", handler)
+          Var.Update attempts ((+) 1)
+
+          if attempts.Value = 1 then
+            failwith "lifecycle setup failed")
+        (fun () ->
+          JS.Window.RemoveEventListener("scroll", handler)
+          Var.Update cleanups ((+) 1)
+
+          if failCleanup && cleanups.Value = 1 then
+            failwith "lifecycle cleanup failed")
+
+    div [] [
+      button [
+        on.click (fun _ _ -> Var.Update mounted not)
+        Attr.Create "data-testid" "lifecycle-toggle"
+      ] [ text "Toggle lifecycle" ]
+      div [ Attr.Create "data-testid" "lifecycle-attempts" ] [
+        textView (attempts.View |> View.Map string<int>)
+      ]
+      div [ Attr.Create "data-testid" "lifecycle-cleanups" ] [
+        textView (cleanups.View |> View.Map string<int>)
+      ]
+      mounted.View
+      |> Doc.BindView(fun show ->
+        if show then
+          div [ Attr.Create "data-testid" "lifecycle-owner" ] [ marker ]
+        else
+          Doc.Empty)
+    ]
+
+  let private invalidScrollSelectorPage () =
+    div [] [
+      ScrollToTop.create (selector = "[", attrs = [ Attr.Create "data-testid" "invalid-scroll" ])
+      ScrollToTop.create (topOffset = 0, attrs = [ Attr.Create "data-testid" "valid-scroll" ])
+    ]
+
   let private progressPage () =
     let value = Var.Create 35.0
     let buffer = Var.Create 85.0
@@ -3802,6 +3848,9 @@ module Pages =
     | "scroll-to-top-negative" -> scrollToTopPage -20 false
     | "scroll-to-top-initial" -> scrollToTopPage 300 true
     | "scroll-to-top-accessible" -> scrollToTopPage 0 true
+    | "scroll-to-top-invalid-selector" -> invalidScrollSelectorPage ()
+    | "lifecycle-failure" -> lifecycleFailurePage false
+    | "lifecycle-double-failure" -> lifecycleFailurePage true
     | "scroll-sections" -> scrollSectionsPage ()
     | "pagination" -> paginationPage ()
     | "pagination-controls" -> paginationControlsPage ()

@@ -52,8 +52,14 @@ module DomRemovalListener =
 module DomLifecycleListener =
 
   [<Direct """
-    if (customElements.get($name)) return;
+    var existing = customElements.get($name);
+    if (existing) {
+      if (existing.weaveLifecycleListener !== true)
+        throw new Error("Custom element name already registered: " + $name);
+      return;
+    }
     function LifecycleMarker() { return Reflect.construct(HTMLElement, [], LifecycleMarker); }
+    LifecycleMarker.weaveLifecycleListener = true;
     Object.setPrototypeOf(LifecycleMarker.prototype, HTMLElement.prototype);
     LifecycleMarker.prototype.connectedCallback = $connected;
     LifecycleMarker.prototype.disconnectedCallback = $disconnected;
@@ -68,8 +74,28 @@ module DomLifecycleListener =
     X<unit>
 
   /// Place the returned Doc inside the element whose connection lifecycle is being watched.
+  /// A failed connection runs disconnection to release partial setup, then reports the error.
   let watch (onConnected: Dom.Element -> unit) (onDisconnected: unit -> unit) =
     let name = "weave-dom-lifecycle-listener"
+    let connected = ref false
+
+    let disconnect () =
+      if connected.Value then
+        connected.Value <- false
+        onDisconnected ()
+
+    let connect parent =
+      connected.Value <- true
+
+      try
+        onConnected parent
+      with error ->
+        try
+          disconnect ()
+        with cleanupError ->
+          JS.Inline("console.error($0)", cleanupError)
+
+        raise error
 
     register
       name
@@ -78,8 +104,8 @@ module DomLifecycleListener =
 
     Doc.Element name [
       Attr.Create "hidden" ""
-      Attr.Prop "attach" onConnected
-      Attr.Prop "detach" onDisconnected
+      Attr.Prop "attach" connect
+      Attr.Prop "detach" disconnect
     ] []
 
   /// Observe only removal; callers can partially apply their cleanup action.

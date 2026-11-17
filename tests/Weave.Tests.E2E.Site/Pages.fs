@@ -2248,6 +2248,7 @@ module Pages =
 
   let private buttonmenuPage () =
     let action = Var.Create "none"
+    let edgeEnabled = Var.Create false
 
     let menuItem label =
       Button.create (
@@ -2267,7 +2268,7 @@ module Pages =
       ButtonMenu.create (
         text "Edge cases",
         [
-          Button.create (text "Unavailable", (fun () -> action.Set "disabled"), enabled = View.Const false)
+          Button.create (text "Unavailable", (fun () -> action.Set "disabled"), enabled = edgeEnabled.View)
           div [] [
             Link.create (
               text "Wrapped link",
@@ -2277,6 +2278,17 @@ module Pages =
           ]
         ],
         attrs = [ Attr.Create "data-testid" "edge-menu" ]
+      )
+      Button.create (
+        text "Toggle edge availability",
+        (fun () -> Var.Update edgeEnabled not),
+        attrs = [ Attr.Create "data-testid" "toggle-edge" ]
+      )
+      ButtonMenu.create (
+        text "Three choices",
+        [ menuItem "One"; menuItem "Two"; menuItem "Three" ],
+        direction = ButtonMenu.Direction.Right,
+        attrs = [ Attr.Create "data-testid" "three-menu" ]
       )
       div [ Attr.Create "data-testid" "menu-action" ] [ textView action.View ]
       Button.create (

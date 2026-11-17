@@ -1,10 +1,68 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open Microsoft.Playwright
 open Xunit
 
+[<Collection("Browser input")>]
 type ButtonMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``closed actions are hidden and cannot be activated``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.Locator(".weave-button-menu").First
+    let menu = container.Locator("[role=menu]")
+    do! this.Expect(menu).ToHaveAttributeAsync("inert", "")
+    do! this.Expect(menu).ToHaveAttributeAsync("aria-hidden", "true")
+    do! this.Expect(container.GetByRole(AriaRole.Menuitem)).ToHaveCountAsync(0)
+    let item = menu.Locator("[role=menuitem]").First
+
+    let! _ =
+      item.EvaluateAsync(
+        "el => { el.focus(); el.dispatchEvent(new KeyboardEvent('keydown', {key:'Enter', bubbles:true, cancelable:true})); }"
+      )
+
+    do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("none")
+    do! container.Locator(".weave-button-menu__trigger").ClickAsync()
+    do! this.Expect(menu).Not.ToHaveAttributeAsync("inert", "")
+    do! this.Expect(container.GetByRole(AriaRole.Menuitem)).ToHaveCountAsync(2)
+  }
+
+  [<Fact>]
+  member this.``horizontal arrows follow current focus and visual direction``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let menu = this.Page.GetByTestId("horizontal-menu")
+    let items = menu.Locator("[role=menuitem]")
+    do! menu.Locator(".weave-button-menu__trigger").ClickAsync()
+    do! this.Expect(menu.Locator("[role=menu]")).Not.ToHaveAttributeAsync("inert", "")
+    do! menu.Locator(".weave-button-menu__trigger").FocusAsync()
+    do! this.Page.Keyboard.PressAsync("End")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    do! items.First.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowRight")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    let! _ = menu.EvaluateAsync("el => el.setAttribute('dir', 'rtl')")
+    do! items.First.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowLeft")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``horizontal arrows follow visual order in rtl``() = task {
+    do! this.NavigateTo("buttonmenu")
+    let menu = this.Page.GetByTestId("three-menu")
+    let! _ = menu.EvaluateAsync("el => el.setAttribute('dir', 'rtl')")
+    do! menu.Locator(".weave-button-menu__trigger").ClickAsync()
+    do! this.Expect(menu.Locator("[role=menu]")).Not.ToHaveAttributeAsync("inert", "")
+    let items = menu.Locator("[role=menuitem]")
+    do! items.Nth(1).FocusAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowRight")
+    do! this.Expect(items.First).ToBeFocusedAsync()
+    do! items.Nth(1).FocusAsync()
+    do! this.Page.Keyboard.PressAsync("ArrowLeft")
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+  }
 
   [<Fact>]
   member this.``button menu trigger is focusable``() = task {
@@ -208,12 +266,40 @@ type ButtonMenuInteractionTests(fixture: TestFixture) =
     let disabled = menu.Locator("[role=menuitem]").First
     do! this.Expect(disabled).ToBeFocusedAsync()
     do! this.Expect(disabled).ToHaveAccessibleNameAsync("Unavailable")
+    do! this.Expect(disabled).ToHaveAttributeAsync("aria-disabled", "true")
+
+    let! _ =
+      this.Page
+        .GetByTestId("toggle-edge")
+        .EvaluateAsync(
+          "button => { button.addEventListener('click', event => event.stopPropagation(), {once:true}); button.click(); }"
+        )
+
+    do! this.Expect(disabled).ToHaveAttributeAsync("aria-disabled", "false")
+
+    let! _ =
+      this.Page
+        .GetByTestId("toggle-edge")
+        .EvaluateAsync(
+          "button => { button.addEventListener('click', event => event.stopPropagation(), {once:true}); button.click(); }"
+        )
+
+    do! this.Expect(disabled).ToHaveAttributeAsync("aria-disabled", "true")
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("none")
     do! this.Page.Keyboard.PressAsync("ArrowUp")
     let link = menu.Locator("[role=menuitem]").Last
     do! this.Expect(link).ToBeFocusedAsync()
     do! this.Expect(link).ToHaveAccessibleNameAsync("Wrapped link")
+
+    let! _ =
+      link.Locator("a").EvaluateAsync("el => el.setAttribute('aria-disabled', 'true')")
+
+    do! this.Expect(link).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Page.Keyboard.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("none")
+    let! _ = link.Locator("a").EvaluateAsync("el => el.removeAttribute('aria-disabled')")
+    do! this.Expect(link).ToHaveAttributeAsync("aria-disabled", "false")
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("link")
   }

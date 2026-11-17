@@ -55,7 +55,6 @@ type Chip =
     ) =
 
     let enabled = defaultArg enabled (View.Const true)
-    let selected = defaultArg selected (View.Const false)
     let attrs = defaultArg attrs List.empty
 
     let interactiveAttrs () = [
@@ -70,18 +69,24 @@ type Chip =
       | Some c -> span [ cl Css.``weave-chip__content`` ] [ c ]
       | None -> Doc.Empty
 
-    let labelDoc = span [ cl Css.``weave-chip__label`` ] [ label ]
+    let labelWith attrs =
+      span [ cl Css.``weave-chip__label``; yield! attrs ] [ label ]
 
-    let closeDoc =
+    let labelDoc, closeDoc =
       match onClose with
       | Some callback ->
+        let labelId = WeaveId.create "weave-chip-label"
+        let closeId = labelId + "-close"
         let closeIconDoc = defaultArg closeIcon (span [] [ text "\u00D7" ])
 
+        labelWith [ attr.id labelId ],
         span [
           cl Css.``weave-chip__close``
           Attr.Create "role" "button"
           yield! interactiveAttrs ()
-          Attr.Create "aria-label" "remove"
+          attr.id closeId
+          Attr.Create "aria-label" "Remove"
+          Attr.Create "aria-labelledby" (closeId + " " + labelId)
           on.clickView enabled (fun _ ev isEnabled ->
             ev.StopPropagation()
             ev.PreventDefault()
@@ -98,15 +103,24 @@ type Chip =
                 callback ()
             | _ -> ())
         ] [ closeIconDoc ]
-      | None -> Doc.Empty
+      | None -> labelWith [], Doc.Empty
 
     let isClickable = Option.isSome onClick || Option.isSome href
+
+    let buttonAttrs = [
+      Attr.Create "role" "button"
+      match selected with
+      | Some selection -> Attr.Dynamic "aria-pressed" (selection |> View.Map string<bool>)
+      | None -> ()
+    ]
 
     let commonAttrs = [
       cl Css.``weave-chip``
       if isClickable then
         cl Css.``weave-chip--clickable``
-      Attr.DynamicClassPred Css.``weave-chip--selected`` selected
+      match selected with
+      | Some selection -> Attr.DynamicClassPred Css.``weave-chip--selected`` selection
+      | None -> ()
       Disabled.disabledClass Css.``weave-chip--disabled`` enabled
       yield! attrs
     ]
@@ -151,7 +165,7 @@ type Chip =
         span [ yield! commonAttrs ] [
           span [
             cl "weave-chip__action"
-            Attr.Create "role" "button"
+            yield! buttonAttrs
             yield! interactiveAttrs ()
             on.clickViewGuarded enabled handler
             on.keyDownView enabled (fun _ ev isEnabled ->
@@ -171,7 +185,7 @@ type Chip =
         span
           [
             yield! commonAttrs
-            Attr.Create "role" "button"
+            yield! buttonAttrs
             on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
 
             yield! interactiveAttrs ()

@@ -29,6 +29,45 @@ module ButtonMenu =
 [<JavaScript>]
 module private ButtonMenuInternal =
 
+  [<Inline "new MutationObserver($callback)">]
+  let createObserver (callback: unit -> unit) : obj = X<obj>
+
+  [<Inline "$observer.observe($root, $options)">]
+  let observe (observer: obj) (root: Dom.Element) (options: obj) : unit = X<unit>
+
+  let synchronizeDisabled (root: Dom.Element) =
+    let update () =
+      let targets =
+        root.QuerySelectorAll("button, input, select, textarea, a[href], a[aria-disabled], [role=button]")
+
+      let disabled =
+        targets.Length > 0
+        && (seq { 0 .. targets.Length - 1 }
+            |> Seq.forall (fun index ->
+              let target = As<Dom.Element>(targets.Item(index))
+
+              As<bool>(target?matches (":disabled"))
+              || target.GetAttribute("aria-disabled") = "true"))
+
+      let state = if disabled then "true" else "false"
+
+      if root.GetAttribute("aria-disabled") <> state then
+        root.SetAttribute("aria-disabled", state)
+
+    let observer = createObserver update
+
+    observe
+      observer
+      root
+      (New [
+        "subtree" => true
+        "childList" => true
+        "attributes" => true
+        "attributeFilter" => [| "disabled"; "aria-disabled"; "href"; "role" |]
+      ])
+
+    update ()
+
   let renderMenu
     (triggerButton: Doc)
     (items: Doc list)
@@ -65,9 +104,11 @@ module private ButtonMenuInternal =
           on.keyDown (fun el ev ->
             match ev with
             | Key.Enter
-            | Key.Space when ev.Target = el ->
+            | Key.Space when ev.Target = el && isOpen.Value ->
               let target =
-                el.QuerySelector("button:not([disabled]), a[href], input:not([disabled])")
+                el.QuerySelector(
+                  "button:not(:disabled):not([aria-disabled='true']), a[href]:not([aria-disabled='true']), input:not(:disabled):not([aria-disabled='true'])"
+                )
 
               if not (isNull target) then
                 ev.PreventDefault()
@@ -84,7 +125,9 @@ module private ButtonMenuInternal =
             let children = el.QuerySelectorAll("button, a, [tabindex]")
 
             for i in 0 .. children.Length - 1 do
-              As<Dom.Element>(children.Item(i)).SetAttribute("tabindex", "-1"))
+              As<Dom.Element>(children.Item(i)).SetAttribute("tabindex", "-1")
+
+            synchronizeDisabled el)
         ] [ item ])
 
     let outsideClickWatcher =
@@ -119,7 +162,21 @@ module private ButtonMenuInternal =
       outsideClickWatcher
       keyboardWatcher
       hoverSync
-      div [ cl Css.``weave-button-menu__items``; Attr.Create "role" "menu" ] menuItems
+      div
+        [
+          cl Css.``weave-button-menu__items``
+          Attr.Create "role" "menu"
+          match direction with
+          | ButtonMenu.Direction.Left
+          | ButtonMenu.Direction.Right -> Attr.Create "aria-orientation" "horizontal"
+          | ButtonMenu.Direction.Top
+          | ButtonMenu.Direction.Bottom -> Attr.Create "aria-orientation" "vertical"
+          Attr.DynamicBool "inert" (isOpen.View |> View.Map not)
+          Attr.DynamicCustom
+            (fun el hidden -> el.SetAttribute("aria-hidden", string<bool> hidden))
+            (isOpen.View |> View.Map not)
+        ]
+        menuItems
       triggerButton
     ]
 

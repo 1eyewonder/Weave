@@ -2271,6 +2271,7 @@ module Pages =
 
   let private buttonmenuPage () =
     let action = Var.Create "none"
+    let edgeEnabled = Var.Create false
 
     let menuItem label =
       Button.create (
@@ -2280,7 +2281,17 @@ module Pages =
       )
 
     div [] [
-      ButtonMenu.create (text "Menu", [ menuItem "Action 1"; menuItem "Action 2" ])
+      ButtonMenu.create (
+        text "Menu",
+        [ menuItem "Action 1"; menuItem "Action 2" ],
+        attrs = [ Attr.Create "data-testid" "top-menu" ]
+      )
+      ButtonMenu.create (
+        text "Bottom Menu",
+        [ menuItem "Bottom 1"; menuItem "Bottom 2" ],
+        direction = ButtonMenu.Direction.Bottom,
+        attrs = [ Attr.Create "data-testid" "bottom-menu" ]
+      )
       ButtonMenu.create (
         text "Horizontal Menu",
         [ menuItem "Left 1"; menuItem "Left 2" ],
@@ -2288,9 +2299,15 @@ module Pages =
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
       )
       ButtonMenu.create (
+        text "Left Menu",
+        [ menuItem "Leftward 1"; menuItem "Leftward 2" ],
+        direction = ButtonMenu.Direction.Left,
+        attrs = [ Attr.Create "data-testid" "left-menu" ]
+      )
+      ButtonMenu.create (
         text "Edge cases",
         [
-          Button.create (text "Unavailable", (fun () -> action.Set "disabled"), enabled = View.Const false)
+          Button.create (text "Unavailable", (fun () -> action.Set "disabled"), enabled = edgeEnabled.View)
           div [] [
             Link.create (
               text "Wrapped link",
@@ -2300,6 +2317,17 @@ module Pages =
           ]
         ],
         attrs = [ Attr.Create "data-testid" "edge-menu" ]
+      )
+      Button.create (
+        text "Toggle edge availability",
+        (fun () -> Var.Update edgeEnabled not),
+        attrs = [ Attr.Create "data-testid" "toggle-edge" ]
+      )
+      ButtonMenu.create (
+        text "Three choices",
+        [ menuItem "One"; menuItem "Two"; menuItem "Three" ],
+        direction = ButtonMenu.Direction.Right,
+        attrs = [ Attr.Create "data-testid" "three-menu" ]
       )
       div [ Attr.Create "data-testid" "menu-action" ] [ textView action.View ]
       Button.create (

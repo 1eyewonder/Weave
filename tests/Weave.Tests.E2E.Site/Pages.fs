@@ -3771,6 +3771,7 @@ module Pages =
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
     | "tabs-contrast" -> TabsRegressionPage.render ()
+    | "tabs-named" -> TabsRegressionPage.namedGroups ()
     | "tabs-initial-top" -> TabsRegressionPage.initial Tabs.Position.Top
     | "tabs-initial-left" -> TabsRegressionPage.initial Tabs.Position.Left
     | "tabs-resize-top" -> TabsRegressionPage.resizable Tabs.Position.Top

@@ -42,6 +42,7 @@ module TabsExamples =
           TabItem.create ("Tab Two", text "Content Two")
           TabItem.create ("Tab Three", text "Content Three")
         ],
+        tabListAttrs = [ Attr.Create "aria-label" "Sample sections" ],
         attrs = [ Color.primary ]
       )
 
@@ -54,6 +55,7 @@ Tabs.create (
     TabItem.create ("Tab Two", text "Content Two")
     TabItem.create ("Tab Three", text "Content Three")
   ],
+  tabListAttrs = [ Attr.Create "aria-label" "Sample sections" ],
   attrs = [ Color.primary ]
 )
 """
@@ -183,6 +185,11 @@ Tabs.create (
           "Custom icon for the scroll-back button (shown when tabs overflow)"
         Helpers.apiParam "?scrollForwardIcon" "Doc" "" "Custom icon for the scroll-forward button"
         Helpers.apiParam "?attrs" "Attr list" "[]" "Additional attributes applied to the root element"
+        Helpers.apiParam
+          "?tabListAttrs"
+          "Attr list"
+          "[]"
+          "Attributes on the tab list. Use aria-label or aria-labelledby to name the group."
       ]
 
       Helpers.returnTypeNote
@@ -198,6 +205,11 @@ Tabs.create (
 
       Helpers.apiTable "TabItem.createIconOnly" [
         Helpers.apiParam "icon" "Doc" "" "Icon displayed as the sole tab content"
+        Helpers.apiParam
+          "label"
+          "string"
+          ""
+          "Accessible name for the icon-only tab. Supply it when the icon is decorative."
         Helpers.apiParam "panel" "Doc" "" "Content rendered when this tab is active"
         Helpers.apiParam "?disabled" "View<bool>" "View.Const false" "Whether this tab is non-interactive"
       ]

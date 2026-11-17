@@ -147,6 +147,16 @@ type TabItem =
     Panel = panel
   }
 
+  /// Creates an icon-only tab with a text name for assistive technology.
+  static member createIconOnly(icon: Doc, panel: Doc, label: string, ?disabled: View<bool>) =
+    let header =
+      Doc.Concat [
+        div [ cl Css.``weave-tabs__tab-icon``; Attr.Create "aria-hidden" "true" ] [ icon ]
+        span [ Visibility.srOnly ] [ text label ]
+      ]
+
+    TabItem.createCustom (header, panel, ?disabled = disabled)
+
   /// Creates a tab with a fully custom header Doc.
   static member createCustom(header: Doc, panel: Doc, ?disabled: View<bool>) : Tabs.TabDef = {
     Header = header
@@ -351,11 +361,14 @@ type Tabs =
       ?position: Position,
       ?scrollBackIcon: Doc,
       ?scrollForwardIcon: Doc,
-      ?attrs: Attr list
+      ?attrs: Attr list,
+      ?tabListAttrs: Attr list
     ) =
 
     let activeIndex = defaultArg activeIndex (Var.Create 0)
     let position = defaultArg position Position.Top
+    let tabListAttrs = defaultArg tabListAttrs []
+    let isHorizontal = Position.isHorizontal position
     let attrs = defaultArg attrs []
     let groupId = TabsInternal.newGroupId ()
 
@@ -365,26 +378,12 @@ type Tabs =
     let scrollBackIcon =
       defaultArg
         scrollBackIcon
-        (span [ cl Css.``weave-tabs__scroll-icon`` ] [
-          text (
-            if Position.isHorizontal position then
-              "\u2039"
-            else
-              "\u25B2"
-          )
-        ])
+        (span [ cl Css.``weave-tabs__scroll-icon`` ] [ text (if isHorizontal then "\u2039" else "\u25B2") ])
 
     let scrollForwardIcon =
       defaultArg
         scrollForwardIcon
-        (span [ cl Css.``weave-tabs__scroll-icon`` ] [
-          text (
-            if Position.isHorizontal position then
-              "\u203A"
-            else
-              "\u25BC"
-          )
-        ])
+        (span [ cl Css.``weave-tabs__scroll-icon`` ] [ text (if isHorizontal then "\u203A" else "\u25BC") ])
 
     let updateOverflow () =
       match headerRef.Value with
@@ -432,7 +431,6 @@ type Tabs =
           | None -> ()
         | None -> ()
 
-      let isHorizontal = Position.isHorizontal position
       let nextKey = if isHorizontal then "ArrowRight" else "ArrowDown"
       let prevKey = if isHorizontal then "ArrowLeft" else "ArrowUp"
 
@@ -485,7 +483,7 @@ type Tabs =
 
       let updateLayout () =
         let availableSize: float =
-          if Position.isHorizontal position then
+          if isHorizontal then
             element?clientWidth
           else
             element?clientHeight
@@ -511,9 +509,11 @@ type Tabs =
       div [
         cl Css.``weave-tabs__header``
         Attr.Create "role" "tablist"
+        Attr.Create "aria-orientation" (if isHorizontal then "horizontal" else "vertical")
         on.afterRender initializeHeader
 
         on.scroll (fun _ _ -> updateOverflow ())
+        yield! tabListAttrs
       ] [
         tabs |> Doc.BindView(List.mapi (fun i t -> tabItem t i) >> Doc.Concat)
 
@@ -565,3 +565,25 @@ type Tabs =
       div [ cl Css.``weave-tabs__header-wrapper`` ] [ scrollBackBtn; header; scrollFwdBtn ]
       panels
     ]
+
+  /// Preserves the compiled signature used by existing applications.
+  [<CompiledName("create");
+    System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
+  static member createLegacy
+    (
+      tabs: View<TabDef list>,
+      ?activeIndex: Var<int>,
+      ?position: Position,
+      ?scrollBackIcon: Doc,
+      ?scrollForwardIcon: Doc,
+      ?attrs: Attr list
+    ) =
+    Tabs.create (
+      tabs,
+      ?activeIndex = activeIndex,
+      ?position = position,
+      ?scrollBackIcon = scrollBackIcon,
+      ?scrollForwardIcon = scrollForwardIcon,
+      ?attrs = attrs,
+      tabListAttrs = []
+    )

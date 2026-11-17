@@ -169,6 +169,27 @@ type PaginationInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``deliberate blur after navigation is not overridden``() = task {
+    do! this.NavigateTo "pagination"
+    do! (this.Button "Go to page 2").ClickAsync()
+    do! this.Expect(this.Current).ToHaveTextAsync "2"
+    let previous = this.Button "Previous page"
+    do! previous.FocusAsync()
+
+    let! _ =
+      previous.EvaluateAsync(
+        "async el => { el.click(); el.blur(); await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); }"
+      )
+
+    do! this.Expect(this.Current).ToHaveTextAsync "1"
+
+    let! focused =
+      this.Page.EvaluateAsync<bool>("document.activeElement === document.body")
+
+    Assert.True(focused)
+  }
+
+  [<Fact>]
   member this.``a boundary jump focuses a newly rendered page and respects focus outside the pager``() = task {
     do! this.NavigateTo "pagination-ranges"
     let pager = this.Page.Locator("#range-keyboard-window")

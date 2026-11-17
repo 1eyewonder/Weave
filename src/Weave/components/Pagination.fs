@@ -103,6 +103,8 @@ type Pagination =
             selectedPage.Set page)
 
     let control controlClass label icon canMove target =
+      let focusRequest = ref None
+
       IconButton.create (
         Icon.create (
           Icon.UiActions icon,
@@ -117,7 +119,17 @@ type Pagination =
           Attr.Create "aria-label" label
           on.click (fun el _ ->
             if obj.ReferenceEquals(el, JS.Document?activeElement) then
-              activatedControl.Value <- Some el)
+              let cancelled = ref false
+              focusRequest.Value <- Some cancelled
+              activatedControl.Value <- Some(el, cancelled))
+          on.blur (fun el _ ->
+            if not (el.HasAttribute "disabled") then
+              focusRequest.Value |> Option.iter (fun cancelled -> cancelled.Value <- true)
+              focusRequest.Value <- None
+
+              match activatedControl.Value with
+              | Some(control, _) when obj.ReferenceEquals(control, el) -> activatedControl.Value <- None
+              | _ -> ())
         ]
       )
 
@@ -148,14 +160,15 @@ type Pagination =
       |> Attr.DynamicCustom(fun pager _ ->
         match activatedControl.Value with
         | None -> ()
-        | Some control ->
+        | Some(control, cancelled) ->
           activatedControl.Value <- None
           // The new current button may be inserted as part of this render.
           JS.Window.RequestAnimationFrame(fun _ ->
             let active = JS.Document?activeElement
 
             if
-              control.HasAttribute("disabled")
+              not cancelled.Value
+              && control.HasAttribute("disabled")
               && (obj.ReferenceEquals(active, control)
                   || obj.ReferenceEquals(active, JS.Document?body))
             then

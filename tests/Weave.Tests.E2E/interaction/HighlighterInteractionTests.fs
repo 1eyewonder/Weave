@@ -7,6 +7,127 @@ open Microsoft.Playwright
 type HighlighterInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``changing search terms preserves the selected text and its direction``(backward: bool) = task {
+    do! this.NavigateTo("highlighter")
+    let output = this.Page.GetByTestId("multi-highlight")
+
+    let! _ =
+      output.EvaluateAsync(
+        """(el, backward) => {
+          const [start, end] = [...el.querySelectorAll('mark')].slice(3, 5).map(mark => mark.firstChild);
+          const selection = el.ownerDocument.getSelection();
+          if (backward) selection.setBaseAndExtent(end, 3, start, 1);
+          else selection.setBaseAndExtent(start, 1, end, 3);
+        }""",
+        backward
+      )
+
+    let! before = this.Page.EvaluateAsync<string>("getSelection().toString()")
+    Assert.Equal("++ [a]", before)
+
+    let! _ =
+      this.Page.GetByTestId("change-terms").EvaluateAsync("button => button.click()")
+
+    do! this.Expect(output.Locator("mark")).ToContainTextAsync([| "<b>" |])
+    let! selected = this.Page.EvaluateAsync<string>("getSelection().toString()")
+    Assert.Equal(before, selected)
+
+    let! anchorIsStart =
+      this.Page.EvaluateAsync<bool>(
+        """() => {
+          const selection = getSelection(), range = selection.getRangeAt(0);
+          return range.startContainer === selection.anchorNode && range.startOffset === selection.anchorOffset;
+        }"""
+      )
+
+    Assert.Equal(not backward, anchorIsStart)
+  }
+
+  [<Fact>]
+  member this.``a selection crossing the highlighter keeps its outside endpoint``() = task {
+    do! this.NavigateTo("highlighter")
+
+    let! before =
+      this.Page.EvaluateAsync<string>(
+        """() => {
+          const output = document.querySelector('[data-testid="multi-highlight"]');
+          const button = document.querySelector('[data-testid="change-terms"]');
+          const label = document.createTreeWalker(button, NodeFilter.SHOW_TEXT).nextNode();
+          const start = [...output.querySelectorAll('mark')].find(mark => mark.textContent === 'C++').firstChild;
+          getSelection().setBaseAndExtent(label, 3, start, 1);
+          const text = getSelection().toString();
+          button.click();
+          return text;
+        }"""
+      )
+
+    do! this.Expect(this.Page.GetByTestId("multi-highlight").Locator("mark")).ToContainTextAsync([| "<b>" |])
+    let! after = this.Page.EvaluateAsync<string>("getSelection().toString()")
+    Assert.StartsWith("++", before)
+    Assert.Equal(before, after)
+    let! anchorOffset = this.Page.EvaluateAsync<int>("getSelection().anchorOffset")
+    Assert.Equal(3, anchorOffset)
+  }
+
+  [<Fact>]
+  member this.``all text ranges accepted by the browser survive a highlight update``() = task {
+    do! this.NavigateTo("highlighter")
+    let output = this.Page.GetByTestId("multi-highlight")
+
+    let! before =
+      output.EvaluateAsync<string array>(
+        """el => {
+          const selection = getSelection();
+          selection.removeAllRanges();
+          for (const mark of el.querySelectorAll('mark:nth-of-type(4), mark:nth-of-type(5)')) {
+            const range = document.createRange();
+            range.selectNodeContents(mark);
+            selection.addRange(range);
+          }
+          return Array.from({length: selection.rangeCount}, (_, i) => selection.getRangeAt(i).toString());
+        }"""
+      )
+
+    Assert.Contains("C++", before)
+
+    let! _ =
+      this.Page.GetByTestId("change-terms").EvaluateAsync("button => button.click()")
+
+    do! this.Expect(output.Locator("mark")).ToContainTextAsync([| "<b>" |])
+
+    let! after =
+      this.Page.EvaluateAsync<string array>(
+        "Array.from({length: getSelection().rangeCount}, (_, i) => getSelection().getRangeAt(i).toString())"
+      )
+
+    Assert.Equal<string>(before, after)
+  }
+
+  [<Fact>]
+  member this.``a selection made elsewhere during a highlight update is kept``() = task {
+    do! this.NavigateTo("highlighter")
+    let output = this.Page.GetByTestId("multi-highlight")
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        """() => {
+          const selection = getSelection();
+          const mark = document.querySelector('[data-testid="multi-highlight"] mark').firstChild;
+          selection.setBaseAndExtent(mark, 0, mark, 3);
+          document.querySelector('[data-testid="change-terms"]').click();
+          const other = document.querySelector('[data-testid="single-highlight"] mark').firstChild;
+          selection.setBaseAndExtent(other, 1, other, 4);
+        }"""
+      )
+
+    do! this.Expect(output.Locator("mark")).ToContainTextAsync([| "<b>" |])
+    let! selected = this.Page.EvaluateAsync<string>("getSelection().toString()")
+    Assert.Equal("eav", selected)
+  }
+
   static member PunctuationCases: obj[] seq = seq {
     for punctuation in ".*+?^${}()|[]\\/-#,@:;!&<>'\"`%=~" do
       yield [| box (string punctuation) |]

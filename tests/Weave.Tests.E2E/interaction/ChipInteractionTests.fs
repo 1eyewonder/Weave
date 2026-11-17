@@ -10,6 +10,7 @@ type ChipInteractionTests(fixture: TestFixture) =
     do! this.NavigateTo("chip")
     let root = this.Page.GetByTestId("chip-both")
     let close = root.Locator(".weave-chip__close")
+    do! this.Expect(close).ToHaveAccessibleNameAsync("Remove Item 0")
     let actions = this.Page.GetByTestId("chip-actions")
     let closes = this.Page.GetByTestId("chip-closes")
     do! close.ClickAsync()
@@ -32,6 +33,7 @@ type ChipInteractionTests(fixture: TestFixture) =
     do! this.Expect(closes).ToHaveTextAsync("2")
     do! root.Locator(".weave-chip__action").ClickAsync()
     do! this.Expect(actions).ToHaveTextAsync("1")
+    do! this.Expect(close).ToHaveAccessibleNameAsync("Remove Item 1")
   }
 
   [<Fact>]
@@ -112,13 +114,16 @@ type ChipInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``close button is focusable and has aria-label``() = task {
+  member this.``close button is focusable and names its chip``() = task {
     do! this.NavigateTo("chip")
-    let close = this.Page.Locator(".weave-chip__close").First
+
+    let close =
+      this.Page.GetByTestId("reactive-chip-both").Locator(".weave-chip__close")
+
     do! this.Expect(close).ToHaveAttributeAsync("tabindex", "0")
     do! close.FocusAsync()
     do! this.Expect(close).ToBeFocusedAsync()
-    do! this.Expect(close).ToHaveAttributeAsync("aria-label", "remove")
+    do! this.Expect(close).ToHaveAccessibleNameAsync("Remove Reactive action and close")
   }
 
   [<Theory>]

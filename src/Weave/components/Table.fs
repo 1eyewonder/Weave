@@ -208,15 +208,14 @@ type Table =
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
-  /// <param name="headerAttrs">Header-only attributes keyed by column key; shared column attributes remain unchanged.</param>
-  /// <param name="rowLabel">Optional descriptive label for each row's selection checkbox. Takes precedence over the row header. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
-  [<Name "create_1">]
+  /// <param name="rowLabel">Descriptive label for each row's selection checkbox. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
+  [<Name "create_2">]
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
       rows: View<'T list>,
       rowKey: 'T -> string,
-      headerAttrs: Map<string, Attr list>,
+      rowLabel: 'T -> string,
       ?onRowClick: 'T -> unit,
       ?selectedKey: Var<string option>,
       ?selectedKeys: Var<Set<string>>,
@@ -224,8 +223,7 @@ type Table =
       ?rowHeader: string,
       ?caption: Doc,
       ?emptyContent: Doc,
-      ?attrs: Attr list,
-      ?rowLabel: 'T -> string
+      ?attrs: Attr list
     ) =
     let attrs = defaultArg attrs List.empty
     let sort = defaultArg sort (Var.Create None)
@@ -263,8 +261,6 @@ type Table =
       ] [ textView arrow ]
 
     let headerCell (column: Table.TableColumnDef<'T>) =
-      let headerOnly = headerAttrs |> Map.tryFind column.Key |> Option.defaultValue []
-
       match column.Sort with
       | Some _ ->
         th [
@@ -272,7 +268,6 @@ type Table =
           attr.scope "col"
           Attr.Dynamic "aria-sort" (sort.View |> View.Map(Table.SortState.ariaSort column.Key))
           yield! column.Attrs
-          yield! headerOnly
         ] [
           button [
             attr.``type`` "button"
@@ -281,12 +276,7 @@ type Table =
           ] [ column.Header; sortIndicator column.Key ]
         ]
       | None ->
-        th [
-          cl Css.``weave-table__header-cell``
-          attr.scope "col"
-          yield! column.Attrs
-          yield! headerOnly
-        ] [ column.Header ]
+        th [ cl Css.``weave-table__header-cell``; attr.scope "col"; yield! column.Attrs ] [ column.Header ]
 
     let sortedRows =
       (rows, sort.View) ||> View.Map2(fun rs state -> Table.sortRows columns state rs)
@@ -375,8 +365,8 @@ type Table =
 
       let selectName () =
         let label =
-          rowLabel
-          |> Option.map (fun describe -> describe row)
+          rowLabel row
+          |> Option.ofObj
           |> Option.filter (System.String.IsNullOrWhiteSpace >> not)
 
         match label, headerId with
@@ -478,41 +468,7 @@ type Table =
       columns,
       rows,
       rowKey,
-      Map.empty,
-      ?onRowClick = onRowClick,
-      ?selectedKey = selectedKey,
-      ?selectedKeys = selectedKeys,
-      ?sort = sort,
-      ?rowHeader = rowHeader,
-      ?caption = caption,
-      ?emptyContent = emptyContent,
-      ?attrs = attrs
-    )
-
-  /// <summary>Creates a table with caller-supplied labels for row selection checkboxes.</summary>
-  /// <param name="rowLabel">Returns a descriptive label for each row. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
-  [<Name "create_2">]
-  static member create<'T>
-    (
-      columns: Table.TableColumnDef<'T> list,
-      rows: View<'T list>,
-      rowKey: 'T -> string,
-      rowLabel: 'T -> string,
-      ?onRowClick: 'T -> unit,
-      ?selectedKey: Var<string option>,
-      ?selectedKeys: Var<Set<string>>,
-      ?sort: Var<Table.SortState option>,
-      ?rowHeader: string,
-      ?caption: Doc,
-      ?emptyContent: Doc,
-      ?attrs: Attr list
-    ) =
-    Table.create<'T>(
-      columns,
-      rows,
-      rowKey,
-      Map.empty,
-      ?rowLabel = Some rowLabel,
+      (fun _ -> ""),
       ?onRowClick = onRowClick,
       ?selectedKey = selectedKey,
       ?selectedKeys = selectedKeys,

@@ -13,7 +13,7 @@ type TableInteractionTests(fixture: TestFixture) =
     this.Rows.Nth(index).Locator("td").First
 
   [<Fact>]
-  member this.``create overloads preserve positional callbacks and combine labels with header attributes``() =
+  member this.``create overloads preserve positional callbacks and combine labels with header content``() =
     task {
       do! this.NavigateTo("table")
       let legacy = this.Page.GetByTestId("positional-callback-table")
@@ -221,7 +221,7 @@ type TableInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``header-only attributes remain unique and reactive without changing shared cells``() = task {
+  member this.``header content IDs remain unique and reactive without changing shared cells``() = task {
     do! this.NavigateTo("table")
     let table = this.Page.GetByTestId("header-attributes-table")
     do! this.Expect(table.Locator("thead #scoped-name")).ToHaveCountAsync(1)

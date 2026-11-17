@@ -1702,14 +1702,20 @@ module Pages =
       button [ on.click (fun _ _ -> nameHeaderId.Set "updated-name") ] [ text "Update column ID" ]
       Table.create (
         columns ()
-        |> List.map (fun column -> { column with Attrs = [ Attr.Class "shared-cell" ] }),
+        |> List.map (fun column ->
+          let id =
+            if column.Key = "name" then
+              Attr.Dynamic "id" scopedHeaderId.View
+            else
+              attr.id "scoped-count"
+
+          {
+            column with
+                Header = span [ id ] [ column.Header ]
+                Attrs = [ Attr.Class "shared-cell" ]
+          }),
         View.Const rows,
         fst,
-        headerAttrs =
-          Map.ofList [
-            "name", [ Attr.Dynamic "id" scopedHeaderId.View ]
-            "count", [ attr.id "scoped-count" ]
-          ],
         selectedKeys = Var.Create(Set.empty: Set<string>),
         rowHeader = "name",
         caption = text "Header attributes",
@@ -1717,10 +1723,14 @@ module Pages =
       )
       button [ on.click (fun _ _ -> scopedHeaderId.Set "new-scoped-name") ] [ text "Update scoped ID" ]
       Table.create (
-        columns (),
+        columns ()
+        |> List.map (fun column ->
+          if column.Key = "name" then
+            { column with Header = span [ attr.id "combined-header-id" ] [ column.Header ] }
+          else
+            column),
         View.Const rows,
         fst,
-        headerAttrs = (Map.empty |> Map.add "name" [ attr.id "combined-header-id" ]),
         rowLabel = (fun (name, _) -> "Named " + name),
         selectedKeys = Var.Create(Set.empty: Set<string>),
         caption = text "Named rows and header",

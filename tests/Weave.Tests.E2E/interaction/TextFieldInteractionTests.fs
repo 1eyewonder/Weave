@@ -168,6 +168,35 @@ type TextFieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``debounce waits until the delay after the latest edit``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let! now = this.Page.EvaluateAsync<int64>("Date.now()")
+    do! this.Page.Clock.PauseAtAsync(System.DateTimeOffset.FromUnixTimeMilliseconds(now + 60000L).UtcDateTime)
+    let search = this.Page.GetByLabel("Search")
+    let counter = this.Page.Locator(".weave-field__counter")
+    let log = this.Page.Locator("output")
+
+    do! search.FillAsync("first")
+    // Allow adaptive rendering to schedule the callback before checking its deadline.
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(counter).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(3900L)
+    do! this.Expect(log).ToHaveTextAsync("")
+
+    do! search.FillAsync("second")
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(counter).ToHaveTextAsync("6/60")
+    // The first edit's deadline must not deliver a callback after the second edit.
+    do! this.Page.Clock.RunForAsync(5900L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! this.Page.Clock.RunForAsync(3999L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! this.Page.Clock.RunForAsync(200L)
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+  }
+
+  [<Fact>]
   member this.``removing a field cancels its pending callback even when its Doc is reused``() = task {
     do! this.Page.Clock.InstallAsync()
     do! this.NavigateTo("textfield-changes")

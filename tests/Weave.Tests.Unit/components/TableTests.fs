@@ -34,6 +34,33 @@ let private descending column =
 let tableTests =
   testList "Table" [
 
+    testCase "given a compiled consumer then the original create signature remains available"
+    <| fun () ->
+      let expected = [|
+        typeof<Table.TableColumnDef<string> list>
+        typeof<View<string list>>
+        typeof<string -> string>
+        typeof<(string -> unit) option>
+        typeof<Var<string option> option>
+        typeof<Var<Set<string>> option>
+        typeof<Var<Table.SortState option> option>
+        typeof<string option>
+        typeof<Doc option>
+        typeof<Doc option>
+        typeof<Attr list option>
+      |]
+
+      let hasOriginalSignature =
+        typeof<Table>.GetMethods()
+        |> Array.filter (fun methodInfo -> methodInfo.Name = "create" && methodInfo.IsGenericMethodDefinition)
+        |> Array.exists (fun methodInfo ->
+          let parameters = methodInfo.MakeGenericMethod(typeof<string>).GetParameters()
+          (parameters |> Array.map (fun parameter -> parameter.ParameterType)) = expected)
+
+      Expect.isTrue
+        hasOriginalSignature
+        "Existing compiled consumers must retain the original Table.create signature"
+
     testList "SortState.next" [
       testCase "given an unsorted table when a header is activated then that column sorts ascending"
       <| fun () ->

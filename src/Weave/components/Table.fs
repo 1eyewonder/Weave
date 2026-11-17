@@ -209,7 +209,6 @@ type Table =
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
   /// <param name="rowLabel">Descriptive label for each row's selection checkbox. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
-  [<Name "create_2">]
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
@@ -449,7 +448,6 @@ type Table =
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
-  [<Name "create">]
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,

@@ -275,7 +275,11 @@ DropdownMenu.create (
       Helpers.apiTable "DropdownMenuItem.create" [
         Helpers.apiParam "content" "Doc" "" "Visual content displayed inside the menu item"
         Helpers.apiParam "onClick" "unit -> unit" "" "Callback invoked when the item is activated"
-        Helpers.apiParam "?text" "string" "\"\"" "Accessible text for the item, used for type-ahead search"
+        Helpers.apiParam
+          "?text"
+          "string"
+          "\"\""
+          "Type a character to focus the next enabled item starting with it. Matching ignores case and wraps around."
         Helpers.apiParam "?icon" "Doc" "" "Optional leading icon Doc"
         Helpers.apiParam
           "?disabled"

@@ -9,6 +9,33 @@ type ProgressTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
   [<Fact>]
+  member this.``Given buffered playback When the download or mode changes Then accessible value text describes only known progress``
+    ()
+    = task {
+    do! this.NavigateTo("docs-progress")
+
+    let bar =
+      this.Page.GetByRole(AriaRole.Progressbar, PageGetByRoleOptions(Name = "Video playback"))
+
+    let download =
+      this.Page.GetByRole(AriaRole.Slider, PageGetByRoleOptions(Name = "Downloaded"))
+
+    do! this.Expect(bar).ToHaveAttributeAsync("aria-valuenow", "40")
+    do! this.Expect(bar).ToHaveAttributeAsync("aria-valuetext", "40% played, 75% downloaded")
+    do! download.PressAsync("End")
+    do! this.Expect(bar).ToHaveAttributeAsync("aria-valuetext", "40% played, 100% downloaded")
+
+    let unknown =
+      this.Page.GetByRole(AriaRole.Switch, PageGetByRoleOptions(Name = "Unknown video duration"))
+
+    do! unknown.PressAsync("Space")
+    do! this.Expect(bar).Not.ToHaveAttributeAsync("aria-valuenow", Regex(".*"))
+    do! this.Expect(bar).Not.ToHaveAttributeAsync("aria-valuetext", Regex(".*"))
+    do! unknown.PressAsync("Space")
+    do! this.Expect(bar).ToHaveAttributeAsync("aria-valuetext", "40% played, 100% downloaded")
+  }
+
+  [<Fact>]
   member this.``progress passes accessibility scan``() = this.RunAxeScan("progress")
 
   [<Fact>]

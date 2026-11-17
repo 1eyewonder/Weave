@@ -152,7 +152,7 @@ type DropdownMenuItem =
   /// </summary>
   /// <param name="content">The Doc to render as the item's visible content.</param>
   /// <param name="onClick">Callback invoked when the item is activated. The menu closes automatically.</param>
-  /// <param name="text">Accessible text for the item. Used for type-ahead search. Defaults to empty string.</param>
+  /// <param name="text">Text for keyboard navigation. Typing a character focuses the next enabled item whose text starts with it, ignoring case. Defaults to empty.</param>
   /// <param name="icon">Optional leading icon Doc.</param>
   /// <param name="disabled">Reactive view controlling the disabled state. Defaults to false.</param>
   /// <param name="attrs">Additional attributes merged onto the item element.</param>
@@ -176,6 +176,15 @@ type DropdownMenuItem =
 
 [<JavaScript>]
 type DropdownMenu =
+
+  [<Inline "Array.from($key).length === 1">]
+  static member private isSingleCharacter(key: string) =
+    key.Length = 1 || (key.Length = 2 && System.Char.IsSurrogatePair(key, 0))
+
+  [<Inline "$text.slice(0, $key.length).toUpperCase() === $key.toUpperCase()">]
+  static member private startsWithCharacter (key: string) (text: string) =
+    text.Length >= key.Length
+    && text.Substring(0, key.Length).ToUpperInvariant() = key.ToUpperInvariant()
 
   /// <summary>
   /// Creates a dropdown menu component anchored to a trigger button.
@@ -226,7 +235,7 @@ type DropdownMenu =
     let popoverRef = ref (JS.Document.CreateElement "div")
     let triggerRef = ref (JS.Document.CreateElement "button")
 
-    let findNextActionIndex (container: Dom.Element) (fromIndex: int) (direction: int) =
+    let findActionIndex matches (container: Dom.Element) (fromIndex: int) (direction: int) =
       let currentItems = itemsSnapshot.Value
       let count = List.length currentItems
 
@@ -242,18 +251,19 @@ type DropdownMenu =
             let candidate = (idx + direction + count) % count
 
             match currentItems.[candidate] with
-            | DropdownMenuItemKind.Action _ ->
+            | DropdownMenuItemKind.Action def when matches def ->
               let itemEl = container.QuerySelector(sprintf "#%s-item-%d" dropdownMenuId candidate)
 
-              let isDisabled = not (isNull itemEl) && itemEl.ClassList.Contains(disabledClass)
-
-              if not isDisabled then
+              if not (isNull itemEl) && not (itemEl.ClassList.Contains(disabledClass)) then
                 Some candidate
               else
                 search candidate (steps + 1)
+            | DropdownMenuItemKind.Action _
             | DropdownMenuItemKind.Divider -> search candidate (steps + 1)
 
         search fromIndex 0
+
+    let findNextActionIndex = findActionIndex (fun _ -> true)
 
     let focusItemAt (index: int) =
       let container = rootRef.Value
@@ -261,7 +271,7 @@ type DropdownMenu =
 
       if not (isNull itemEl) then
         Var.Set highlightedIndex index
-        JS.Window.SetTimeout((fun () -> itemEl?focus ()), 0) |> ignore
+        itemEl?focus ()
 
     let close () =
       Var.Set openVar false
@@ -384,6 +394,27 @@ type DropdownMenu =
           | None -> ()
 
       | Key.Tab -> close ()
+      | _ when not (ev.CtrlKey || ev.MetaKey || ev.AltKey || ev?isComposing) ->
+        let key = ev.Key
+
+        if not (System.String.IsNullOrEmpty key) && DropdownMenu.isSingleCharacter key then
+          let active = container.QuerySelector("[role='menuitem']:focus-within")
+          let focusedId = if isNull active then "" else active.Id
+
+          let fromIndex =
+            seq { 0 .. count - 1 }
+            |> Seq.tryFind (fun index -> focusedId = sprintf "%s-item-%d" dropdownMenuId index)
+            |> Option.defaultValue -1
+
+          let matches def =
+            not (System.String.IsNullOrEmpty def.Text)
+            && DropdownMenu.startsWithCharacter key def.Text
+
+          match findActionIndex matches container fromIndex 1 with
+          | Some index ->
+            ev.PreventDefault()
+            focusItemAt index
+          | None -> ()
       | _ -> ()
 
     let triggerButton =

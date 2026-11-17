@@ -1,10 +1,44 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open Microsoft.Playwright
 open Xunit
 
 type SelectInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("City", "istanbul", "İSTANBUL")>]
+  [<InlineData("City", "ığdır", "IĞDIR")>]
+  [<InlineData("Cities", "istanbul", "İSTANBUL")>]
+  [<InlineData("Cities", "ığdır", "IĞDIR")>]
+  member this.``Given a search in an open select When the application culture changes Then the matching option can be selected``
+    (label: string, query: string, expected: string)
+    = task {
+    do! this.NavigateTo("select-culture")
+
+    let trigger =
+      this.Page.GetByRole(AriaRole.Combobox, PageGetByRoleOptions(Name = label, Exact = true))
+
+    do! trigger.PressAsync("Enter")
+
+    let search =
+      this.Page.GetByRole(AriaRole.Textbox, PageGetByRoleOptions(Name = "Search options"))
+
+    do! search.FillAsync(query)
+    do! this.Expect(this.Page.GetByText("No items found")).ToBeVisibleAsync()
+
+    // A programmatic culture update keeps the same search open.
+    let! _ =
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Use Turkish"))
+        .EvaluateAsync("el => el.click()")
+
+    do! this.Expect(this.Page.GetByRole(AriaRole.Option)).ToHaveTextAsync(expected)
+    do! search.PressAsync("ArrowDown")
+    do! search.PressAsync("Enter")
+    do! this.Expect(trigger).ToContainTextAsync(expected)
+  }
 
   [<Theory>]
   [<InlineData("keyboard-single")>]

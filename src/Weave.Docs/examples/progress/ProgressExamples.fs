@@ -214,17 +214,24 @@ Doc.Concat [
 
   let private buffering () =
     let content =
+      let played = 40
       let downloaded = Var.Create 75
+      let unknown = Var.Create false
       let downloadLabel = downloaded.View |> View.Map(sprintf "Downloaded: %d%%")
 
+      let valueText =
+        downloaded.View |> View.Map(sprintf "%d%% played, %d%% downloaded" played)
+
       div [ Flex.Flex.allSizes; FlexDirection.Column.allSizes; Gap.All.g4 ] [
-        Slider.create (downloaded, min = 40, labelText = downloadLabel)
-        p [] [ text "Playback: 40%. Downloaded video appears ahead of playback." ]
+        Slider.create (downloaded, min = played, labelText = downloadLabel)
+        Switch.create (unknown, content = text "Unknown video duration")
         Progress.Linear.create (
-          value = View.Const 40.0,
+          value = View.Const(float played),
           bufferValue = (downloaded.View |> View.Map float),
+          indeterminate = unknown.View,
           attrs = [
             Attr.Create "aria-label" "Video playback"
+            Attr.DynamicPred "aria-valuetext" (View.not unknown.View) valueText
             Progress.Linear.Size.large
             Progress.Linear.Variant.rounded
           ]
@@ -233,23 +240,29 @@ Doc.Concat [
 
     let description =
       Helpers.bodyText
-        "A buffer shows work prepared ahead of completion. Here playback is at 40%; move the slider to change the downloaded amount. bufferValue is the total prepared amount, not an increment, and is hidden in indeterminate mode."
+        "Playback is at 40%. Move the slider to change how much video has downloaded. When the buffered amount matters, include both amounts in aria-valuetext using your application's language and units. Remove the value text while the duration is unknown."
 
     Helpers.codeSampleSection
       "Buffering"
       description
       content
-      """let downloaded = Var.Create 75
+      """let played = 40
+let downloaded = Var.Create 75
+let unknown = Var.Create false
 let downloadLabel = downloaded.View |> View.Map(sprintf "Downloaded: %d%%")
+let valueText = downloaded.View |> View.Map(sprintf "%d%% played, %d%% downloaded" played)
 
 Doc.Concat [
-  Slider.create (downloaded, min = 40, labelText = downloadLabel)
+  Slider.create (downloaded, min = played, labelText = downloadLabel)
+  Switch.create (unknown, content = text "Unknown video duration")
 
   Progress.Linear.create (
-    value = View.Const 40.0,
+    value = View.Const(float played),
     bufferValue = (downloaded.View |> View.Map float),
+    indeterminate = unknown.View,
     attrs = [
       Attr.Create "aria-label" "Video playback"
+      Attr.DynamicPred "aria-valuetext" (View.not unknown.View) valueText
       Progress.Linear.Size.large
       Progress.Linear.Variant.rounded
     ]

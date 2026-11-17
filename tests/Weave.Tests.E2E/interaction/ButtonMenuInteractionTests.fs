@@ -8,6 +8,43 @@ open Xunit
 type ButtonMenuInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 
+  [<Theory>]
+  [<InlineData("top-menu", "vertical")>]
+  [<InlineData("bottom-menu", "vertical")>]
+  [<InlineData("horizontal-menu", "horizontal")>]
+  [<InlineData("left-menu", "horizontal")>]
+  member this.``open menu exposes its orientation``(name: string, orientation: string) = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.GetByTestId(name)
+    do! container.Locator(".weave-button-menu__trigger").ClickAsync()
+    do! this.Expect(container.GetByRole(AriaRole.Menu)).ToHaveAttributeAsync("aria-orientation", orientation)
+  }
+
+  [<Theory>]
+  [<InlineData("top-menu", "ltr", "ArrowUp", "ArrowDown")>]
+  [<InlineData("top-menu", "rtl", "ArrowUp", "ArrowDown")>]
+  [<InlineData("bottom-menu", "ltr", "ArrowDown", "ArrowUp")>]
+  [<InlineData("bottom-menu", "rtl", "ArrowDown", "ArrowUp")>]
+  member this.``vertical arrows follow menu direction independent of text direction``
+    (name: string, textDirection: string, next: string, previous: string)
+    = task {
+    do! this.NavigateTo("buttonmenu")
+    let container = this.Page.GetByTestId(name)
+
+    let! _ =
+      container.EvaluateAsync("(el, direction) => el.setAttribute('dir', direction)", textDirection)
+
+    do! container.Locator(".weave-button-menu__trigger").ClickAsync()
+    let menu = container.GetByRole(AriaRole.Menu)
+    let items = menu.GetByRole(AriaRole.Menuitem)
+    do! this.Expect(items).ToHaveCountAsync(2)
+    do! items.First.FocusAsync()
+    do! this.Page.Keyboard.PressAsync(next)
+    do! this.Expect(items.Last).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync(previous)
+    do! this.Expect(items.First).ToBeFocusedAsync()
+  }
+
   [<Fact>]
   member this.``closed actions are hidden and cannot be activated``() = task {
     do! this.NavigateTo("buttonmenu")

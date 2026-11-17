@@ -2281,12 +2281,28 @@ module Pages =
       )
 
     div [] [
-      ButtonMenu.create (text "Menu", [ menuItem "Action 1"; menuItem "Action 2" ])
+      ButtonMenu.create (
+        text "Menu",
+        [ menuItem "Action 1"; menuItem "Action 2" ],
+        attrs = [ Attr.Create "data-testid" "top-menu" ]
+      )
+      ButtonMenu.create (
+        text "Bottom Menu",
+        [ menuItem "Bottom 1"; menuItem "Bottom 2" ],
+        direction = ButtonMenu.Direction.Bottom,
+        attrs = [ Attr.Create "data-testid" "bottom-menu" ]
+      )
       ButtonMenu.create (
         text "Horizontal Menu",
         [ menuItem "Left 1"; menuItem "Left 2" ],
         direction = ButtonMenu.Direction.Right,
         attrs = [ Attr.Create "data-testid" "horizontal-menu" ]
+      )
+      ButtonMenu.create (
+        text "Left Menu",
+        [ menuItem "Leftward 1"; menuItem "Leftward 2" ],
+        direction = ButtonMenu.Direction.Left,
+        attrs = [ Attr.Create "data-testid" "left-menu" ]
       )
       ButtonMenu.create (
         text "Edge cases",

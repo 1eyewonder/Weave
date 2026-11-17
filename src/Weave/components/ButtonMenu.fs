@@ -166,6 +166,11 @@ module private ButtonMenuInternal =
         [
           cl Css.``weave-button-menu__items``
           Attr.Create "role" "menu"
+          match direction with
+          | ButtonMenu.Direction.Left
+          | ButtonMenu.Direction.Right -> Attr.Create "aria-orientation" "horizontal"
+          | ButtonMenu.Direction.Top
+          | ButtonMenu.Direction.Bottom -> Attr.Create "aria-orientation" "vertical"
           Attr.DynamicBool "inert" (isOpen.View |> View.Map not)
           Attr.DynamicCustom
             (fun el hidden -> el.SetAttribute("aria-hidden", string<bool> hidden))

@@ -630,7 +630,7 @@ TextField.multiLine (
             "?onChange"
             "string -> unit"
             ""
-            "Callback invoked when the value changes (debounced if debounce is set)"
+            "Called for user edits and external value changes while the field is mounted. The initial value is skipped, and removing the field cancels its pending debounce."
           Helpers.apiParam
             "?inputAttrs"
             "Attr list"

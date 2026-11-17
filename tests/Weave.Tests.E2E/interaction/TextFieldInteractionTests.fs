@@ -144,6 +144,56 @@ type TextFieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``change callbacks skip initial values and include native and external edits``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let log = this.Page.Locator("output")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    let search = this.Page.GetByLabel("Search")
+    do! search.FillAsync("first")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! search.FillAsync("second")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("6/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+    do! this.Page.GetByText("Switch field").ClickAsync()
+    do! this.Expect(this.Page.GetByLabel("Notes")).ToBeVisibleAsync()
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Expect(log).ToHaveTextAsync("search=second|notes=external")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(log).ToHaveTextAsync("search=second|notes=external")
+  }
+
+  [<Fact>]
+  member this.``removing a field cancels its pending callback even when its Doc is reused``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    let toggle = this.Page.GetByText("Switch field")
+    let log = this.Page.Locator("output")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+    do! toggle.ClickAsync()
+    do! this.Page.GetByLabel("Notes").FillAsync("new")
+    do! this.Expect(log).ToContainTextAsync("notes=new")
+    do! toggle.ClickAsync()
+    do! this.Expect(search).ToHaveValueAsync("old")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("notes=new")
+    do! search.FillAsync("fresh")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("notes=new|search=fresh")
+    do! toggle.ClickAsync()
+    do! this.Expect(this.Page.GetByLabel("Notes")).ToHaveValueAsync("external")
+    do! this.Expect(log).ToHaveTextAsync("notes=new|search=fresh")
+  }
+
+  [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {
     do! this.NavigateTo("textfield")
     let input = this.Page.Locator("input[aria-invalid='true']").First

@@ -76,22 +76,35 @@ type TextField =
       attrs: Attr list option
     ) =
 
-    let debounceSinkDoc =
-      match onChange with
-      | Some callback ->
-        let timeoutHandle = ref (None: JS.Handle option)
+    let owner = ref<Dom.Element> null
 
-        value
-        |> Doc.sinkCached (fun v ->
+    let observeChanges callback =
+      let mutable timeout = None
+      let removal = DomRemovalListener.create ()
+
+      let cancel () =
+        timeout |> Option.iter JS.ClearTimeout
+        timeout <- None
+
+      value
+      |> Doc.sinkCached (fun current ->
+        // The first sample, including an offline edit on reuse, precedes insertion.
+        if not (isNull owner.Value) && As<bool> owner.Value?isConnected then
           match debounce with
+          | None -> callback current
           | Some delay ->
-            match timeoutHandle.Value with
-            | Some h -> JS.ClearTimeout h
-            | None -> ()
+            match timeout with
+            | Some handle -> JS.ClearTimeout handle
+            | None -> removal.Watch(owner.Value, cancel)
 
-            timeoutHandle.Value <- Some(JS.SetTimeout (fun () -> callback v) delay)
-          | None -> callback v)
-      | None -> Doc.Empty
+            let notify () =
+              timeout <- None
+              removal.Disconnect()
+
+              if As<bool> owner.Value?isConnected then
+                callback current
+
+            timeout <- Some(JS.SetTimeout notify delay))
 
     let counterDoc =
       match maxLength with
@@ -123,13 +136,17 @@ type TextField =
         ?typoAttrs = typoAttrs,
         inputId = inputId,
         attrs = [
+          if onChange.IsSome then
+            on.afterRender (fun el -> owner.Value <- el)
           if isMultiline then
             Css.``weave-field--multiline`` |> cl
           yield! defaultArg attrs []
         ]
       )
 
-    [ debounceSinkDoc; fieldDoc ] |> Doc.Concat
+    match onChange with
+    | Some callback -> Doc.Concat [ observeChanges callback; fieldDoc ]
+    | None -> fieldDoc
 
   static member singleLine
     (

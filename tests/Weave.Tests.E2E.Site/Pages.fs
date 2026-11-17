@@ -708,6 +708,35 @@ module Pages =
       )
     ]
 
+  let private textFieldChangesPage () =
+    let search = Var.Create "initial"
+    let notes = Var.Create "initial"
+    let showSearch = Var.Create true
+    let changes = Var.Create []
+
+    let record field value =
+      changes.Update(fun log -> log @ [ field + "=" + value ])
+
+    let original =
+      TextField.singleLine (
+        search,
+        labelText = View.Const "Search",
+        maxLength = 60,
+        debounce = 10000,
+        onChange = record "search"
+      )
+
+    let replacement =
+      TextField.multiLine (notes, labelText = View.Const "Notes", maxLength = 60, onChange = record "notes")
+
+    div [] [
+      showSearch.View
+      |> Doc.BindView(fun visible -> if visible then original else replacement)
+      button [ on.click (fun _ _ -> showSearch.Update not) ] [ text "Switch field" ]
+      button [ on.click (fun _ _ -> notes.Set "external") ] [ text "Set notes" ]
+      output [] [ textView (changes.View |> View.Map(String.concat "|")) ]
+    ]
+
   let private textFieldPage () =
     div [] [
       TextField.singleLine (Var.Create "", labelText = View.Const "Standard Text Field")
@@ -3796,6 +3825,7 @@ module Pages =
     | "numericfield" -> numericFieldPage ()
     | "textfield" -> textFieldPage ()
     | "multiline-editing" -> multilineEditingPage ()
+    | "textfield-changes" -> textFieldChangesPage ()
     | "form" -> formPage ()
     | "form-sizing" -> formSizingPage ()
     | "form-shared-field" -> sharedFieldPage ()

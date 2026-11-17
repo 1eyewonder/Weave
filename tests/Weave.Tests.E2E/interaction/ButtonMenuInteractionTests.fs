@@ -293,12 +293,21 @@ type ButtonMenuInteractionTests(fixture: TestFixture) =
     do! this.Expect(link).ToHaveAccessibleNameAsync("Wrapped link")
 
     let! _ =
-      link.Locator("a").EvaluateAsync("el => el.setAttribute('aria-disabled', 'true')")
+      link
+        .Locator("a")
+        .EvaluateAsync("el => { el.setAttribute('aria-disabled', 'true'); el.removeAttribute('href'); }")
 
     do! this.Expect(link).ToHaveAttributeAsync("aria-disabled", "true")
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("none")
-    let! _ = link.Locator("a").EvaluateAsync("el => el.removeAttribute('aria-disabled')")
+
+    let! _ =
+      link
+        .Locator("a")
+        .EvaluateAsync(
+          "el => { el.setAttribute('href', '#menu-link-target'); el.removeAttribute('aria-disabled'); }"
+        )
+
     do! this.Expect(link).ToHaveAttributeAsync("aria-disabled", "false")
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(this.Page.GetByTestId("menu-action")).ToHaveTextAsync("link")

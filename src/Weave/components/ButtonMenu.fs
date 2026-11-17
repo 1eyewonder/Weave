@@ -38,7 +38,7 @@ module private ButtonMenuInternal =
   let synchronizeDisabled (root: Dom.Element) =
     let update () =
       let targets =
-        root.QuerySelectorAll("button, input, select, textarea, a[href], [role=button]")
+        root.QuerySelectorAll("button, input, select, textarea, a[href], a[aria-disabled], [role=button]")
 
       let disabled =
         targets.Length > 0
@@ -63,7 +63,7 @@ module private ButtonMenuInternal =
         "subtree" => true
         "childList" => true
         "attributes" => true
-        "attributeFilter" => [| "disabled"; "aria-disabled" |]
+        "attributeFilter" => [| "disabled"; "aria-disabled"; "href"; "role" |]
       ])
 
     update ()

@@ -11,22 +11,6 @@ open Weave.CssHelpers.Core
 [<JavaScript; RequireQualifiedAccess>]
 module ScrollToTop =
 
-  [<Direct """
-    if (customElements.get($name)) return;
-    function ScrollListener() { return Reflect.construct(HTMLElement, [], ScrollListener); }
-    Object.setPrototypeOf(ScrollListener.prototype, HTMLElement.prototype);
-    ScrollListener.prototype.connectedCallback = $connected;
-    ScrollListener.prototype.disconnectedCallback = $disconnected;
-    customElements.define($name, ScrollListener);
-  """>]
-  let internal registerScrollListener
-    (name: string)
-    (connected: ThisAction<Dom.Element>)
-    (disconnected: ThisAction<Dom.Element>)
-    : unit
-    =
-    X<unit>
-
   module Behavior =
     /// Return immediately instead of animating the scroll.
     let instant = Attr.Create "data-weave-scroll-behavior" "instant"
@@ -84,16 +68,8 @@ type ScrollToTop =
     let handler (_: Dom.Event) = update ()
 
     let listener =
-      let name = "weave-scroll-to-top-listener"
-
-      ScrollToTop.registerScrollListener
-        name
-        (ThisAction<Dom.Element>(fun marker -> marker?attach marker?parentElement))
-        (ThisAction<Dom.Element>(fun marker -> marker?detach ()))
-
-      Doc.Element name [
-        Attr.Create "hidden" ""
-        Attr.Prop "attach" (fun (button: Dom.Element) ->
+      DomLifecycleListener.watch
+        (fun (button: Dom.Element) ->
           buttonRef.Value <- button
 
           target.Value <-
@@ -107,7 +83,7 @@ type ScrollToTop =
             | None -> JS.Window.AddEventListener("scroll", handler)
 
           update ())
-        Attr.Prop "detach" (fun () ->
+        (fun () ->
           if not (isNull target.Value) then
             match selector with
             | Some _ -> target.Value.RemoveEventListener("scroll", handler)
@@ -115,7 +91,6 @@ type ScrollToTop =
 
           target.Value <- null
           buttonRef.Value <- null)
-      ] []
 
     let icon =
       Icon.create (

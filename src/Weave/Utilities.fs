@@ -47,6 +47,44 @@ module DomRemovalListener =
 
   let create () = { Observer = None }
 
+/// A hidden marker that invokes callbacks each time its parent enters or leaves the document.
+[<JavaScript>]
+module DomLifecycleListener =
+
+  [<Direct """
+    if (customElements.get($name)) return;
+    function LifecycleMarker() { return Reflect.construct(HTMLElement, [], LifecycleMarker); }
+    Object.setPrototypeOf(LifecycleMarker.prototype, HTMLElement.prototype);
+    LifecycleMarker.prototype.connectedCallback = $connected;
+    LifecycleMarker.prototype.disconnectedCallback = $disconnected;
+    customElements.define($name, LifecycleMarker);
+  """>]
+  let private register
+    (name: string)
+    (connected: ThisAction<Dom.Element>)
+    (disconnected: ThisAction<Dom.Element>)
+    : unit
+    =
+    X<unit>
+
+  /// Place the returned Doc inside the element whose connection lifecycle is being watched.
+  let watch (onConnected: Dom.Element -> unit) (onDisconnected: unit -> unit) =
+    let name = "weave-dom-lifecycle-listener"
+
+    register
+      name
+      (ThisAction<Dom.Element>(fun marker -> marker?attach marker?parentElement))
+      (ThisAction<Dom.Element>(fun marker -> marker?detach ()))
+
+    Doc.Element name [
+      Attr.Create "hidden" ""
+      Attr.Prop "attach" onConnected
+      Attr.Prop "detach" onDisconnected
+    ] []
+
+  /// Observe only removal; callers can partially apply their cleanup action.
+  let onRemoved = watch ignore
+
 /// <summary>
 /// Listens for events on the document and invokes a callback when the event
 /// target is outside all of the tracked element refs.

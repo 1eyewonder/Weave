@@ -58,6 +58,84 @@ type ForcedColorIndicatorTests(fixture: TestFixture) =
   [<Theory>]
   [<InlineData(false)>]
   [<InlineData(true)>]
+  member this.``forced colors distinguish selected dates``(dark: bool) = task {
+    do! this.Open("calendar-validation", dark)
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Allow all Booking date", Exact = true))
+        .ClickAsync()
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Booking date", Exact = true))
+        .ClickAsync()
+
+    let selected = this.Page.Locator(".weave-calendar__day--selected")
+
+    let ordinary =
+      this.Page.Locator(".weave-calendar__day:not(.weave-calendar__day--selected):not(:disabled)").First
+
+    do! this.Expect(selected).ToHaveCountAsync(1)
+    let! selectedRow = this.LuminanceRow(selected, 0.3)
+    let! ordinaryRow = this.LuminanceRow(ordinary, 0.3)
+    let selectedPixel = selectedRow[selectedRow.Length / 3]
+    let ordinaryPixel = ordinaryRow[ordinaryRow.Length / 3]
+    Assert.True([| selectedPixel |] |> contrastsWith ordinaryPixel, "Selected date must remain visible")
+    let! _ = ordinary.EvaluateAsync("el => el.setAttribute('aria-current', 'date')")
+
+    let! todayBorder =
+      ordinary.EvaluateAsync<float>("el => parseFloat(getComputedStyle(el).borderTopWidth)")
+
+    Assert.True(todayBorder >= 1.0, "Today's date must retain a border")
+  }
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
+  member this.``forced colors distinguish selected clock values``(dark: bool) = task {
+    do! this.Open("time-availability", dark)
+
+    do!
+      this.Page
+        .GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Scheduled time", Exact = true))
+        .ClickAsync()
+
+    let hour = this.Page.Locator(".weave-time-picker__number--selected")
+    do! this.Expect(hour).ToHaveCountAsync(1)
+
+    let! colors =
+      hour.EvaluateAsync<string array>(
+        """el => [getComputedStyle(el).color,
+          getComputedStyle(document.querySelector('.weave-time-picker__hand')).fill,
+          getComputedStyle(el).forcedColorAdjust]"""
+      )
+
+    Assert.NotEqual<string>(colors[0], colors[1])
+
+    if this.Page.Context.Browser.BrowserType.Name <> "webkit" then
+      Assert.Equal("none", colors[2])
+
+    let! contrast =
+      hour.EvaluateAsync<float>(
+        """el => {
+          const color = value => value.match(/\d+/g).slice(0, 3).map(Number).map(v => {
+            const c = v / 255;
+            return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+          });
+          const luminance = rgb => 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+          const text = luminance(color(getComputedStyle(el).color));
+          const fill = luminance(color(getComputedStyle(document.querySelector('.weave-time-picker__hand')).fill));
+          return (Math.max(text, fill) + 0.05) / (Math.min(text, fill) + 0.05);
+        }"""
+      )
+
+    Assert.True(contrast >= 4.5, $"Clock number contrast: %f{contrast}")
+  }
+
+  [<Theory>]
+  [<InlineData(false)>]
+  [<InlineData(true)>]
   member this.``Given forced colors then ticks on both sides of the thumb extend visibly beyond the track``
     (dark: bool)
     = task {

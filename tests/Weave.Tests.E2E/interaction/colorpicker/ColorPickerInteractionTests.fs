@@ -105,7 +105,7 @@ type ColorPickerInteractionTests(fixture: TestFixture) =
   member this.``Given an external color change then hue reflects it``() = task {
     do! this.NavigateTo("color-picker")
     do! this.UseExternalColor()
-    do! this.Expect(this.Slider("Hue")).ToHaveAttributeAsync("aria-valuenow", "120.00")
+    do! this.Expect(this.Slider("Hue")).ToHaveAttributeAsync("aria-valuenow", "120")
   }
 
   [<Fact>]

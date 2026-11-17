@@ -1992,6 +1992,7 @@ module Pages =
   let private linkPage () =
     let activations = Var.Create 0
     let enabled = Var.Create true
+    let attributeDestination = Var.Create "#attribute-destination"
 
     let activate () = Var.Update activations ((+) 1)
 
@@ -2035,6 +2036,20 @@ module Pages =
           attrs = [ Attr.Create "aria-label" "Add item"; Attr.Create "data-testid" "icon-action" ]
         )
         Button.create (text "Toggle links", fun () -> Var.Update enabled not)
+        Link.create (
+          text "Attribute destination",
+          enabled = enabled.View,
+          onClick = activate,
+          attrs = [
+            Attr.Dynamic "href" attributeDestination.View
+            Attr.Create "tabindex" "0"
+            Attr.Create "data-testid" "attribute-destination"
+          ]
+        )
+        Button.create (
+          text "Change destination",
+          fun () -> Var.Set attributeDestination "#changed-destination"
+        )
         Link.create (text "Destination", href = "#destination", enabled = enabled.View, onClick = activate)
         IconLink.create (
           text "→",

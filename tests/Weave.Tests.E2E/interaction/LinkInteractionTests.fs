@@ -23,10 +23,7 @@ type LinkInteractionTests(fixture: TestFixture) =
       Assert.Equal("#link", hash)
       let! after = this.Page.EvaluateAsync<float>("window.scrollY")
       Assert.Equal(before, after)
-      do! this.Expect(action).ToHaveRoleAsync(AriaRole.Button)
-      do! this.Expect(action).ToHaveAttributeAsync("type", "button")
-      do! action.PressAsync("Space")
-      do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("2")
+      do! this.Expect(action).ToHaveRoleAsync(AriaRole.Link)
     }
 
   [<Theory>]
@@ -45,8 +42,10 @@ type LinkInteractionTests(fixture: TestFixture) =
 
     do! toggle.ClickAsync()
     do! this.Expect(link).ToBeDisabledAsync()
-    let! disabledHref = link.GetAttributeAsync("href")
-    Assert.Null(disabledHref)
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#destination")
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "-1")
+    do! link.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Enter")
     let! _ = link.EvaluateAsync("el => el.click()")
     do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("0")
     let! disabledHash = this.Page.EvaluateAsync<string>("location.hash")
@@ -54,6 +53,7 @@ type LinkInteractionTests(fixture: TestFixture) =
     do! toggle.ClickAsync()
     do! this.Expect(link).ToBeEnabledAsync()
     do! this.Expect(link).ToHaveAttributeAsync("href", "#destination")
+    do! this.Expect(link).Not.ToHaveAttributeAsync("tabindex", "-1")
     do! link.PressAsync("Enter")
     do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("1")
     let! enabledHash = this.Page.EvaluateAsync<string>("location.hash")
@@ -99,6 +99,38 @@ type LinkInteractionTests(fixture: TestFixture) =
       )
 
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("link-count")).ToHaveTextAsync("1")
+  }
+
+  [<Fact>]
+  member this.``an attribute destination remains a link across availability changes``() = task {
+    do! this.NavigateTo("link")
+    let link = this.Page.GetByTestId("attribute-destination")
+    do! this.Expect(link).ToHaveRoleAsync(AriaRole.Link)
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#attribute-destination")
+
+    let toggle =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Toggle links"))
+
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToBeDisabledAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "-1")
+    do! toggle.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+
+    do!
+      this
+        .Expect(this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Change destination")))
+        .ToBeFocusedAsync()
+
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Change destination")).ClickAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#changed-destination")
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#changed-destination")
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "0")
+    do! link.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("1")
+    let! hash = this.Page.EvaluateAsync<string>("location.hash")
+    Assert.Equal("#changed-destination", hash)
   }
 
   [<Fact>]

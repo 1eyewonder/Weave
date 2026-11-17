@@ -31,39 +31,47 @@ module Link =
     let disabled = View.not enabled
     let state = Disabled.disabledClass Css.``weave-link--disabled`` enabled
 
-    match href, onClick with
-    | None, Some activate ->
-      button
-        [
-          attr.``type`` "button"
-          Disabled.nativeAttr enabled
-          on.clickViewGuarded enabled activate
-          state
-          yield! attrs
-        ]
-        children
-    | _ ->
-      a
-        [
-          Attr.DynamicPred "href" enabled (View.Const(defaultArg href "#"))
-          Attr.Create "role" "link"
-          Attr.DynamicPred "aria-disabled" disabled (View.Const "true")
-          on.clickView enabled (fun _ ev canNavigate ->
-            if canNavigate then
-              onClick |> Option.iter (fun activate -> activate ())
-            else
-              ev.PreventDefault())
-          state
-          yield! attrs
-        ]
-        children
+    let isAction (el: WebSharper.JavaScript.Dom.Element) =
+      Option.isNone href && Option.isSome onClick && el.GetAttribute("href") = "#"
+
+    let mutable previousTabIndex: string option = None
+    let mutable tabIndexSuppressed = false
+
+    a
+      [
+        attr.href (defaultArg href "#")
+        Attr.DynamicPred "aria-disabled" disabled (View.Const "true")
+        on.clickView enabled (fun el ev canNavigate ->
+          if not canNavigate || isAction el then
+            ev.PreventDefault()
+
+          if canNavigate then
+            onClick |> Option.iter (fun activate -> activate ()))
+        state
+        yield! attrs
+
+        enabled
+        |> Attr.DynamicCustom(fun el canNavigate ->
+          if canNavigate && tabIndexSuppressed then
+            match previousTabIndex with
+            | Some value -> el.SetAttribute("tabindex", value)
+            | None -> el.RemoveAttribute "tabindex"
+
+            tabIndexSuppressed <- false
+          elif not canNavigate && not tabIndexSuppressed then
+            previousTabIndex <- Option.ofObj (el.GetAttribute "tabindex")
+            el.SetAttribute("tabindex", "-1")
+            tabIndexSuppressed <- true)
+
+      ]
+      children
 
 [<JavaScript; RequireQualifiedAccess>]
 type Link =
 
   /// <summary>
   /// Creates a link with optional text label and start/end icon adornments.
-  /// A callback without a destination renders a button styled like a link.
+  /// A callback without a destination does not navigate away from the current page.
   /// The underline decoration is applied only to the text portion, never to icons.
   /// Pass <c>Link.Underline.*</c> via <c>?attrs</c> to control decoration.
   /// </summary>
@@ -100,7 +108,7 @@ type IconLink =
 
   /// <summary>
   /// Creates a link containing only an icon — no text label and no underline.
-  /// A callback without a destination renders a button styled like an icon link.
+  /// A callback without a destination does not navigate away from the current page.
   /// </summary>
   static member create
     (icon: Doc, ?href: string, ?enabled: View<bool>, ?onClick: unit -> unit, ?attrs: Attr list)

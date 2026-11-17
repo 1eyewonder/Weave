@@ -25,7 +25,7 @@ module WeaveList =
     /// </summary>
     | ToggleSelection
     /// <summary>
-    /// Multiple items can be selected simultaneously. A checkbox is displayed on each item.
+    /// Multiple items can be selected simultaneously. A parent checkbox selects its enabled leaves.
     /// </summary>
     | MultiSelection
 
@@ -96,7 +96,7 @@ type WeaveList =
 
     let isMultiSelect = Option.isSome selectedValues
 
-    let rec collectLeafValues (children: ListChild list) : string list =
+    let rec collectLeafValues (children: ListChild list) =
       children
       |> List.collect (fun child ->
         match child with
@@ -104,7 +104,9 @@ type WeaveList =
         | ListChild.Item def ->
           if List.isEmpty def.NestedChildren then
             match def.Value with
-            | Some v -> [ v ]
+            | Some value -> [
+                def.Disabled |> View.Map(fun disabled -> if disabled then None else Some value)
+              ]
             | None -> []
           else
             collectLeafValues def.NestedChildren)
@@ -125,24 +127,29 @@ type WeaveList =
 
       let hasNestedLeafValues = not (List.isEmpty nestedLeafValues)
 
+      let enabledLeafValues =
+        nestedLeafValues |> View.Sequence |> View.Map(Seq.choose id >> Set.ofSeq)
+
+      let parentCoverage =
+        match selectedValues with
+        | Some selection when hasNestedLeafValues ->
+          (enabledLeafValues, selection.View)
+          ||> View.Map2(fun enabled selected -> enabled, Set.intersect enabled selected)
+        | _ -> View.Const(Set.empty, Set.empty)
+
       let isSelected =
         match def.Value, selectedValue, selectedValues with
+        | _, _, Some _ when hasNestedLeafValues ->
+          parentCoverage
+          |> View.MapCached(fun (enabled, selectedLeaves) -> not enabled.IsEmpty && selectedLeaves = enabled)
         | Some v, Some sv, _ -> sv.View |> View.MapCached(fun sel -> sel = Some v)
         | Some v, _, Some svs -> svs.View |> View.MapCached(fun sel -> Set.contains v sel)
-        | None, _, Some svs when hasNestedLeafValues ->
-          svs.View
-          |> View.MapCached(fun sel -> nestedLeafValues |> List.forall (fun v -> Set.contains v sel))
         | _ -> View.Const false
 
       let isIndeterminate =
-        match selectedValues with
-        | Some svs when hasNestedLeafValues ->
-          svs.View
-          |> View.MapCached(fun sel ->
-            let anySelected = nestedLeafValues |> List.exists (fun v -> Set.contains v sel)
-            let allSelected = nestedLeafValues |> List.forall (fun v -> Set.contains v sel)
-            anySelected && not allSelected)
-        | _ -> View.Const false
+        parentCoverage
+        |> View.MapCached(fun (enabled, selectedLeaves) ->
+          not selectedLeaves.IsEmpty && selectedLeaves <> enabled)
 
       let handleRowClick () =
         if hasNestedItems then
@@ -165,16 +172,14 @@ type WeaveList =
             Var.Set svs (Set.add v svs.Value)
         | _ -> ()
 
-      let handleParentCheckboxClick () =
+      let handleParentCheckboxClick enabled =
         match selectedValues with
         | Some svs ->
-          let allSelected =
-            nestedLeafValues |> List.forall (fun v -> Set.contains v svs.Value)
-
-          if allSelected then
-            Var.Set svs (nestedLeafValues |> List.fold (fun acc v -> Set.remove v acc) svs.Value)
-          else
-            Var.Set svs (nestedLeafValues |> List.fold (fun acc v -> Set.add v acc) svs.Value)
+          Var.Update svs (fun selected ->
+            if Set.isSubset enabled selected then
+              Set.difference selected enabled
+            else
+              Set.union selected enabled)
         | None -> ()
 
       let interactable = View.not def.Disabled <&&> View.not readOnly
@@ -192,17 +197,17 @@ type WeaveList =
           on.clickViewGuarded interactable handleRowClick
           yield! def.Attrs
         ] [
-          if isMultiSelect then
+          if isMultiSelect && isSelectable then
             span [
               cl Css.``weave-list-item__checkbox``
               Attr.DynamicClassPred Css.``weave-list-item__checkbox--checked`` isSelected
               Attr.DynamicClassPred Css.``weave-list-item__checkbox--indeterminate`` isIndeterminate
               if hasNestedLeafValues then
-                on.clickView interactable (fun _ ev isInteractable ->
+                on.clickView (View.zip interactable enabledLeafValues) (fun _ ev (isInteractable, enabled) ->
                   ev.StopPropagation()
 
                   if isInteractable then
-                    handleParentCheckboxClick ())
+                    handleParentCheckboxClick enabled)
             ] []
 
           div [ cl Css.``weave-list-item__content`` ] [

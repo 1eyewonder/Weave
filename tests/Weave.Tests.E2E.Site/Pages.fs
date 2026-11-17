@@ -2024,6 +2024,8 @@ module Pages =
     let selected = Var.Create<string option> None
     let nestedSelected = Var.Create(Set.empty<string>)
     let nestedExpanded = Var.Create false
+    let bulkSelection = Var.Create(Set.singleton "archived")
+    let archivedDisabled = Var.Create true
 
     div [] [
       selected.View
@@ -2090,6 +2092,33 @@ module Pages =
           selectedValues = nestedSelected,
           selectionMode = WeaveList.SelectionMode.MultiSelection
         )
+      ]
+      div [ Attr.Create "data-testid" "bulk-list" ] [
+        WeaveList.create (
+          [
+            ListItem.create (
+              text "Departments",
+              value = "group",
+              expanded = Var.Create true,
+              nestedChildren = [
+                ListItem.create (text "Sales", value = "sales")
+                ListItem.create (text "Support", value = "support")
+                ListItem.create (text "Archived", value = "archived", disabled = archivedDisabled.View)
+              ]
+            )
+            ListItem.create (text "Information")
+            ListItem.create (
+              text "More information",
+              nestedChildren = [ WeaveList.ListChild.Content(text "Read only") ]
+            )
+          ],
+          selectedValues = bulkSelection
+        )
+        Button.create (text "Toggle archived availability", fun () -> Var.Update archivedDisabled not)
+        Button.create (text "Select group value", fun () -> Var.Set bulkSelection (Set.singleton "group"))
+        div [ Attr.Create "data-testid" "bulk-selection" ] [
+          Doc.TextView(bulkSelection.View |> View.Map(String.concat ","))
+        ]
       ]
     ]
 

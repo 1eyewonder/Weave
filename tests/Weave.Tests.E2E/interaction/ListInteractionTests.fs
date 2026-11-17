@@ -1,9 +1,46 @@
 namespace Weave.Tests.E2E
 
 open Xunit
+open System.Text.RegularExpressions
 
 type ListInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``parent selection follows enabled leaves and preserves a disabled selection``() = task {
+    do! this.NavigateTo("list")
+    let group = this.Page.GetByTestId("bulk-list")
+    let parent = group.Locator(".weave-list-item__checkbox").First
+    let selection = this.Page.GetByTestId("bulk-selection")
+    do! parent.ClickAsync()
+    do! this.Expect(selection).ToHaveTextAsync("archived,sales,support")
+    do! this.Expect(parent).ToHaveClassAsync(Regex("checkbox--checked"))
+    do! parent.ClickAsync()
+    do! this.Expect(selection).ToHaveTextAsync("archived")
+    do! this.Expect(parent).Not.ToHaveClassAsync(Regex("checkbox--indeterminate|checkbox--checked"))
+    do! group.GetByText("Sales", Microsoft.Playwright.LocatorGetByTextOptions(Exact = true)).ClickAsync()
+    do! this.Expect(parent).ToHaveClassAsync(Regex("checkbox--indeterminate"))
+    do! group.GetByText("Toggle archived availability").ClickAsync()
+    do! parent.ClickAsync()
+    do! parent.ClickAsync()
+    do! this.Expect(selection).ToHaveTextAsync("")
+    do! group.GetByText("Toggle archived availability").ClickAsync()
+    do! parent.ClickAsync()
+    do! this.Expect(selection).ToHaveTextAsync("sales,support")
+  }
+
+  [<Fact>]
+  member this.``the parent indicator ignores its own value and informational rows have no checkbox``() = task {
+    do! this.NavigateTo("list")
+    let group = this.Page.GetByTestId("bulk-list")
+    do! group.GetByText("Select group value").ClickAsync()
+    let parent = group.Locator(".weave-list-item__checkbox").First
+    do! this.Expect(parent).Not.ToHaveClassAsync(Regex("checkbox--indeterminate|checkbox--checked"))
+    do! this.Expect(group.Locator(".weave-list-item__checkbox")).ToHaveCountAsync(4)
+    do! group.GetByText("More information").ClickAsync()
+    do! this.Expect(group.GetByText("Read only")).ToBeVisibleAsync()
+    do! this.Expect(this.Page.GetByTestId("bulk-selection")).ToHaveTextAsync("group")
+  }
 
   [<Fact>]
   member this.``list click selects and nested checkbox does not expand group``() = task {

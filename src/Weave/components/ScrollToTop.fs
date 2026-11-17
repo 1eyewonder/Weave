@@ -20,7 +20,7 @@ type ScrollToTop =
 
   /// Creates an accessible icon button that appears once the target is scrolled
   /// at least topOffset pixels (default 300). Omit selector to scroll the page.
-  /// The selector is resolved once after mounting; a missing target keeps the button hidden.
+  /// The selector is resolved each time the button mounts. A missing target keeps the button hidden.
   /// Smooth scrolling respects reduced motion. Pass Behavior.instant through attrs
   /// to disable it. Override the accessible name with an aria-label attribute.
   static member create(?selector: string, ?topOffset: int, ?attrs: Attr list) =
@@ -41,6 +41,23 @@ type ScrollToTop =
         let reducedMotion = JS.Window.MatchMedia("(prefers-reduced-motion: reduce)").Matches
         let instant = buttonRef.Value.GetAttribute("data-weave-scroll-behavior") = "instant"
 
+        if JS.Document.ActiveElement = buttonRef.Value then
+          let start =
+            if selector.IsSome then
+              target.Value
+            else
+              As<Dom.Element> JS.Document.Body
+
+          let temporaryTabIndex = not (start.HasAttribute "tabindex")
+
+          if temporaryTabIndex then
+            start.SetAttribute("tabindex", "-1")
+
+          start?focus (New [ "preventScroll" => true ])
+
+          if temporaryTabIndex then
+            start.RemoveAttribute "tabindex"
+
         target.Value?scrollTo(
           New [
             "top" => 0
@@ -48,11 +65,41 @@ type ScrollToTop =
           ]
         )
 
-    IconButton.create (
+    let handler (_: Dom.Event) = update ()
+
+    let listener =
+      DomLifecycleListener.watch
+        (fun (button: Dom.Element) ->
+          buttonRef.Value <- button
+
+          target.Value <-
+            match selector with
+            | Some value -> JS.Document.QuerySelector value
+            | None -> As<Dom.Element> JS.Document?scrollingElement
+
+          if not (isNull target.Value) then
+            match selector with
+            | Some _ -> target.Value.AddEventListener("scroll", handler)
+            | None -> JS.Window.AddEventListener("scroll", handler)
+
+          update ())
+        (fun () ->
+          if not (isNull target.Value) then
+            match selector with
+            | Some _ -> target.Value.RemoveEventListener("scroll", handler)
+            | None -> JS.Window.RemoveEventListener("scroll", handler)
+
+          target.Value <- null
+          buttonRef.Value <- null)
+
+    let icon =
       Icon.create (
         Icons.MaterialSymbols.Icon.Hardware Icons.MaterialSymbols.Hardware.KeyboardArrowUp,
         attrs = [ Attr.Create "aria-hidden" "true" ]
-      ),
+      )
+
+    IconButton.create (
+      Doc.Concat [ icon; listener ],
       scroll,
       enabled = visible.View,
       attrs = [
@@ -64,32 +111,6 @@ type ScrollToTop =
         visible.View
         |> View.Map(fun v -> if v then "0" else "-1")
         |> Attr.Dynamic "tabindex"
-        on.afterRender (fun el ->
-          buttonRef.Value <- el
-
-          target.Value <-
-            match selector with
-            | Some value -> JS.Document.QuerySelector value
-            | None -> As<Dom.Element> JS.Document?scrollingElement
-
-          if not (isNull target.Value) then
-            let handler (_: Dom.Event) = update ()
-
-            let detach () =
-              match selector with
-              | Some _ -> target.Value.RemoveEventListener("scroll", handler)
-              | None -> JS.Window.RemoveEventListener("scroll", handler)
-
-              target.Value <- null
-              buttonRef.Value <- null
-
-            match selector with
-            | Some _ -> target.Value.AddEventListener("scroll", handler)
-            | None -> JS.Window.AddEventListener("scroll", handler)
-
-            update ()
-            let removal = DomRemovalListener.create ()
-            removal.Watch(el, detach))
         yield! defaultArg attrs []
       ]
     )

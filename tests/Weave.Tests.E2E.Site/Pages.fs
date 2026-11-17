@@ -1418,23 +1418,43 @@ module Pages =
     )
 
   let private dynamicExpansionPanelPage () =
-    let expanded = Var.Create false
     let panelEnabled = Var.Create true
     let headerEnabled = Var.Create true
+    let mounted = Var.Create true
+    let headerReads = Var.Create 0
+
+    let panel label testId enabled =
+      let expanded = Var.Create false
+
+      ExpansionPanel.create (
+        ExpansionPanelHeader.create (
+          text label,
+          expanded,
+          enabled = enabled,
+          attrs = [ Attr.Create "data-testid" testId ]
+        ),
+        ExpansionPanelContent.create (text "Panel content"),
+        expanded = expanded,
+        enabled = panelEnabled.View
+      )
+
+    let removableHeaderEnabled =
+      headerEnabled.View
+      |> View.Map(fun value ->
+        headerReads.Value <- headerReads.Value + 1
+        value)
+
+    let removable =
+      panel "Remountable header" "remountable-expansion-header" removableHeaderEnabled
 
     div [] [
       ExpansionPanelContainer.create [
-        ExpansionPanel.create (
-          ExpansionPanelHeader.create (
-            text "Dynamic header",
-            expanded,
-            enabled = headerEnabled.View,
-            attrs = [ Attr.Create "data-testid" "dynamic-expansion-header" ]
-          ),
-          ExpansionPanelContent.create (text "Panel content"),
-          expanded = expanded,
-          enabled = panelEnabled.View
-        )
+        panel "Dynamic header" "dynamic-expansion-header" headerEnabled.View
+        mounted.View |> Doc.BindView(fun show -> if show then removable else Doc.Empty)
+      ]
+      Button.create (text "Toggle mounted panel", (fun () -> mounted.Value <- not mounted.Value))
+      span [ Attr.Create "data-testid" "removable-header-reads" ] [
+        textView (headerReads.View |> View.Map string<int>)
       ]
       Button.create (
         text "Toggle panel",
@@ -2209,7 +2229,7 @@ module Pages =
       div [ Attr.Create "data-testid" "chip-actions" ] [ Doc.TextView(chipActions.View |> View.Map string) ]
       div [ Attr.Create "data-testid" "chip-closes" ] [ Doc.TextView(chipCloses.View |> View.Map string) ]
       Chip.create (
-        text "Both",
+        textView (chipActions.View |> View.Map(fun count -> $"Item %d{count}")),
         onClick = (fun () -> Var.Set chipActions (chipActions.Value + 1)),
         onClose = (fun () -> Var.Set chipCloses (chipCloses.Value + 1)),
         attrs = [ Attr.Create "data-testid" "chip-both" ]
@@ -2237,6 +2257,7 @@ module Pages =
 
   let private chipsetPage () =
     let selected = Var.Create<string option> None
+    let removed = Var.Create ""
 
     div [] [
       selected.View
@@ -2271,9 +2292,11 @@ module Pages =
             ChipItem.create (text "Disabled", "disabled", closable = true, disabled = View.Const true)
             ChipItem.create (text "Three", "three", closable = true)
           ],
-          selectedValue = Var.Create None,
-          onClose = (fun _ -> ())
+          selectedValues = Var.Create Set.empty,
+          selectionMode = ChipSet.SelectionMode.Multi,
+          onClose = removed.Set
         )
+        div [ Attr.Create "data-testid" "removed-chip" ] [ textView removed.View ]
       ]
     ]
 

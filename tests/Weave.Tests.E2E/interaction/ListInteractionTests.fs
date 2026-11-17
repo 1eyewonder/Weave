@@ -3,8 +3,86 @@ namespace Weave.Tests.E2E
 open Xunit
 open System.Text.RegularExpressions
 
+[<Collection("Browser input")>]
 type ListInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``keyboard users can select a single item``() = task {
+    do! this.NavigateTo("list")
+    let items = this.Page.Locator("[aria-label='Test items']")
+
+    let item =
+      items.GetByRole(
+        Microsoft.Playwright.AriaRole.Button,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Item 1")
+      )
+
+    do! this.Expect(item).ToHaveAttributeAsync("aria-pressed", "false")
+    do! item.FocusAsync()
+    do! item.PressAsync("Enter")
+    do! this.Expect(item).ToHaveAttributeAsync("aria-pressed", "true")
+    do! this.Expect(this.Page.GetByTestId("list-selection")).ToHaveTextAsync("1")
+  }
+
+  [<Fact>]
+  member this.``keyboard users can select and expand a list group``() = task {
+    do! this.NavigateTo("list")
+    let group = this.Page.GetByTestId("bulk-list")
+
+    let select =
+      group.GetByRole(
+        Microsoft.Playwright.AriaRole.Checkbox,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Departments")
+      )
+
+    let expand =
+      group.GetByRole(
+        Microsoft.Playwright.AriaRole.Button,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Departments")
+      )
+
+    do! this.Expect(select).ToHaveAttributeAsync("aria-checked", "false")
+    do! select.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(expand).ToBeFocusedAsync()
+
+    let! focusVisible =
+      expand.EvaluateAsync<bool>(
+        "el => { const style = getComputedStyle(el); return style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0; }"
+      )
+
+    Assert.True(focusVisible, "Keyboard focus must remain visible")
+    do! select.FocusAsync()
+    do! select.PressAsync("Space")
+    do! this.Expect(select).ToHaveAttributeAsync("aria-checked", "true")
+    do! this.Expect(this.Page.GetByTestId("bulk-selection")).ToHaveTextAsync("archived,sales,support")
+
+    let sales =
+      group.GetByRole(
+        Microsoft.Playwright.AriaRole.Checkbox,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Sales", Exact = true)
+      )
+
+    do! this.Expect(sales).ToHaveAttributeAsync("aria-checked", "true")
+    do! sales.FocusAsync()
+    do! sales.PressAsync("Space")
+    do! this.Expect(select).ToHaveAttributeAsync("aria-checked", "mixed")
+    do! this.Expect(this.Page.GetByTestId("bulk-selection")).ToHaveTextAsync("archived,support")
+
+    let archived =
+      group.GetByRole(
+        Microsoft.Playwright.AriaRole.Checkbox,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Archived", Exact = true)
+      )
+
+    do! this.Expect(archived).ToHaveAttributeAsync("aria-disabled", "true")
+    do! this.Expect(archived).ToHaveAttributeAsync("tabindex", "-1")
+    do! this.Expect(expand).ToHaveAttributeAsync("aria-expanded", "true")
+    do! expand.FocusAsync()
+    do! expand.PressAsync("Enter")
+    do! this.Expect(expand).ToHaveAttributeAsync("aria-expanded", "false")
+  }
 
   [<Fact>]
   member this.``parent checkbox follows availability of all leaves``() = task {

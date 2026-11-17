@@ -75,6 +75,8 @@ type ScrollToTopInteractionTests(fixture: TestFixture) =
     do! this.Expect(button).ToBeVisibleAsync()
     do! this.Expect(button).ToBeEnabledAsync()
     do! this.Expect(button).ToHaveAttributeAsync("aria-label", "Back to top")
+    do! this.Expect(button).ToHaveAccessibleNameAsync("Back to top")
+    do! this.Expect(button.Locator("weave-dom-lifecycle-listener")).ToBeHiddenAsync()
     do! this.Expect(button).ToHaveAttributeAsync("aria-hidden", "false")
     let! _ = this.Page.EvaluateAsync("() => window.scrollTo(0, 299)")
     do! this.Expect(button).ToBeHiddenAsync()

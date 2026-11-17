@@ -79,6 +79,8 @@ Container.create (
       Helpers.styleModuleTable "Container (module-level)" [
         ("fixedWidth", "Container uses fixed width instead of fluid max-width")
         ("gutters", "Adds horizontal padding to the container edges")
+        ("contentHeight",
+         "Sizes the container to its contents and prevents it from growing to fill a flex column")
       ]
     ]
 
@@ -88,7 +90,7 @@ Container.create (
         Helpers.pageTitle "Container"
         div [ Typography.body1; Margin.Bottom.extraSmall ] [
           text
-            "The Container component centers your content and provides responsive width constraints. Use it to wrap page sections or layouts."
+            "Container centers content and provides responsive width constraints. By default it fills its parent's height and grows in a flex layout. For stacked page sections, pass Container.contentHeight in attrs so each section fits its content."
         ]
 
         Helpers.divider ()

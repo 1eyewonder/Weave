@@ -21,6 +21,8 @@ module Container =
 
   let fixedWidth = cl Css.``weave-container--fixed``
   let gutters = cl Css.``weave-container--gutters``
+  /// Size the container to its content, including when stacked in a flex column.
+  let contentHeight = cl Css.``weave-container--content-height``
 
 [<JavaScript; RequireQualifiedAccess>]
 type Container =

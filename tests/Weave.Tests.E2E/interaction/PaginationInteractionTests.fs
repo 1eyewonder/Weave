@@ -50,6 +50,46 @@ type PaginationInteractionTests(fixture: TestFixture) =
     do! this.Expect(this.Current).ToHaveTextAsync "20"
   }
 
+  [<Theory>]
+  [<InlineData("Select below range", "-5", "1")>]
+  [<InlineData("Select above range", "100", "20")>]
+  member this.``activating the displayed boundary repairs an external selection``
+    (command: string, raw: string, page: string)
+    = task {
+    do! this.NavigateTo "pagination"
+    let value = this.Page.Locator("#page-value")
+    do! (this.Button command).ClickAsync()
+    do! this.Expect(this.Current).ToHaveTextAsync page
+    do! this.Expect(value).ToHaveTextAsync raw
+    do! (this.Button("Go to page " + page)).ClickAsync()
+    do! this.Expect(value).ToHaveTextAsync page
+  }
+
+  [<Theory>]
+  [<InlineData("2", "Previous page", "1")>]
+  [<InlineData("19", "Next page", "20")>]
+  [<InlineData("2", "First page", "1")>]
+  [<InlineData("19", "Last page", "20")>]
+  member this.``focus moves to the selected page when an activated navigation button disables``
+    (startingPage: string, direction: string, destination: string)
+    = task {
+    do! this.NavigateTo "pagination"
+
+    if startingPage = "19" then
+      do! (this.Button "Last page").ClickAsync()
+
+    do! (this.Button("Go to page " + startingPage)).ClickAsync()
+    do! this.Expect(this.Current).ToHaveTextAsync startingPage
+    let control = this.Button direction
+    do! this.Expect(control).ToBeEnabledAsync()
+    do! control.FocusAsync()
+    do! this.Expect(control).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync "Enter"
+    do! this.Expect(control).ToBeDisabledAsync()
+    do! this.Expect(this.Current).ToHaveTextAsync destination
+    do! this.Expect(this.Current).ToBeFocusedAsync()
+  }
+
   [<Fact>]
   member this.``cached page buttons track selection count and enabled changes without replacement``() = task {
     do! this.NavigateTo "pagination"
@@ -75,16 +115,6 @@ type PaginationInteractionTests(fixture: TestFixture) =
           retained,
           "Page 1 and page 3 must reuse their original DOM buttons throughout these updates"
         )
-    }
-
-    let settleRendering () = task {
-      let! _ =
-        this.Page.EvaluateAsync(
-          """() => new Promise(resolve =>
-        requestAnimationFrame(() => requestAnimationFrame(resolve)))"""
-        )
-
-      ()
     }
 
     // A retained button must update selection rather than keep its initial attributes.
@@ -124,8 +154,7 @@ type PaginationInteractionTests(fixture: TestFixture) =
     do! this.Expect(first).ToBeEnabledAsync()
     do! this.Expect(third).ToBeEnabledAsync()
     do! third.ClickAsync()
-    do! settleRendering ()
-    do! this.Expect(value).ToHaveTextAsync "100"
+    do! this.Expect(value).ToHaveTextAsync "3"
     do! first.ClickAsync()
     do! this.Expect(value).ToHaveTextAsync "1"
     do! (this.Button "Restore count").ClickAsync()
@@ -137,6 +166,31 @@ type PaginationInteractionTests(fixture: TestFixture) =
     do! this.Expect(third).ToHaveAttributeAsync("aria-current", "page")
     do! this.Expect(this.Current).ToHaveCountAsync 1
     do! expectRetainedButtons ()
+  }
+
+  [<Fact>]
+  member this.``a boundary jump focuses a newly rendered page and respects focus outside the pager``() = task {
+    do! this.NavigateTo "pagination-ranges"
+    let pager = this.Page.Locator("#range-keyboard-window")
+
+    let pageButton name =
+      pager.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = name, Exact = true))
+
+    let current = pager.Locator("[aria-current='page']")
+    do! this.Expect(current).ToHaveTextAsync "10"
+    do! this.Expect(pageButton "Go to page 20").ToHaveCountAsync 0
+    let last = pageButton "Last page"
+    do! last.FocusAsync()
+    do! this.Expect(last).ToBeFocusedAsync()
+    do! this.Page.Keyboard.PressAsync "Enter"
+    do! this.Expect(current).ToHaveTextAsync "20"
+    do! this.Expect(current).ToBeFocusedAsync()
+
+    let outside = this.Page.Locator("#range-small [aria-current='page']")
+    do! outside.FocusAsync()
+    let! _ = (pageButton "First page").EvaluateAsync("el => el.click()")
+    do! this.Expect(current).ToHaveTextAsync "1"
+    do! this.Expect(outside).ToBeFocusedAsync()
   }
 
   [<Theory>]

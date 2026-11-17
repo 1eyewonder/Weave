@@ -1,6 +1,7 @@
 namespace Weave
 
 open WebSharper
+open WebSharper.JavaScript
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
@@ -66,8 +67,9 @@ module private PaginationInternal =
 type Pagination =
 
   /// Creates page navigation with one-based selection. Count is normalized to zero
-  /// or greater; out-of-range selection is clamped for display without writing to
-  /// the caller's Var. With no pages, no page is current and all controls disable.
+  /// or greater. An out-of-range external value is clamped for display. Activating
+  /// a page writes its number to the caller's Var, including the displayed page.
+  /// With no pages, no page is current and all controls disable.
   /// Native buttons support Tab, Enter, and Space. Use Pagination.Controls attrs
   /// for control visibility and an aria-label attr to override "Pagination".
   static member create
@@ -89,6 +91,7 @@ type Pagination =
       View.Map2 (fun n page -> if n = 0 then 0 else max 1 (min n page)) count selectedPage.View
 
     let state = View.zip count selected
+    let activatedControl = ref None
 
     let select target =
       View.zip enabled state
@@ -96,7 +99,7 @@ type Pagination =
         if canSelect && n > 0 then
           let page = max 1 (min n (target n current))
 
-          if page <> current then
+          if page <> selectedPage.Value then
             selectedPage.Set page)
 
     let control controlClass label icon canMove target =
@@ -112,6 +115,9 @@ type Pagination =
           cl Css.``weave-pagination__control``
           cl controlClass
           Attr.Create "aria-label" label
+          on.click (fun el _ ->
+            if obj.ReferenceEquals(el, JS.Document?activeElement) then
+              activatedControl.Value <- Some el)
         ]
       )
 
@@ -138,6 +144,26 @@ type Pagination =
     nav [
       cl Css.``weave-pagination``
       Attr.Create "aria-label" "Pagination"
+      selected
+      |> Attr.DynamicCustom(fun pager _ ->
+        match activatedControl.Value with
+        | None -> ()
+        | Some control ->
+          activatedControl.Value <- None
+          // The new current button may be inserted as part of this render.
+          JS.Window.RequestAnimationFrame(fun _ ->
+            let active = JS.Document?activeElement
+
+            if
+              control.HasAttribute("disabled")
+              && (obj.ReferenceEquals(active, control)
+                  || obj.ReferenceEquals(active, JS.Document?body))
+            then
+              let current = pager.QuerySelector("[aria-current='page']")
+
+              if not (isNull current) then
+                current?focus ())
+          |> ignore)
       yield! defaultArg attrs []
     ] [
       boundary "First page" UiActions.FirstPage (fun (_, page) -> page > 1) (fun _ _ -> 1)

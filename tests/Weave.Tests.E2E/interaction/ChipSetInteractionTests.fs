@@ -1,6 +1,7 @@
 namespace Weave.Tests.E2E
 
 open Xunit
+open Microsoft.Playwright
 
 type ChipSetInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
@@ -20,6 +21,59 @@ type ChipSetInteractionTests(fixture: TestFixture) =
     do! actions.First.FocusAsync()
     do! actions.First.PressAsync("ArrowRight")
     do! this.Expect(actions.Nth(2)).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
+  member this.``exclusive chip buttons expose their selection and deselection``() = task {
+    do! this.NavigateToChipSet()
+
+    let button name pressed =
+      this.Page.GetByRole(
+        AriaRole.Button,
+        PageGetByRoleOptions(Name = name, Exact = true, Pressed = System.Nullable pressed)
+      )
+
+    do! (button "Chip A" false).ClickAsync()
+    do! this.Expect(button "Chip A" true).ToBeVisibleAsync()
+    do! (button "Chip B" false).PressAsync("Enter")
+    do! this.Expect(button "Chip A" false).ToBeVisibleAsync()
+    do! this.Expect(button "Chip B" true).ToBeVisibleAsync()
+    do! (button "Chip B" true).PressAsync("Space")
+    do! this.Expect(button "Chip B" false).ToBeVisibleAsync()
+  }
+
+  [<Fact>]
+  member this.``multiple chip buttons expose independent pressed states``() = task {
+    do! this.NavigateToChipSet()
+    let group = this.Page.GetByTestId("closable-chipset")
+
+    let button name pressed =
+      group.GetByRole(
+        AriaRole.Button,
+        LocatorGetByRoleOptions(Name = name, Exact = true, Pressed = System.Nullable pressed)
+      )
+
+    do! (button "One" false).ClickAsync()
+    do! (button "Three" false).ClickAsync()
+    do! this.Expect(button "One" true).ToBeVisibleAsync()
+    do! (button "Three" true).PressAsync("Enter")
+    do! this.Expect(button "One" true).ToBeVisibleAsync()
+    do! this.Expect(button "Three" false).ToBeVisibleAsync()
+  }
+
+  [<Fact>]
+  member this.``remove buttons name and activate their own chip``() = task {
+    do! this.NavigateToChipSet()
+    let group = this.Page.GetByTestId("closable-chipset")
+
+    let remove label =
+      group.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Remove " + label, Exact = true))
+
+    do! this.Expect(remove "Disabled").ToBeDisabledAsync()
+    do! (remove "One").ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("removed-chip")).ToHaveTextAsync("one")
+    do! (remove "Three").PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("removed-chip")).ToHaveTextAsync("three")
   }
 
   [<Fact>]

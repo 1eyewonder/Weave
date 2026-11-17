@@ -4,6 +4,7 @@ open System
 open Microsoft.Playwright
 open Xunit
 
+[<Collection("Browser input")>]
 type ForcedColorIndicatorTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
 

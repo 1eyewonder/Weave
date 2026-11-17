@@ -77,15 +77,13 @@ type TextField =
     ) =
 
     let owner = ref<Dom.Element> null
+    let mutable timeout = None
+
+    let cancel () =
+      timeout |> Option.iter JS.ClearTimeout
+      timeout <- None
 
     let observeChanges callback =
-      let mutable timeout = None
-      let removal = DomRemovalListener.create ()
-
-      let cancel () =
-        timeout |> Option.iter JS.ClearTimeout
-        timeout <- None
-
       value
       |> Doc.sinkCached (fun current ->
         // The first sample, including an offline edit on reuse, precedes insertion.
@@ -93,13 +91,10 @@ type TextField =
           match debounce with
           | None -> callback current
           | Some delay ->
-            match timeout with
-            | Some handle -> JS.ClearTimeout handle
-            | None -> removal.Watch(owner.Value, cancel)
+            cancel ()
 
             let notify () =
               timeout <- None
-              removal.Disconnect()
 
               if As<bool> owner.Value?isConnected then
                 callback current
@@ -122,7 +117,10 @@ type TextField =
 
     let fieldDoc =
       Field.createWithSupportingContent (
-        inputElement,
+        (if onChange.IsSome && debounce.IsSome then
+           Doc.Concat [ inputElement; DomLifecycleListener.onRemoved cancel ]
+         else
+           inputElement),
         isFocused.View,
         shouldFloat,
         counterDoc,

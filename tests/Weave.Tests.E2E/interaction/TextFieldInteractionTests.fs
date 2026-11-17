@@ -194,6 +194,46 @@ type TextFieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``removing and reinserting a field in one task cancels the pending callback``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    let log = this.Page.Locator("output")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+
+    let! _ =
+      search.EvaluateAsync(
+        "el => { const field = el.closest('.weave-field'); const parent = field.parentNode; const next = field.nextSibling; field.remove(); parent.insertBefore(field, next); }"
+      )
+
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! search.FillAsync("fresh")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("search=fresh")
+  }
+
+  [<Fact>]
+  member this.``an edit immediately after reinserting a field is still reported``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+
+    let! _ =
+      search.EvaluateAsync(
+        "el => { const field = el.closest('.weave-field'); const parent = field.parentNode; const next = field.nextSibling; field.remove(); parent.insertBefore(field, next); el.value = 'fresh'; el.dispatchEvent(new Event('input', {bubbles: true})); }"
+      )
+
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(this.Page.Locator("output")).ToHaveTextAsync("search=fresh")
+  }
+
+  [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {
     do! this.NavigateTo("textfield")
     let input = this.Page.Locator("input[aria-invalid='true']").First

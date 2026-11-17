@@ -1,10 +1,64 @@
 namespace Weave.Tests.E2E
 
 open Xunit
+open Microsoft.Playwright
 
 [<Collection("Browser input")>]
 type LinkInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("link-action")>]
+  [<InlineData("icon-action")>]
+  member this.``a callback without a destination preserves the route and scroll position``(testId: string) =
+    task {
+      do! this.NavigateTo("link")
+      let action = this.Page.GetByTestId(testId)
+      do! action.ScrollIntoViewIfNeededAsync()
+      let! before = this.Page.EvaluateAsync<float>("window.scrollY")
+      Assert.True(before > 0.0)
+      do! action.PressAsync("Enter")
+      do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("1")
+      let! hash = this.Page.EvaluateAsync<string>("location.hash")
+      Assert.Equal("#link", hash)
+      let! after = this.Page.EvaluateAsync<float>("window.scrollY")
+      Assert.Equal(before, after)
+      do! this.Expect(action).ToHaveRoleAsync(AriaRole.Link)
+    }
+
+  [<Theory>]
+  [<InlineData("Destination")>]
+  [<InlineData("Go to destination")>]
+  member this.``disabling and re-enabling a destination updates navigation and its accessible state``
+    (name: string)
+    = task {
+    do! this.NavigateTo("link")
+
+    let link =
+      this.Page.GetByRole(AriaRole.Link, PageGetByRoleOptions(Name = name, Exact = true))
+
+    let toggle =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Toggle links"))
+
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToBeDisabledAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#destination")
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "-1")
+    do! link.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Enter")
+    let! _ = link.EvaluateAsync("el => el.click()")
+    do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("0")
+    let! disabledHash = this.Page.EvaluateAsync<string>("location.hash")
+    Assert.Equal("#link", disabledHash)
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToBeEnabledAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#destination")
+    do! this.Expect(link).Not.ToHaveAttributeAsync("tabindex", "-1")
+    do! link.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("1")
+    let! enabledHash = this.Page.EvaluateAsync<string>("location.hash")
+    Assert.Equal("#destination", enabledHash)
+  }
 
   [<Theory>]
   [<InlineData("count-link")>]
@@ -45,6 +99,55 @@ type LinkInteractionTests(fixture: TestFixture) =
       )
 
     do! Microsoft.Playwright.Assertions.Expect(page.GetByTestId("link-count")).ToHaveTextAsync("1")
+  }
+
+  [<Fact>]
+  member this.``an attribute destination remains a link across availability changes``() = task {
+    do! this.NavigateTo("link")
+    let link = this.Page.GetByTestId("attribute-destination")
+    do! this.Expect(link).ToHaveRoleAsync(AriaRole.Link)
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#attribute-destination")
+
+    let toggle =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Toggle links"))
+
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToBeDisabledAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "-1")
+    do! toggle.FocusAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+
+    do!
+      this
+        .Expect(this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Change destination")))
+        .ToBeFocusedAsync()
+
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Change destination")).ClickAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#changed-destination")
+    do! toggle.ClickAsync()
+    do! this.Expect(link).ToHaveAttributeAsync("href", "#changed-destination")
+    do! this.Expect(link).ToHaveAttributeAsync("tabindex", "0")
+    do! link.PressAsync("Enter")
+    do! this.Expect(this.Page.GetByTestId("link-count")).ToHaveTextAsync("1")
+    let! hash = this.Page.EvaluateAsync<string>("location.hash")
+    Assert.Equal("#changed-destination", hash)
+  }
+
+  [<Fact>]
+  member this.``a destination retains its caller-supplied role as its availability changes``() = task {
+    do! this.NavigateTo("link")
+
+    let item =
+      this.Page.GetByRole(AriaRole.Menuitem, PageGetByRoleOptions(Name = "Menu destination"))
+
+    let toggle =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Toggle links"))
+
+    do! this.Expect(item).ToBeEnabledAsync()
+    do! toggle.ClickAsync()
+    do! this.Expect(item).ToBeDisabledAsync()
+    do! toggle.ClickAsync()
+    do! this.Expect(item).ToBeEnabledAsync()
   }
 
   [<Fact>]

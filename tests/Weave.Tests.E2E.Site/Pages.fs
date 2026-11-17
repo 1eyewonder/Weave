@@ -1580,6 +1580,7 @@ module Pages =
     let selected = Var.Create(None: string option)
     let checkedRows = Var.Create(Set.ofList [ "Alpha" ])
     let nameHeaderId = Var.Create "select-name"
+    let scopedHeaderId = Var.Create "scoped-name"
 
     let externalSort =
       Var.Create(
@@ -1691,6 +1692,41 @@ module Pages =
         attrs = [ Attr.Create "data-testid" "select-table"; Table.hiddenCaption ]
       )
       button [ on.click (fun _ _ -> nameHeaderId.Set "updated-name") ] [ text "Update column ID" ]
+      Table.create (
+        columns ()
+        |> List.map (fun column -> { column with Attrs = [ Attr.Class "shared-cell" ] }),
+        View.Const rows,
+        fst,
+        headerAttrs =
+          Map.ofList [
+            "name", [ Attr.Dynamic "id" scopedHeaderId.View ]
+            "count", [ attr.id "scoped-count" ]
+          ],
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        rowHeader = "name",
+        caption = text "Header attributes",
+        attrs = [ Attr.Create "data-testid" "header-attributes-table"; Table.hiddenCaption ]
+      )
+      button [ on.click (fun _ _ -> scopedHeaderId.Set "new-scoped-name") ] [ text "Update scoped ID" ]
+      Table.createWithRowLabel (
+        columns (),
+        View.Const rows,
+        (fun (name, _) -> "opaque-" + name),
+        (fun (name, count) -> if name = "Gamma" then " " else $"%s{name}: %d{count} items"),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        rowHeader = "name",
+        caption = text "Named selection",
+        attrs = [ Attr.Create "data-testid" "named-selection-table"; Table.hiddenCaption ]
+      )
+      Table.createWithRowLabel (
+        columns (),
+        View.Const rows,
+        (fun (name, _) -> "opaque-" + name),
+        (fun (name, _) -> if name = "Beta" then "Named Beta" else " "),
+        selectedKeys = Var.Create(Set.empty: Set<string>),
+        caption = text "Empty selection labels",
+        attrs = [ Attr.Create "data-testid" "empty-selection-labels"; Table.hiddenCaption ]
+      )
       Table.create (
         columns (),
         View.Const rows,

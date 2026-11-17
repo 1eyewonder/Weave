@@ -202,17 +202,20 @@ type Table =
   /// <param name="rowKey">Stable identity for each row. Unchanged rows are not re-rendered when <c>rows</c> updates, and selection is tracked by this key.</param>
   /// <param name="onRowClick">When supplied, rows activate on click, and the first cell holds a button that activates the row from the keyboard.</param>
   /// <param name="selectedKey">When supplied, activating a row selects it and the selected row is marked with <c>aria-current</c>.</param>
-  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox is named by its row header or, when none is configured, by its row key.</param>
+  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox uses its supplied label, row header, or row key.</param>
   /// <param name="sort">The sort state. Supply it to start sorted or to react to sorting, such as sorting on a server. Defaults to unsorted.</param>
   /// <param name="rowHeader">Key of the column whose cells label their rows, rendered as row header cells.</param>
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
+  /// <param name="headerAttrs">Header-only attributes keyed by column key; shared column attributes remain unchanged.</param>
+  /// <param name="rowLabel">Optional descriptive label for each row's selection checkbox. Takes precedence over the row header.</param>
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
       rows: View<'T list>,
       rowKey: 'T -> string,
+      headerAttrs: Map<string, Attr list>,
       ?onRowClick: 'T -> unit,
       ?selectedKey: Var<string option>,
       ?selectedKeys: Var<Set<string>>,
@@ -220,7 +223,8 @@ type Table =
       ?rowHeader: string,
       ?caption: Doc,
       ?emptyContent: Doc,
-      ?attrs: Attr list
+      ?attrs: Attr list,
+      ?rowLabel: 'T -> string
     ) =
     let attrs = defaultArg attrs List.empty
     let sort = defaultArg sort (Var.Create None)
@@ -258,6 +262,8 @@ type Table =
       ] [ textView arrow ]
 
     let headerCell (column: Table.TableColumnDef<'T>) =
+      let headerOnly = headerAttrs |> Map.tryFind column.Key |> Option.defaultValue []
+
       match column.Sort with
       | Some _ ->
         th [
@@ -265,6 +271,7 @@ type Table =
           attr.scope "col"
           Attr.Dynamic "aria-sort" (sort.View |> View.Map(Table.SortState.ariaSort column.Key))
           yield! column.Attrs
+          yield! headerOnly
         ] [
           button [
             attr.``type`` "button"
@@ -273,7 +280,12 @@ type Table =
           ] [ column.Header; sortIndicator column.Key ]
         ]
       | None ->
-        th [ cl Css.``weave-table__header-cell``; attr.scope "col"; yield! column.Attrs ] [ column.Header ]
+        th [
+          cl Css.``weave-table__header-cell``
+          attr.scope "col"
+          yield! column.Attrs
+          yield! headerOnly
+        ] [ column.Header ]
 
     let sortedRows =
       (rows, sort.View) ||> View.Map2(fun rs state -> Table.sortRows columns state rs)
@@ -360,10 +372,16 @@ type Table =
         Attr.DynamicPred "aria-current" isCurrent (View.Const "true")
       ]
 
-      let selectName =
-        match headerId with
-        | Some id -> Attr.Create "aria-labelledby" id
-        | None -> Attr.Create "aria-label" ("Select row " + key)
+      let selectName () =
+        let label =
+          rowLabel
+          |> Option.map (fun describe -> describe row)
+          |> Option.filter (System.String.IsNullOrWhiteSpace >> not)
+
+        match label, headerId with
+        | Some value, _ -> Attr.Create "aria-label" ("Select row " + value)
+        | None, Some id -> Attr.Create "aria-labelledby" id
+        | None, None -> Attr.Create "aria-label" ("Select row " + key)
 
       let cell (index: int) (column: Table.TableColumnDef<'T>) =
         let content =
@@ -383,7 +401,7 @@ type Table =
 
       tr [ cl Css.``weave-table__row``; yield! rowAttrs ] [
         match selectedKeys with
-        | Some keys -> rowSelect keys key selectName
+        | Some keys -> rowSelect keys key (selectName ())
         | None -> Doc.Empty
 
         yield! List.mapi cell columns
@@ -427,3 +445,79 @@ type Table =
         ]
       ]
     ]
+
+  /// <summary>Creates a data table rendered as a semantic <c>table</c> element.</summary>
+  /// <param name="columns">Column definitions created with <c>TableColumn.create</c>.</param>
+  /// <param name="rows">Reactive list of row values.</param>
+  /// <param name="rowKey">Stable identity for each row. Unchanged rows are not re-rendered when <c>rows</c> updates, and selection is tracked by this key.</param>
+  /// <param name="onRowClick">When supplied, rows activate on click, and the first cell holds a button that activates the row from the keyboard.</param>
+  /// <param name="selectedKey">When supplied, activating a row selects it and the selected row is marked with <c>aria-current</c>.</param>
+  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox is named by its row header or, when none is configured, by its row key.</param>
+  /// <param name="sort">The sort state. Supply it to start sorted or to react to sorting, such as sorting on a server. Defaults to unsorted.</param>
+  /// <param name="rowHeader">Key of the column whose cells label their rows, rendered as row header cells.</param>
+  /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
+  /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
+  /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
+  static member create<'T>
+    (
+      columns: Table.TableColumnDef<'T> list,
+      rows: View<'T list>,
+      rowKey: 'T -> string,
+      ?onRowClick: 'T -> unit,
+      ?selectedKey: Var<string option>,
+      ?selectedKeys: Var<Set<string>>,
+      ?sort: Var<Table.SortState option>,
+      ?rowHeader: string,
+      ?caption: Doc,
+      ?emptyContent: Doc,
+      ?attrs: Attr list
+    ) =
+    Table.create<'T>(
+      columns,
+      rows,
+      rowKey,
+      Map.empty,
+      ?onRowClick = onRowClick,
+      ?selectedKey = selectedKey,
+      ?selectedKeys = selectedKeys,
+      ?sort = sort,
+      ?rowHeader = rowHeader,
+      ?caption = caption,
+      ?emptyContent = emptyContent,
+      ?attrs = attrs
+    )
+
+  /// <summary>Creates a table with caller-supplied labels for row selection checkboxes.</summary>
+  /// <param name="rowLabel">Returns a descriptive label for each row. Empty labels fall back to the row header or key.</param>
+  /// <param name="headerAttrs">Optional header-only attributes keyed by column key.</param>
+  static member createWithRowLabel<'T>
+    (
+      columns: Table.TableColumnDef<'T> list,
+      rows: View<'T list>,
+      rowKey: 'T -> string,
+      rowLabel: 'T -> string,
+      ?headerAttrs: Map<string, Attr list>,
+      ?onRowClick: 'T -> unit,
+      ?selectedKey: Var<string option>,
+      ?selectedKeys: Var<Set<string>>,
+      ?sort: Var<Table.SortState option>,
+      ?rowHeader: string,
+      ?caption: Doc,
+      ?emptyContent: Doc,
+      ?attrs: Attr list
+    ) =
+    Table.create<'T>(
+      columns,
+      rows,
+      rowKey,
+      defaultArg headerAttrs Map.empty,
+      rowLabel = rowLabel,
+      ?onRowClick = onRowClick,
+      ?selectedKey = selectedKey,
+      ?selectedKeys = selectedKeys,
+      ?sort = sort,
+      ?rowHeader = rowHeader,
+      ?caption = caption,
+      ?emptyContent = emptyContent,
+      ?attrs = attrs
+    )

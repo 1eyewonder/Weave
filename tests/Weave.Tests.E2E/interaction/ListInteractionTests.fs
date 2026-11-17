@@ -26,6 +26,30 @@ type ListInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``a selectable item preserves links in its content``() = task {
+    do! this.NavigateTo("list")
+    let group = this.Page.GetByTestId("bulk-list")
+
+    let sales =
+      group.GetByText("Sales", Microsoft.Playwright.LocatorGetByTextOptions(Exact = true))
+
+    let! _ =
+      sales.EvaluateAsync(
+        "el => { const link = document.createElement('a'); link.href = '#details'; link.textContent = 'Details'; el.append(link); }"
+      )
+
+    let details =
+      group.GetByRole(
+        Microsoft.Playwright.AriaRole.Link,
+        Microsoft.Playwright.LocatorGetByRoleOptions(Name = "Details")
+      )
+
+    do! this.Expect(details).ToBeVisibleAsync()
+    do! details.FocusAsync()
+    do! this.Expect(details).ToBeFocusedAsync()
+  }
+
+  [<Fact>]
   member this.``keyboard users can select and expand a list group``() = task {
     do! this.NavigateTo("list")
     let group = this.Page.GetByTestId("bulk-list")

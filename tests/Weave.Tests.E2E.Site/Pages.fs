@@ -725,6 +725,20 @@ module Pages =
       TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field", maxLength = 50)
     ]
 
+  let private selectCulturePage () =
+    Globalization.setCulture "en-US"
+
+    let cities =
+      [ "İSTANBUL"; "IĞDIR"; "ANKARA" ]
+      |> List.map (fun city -> SelectItem.create (text city, city, city))
+      |> View.Const
+
+    div [] [
+      Button.create (text "Use Turkish", fun () -> Globalization.setCulture "tr-TR")
+      Select.create (cities, Var.Create None, searchable = true, labelText = View.Const "City")
+      MultiSelect.create (cities, Var.Create Set.empty, searchable = true, labelText = View.Const "Cities")
+    ]
+
   let private selectPage () =
     let dynamicDisabled = Var.Create false
     let selectEnabled = Var.Create true
@@ -3650,6 +3664,7 @@ module Pages =
     | "form-grid-validation" -> formGridValidationPage ()
     | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()
+    | "select-culture" -> selectCulturePage ()
     | "select-sizing" -> SelectSizingPage.render ()
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()

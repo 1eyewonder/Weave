@@ -111,13 +111,14 @@ module Select =
 
     let filteredItems searchable (searchText: Var<string>) (items: View<SelectItemDef<'T> list>) =
       if searchable then
-        (searchText.View, items)
-        ||> View.Map2(fun query defs ->
+        (Globalization.culture, searchText.View, items)
+        |||> View.Map3(fun culture query defs ->
           if String.IsNullOrWhiteSpace query then
             defs
           else
-            let q = query.ToLower()
-            defs |> List.filter (fun def -> def.Text.ToLower().Contains(q)))
+            let lower = Globalization.toLower culture
+            let search = lower query
+            defs |> List.filter (fun def -> (lower def.Text).Contains(search)))
       else
         items
 

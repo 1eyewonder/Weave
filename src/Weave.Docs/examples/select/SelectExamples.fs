@@ -108,7 +108,7 @@ Select.create (
   let private searchableExample () =
     let description =
       Helpers.bodyText
-        "Enable search to filter the dropdown items by typing. The search input auto-focuses when the dropdown opens. Filtering is case-insensitive on the item's Text field."
+        "Enable search to filter the dropdown items by typing. The search input auto-focuses when the dropdown opens. Select and MultiSelect match substrings of each item's Text using the application culture for case conversion. Calling Globalization.setCulture updates an open search."
 
     let content =
       let selected = Var.Create<string option> None

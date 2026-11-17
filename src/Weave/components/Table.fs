@@ -209,7 +209,7 @@ type Table =
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
   /// <param name="headerAttrs">Header-only attributes keyed by column key; shared column attributes remain unchanged.</param>
-  /// <param name="rowLabel">Optional descriptive label for each row's selection checkbox. Takes precedence over the row header.</param>
+  /// <param name="rowLabel">Optional descriptive label for each row's selection checkbox. Takes precedence over the row header. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
@@ -488,7 +488,7 @@ type Table =
     )
 
   /// <summary>Creates a table with caller-supplied labels for row selection checkboxes.</summary>
-  /// <param name="rowLabel">Returns a descriptive label for each row. Empty labels fall back to the row header or key.</param>
+  /// <param name="rowLabel">Returns a descriptive label for each row. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
   /// <param name="headerAttrs">Optional header-only attributes keyed by column key.</param>
   static member createWithRowLabel<'T>
     (

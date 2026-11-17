@@ -27,11 +27,43 @@ module Link =
     let success = cl Css.``weave-link--success``
     let info = cl Css.``weave-link--info``
 
+  let internal render href onClick enabled attrs children =
+    let disabled = View.not enabled
+    let state = Disabled.disabledClass Css.``weave-link--disabled`` enabled
+
+    match href, onClick with
+    | None, Some activate ->
+      button
+        [
+          attr.``type`` "button"
+          Disabled.nativeAttr enabled
+          on.clickViewGuarded enabled activate
+          state
+          yield! attrs
+        ]
+        children
+    | _ ->
+      a
+        [
+          Attr.DynamicPred "href" enabled (View.Const(defaultArg href "#"))
+          Attr.Create "role" "link"
+          Attr.DynamicPred "aria-disabled" disabled (View.Const "true")
+          on.clickView enabled (fun _ ev canNavigate ->
+            if canNavigate then
+              onClick |> Option.iter (fun activate -> activate ())
+            else
+              ev.PreventDefault())
+          state
+          yield! attrs
+        ]
+        children
+
 [<JavaScript; RequireQualifiedAccess>]
 type Link =
 
   /// <summary>
   /// Creates a link with optional text label and start/end icon adornments.
+  /// A callback without a destination renders a button styled like a link.
   /// The underline decoration is applied only to the text portion, never to icons.
   /// Pass <c>Link.Underline.*</c> via <c>?attrs</c> to control decoration.
   /// </summary>
@@ -46,9 +78,7 @@ type Link =
       ?attrs: Attr list
     ) =
 
-    let href = defaultArg href "#"
     let enabled = defaultArg enabled (View.Const true)
-    let onClick = defaultArg onClick (fun () -> ())
     let attrs = defaultArg attrs List.empty
 
     let startIconDoc =
@@ -63,42 +93,20 @@ type Link =
 
     let textLabel = Html.span [ cl Css.``weave-link__text`` ] [ innerContents ]
 
-    a [
-      cl Css.``weave-link``
-
-      attr.href href
-
-      Disabled.disabledClass Css.``weave-link--disabled`` enabled
-
-      // Prevent default navigation when disabled; fire onClick only when enabled
-      on.clickView enabled (fun _ ev isEnabled -> if not isEnabled then ev.PreventDefault() else onClick ())
-
-      yield! attrs
-    ] [ startIconDoc; textLabel; endIconDoc ]
+    Link.render href onClick enabled (cl Css.``weave-link`` :: attrs) [ startIconDoc; textLabel; endIconDoc ]
 
 [<JavaScript; RequireQualifiedAccess>]
 type IconLink =
 
   /// <summary>
   /// Creates a link containing only an icon — no text label and no underline.
+  /// A callback without a destination renders a button styled like an icon link.
   /// </summary>
   static member create
     (icon: Doc, ?href: string, ?enabled: View<bool>, ?onClick: unit -> unit, ?attrs: Attr list)
     =
 
-    let href = defaultArg href "#"
     let enabled = defaultArg enabled (View.Const true)
-    let onClick = defaultArg onClick (fun () -> ())
     let attrs = defaultArg attrs List.empty
 
-    a [
-      cls [ Css.``weave-link``; Css.``weave-link--icon`` ]
-
-      attr.href href
-
-      Disabled.disabledClass Css.``weave-link--disabled`` enabled
-
-      on.clickView enabled (fun _ ev isEnabled -> if not isEnabled then ev.PreventDefault() else onClick ())
-
-      yield! attrs
-    ] [ icon ]
+    Link.render href onClick enabled (cls [ Css.``weave-link``; Css.``weave-link--icon`` ] :: attrs) [ icon ]

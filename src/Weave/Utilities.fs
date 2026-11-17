@@ -215,26 +215,32 @@ module internal FocusNavigation =
 [<JavaScript>]
 module MenuKeyboardNav =
 
-  let private focusItemAt (container: Dom.Element) (focusedIdx: int ref) (index: int) =
+  let private focusItemAt (container: Dom.Element) (index: int) =
     let items = container.QuerySelectorAll("[role='menuitem']")
 
     if index >= 0 && index < items.Length then
-      focusedIdx.Value <- index
       let target = As<Dom.Element>(items.Item(index))
-      JS.Window.SetTimeout((fun () -> target?focus ()), 0) |> ignore
+      target?focus ()
 
-  let private focusByOffset (container: Dom.Element) (focusedIdx: int ref) (offset: int) =
+  let private focusByOffset (container: Dom.Element) (offset: int) =
     let items = container.QuerySelectorAll("[role='menuitem']")
     let len = items.Length
 
     if len > 0 then
+      let active = container.QuerySelector("[role='menuitem']:focus-within")
+
+      let current =
+        seq { 0 .. len - 1 }
+        |> Seq.tryFind (fun i -> obj.ReferenceEquals(items.Item(i), active))
+        |> Option.defaultValue -1
+
       let targetIdx =
-        if focusedIdx.Value = -1 then
+        if current = -1 then
           if offset > 0 then 0 else len - 1
         else
-          (focusedIdx.Value + offset + len) % len
+          (current + offset + len) % len
 
-      focusItemAt container focusedIdx targetIdx
+      focusItemAt container targetIdx
 
   /// <summary>
   /// Returns a Doc sink that attaches/detaches a keydown listener on the container
@@ -249,37 +255,38 @@ module MenuKeyboardNav =
     (prevKey: string)
     : Doc
     =
-    let focusedIdx = ref -1
     let keyHandler: (Dom.Event -> unit) option ref = ref None
     let focusOutHandler: (Dom.Event -> unit) option ref = ref None
 
     let handleKeyDown (ev: Dom.KeyboardEvent) =
       let container = containerRef.Value
+      let isRtl = As<string>(JS.Window?getComputedStyle(container)?direction) = "rtl"
+      let horizontal = nextKey = "ArrowLeft" || nextKey = "ArrowRight"
+      let direction = if horizontal && isRtl then -1 else 1
 
       match ev with
       | Key.Escape ->
         ev.PreventDefault()
         isOpen.Value <- false
-        focusedIdx.Value <- -1
         triggerRef.Value?focus()
       | Key.NavKey nextKey ->
         ev.PreventDefault()
-        focusByOffset container focusedIdx 1
+        focusByOffset container direction
       | Key.NavKey prevKey ->
         ev.PreventDefault()
-        focusByOffset container focusedIdx -1
+        focusByOffset container -direction
       | Key.Home ->
         ev.PreventDefault()
         let items = container.QuerySelectorAll("[role='menuitem']")
 
         if items.Length > 0 then
-          focusItemAt container focusedIdx 0
+          focusItemAt container 0
       | Key.End ->
         ev.PreventDefault()
         let items = container.QuerySelectorAll("[role='menuitem']")
 
         if items.Length > 0 then
-          focusItemAt container focusedIdx (items.Length - 1)
+          focusItemAt container (items.Length - 1)
       | _ -> ()
 
     let handleFocusOut (ev: Dom.Event) =
@@ -288,7 +295,6 @@ module MenuKeyboardNav =
 
       if isNull related || not (As<bool>(container?contains (related))) then
         isOpen.Value <- false
-        focusedIdx.Value <- -1
 
     let detachAll () =
       match keyHandler.Value with
@@ -308,8 +314,6 @@ module MenuKeyboardNav =
       detachAll ()
 
       if opened then
-        focusedIdx.Value <- -1
-
         let kh = fun (e: Dom.Event) -> handleKeyDown (As<Dom.KeyboardEvent> e)
         containerRef.Value.AddEventListener("keydown", kh)
         keyHandler.Value <- Some kh

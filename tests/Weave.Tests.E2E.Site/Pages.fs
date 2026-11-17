@@ -3806,6 +3806,7 @@ module Pages =
     | "docs-select" -> appearancePage (Weave.Docs.Examples.SelectExamples.render ())
     | "docs-colorpicker" -> appearancePage (Weave.Docs.Examples.ColorPickerExamples.render ())
     | "progress-appearance" -> appearancePage (Weave.Docs.Examples.ProgressExamples.appearance ())
+    | "docs-progress" -> appearancePage (Weave.Docs.Examples.ProgressExamples.render ())
     | "pagination-appearance" -> appearancePage (Weave.Docs.Examples.PaginationExamples.appearance ())
     | "slider-appearance" -> appearancePage (Weave.Docs.Examples.SliderExamples.appearance ())
     | "link-appearance" -> appearancePage (Weave.Docs.Examples.ReferenceAppearance.link ())

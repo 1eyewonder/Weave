@@ -176,18 +176,18 @@ type TableInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``column identifiers belong to headers and shared classes also reach the body``() = task {
+  member this.``column attributes remain on body cells while row names stay distinct``() = task {
     do! this.NavigateTo("table")
     let table = this.Page.GetByTestId("select-table")
 
     for key in [ "name"; "count" ] do
-      do! this.Expect(this.Page.Locator("#select-" + key)).ToHaveCountAsync(1)
       do! this.Expect(table.Locator("thead #select-" + key)).ToHaveCountAsync(1)
+      do! this.Expect(table.Locator("tbody [id='select-" + key + "']")).ToHaveCountAsync(3)
 
     do! this.Expect(table.Locator("tbody .selection-column")).ToHaveCountAsync(6)
     do! this.Page.GetByText("Update column ID").ClickAsync()
     do! this.Expect(table.Locator("thead #updated-name")).ToHaveCountAsync(1)
-    do! this.Expect(this.Page.Locator("#updated-name")).ToHaveCountAsync(1)
+    do! this.Expect(table.Locator("tbody [id='updated-name']")).ToHaveCountAsync(3)
 
     for name in [ "Alpha"; "Beta"; "Gamma" ] do
       let checkbox =

@@ -155,7 +155,7 @@ type TableColumn =
   /// <param name="header">The Doc rendered in the column header cell.</param>
   /// <param name="cell">Renders the body cell content for a row value.</param>
   /// <param name="sort">When supplied, the header becomes a button that sorts by this column.</param>
-  /// <param name="attrs">Additional attributes shared by the header and body cells, such as alignment or width. An id identifies only the column header.</param>
+  /// <param name="attrs">Additional attributes merged onto both the header and body cells of this column, such as alignment or width.</param>
   static member create<'T>
     (key: string, header: Doc, cell: 'T -> Doc, ?sort: Table.ColumnSort<'T>, ?attrs: Attr list)
     : Table.TableColumnDef<'T> = {
@@ -377,15 +377,9 @@ type Table =
             cls [ Css.``weave-table__cell``; Css.``weave-table__row-header`` ]
             attr.scope "row"
             yield! column.Attrs
-            Attr.bindOption attr.id headerId
-          ] [ content ]
+          ] [ span [ Attr.bindOption attr.id headerId ] [ content ] ]
         else
-          td [
-            cl Css.``weave-table__cell``
-            yield! column.Attrs
-            if not column.Attrs.IsEmpty then
-              on.afterRender (fun el -> el.RemoveAttribute "id")
-          ] [ content ]
+          td [ cl Css.``weave-table__cell``; yield! column.Attrs ] [ content ]
 
       tr [ cl Css.``weave-table__row``; yield! rowAttrs ] [
         match selectedKeys with

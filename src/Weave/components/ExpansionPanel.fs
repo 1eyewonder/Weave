@@ -109,8 +109,6 @@ type ExpansionPanelHeader =
       | Some icon -> [ content; icon ]
       | None -> [ content ]
 
-    let enabledRef: bool ref = ref true
-
     div
       [
         cl Css.``weave-expansion-panel__header``
@@ -124,7 +122,6 @@ type ExpansionPanelHeader =
           el.SetAttribute("data-weave-header-disabled", if isEnabled then "false" else "true")
           ExpansionPanel.syncHeaderAvailability el)
         Attr.Create "role" "button"
-        on.afterRender (fun _ -> enabled |> View.Sink(fun v -> enabledRef.Value <- v))
         expanded.View
         |> View.Map(fun v -> if v then "true" else "false")
         |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-expanded", v))
@@ -136,12 +133,12 @@ type ExpansionPanelHeader =
           if isEnabled && el.GetAttribute("aria-disabled") <> "true" then
             Var.Set expanded (not isExpanded)
 
-        on.keyDown (fun el ev ->
+        on.keyDownView enabled (fun el ev isEnabled ->
           match ev with
           | Key.Activate ->
             ev.PreventDefault()
 
-            if enabledRef.Value && el.GetAttribute("aria-disabled") <> "true" then
+            if isEnabled && el.GetAttribute("aria-disabled") <> "true" then
               Var.Set expanded (not expanded.Value)
           | _ -> ())
 
@@ -183,17 +180,16 @@ type ExpansionPanel =
       View.not expanded.View
       |> Attr.DynamicClassPred Css.``weave-expansion-panel--collapsed``
 
-      on.afterRender (fun el ->
+      enabled
+      |> Attr.DynamicCustom(fun el isEnabled ->
         let headerEl = el.QuerySelector("." + Css.``weave-expansion-panel__header``)
 
         if not (isNull headerEl) then
           headerEl.SetAttribute("aria-controls", panelId)
           headerEl.SetAttribute("id", headerId)
 
-          enabled
-          |> View.Sink(fun isEnabled ->
-            headerEl.SetAttribute("data-weave-panel-disabled", if isEnabled then "false" else "true")
-            ExpansionPanel.syncHeaderAvailability headerEl))
+          headerEl.SetAttribute("data-weave-panel-disabled", if isEnabled then "false" else "true")
+          ExpansionPanel.syncHeaderAvailability headerEl)
 
       yield! attrs
     ] [

@@ -186,9 +186,7 @@ type WeaveList =
 
       let isSelectable = def.Value.IsSome || hasNestedLeafValues
 
-      let hasRowAction =
-        hasNestedItems
-        || (def.Value.IsSome && (selectedValue.IsSome || selectedValues.IsSome))
+      let hasRowAction = hasNestedItems || (def.Value.IsSome && selectedValue.IsSome)
 
       let contentId = WeaveId.create "weave-list-item-label"
 
@@ -211,17 +209,11 @@ type WeaveList =
           cl Css.``weave-list-item__checkbox``
           Attr.DynamicClassPred Css.``weave-list-item__checkbox--checked`` isSelected
           Attr.DynamicClassPred Css.``weave-list-item__checkbox--indeterminate`` isIndeterminate
-          if hasNestedLeafValues then
+          if isMultiSelect && isSelectable then
             Attr.Create "role" "checkbox"
             Attr.Create "aria-labelledby" contentId
             checkedState |> Attr.Dynamic "aria-checked"
             yield! controlState ()
-
-            on.clickView (View.zip interactable enabledLeafValues) (fun _ ev (isInteractable, enabled) ->
-              ev.StopPropagation()
-
-              if isInteractable then
-                handleParentCheckboxClick enabled)
 
             on.keyDownView (View.zip interactable enabledLeafValues) (fun el ev (isInteractable, enabled) ->
               match ev with
@@ -230,10 +222,18 @@ type WeaveList =
                 ev.StopPropagation()
 
                 if isInteractable then
-                  handleParentCheckboxClick enabled
+                  if hasNestedLeafValues then
+                    handleParentCheckboxClick enabled
+                  else
+                    handleRowClick ()
               | _ -> ())
-          else
-            Attr.Create "aria-hidden" "true"
+
+          if hasNestedLeafValues then
+            on.clickView (View.zip interactable enabledLeafValues) (fun _ ev (isInteractable, enabled) ->
+              ev.StopPropagation()
+
+              if isInteractable then
+                handleParentCheckboxClick enabled)
         ] []
 
       let itemRow =
@@ -258,16 +258,12 @@ type WeaveList =
             cl Css.``weave-list-item__content``
             Attr.Create "id" contentId
             if hasRowAction then
-              if not hasNestedItems && isMultiSelect then
-                Attr.Create "role" "checkbox"
-                checkedState |> Attr.Dynamic "aria-checked"
-              else
-                Attr.Create "role" "button"
+              Attr.Create "role" "button"
 
-                if hasNestedItems then
-                  def.Expanded.View |> View.Map string<bool> |> Attr.Dynamic "aria-expanded"
-                elif selectedValue.IsSome then
-                  isSelected |> View.Map string<bool> |> Attr.Dynamic "aria-pressed"
+              if hasNestedItems then
+                def.Expanded.View |> View.Map string<bool> |> Attr.Dynamic "aria-expanded"
+              elif selectedValue.IsSome then
+                isSelected |> View.Map string<bool> |> Attr.Dynamic "aria-pressed"
 
               yield! controlState ()
 

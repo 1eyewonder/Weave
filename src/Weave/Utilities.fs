@@ -93,7 +93,7 @@ module DomLifecycleListener =
         try
           disconnect ()
         with cleanupError ->
-          JS.Inline("console.error($0)", cleanupError)
+          WebSharper.JavaScript.Console.Error(cleanupError)
 
         raise error
 

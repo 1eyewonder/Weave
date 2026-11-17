@@ -1,6 +1,7 @@
 namespace Weave.Tests.E2E
 
 open System.Text.RegularExpressions
+open Microsoft.Playwright
 open Xunit
 
 type ExpansionPanelInteractionTests(fixture: TestFixture) =
@@ -158,3 +159,39 @@ type ExpansionPanelInteractionTests(fixture: TestFixture) =
     do! header.PressAsync("Enter")
     do! this.Expect(header).ToHaveAttributeAsync("aria-expanded", "true")
   }
+
+  [<Theory>]
+  [<InlineData("toggle-panel-enabled")>]
+  [<InlineData("toggle-header-enabled")>]
+  member this.``detached panel pauses availability updates and catches up on remount``(toggleId: string) =
+    task {
+      do! this.NavigateTo("expansion-panel-dynamic")
+      let live = this.Page.GetByTestId("dynamic-expansion-header")
+      let removable = this.Page.GetByTestId("remountable-expansion-header")
+      let toggle = this.Page.GetByTestId(toggleId)
+
+      let mount =
+        this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Toggle mounted panel"))
+
+      do! this.Expect(removable).ToHaveAttributeAsync("aria-disabled", "false")
+      let! original = removable.ElementHandleAsync()
+      do! mount.ClickAsync()
+      do! this.Expect(removable).ToHaveCountAsync(0)
+      let reads = this.Page.GetByTestId("removable-header-reads")
+      let! originalReads = reads.TextContentAsync()
+      do! toggle.ClickAsync()
+      do! this.Expect(live).ToHaveAttributeAsync("aria-disabled", "true")
+      let! detachedState = original.GetAttributeAsync("aria-disabled")
+      Assert.Equal("false", detachedState)
+      let! detachedReads = reads.TextContentAsync()
+      Assert.Equal(originalReads, detachedReads)
+      do! mount.ClickAsync()
+      do! this.Expect(removable).ToHaveAttributeAsync("aria-disabled", "true")
+      do! this.Expect(removable).ToHaveAttributeAsync("tabindex", "-1")
+      let! reconnected = original.EvaluateAsync<bool>("el => el.isConnected")
+      Assert.True(reconnected)
+      do! toggle.ClickAsync()
+      do! this.Expect(removable).ToHaveAttributeAsync("tabindex", "0")
+      do! removable.PressAsync("Enter")
+      do! this.Expect(removable).ToHaveAttributeAsync("aria-expanded", "true")
+    }

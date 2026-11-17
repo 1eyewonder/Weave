@@ -105,7 +105,7 @@ type ColorPickerInteractionTests(fixture: TestFixture) =
   member this.``Given an external color change then hue reflects it``() = task {
     do! this.NavigateTo("color-picker")
     do! this.UseExternalColor()
-    do! this.Expect(this.Slider("Hue")).ToHaveAttributeAsync("aria-valuenow", "120.00")
+    do! this.Expect(this.Slider("Hue")).ToHaveAttributeAsync("aria-valuenow", "120")
   }
 
   [<Fact>]
@@ -132,9 +132,45 @@ type ColorPickerInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
-  member this.``Given opaque mode when mounted then caller alpha is preserved``() = task {
+  member this.``opaque hex displays stored alpha and leaves it intact when committed without editing``() =
+    task {
+      do! this.NavigateTo("color-picker")
+      let hex = this.Page.GetByTestId("opaque").GetByRole(AriaRole.Textbox)
+      do! this.Expect(hex).ToHaveValueAsync("#12345680")
+      do! hex.PressAsync("Enter")
+      do! this.Expect(this.Page.GetByTestId("opaque-value")).ToHaveTextAsync("#12345680")
+    }
+
+  [<Fact>]
+  member this.``opaque pickers show externally supplied transparency until editing makes the color opaque``
+    ()
+    = task {
     do! this.NavigateTo("color-picker")
-    do! this.Expect(this.Page.GetByTestId("opaque-value")).ToHaveTextAsync("#12345680")
+    let hex = this.Page.GetByTestId("opaque")
+    let rgb = this.Page.GetByTestId("opaque-rgb")
+
+    let field =
+      this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Opaque accent"))
+
+    do! this.Expect(hex).ToContainTextAsync("Current opacity is 50.2%")
+    do! this.Page.GetByRole(AriaRole.Button, PageGetByRoleOptions(Name = "Set transparent red")).ClickAsync()
+    let explanation = "Current opacity is 0.0%. Edits make this color opaque."
+    do! this.Expect(this.Page.GetByTestId("opaque-value")).ToHaveTextAsync("#FF000000")
+    do! this.Expect(hex.GetByRole(AriaRole.Textbox)).ToHaveValueAsync("#FF000000")
+    do! this.Expect(rgb).ToContainTextAsync(explanation)
+    do! this.Expect(field).ToHaveAccessibleDescriptionAsync(explanation)
+
+    for picker in [ hex; rgb; field ] do
+      do!
+        this
+          .Expect(picker.Locator(".weave-colorpicker__preview > span"))
+          .ToHaveCSSAsync("background-color", "rgba(255, 0, 0, 0)")
+
+    do! rgb.GetByLabel("G", LocatorGetByLabelOptions(Exact = true)).FillAsync("17")
+    do! this.Expect(this.Page.GetByTestId("opaque-value")).ToHaveTextAsync("#FF1100")
+    do! this.Expect(hex.GetByRole(AriaRole.Textbox)).ToHaveValueAsync("#FF1100")
+    do! this.Expect(rgb).Not.ToContainTextAsync("Current opacity")
+    do! this.Expect(field).ToHaveAccessibleDescriptionAsync("")
   }
 
   [<Fact>]

@@ -61,6 +61,9 @@ module ColorPickerPage =
         attrs = [ Attr.Create "data-testid" "opaque-rgb" ]
       )
 
+      ColorPicker.field (opaque, labelText = View.Const "Opaque accent", mode = ColorPicker.Mode.RGB)
+      Button.create (text "Set transparent red", (fun () -> opaque.Value <- PickerColor.ofHex "#FF000000"))
+
       p [ Attr.Create "data-testid" "value" ] [ Doc.TextView(color.View |> View.Map PickerColor.toHex) ]
       p [ Attr.Create "data-testid" "opaque-value" ] [
         Doc.TextView(opaque.View |> View.Map PickerColor.toHex)

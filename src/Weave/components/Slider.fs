@@ -71,6 +71,15 @@ type Slider =
     let minimum = minVal * scale
     let maximum = maxVal * scale
 
+    let enforceBounds =
+      valueAsFloat.View
+      |> Doc.sinkCached (fun current ->
+        if minVal <= maxVal then
+          if System.Double.IsNaN current || current < minVal then
+            valueAsFloat.Set minVal
+          elif current > maxVal then
+            valueAsFloat.Set maxVal)
+
     let pct =
       valueAsFloat.View
       |> View.MapCached(fun v -> Bounded.percentOf minimum maximum (v * scale))
@@ -188,7 +197,7 @@ type Slider =
         |> View.Map(fun isEnabled -> if isEnabled then "false" else "true")
         |> Attr.DynamicCustom(fun el value -> el.SetAttribute("aria-disabled", value))
         valueAsFloat.View
-        |> View.Map(sprintf "%.2f")
+        |> View.Map string<float>
         |> Attr.DynamicCustom(fun el v -> el.SetAttribute("aria-valuenow", v))
 
         labelText
@@ -198,8 +207,8 @@ type Slider =
           else
             el.RemoveAttribute("aria-label"))
 
-        Attr.Create "aria-valuemin" (sprintf "%.2f" minVal)
-        Attr.Create "aria-valuemax" (sprintf "%.2f" maxVal)
+        Attr.Create "aria-valuemin" (string<float> minVal)
+        Attr.Create "aria-valuemax" (string<float> maxVal)
 
         onPointerDown
         onPointerMove
@@ -232,10 +241,11 @@ type Slider =
       Disabled.disabledClass Css.``weave-slider--disabled`` enabled
 
       yield! attrs
-    ] [ label; trackContainer; tickLabelsDoc ]
+    ] [ enforceBounds; label; trackContainer; tickLabelsDoc ]
 
   /// <summary>
   /// Creates a slider for integer values.
+  /// The mounted slider clamps initial and externally assigned values to its bounds.
   /// </summary>
   static member create
     (
@@ -259,47 +269,23 @@ type Slider =
     let enabled = defaultArg enabled (View.Const true)
     let attrs = defaultArg attrs List.empty
 
-    // Bridge Var<int> to Var<float>
-    let floatVar = Var.Create(float value.Value)
+    let floatValue = Var.Lens value float (fun _ next -> int (round next))
 
-    let syncToFloat =
-      value.View
-      |> Doc.BindView(fun v ->
-        let f = float v
-
-        if floatVar.Value <> f then
-          floatVar.Value <- f
-
-        Doc.Empty)
-
-    let syncToInt =
-      floatVar.View
-      |> Doc.BindView(fun f ->
-        let i = int (round f)
-
-        if value.Value <> i then
-          value.Value <- i
-
-        Doc.Empty)
-
-    Doc.Concat [
-      syncToFloat
-      syncToInt
-      Slider.renderSlider (
-        floatVar,
-        minVal,
-        maxVal,
-        stepVal,
-        labelText,
-        showTickMarks,
-        tickMarkLabels,
-        enabled,
-        attrs
-      )
-    ]
+    Slider.renderSlider (
+      floatValue,
+      minVal,
+      maxVal,
+      stepVal,
+      labelText,
+      showTickMarks,
+      tickMarkLabels,
+      enabled,
+      attrs
+    )
 
   /// <summary>
   /// Creates a slider for floating-point values.
+  /// The mounted slider clamps initial and externally assigned values to its bounds and replaces NaN with the minimum.
   /// </summary>
   static member create
     (

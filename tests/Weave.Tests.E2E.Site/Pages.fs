@@ -753,6 +753,27 @@ module Pages =
       TextField.multiLine (Var.Create "", labelText = View.Const "Multiline Text Field", maxLength = 50)
     ]
 
+  let private multilineEditingPage () =
+    let initial = String.replicate 18 "a\r\n" + "\r🙂z"
+    let value = Var.Create initial
+
+    div [] [
+      TextField.multiLine (
+        value,
+        labelText = View.Const "Notes",
+        maxLength = 50,
+        inputAttrs = [ Attr.Create "minlength" "10" ]
+      )
+      output [] [ textView value.View ]
+      button [ on.click (fun _ _ -> value.Set initial) ] [ text "Restore notes" ]
+      TextField.singleLine (
+        Var.Create "",
+        labelText = View.Const "Summary",
+        maxLength = 50,
+        inputAttrs = [ Attr.Create "minlength" "10" ]
+      )
+    ]
+
   let private selectCulturePage () =
     Globalization.setCulture "en-US"
 
@@ -2539,6 +2560,34 @@ module Pages =
       )
     ]
 
+  let private sliderRangePage () =
+    let integer = Var.Create 7
+    let fraction = Var.Create 0.001
+
+    let setValues whole part =
+      integer.Set whole
+      fraction.Set part
+
+    div [] [
+      div [ Attr.Create "data-testid" "integer" ] [
+        Slider.create (integer, min = 0, max = 5, labelText = View.Const "Whole units")
+        output [] [ textView (integer.View |> View.Map string<int>) ]
+      ]
+      div [ Attr.Create "data-testid" "fraction" ] [
+        Slider.create (
+          fraction,
+          min = 0.0,
+          max = 0.004,
+          step = 0.001,
+          labelText = View.Const "Fractional units"
+        )
+        output [] [ textView (fraction.View |> View.Map string<float>) ]
+      ]
+      button [ on.click (fun _ _ -> setValues -2 -0.01) ] [ text "Set below minimum" ]
+      button [ on.click (fun _ _ -> setValues 8 0.01) ] [ text "Set above maximum" ]
+      button [ on.click (fun _ _ -> fraction.Set nan) ] [ text "Set fraction to NaN" ]
+    ]
+
   let private resizeListenerPage () =
     let mounted = Var.Create true
     let size = Var.Create<ResizeListener.ElementSize option> None
@@ -3746,6 +3795,7 @@ module Pages =
     | "field" -> fieldPage ()
     | "numericfield" -> numericFieldPage ()
     | "textfield" -> textFieldPage ()
+    | "multiline-editing" -> multilineEditingPage ()
     | "form" -> formPage ()
     | "form-sizing" -> formSizingPage ()
     | "form-shared-field" -> sharedFieldPage ()
@@ -3775,6 +3825,7 @@ module Pages =
     | "dialog-triggered" -> dialogTriggeredPage ()
     | "tabs" -> tabsPage ()
     | "tabs-contrast" -> TabsRegressionPage.render ()
+    | "tabs-named" -> TabsRegressionPage.namedGroups ()
     | "tabs-initial-top" -> TabsRegressionPage.initial Tabs.Position.Top
     | "tabs-initial-left" -> TabsRegressionPage.initial Tabs.Position.Left
     | "tabs-resize-top" -> TabsRegressionPage.resizable Tabs.Position.Top
@@ -3889,6 +3940,7 @@ module Pages =
     | "slider-tiny-step" -> tickSliderPage 0.0 100.0 1e-310 50.0
     | "slider-wide-range" -> tickSliderPage -1e308 1e308 1e307 0.0
     | "slider-dynamic" -> dynamicSliderPage ()
+    | "slider-range" -> sliderRangePage ()
     | "color-picker" -> ColorPickerPage.render ()
     | _ -> div [] [ text (sprintf "Unknown page: %s" hash) ]
 

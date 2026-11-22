@@ -30,6 +30,7 @@
     <Compile Include="components/Snackbar.fs" />
     <Compile Include="components/Card.fs" />
     <Compile Include="components/Carousel.fs" />
+    <Compile Include="components/SwipeArea.fs" />
     <Compile Include="components/ButtonGroup.fs" />
     <Compile Include="components/ButtonMenu.fs" />
     <Compile Include="components/Chip.fs" />

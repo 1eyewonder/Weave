@@ -20,6 +20,164 @@ module Pages =
       TextField.singleLine (name, labelText = View.Const "Second name editor")
     ]
 
+  let private swipeAreaPage touchAction =
+    let result = Var.Create "None"
+    let count = Var.Create 0
+    let cancels = Var.Create 0
+    let movement = Var.Create "None"
+    let enabled = Var.Create true
+    let threshold = Var.Create 100
+    let clicks = Var.Create 0
+    let inner = Var.Create 0
+
+    let report (swipe: SwipeArea.Swipe) =
+      let direction =
+        match swipe.Direction with
+        | SwipeArea.Direction.Left -> "Left"
+        | SwipeArea.Direction.Right -> "Right"
+        | SwipeArea.Direction.Up -> "Up"
+        | SwipeArea.Direction.Down -> "Down"
+
+      result.Set(sprintf "%s:%.0f:%.0f" direction swipe.DeltaX swipe.DeltaY)
+      count.Set(count.Value + 1)
+
+    div [ Attr.Style "min-height" "1500px" ] [
+      SwipeArea.create (
+        div [] [
+          p [] [ text "Swipe here" ]
+          Button.create (text "Embedded button", (fun () -> clicks.Set(clicks.Value + 1)))
+          input [ attr.``type`` "text"; Attr.Create "aria-label" "Embedded input" ] []
+          div [ Attr.Create "data-weave-swipe-ignore" ""; attr.id "ignored" ] [ text "Custom control" ]
+          SwipeArea.create (
+            text "Nested area",
+            (fun _ -> inner.Set(inner.Value + 1)),
+            threshold = View.Const 30,
+            attrs = [
+              attr.id "nested-area"
+              Attr.Style "position" "absolute"
+              Attr.Style "right" "10px"
+              Attr.Style "bottom" "10px"
+              Attr.Style "width" "140px"
+              Attr.Style "height" "100px"
+            ]
+          )
+        ],
+        report,
+        threshold = threshold.View,
+        enabled = enabled.View,
+        onDrag = (fun delta -> movement.Set(sprintf "%.0f:%.0f" delta.DeltaX delta.DeltaY)),
+        onSwipeCancel = (fun () -> cancels.Set(cancels.Value + 1)),
+        attrs = [
+          attr.id "swipe-area"
+          yield! touchAction
+          Attr.Style "position" "relative"
+          Attr.Style "width" "500px"
+          Attr.Style "height" "300px"
+        ]
+      )
+      for id, view in [ "result", result.View; "movement", movement.View ] do
+        p [ attr.id id ] [ textView view ]
+
+      p [ attr.id "enabled" ] [ textView (enabled.View |> View.Map string<bool>) ]
+      for id, view in
+        [
+          "count", count.View
+          "cancels", cancels.View
+          "clicks", clicks.View
+          "inner", inner.View
+        ] do
+        p [ attr.id id ] [ textView (view |> View.Map string<int>) ]
+      Button.create (
+        text "Toggle enabled",
+        (fun () -> enabled.Set(not enabled.Value)),
+        attrs = [ attr.id "toggle-swipe-enabled" ]
+      )
+      Button.create (text "Lower threshold", (fun () -> threshold.Set 30))
+      Button.create (text "Raise threshold", (fun () -> threshold.Set 100))
+      Button.create (text "Negative threshold", (fun () -> threshold.Set -10))
+      Button.create (text "Zero threshold", (fun () -> threshold.Set 0))
+      Button.create (text "Next", (fun () -> count.Set(count.Value + 1)))
+      SwipeArea.create (text "Native scrolling", ignore, attrs = [ attr.id "native-area" ])
+      SwipeArea.create (
+        text "Horizontal gestures",
+        ignore,
+        attrs = [ attr.id "horizontal-area"; SwipeArea.TouchAction.horizontal ]
+      )
+      SwipeArea.create (
+        text "Vertical gestures",
+        ignore,
+        attrs = [ attr.id "vertical-area"; SwipeArea.TouchAction.vertical ]
+      )
+    ]
+
+  let private swipeRemovalPage () =
+    let mounted = Var.Create true
+    let count = Var.Create 0
+    let movement = Var.Create "None"
+
+    div [] [
+      mounted.View
+      |> Doc.BindView(fun visible ->
+        if visible then
+          SwipeArea.create (
+            text "Removable swipe area",
+            (fun _ -> count.Set(count.Value + 1)),
+            onDrag = (fun delta -> movement.Set(sprintf "%.0f:%.0f" delta.DeltaX delta.DeltaY)),
+            attrs = [
+              attr.id "removable-area"
+              Attr.Style "width" "500px"
+              Attr.Style "height" "200px"
+            ]
+          )
+        else
+          Doc.Empty)
+      p [ attr.id "removal-count" ] [ textView (count.View |> View.Map string<int>) ]
+      p [ attr.id "removal-movement" ] [ textView movement.View ]
+      Button.create (text "Toggle area", (fun () -> mounted.Set(not mounted.Value)))
+    ]
+
+  let private swipeControlsPage () =
+    let count = Var.Create 0
+    let clicks = Var.Create 0
+
+    div [] [
+      SwipeArea.create (
+        div [] [
+          input [
+            attr.id "editable-input"
+            Attr.Create "aria-label" "Input"
+            attr.value "alpha beta"
+          ] []
+          textarea [ attr.id "editable-textarea"; Attr.Create "aria-label" "Textarea" ] [ text "alpha beta" ]
+          select [ attr.id "editable-select"; Attr.Create "aria-label" "Select" ] [
+            option [ attr.value "one" ] [ text "One" ]
+            option [ attr.value "two" ] [ text "Two" ]
+          ]
+          div [
+            attr.id "editable-content"
+            Attr.Create "contenteditable" "true"
+            Attr.Create "aria-label" "Editable"
+          ] [ text "alpha beta" ]
+          a [ attr.id "control-link"; attr.href "#control-target" ] [ text "Control link" ]
+          button [
+            attr.id "ignored-control"
+            attr.``type`` "button"
+            Attr.Create "data-weave-swipe-ignore" ""
+            on.click (fun _ _ -> clicks.Set(clicks.Value + 1))
+          ] [ text "Ignored action" ]
+          div [ attr.id "custom-ignore"; Attr.Create "data-weave-swipe-ignore" "" ] [ text "Ignored content" ]
+        ],
+        (fun _ -> count.Set(count.Value + 1)),
+        attrs = [
+          attr.id "controls-area"
+          Attr.Style "width" "600px"
+          Attr.Style "min-height" "260px"
+        ]
+      )
+      p [ attr.id "controls-count" ] [ textView (count.View |> View.Map string<int>) ]
+      p [ attr.id "controls-clicks" ] [ textView (clicks.View |> View.Map string<int>) ]
+    ]
+
   let private formArithmeticPage () =
     let price =
       FormField.create (25.0, rules = [ Validate.greaterThan 0.0 "Price must be positive." ])
@@ -3882,6 +4040,11 @@ module Pages =
     | "tabs-resize-top" -> TabsRegressionPage.resizable Tabs.Position.Top
     | "tabs-resize-bottom" -> TabsRegressionPage.resizable Tabs.Position.Bottom
     | "carousel" -> carouselPage false false
+    | "swipe-area" -> swipeAreaPage [ SwipeArea.TouchAction.none ]
+    | "swipe-area-scroll" -> swipeAreaPage [ SwipeArea.TouchAction.horizontal ]
+    | "swipe-area-removal" -> swipeRemovalPage ()
+    | "swipe-area-controls" -> swipeControlsPage ()
+    | "swipe-area-documentation" -> Weave.Docs.Examples.SwipeAreaExamples.render ()
     | "carousel-autoplay" -> carouselPage true false
     | "carousel-custom-controls" -> carouselPage false true
     | "carousel-autoplay-custom-controls" -> carouselPage true true

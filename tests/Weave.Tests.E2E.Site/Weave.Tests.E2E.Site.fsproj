@@ -6,6 +6,8 @@
   <ItemGroup>
     <Compile Include="../../src/Weave.Docs/examples/shared/ApiReference.fs" Link="docs/shared/ApiReference.fs" />
     <Compile Include="../../src/Weave.Docs/examples/shared/ExampleHelpers.fs" Link="docs/shared/ExampleHelpers.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/swipe-area/SwipeAreaAppearance.fs" Link="docs/swipe-area/SwipeAreaAppearance.fs" />
+    <Compile Include="../../src/Weave.Docs/examples/swipe-area/SwipeAreaExamples.fs" Link="docs/swipe-area/SwipeAreaExamples.fs" />
     <Compile Include="../../src/Weave.Docs/examples/shared/SourceString.fs" Link="docs/shared/SourceString.fs" />
     <Compile Include="../../src/Weave.Docs/examples/text-field/TextFieldAppearance.fs" Link="docs/text-field/TextFieldAppearance.fs" />
     <Compile Include="../../src/Weave.Docs/examples/text-field/TextFieldExamples.fs" Link="docs/text-field/TextFieldExamples.fs" />

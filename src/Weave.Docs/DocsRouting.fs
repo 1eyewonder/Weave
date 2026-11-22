@@ -22,6 +22,7 @@ module DocsRouting =
     | CheckboxExamples
     | CardExamples
     | CarouselExamples
+    | SwipeAreaExamples
     | PaginationExamples
     | ChipExamples
     | ChipSetExamples
@@ -85,6 +86,7 @@ module DocsRouting =
     | CheckboxExamples -> "Checkbox"
     | CardExamples -> "Card"
     | CarouselExamples -> "Carousel"
+    | SwipeAreaExamples -> "Swipe Area"
     | PaginationExamples -> "Pagination"
     | ChipExamples -> "Chip"
     | ChipSetExamples -> "Chip Set"
@@ -153,6 +155,7 @@ module DocsRouting =
     | ExpansionPanelExamples -> "accordion disclosure collapse expand"
     | ProgressExamples -> "loading spinner indicator percentage"
     | PaginationExamples -> "pages paging page navigation"
+    | SwipeAreaExamples -> "swipe gesture touch drag pointer navigation"
     | CheckboxExamples -> "check checked boolean selection toggle"
     | RadioButtonExamples -> "radio options choice selection"
     | SwitchExamples -> "toggle boolean settings on off"
@@ -183,6 +186,7 @@ module DocsRouting =
     | "Checkbox" -> Some CheckboxExamples
     | "Card" -> Some CardExamples
     | "Carousel" -> Some CarouselExamples
+    | "Swipe Area" -> Some SwipeAreaExamples
     | "Pagination" -> Some PaginationExamples
     | "Chip" -> Some ChipExamples
     | "Chip Set" -> Some ChipSetExamples
@@ -247,6 +251,7 @@ module DocsRouting =
     | CheckboxExamples -> "#checkbox"
     | CardExamples -> "#card"
     | CarouselExamples -> "#carousel"
+    | SwipeAreaExamples -> "#swipe-area"
     | PaginationExamples -> "#pagination"
     | ChipExamples -> "#chip"
     | ChipSetExamples -> "#chip-set"
@@ -311,6 +316,7 @@ module DocsRouting =
     | "#checkbox" -> Some CheckboxExamples
     | "#card" -> Some CardExamples
     | "#carousel" -> Some CarouselExamples
+    | "#swipe-area" -> Some SwipeAreaExamples
     | "#pagination" -> Some PaginationExamples
     | "#chip" -> Some ChipExamples
     | "#chip-set" -> Some ChipSetExamples

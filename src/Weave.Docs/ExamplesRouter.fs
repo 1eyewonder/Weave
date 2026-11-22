@@ -36,6 +36,7 @@ module ExamplesRouter =
       | CheckboxExamples -> CheckboxExamples.render ()
       | CardExamples -> CardExamples.render ()
       | CarouselExamples -> CarouselExamples.render ()
+      | SwipeAreaExamples -> SwipeAreaExamples.render ()
       | PaginationExamples -> PaginationExamples.render ()
       | ChipExamples -> ChipExamples.render ()
       | ChipSetExamples -> ChipSetExamples.render ()

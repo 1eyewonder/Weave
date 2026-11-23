@@ -2149,6 +2149,10 @@ module Pages =
 
   let private linkPage () =
     let activations = Var.Create 0
+    let enabled = Var.Create true
+    let attributeDestination = Var.Create "#attribute-destination"
+
+    let activate () = Var.Update activations ((+) 1)
 
     div [] [
       div [ Attr.Create "data-testid" "link-count" ] [ Doc.TextView(activations.View |> View.Map string) ]
@@ -2178,6 +2182,49 @@ module Pages =
       Link.create (text "Disabled Link", href = "#", enabled = View.Const false)
       Link.create (text "Always Underline", href = "#", attrs = [ Link.Underline.always ])
       Link.create (text "No Underline", href = "#", attrs = [ Link.Underline.none ])
+      div [ Attr.Style "margin-block-start" "100vh" ] [
+        Link.create (
+          text "Run action",
+          onClick = activate,
+          attrs = [ Attr.Create "data-testid" "link-action" ]
+        )
+        IconLink.create (
+          text "+",
+          onClick = activate,
+          attrs = [ Attr.Create "aria-label" "Add item"; Attr.Create "data-testid" "icon-action" ]
+        )
+        Button.create (text "Toggle links", fun () -> Var.Update enabled not)
+        Link.create (
+          text "Attribute destination",
+          enabled = enabled.View,
+          onClick = activate,
+          attrs = [
+            Attr.Dynamic "href" attributeDestination.View
+            Attr.Create "tabindex" "0"
+            Attr.Create "data-testid" "attribute-destination"
+          ]
+        )
+        Button.create (
+          text "Change destination",
+          fun () -> Var.Set attributeDestination "#changed-destination"
+        )
+        Link.create (text "Destination", href = "#destination", enabled = enabled.View, onClick = activate)
+        IconLink.create (
+          text "→",
+          href = "#destination",
+          enabled = enabled.View,
+          onClick = activate,
+          attrs = [ Attr.Create "aria-label" "Go to destination" ]
+        )
+        div [ Attr.Create "role" "menu"; Attr.Create "aria-label" "Destinations" ] [
+          Link.create (
+            text "Menu destination",
+            href = "#destination",
+            enabled = enabled.View,
+            attrs = [ Attr.Create "role" "menuitem" ]
+          )
+        ]
+      ]
       div [ SurfaceColor.BackgroundColor.paper; Padding.All.small ] [
         for name, colorAttrs in
           [

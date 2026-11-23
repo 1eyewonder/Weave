@@ -1,7 +1,12 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
-// Renders as <a>, designed to sit inline with surrounding text or standalone.
+button.weave-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 .weave-link {
   display: inline-flex;
   align-items: center;

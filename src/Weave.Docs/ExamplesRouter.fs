@@ -314,12 +314,88 @@ module ExamplesRouter =
       |> snd
       |> List.map pageToString
 
-    let dateTimeLabels = [ "Date & Time Guide"; "Date Picker"; "Date Range Picker"; "Time Picker" ]
-
-    let dateTimeExpanded =
-      Var.Create(List.contains (pageToString initialPage) dateTimeLabels)
-
     let componentsLabels = labelsForGroup "Components"
+
+    // The catalog remains the source for search and the home page directory.
+    let componentGroups = [
+      "Actions",
+      Icon.Action Action.TouchApp,
+      [ ButtonExamples; ButtonGroupExamples; ButtonMenuExamples; LinkExamples ]
+      "Inputs",
+      Icon.Action Action.Input,
+      [
+        CheckboxExamples
+        ColorPickerExamples
+        DateTimeGuide
+        DatePickerExamples
+        DateRangePickerExamples
+        TimePickerExamples
+        FieldExamples
+        FormExamples
+        NumericFieldExamples
+        RadioButtonExamples
+        SelectExamples
+        SliderExamples
+        SwitchExamples
+        TextFieldExamples
+      ]
+      "Navigation",
+      Icon.Maps Maps.Navigation,
+      [
+        AppBarExamples
+        DrawerExamples
+        DropdownMenuExamples
+        PaginationExamples
+        ScrollToTopExamples
+        TabsExamples
+      ]
+      "Feedback",
+      Icon.Action Action.Feedback,
+      [
+        AlertExamples
+        DialogExamples
+        ProgressExamples
+        SnackbarExamples
+        TooltipExamples
+      ]
+      "Layout & display",
+      Icon.Text Text.GridView,
+      [
+        CardExamples
+        CarouselExamples
+        ChipExamples
+        ChipSetExamples
+        ContainerExamples
+        DividerExamples
+        ExpansionPanelExamples
+        GridExamples
+        HighlighterExamples
+        IconsExamples
+        ListExamples
+        SpacerExamples
+        TableExamples
+        TypographyExamples
+      ]
+    ]
+
+    let ungroupedComponents =
+      let groupedPages = componentGroups |> List.collect (fun (_, _, pages) -> pages)
+
+      DocsHome.catalog
+      |> List.find (fun (name, _) -> name = "Components")
+      |> snd
+      |> List.filter (fun page -> not (List.contains page groupedPages))
+
+    let componentGroupStates =
+      [
+        yield! componentGroups
+        if not (List.isEmpty ungroupedComponents) then
+          "Other components", Icon.Android Android.Widgets, ungroupedComponents
+      ]
+      |> List.map (fun (name, icon, pages) ->
+        let labels = pages |> List.map pageToString
+        name, icon, labels, Var.Create(List.contains (pageToString initialPage) labels))
+
     let stylingLabels = labelsForGroup "Styling"
     let utilitiesLabels = labelsForGroup "Utilities"
     let showcasesLabels = labelsForGroup "Showcases"
@@ -344,11 +420,12 @@ module ExamplesRouter =
           for labels, expanded in
             [
               componentsLabels, componentsExpanded
-              dateTimeLabels, dateTimeExpanded
               stylingLabels, stylingExpanded
               utilitiesLabels, utilitiesExpanded
               showcasesLabels, showcasesExpanded
-            ] do
+            ]
+            @ (componentGroupStates
+               |> List.map (fun (_, _, labels, expanded) -> labels, expanded)) do
             if List.contains label labels then
               Var.Set expanded true
         | None -> ())
@@ -439,18 +516,13 @@ module ExamplesRouter =
               |> Doc.BindView(fun exp ->
                 if exp then
                   div [ Attr.Class "docs-nav-items" ] [
-                    for item in labels do
-                      if label = "Components" && item = "Date & Time Guide" then
+                    if label = "Components" then
+                      for groupName, icon, groupLabels, expanded in componentGroupStates do
                         div [ Attr.Class "docs-nav-subgroup" ] [
-                          navGroup
-                            (Icon.Android Android.Widgets)
-                            "Date & time"
-                            dateTimeExpanded
-                            dateTimeLabels
+                          navGroup icon groupName expanded groupLabels
                         ]
-                      elif label = "Components" && List.contains item dateTimeLabels then
-                        ()
-                      else
+                    else
+                      for item in labels do
                         navLeafItem item
                   ]
                 else

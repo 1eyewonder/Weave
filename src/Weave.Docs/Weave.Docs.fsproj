@@ -90,6 +90,8 @@
     <Compile Include="examples/CardExamples.fs" />
     <Compile Include="examples/carousel/CarouselAppearance.fs" />
     <Compile Include="examples/carousel/CarouselExamples.fs" />
+    <Compile Include="examples/swipe-area/SwipeAreaAppearance.fs" />
+    <Compile Include="examples/swipe-area/SwipeAreaExamples.fs" />
     <Compile Include="examples/pagination/PaginationAppearance.fs" />
     <Compile Include="examples/pagination/PaginationExamples.fs" />
     <Compile Include="examples/TableExamples.fs" />

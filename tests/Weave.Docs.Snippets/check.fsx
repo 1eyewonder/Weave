@@ -20,6 +20,7 @@
 #load "../../src/Weave.Docs/examples/dialog/DialogAppearance.fs"
 #load "../../src/Weave.Docs/examples/drawer/DrawerAppearance.fs"
 #load "../../src/Weave.Docs/examples/carousel/CarouselAppearance.fs"
+#load "../../src/Weave.Docs/examples/swipe-area/SwipeAreaAppearance.fs"
 #load "../../src/Weave.Docs/examples/select/SelectAppearance.fs"
 #load "../../src/Weave.Docs/examples/dropdown-menu/DropdownAppearance.fs"
 #load "../../src/Weave.Docs/examples/container/ContainerAppearance.fs"
@@ -1068,6 +1069,7 @@ let appearanceSnippets = [
       "DialogExamples.fs", "DialogAppearance.fs", Weave.Docs.DialogAppearance.cases ()
       "DrawerExamples.fs", "DrawerAppearance.fs", Weave.Docs.DrawerAppearance.cases ()
       "CarouselExamples.fs", "CarouselAppearance.fs", Weave.Docs.CarouselAppearance.cases ()
+      "SwipeAreaExamples.fs", "SwipeAreaAppearance.fs", Weave.Docs.SwipeAreaAppearance.cases ()
       "SelectExamples.fs", "SelectAppearance.fs", Weave.Docs.SelectAppearance.cases ()
       "DropdownMenuExamples.fs", "DropdownAppearance.fs", Weave.Docs.DropdownAppearance.cases ()
       "ContainerExamples.fs", "ContainerAppearance.fs", Weave.Docs.ContainerAppearance.cases ()

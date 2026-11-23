@@ -51,6 +51,7 @@ module DocsHome =
       SliderExamples
       SnackbarExamples
       SpacerExamples
+      SwipeAreaExamples
       SwitchExamples
       TableExamples
       TabsExamples

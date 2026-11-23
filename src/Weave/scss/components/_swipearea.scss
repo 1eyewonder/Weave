@@ -1,0 +1,16 @@
+.weave-swipearea {
+  min-width: 0;
+  user-select: none;
+
+  &--horizontal {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  &--vertical {
+    touch-action: pan-x pinch-zoom;
+  }
+
+  &--no-touch-action {
+    touch-action: none;
+  }
+}

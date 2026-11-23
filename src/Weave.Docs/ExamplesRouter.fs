@@ -537,10 +537,6 @@ module ExamplesRouter =
 
     let navList =
       div [ Padding.Vertical.extraSmall ] [
-        div [ Attr.Class "docs-nav-intro" ] [
-          div [ Attr.Class "docs-nav-intro__title" ] [ text "Documentation" ]
-          div [ Attr.Class "docs-nav-intro__description" ] [ text "Explore the Weave library" ]
-        ]
         div [ Attr.Class "docs-nav-search" ] [
           TextField.singleLine (
             navSearch,

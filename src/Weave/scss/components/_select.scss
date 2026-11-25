@@ -301,6 +301,7 @@
 }
 
 .weave-select__list {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

@@ -4,8 +4,165 @@ open System.Text.RegularExpressions
 open Microsoft.Playwright
 open Xunit
 
+[<Collection("Browser input")>]
 type SelectInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("long-single-plain", false, false)>]
+  [<InlineData("long-single-search", true, false)>]
+  [<InlineData("long-multi-plain", false, true)>]
+  [<InlineData("long-multi-search", true, true)>]
+  member this.``arrow keys keep the active option visible in a long select``
+    (testId: string, searchable: bool, multi: bool)
+    = task {
+    do! this.NavigateTo("select-keyboard-scroll")
+
+    // Keep the pointer hit target stable during the dropdown's entrance.
+    let! _ =
+      this.Page.AddStyleTagAsync(
+        PageAddStyleTagOptions(Content = ".weave-select__popover { transition: none !important; }")
+      )
+
+    let root = this.Page.GetByTestId(testId)
+    let combobox = root.GetByRole(AriaRole.Combobox)
+    let listbox = root.GetByRole(AriaRole.Listbox)
+    let search = root.GetByLabel("Search options")
+    let keyboard = this.Page.Keyboard
+    let keyboardTarget = if searchable then search else combobox
+
+    if searchable then
+      do! combobox.PressAsync("Enter")
+      do! this.Expect(search).ToBeFocusedAsync()
+      do! search.FillAsync("Odd")
+      do! this.Expect(listbox.GetByRole(AriaRole.Option)).ToHaveCountAsync(18)
+
+      if multi then
+        do! keyboard.PressAsync("ArrowDown")
+        do! this.Expect(root.GetByRole(AriaRole.Checkbox)).ToBeFocusedAsync()
+    else
+      do! combobox.FocusAsync()
+
+    let indices =
+      [ 1..36 ]
+      |> List.filter (fun index -> index <> 11 && (if searchable then index % 2 = 1 else index > 8))
+
+    let optionLabel index =
+      let group = if index % 2 = 0 then "Even" else "Odd"
+      $"%s{group} option %d{index}"
+
+    let optionAt index =
+      listbox.GetByRole(AriaRole.Option, LocatorGetByRoleOptions(Name = optionLabel index, Exact = true))
+
+    let! pageScroll = this.Page.EvaluateAsync<float>("() => window.scrollY")
+    let viewport = LocatorAssertionsToBeInViewportOptions(Ratio = 0.99f)
+
+    let assertActive index = task {
+      let option = optionAt index
+      let! id = option.GetAttributeAsync("id")
+      do! this.Expect(option).ToHaveClassAsync(Regex("weave-select__item--highlighted"))
+      do! this.Expect(option).ToBeInViewportAsync(viewport)
+      // Read the active descendant after the scroll has brought the option into view.
+      do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", id)
+      do! this.Expect(keyboardTarget).ToBeFocusedAsync()
+      let! actualPageScroll = this.Page.EvaluateAsync<float>("() => window.scrollY")
+      Assert.Equal(pageScroll, actualPageScroll)
+    }
+
+    let movePointerTo index = task {
+      let option = optionAt index
+      do! this.Expect(option).ToBeInViewportAsync(viewport)
+      let! bounds = option.BoundingBoxAsync()
+      let x = int (bounds.X + bounds.Width / 2.0f)
+      let y = int (bounds.Y + bounds.Height / 2.0f)
+      // Mouse.MoveAsync does not scroll the target into view.
+      do! this.Page.Mouse.MoveAsync(float32 x, float32 y)
+      return [| x; y |]
+    }
+
+    do! keyboard.PressAsync("ArrowDown")
+    do! assertActive indices.Head
+    let! _ = movePointerTo indices.Head
+
+    for index in indices.Tail do
+      do! keyboard.PressAsync("ArrowDown")
+      do! assertActive index
+
+    let last = List.last indices
+    do! keyboard.PressAsync("ArrowDown")
+    do! assertActive last
+
+    let! bottomScroll = listbox.EvaluateAsync<float>("el => el.scrollTop")
+    Assert.True(bottomScroll > 0.0, "The listbox must scroll to reach the last option")
+
+    for index in indices |> List.rev |> List.tail do
+      do! keyboard.PressAsync("ArrowUp")
+      do! assertActive index
+
+    let! topScroll = listbox.EvaluateAsync<float>("el => el.scrollTop")
+    Assert.True(topScroll < bottomScroll, "The listbox must scroll back toward the first option")
+
+    let second = indices.Tail.Head
+    let! pointer = movePointerTo second
+    do! assertActive second
+
+    // Simulate a new row under the stationary pointer. Enter must still select
+    // the active row even if the DOM has not rendered the mouse event yet.
+    let! _ =
+      (optionAt indices.Head)
+        .EvaluateAsync<obj>(
+          """(el, [clientX, clientY]) =>
+            el.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, clientX, clientY }))""",
+          pointer
+        )
+
+    do! keyboard.PressAsync("Enter")
+    do! this.Expect(combobox).ToHaveTextAsync(optionLabel second)
+
+    if multi then
+      do! this.Expect(optionAt second).ToHaveAttributeAsync("aria-selected", "true")
+      do! keyboard.PressAsync("Escape")
+
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-expanded", "false")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", "")
+  }
+
+  [<Fact>]
+  member this.``rapid arrow reversals keep the final option in view without scrolling for stale highlights``
+    ()
+    = task {
+    do! this.NavigateTo("select-keyboard-scroll")
+    let root = this.Page.GetByTestId("long-single-search")
+    let combobox = root.GetByRole(AriaRole.Combobox)
+    let listbox = root.GetByRole(AriaRole.Listbox)
+    let search = root.GetByLabel("Search options")
+    let firstOption = listbox.GetByRole(AriaRole.Option).First
+    do! combobox.PressAsync("ArrowDown")
+    do! this.Expect(search).ToBeFocusedAsync()
+    do! this.Expect(firstOption).ToHaveClassAsync(Regex("weave-select__item--highlighted"))
+    let! initialScroll = listbox.EvaluateAsync<float>("el => el.scrollTop")
+
+    let finalOption =
+      listbox.GetByRole(AriaRole.Option, LocatorGetByRoleOptions(Name = "Odd option 5", Exact = true))
+
+    // Keep the burst in one browser task so queued scrolls cannot run between keys.
+    let! _ =
+      search.EvaluateAsync<obj>(
+        """async el => {
+            const press = key => el.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+            for (let i = 0; i < 20; i++) press('ArrowDown');
+            for (let i = 0; i < 16; i++) press('ArrowUp');
+            await new Promise(requestAnimationFrame);
+            await new Promise(requestAnimationFrame);
+          }"""
+      )
+
+    let! id = finalOption.GetAttributeAsync("id")
+    do! this.Expect(combobox).ToHaveAttributeAsync("aria-activedescendant", id)
+    do! this.Expect(finalOption).ToBeInViewportAsync(LocatorAssertionsToBeInViewportOptions(Ratio = 0.99f))
+    let! finalScroll = listbox.EvaluateAsync<float>("el => el.scrollTop")
+    Assert.Equal(initialScroll, finalScroll)
+  }
 
   [<Theory>]
   [<InlineData("City", "istanbul", "İSTANBUL")>]
@@ -500,7 +657,9 @@ type SelectInteractionTests(fixture: TestFixture) =
     let combobox = root.Locator("[role='combobox']")
     do! combobox.PressAsync("Enter")
     let options = root.Locator("[role='option']")
-    do! options.Nth(0).DispatchEventAsync("mouseenter")
+    let disabled = options.Nth(0)
+    do! disabled.DispatchEventAsync("mousemove")
+    do! this.Expect(disabled).ToHaveClassAsync(Regex("weave-select__item--highlighted"))
     do! this.Page.Keyboard.PressAsync("Enter")
     do! this.Expect(options.Nth(0)).Not.ToHaveClassAsync(Regex("weave-select__item--selected"))
     do! this.Page.Keyboard.PressAsync("ArrowDown")

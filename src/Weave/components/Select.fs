@@ -122,18 +122,42 @@ module Select =
       else
         items
 
+    let optionId selectId index = sprintf "%s-item-%d" selectId index
+
     let activeDescendant selectId (highlightedIndex: Var<int>) (isOpen: Var<bool>) =
       (highlightedIndex.View, isOpen.View)
-      ||> View.Map2(fun idx opened ->
-        if opened && idx >= 0 then
-          sprintf "%s-item-%d" selectId idx
-        else
-          "")
+      ||> View.Map2(fun idx opened -> if opened && idx >= 0 then optionId selectId idx else "")
+
+    let revealOption selectId (container: Dom.Element) index =
+      if index >= 0 then
+        let option = container.QuerySelector("#" + optionId selectId index)
+
+        if not (isNull option) then
+          let listbox = As<Dom.Element>(option?parentElement)
+          let optionTop = As<float>(option?offsetTop)
+          let optionBottom = optionTop + As<float>(option?offsetHeight)
+          let scrollTop = As<float>(listbox?scrollTop)
+          let listHeight = As<float>(listbox?clientHeight)
+
+          if optionTop < scrollTop then
+            listbox?scrollTop <- optionTop
+          elif optionBottom > scrollTop + listHeight then
+            listbox?scrollTop <- optionBottom - listHeight
+
+    let highlight selectId (popover: Dom.Element ref) (isOpen: Var<bool>) (highlightedIndex: Var<int>) index =
+      Var.Set highlightedIndex index
+
+      if index >= 0 then
+        JS.Window.RequestAnimationFrame(fun _ ->
+          if isOpen.Value && highlightedIndex.Value = index then
+            revealOption selectId popover.Value index)
+        |> ignore
 
     let handleKey
       (isOpen: Var<bool>)
       (searchText: Var<string>)
       (highlightedIndex: Var<int>)
+      (highlight: int -> unit)
       (select: SelectItemDef<'T> -> unit)
       (items: (SelectItemDef<'T> * bool) list)
       (allItems: (SelectItemDef<'T> * bool) list)
@@ -161,12 +185,12 @@ module Select =
         if not isOpen.Value then
           Var.Set isOpen true
           Var.Set searchText ""
-          Var.Set highlightedIndex (move allItems -1 1 |> Option.defaultValue -1)
+          highlight (move allItems -1 1 |> Option.defaultValue -1)
         else
-          move items highlightedIndex.Value 1 |> Option.iter (Var.Set highlightedIndex)
+          move items highlightedIndex.Value 1 |> Option.iter highlight
       | Key.ArrowUp ->
         if isOpen.Value then
-          move items highlightedIndex.Value -1 |> Option.iter (Var.Set highlightedIndex)
+          move items highlightedIndex.Value -1 |> Option.iter highlight
       | _ -> ()
 
     let itemOrderIsCurrent (items: View<SelectItemDef<'T> list>) (previous: 'T list option ref) =
@@ -242,7 +266,22 @@ module Select =
     let searchInput searchText highlightedIndex onKeyDown =
       searchInputGuarded (View.Const true) searchText highlightedIndex onKeyDown
 
-    let singleItem
+    let internal optionHover (highlightedIndex: Var<int>) =
+      let lastPosition = ref None
+
+      fun index ->
+        on.mouseMove (fun _ ev ->
+          // Scrolling can move a different option under a stationary pointer.
+          let position = ev.ClientX, ev.ClientY
+
+          if lastPosition.Value <> Some position then
+            lastPosition.Value <- Some position
+
+            if highlightedIndex.Value <> index then
+              Var.Set highlightedIndex index)
+
+    let internal singleItemWithHover
+      (hover: Attr)
       (selectId: string)
       (index: int)
       (def: SelectItemDef<'T>)
@@ -257,7 +296,7 @@ module Select =
       let itemEnabled =
         (enabled, def.Disabled) ||> View.map2Cached (fun e d -> e && not d)
 
-      let itemId = sprintf "%s-item-%d" selectId index
+      let itemId = Keyboard.optionId selectId index
 
       let isHighlighted = highlightedIndex.View |> View.MapCached(fun hi -> hi = index)
 
@@ -277,11 +316,23 @@ module Select =
         on.clickViewGuarded itemEnabled (fun () ->
           Var.Set selectedValue (Some def.Value)
           Var.Set isOpen false)
-        on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
+        hover
         yield! def.Attrs
       ] [ span [ cl Css.``weave-select__item-content`` ] [ def.Content ] ]
 
-    let multiItem
+    let singleItem selectId index def selectedValue isOpen highlightedIndex enabled =
+      singleItemWithHover
+        (on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index))
+        selectId
+        index
+        def
+        selectedValue
+        isOpen
+        highlightedIndex
+        enabled
+
+    let internal multiItemWithHover
+      (hover: Attr)
       (selectId: string)
       (index: int)
       (def: SelectItemDef<'T>)
@@ -303,7 +354,7 @@ module Select =
         else
           Var.Set selectedValues (Set.add def.Value current)
 
-      let itemId = sprintf "%s-item-%d" selectId index
+      let itemId = Keyboard.optionId selectId index
 
       let isHighlighted = highlightedIndex.View |> View.MapCached(fun hi -> hi = index)
 
@@ -321,7 +372,7 @@ module Select =
           (fun el value -> el.SetAttribute("aria-disabled", value))
           (def.Disabled |> View.Map(sprintf "%b"))
         on.clickViewGuarded itemEnabled toggle
-        on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index)
+        hover
         yield! def.Attrs
       ] [
         span [
@@ -330,6 +381,16 @@ module Select =
         ] []
         span [ cl Css.``weave-select__item-content`` ] [ def.Content ]
       ]
+
+    let multiItem selectId index def selectedValues highlightedIndex enabled =
+      multiItemWithHover
+        (on.mouseEnter (fun _ _ -> Var.Set highlightedIndex index))
+        selectId
+        index
+        def
+        selectedValues
+        highlightedIndex
+        enabled
 
     let internal selectAllRowWithAttrs
       (items: View<SelectItemDef<'T> list>)
@@ -603,6 +664,8 @@ type Select =
     let activeDescendantView =
       Keyboard.activeDescendant selectId highlightedIndex openVar
 
+    let highlight = Keyboard.highlight selectId popoverRef openVar highlightedIndex
+
     let handleKeyNav (_, filtered, all) ev =
       let canSelect =
         match ev with
@@ -614,6 +677,7 @@ type Select =
           openVar
           searchText
           highlightedIndex
+          highlight
           (fun def ->
             Var.Set selectedValue (Some def.Value)
             Var.Set openVar false)
@@ -678,6 +742,8 @@ type Select =
       openVar.View
       |> Doc.BindView(fun isOpen ->
         if isOpen then
+          let hover = Render.optionHover highlightedIndex
+
           div [
             cl Css.``weave-select__popover``
             on.afterRender (fun el ->
@@ -694,7 +760,11 @@ type Select =
                 highlightedIndex
                 handleKeyNav
 
-            div [ cl Css.``weave-select__list``; Attr.Create "role" "listbox" ] [
+            div [
+              cl Css.``weave-select__list``
+              Attr.Create "role" "listbox"
+              on.afterRender (fun el -> Keyboard.revealOption selectId el highlightedIndex.Value)
+            ] [
               filteredItems
               |> Doc.BindView(fun filtered ->
                 if List.isEmpty filtered then
@@ -702,7 +772,15 @@ type Select =
                 else
                   filtered
                   |> List.mapi (fun i def ->
-                    Render.singleItem selectId i def selectedValue openVar highlightedIndex interactable)
+                    Render.singleItemWithHover
+                      (hover i)
+                      selectId
+                      i
+                      def
+                      selectedValue
+                      openVar
+                      highlightedIndex
+                      interactable)
                   |> Doc.Concat)
             ]
           ]
@@ -896,6 +974,8 @@ type MultiSelect =
     let activeDescendantView =
       Keyboard.activeDescendant selectId highlightedIndex openVar
 
+    let highlight = Keyboard.highlight selectId popoverRef openVar highlightedIndex
+
     let handleKeyNav (_, filtered, all) ev =
       let canSelect =
         match ev with
@@ -907,6 +987,7 @@ type MultiSelect =
           openVar
           searchText
           highlightedIndex
+          highlight
           (fun def ->
             let current = selectedValues.Value
 
@@ -992,6 +1073,8 @@ type MultiSelect =
       openVar.View
       |> Doc.BindView(fun isOpen ->
         if isOpen then
+          let hover = Render.optionHover highlightedIndex
+
           div [
             cl Css.``weave-select__popover``
             on.afterRender (fun el ->
@@ -1022,7 +1105,7 @@ type MultiSelect =
                     else
                       search?focus ()
 
-                    Var.Set highlightedIndex (Keyboard.move filtered -1 1 |> Option.defaultValue -1)
+                    highlight (Keyboard.move filtered -1 1 |> Option.defaultValue -1)
                   | Key.ArrowUp when canInteract ->
                     ev.PreventDefault()
                     let search = popoverRef.Value.QuerySelector(".weave-select__search-input")
@@ -1045,6 +1128,7 @@ type MultiSelect =
               cl Css.``weave-select__list``
               Attr.Create "role" "listbox"
               Attr.Create "aria-multiselectable" "true"
+              on.afterRender (fun el -> Keyboard.revealOption selectId el highlightedIndex.Value)
             ] [
               filteredItems
               |> Doc.BindView(fun filtered ->
@@ -1053,7 +1137,14 @@ type MultiSelect =
                 else
                   filtered
                   |> List.mapi (fun i def ->
-                    Render.multiItem selectId i def selectedValues highlightedIndex interactable)
+                    Render.multiItemWithHover
+                      (hover i)
+                      selectId
+                      i
+                      def
+                      selectedValues
+                      highlightedIndex
+                      interactable)
                   |> Doc.Concat)
             ]
           ]

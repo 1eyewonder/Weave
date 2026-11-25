@@ -154,6 +154,12 @@
   min-width: 0;
 }
 
+.weave-list-item__content:focus-visible,
+.weave-list-item__checkbox:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .weave-list-item__secondary-content {
   font-family: var(--typography-body2-family);
   font-size: var(--typography-body2-size);

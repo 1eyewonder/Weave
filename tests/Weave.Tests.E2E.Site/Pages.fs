@@ -3115,6 +3115,7 @@ module Pages =
           "single-gap", 8, 4, 1, 1
           "custom", 20, 10, 2, 2
           "zero-window", 20, 10, 0, 0
+          "keyboard-window", 20, 10, 0, 0
           "negative-window", 20, 10, -1, -2
           "overlap", 3, 2, 10, 10
           "huge", System.Int32.MaxValue, System.Int32.MaxValue, 1, 1
@@ -3126,6 +3127,8 @@ module Pages =
           siblingCount = siblings,
           attrs = [
             Pagination.Controls.hidePreviousNext
+            if name = "keyboard-window" then
+              Pagination.Controls.showFirstLast
             Attr.Create "aria-label" name
             Attr.Create "id" ("range-" + name)
           ]

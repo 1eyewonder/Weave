@@ -946,6 +946,43 @@ module Pages =
       MultiSelect.create (cities, Var.Create Set.empty, searchable = true, labelText = View.Const "Cities")
     ]
 
+  let private selectKeyboardScrollPage () =
+    let items searchable =
+      [
+        for index in 1..36 do
+          let group = if index % 2 = 0 then "Even" else "Odd"
+          let label = $"%s{group} option %d{index}"
+          let disabled = index = 11 || (not searchable && index <= 8)
+          SelectItem.create (text label, label, index, disabled = View.Const disabled)
+      ]
+      |> View.Const
+
+    // Give the document room to scroll so tests can detect scroll escaping the listbox.
+    div [ Attr.Style "min-height" "150vh" ] [
+      for searchable in [ false; true ] do
+        let options = items searchable
+        let mode = if searchable then "search" else "plain"
+
+        div [ Attr.Create "data-testid" ("long-single-" + mode) ] [
+          Select.create (
+            options,
+            Var.Create None,
+            searchable = searchable,
+            labelText = View.Const "Long single"
+          )
+        ]
+
+        div [ Attr.Create "data-testid" ("long-multi-" + mode) ] [
+          MultiSelect.create (
+            options,
+            Var.Create Set.empty,
+            searchable = searchable,
+            showSelectAll = searchable,
+            labelText = View.Const "Long multi"
+          )
+        ]
+    ]
+
   let private selectPage () =
     let dynamicDisabled = Var.Create false
     let selectEnabled = Var.Create true
@@ -4043,6 +4080,7 @@ module Pages =
     | "form-arithmetic" -> formArithmeticPage ()
     | "select" -> selectPage ()
     | "select-culture" -> selectCulturePage ()
+    | "select-keyboard-scroll" -> selectKeyboardScrollPage ()
     | "select-sizing" -> SelectSizingPage.render ()
     | "resize-listener" -> resizeListenerPage ()
     | "animation" -> animationPage ()

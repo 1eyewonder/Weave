@@ -47,6 +47,70 @@ module DomRemovalListener =
 
   let create () = { Observer = None }
 
+/// A hidden marker that invokes callbacks each time its parent enters or leaves the document.
+[<JavaScript>]
+module DomLifecycleListener =
+
+  [<Direct """
+    var existing = customElements.get($name);
+    if (existing) {
+      if (existing.weaveLifecycleListener !== true)
+        throw new Error("Custom element name already registered: " + $name);
+      return;
+    }
+    function LifecycleMarker() { return Reflect.construct(HTMLElement, [], LifecycleMarker); }
+    LifecycleMarker.weaveLifecycleListener = true;
+    Object.setPrototypeOf(LifecycleMarker.prototype, HTMLElement.prototype);
+    LifecycleMarker.prototype.connectedCallback = $connected;
+    LifecycleMarker.prototype.disconnectedCallback = $disconnected;
+    customElements.define($name, LifecycleMarker);
+  """>]
+  let private register
+    (name: string)
+    (connected: ThisAction<Dom.Element>)
+    (disconnected: ThisAction<Dom.Element>)
+    : unit
+    =
+    X<unit>
+
+  /// Place the returned Doc inside the element whose connection lifecycle is being watched.
+  /// A failed connection runs disconnection to release partial setup, then reports the error.
+  let watch (onConnected: Dom.Element -> unit) (onDisconnected: unit -> unit) =
+    let name = "weave-dom-lifecycle-listener"
+    let connected = ref false
+
+    let disconnect () =
+      if connected.Value then
+        connected.Value <- false
+        onDisconnected ()
+
+    let connect parent =
+      connected.Value <- true
+
+      try
+        onConnected parent
+      with error ->
+        try
+          disconnect ()
+        with cleanupError ->
+          WebSharper.JavaScript.Console.Error(cleanupError)
+
+        raise error
+
+    register
+      name
+      (ThisAction<Dom.Element>(fun marker -> marker?attach marker?parentElement))
+      (ThisAction<Dom.Element>(fun marker -> marker?detach ()))
+
+    Doc.Element name [
+      Attr.Create "hidden" ""
+      Attr.Prop "attach" connect
+      Attr.Prop "detach" disconnect
+    ] []
+
+  /// Observe only removal; callers can partially apply their cleanup action.
+  let onRemoved = watch ignore
+
 /// <summary>
 /// Listens for events on the document and invokes a callback when the event
 /// target is outside all of the tracked element refs.

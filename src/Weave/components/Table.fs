@@ -169,12 +169,6 @@ type TableColumn =
 [<JavaScript>]
 module private TableInternal =
 
-  let mutable idCounter = 0
-
-  let nextRowHeaderId () =
-    idCounter <- idCounter + 1
-    sprintf "weave-table-row-header-%d" idCounter
-
   let selectBox (name: Attr) (isChecked: View<bool>) (isIndeterminate: View<bool>) (onToggle: Attr) =
     label [
       cls [
@@ -208,17 +202,19 @@ type Table =
   /// <param name="rowKey">Stable identity for each row. Unchanged rows are not re-rendered when <c>rows</c> updates, and selection is tracked by this key.</param>
   /// <param name="onRowClick">When supplied, rows activate on click, and the first cell holds a button that activates the row from the keyboard.</param>
   /// <param name="selectedKey">When supplied, activating a row selects it and the selected row is marked with <c>aria-current</c>.</param>
-  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown.</param>
+  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox uses its supplied label, row header, or row key.</param>
   /// <param name="sort">The sort state. Supply it to start sorted or to react to sorting, such as sorting on a server. Defaults to unsorted.</param>
   /// <param name="rowHeader">Key of the column whose cells label their rows, rendered as row header cells.</param>
   /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
   /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
   /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
+  /// <param name="rowLabel">Descriptive label for each row's selection checkbox. Empty labels fall back to the row header or key. Currently, changing a row without changing its key does not refresh its rendered cells or label.</param>
   static member create<'T>
     (
       columns: Table.TableColumnDef<'T> list,
       rows: View<'T list>,
       rowKey: 'T -> string,
+      rowLabel: 'T -> string,
       ?onRowClick: 'T -> unit,
       ?selectedKey: Var<string option>,
       ?selectedKeys: Var<Set<string>>,
@@ -231,6 +227,10 @@ type Table =
     let attrs = defaultArg attrs List.empty
     let sort = defaultArg sort (Var.Create None)
     let isInteractive = Option.isSome onRowClick || Option.isSome selectedKey
+
+    let rowHeader =
+      rowHeader
+      |> Option.filter (fun key -> columns |> List.exists (fun column -> column.Key = key))
 
     let columnCount =
       List.length columns + (if Option.isSome selectedKeys then 1 else 0)
@@ -339,7 +339,9 @@ type Table =
 
     let renderRow (row: 'T) =
       let key = rowKey row
-      let headerId = rowHeader |> Option.map (fun _ -> TableInternal.nextRowHeaderId ())
+
+      let headerId =
+        rowHeader |> Option.map (fun _ -> WeaveId.create "weave-table-row-header")
 
       let isCurrent =
         selectedKey
@@ -360,10 +362,16 @@ type Table =
         Attr.DynamicPred "aria-current" isCurrent (View.Const "true")
       ]
 
-      let selectName =
-        match headerId with
-        | Some id -> Attr.Create "aria-labelledby" id
-        | None -> Attr.Create "aria-label" "Select row"
+      let selectName () =
+        let label =
+          rowLabel row
+          |> Option.ofObj
+          |> Option.filter (System.String.IsNullOrWhiteSpace >> not)
+
+        match label, headerId with
+        | Some value, _ -> Attr.Create "aria-label" ("Select row " + value)
+        | None, Some id -> Attr.Create "aria-labelledby" id
+        | None, None -> Attr.Create "aria-label" ("Select row " + key)
 
       let cell (index: int) (column: Table.TableColumnDef<'T>) =
         let content =
@@ -376,15 +384,14 @@ type Table =
           th [
             cls [ Css.``weave-table__cell``; Css.``weave-table__row-header`` ]
             attr.scope "row"
-            Attr.bindOption attr.id headerId
             yield! column.Attrs
-          ] [ content ]
+          ] [ span [ Attr.bindOption attr.id headerId ] [ content ] ]
         else
           td [ cl Css.``weave-table__cell``; yield! column.Attrs ] [ content ]
 
       tr [ cl Css.``weave-table__row``; yield! rowAttrs ] [
         match selectedKeys with
-        | Some keys -> rowSelect keys key selectName
+        | Some keys -> rowSelect keys key (selectName ())
         | None -> Doc.Empty
 
         yield! List.mapi cell columns
@@ -428,3 +435,44 @@ type Table =
         ]
       ]
     ]
+
+  /// <summary>Creates a data table rendered as a semantic <c>table</c> element.</summary>
+  /// <param name="columns">Column definitions created with <c>TableColumn.create</c>.</param>
+  /// <param name="rows">Reactive list of row values.</param>
+  /// <param name="rowKey">Stable identity for each row. Unchanged rows are not re-rendered when <c>rows</c> updates, and selection is tracked by this key.</param>
+  /// <param name="onRowClick">When supplied, rows activate on click, and the first cell holds a button that activates the row from the keyboard.</param>
+  /// <param name="selectedKey">When supplied, activating a row selects it and the selected row is marked with <c>aria-current</c>.</param>
+  /// <param name="selectedKeys">When supplied, a leading checkbox column selects any number of rows, with a header checkbox that selects or clears every row shown. Each row checkbox is named by its row header or, when none is configured, by its row key.</param>
+  /// <param name="sort">The sort state. Supply it to start sorted or to react to sorting, such as sorting on a server. Defaults to unsorted.</param>
+  /// <param name="rowHeader">Key of the column whose cells label their rows, rendered as row header cells.</param>
+  /// <param name="caption">The table's caption, which is also its accessible name. Hide it visually with <c>Table.hiddenCaption</c>.</param>
+  /// <param name="emptyContent">Doc rendered in a full-width row when <c>rows</c> is empty.</param>
+  /// <param name="attrs">Additional attributes (density, striped, hoverable, sticky header, colors, etc.) merged onto the root element.</param>
+  static member create<'T>
+    (
+      columns: Table.TableColumnDef<'T> list,
+      rows: View<'T list>,
+      rowKey: 'T -> string,
+      ?onRowClick: 'T -> unit,
+      ?selectedKey: Var<string option>,
+      ?selectedKeys: Var<Set<string>>,
+      ?sort: Var<Table.SortState option>,
+      ?rowHeader: string,
+      ?caption: Doc,
+      ?emptyContent: Doc,
+      ?attrs: Attr list
+    ) =
+    Table.create<'T>(
+      columns,
+      rows,
+      rowKey,
+      (fun _ -> ""),
+      ?onRowClick = onRowClick,
+      ?selectedKey = selectedKey,
+      ?selectedKeys = selectedKeys,
+      ?sort = sort,
+      ?rowHeader = rowHeader,
+      ?caption = caption,
+      ?emptyContent = emptyContent,
+      ?attrs = attrs
+    )

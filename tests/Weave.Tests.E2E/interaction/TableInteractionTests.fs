@@ -13,6 +13,31 @@ type TableInteractionTests(fixture: TestFixture) =
     this.Rows.Nth(index).Locator("td").First
 
   [<Fact>]
+  member this.``create overloads preserve positional callbacks and combine labels with header content``() =
+    task {
+      do! this.NavigateTo("table")
+      let legacy = this.Page.GetByTestId("positional-callback-table")
+
+      do!
+        legacy.GetByRole(AriaRole.Button, LocatorGetByRoleOptions(Name = "Alpha", Exact = true)).ClickAsync()
+
+      do! this.Expect(this.Page.GetByTestId("clicked-row")).ToHaveTextAsync("Alpha")
+      let combined = this.Page.GetByTestId("combined-overload-table")
+      do! this.Expect(combined.Locator("thead #combined-header-id")).ToHaveCountAsync(1)
+      do! this.Expect(combined.Locator("tbody #combined-header-id")).ToHaveCountAsync(0)
+
+      do!
+        this
+          .Expect(
+            combined.GetByRole(
+              AriaRole.Checkbox,
+              LocatorGetByRoleOptions(Name = "Select row Named Alpha", Exact = true)
+            )
+          )
+          .ToHaveCountAsync(1)
+    }
+
+  [<Fact>]
   member this.``clickable row exposes a button in its first cell``() = task {
     do! this.NavigateTo("table")
 
@@ -156,6 +181,117 @@ type TableInteractionTests(fixture: TestFixture) =
         .GetByRole(AriaRole.Rowheader, LocatorGetByRoleOptions(Name = "Beta"))
 
     do! this.Expect(header).ToHaveAttributeAsync("scope", "row")
+  }
+
+  [<Fact>]
+  member this.``each row checkbox has a name even without a row header``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("current-and-checked-table")
+
+    for name in [ "Alpha"; "Beta"; "Gamma" ] do
+      do!
+        this
+          .Expect(
+            table.GetByRole(
+              AriaRole.Checkbox,
+              LocatorGetByRoleOptions(Name = "Select row " + name, Exact = true)
+            )
+          )
+          .ToHaveCountAsync(1)
+  }
+
+  [<Fact>]
+  member this.``column attributes remain on body cells while row names stay distinct``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("select-table")
+
+    for key in [ "name"; "count" ] do
+      do! this.Expect(table.Locator("thead #select-" + key)).ToHaveCountAsync(1)
+
+    do! this.Expect(table.Locator("tbody [id='select-count']")).ToHaveCountAsync(3)
+    do! this.Expect(table.Locator("tbody .selection-column")).ToHaveCountAsync(6)
+    do! this.Page.GetByText("Update column ID").ClickAsync()
+    do! this.Expect(table.Locator("thead #updated-name")).ToHaveCountAsync(1)
+
+    for name in [ "Alpha"; "Beta"; "Gamma" ] do
+      let checkbox =
+        table.GetByRole(AriaRole.Checkbox, LocatorGetByRoleOptions(Name = name, Exact = true))
+
+      do! this.Expect(checkbox).ToHaveCountAsync(1)
+  }
+
+  [<Fact>]
+  member this.``header content IDs remain unique and reactive without changing shared cells``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("header-attributes-table")
+    do! this.Expect(table.Locator("thead #scoped-name")).ToHaveCountAsync(1)
+    do! this.Expect(table.Locator("thead #scoped-count")).ToHaveCountAsync(1)
+    do! this.Expect(table.Locator("tbody #scoped-name, tbody #scoped-count")).ToHaveCountAsync(0)
+    do! this.Expect(table.Locator("thead .shared-cell")).ToHaveCountAsync(2)
+    do! this.Expect(table.Locator("tbody .shared-cell")).ToHaveCountAsync(6)
+    do! this.Page.GetByText("Update scoped ID").ClickAsync()
+    do! this.Expect(table.Locator("thead #new-scoped-name")).ToHaveCountAsync(1)
+    do! this.Expect(table.Locator("#scoped-name, tbody #new-scoped-name")).ToHaveCountAsync(0)
+
+    for name in [ "Alpha"; "Beta"; "Gamma" ] do
+      do!
+        this
+          .Expect(table.GetByRole(AriaRole.Checkbox, LocatorGetByRoleOptions(Name = name, Exact = true)))
+          .ToHaveCountAsync(1)
+  }
+
+  [<Fact>]
+  member this.``custom row labels avoid opaque keys and fall back to the row header``() = task {
+    do! this.NavigateTo("table")
+    let table = this.Page.GetByTestId("named-selection-table")
+
+    let named =
+      table.GetByRole(
+        AriaRole.Checkbox,
+        LocatorGetByRoleOptions(Name = "Select row Beta: 2 items", Exact = true)
+      )
+
+    do! this.Expect(named).ToHaveCountAsync(1)
+
+    do!
+      this
+        .Expect(table.GetByRole(AriaRole.Checkbox, LocatorGetByRoleOptions(Name = "Gamma", Exact = true)))
+        .ToHaveCountAsync(1)
+
+    do!
+      this
+        .Expect(
+          table.GetByRole(
+            AriaRole.Checkbox,
+            LocatorGetByRoleOptions(Name = "Select row opaque-Beta", Exact = true)
+          )
+        )
+        .ToHaveCountAsync(0)
+
+    do! named.FocusAsync()
+    do! named.PressAsync("Space")
+    do! this.Expect(named).ToBeCheckedAsync()
+    let fallback = this.Page.GetByTestId("empty-selection-labels")
+
+    do!
+      this
+        .Expect(
+          fallback.GetByRole(
+            AriaRole.Checkbox,
+            LocatorGetByRoleOptions(Name = "Select row Named Beta", Exact = true)
+          )
+        )
+        .ToHaveCountAsync(1)
+
+    do!
+      this
+        .Expect(
+          fallback.GetByRole(
+            AriaRole.Checkbox,
+            LocatorGetByRoleOptions(Name = "Select row opaque-Gamma", Exact = true)
+          )
+        )
+        .ToHaveCountAsync(1)
   }
 
   [<Fact>]

@@ -363,8 +363,24 @@ type PickerInteractionTests(fixture: TestFixture) =
     do! (this.Button "Time").ClickAsync()
     let clock = this.Page.Locator(".weave-time-picker__clock")
     do! this.Expect(clock).ToBeVisibleAsync()
-    let! dial = clock.BoundingBoxAsync()
-    Assert.True(abs (dial.Width - dial.Height) < 1.0f)
+
+    let! dimensions =
+      clock.EvaluateAsync<float[]>(
+        "e => { const r = e.getBoundingClientRect(); return [r.width, r.height]; }"
+      )
+
+    let clockWidth, clockHeight = dimensions[0], dimensions[1]
+
+    Assert.True(
+      clockWidth > 0.0 && clockHeight > 0.0,
+      $"Clock has no visible area: {clockWidth} × {clockHeight}"
+    )
+
+    Assert.True(
+      abs (clockWidth - clockHeight) < 1.0,
+      $"Clock dimensions differ: {clockWidth} × {clockHeight}"
+    )
+
     do! this.Capture(sprintf "clock-%d-%s" width theme)
   }
 

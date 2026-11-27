@@ -144,6 +144,125 @@ type TextFieldInteractionTests(fixture: TestFixture) =
   }
 
   [<Fact>]
+  member this.``change callbacks skip initial values and include native and external edits``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let log = this.Page.Locator("output")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    let search = this.Page.GetByLabel("Search")
+    do! search.FillAsync("first")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! search.FillAsync("second")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("6/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+    do! this.Page.GetByText("Switch field").ClickAsync()
+    do! this.Expect(this.Page.GetByLabel("Notes")).ToBeVisibleAsync()
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Expect(log).ToHaveTextAsync("search=second|notes=external")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(log).ToHaveTextAsync("search=second|notes=external")
+  }
+
+  [<Fact>]
+  member this.``debounce waits until the delay after the latest edit``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let! now = this.Page.EvaluateAsync<int64>("Date.now()")
+    do! this.Page.Clock.PauseAtAsync(System.DateTimeOffset.FromUnixTimeMilliseconds(now + 60000L).UtcDateTime)
+    let search = this.Page.GetByLabel("Search")
+    let counter = this.Page.Locator(".weave-field__counter")
+    let log = this.Page.Locator("output")
+
+    do! search.FillAsync("first")
+    // Allow adaptive rendering to schedule the callback before checking its deadline.
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(counter).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(3900L)
+    do! this.Expect(log).ToHaveTextAsync("")
+
+    do! search.FillAsync("second")
+    do! this.Page.Clock.RunForAsync(100L)
+    do! this.Expect(counter).ToHaveTextAsync("6/60")
+    // The first edit's deadline must not deliver a callback after the second edit.
+    do! this.Page.Clock.RunForAsync(5900L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! this.Page.Clock.RunForAsync(3999L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! this.Page.Clock.RunForAsync(200L)
+    do! this.Expect(log).ToHaveTextAsync("search=second")
+  }
+
+  [<Fact>]
+  member this.``removing a field cancels its pending callback even when its Doc is reused``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    let toggle = this.Page.GetByText("Switch field")
+    let log = this.Page.Locator("output")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+    do! toggle.ClickAsync()
+    do! this.Page.GetByLabel("Notes").FillAsync("new")
+    do! this.Expect(log).ToContainTextAsync("notes=new")
+    do! toggle.ClickAsync()
+    do! this.Expect(search).ToHaveValueAsync("old")
+    do! this.Page.GetByText("Set notes").ClickAsync()
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("notes=new")
+    do! search.FillAsync("fresh")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("notes=new|search=fresh")
+    do! toggle.ClickAsync()
+    do! this.Expect(this.Page.GetByLabel("Notes")).ToHaveValueAsync("external")
+    do! this.Expect(log).ToHaveTextAsync("notes=new|search=fresh")
+  }
+
+  [<Fact>]
+  member this.``removing and reinserting a field in one task cancels the pending callback``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    let log = this.Page.Locator("output")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+
+    let! _ =
+      search.EvaluateAsync(
+        "el => { const field = el.closest('.weave-field'); const parent = field.parentNode; const next = field.nextSibling; field.remove(); parent.insertBefore(field, next); }"
+      )
+
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("")
+    do! search.FillAsync("fresh")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(log).ToHaveTextAsync("search=fresh")
+  }
+
+  [<Fact>]
+  member this.``an edit immediately after reinserting a field is still reported``() = task {
+    do! this.Page.Clock.InstallAsync()
+    do! this.NavigateTo("textfield-changes")
+    let search = this.Page.GetByLabel("Search")
+    do! search.FillAsync("old")
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("3/60")
+
+    let! _ =
+      search.EvaluateAsync(
+        "el => { const field = el.closest('.weave-field'); const parent = field.parentNode; const next = field.nextSibling; field.remove(); parent.insertBefore(field, next); el.value = 'fresh'; el.dispatchEvent(new Event('input', {bubbles: true})); }"
+      )
+
+    do! this.Expect(this.Page.Locator(".weave-field__counter")).ToHaveTextAsync("5/60")
+    do! this.Page.Clock.RunForAsync(11000L)
+    do! this.Expect(this.Page.Locator("output")).ToHaveTextAsync("search=fresh")
+  }
+
+  [<Fact>]
   member this.``invalid field has aria-invalid attribute``() = task {
     do! this.NavigateTo("textfield")
     let input = this.Page.Locator("input[aria-invalid='true']").First

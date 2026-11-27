@@ -1,10 +1,179 @@
 namespace Weave.Tests.E2E
 
+open System
+open System.Threading.Tasks
 open Microsoft.Playwright
 open Xunit
 
+[<Collection("Browser input")>]
+type ScrollToTopKeyboardTests(fixture: TestFixture) =
+  inherit E2ETestBase(fixture)
+
+  [<Theory>]
+  [<InlineData("scroll-page", "scroll-toggle", "html", false)>]
+  [<InlineData("scroll-panel", "panel-start", "#scroll-target", false)>]
+  [<InlineData("scroll-panel", "panel-start", "#scroll-target", true)>]
+  member this.``after returning to the top Tab continues at the start of the target``
+    (testId: string, startId: string, target: string, removeTabIndex: bool)
+    = task {
+    do! this.NavigateTo("scroll-to-top")
+    let button = this.Page.GetByTestId(testId)
+    let scroller = this.Page.Locator(target)
+
+    if removeTabIndex then
+      let! _ = scroller.EvaluateAsync("el => el.removeAttribute('tabindex')")
+      ()
+
+    let! _ = scroller.EvaluateAsync("el => el.scrollTop = 600")
+    do! this.Expect(button).ToBeVisibleAsync()
+    do! button.PressAsync("Enter")
+    do! this.Expect(button).ToBeHiddenAsync()
+    do! this.Page.Keyboard.PressAsync("Tab")
+    do! this.Expect(this.Page.GetByTestId(startId)).ToBeFocusedAsync()
+
+    if removeTabIndex then
+      do! this.Expect(scroller).Not.ToHaveAttributeAsync("tabindex", "-1")
+  }
+
 type ScrollToTopInteractionTests(fixture: TestFixture) =
   inherit E2ETestBase(fixture)
+
+  [<Fact>]
+  member this.``an invalid selector reports its error without affecting another control``() = task {
+    let error =
+      TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously)
+
+    this.Page.PageError.Add(fun message -> error.TrySetResult(message) |> ignore)
+    do! this.NavigateTo("scroll-to-top-invalid-selector")
+    let! message = error.Task.WaitAsync(TimeSpan.FromSeconds 5.)
+    Assert.Contains("selector", message, StringComparison.OrdinalIgnoreCase)
+    do! this.Expect(this.Page.GetByTestId("invalid-scroll")).ToBeHiddenAsync()
+    do! this.Expect(this.Page.GetByTestId("valid-scroll")).ToBeVisibleAsync()
+  }
+
+  [<Fact>]
+  member this.``failed lifecycle setup cleans up and can reconnect``() = task {
+    use! _script =
+      this.Page.AddInitScriptAsync(
+        """(() => {
+      const add = window.addEventListener.bind(window);
+      const remove = window.removeEventListener.bind(window);
+      window.lifecycleScrollListeners = new Set();
+      window.addEventListener = (name, handler, ...args) => {
+        if (name === 'scroll') window.lifecycleScrollListeners.add(handler);
+        return add(name, handler, ...args);
+      };
+      window.removeEventListener = (name, handler, ...args) => {
+        if (name === 'scroll') window.lifecycleScrollListeners.delete(handler);
+        return remove(name, handler, ...args);
+      };
+    })();"""
+      )
+
+    let error =
+      TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously)
+
+    this.Page.PageError.Add(fun message -> error.TrySetResult(message) |> ignore)
+    do! this.NavigateTo("lifecycle-failure")
+    let! message = error.Task.WaitAsync(TimeSpan.FromSeconds 5.)
+    Assert.Contains("lifecycle setup failed", message)
+    do! this.Expect(this.Page.GetByTestId("lifecycle-attempts")).ToHaveTextAsync("1")
+    do! this.Expect(this.Page.GetByTestId("lifecycle-cleanups")).ToHaveTextAsync("1")
+
+    let! count =
+      this.Page.EvaluateAsync<int>("() => window.lifecycleScrollListeners.size")
+
+    Assert.Equal(0, count)
+    let toggle = this.Page.GetByTestId("lifecycle-toggle")
+    do! toggle.ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("lifecycle-owner")).ToHaveCountAsync(0)
+    do! this.Expect(this.Page.GetByTestId("lifecycle-cleanups")).ToHaveTextAsync("1")
+    do! toggle.ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("lifecycle-attempts")).ToHaveTextAsync("2")
+
+    let! reconnected =
+      this.Page.EvaluateAsync<int>("() => window.lifecycleScrollListeners.size")
+
+    Assert.Equal(1, reconnected)
+    do! toggle.ClickAsync()
+    do! this.Expect(this.Page.GetByTestId("lifecycle-owner")).ToHaveCountAsync(0)
+    do! this.Expect(this.Page.GetByTestId("lifecycle-cleanups")).ToHaveTextAsync("2")
+
+    let! finalCount =
+      this.Page.EvaluateAsync<int>("() => window.lifecycleScrollListeners.size")
+
+    Assert.Equal(0, finalCount)
+  }
+
+  [<Fact>]
+  member this.``a cleanup failure is reported without hiding the setup error``() = task {
+    use! _script =
+      this.Page.AddInitScriptAsync(
+        """(() => {
+          const original = console.error.bind(console);
+          window.cleanupErrors = [];
+          console.error = error => {
+            window.cleanupErrors.push(String(error.message || error));
+            original(error);
+          };
+        })();"""
+      )
+
+    let error =
+      TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously)
+
+    this.Page.PageError.Add(fun message -> error.TrySetResult(message) |> ignore)
+
+    do! this.NavigateTo("lifecycle-double-failure")
+    let! setupMessage = error.Task.WaitAsync(TimeSpan.FromSeconds 5.)
+
+    let! cleanupMessage =
+      this.Page.EvaluateAsync<string>("() => window.cleanupErrors.join('|')")
+
+    Assert.Contains("lifecycle setup failed", setupMessage)
+    Assert.Contains("lifecycle cleanup failed", cleanupMessage)
+  }
+
+  [<Fact>]
+  member this.``conflicting custom element registration is reported``() = task {
+    use! _script =
+      this.Page.AddInitScriptAsync(
+        "customElements.define('weave-dom-lifecycle-listener', class extends HTMLElement {});"
+      )
+
+    let error =
+      TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously)
+
+    this.Page.PageError.Add(fun message -> error.TrySetResult(message) |> ignore)
+    let! _ = this.Page.GotoAsync($"%s{fixture.BaseUrl}/#scroll-to-top")
+    let! message = error.Task.WaitAsync(TimeSpan.FromSeconds 5.)
+    Assert.Contains("Custom element name already registered", message)
+  }
+
+  [<Fact>]
+  member this.``reused buttons read the current scroll position and can activate again``() = task {
+    do! this.NavigateTo("scroll-to-top")
+    let pageButton = this.Page.GetByTestId("scroll-page")
+    let panelButton = this.Page.GetByTestId("scroll-panel")
+    let toggle = this.Page.GetByTestId("scroll-toggle")
+    let panel = this.Page.Locator("#scroll-target")
+    let! _ = toggle.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToHaveCountAsync(0)
+    do! this.Expect(panelButton).ToHaveCountAsync(0)
+
+    let! _ =
+      this.Page.EvaluateAsync(
+        "() => { window.scrollTo(0, 600); document.getElementById('scroll-target').scrollTop = 400; }"
+      )
+
+    let! _ = toggle.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToBeVisibleAsync()
+    do! this.Expect(panelButton).ToBeVisibleAsync()
+    let! _ = panelButton.EvaluateAsync("el => el.click()")
+    do! this.Expect(panel).ToHaveJSPropertyAsync("scrollTop", 0)
+    let! _ = pageButton.EvaluateAsync("el => el.click()")
+    do! this.Expect(pageButton).ToBeHiddenAsync()
+  }
 
   [<Fact>]
   member this.``page threshold is inclusive and hidden buttons are inaccessible``() = task {
@@ -20,6 +189,8 @@ type ScrollToTopInteractionTests(fixture: TestFixture) =
     do! this.Expect(button).ToBeVisibleAsync()
     do! this.Expect(button).ToBeEnabledAsync()
     do! this.Expect(button).ToHaveAttributeAsync("aria-label", "Back to top")
+    do! this.Expect(button).ToHaveAccessibleNameAsync("Back to top")
+    do! this.Expect(button.Locator("weave-dom-lifecycle-listener")).ToBeHiddenAsync()
     do! this.Expect(button).ToHaveAttributeAsync("aria-hidden", "false")
     let! _ = this.Page.EvaluateAsync("() => window.scrollTo(0, 299)")
     do! this.Expect(button).ToBeHiddenAsync()
